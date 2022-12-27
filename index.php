@@ -542,7 +542,7 @@ $(function () {
       });
   });
   
-  $("a[href='#billboard']").click();
+  $("a[href='#inquiry']").click();
 });
 </script>
 </body>

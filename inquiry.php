@@ -500,6 +500,7 @@ else{
 // Values
 $(function () {
   $('#customerNoHidden').hide();
+  $('#problems').select2();
 
   /*var table = $("#weightTable").DataTable({
     "responsive": true,
