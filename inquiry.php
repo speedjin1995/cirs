@@ -41,7 +41,7 @@ else{
 <select class="form-control" style="width: 100%;" id="customerNoHidden" style="display: none;">
   <option value="" selected disabled hidden>Please Select</option>
   <?php while($rowCustomer=mysqli_fetch_assoc($customers)){ ?>
-    <option value="<?=$rowCustomer['id'] ?>"><?=$rowCustomer['customer_name'] ?></option>
+    <option value="<?=$rowCustomer['customer_name'] ?>" data-id="<?=$rowCustomer['id'] ?>"><?=$rowCustomer['customer_name'] ?></option>
   <?php } ?>
 </select>
 
@@ -129,7 +129,7 @@ else{
             <div class="row">
               <div class="col-6"></div>
               <div class="col-3">
-                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="refreshBtn">Refresh</button>
+                <!--button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="refreshBtn">Refresh</button-->
               </div>
               <div class="col-3">
                 <button type="button" class="btn btn-block bg-gradient-warning btn-sm" onclick="newEntry()">Add New Inquiry</button>
@@ -204,7 +204,7 @@ else{
                 <label>Problems * </label>
                 <select class="select2" id="problems" name="problems" multiple="multiple" data-placeholder="Select a Problem" style="width: 100%;" required>
                   <?php while($rowP=mysqli_fetch_assoc($problems)){ ?>
-                    <option value="<?=$rowP['id'] ?>"><?=$rowP['problem'] ?></option>
+                    <option value="<?=$rowP['problem'] ?>"><?=$rowP['problem'] ?></option>
                   <?php } ?>
                 </select>
               </div>
@@ -268,7 +268,7 @@ else{
             <div class="col-4">
               <div class="form-group">
                 <label>PIC Attend *</label>
-                <select class="form-control" style="width: 100%;" id="brand" name="brand" required>
+                <select class="form-control" style="width: 100%;" id="picAttend" name="picAttend" required>
                   <option selected="selected">-</option>
                   <?php while($rowU=mysqli_fetch_assoc($users)){ ?>
                     <option value="<?=$rowU['id'] ?>"><?=$rowU['name'] ?></option>
@@ -502,48 +502,44 @@ $(function () {
   $('#customerNoHidden').hide();
   $('#problems').select2();
 
-  /*var table = $("#weightTable").DataTable({
+  var table = $("#weightTable").DataTable({
     "responsive": true,
     "autoWidth": false,
     'processing': true,
     'serverSide': true,
     'serverMethod': 'post',
-    'searching': true,
+    'searching': false,
     'order': [[ 1, 'asc' ]],
     'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
-        'url':'php/loadWeights.php'
+        'url':'php/loadInquiries.php'
     },
     'columns': [
       { data: 'no' },
-      { data: 'pStatus' },
-      { data: 'status' },
-      { data: 'serialNo' },
-      { data: 'veh_number' },
-      { data: 'product_name' },
-      { data: 'currentWeight' },
-      { data: 'inCDateTime' },
-      { data: 'tare' },
-      { data: 'outGDateTime' },
-      { data: 'totalWeight' },
+      { data: 'calling_datetime' },
+      { data: 'case_no' },
+      { data: 'case_status' },
+      { data: 'issues' },
+      { data: 'company_name' },
+      { data: 'contact_no' },
+      { data: 'updated_datetime' },
+      { data: 'name' },
       { 
-        className: 'dt-control',
-        orderable: false,
-        data: null,
+        data: 'id',
         render: function ( data, type, row ) {
-          return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
+          return '<div class="row"><div class="col-12"><button type="button" id="edit'+data+'" onclick="edit('+data+')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div></div>';
         }
       }
     ],
-    "rowCallback": function( row, data, index ) {
+    /*"rowCallback": function( row, data, index ) {
       $('td', row).css('background-color', '#E6E6FA');
     },
     "drawCallback": function(settings) {
       $('#salesInfo').text(settings.json.salesTotal);
       $('#purchaseInfo').text(settings.json.purchaseTotal);
       $('#localInfo').text(settings.json.localTotal);
-    }
-  });*/
+    }*/
+  });
 
   // Add event listener for opening and closing details
   /*$('#weightTable tbody').on('click', 'td.dt-control', function () {
@@ -556,14 +552,7 @@ $(function () {
       tr.removeClass('shown');
     }
     else {
-      <?php 
-        /*if($role == "ADMIN"){
-          echo 'row.child( format(row.data()) ).show();tr.addClass("shown");';
-        }
-        else{
-          echo 'row.child( formatNormal(row.data()) ).show();tr.addClass("shown");';
-        }*/
-      ?>
+      row.child( format(row.data()) ).show();tr.addClass("shown");
     }
   });*/
   
@@ -580,22 +569,26 @@ $(function () {
 
   $.validator.setDefaults({
     submitHandler: function () {
-        if($('#extendModal').hasClass('show')){
-          $('#spinnerLoading').show();
+      if($('#extendModal').hasClass('show')){
+        $('#spinnerLoading').show();
 
-            var convert1 = $('#extendModal').find('#dateTime').val().replace(", ", " ");
-            convert1 = convert1.replace(":", "/");
-            convert1 = convert1.replace(":", "/");
-            convert1 = convert1.replace(" ", "/");
-            convert1 = convert1.replace(" pm", "");
-            convert1 = convert1.replace(" am", "");
-            convert1 = convert1.replace(" PM", "");
-            convert1 = convert1.replace(" AM", "");
-            var convert2 = convert1.split("/");
-            var date  = new Date(convert2[2], convert2[1] - 1, convert2[0], convert2[3], convert2[4], convert2[5]);
-            $('#extendModal').find('#dateTime').val(date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
+        var convert1 = $('#extendModal').find('#dateTime').val().replace(", ", " ");
+        var date  = formatDate(convert1);
+        $('#extendModal').find('#dateTime').val(date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds());
 
-        $.post('php/insertWeight.php', $('#extendForm').serialize(), function(data){
+        var convert2 = $('#extendModal').find('#callingDate').val().replace(", ", " ");
+        var date2  = formatDate(convert2);
+        $('#extendModal').find('#callingDate').val(date.getFullYear() + "-" + (date2.getMonth() + 1) + "-" + date2.getDate() + " " + date2.getHours() + ":" + date2.getMinutes() + ":" + date2.getSeconds());
+
+        var convert3 = $('#extendModal').find('#validateDate').val().replace(", ", " ");
+        var date3  = formatDate(convert3);
+        $('#extendModal').find('#validateDate').val(date3.getFullYear() + "-" + (date3.getMonth() + 1) + "-" + date3.getDate() + " " + date3.getHours() + ":" + date3.getMinutes() + ":" + date3.getSeconds());
+
+        var convert4 = $('#extendModal').find('#dueDate').val().replace(", ", " ");
+        var date4  = formatDate(convert4);
+        $('#extendModal').find('#dueDate').val(date4.getFullYear() + "-" + (date4.getMonth() + 1) + "-" + date4.getDate() + " " + date4.getHours() + ":" + date4.getMinutes() + ":" + date4.getSeconds());
+
+        $.post('php/insertInquiry.php', $('#extendForm').serialize(), function(data){
           var obj = JSON.parse(data); 
           if(obj.status === 'success'){
             $('#extendModal').modal('hide');
@@ -613,6 +606,57 @@ $(function () {
         });
       }
     }
+  });
+
+  $('#extendModal').find('#customerType').on('change', function(){
+    if($(this).val() == "NEW"){
+      $('#extendModal').find('#company').hide();
+      $('#extendModal').find('#companyText').show();
+    }
+    else{
+      $('#extendModal').find('#company').html($('select#customerNoHidden').html());
+      $('#extendModal').find('#company').show();
+      $('#extendModal').find('#companyText').hide();
+    }
+  });
+
+  $('#extendModal').find('#company').on('change', function(){
+    $('#spinnerLoading').show();
+    var id = $(this).find(":selected").attr("data-id");
+
+    $.post('php/getCustomer.php', {userID: id}, function(data){
+      var obj = JSON.parse(data);
+      
+      if(obj.status === 'success'){
+        $('#extendModal').find('#address1').val(obj.message.customer_address);
+        //$('#extendModal').find('#address2').val(obj.message.address2);
+        //$('#extendModal').find('#address3').val(obj.message.address3);
+        $('#extendModal').find('#contact').val(obj.message.customer_phone);
+        $('#extendModal').find('#email').val(obj.message.customer_email);
+        $('#extendModal').modal('show');
+
+        $('#extendForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when pull data", "Failed:");
+      }
+      $('#spinnerLoading').hide();
+    });
   });
 
   /*$('#refreshBtn').on('click', function(){
@@ -687,261 +731,7 @@ $(function () {
   $('#datePicker').on('click', function () {
     $('#datePicker').attr('data-info', '1');
   });*/
-
-  $('#extendModal').find('#status').on('change', function () {
-    if($(this).val() == '1'){
-      $('#extendModal').find('#customerNo').html($('select#customerNoHidden').html()).append($(this).val());
-      $('#extendModal').find('.labelStatus').text('Customer No *');
-      $('#extendModal').find('.labelOrder').text('Order Weight');
-      $('#customerNo').removeAttr('hidden');
-      $('#customerNo').attr('required', 'required');
-      $('#customerNoTxt').attr('hidden', 'hidden');
-      $('#customerNoTxt').removeAttr('required');
-    }
-    else if($(this).val() == '2'){
-      $('#extendModal').find('#customerNo').html($('select#supplierNoHidden').html()).append($(this).val());
-      $('#extendModal').find('.labelStatus').text('Supplier No *');
-      $('#extendModal').find('.labelOrder').text('Supply Weight');
-      $('#customerNo').removeAttr('hidden');
-      $('#customerNo').attr('required', 'required');
-      $('#customerNoTxt').attr('hidden', 'hidden');
-      $('#customerNoTxt').removeAttr('required');
-    }
-    else{
-      $('#extendModal').find('.labelStatus').text('Description *');
-      $('#customerNoTxt').removeAttr('hidden');
-      $('#customerNo').removeAttr('required');
-      $('#customerNoTxt').attr('required', 'required');
-      $('#customerNo').attr('hidden', 'hidden');
-    }
-  });
-
-  $('#extendModal').find('#product').on('change', function () {
-    var id = $(this).val();
-
-    $.post('php/getProduct.php', {userID: id}, function(data){
-      var obj = JSON.parse(data);
-        
-      if(obj.status === 'success'){
-        var unitPrice = parseFloat(obj.message.product_price).toFixed(2);
-        $('#extendModal').find('#unitPrice').val(unitPrice);
-        $('#unitPrice').trigger("keyup");
-      }
-      else if(obj.status === 'failed'){
-        toastr["error"](obj.message, "Failed:");
-      }
-      else{
-        toastr["error"]("Something wrong when getting product price", "Failed:");
-      }
-    });
-  });
-
-  $('#extendModal').find('#currency').on('change', function () {
-    var id = $(this).val();
-
-    $.post('php/getCurrency.php', {userID: id}, function(data){
-      var obj = JSON.parse(data);
-        
-      if(obj.status === 'success'){
-        updatePrices("Y", obj.message.rate);
-      }
-      else if(obj.status === 'failed'){
-        toastr["error"](obj.message, "Failed:");
-      }
-      else{
-        toastr["error"]("Something wrong when getting currency rate", "Failed:");
-      }
-    });
-  });
-
-  $('#extendModal').find('#unitWeight').on('change', function () {
-    var unitWeight = $(this).val();
-
-    if(unitWeight == 1){
-      weightUnit = "1";
-      $('#changeWeight').text("KG");
-      $('#changeWeightTare').text("KG");
-      $('#changeWeightActual').text("KG");
-      $('#changeWeightTotal').text("KG");
-      $('#changeSupplyWeight').text("KG");
-      $('#changeWeightVariance').text("KG");
-      $('#changeReduceWeight').text("KG");
-
-      if(indicatorUnit == "g"){
-        if($('#currentWeight').val()){
-          $('#currentWeight').val(parseFloat(parseFloat($('#currentWeight').val()) / 1000).toFixed(2));
-        }
-        
-        if($('#tareWeight').val()){
-            $('#tareWeight').val(parseFloat(parseFloat($('#tareWeight').val()) / 1000).toFixed(2));
-        }
-        
-        if($('#actualWeight').val()){
-          $('#actualWeight').val(parseFloat(parseFloat($('#actualWeight').val()) / 1000).toFixed(2));
-        }
-        
-        if($('#totalWeight').val()){
-          $('#totalWeight').val(parseFloat(parseFloat($('#totalWeight').val()) / 1000).toFixed(2));
-        }
-
-        if($('#reduceWeight').val()){
-          $('#reduceWeight').val(parseFloat(parseFloat($('#reduceWeight').val()) / 1000).toFixed(2));
-        }
-      }
-    }
-    else if(unitWeight == 2){
-      weightUnit = "2";
-      $('#changeWeight').text("G");
-      $('#changeWeightTare').text("G");
-      $('#changeWeightActual').text("G");
-      $('#changeWeightTotal').text("G");
-      $('#changeSupplyWeight').text("G");
-      $('#changeWeightVariance').text("G");
-      $('#changeReduceWeight').text("G");
-      
-      if(indicatorUnit == "kg"){
-        if($('#currentWeight').val()){
-          $('#currentWeight').val(parseFloat(parseFloat($('#currentWeight').val()) * 1000).toFixed(2));
-        }
-        
-        if($('#tareWeight').val()){
-          $('#tareWeight').val(parseFloat(parseFloat($('#tareWeight').val()) * 1000).toFixed(2));
-        }
-        
-        if($('#actualWeight').val()){
-          $('#actualWeight').val(parseFloat(parseFloat($('#actualWeight').val()) * 1000).toFixed(2));
-        }
-        
-        if($('#totalWeight').val()){
-          $('#totalWeight').val(parseFloat(parseFloat($('#totalWeight').val()) * 1000).toFixed(2));
-        }
-
-        if($('#reduceWeight').val()){
-          $('#reduceWeight').val(parseFloat(parseFloat($('#reduceWeight').val()) * 1000).toFixed(2));
-        }
-      }
-    }
-    else if(unitWeight == 3){
-      weightUnit = "3";
-      $('#changeWeight').text("LB");
-      $('#changeWeightTare').text("LB");
-      $('#changeWeightActual').text("LB");
-      $('#changeWeightTotal').text("LB");
-      $('#changeSupplyWeight').text("LB");
-      $('#changeWeightVariance').text("LB");
-      $('#changeReduceWeight').text("LB");
-    }
-    else if(unitWeight == 6){
-      weightUnit = "6";
-      $('#changeWeight').text("mg");
-      $('#changeWeightTare').text("mg");
-      $('#changeWeightActual').text("mg");
-      $('#changeWeightTotal').text("mg");
-      $('#changeSupplyWeight').text("mg");
-      $('#changeWeightVariance').text("mg");
-      $('#changeReduceWeight').text("mg");
-    }
-    else if(unitWeight == 8){
-      weightUnit = "8";
-      $('#changeWeight').text("ct");
-      $('#changeWeightTare').text("ct");
-      $('#changeWeightActual').text("ct");
-      $('#changeWeightTotal').text("ct");
-      $('#changeSupplyWeight').text("ct");
-      $('#changeWeightVariance').text("ct");
-      $('#changeReduceWeight').text("ct");
-    }
-    else if(unitWeight == 9){
-      weightUnit = "9";
-      $('#changeWeight').text("Oz");
-      $('#changeWeightTare').text("Oz");
-      $('#changeWeightActual').text("Oz");
-      $('#changeWeightTotal').text("Oz");
-      $('#changeSupplyWeight').text("Oz");
-      $('#changeWeightVariance').text("Oz");
-      $('#changeReduceWeight').text("Oz");
-    }
-  });
-
-  $('#extendModal').find('#unitPrice').on('keyup', function () {
-    updatePrices("N", rate);
-  });
-
-  $('#extendModal').find('#variancePerc').on('keyup', function(){
-    if($('#supplyWeight').val() && $('#actualWeight').val()){
-      var supplyWeight =  $('#supplyWeight').val();
-      var actualWeight =  $('#actualWeight').val();
-      $('#variancePerc').val(((supplyWeight - actualWeight) / actualWeight * 100).toFixed(2));
-    }
-    
-  });
 });
-
-function updatePrices(isFromCurrency, rat){
-  var totalPrice;
-  var unitPrice = $('#unitPrice').val();
-  var totalWeight = $('#totalWeight').val();
-
-  if(isFromCurrency == 'Y'){
-    unitPrice = (unitPrice / rate) * parseFloat(rat);
-    $('#extendModal').find('#unitPrice').val(unitPrice.toFixed(2));
-    rate = parseFloat(rat).toFixed(2);
-  }
-  else{
-    unitPrice = unitPrice * parseFloat(rat);
-    $('#extendModal').find('#unitPrice').val(unitPrice.toFixed(2));
-    rate = parseFloat(rat).toFixed(2);
-  }
-  
-
-  if(unitPrice != '' &&  moq != '' && totalWeight != ''){
-    totalPrice = unitPrice * totalWeight;
-    $('#totalPrice').val(totalPrice.toFixed(2));
-  }
-  else(
-    $('#totalPrice').val((0).toFixed(2))
-  )
-}
-
-function updateWeights(){
-  var tareWeight =  0;
-  var currentWeight =  0;
-  var reduceWeight = 0;
-  var moq = $('#moq').val();
-  var totalWeight = 0;
-  var actualWeight = 0;
-
-  if($('#currentWeight').val()){
-    currentWeight =  $('#currentWeight').val();
-  }
-
-  if($('#tareWeight').val()){
-    tareWeight =  $('#tareWeight').val();
-  }
-
-  if($('#reduceWeight').val()){
-    reduceWeight =  $('#reduceWeight').val();
-  }
-
-  if(tareWeight == 0){
-    actualWeight = currentWeight - reduceWeight;
-    actualWeight = Math.abs(actualWeight);
-    $('#actualWeight').val(actualWeight.toFixed(2));
-  }
-  else{
-    actualWeight = tareWeight - currentWeight - reduceWeight;
-    actualWeight = Math.abs(actualWeight);
-    $('#actualWeight').val(actualWeight.toFixed(2));
-  }
-
-  if(actualWeight != '' &&  moq != ''){
-    totalWeight = actualWeight * moq;
-    $('#totalWeight').val(totalWeight.toFixed(2));
-  }
-  else{
-    $('#totalWeight').val((0).toFixed(2))
-  };
-}
 
 function format (row) {
   return '<div class="row"><div class="col-md-3"><p>Customer Name: '+row.customer_name+
@@ -1005,52 +795,75 @@ function formatNormal (row) {
   '</p></div></div>';
 }
 
+function formatDate(convert1) {
+  convert1 = convert1.replace(":", "/");
+  convert1 = convert1.replace(":", "/");
+  convert1 = convert1.replace(" ", "/");
+  convert1 = convert1.replace(" pm", "");
+  convert1 = convert1.replace(" am", "");
+  convert1 = convert1.replace(" PM", "");
+  convert1 = convert1.replace(" AM", "");
+  var convert2 = convert1.split("/");
+  var date  = new Date(convert2[2], convert2[1] - 1, convert2[0], convert2[3], convert2[4], convert2[5]);
+  return date
+}
+
 function newEntry(){
   var date = new Date();
-  $('#extendModal').find('#id').val("");
-  $('#extendModal').find('#serialNumber').val("");
-  $('#extendModal').find('#unitWeight').val('');
-  $('#extendModal').find('#invoiceNo').val("");
-  $('#extendModal').find('#status').val('');
-  $('#extendModal').find('#lotNo').val('');
-  $('#extendModal').find('#vehicleNo').val('');
-  $('#extendModal').find('#customerNo').val('');
-  $('#extendModal').find('#deliveryNo').val("");
-  $('#extendModal').find('#batchNo').val("");
-  $('#extendModal').find('#purchaseNo').val("");
-  $('#extendModal').find('#currentWeight').val("");
-  $('#extendModal').find('#product').val('');
-  $('#extendModal').find('#transporter').val('');
-  $('#extendModal').find('#moq').val("1");
-  $('#extendModal').find('#currency').val("1");
-  $('#extendModal').find('#tareWeight').val("0.00");
-  $('#extendModal').find('#package').val('');
-  $('#extendModal').find('#actualWeight').val("");
-  $('#extendModal').find('#supplyWeight').val("");
-  $('#extendModal').find('#varianceWeight').val("");
-  $('#extendModal').find('#remark').val("");
-  $('#extendModal').find('#totalPrice').val("");
-  $('#extendModal').find('#unitPrice').val("");
-  $('#extendModal').find('#totalWeight').val("");
-  $('#extendModal').find('#manual').prop('checked', false);
-  $('#extendModal').find('#manualVehicle').prop('checked', false);
-  $('#extendModal').find('#manualOutgoing').prop('checked', false);
-  $('#extendModal').find('#vehicleNoTct').val("");
-  $('#extendModal').find('#vehicleNo').removeAttr('hidden');
-  $('#extendModal').find('#vehicleNoTct').attr('hidden', 'hidden');
-  // $('#extendModal').find('.hidOutgoing').attr('hidden', 'hidden');
-  $('#extendModal').find('#currentWeight').attr('readonly', true);
-  $('#extendModal').find('#tareWeight').attr('readonly', true);
-  $('#extendModal').find('#reduceWeight').val("");
-  $('#extendModal').find('#outGDateTime').val("");
-  $('#extendModal').find('#inCDateTime').val("");
-  $('#extendModal').find('#pStatus').val("");
-  $('#extendModal').find('#variancePerc').val("");
+
   $('#datePicker').datetimepicker({
-      icons: { time: 'far fa-clock' },
-      format: 'DD/MM/YYYY HH:mm:ss A'
+    icons: { time: 'far fa-clock' },
+    format: 'DD/MM/YYYY HH:mm:ss A'
   });
+
+  $('#callingDatePicker').datetimepicker({
+    icons: { time: 'far fa-clock' },
+    format: 'DD/MM/YYYY HH:mm:ss A'
+  });
+
+  $('#validateDatePicker').datetimepicker({
+    icons: { time: 'far fa-clock' },
+    format: 'DD/MM/YYYY HH:mm:ss A'
+  });
+
+  $('#dueDatePicker').datetimepicker({
+    icons: { time: 'far fa-clock' },
+    format: 'DD/MM/YYYY HH:mm:ss A'
+  });
+
+  $('#extendModal').find('#id').val("");
+  $('#extendModal').find('#customerType').val("");
+  $('#extendModal').find('#machineType').val('');
+  $('#extendModal').find('#problems').val("");
+  $('#extendModal').find('#company').val('');
+  $('#extendModal').find('#companyText').val('');
+  $('#extendModal').find('#brand').val('');
   $('#extendModal').find('#dateTime').val(date.toLocaleString('en-AU', { hour12: false }));
+  $('#extendModal').find('#address1').val('');
+  $('#extendModal').find('#model').val("");
+  $('#extendModal').find('#picAttend').val("");
+  $('#extendModal').find('#address2').val("");
+  $('#extendModal').find('#structure').val("");
+  $('#extendModal').find('#address3').val("");
+  $('#extendModal').find('#size').val("");
+  $('#extendModal').find('#contact').val("");
+  $('#extendModal').find('#pic').val("");
+  $('#extendModal').find('#capacity').val("");
+  $('#extendModal').find('#mobile1').val("");
+  $('#extendModal').find('#mobile2').val("");
+  $('#extendModal').find('#serialNo').val("");
+  $('#extendModal').find('#email').val("");
+  $('#extendModal').find('#warranty').val("");
+  $('#extendModal').find('#caseStatus').val("");
+  $('#extendModal').find('#statusValidate').val("");
+  $('#extendModal').find('#caseNo').val("");
+  $('#extendModal').find('#validationBy').val("");
+  $('#extendModal').find('#callingDate').val(date.toLocaleString('en-AU', { hour12: false }));
+  $('#extendModal').find('#validateDate').val(date.toLocaleString('en-AU', { hour12: false }));
+  $('#extendModal').find('#callingBy').val("");
+  $('#extendModal').find('#stampingNo').val("");
+  $('#extendModal').find('#userContact').val("");
+  $('#extendModal').find('#dueDate').val(date.toLocaleString('en-AU', { hour12: false }));
   $('#extendModal').modal('show');
   
   $('#extendForm').validate({
@@ -1078,81 +891,72 @@ function edit(id) {
     var obj = JSON.parse(data);
     
     if(obj.status === 'success'){
-      $('#extendModal').find('#id').val(obj.message.id);
-      $('#extendModal').find('#serialNumber').val(obj.message.serialNo);
-      $('#extendModal').find('#unitWeight').val(obj.message.unitWeight);
-      $('#extendModal').find('#invoiceNo').val(obj.message.invoiceNo);
-      $('#extendModal').find('#status').val(obj.message.status);
-      $('#extendModal').find('#lotNo').val(obj.message.lotNo);
-      $('#extendModal').find('#deliveryNo').val(obj.message.deliveryNo);
-      $('#extendModal').find('#batchNo').val(obj.message.batchNo);
-      $('#extendModal').find('#purchaseNo').val(obj.message.purchaseNo);
-      $('#extendModal').find('#currentWeight').val(obj.message.currentWeight);
-      $('#extendModal').find('#product').val(obj.message.productName);
-      $('#extendModal').find('#moq').val(obj.message.moq);
-      $('#extendModal').find('#currency').val(obj.message.currency);
-      $('#extendModal').find('#transporter').val(obj.message.transporter);
-      $('#extendModal').find('#tareWeight').val(obj.message.tare);
-      $('#extendModal').find('#package').val(obj.message.package);
-      $('#extendModal').find('#actualWeight').val(obj.message.actualWeight);
-      $('#extendModal').find('#supplyWeight').val(obj.message.supplyWeight);
-      $('#extendModal').find('#varianceWeight').val(obj.message.varianceWeight);
-      $('#extendModal').find('#remark').val(obj.message.remark);
-      $('#extendModal').find('#totalPrice').val(obj.message.totalPrice);
-      $('#extendModal').find('#unitPrice').val(obj.message.unitPrice);
-      $('#extendModal').find('#totalWeight').val(obj.message.totalWeight);
-      $('#extendModal').find('#reduceWeight').val(obj.message.reduceWeight);
-      $('#extendModal').find('#pStatus').val(obj.message.pStatus);
-      $('#extendModal').find('#outGDateTime').val(obj.message.outGDateTime);
-      $('#extendModal').find('#inCDateTime').val(obj.message.inCDateTime);
-      $('#extendModal').find('#variancePerc').val(obj.message.variancePerc);
-
-      $('#extendModal').find('#toDatePicker').datetimepicker({
+      $('#datePicker').datetimepicker({
         icons: { time: 'far fa-clock' },
         format: 'DD/MM/YYYY HH:mm:ss A'
       });
 
-      $('#extendModal').find('#dateTime').val(obj.message.dateTime);
-    
-      if($('#extendModal').find('#status').val() == '1'){
-        $('#extendModal').find('#customerNo').html($('select#customerNoHidden').html()).append($('#extendModal').find('#status').val());
-        $('#extendModal').find('.labelStatus').text('Customer No');
-        $('#extendModal').find('.labelOrder').text('Order Weight');
-        $('#extendModal').find('#customerNo').val(obj.message.customer);
-        
-      }
-      else if($('#extendModal').find('#status').val() == '2'){
-        $('#extendModal').find('#customerNo').html($('select#supplierNoHidden').html()).append($('#extendModal').find('#status').val());
-        $('#extendModal').find('.labelStatus').text('Supplier No');
-        $('#extendModal').find('.labelOrder').text('Supply Weight');
-        $('#extendModal').find('#customerNo').val(obj.message.customer);
-      }
+      $('#callingDatePicker').datetimepicker({
+        icons: { time: 'far fa-clock' },
+        format: 'DD/MM/YYYY HH:mm:ss A'
+      });
 
-      if(obj.message.manualVehicle === 1){
-        $('#extendModal').find('#manualVehicle').prop('checked', true);
-        $('#extendModal').find('#vehicleNoTct').removeAttr('hidden');
-        $('#extendModal').find('#vehicleNo').attr('hidden', 'hidden');
-        $('#extendModal').find('#vehicleNoTct').val(obj.message.vehicleNo);
+      $('#validateDatePicker').datetimepicker({
+        icons: { time: 'far fa-clock' },
+        format: 'DD/MM/YYYY HH:mm:ss A'
+      });
+
+      $('#dueDatePicker').datetimepicker({
+        icons: { time: 'far fa-clock' },
+        format: 'DD/MM/YYYY HH:mm:ss A'
+      });
+
+      $('#extendModal').find('#id').val(obj.message.id);
+      $('#extendModal').find('#machineType').val(obj.message.machine_type);
+      $('#extendModal').find('#problems').val(JSON.parse(obj.message.issues));
+      $('#extendModal').find('#customerType').val(obj.message.customer_type);
+
+      if(obj.message.customer_type == "NEW"){
+        $('#extendModal').find('#companyText').val(obj.message.company_name);
+        $('#extendModal').find('#company').hide();
+        $('#extendModal').find('#companyText').show();
       }
       else{
-        $('#extendModal').find('#manualVehicle').prop('checked', false);
-        $('#extendModal').find('#vehicleNo').removeAttr('hidden');
-        $('#extendModal').find('#vehicleNoTct').attr('hidden', 'hidden');
-        $('#extendModal').find('#vehicleNo').val(obj.message.vehicleNo);
+        $('#extendModal').find('#company').html($('select#customerNoHidden').html());
+        $('#extendModal').find('#company').show();
+        $('#extendModal').find('#companyText').hide();
+        $('#extendModal').find('#company').val(obj.message.company_name);
       }
 
-            ///still need do some changes
-      if(obj.message.manual === 1){
-        $('#extendModal').find('#manual').prop('checked', true);
-        $('#extendModal').find('#currentWeight').attr('readonly', false);
-      }
-
-      if(obj.message.manualOutgoing === 1){
-        $('#extendModal').find('#manualOutgoing').prop('checked', true);
-        $('#extendModal').find('#tareWeight').attr('readonly', false);
-      }
-
+      $('#extendModal').find('#brand').val(obj.message.brand);
+      $('#extendModal').find('#dateTime').val(obj.message.created_datetime);
+      $('#extendModal').find('#address1').val(obj.message.address1);
+      $('#extendModal').find('#model').val(obj.message.model);
+      $('#extendModal').find('#picAttend').val(obj.message.pic_attend);
+      $('#extendModal').find('#address2').val(obj.message.address2);
+      $('#extendModal').find('#structure').val(obj.message.structure);
+      $('#extendModal').find('#address3').val(obj.message.address3);
+      $('#extendModal').find('#size').val(obj.message.size);
+      $('#extendModal').find('#contact').val(obj.message.contact_no);
+      $('#extendModal').find('#pic').val(obj.message.pic);
+      $('#extendModal').find('#capacity').val(obj.message.capacity);
+      $('#extendModal').find('#mobile1').val(obj.message.mobile1);
+      $('#extendModal').find('#mobile2').val(obj.message.mobile2);
+      $('#extendModal').find('#serialNo').val(obj.message.serial_no);
+      $('#extendModal').find('#email').val(obj.message.email);
+      $('#extendModal').find('#warranty').val(obj.message.warranty);
+      $('#extendModal').find('#caseStatus').val(obj.message.case_status);
+      $('#extendModal').find('#statusValidate').val(obj.message.status_validate);
+      $('#extendModal').find('#caseNo').val(obj.message.case_no);
+      $('#extendModal').find('#validationBy').val(obj.message.validate_by);
+      $('#extendModal').find('#callingDate').val(obj.message.calling_datetime);
+      $('#extendModal').find('#validateDate').val(obj.message.last_validate_date);
+      $('#extendModal').find('#callingBy').val(obj.message.calling_by_cus);
+      $('#extendModal').find('#stampingNo').val(obj.message.stamping_no);
+      $('#extendModal').find('#userContact').val(obj.message.user_contact);
+      $('#extendModal').find('#dueDate').val(obj.message.due_date);
       $('#extendModal').modal('show');
+
       $('#extendForm').validate({
         errorElement: 'span',
         errorPlacement: function (error, element) {
