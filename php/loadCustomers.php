@@ -37,7 +37,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
       "id"=>$row['id'],
       "customer_code"=>$row['customer_code'],
       "customer_name"=>$row['customer_name'],
-      "customer_address"=>$row['customer_address'],
+      "customer_address"=>$row['customer_address']." ". $row['address2'] ." ". $row['address3'],
       "customer_phone"=>$row['customer_phone'],
       "customer_email"=>$row['customer_email']
     );

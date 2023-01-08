@@ -34,7 +34,8 @@ $data = array();
 $counter = 1;
 
 while($row = mysqli_fetch_assoc($empRecords)) {
-  $issues = join(",", json_decode($row['issues'], true));
+  //$issues = join(",", json_decode($row['issues'], true));
+  $issues = json_decode($row['issues'], true);
 
   $data[] = array( 
     "no"=>$counter,

@@ -633,8 +633,8 @@ $(function () {
       
       if(obj.status === 'success'){
         $('#extendModal').find('#address1').val(obj.message.customer_address);
-        $('#extendModal').find('#address2').val(obj.message.address2);
-        $('#extendModal').find('#address3').val(obj.message.address3);
+        //$('#extendModal').find('#address2').val(obj.message.address2);
+        //$('#extendModal').find('#address3').val(obj.message.address3);
         $('#extendModal').find('#contact').val(obj.message.customer_phone);
         $('#extendModal').find('#email').val(obj.message.customer_email);
         $('#extendModal').modal('show');
@@ -891,7 +891,7 @@ function numberWithCommas(x) {
 
 function edit(id) {
   $('#spinnerLoading').show();
-  $.post('php/getInquiry.php', {userID: id}, function(data){
+  $.post('php/getWeights.php', {userID: id}, function(data){
     var obj = JSON.parse(data);
     
     if(obj.status === 'success'){

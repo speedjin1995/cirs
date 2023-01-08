@@ -65,7 +65,7 @@ if(isset($_POST['customerType'], $_POST['machineType'], $_POST['problems'], $_PO
 	$problems = json_encode($pro);
 
 	if($_POST['id'] != null && $_POST['id'] != ''){
-		if ($update_stmt = $db->prepare("UPDATE weight SET customer_type=?, company_name=?, address1=?, address2=?, address3=?, contact_no=?, pic=?, mobile1=?, mobile2=?
+		if ($update_stmt = $db->prepare("UPDATE inquiry SET customer_type=?, company_name=?, address1=?, address2=?, address3=?, contact_no=?, pic=?, mobile1=?, mobile2=?
 		, email=?, case_status=?, case_no=?, calling_datetime=?, calling_by_cus=?, user_contact=?, machine_type=?, brand=?, model=?, structure=?, size=?, capacity=?, serial_no=?, 
 		warranty=?, status_validate=?, validate_by=?, last_validate_date=?, stamping_no=?, due_date=?, issues=?, pic_attend=?, updated_by=? WHERE id=?")){
 			$update_stmt->bind_param('ssssssssssssssssssssssssssssssss', $customerType, $customerName, $address1, $address2, $address3, $contact, 
@@ -103,9 +103,9 @@ if(isset($_POST['customerType'], $_POST['machineType'], $_POST['problems'], $_PO
 		}
 	}
 	else{
-		if ($insert_stmt = $db->prepare("INSERT INTO weight (customer_type, company_name, address1, address2, address3, contact_no, pic, mobile1,
+		if ($insert_stmt = $db->prepare("INSERT INTO inquiry (customer_type, company_name, address1, address2, address3, contact_no, pic, mobile1,
 		mobile2, email, case_status, case_no, calling_datetime, calling_by_cus, user_contact, machine_type, brand, model, structure, size, capacity, 
-		serial_no, warranty, status_validate, validate_by, last_validate_date, stamping_no, due_date, issues, pic_attend, created_datetime, created_by
+		serial_no, warranty, status_validate, validate_by, last_validate_date, stamping_no, due_date, issues, pic_attend, created_datetime, created_by,
 		updated_by) 
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
 			$insert_stmt->bind_param('sssssssssssssssssssssssssssssssss', $customerType, $customerName, $address1, $address2, $address3, $contact, 

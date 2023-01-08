@@ -302,10 +302,10 @@ to get the desired effect
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: #3d44c1;">
     <!-- Brand Logo -->
-    <a href="#" class="brand-link logo-switch">
+    <!--a href="#" class="brand-link logo-switch">
       <img src="assets/logoSmall.png" alt="Sneakercube Logo" class="brand-image-xl logo-xs">
       <img src="assets/logo.png" alt="Sneakercube Logo" class="brand-image-xl logo-xl">
-    </a>
+    </a-->
 
     <!-- Sidebar -->
     <div class="sidebar">
@@ -350,6 +350,12 @@ to get the desired effect
                 </a>
               </li>
             </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#stamping" data-file="stamp.php" class="nav-link link">
+              <i class="nav-icon fas fa-stamp"></i>
+              <p>Stamping</p>
+            </a>
           </li>
           <?php 
               if($role == "ADMIN"){
@@ -444,6 +450,12 @@ to get the desired effect
               </li>
             </ul>
           </li>
+          <!--li class="nav-item">
+            <a href="#transaction" data-file="transaction.html" class="nav-link link">
+              <i class="nav-icon fas fa-file"></i>
+              <p>Transaction</p>
+            </a>
+          </li-->
           <li class="nav-item">
             <a href="php/logout.php" class="nav-link">
               <i class="nav-icon fas fa-sign-out-alt"></i>
@@ -480,6 +492,8 @@ to get the desired effect
 <script src="plugins/jquery-validation/jquery.validate.min.js"></script>
 <!-- Bootstrap -->
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
 <!-- AdminLTE -->
 <script src="dist/js/adminlte.js"></script>
 <!-- OPTIONAL SCRIPTS -->
