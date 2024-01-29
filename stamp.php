@@ -49,7 +49,7 @@ else{
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Customer Inquiries</h1>
+        <h1 class="m-0 text-dark">Stamping</h1>
       </div><!-- /.col -->
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
@@ -141,15 +141,13 @@ else{
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <th>No</th>
-                  <th>Cus. Date Calling</th>
-                  <th>Case No.</th>
-                  <th>Case Status</th>
-                  <th>Requirement</th>
-                  <th>Customer Inquiry Case Notes</th>
-                  <th>Error Highlight 1</th>
-                  <th>Commit Date</th>
-                  <th>Attend By</th>
+                  <th>Customers</th>
+                  <th>Brands</th>
+                  <th>Desc</th>
+                  <th>Model</th>
+                  <th>Capacity</th>
+                  <th>Serial No.</th>
+                  <th>Next Due Date</th>
                   <th></th>
                 </tr>
               </thead>
@@ -166,7 +164,7 @@ else{
     <div class="modal-content">
       <form role="form" id="extendForm">
         <div class="modal-header bg-gray-dark color-palette">
-          <h4 class="modal-title">Add New Inquiry</h4>
+          <h4 class="modal-title">Add New Stamping</h4>
           <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -516,18 +514,16 @@ $(function () {
     'order': [[ 1, 'asc' ]],
     'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
-        'url':'php/loadInquiries.php'
+        'url':'php/loadStamping.php'
     },
     'columns': [
-      { data: 'no' },
-      { data: 'calling_datetime' },
-      { data: 'case_no' },
-      { data: 'case_status' },
-      { data: 'issues' },
-      { data: 'company_name' },
-      { data: 'contact_no' },
-      { data: 'updated_datetime' },
-      { data: 'name' },
+      { data: 'customer_name' },
+      { data: 'brand' },
+      { data: 'machine_type' },
+      { data: 'model' },
+      { data: 'capacity' },
+      { data: 'serial_no' },
+      { data: 'due_date' },
       { 
         data: 'id',
         render: function ( data, type, row ) {

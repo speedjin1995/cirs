@@ -413,6 +413,12 @@ to get the desired effect
                       <p>Customers</p>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="#validators" data-file="validators.php" class="nav-link link">
+                      <i class="nav-icon fas fa-search"></i>
+                      <p>Validators</p>
+                    </a>
+                  </li>
                 </ul>
               </li>';
               }
