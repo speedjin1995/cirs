@@ -28,7 +28,7 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "SELECT stamping.*, machines.machine_type, brand.brand, model.model, capacity.capacity, customers.customer_name, validators.validator FROM stamping, machines, brand, model, capacity, customers, validators WHERE stamping.descriptions = machines.id AND stamping.brand = brand.id AND stamping.model=model.id AND stamping.capacity=capacity.id AND stamping.customers=customers.id AND stamping.validate_by=validators.id ".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+$empQuery = "SELECT stamping.*, machines.machine_type, brand.brand, model.model, capacity.capacity, customers.customer_name, validators.validator FROM stamping, machines, brand, model, capacity, customers, validators WHERE stamping.descriptions = machines.id AND stamping.brand = brand.id AND stamping.model=model.id AND stamping.capacity=capacity.id AND stamping.customers=customers.id AND stamping.validate_by=validators.id ".$searchQuery;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;
