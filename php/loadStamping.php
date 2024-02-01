@@ -53,6 +53,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "customer_pic"=>$row['customer_pic'],
     "follow_up_date"=>$row['follow_up_date'],
     "quotation_no"=>$row['quotation_no'],
+    "status"=>$row['status'],
     "remarks"=>$remarks
   );
 
