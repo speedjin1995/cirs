@@ -326,36 +326,58 @@ to get the desired effect
           <!-- Add icons to the links using the .nav-icon class
             with font-awesome or any other icon font library -->
           <!--li class="nav-item">
-            <a href="#weight" data-file="weightPage.php" class="nav-link link">
+            <a href="#dashboard" data-file="dashboard.php" class="nav-link link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>Weight Weighing</p>
+              <p>Dashboard</p>
             </a>
           </li-->
-          <li class="nav-item has-treeview menu-open">
+          <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>Inquries<i class="fas fa-angle-left right"></i></p>
             </a>
-            <ul class="nav nav-treeview" style="display: block;">
-              <!--li class="nav-item">
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
                 <a href="#monitoring" data-file="monitoring.php" class="nav-link link">
                   <i class="nav-icon fas fa-chart-pie"></i>
                   <p>Monitoring</p>
                 </a>
-              </li-->
-              <li class="nav-item">
+              </li>
+              <?php if($role == "ADMIN"){
+                echo '<li class="nav-item">
                 <a href="#inquiry" data-file="inquiry.php" class="nav-link link">
                   <i class="nav-icon fas fa-tachometer-alt"></i>
                   <p>Inquries</p>
+                </a></li>';
+              }?>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview menu-open">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-certificate"></i>
+              <p>Stamping<i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview" style="display: block;">
+              <li class="nav-item">
+                <a href="#pending" data-file="pending.php" class="nav-link link">
+                  <i class="nav-icon fas fa-user-check"></i>
+                  <p>Pending Stamping</p>
+                </a>
+              </li>
+              <?php if($role == "ADMIN"){
+                echo '<li class="nav-item">
+                <a href="#stamping" data-file="stamp.php" class="nav-link link">
+                  <i class="nav-icon fas fa-stamp"></i>
+                  <p>All Stamping</p>
+                </a></li>';
+              }?>
+              <li class="nav-item">
+                <a href="#oldstamp" data-file="oldstamp.php" class="nav-link link">
+                  <i class="nav-icon fas fa-window-close"></i>
+                  <p>Cancelled Stamping</p>
                 </a>
               </li>
             </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#stamping" data-file="stamp.php" class="nav-link link">
-              <i class="nav-icon fas fa-stamp"></i>
-              <p>Stamping</p>
-            </a>
           </li>
           <?php 
               if($role == "ADMIN"){
@@ -562,7 +584,7 @@ $(function () {
       });
   });
   
-  $("a[href='#inquiry']").click();
+  $("a[href='#pending']").click();
 });
 
 function formatDate(date) {
