@@ -21,7 +21,7 @@ if(isset($_POST['userID'])){
             $result = $update_stmt->get_result();
             $message = array();
             
-            while ($row = $result->fetch_assoc()) {
+            if ($row = $result->fetch_assoc()) {
                 $message['id'] = $row['id'];
                 $message['customers'] = $row['customers'];
                 $message['brand'] = $row['brand'];

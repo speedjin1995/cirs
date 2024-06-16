@@ -539,7 +539,7 @@ to get the desired effect
 <script src="plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 <script src="plugins/chart.js/Chart.min.js"></script>
 <script src="plugins/daterangepicker/daterangepicker.js"></script>
-
+<script src="plugins/sheets/xlsx.full.min.js"></script>
 <script>
 $(function () {
   toastr.options = {
@@ -586,6 +586,10 @@ $(function () {
   
   $("a[href='#pending']").click();
 });
+
+function isValidDate(d) {
+  return !isNaN(Date.parse(d));
+}
 
 function formatDate(date) {
   const day = ('0' + date.getDate()).slice(-2);

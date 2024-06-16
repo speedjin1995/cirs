@@ -20,6 +20,7 @@ else{
   }
 
   $customers = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
+  $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $machinetypes = $db->query("SELECT * FROM machines WHERE deleted = '0'");
   $brands = $db->query("SELECT * FROM brand WHERE deleted = '0'");
   $models = $db->query("SELECT * FROM model WHERE deleted = '0'");
@@ -53,79 +54,73 @@ else{
 <!-- Main content -->
 <div class="content">
   <div class="container-fluid">
-    <!--div div class="row">
-      <div class="col-md-3 col-sm-6 col-12">
-        <div class="info-box" id="saleCard">
-          <span class="info-box-icon bg-info">
-            <i class="fas fa-shopping-cart"></i>
-          </span>
-          <div class="info-box-content">
-            <span class="info-box-text"></span>
-            <span class="info-box-number" id="salesInfo">0</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3 col-sm-6 col-12">
-        <div class="info-box" id="purchaseCard">
-          <span class="info-box-icon bg-success">
-            <i class="fas fa-shopping-basket"></i>
-          </span>
-          <div class="info-box-content">
-            <span class="info-box-text">Purchase</span>
-            <span class="info-box-number" id="purchaseInfo">0</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3 col-sm-6 col-12">
-        <div class="info-box" id="miscCard">
-          <span class="info-box-icon bg-warning">
-            <i class="fas fa-warehouse" style="color: white;"></i>
-          </span>
-          <div class="info-box-content">
-            <span class="info-box-text">Miscellaneous</span>
-            <span class="info-box-number" id="localInfo">0</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-3 col-sm-6 col-12">
-        <div class="input-group-text color-palette" id="indicatorConnected"><i>Indicator Connected</i></div>
-        <div class="input-group-text bg-danger color-palette" id="checkingConnection"><i>Checking Connection</i></div>
-      </div>
-    </div-->
-
-    <div class="row">
-      <!-- <div class="col-lg-12">
+  <div class="row">
+      <div class="col-lg-12">
         <div class="card">
-          <div class="card-header">
+          <div class="card-body">
             <div class="row">
-              <div class="col-4">
-                <div class="input-group-text color-palette" id="indicatorConnected"><i>Indicator Connected</i></div>
+              <div class="form-group col-3">
+                <label>From Date:</label>
+                <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
+                  <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
+                  <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
+                  <div class="input-group-text"><i class="fa fa-calendar"></i></div></div>
+                </div>
               </div>
-              <div class="col-4">
-                <div class="input-group-text bg-danger color-palette" id="checkingConnection"><i>Checking Connection</i></div>
+
+              <div class="form-group col-3">
+                <label>To Date:</label>
+                <div class="input-group date" id="toDatePicker" data-target-input="nearest">
+                  <input type="text" class="form-control datetimepicker-input" data-target="#toDatePicker" id="toDate"/>
+                  <div class="input-group-append" data-target="#toDatePicker" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
+                </div>
               </div>
-              <div class="col-4">
-                <button type="button" class="btn btn-block bg-gradient-primary"  onclick="setup()">
-                  Setup
+
+              <div class="col-3">
+                <div class="form-group">
+                  <label>Customer No</label>
+                  <select class="form-control select2" id="customerNoFilter" name="customerNoFilter">
+                    <option value="" selected disabled hidden>Please Select</option>
+                    <?php while($rowCustomer2=mysqli_fetch_assoc($customers2)){ ?>
+                      <option value="<?=$rowCustomer2['id'] ?>"><?=$rowCustomer2['customer_name'] ?></option>
+                    <?php } ?>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-9"></div>
+              <div class="col-3">
+                <button type="button" class="btn btn-block bg-gradient-warning btn-sm"  id="filterSearch">
+                  <i class="fas fa-search"></i>
+                  Search
                 </button>
               </div>
             </div>
           </div>
         </div>
-      </div> -->
+      </div>
+    </div>
 
+    <div class="row">
       <div class="col-lg-12">
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-6"></div>
-              <div class="col-3">
-                <!--button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="refreshBtn">Refresh</button-->
+              <div class="col-4"></div>
+              <div class="col-2">
+                <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
               </div>
-              <div class="col-3">
+              <div class="col-2">
+                <a href="/template/Stamping Record Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
+              </div>
+              <div class="col-2">
+                <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">Upload Excel</button>
+              </div>
+              <div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-warning btn-sm" onclick="newEntry()">Add New Stamping</button>
               </div>
             </div>
@@ -325,6 +320,30 @@ else{
   </div> <!-- /.modal-dialog -->
 </div> <!-- /.modal -->
 
+<div class="modal fade" id="uploadModal">
+  <div class="modal-dialog modal-xl" style="max-width: 90%;">
+    <div class="modal-content">
+      <form role="form" id="uploadForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Upload Excel File</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="file" id="fileInput">
+          <button id="previewButton">Preview Data</button>
+          <div id="previewTable" style="overflow: auto;"></div>
+        </div>
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <script>
 // Values
 $(function () {
@@ -385,15 +404,15 @@ $(function () {
   });*/
   
   //Date picker
-  /*$('#fromDate').datetimepicker({
-      icons: { time: 'far fa-clock' },
-      format: 'DD/MM/YYYY hh:mm:ss A'
+  $('#fromDate').datetimepicker({
+    icons: { time: 'far fa-clock' },
+    format: 'DD/MM/YYYY'
   });
 
   $('#toDate').datetimepicker({
-      icons: { time: 'far fa-clock' },
-      format: 'DD/MM/YYYY hh:mm:ss A'
-  });*/
+    icons: { time: 'far fa-clock' },
+    format: 'DD/MM/YYYY'
+  });
 
   $.validator.setDefaults({
     submitHandler: function () {
@@ -417,7 +436,99 @@ $(function () {
           $('#spinnerLoading').hide();
         });
       }
+      else if($('#uploadModal').hasClass('show')){
+        $('#spinnerLoading').show();
+
+        // Serialize the form data into an array of objects
+        var formData = $('#uploadForm').serializeArray();
+        var data = [];
+        var rowIndex = -1;
+        formData.forEach(function(field) {
+            var match = field.name.match(/([a-zA-Z]+)\[(\d+)\]/);
+            if (match) {
+              var fieldName = match[1];
+              var index = parseInt(match[2], 10);
+              if (index !== rowIndex) {
+                rowIndex = index;
+                data.push({});
+              }
+              data[index][fieldName] = field.value;
+            }
+        });
+
+        // Send the JSON array to the server
+        $.ajax({
+            url: 'php/uploadStampings.php',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+              var obj = JSON.parse(response);
+              if (obj.status === 'success') {
+                $('#uploadModal').modal('hide');
+                toastr["success"](obj.message, "Success:");
+                $('#weightTable').DataTable().ajax.reload();
+              } 
+              else if (obj.status === 'failed') {
+                toastr["error"](obj.message, "Failed:");
+              } 
+              else {
+                toastr["error"]("Something went wrong when editing", "Failed:");
+              }
+              
+              $('#spinnerLoading').hide();
+            }
+        });
+      }
     }
+  });
+
+  $('#filterSearch').on('click', function(){
+    //$('#spinnerLoading').show();
+
+    var fromDateValue = $('#fromDate').val();
+    var toDateValue = $('#toDate').val();
+    var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
+
+    //Destroy the old Datatable
+    $("#weightTable").DataTable().clear().destroy();
+
+    //Create new Datatable
+    table = $("#weightTable").DataTable({
+      "responsive": true,
+      "autoWidth": false,
+      'processing': true,
+      'serverSide': true,
+      'serverMethod': 'post',
+      'searching': false,
+      'order': [[ 1, 'asc' ]],
+      'columnDefs': [ { orderable: false, targets: [0] }],
+      'ajax': {
+        'type': 'POST',
+        'url':'php/filterStamping.php',
+        'data': {
+          fromDate: fromDateValue,
+          toDate: toDateValue,
+          customer: customerNoFilter,
+        } 
+      },
+      'columns': [
+        { data: 'customer_name' },
+        { data: 'brand' },
+        { data: 'machine_type' },
+        { data: 'model' },
+        { data: 'capacity' },
+        { data: 'serial_no' },
+        { data: 'due_date' },
+        { data: 'status' },
+        { 
+          data: 'id',
+          render: function ( data, type, row ) {
+            return '<div class="row"><div class="col-12"><button type="button" id="edit'+data+'" onclick="edit('+data+')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div></div>';
+          }
+        }
+      ],
+    });
   });
 
   /*$('#refreshBtn').on('click', function(){
@@ -492,6 +603,38 @@ $(function () {
   $('#datePicker').on('click', function () {
     $('#datePicker').attr('data-info', '1');
   });*/
+
+  $('#uploadExccl').on('click', function(){
+    $('#uploadModal').modal('show');
+
+    $('#uploadForm').validate({
+      errorElement: 'span',
+      errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      }
+    });
+  });
+
+  $('#uploadModal').find('#previewButton').on('click', function(){
+    var fileInput = document.getElementById('fileInput');
+    var file = fileInput.files[0];
+    var reader = new FileReader();
+    
+    reader.onload = function(e) {
+      var data = e.target.result;
+      // Process data and display preview
+      displayPreview(data);
+    };
+
+    reader.readAsBinaryString(file);
+  });
 });
 
 function format (row) {
@@ -753,4 +896,64 @@ function portrait(id) {
     }
   });
 }
+
+function displayPreview(data) {
+  // Parse the Excel data
+  var workbook = XLSX.read(data, { type: 'binary' });
+
+  // Get the first sheet
+  var sheetName = workbook.SheetNames[0];
+  var sheet = workbook.Sheets[sheetName];
+
+  // Convert the sheet to an array of objects
+  var jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+  // Get the headers
+  var headers = jsonData[0];
+
+  // Ensure we handle cases where there may be less than 15 columns
+  while (headers.length < 15) {
+    headers.push(''); // Adding empty headers to reach 15 columns
+  }
+
+  // Create HTML table headers
+  var htmlTable = '<table style="width:100%;"><thead><tr>';
+  headers.forEach(function(header) {
+      htmlTable += '<th>' + header + '</th>';
+  });
+  htmlTable += '</tr></thead><tbody>';
+
+  // Iterate over the data and create table rows
+  for (var i = 1; i < jsonData.length; i++) {
+      htmlTable += '<tr>';
+      var rowData = jsonData[i];
+
+      // Ensure we handle cases where there may be less than 15 cells in a row
+      while (rowData.length < 15) {
+        rowData.push(''); // Adding empty cells to reach 15 columns
+      }
+
+      for (var j = 0; j < 15; j++) {
+        var cellData = rowData[j];
+        var formattedData = cellData;
+
+        // Check if cellData is a valid Excel date serial number and format it to DD/MM/YYYY
+        if (typeof cellData === 'number' && cellData > 0) {
+            var excelDate = XLSX.SSF.parse_date_code(cellData);
+            if (excelDate) {
+                formattedData = formatDate2(new Date(excelDate.y, excelDate.m - 1, excelDate.d));
+            }
+        }
+
+        htmlTable += '<td><input type="text" id="'+headers[j]+(i-1)+'" name="'+headers[j]+'['+(i-1)+']" value="' + (formattedData == null ? '' : formattedData) + '" /></td>';
+      }
+      htmlTable += '</tr>';
+  }
+
+  htmlTable += '</tbody></table>';
+
+  var previewTable = document.getElementById('previewTable');
+  previewTable.innerHTML = htmlTable;
+}
+
 </script>

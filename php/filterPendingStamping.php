@@ -13,10 +13,28 @@ $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
 $searchValue = mysqli_real_escape_string($db,$_POST['search']['value']); // Search value
 
 ## Search 
-$searchQuery = "";
-/*if($searchValue != ''){
-  $searchQuery = " and (inquiry.case_no like '%".$searchValue."%' or inquiry.vehicleNo like '%".$searchValue."%' )";
-}*/
+$searchQuery = " ";
+
+if($_POST['fromDate'] != null && $_POST['fromDate'] != ''){
+  $dateTime = DateTime::createFromFormat('d/m/Y', $_POST['fromDate']);
+  $fromDateTime = $dateTime->format('Y-m-d 00:00:00');
+  $searchQuery = " and stamping_date >= '".$fromDateTime."'";
+}
+
+if($_POST['toDate'] != null && $_POST['toDate'] != ''){
+  $dateTime = DateTime::createFromFormat('d/m/Y', $_POST['toDate']);
+  $toDateTime = $dateTime->format('Y-m-d 23:59:59');
+	$searchQuery .= " and stamping_date <= '".$toDateTime."'";
+}
+
+if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] != '-'){
+	$searchQuery .= " and customers = '".$_POST['customer']."'";
+}
+
+if($searchValue != ''){
+  $searchQuery = " and (stamping_no like '%".$searchValue."%' OR
+  quotation_no like '%".$searchValue."%')";
+}
 
 ## Total number of records without filtering
 $sel = mysqli_query($db,"select count(*) as allcount FROM stamping");
@@ -29,7 +47,7 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "SELECT * FROM stamping WHERE status = 'Active' ".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
+$empQuery = "SELECT * FROM stamping WHERE status = 'Active'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;

@@ -106,7 +106,7 @@ else{
                 <!--button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="refreshBtn">Refresh</button-->
               </div>
               <div class="col-3">
-                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" onclick="newEntry()">Add New Stamping</button>
+                <!--button type="button" class="btn btn-block bg-gradient-warning btn-sm" onclick="newEntry()">Add New Stamping</button-->
               </div>
             </div>
           </div>

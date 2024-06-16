@@ -1,6 +1,7 @@
 <?php
 ## Database configuration
 require_once 'db_connect.php';
+require_once 'requires/lookup.php';
 
 ## Read value
 $draw = $_POST['draw'];
@@ -15,41 +16,41 @@ $searchValue = mysqli_real_escape_string($db,$_POST['search']['value']); // Sear
 $today = new DateTime("now");
 $today->setTime(0, 0, 0);
 $today->modify('+1 month');
-$newDate = $today->format('Y-m-d H:i:s');
-$searchQuery = "AND stamping.status = 'Active' AND stamping.due_date <= '".$newDate."'";
+$newDate = $today->format('Y-m-d 23:59:59');
+$searchQuery = "WHERE status = 'Cancelled' AND due_date <= '".$newDate."'";
 /*if($searchValue != ''){
   $searchQuery = " and (inquiry.case_no like '%".$searchValue."%' or inquiry.vehicleNo like '%".$searchValue."%' )";
 }*/
 
 ## Total number of records without filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM stamping, machines, brand, model, capacity, customers, validators WHERE stamping.descriptions = machines.id AND stamping.brand = brand.id AND stamping.model=model.id AND stamping.capacity=capacity.id AND stamping.customers=customers.id AND stamping.validate_by=validators.id");
+$sel = mysqli_query($db,"select count(*) as allcount FROM stamping");
 $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM stamping, machines, brand, model, capacity, customers, validators WHERE stamping.descriptions = machines.id AND stamping.brand = brand.id AND stamping.model=model.id AND stamping.capacity=capacity.id AND stamping.customers=customers.id AND stamping.validate_by=validators.id ".$searchQuery);
+$sel = mysqli_query($db,"select count(*) as allcount FROM stamping ".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "SELECT stamping.*, machines.machine_type, brand.brand, model.model, capacity.capacity, customers.customer_name, validators.validator FROM stamping, machines, brand, model, capacity, customers, validators WHERE stamping.descriptions = machines.id AND stamping.brand = brand.id AND stamping.model=model.id AND stamping.capacity=capacity.id AND stamping.customers=customers.id AND stamping.validate_by=validators.id ".$searchQuery;
+$empQuery = "SELECT * FROM stamping ".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;
 
 while($row = mysqli_fetch_assoc($empRecords)) {
-  $remarks = json_decode($row['remarks'], true);
+  $remarks = $row['remarks'] != null ? json_decode($row['remarks'], true) : [];
 
   $data[] = array( 
     "no"=>$counter,
     "id"=>$row['id'],
-    "customer_name"=>$row['customer_name'],
-    "brand"=>$row['brand'],
-    "machine_type"=>$row['machine_type'],
-    "model"=>$row['model'],
-    "capacity"=>$row['capacity'],
+    "customer_name"=>$row['customers'] != null ? searchCustNameById($row['customers'], $db) : '',
+    "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
+    "machine_type"=>$row['descriptions'] != null ? searchMachineNameById($row['descriptions'], $db) : '',
+    "model"=>$row['model'] != null  ? searchModelNameById($row['model'], $db) : '',
+    "capacity"=>$row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '',
     "serial_no"=>$row['serial_no'],
-    "validator"=>$row['validator'],
+    "validator"=>$row['validate_by'] != null ? searchValidatorNameById($row['validate_by'], $db) : '',
     "stamping_no"=>$row['stamping_no'],
     "invoice_no"=>$row['invoice_no'],
     "stamping_date"=>$row['stamping_date'],
