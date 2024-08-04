@@ -331,7 +331,7 @@ to get the desired effect
               <p>Dashboard</p>
             </a>
           </li-->
-          <li class="nav-item has-treeview">
+          <!--li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>Inquries<i class="fas fa-angle-left right"></i></p>
@@ -343,15 +343,15 @@ to get the desired effect
                   <p>Monitoring</p>
                 </a>
               </li>
-              <?php if($role == "ADMIN"){
+              <?php /*if($role == "ADMIN"){
                 echo '<li class="nav-item">
                 <a href="#inquiry" data-file="inquiry.php" class="nav-link link">
                   <i class="nav-icon fas fa-tachometer-alt"></i>
                   <p>Inquries</p>
                 </a></li>';
-              }?>
+              }*/?>
             </ul>
-          </li>
+          </li-->
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-certificate"></i>
@@ -421,6 +421,12 @@ to get the desired effect
                     <a href="#capacity" data-file="capacity.php" class="nav-link link">
                       <i class="nav-icon fas fa-industry"></i>
                       <p>Capacity</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#alat" data-file="alat.php" class="nav-link link">
+                      <i class="nav-icon fas fa-tools"></i>
+                      <p>Jenis Alat</p>
                     </a>
                   </li>
                   <li class="nav-item">
@@ -584,7 +590,7 @@ $(function () {
       });
   });
   
-  $("a[href='#pending']").click();
+  $("a[href='#stamping']").click();
 });
 
 function isValidDate(d) {
@@ -605,16 +611,41 @@ function formatDate(date) {
 }
 
 function formatDate2(date) {
-  const day = ('0' + date.getDate()).slice(-2);
-  const month = ('0' + (date.getMonth() + 1)).slice(-2);
-  const year = date.getFullYear();
-  const hours = ('0' + date.getHours()).slice(-2);
-  const minutes = ('0' + date.getMinutes()).slice(-2);
-  const seconds = ('0' + date.getSeconds()).slice(-2);
-  const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+  if(date){
+    const day = ('0' + date.getDate()).slice(-2);
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const year = date.getFullYear();
+    const hours = ('0' + date.getHours()).slice(-2);
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+    const seconds = ('0' + date.getSeconds()).slice(-2);
+    const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
 
-  //return `${day}/${month}/${year} ${hours}:${minutes}:${seconds} ${ampm}`;
-  return `${day}/${month}/${year}`;
+    //return `${day}/${month}/${year} ${hours}:${minutes}:${seconds} ${ampm}`;
+    return `${day}/${month}/${year}`;
+  }
+  else{
+    return '';
+  }
+}
+
+function formatDate3(date2) {
+  if(date2){
+    var date = new Date(date2);
+
+    const day = ('0' + date.getDate()).slice(-2);
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const year = date.getFullYear();
+    const hours = ('0' + date.getHours()).slice(-2);
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+    const seconds = ('0' + date.getSeconds()).slice(-2);
+    const ampm = date.getHours() >= 12 ? 'PM' : 'AM';
+
+    //return `${day}/${month}/${year} ${hours}:${minutes}:${seconds} ${ampm}`;
+    return `${day}/${month}/${year}`;
+  }
+  else{
+    return '';
+  }
 }
 
 function numberWithCommas(x) {

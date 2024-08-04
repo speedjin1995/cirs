@@ -8,13 +8,12 @@ if(!isset($_SESSION['userID'])){
     echo 'window.location.href = "../login.html";</script>';
 }
 
-if(isset($_POST['capacity'], $_POST['capacity'])){
+if(isset($_POST['capacity'])){
     $capacity = filter_input(INPUT_POST, 'capacity', FILTER_SANITIZE_STRING);
-    $price = filter_input(INPUT_POST, 'price', FILTER_SANITIZE_STRING);
 
     if($_POST['id'] != null && $_POST['id'] != ''){
-        if ($update_stmt = $db->prepare("UPDATE `capacity` SET `capacity`=?, price=? WHERE id=?")) {
-            $update_stmt->bind_param('sss', $capacity, $price, $_POST['id']);
+        if ($update_stmt = $db->prepare("UPDATE `alat` SET `alat`=? WHERE id=?")) {
+            $update_stmt->bind_param('ss', $capacity, $_POST['id']);
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
@@ -39,8 +38,8 @@ if(isset($_POST['capacity'], $_POST['capacity'])){
         }
     }
     else{
-        if ($insert_stmt = $db->prepare("INSERT INTO `capacity` (`capacity`, price) VALUES (?, ?)")) {
-            $insert_stmt->bind_param('ss', $capacity, $price);
+        if ($insert_stmt = $db->prepare("INSERT INTO `alat` (`alat`) VALUES (?)")) {
+            $insert_stmt->bind_param('s', $capacity);
             
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {

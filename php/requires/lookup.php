@@ -80,6 +80,22 @@ function searchCapacityIdByName($value, $db) {
     return $id;
 }
 
+function searchJenisAlatIdByName($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM alat WHERE alat=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['id'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
 function searchValidatorIdByName($value, $db) {
     $id = null;
 
@@ -177,6 +193,22 @@ function searchCapacityNameById($value, $db) {
     return $id;
 }
 
+function searchAlatNameById($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM alat WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['alat'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
 function searchValidatorNameById($value, $db) {
     $id = null;
 
@@ -193,4 +225,19 @@ function searchValidatorNameById($value, $db) {
     return $id;
 }
 
+function searchStaffNameById($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM users WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['name'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
 ?>

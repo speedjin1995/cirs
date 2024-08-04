@@ -23,23 +23,42 @@ if(isset($_POST['userID'])){
             
             if ($row = $result->fetch_assoc()) {
                 $message['id'] = $row['id'];
+                $message['customer_type'] = $row['customer_type'];
                 $message['customers'] = $row['customers'];
+                $message['address1'] = $row['address1'];
+                $message['address2'] = $row['address2'];
+                $message['address3'] = $row['address3'];
                 $message['brand'] = $row['brand'];
-                $message['descriptions'] = $row['descriptions'];
+                $message['machine_type'] = $row['machine_type'];
                 $message['model'] = $row['model'];
                 $message['capacity'] = $row['capacity'];
                 $message['serial_no'] = $row['serial_no'];
                 $message['validate_by'] = $row['validate_by'];
-                $message['stamping_no'] = $row['stamping_no'];
+                $message['jenis_alat'] = $row['jenis_alat'];
+                $message['no_daftar'] = $row['no_daftar'];
+                $message['pin_keselamatan'] = $row['pin_keselamatan'];
+                $message['siri_keselamatan'] = $row['siri_keselamatan'];
+                $message['include_cert'] = $row['include_cert'];
+                $message['borang_d'] = $row['borang_d'];
                 $message['invoice_no'] = $row['invoice_no'];
+                $message['cash_bill'] = $row['cash_bill'];
                 $message['stamping_date'] = $row['stamping_date'];
                 $message['due_date'] = $row['due_date'];
                 $message['pic'] = $row['pic'];
                 $message['customer_pic'] = $row['customer_pic'];
-                $message['follow_up_date'] = $row['follow_up_date'];
                 $message['quotation_no'] = $row['quotation_no'];
+                $message['quotation_date'] = $row['quotation_date'];
+                $message['purchase_no'] = $row['purchase_no'];
+                $message['purchase_date'] = $row['purchase_date'];
                 $message['remarks'] = $row['remarks'];
+                $message['log'] = json_decode($row['log'], true);
+                $message['unit_price'] = $row['unit_price'];
+                $message['cert_price'] = $row['cert_price'];
+                $message['total_amount'] = $row['total_amount'];
+                $message['sst'] = $row['sst'];
+                $message['subtotal_amount'] = $row['subtotal_amount'];
                 $message['status'] = $row['status'];
+                $message['existing_id'] = $row['existing_id'];
             }
             
             echo json_encode(

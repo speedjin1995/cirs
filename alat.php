@@ -16,7 +16,7 @@ else{
     <div class="container-fluid">
         <div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0 text-dark">Capacity</h1>
+				<h1 class="m-0 text-dark">Jenis Alat</h1>
 			</div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -33,7 +33,7 @@ else{
                         <div class="row">
                             <div class="col-9"></div>
                             <div class="col-3">
-                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addCapacity">Add Capacity</button>
+                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addCapacity">Add Jenis Alat</button>
                             </div>
                         </div>
                     </div>
@@ -42,8 +42,7 @@ else{
 							<thead>
 								<tr>
                                     <th>No.</th>
-									<th>Capacity</th>
-                                    <th>Price</th>
+									<th>Jenis Alat</th>
 									<th>Actions</th>
 								</tr>
 							</thead>
@@ -60,7 +59,7 @@ else{
       <div class="modal-content">
         <form role="form" id="capacityForm">
             <div class="modal-header">
-              <h4 class="modal-title">Add Capacity</h4>
+              <h4 class="modal-title">Add Jenis Alat</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -71,12 +70,8 @@ else{
                   <input type="hidden" class="form-control" id="id" name="id">
                 </div>
                 <div class="form-group">
-                  <label for="capacity">Capacity *</label>
+                  <label for="capacity">Jenis Alat *</label>
                   <input type="text" class="form-control" name="capacity" id="capacity" placeholder="Enter Capacity" required>
-                </div>
-                <div class="form-group">
-                  <label for="price">Price *</label>
-                  <input type="number" class="form-control" name="price" id="price" placeholder="Enter Price" required>
                 </div>
               </div>
             </div>
@@ -101,12 +96,11 @@ $(function () {
         'serverMethod': 'post',
         'order': [[ 1, 'asc' ]],
         'ajax': {
-            'url':'php/loadCapacity.php'
+            'url':'php/loadAlat.php'
         },
         'columns': [
             { data: 'counter' },
-            { data: 'capacity' },
-            { data: 'price' },
+            { data: 'alat' },
             { 
                 data: 'id',
                 render: function ( data, type, row ) {
@@ -123,7 +117,7 @@ $(function () {
     $.validator.setDefaults({
         submitHandler: function () {
             $('#spinnerLoading').show();
-            $.post('php/capacity.php', $('#capacityForm').serialize(), function(data){
+            $.post('php/alat.php', $('#capacityForm').serialize(), function(data){
                 var obj = JSON.parse(data); 
                 
                 if(obj.status === 'success'){
@@ -147,7 +141,6 @@ $(function () {
     $('#addCapacity').on('click', function(){
         $('#capacityModal').find('#id').val("");
         $('#capacityModal').find('#capacity').val("");
-        $('#capacityModal').find('#price').val("0.00");
         $('#capacityModal').modal('show');
         
         $('#capacityForm').validate({
@@ -168,13 +161,12 @@ $(function () {
 
 function edit(id){
     $('#spinnerLoading').show();
-    $.post('php/getCapacity.php', {userID: id}, function(data){
+    $.post('php/getAlat.php', {userID: id}, function(data){
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){
             $('#capacityModal').find('#id').val(obj.message.id);
-            $('#capacityModal').find('#capacity').val(obj.message.capacity);
-            $('#capacityModal').find('#price').val(obj.message.price);
+            $('#capacityModal').find('#capacity').val(obj.message.alat);
             $('#capacityModal').modal('show');
             
             $('#capacityForm').validate({
@@ -203,7 +195,7 @@ function edit(id){
 
 function deactivate(id){
     $('#spinnerLoading').show();
-    $.post('php/deleteCapacity.php', {userID: id}, function(data){
+    $.post('php/deleteAlat.php', {userID: id}, function(data){
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){
