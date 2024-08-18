@@ -185,7 +185,7 @@ function searchCapacityNameById($value, $db) {
         $select_stmt->execute();
         $result = $select_stmt->get_result();
         if ($row = $result->fetch_assoc()) {
-            $id = $row['capacity'];
+            $id = $row['name'];
         }
         $select_stmt->close();
     }

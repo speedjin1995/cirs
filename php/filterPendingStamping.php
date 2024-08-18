@@ -32,8 +32,10 @@ if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] 
 }
 
 if($searchValue != ''){
-  $searchQuery = " and (stamping_no like '%".$searchValue."%' OR
-  quotation_no like '%".$searchValue."%')";
+  $searchQuery = " and (purchase_no like '%".$searchValue."%' OR
+  quotation_no like '%".$searchValue."%' OR
+  invoice_no like '%".$searchValue."%' OR
+  cash_bill like '%".$searchValue."%')";
 }
 
 ## Total number of records without filtering
@@ -42,38 +44,53 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM stamping WHERE status = 'Active'".$searchQuery);
+$sel = mysqli_query($db,"select count(*) as allcount FROM stamping WHERE status = 'Pending'".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "SELECT * FROM stamping WHERE status = 'Active'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
+$empQuery = "SELECT * FROM stamping WHERE status = 'Pending'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;
 
 while($row = mysqli_fetch_assoc($empRecords)) {
-  $remarks = $row['remarks'] != null ? json_decode($row['remarks'], true) : [];
-
   $data[] = array( 
     "no"=>$counter,
     "id"=>$row['id'],
-    "customer_name"=>$row['customers'] != null ? searchCustNameById($row['customers'], $db) : '',
+    "customers"=>$row['customers'] != null ? searchCustNameById($row['customers'], $db) : '',
+    "address1"=>$row['address1'] ?? '',
+    "address2"=>$row['address2'] ?? '',
+    "address3"=>$row['address3'] ?? '',
     "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
-    "machine_type"=>$row['descriptions'] != null ? searchMachineNameById($row['descriptions'], $db) : '',
+    "machine_type"=>$row['machine_type'] != null ? searchMachineNameById($row['machine_type'], $db) : '',
     "model"=>$row['model'] != null  ? searchModelNameById($row['model'], $db) : '',
     "capacity"=>$row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '',
-    "serial_no"=>$row['serial_no'],
+    "serial_no"=>$row['serial_no'] ?? '',
     "validator"=>$row['validate_by'] != null ? searchValidatorNameById($row['validate_by'], $db) : '',
-    "stamping_no"=>$row['stamping_no'],
-    "invoice_no"=>$row['invoice_no'],
-    "stamping_date"=>$row['stamping_date'],
-    "due_date"=>$row['due_date'],
-    "customer_pic"=>$row['customer_pic'],
-    "follow_up_date"=>$row['follow_up_date'],
-    "quotation_no"=>$row['quotation_no'],
+    "jenis_alat"=>$row['jenis_alat'] != null ? searchAlatNameById($row['jenis_alat'], $db) : '', 
+    "cash_bill"=>$row['cash_bill'] ?? '',
+    "invoice_no"=>$row['invoice_no'] ?? '',
+    "stamping_date"=>$row['stamping_date'] ?? '',
+    "due_date"=>$row['due_date'] ?? '',
+    "pic"=>$row['pic'] != null ? searchStaffNameById($row['pic'], $db) : '',
+    "customer_pic"=>$row['customer_pic'] ?? '',
+    "quotation_date"=>$row['quotation_date'] ?? '',
+    "quotation_no"=>$row['quotation_no'] ?? '',
+    "purchase_no"=>$row['purchase_no'] ?? '',
+    "purchase_date"=>$row['purchase_date'] ?? '',
+    "unit_price"=>$row['unit_price'] ?? '',
+    "cert_price"=>$row['cert_price'] ?? '',
+    "total_amount"=>$row['total_amount'] ?? '',
+    "sst"=>$row['sst'] ?? '',
+    "subtotal_amount"=>$row['subtotal_amount'] ?? '',
+    "log"=> json_decode($row['log'], true),
     "status"=>$row['status'],
-    "remarks"=>$remarks
+    "remarks"=>$row['remarks'] ?? '',
+    "no_daftar"=>$row['no_daftar'] ?? '',
+    "pin_keselamatan"=>$row['pin_keselamatan'] ?? '',
+    "siri_keselamatan"=>$row['siri_keselamatan'] ?? '',
+    "borang_d"=>$row['borang_d'] ?? ''
   );
 
   $counter++;

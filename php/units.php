@@ -8,14 +8,12 @@ if(!isset($_SESSION['userID'])){
     echo 'window.location.href = "../login.html";</script>';
 }
 
-if(isset($_POST['capacityName'], $_POST['capacity'], $_POST['unit'])){
-    $capacityName = filter_input(INPUT_POST, 'capacityName', FILTER_SANITIZE_STRING);
-    $capacity = filter_input(INPUT_POST, 'capacity', FILTER_SANITIZE_STRING);
-    $unit = filter_input(INPUT_POST, 'unit', FILTER_SANITIZE_STRING);
+if(isset($_POST['units'])){
+    $lotsNumber = filter_input(INPUT_POST, 'units', FILTER_SANITIZE_STRING);
 
     if($_POST['id'] != null && $_POST['id'] != ''){
-        if ($update_stmt = $db->prepare("UPDATE `capacity` SET `name`=?, `capacity`=?, `units`=? WHERE id=?")) {
-            $update_stmt->bind_param('ssss', $capacityName, $capacity, $unit, $_POST['id']);
+        if ($update_stmt = $db->prepare("UPDATE units SET units=? WHERE id=?")) {
+            $update_stmt->bind_param('ss', $lotsNumber, $_POST['id']);
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
@@ -40,8 +38,8 @@ if(isset($_POST['capacityName'], $_POST['capacity'], $_POST['unit'])){
         }
     }
     else{
-        if ($insert_stmt = $db->prepare("INSERT INTO `capacity` (`name`, `capacity`, `units`) VALUES (?, ?, ?)")) {
-            $insert_stmt->bind_param('sss', $capacityName, $capacity, $unit);
+        if ($insert_stmt = $db->prepare("INSERT INTO units (units) VALUES (?)")) {
+            $insert_stmt->bind_param('s', $lotsNumber);
             
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {
@@ -63,14 +61,6 @@ if(isset($_POST['capacityName'], $_POST['capacity'], $_POST['unit'])){
                     )
                 );
             }
-        }
-        else{
-            echo json_encode(
-                array(
-                    "status"=> "failed", 
-                    "message"=> "Something goes wrong when create capacity"
-                )
-            );
         }
     }
 }

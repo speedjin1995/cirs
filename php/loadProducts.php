@@ -18,17 +18,17 @@ if($searchValue != ''){
 }
 
 ## Total number of records without filtering
-$sel = mysqli_query($db,"select count(*) as allcount from capacity, units WHERE capacity.units = units.id AND capacity.deleted = '0'");
+$sel = mysqli_query($db,"select count(*) as allcount from products, machines, capacity, alat, validators WHERE products.machine_type = machines.id AND products.jenis_alat = alat.id AND products.capacity = capacity.id AND products.validator = validators.id AND products.deleted = '0'");
 $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM capacity, units WHERE capacity.units = units.id AND capacity.deleted = '0'".$searchQuery);
+$sel = mysqli_query($db,"select count(*) as allcount FROM products, machines, capacity, alat, validators WHERE products.machine_type = machines.id AND products.jenis_alat = alat.id AND products.capacity = capacity.id AND products.validator = validators.id AND capacity.deleted = '0'".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "select capacity.*, units.units from capacity, units WHERE capacity.units = units.id AND capacity.deleted = '0'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+$empQuery = "select products.*, machines.machine_type, capacity.name as capacity, alat.alat, validators.validator from products, machines, capacity, alat, validators WHERE products.machine_type = machines.id AND products.jenis_alat = alat.id AND products.capacity = capacity.id AND products.validator = validators.id AND capacity.deleted = '0'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;
@@ -38,8 +38,11 @@ while($row = mysqli_fetch_assoc($empRecords)) {
       "counter"=>$counter,
       "id"=>$row['id'],
       "name"=>$row['name'],
+      "machine_type"=>$row['machine_type'],
       "capacity"=>$row['capacity'],
-      "units"=>$row['units']
+      "alat"=>$row['alat'],
+      "validator"=>$row['validator'],
+      "price"=>$row['price']
     );
 
     $counter++;

@@ -141,7 +141,7 @@ $(function () {
 
     $('#addBrand').on('click', function(){
         $('#brandModal').find('#id').val("");
-        $('#brandModal').find('#status').val("");
+        $('#brandModal').find('#brand').val("");
         $('#brandModal').modal('show');
         
         $('#brandForm').validate({

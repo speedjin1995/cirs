@@ -31,6 +31,10 @@ if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] 
 	$searchQuery .= " and customers = '".$_POST['customer']."'";
 }
 
+if($_POST['status'] != null && $_POST['status'] != '' && $_POST['status'] != '-'){
+	$searchQuery .= " and status = '".$_POST['status']."'";
+}
+
 if($searchValue != ''){
   $searchQuery = " and (purchase_no like '%".$searchValue."%' OR
   quotation_no like '%".$searchValue."%' OR
@@ -44,12 +48,12 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM stamping WHERE status = 'Active'".$searchQuery);
+$sel = mysqli_query($db,"select count(*) as allcount FROM stamping WHERE 1=1".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "SELECT * FROM stamping WHERE status = 'Active'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
+$empQuery = "SELECT * FROM stamping WHERE 1=1".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;

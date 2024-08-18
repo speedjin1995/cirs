@@ -31,6 +31,7 @@ else{
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE deleted = '0'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
+  $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
 }
 ?>
 
@@ -87,6 +88,17 @@ else{
                     <?php while($rowCustomer2=mysqli_fetch_assoc($customers2)){ ?>
                       <option value="<?=$rowCustomer2['id'] ?>"><?=$rowCustomer2['customer_name'] ?></option>
                     <?php } ?>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-3">
+                <div class="form-group">
+                  <label>Status</label>
+                  <select class="form-control" id="statusFilter" name="statusFilter">
+                    <option value="" selected disabled hidden>Please Select</option>
+                    <option value="Active">Active</option>
+                    <option value="Complete">Complete</option>
                   </select>
                 </div>
               </div>
@@ -165,305 +177,308 @@ else{
 
         <div class="modal-body" >
           <input type="hidden" class="form-control" id="id" name="id">
-
-          <div class="row">
-            <div class="col-4">
-              <div class="form-group">
-                <label>Customer Type * </label>
-                <select class="form-control" style="width: 100%;" id="customerType" name="customerType" required>
-                  <option value="NEW">NEW</option>
-                  <option value="EXISTING">EXISTING</option>
-                </select>
+          <div class="card card-primary">
+            <div class="card-body">
+              <div class="row">
+                <h4>Customer Information</h4>
               </div>
-            </div>
-            <div class="col-4">
-              <div class="form-group">
-                <label>Brand *</label>
-                <select class="form-control" style="width: 100%;" id="brand" name="brand" required>
-                  <option selected="selected">-</option>
-                  <?php while($rowB=mysqli_fetch_assoc($brands)){ ?>
-                    <option value="<?=$rowB['id'] ?>"><?=$rowB['brand'] ?></option>
-                  <?php } ?>
-                </select>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="form-group">
-                <label>Validator * </label>
-                <select class="form-control" style="width: 100%;" id="validator" name="validator" required>
-                  <option selected="selected">-</option>
-                  <?php while($rowVA=mysqli_fetch_assoc($validators)){ ?>
-                    <option value="<?=$rowVA['id'] ?>"><?=$rowVA['validator'] ?></option>
-                  <?php } ?>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-4">
-              <div class="form-group">
-                <label>Customer * </label>
-                <select class="form-control" style="width: 100%;" id="company" name="company" required></select>
-                <input class="form-control" type="text" placeholder="Company Name" id="companyText" name="companyText" style="display: none;">
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="form-group">
-                <label>Machine Type *</label>
-                <select class="form-control" style="width: 100%;" id="machineType" name="machineType" required>
-                  <option selected="selected">-</option>
-                  <?php while($rowS=mysqli_fetch_assoc($machinetypes)){ ?>
-                    <option value="<?=$rowS['id'] ?>"><?=$rowS['machine_type'] ?></option>
-                  <?php } ?>
-                </select>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="form-group">
-                <label>Jenis Alat *</label>
-                <select class="form-control" style="width: 100%;" id="jenisAlat" name="jenisAlat" required>
-                  <option selected="selected">-</option>
-                  <?php while($rowA=mysqli_fetch_assoc($alats)){ ?>
-                    <option value="<?=$rowA['id'] ?>"><?=$rowA['alat'] ?></option>
-                  <?php } ?>
-                </select>
+              <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Customer Type * </label>
+                    <select class="form-control" style="width: 100%;" id="customerType" name="customerType" required>
+                      <option value="NEW">NEW</option>
+                      <option value="EXISTING">EXISTING</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Customer * </label>
+                    <select class="form-control select2" style="width: 100%;" id="company" name="company" required></select>
+                    <input class="form-control" type="text" placeholder="Company Name" id="companyText" name="companyText" style="display: none;">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Address Line 1 * </label>
+                    <input class="form-control" type="text" placeholder="Address Line 1" id="address1" name="address1" required>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Address Line 2 </label>
+                    <input class="form-control" type="text" placeholder="Address Line 2" id="address2" name="address2">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Address Line 3 </label>
+                    <input class="form-control" type="text" placeholder="Address Line 3" id="address3" name="address3">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>P.I.C</label>
+                    <input class="form-control" type="text" placeholder="PIC" id="pic" name="pic">
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="row">
-            <div class="col-4">
-              <div class="form-group">
-                <label>Address Line 1 * </label>
-                <input class="form-control" type="text" placeholder="Address Line 1" id="address1" name="address1" required>
+          <div class="card card-primary">
+            <div class="card-body">
+              <div class="row">
+                <h4>Machine Information</h4>
               </div>
-            </div>
-            <div class="col-4">
-              <div class="form-group">
-                <label>Model *</label>
-                <select class="form-control" style="width: 100%;" id="model" name="model" required>
-                  <option selected="selected">-</option>
-                  <?php while($rowM=mysqli_fetch_assoc($models)){ ?>
-                    <option value="<?=$rowM['id'] ?>"><?=$rowM['model'] ?></option>
-                  <?php } ?>
-                </select>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="form-group">
-                <label>Stamping Date</label>
-                <div class='input-group date' id="datePicker" data-target-input="nearest">
-                  <input type='text' class="form-control datetimepicker-input" data-target="#datePicker" id="stampDate" name="stampDate"/>
-                  <div class="input-group-append" data-target="#datePicker" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+              <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Brand *</label>
+                    <select class="form-control select2" style="width: 100%;" id="brand" name="brand" required>
+                      <option selected="selected">-</option>
+                      <?php while($rowB=mysqli_fetch_assoc($brands)){ ?>
+                        <option value="<?=$rowB['id'] ?>"><?=$rowB['brand'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Model *</label>
+                    <select class="form-control select2" style="width: 100%;" id="model" name="model" required>
+                      <option selected="selected">-</option>
+                      <?php while($rowM=mysqli_fetch_assoc($models)){ ?>
+                        <option value="<?=$rowM['id'] ?>"><?=$rowM['model'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Product *</label>
+                    <select class="form-control select2" style="width: 100%;" id="product" name="product" required>
+                      <option selected="selected">-</option>
+                      <?php while($rowProduct=mysqli_fetch_assoc($products)){ ?>
+                        <option 
+                          value="<?=$rowProduct['id'] ?>" 
+                          data-price="<?=$rowProduct['price'] ?>" 
+                          data-machine="<?=$rowProduct['machine_type'] ?>" 
+                          data-alat="<?=$rowProduct['jenis_alat'] ?>" 
+                          data-capacity="<?=$rowProduct['capacity'] ?>" 
+                          data-validator="<?=$rowProduct['validator'] ?>">
+                          <?=$rowProduct['name'] ?>
+                        </option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Machine Type *</label>
+                    <select class="form-control select2" style="width: 100%;" id="machineType" name="machineType" required>
+                      <option selected="selected">-</option>
+                      <?php while($rowS=mysqli_fetch_assoc($machinetypes)){ ?>
+                        <option value="<?=$rowS['id'] ?>"><?=$rowS['machine_type'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Jenis Alat *</label>
+                    <select class="form-control select2" style="width: 100%;" id="jenisAlat" name="jenisAlat" required>
+                      <option selected="selected">-</option>
+                      <?php while($rowA=mysqli_fetch_assoc($alats)){ ?>
+                        <option value="<?=$rowA['id'] ?>"><?=$rowA['alat'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Capacity * </label>
+                    <select class="form-control select2" style="width: 100%;" id="capacity" name="capacity" required>
+                      <option selected="selected">-</option>
+                      <?php while($rowCA=mysqli_fetch_assoc($capacities)){ ?>
+                        <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Serial No * </label>
+                    <input class="form-control" type="text" placeholder="Serial No." id="serial" name="serial" required>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           
-          <div class="row">
-            <div class="col-4">
-              <div class="form-group">
-                <label>Address Line 2 </label>
-                <input class="form-control" type="text" placeholder="Address Line 2" id="address2" name="address2">
+          <div class="card card-primary">
+            <div class="card-body">
+              <div class="row">
+                <h4>Stamping Information</h4>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Validator * </label>
+                    <select class="form-control select2" style="width: 100%;" id="validator" name="validator" required>
+                      <option selected="selected">-</option>
+                      <?php while($rowVA=mysqli_fetch_assoc($validators)){ ?>
+                        <option value="<?=$rowVA['id'] ?>"><?=$rowVA['validator'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Stamping Date</label>
+                    <div class='input-group date' id="datePicker" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker" id="stampDate" name="stampDate"/>
+                      <div class="input-group-append" data-target="#datePicker" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>No Daftar </label>
+                    <input class="form-control" type="text" placeholder="No Daftar" id="noDaftar" name="noDaftar">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>No PIN Pelekat Keselamatan </label>
+                    <input class="form-control" type="text" placeholder="No PIN Pelekat Keselamatan" id="pinKeselamatan" name="pinKeselamatan">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>No Siri Pelekat Keselamatan </label>
+                    <input class="form-control" type="text" placeholder="No Siri Pelekat Keselamatan" id="siriKeselamatan" name="siriKeselamatan">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>No. Borang D</label>
+                    <input class="form-control" type="text" placeholder="No. Borang D" id="borangD" name="borangD">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Next Due Date *</label>
+                    <div class='input-group date' id="datePicker2" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker2" id="dueDate" name="dueDate" required/>
+                      <div class="input-group-append" data-target="#datePicker2" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Included Certificate * </label>
+                    <select class="form-control" style="width: 100%;" id="includeCert" name="includeCert" required>
+                      <option value="YES">YES</option>
+                      <option value="NO">NO</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="col-4">
-              <div class="form-group">
-                <label>Capacity * </label>
-                <select class="form-control" style="width: 100%;" id="capacity" name="capacity" required>
-                  <option selected="selected">-</option>
-                  <?php while($rowCA=mysqli_fetch_assoc($capacities)){ ?>
-                    <option value="<?=$rowCA['id'] ?>" data-price="<?=$rowCA['price'] ?>"><?=$rowCA['capacity'] ?></option>
-                  <?php } ?>
-                </select>
+          </div>
+
+          <div class="card card-primary">
+            <div class="card-body">
+              <div class="row">
+                <h4>Billing Information</h4>
               </div>
-            </div>
-            <div class="col-4">
-              <div class="form-group">
-                <label>No Daftar </label>
-                <input class="form-control" type="text" placeholder="No Daftar" id="noDaftar" name="noDaftar">
+              <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Quotation No.</label>
+                    <input class="form-control" type="text" placeholder="PO No" id="quotation" name="quotation">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Quotation Date</label>
+                    <div class='input-group date' id="datePicker3" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker3" id="quotationDate" name="quotationDate"/>
+                      <div class="input-group-append" data-target="#datePicker3" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>PO No.</label>
+                    <input class="form-control" type="text" placeholder="PO No" id="poNo" name="poNo">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>PO Date *</label>
+                    <div class='input-group date' id="datePicker4" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker4" id="poDate" name="poDate"/>
+                      <div class="input-group-append" data-target="#datePicker4" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Invoice / Cash Bill No.</label>
+                    <input class="form-control" type="text" placeholder="Invoice No" id="invoice" name="invoice">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Unit Price *</label>
+                    <input type="number" class="form-control" id="unitPrice" name="unitPrice" required>
+                  </div>
+                </div>
+                <div class="col-4" id="cerId">
+                  <div class="form-group">
+                    <label>Cert.Price</label>
+                    <input type="text" class="form-control" id="certPrice" name="certPrice" readonly>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Total Amount</label>
+                    <input type="text" class="form-control" id="totalAmount" name="totalAmount" readonly>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>SST 8%</label>
+                    <input type="text" class="form-control" id="sst" name="sst" readonly>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Sub Total Amount</label>
+                    <input type="text" class="form-control" id="subAmount" name="subAmount" readonly>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           <div class="row">
-            <div class="col-4">
-              <div class="form-group">
-                <label>Address Line 3 </label>
-                <input class="form-control" type="text" placeholder="Address Line 3" id="address3" name="address3">
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="form-group">
-                <label>Serial No * </label>
-                <input class="form-control" type="text" placeholder="Serial No." id="serial" name="serial" required>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="form-group">
-                <label>No PIN Pelekat Keselamatan </label>
-                <input class="form-control" type="text" placeholder="No PIN Pelekat Keselamatan" id="pinKeselamatan" name="pinKeselamatan">
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-4">
-              <div class="form-group">
-                <label>Attn To</label>
-                <select class="form-control" style="width: 100%;" id="attnTo" name="attnTo" readonly>
-                  <option selected="selected">-</option>
-                  <?php while($rowU=mysqli_fetch_assoc($users2)){ ?>
-                    <option value="<?=$rowU['id'] ?>"><?=$rowU['name'] ?></option>
-                  <?php } ?>
-                </select>
-              </div>
-            </div>
-            <div class="col-4"></div>
-            <div class="col-4">
-              <div class="form-group">
-                <label>No Siri Pelekat Keselamatan </label>
-                <input class="form-control" type="text" placeholder="No Siri Pelekat Keselamatan" id="siriKeselamatan" name="siriKeselamatan">
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-4">
-              <div class="form-group">
-                <label>Person Contact</label>
-                <input class="form-control" type="text" placeholder="PIC" id="pic" name="pic">
-              </div>
-            </div>
-            <div class="col-4"></div>
-            <div class="col-4">
-              <div class="form-group">
-                <label>No. Borang D</label>
-                <input class="form-control" type="text" placeholder="No. Borang D" id="borangD" name="borangD">
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-8">
+            <div class="col-12">
               <div class="form-group">
                 <label>Remark</label>
                 <textarea class="form-control" type="text" placeholder="Remark" id="remark" name="remark"></textarea>
               </div>
-            </div>
-            <div class="col-4">
-              <div class="form-group">
-                <label>Next Due Date *</label>
-                <div class='input-group date' id="datePicker2" data-target-input="nearest">
-                  <input type='text' class="form-control datetimepicker-input" data-target="#datePicker2" id="dueDate" name="dueDate" required/>
-                  <div class="input-group-append" data-target="#datePicker2" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-4">
-              <div class="form-group">
-                <label>Quotation No.</label>
-                <input class="form-control" type="text" placeholder="PO No" id="quotation" name="quotation">
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="form-group">
-                <label>Quotation Date</label>
-                <div class='input-group date' id="datePicker3" data-target-input="nearest">
-                  <input type='text' class="form-control datetimepicker-input" data-target="#datePicker3" id="quotationDate" name="quotationDate"/>
-                  <div class="input-group-append" data-target="#datePicker3" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="form-group">
-                <label>Included Certificate * </label>
-                <select class="form-control" style="width: 100%;" id="includeCert" name="includeCert" required>
-                  <option value="YES">YES</option>
-                  <option value="NO">NO</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-          <div class="col-4">
-              <div class="form-group">
-                <label>PO No.</label>
-                <input class="form-control" type="text" placeholder="PO No" id="poNo" name="poNo">
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="form-group">
-                <label>PO Date *</label>
-                <div class='input-group date' id="datePicker4" data-target-input="nearest">
-                  <input type='text' class="form-control datetimepicker-input" data-target="#datePicker4" id="poDate" name="poDate"/>
-                  <div class="input-group-append" data-target="#datePicker4" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-4">
-              <div class="form-group">
-                <label>Cash Bill No.</label>
-                <input class="form-control" type="text" placeholder="Cash Bill No." id="cashBill" name="cashBill">
-              </div>
-            </div>
-            
-            <div class="col-4">
-              <div class="form-group">
-                <label>Invoice No.</label>
-                <input class="form-control" type="text" placeholder="Invoice No" id="invoice" name="invoice">
-              </div>
-            </div>
-            
-            <div class="col-4">
-              <button style="margin-left:auto;margin-right: 25px;margin-top: 30px;" type="button" class="btn btn-primary add-price">Add Items</button>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-9">
-              <table style="width: 100%;">
-                <thead>
-                  <tr>
-                    <th width="5%">No.</th>
-                    <th width="15%">Date Created</th>
-                    <th>Notes</th>
-                    <th width="17%">Next Follow Date</th>
-                    <th width="15%">Follow Up By</th>
-                    <th width="13%">Status</th>
-                    <!--th>Delete</th-->
-                  </tr>
-                </thead>
-                <tbody id="pricingTable"></tbody>
-              </table>
-            </div>
-            <div class="col-3">
-              <p><u>Unit Stamping Price Refering:</u></p>
-              <table style="width: 100%;">
-                <tbody id="pricingTable">
-                  <tr><td>Unit Price</td><td><input type="text" class="form-control" id="unitPrice" name="unitPrice" readonly></td></tr>
-                  <tr id="cerId"><td>Cert.Price</td><td><input type="text" class="form-control" id="certPrice" name="certPrice" readonly></td></tr>
-                  <tr><td>Total Amount</td><td><input type="text" class="form-control" id="totalAmount" name="totalAmount" readonly></td></tr>
-                  <tr><td>SST 6%</td><td><input type="text" class="form-control" id="sst" name="sst" readonly></td></tr>
-                  <tr><td>Sub Amount</td><td><input type="text" class="form-control" id="subAmount" name="subAmount" readonly></td></tr>
-                </tbody>
-              </table>
             </div>
           </div>
         </div>
@@ -520,8 +535,6 @@ else{
               <div class="form-group">
                 <label>Borang 6/7/Panjang *</label>
                 <select class="form-control" id="driver" name="driver" required>
-                  <option value="6">Borang 6</option>
-                  <option value="7">Borang 7</option>
                   <option value="P">Borang Panjang</option>
                 </select>
               </div>
@@ -593,13 +606,13 @@ $(function () {
   });
 
   //Date picker
-  $('#fromDate').datetimepicker({
+  $('#fromDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
     defaultDate: yesterday
   });
 
-  $('#toDate').datetimepicker({
+  $('#toDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
     defaultDate: today
@@ -632,6 +645,7 @@ $(function () {
   var fromDateValue = $('#fromDate').val();
   var toDateValue = $('#toDate').val();
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
+  var statusFilter = $('#statusFilter').val() ? $('#statusFilter').val() : '';
 
   var table = $("#weightTable").DataTable({
     "responsive": true,
@@ -649,6 +663,7 @@ $(function () {
         fromDate: fromDateValue,
         toDate: toDateValue,
         customer: customerNoFilter,
+        status: statusFilter
       } 
     },
     'columns': [
@@ -806,6 +821,7 @@ $(function () {
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
+    var statusFilter = $('#statusFilter').val() ? $('#statusFilter').val() : '';
 
     //Destroy the old Datatable
     $("#weightTable").DataTable().clear().destroy();
@@ -827,6 +843,7 @@ $(function () {
           fromDate: fromDateValue,
           toDate: toDateValue,
           customer: customerNoFilter,
+          status: statusFilter
         } 
       },
       'columns': [
@@ -855,8 +872,10 @@ $(function () {
         { 
           data: 'id',
           render: function ( data, type, row ) {
-            return '<div class="row"><div class="col-4"><button type="button" id="edit'+data+'" onclick="edit('+data+
-            ')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-12"><button type="button" id="delete'+data+'" onclick="deactivate('+data+
+            return '<div class="row"><div class="col-3"><button type="button" id="edit'+data+'" onclick="edit('+data+
+            ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button type="button" id="print'+data+'" onclick="print('+data+
+            ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div><div class="col-3"><button type="button" id="complete'+data+'" onclick="complete('+data+
+            ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div><div class="col-3"><button type="button" id="delete'+data+'" onclick="deactivate('+data+
             ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
           }
         },
@@ -883,7 +902,7 @@ $(function () {
 
     if (selectedIds.length > 0) {
       $("#printDOModal").find('#id').val(selectedIds);
-      $("#printDOModal").find('#driver').val('6');
+      $("#printDOModal").find('#driver').val('P');
       $("#printDOModal").modal("show");
 
       $('#printDOForm').validate({
@@ -899,7 +918,10 @@ $(function () {
           $(element).removeClass('is-invalid');
         }
       });
-    } else {
+
+      //$('#printDOForm').submit();
+    } 
+    else {
       // Optionally, you can display a message or take another action if no IDs are selected
       alert("Please select at least one DO to Deliver.");
     }
@@ -1009,17 +1031,44 @@ $(function () {
 
     reader.readAsBinaryString(file);
   });
-  
+
+  $('#extendModal').find('#stampDate').on('blur', function (e) {
+    if($(this).val()){
+      var parts = $(this).val().split('/');
+      var day = parseInt(parts[0], 10);
+      var month = parseInt(parts[1], 10) - 1; // Months are zero-based
+      var year = parseInt(parts[2], 10);
+
+      var date = new Date(year, month, day);
+      
+      // Add 1 year to the date
+      date.setFullYear(date.getFullYear() + 1);
+      
+      /*/ Format the new date back to 'DD/MM/YYYY'
+      var newDay = ("0" + date.getDate()).slice(-2);
+      var newMonth = ("0" + (date.getMonth() + 1)).slice(-2); // Months are zero-based
+      var newYear = date.getFullYear();
+      
+      var dueDate = newDay + '/' + newMonth + '/' + newYear;*/
+      
+      // Assign the new date to '#dueDate'
+      $('#extendModal').find('#dueDate').val(formatDate3(date));
+    }
+  });
 
   $('#extendModal').find('#customerType').on('change', function(){
     if($(this).val() == "NEW"){
       $('#extendModal').find('#company').hide();
+      $('#extendModal').find('#company').parents('.form-group').find('.select2-container').hide();
       $('#extendModal').find('#companyText').show();
+      $('#extendModal').find('#companyText').val('');
     }
     else{
       $('#extendModal').find('#company').html($('select#customerNoHidden').html());
       $('#extendModal').find('#company').show();
+      $('#extendModal').find('#company').parents('.form-group').find('.select2-container').show();
       $('#extendModal').find('#companyText').hide();
+      $('#extendModal').find('#companyText').val('');
     }
   });
 
@@ -1062,14 +1111,22 @@ $(function () {
     });
   });
 
-  $('#extendModal').find('#capacity').on('change', function(){
+  $('#extendModal').find('#product').on('change', function(){
     var price = parseFloat($(this).find(":selected").attr("data-price"));
+    var machine = parseFloat($(this).find(":selected").attr("data-machine"));
+    var alat = parseFloat($(this).find(":selected").attr("data-alat"));
+    var capacity = parseFloat($(this).find(":selected").attr("data-capacity"));
+    var validator = parseFloat($(this).find(":selected").attr("data-validator"));
     var includeCert = $('#includeCert').val();
     var certPrice = 30;
     var sst = 0;
     var totalAmt = price;
 
     $('#unitPrice').val(price);
+    $('#machineType').val(machine).trigger('change');
+    $('#jenisAlat').val(alat).trigger('change');
+    $('#capacity').val(capacity).trigger('change');
+    $('#validator').val(validator).trigger('change');
 
     if(includeCert == 'YES'){
       $('#certPrice').val(certPrice);
@@ -1087,7 +1144,7 @@ $(function () {
   });
 
   $('#extendModal').find('#includeCert').on('change', function(){
-    var price = parseFloat($('#capacity').find(":selected").attr("data-price"));
+    var price = parseFloat($('#product').find(":selected").attr("data-price"));
     var includeCert = $(this).val();
     var certPrice = 30;
     var sst = 0;
@@ -1145,31 +1202,57 @@ $(function () {
 });
 
 function format (row) {
-  var returnString = '<div class="row"><div class="col-md-3"><p>Customer Name: '+row.customers+
-  '</p></div><div class="col-md-3"><p>Brand: '+row.brand+
-  '</p></div><div class="col-md-3"><p>Machine Type: '+row.machine_type+
-  '</p></div><div class="col-md-3"><p>Model: '+row.model+
-  '</p></div></div><div class="row"><div class="col-md-3"><p>Address: ' + row.address1 + '<br>' + row.address2 + '<br>' + row.address3 +
-  '</p></div><div class="col-md-9"><div class="row"><div class="col-md-4"<p>Capacity: '+row.capacity+
-  '</p></div><div class="col-md-4"><p>Validate By: '+row.validator+
-  '</p></div><div class="col-md-4"><p>Jenis Alat: '+row.jenis_alat+
-  '</p></div></div><div class="row"><div class="col-md-4"><p>No. Daftar: '+row.no_daftar+
-  '</p></div><div class="col-md-4"><p>PIN Keselamatan: '+row.pin_keselamatan+
-  '</p></div><div class="col-md-4"><p>Siri Keselamatan: '+row.siri_keselamatan+
-  '</p></div></div><div class="row"><div class="col-md-4"><p>Borang D: '+row.borang_d+
-  '</p></div><div class="col-md-4"><p>Invoice No: '+row.invoice_no+
-  '</p></div><div class="col-md-4"><p>Cash Bill: '+row.cash_bill+
-  '</p></div></div></div></div><div class="row"><div class="col-md-3"><p>Quotation No: '+row.quotation_no+
-  '</p></div><div class="col-md-3"><p>Quotation Date: '+row.quotation_date+
-  '</p></div><div class="col-md-3"><p>Purchase No: '+row.purchase_no+
-  '</p></div><div class="col-md-3"><p>Purchase Date: '+row.purchase_date+
-  '</p></div></div><div class="row"><div class="col-md-6"><p>Remark: '+row.remarks+
-  '</p></div><div class="col-md-3"><p>Unit Price: '+row.unit_price+
-  '</p></div><div class="col-md-3"><p>Cert Price: '+row.cert_price+
-  '</p></div></div><div class="row"><div class="col-md-3"><p>Total Amount: '+row.total_amount+
-  '</p></div><div class="col-md-3"><p>SST Price: '+row.sst+
-  '</p></div><div class="col-md-3"><p>Sub Total Price: '+row.subtotal_amount+
-  '</p></div></div><br>';
+  var returnString = `
+  <div class="row">
+    <!-- Customer Section -->
+    <div class="col-md-6">
+      <p><strong>${row.customers}</strong><br>
+      ${row.address1}<br>${row.address2}<br>${row.address3}</p>
+    </div>
+  </div><hr>
+
+  <div class="row">
+    <!-- Machine Section -->
+    <div class="col-6">
+      <p><strong>Brand:</strong> ${row.brand}</p>
+      <p><strong>Model:</strong> ${row.model}</p>
+      <p><strong>Machine Type:</strong> ${row.machine_type}</p>
+      <p><strong>Capacity:</strong> ${row.capacity}</p>
+      <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
+      <p><strong>Serial No:</strong> ${row.serial_no}</p>
+    </div>
+
+    <!-- Stamping Section -->
+    <div class="col-6">
+      <p><strong>No. Daftar:</strong> ${row.no_daftar}</p>
+      <p><strong>PIN Keselamatan:</strong> ${row.pin_keselamatan}</p>
+      <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
+      <p><strong>Borang D:</strong> ${row.borang_d}</p>
+      <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
+      <p><strong>Due Date:</strong> ${row.due_date}</p>
+    </div>
+  </div><hr>
+
+  <div class="row">
+    <!-- Billing Section -->
+    <div class="col-6">
+      <p><strong>Quotation No:</strong> ${row.quotation_no}</p>
+      <p><strong>Quotation Date:</strong> ${row.quotation_date}</p>
+      <p><strong>Purchase No:</strong> ${row.purchase_no}</p>
+      <p><strong>Purchase Date:</strong> ${row.purchase_date}</p>
+      <p><strong>Invoice/Cash Bill No:</strong> ${row.invoice_no}</p>
+    </div>
+
+    <!-- Price Section -->
+    <div class="col-6">
+      <p><strong>Unit Price:</strong> ${row.unit_price}</p>
+      <p><strong>Cert Price:</strong> ${row.cert_price}</p>
+      <p><strong>Total Amount:</strong> ${row.total_amount}</p>
+      <p><strong>SST Price:</strong> ${row.sst}</p>
+      <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>
+    </div>
+  </div><br>
+  `;
   
   if (row.log.length > 0) {
     returnString += '<h4>Log</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="15%">Date Created</th><th>Notes</th><th width="17%">Next Follow Date</th><th width="15%">Follow Up By</th><th width="13%">Status</th></tr></thead><tbody>'
@@ -1233,17 +1316,18 @@ function newEntry(){
 
   $('#extendModal').find('#id').val("");
   $('#extendModal').find('#customerType').val("EXISTING").attr('readonly', false).trigger('change');
-  $('#extendModal').find('#brand').val('');
-  $('#extendModal').find('#validator').val('');
+  $('#extendModal').find('#brand').val('').trigger('change');
+  $('#extendModal').find('#validator').val('').trigger('change');
+  $('#extendModal').find('#product').val('').trigger('change');
   $('#extendModal').find('#company').val('');
-  $('#extendModal').find('#companyText').val('');
-  $('#extendModal').find('#machineType').val('');
-  $('#extendModal').find('#jenisAlat').val('');
+  $('#extendModal').find('#companyText').val('').trigger('change');
+  $('#extendModal').find('#machineType').val('').trigger('change');
+  $('#extendModal').find('#jenisAlat').val('').trigger('change');
   $('#extendModal').find('#address1').val('');
-  $('#extendModal').find('#model').val("");
+  $('#extendModal').find('#model').val("").trigger('change');
   $('#extendModal').find('#stampDate').val('');
   $('#extendModal').find('#address2').val('');
-  $('#extendModal').find('#capacity').val('');
+  $('#extendModal').find('#capacity').val('').trigger('change');
   $('#extendModal').find('#noDaftar').val('');
   $('#extendModal').find('#address3').val('');
   $('#extendModal').find('#serial').val('');
@@ -1256,7 +1340,7 @@ function newEntry(){
   $('#extendModal').find('#dueDate').val('');
   $('#extendModal').find('#quotation').val("");
   $('#extendModal').find('#quotationDate').val('');
-  $('#extendModal').find('#includeCert').val("NO");
+  $('#extendModal').find('#includeCert').val("NO").trigger('change');
   $('#extendModal').find('#poNo').val("");
   $('#extendModal').find('#poDate').val('');
   $('#extendModal').find('#cashBill').val("");
@@ -1295,17 +1379,18 @@ function edit(id) {
     if(obj.status === 'success'){
       $('#extendModal').find('#id').val(obj.message.id);
       $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
-      $('#extendModal').find('#brand').val(obj.message.brand);
-      $('#extendModal').find('#validator').val(obj.message.validate_by);
-      $('#extendModal').find('#company').val(obj.message.customers);
+      $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
+      $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
+      $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
       $('#extendModal').find('#companyText').val('');
-      $('#extendModal').find('#machineType').val(obj.message.machine_type);
-      $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat);
+      $('#extendModal').find('#product').val(obj.message.products).trigger('change');
+      $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
+      $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
       $('#extendModal').find('#address1').val(obj.message.address1);
-      $('#extendModal').find('#model').val(obj.message.model);
+      $('#extendModal').find('#model').val(obj.message.model).trigger('change');
       $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
       $('#extendModal').find('#address2').val(obj.message.address2);
-      $('#extendModal').find('#capacity').val(obj.message.capacity);
+      $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
       $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
       $('#extendModal').find('#address3').val(obj.message.address3);
       $('#extendModal').find('#serial').val(obj.message.serial_no);
@@ -1318,7 +1403,7 @@ function edit(id) {
       $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
       $('#extendModal').find('#quotation').val(obj.message.quotation_no);
       $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
-      $('#extendModal').find('#includeCert').val(obj.message.include_cert);
+      $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
       $('#extendModal').find('#poNo').val(obj.message.purchase_no);
       $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
       $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
@@ -1396,10 +1481,31 @@ function edit(id) {
   });
 }
 
+function complete(id) {
+  if (confirm('Are you sure you want to complete this items?')) {
+    $('#spinnerLoading').show();
+    $.post('php/completeStamp.php', {userID: id}, function(data){
+      var obj = JSON.parse(data);
+
+      if(obj.status === 'success'){
+        toastr["success"](obj.message, "Success:");
+        $('#weightTable').DataTable().ajax.reload();
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when activate", "Failed:");
+      }
+      $('#spinnerLoading').hide();
+    });
+  }
+}
+
 function deactivate(id) {
   if (confirm('Are you sure you want to delete this items?')) {
     $('#spinnerLoading').show();
-    $.post('php/deleteWeight.php', {userID: id}, function(data){
+    $.post('php/deleteStamp.php', {userID: id}, function(data){
       var obj = JSON.parse(data);
 
       if(obj.status === 'success'){

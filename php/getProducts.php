@@ -6,7 +6,7 @@ session_start();
 if(isset($_POST['userID'])){
 	$id = filter_input(INPUT_POST, 'userID', FILTER_SANITIZE_STRING);
 
-    if ($update_stmt = $db->prepare("SELECT * FROM capacity WHERE id=?")) {
+    if ($update_stmt = $db->prepare("SELECT * FROM products WHERE id=?")) {
         $update_stmt->bind_param('s', $id);
         
         // Execute the prepared query.
@@ -24,8 +24,11 @@ if(isset($_POST['userID'])){
             while ($row = $result->fetch_assoc()) {
                 $message['id'] = $row['id'];
                 $message['name'] = $row['name'];
+                $message['machine_type'] = $row['machine_type'];
+                $message['jenis_alat'] = $row['jenis_alat'];
                 $message['capacity'] = $row['capacity'];
-                $message['units'] = $row['units'];
+                $message['validator'] = $row['validator'];
+                $message['price'] = $row['price'];
             }
             
             echo json_encode(

@@ -379,6 +379,36 @@ to get the desired effect
               </li>
             </ul>
           </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-file-contract"></i>
+              <p>Reports<i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview" style="display: none;">
+              <li class="nav-item">
+                <a href="#jadual6" data-file="jadual6.php" class="nav-link link">
+                  <i class="nav-icon fas fa-table"></i>
+                  <p>Jadual 6</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#jadual7" data-file="jadual7.php" class="nav-link link">
+                  <i class="nav-icon fas fa-receipt"></i>
+                  <p>Jadual 7</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <?php 
+            if($role == "ADMIN"){
+              echo '<li class="nav-item">
+                <a href="#products" data-file="products.php" class="nav-link link">
+                  <i class="nav-icon fas fa-thermometer"></i>
+                  <p>Products</p>
+                </a>
+              </li>';
+            }
+          ?>
           <?php 
               if($role == "ADMIN"){
                 echo '<li class="nav-item">
@@ -396,7 +426,7 @@ to get the desired effect
                   <li class="nav-item">
                     <a href="#machine" data-file="machine.php" class="nav-link link">
                       <i class="nav-icon fas fa-store"></i>
-                      <p>Machine Type</p>
+                      <p>Machine/Scale Type</p>
                     </a>
                   </li>
                   <li class="nav-item">
@@ -407,7 +437,7 @@ to get the desired effect
                   </li>
                   <li class="nav-item">
                     <a href="#model" data-file="model.php" class="nav-link link">
-                      <i class="nav-icon fas fa-balance-scale"></i>
+                      <i class="nav-icon fas fa-tag"></i>
                       <p>Model</p>
                     </a>
                   </li>
@@ -439,6 +469,12 @@ to get the desired effect
                     <a href="#customers" data-file="customers.php" class="nav-link link">
                       <i class="nav-icon fas fa-book"></i>
                       <p>Customers</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#units" data-file="units.php" class="nav-link link">
+                      <i class="nav-icon fas fa-balance-scale"></i>
+                      <p>Units</p>
                     </a>
                   </li>
                   <li class="nav-item">

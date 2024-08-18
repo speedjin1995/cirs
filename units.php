@@ -16,7 +16,7 @@ else{
     <div class="container-fluid">
         <div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0 text-dark">Machine/Scale Type</h1>
+				<h1 class="m-0 text-dark">Units</h1>
 			</div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -33,16 +33,16 @@ else{
                         <div class="row">
                             <div class="col-9"></div>
                             <div class="col-3">
-                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addMachine">Add Machine Type</button>
+                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addUnits">Add Units</button>
                             </div>
                         </div>
                     </div>
 					<div class="card-body">
-						<table id="machineTable" class="table table-bordered table-striped">
+						<table id="unitTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
 									<th>No.</th>
-									<th>Machine Type</th>
+									<th>Units</th>
 									<th>Actions</th>
 								</tr>
 							</thead>
@@ -54,12 +54,12 @@ else{
 	</div><!-- /.container-fluid -->
 </section><!-- /.content -->
 
-<div class="modal fade" id="machineModal">
+<div class="modal fade" id="unitModal">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
-        <form role="form" id="machineForm">
+        <form role="form" id="unitForm">
             <div class="modal-header">
-              <h4 class="modal-title">Add Machines Type</h4>
+              <h4 class="modal-title">Add Lots</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -70,8 +70,8 @@ else{
     					<input type="hidden" class="form-control" id="id" name="id">
     				</div>
     				<div class="form-group">
-    					<label for="machineTypes">Machines Type*</label>
-    					<input type="text" class="form-control" name="machineTypes" id="machineTypes" placeholder="Enter Machine Type" required>
+    					<label for="units">Units*</label>
+    					<input type="text" class="form-control" name="units" id="units" placeholder="Enter Units" required>
     				</div>
     			</div>
             </div>
@@ -88,7 +88,7 @@ else{
 
 <script>
 $(function () {
-    $("#machineTable").DataTable({
+    $("#unitTable").DataTable({
         "responsive": true,
         "autoWidth": false,
         'processing': true,
@@ -97,11 +97,11 @@ $(function () {
         'order': [[ 1, 'asc' ]],
         'columnDefs': [ { orderable: false, targets: [0] }],
         'ajax': {
-            'url':'php/loadMachine.php'
+            'url':'php/loadUnits.php'
         },
         'columns': [
             { data: 'counter' },
-            { data: 'machine_type' },
+            { data: 'units' },
             { 
                 data: 'id',
                 render: function ( data, type, row ) {
@@ -112,20 +112,23 @@ $(function () {
         "rowCallback": function( row, data, index ) {
 
             $('td', row).css('background-color', '#E6E6FA');
-        },        
+        },
     });
     
     $.validator.setDefaults({
         submitHandler: function () {
             $('#spinnerLoading').show();
-            $.post('php/machine.php', $('#machineForm').serialize(), function(data){
+            $.post('php/units.php', $('#unitForm').serialize(), function(data){
                 var obj = JSON.parse(data); 
                 
                 if(obj.status === 'success'){
-                    $('#machineModal').modal('hide');
+                    $('#unitModal').modal('hide');
                     toastr["success"](obj.message, "Success:");
-                    $('#machineTable').DataTable().ajax.reload();
-                    $('#spinnerLoading').hide();
+                    
+                    $.get('units.php', function(data) {
+                        $('#mainContents').html(data);
+                        $('#spinnerLoading').hide();
+                    });
                 }
                 else if(obj.status === 'failed'){
                     toastr["error"](obj.message, "Failed:");
@@ -139,12 +142,12 @@ $(function () {
         }
     });
 
-    $('#addMachine').on('click', function(){
-        $('#machineModal').find('#id').val("");
-        $('#machineModal').find('#machineTypes').val("");
-        $('#machineModal').modal('show');
+    $('#addUnits').on('click', function(){
+        $('#unitModal').find('#id').val("");
+        $('#unitModal').find('#units').val("");
+        $('#unitModal').modal('show');
         
-        $('#machineForm').validate({
+        $('#unitForm').validate({
             errorElement: 'span',
             errorPlacement: function (error, element) {
                 error.addClass('invalid-feedback');
@@ -162,15 +165,15 @@ $(function () {
 
 function edit(id){
     $('#spinnerLoading').show();
-    $.post('php/getMachine.php', {userID: id}, function(data){
+    $.post('php/getUnits.php', {userID: id}, function(data){
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){
-            $('#machineModal').find('#id').val(obj.message.id);
-            $('#machineModal').find('#machineTypes').val(obj.message.machine_type);
-            $('#machineModal').modal('show');
+            $('#unitModal').find('#id').val(obj.message.id);
+            $('#unitModal').find('#units').val(obj.message.units);
+            $('#unitModal').modal('show');
             
-            $('#machineForm').validate({
+            $('#unitForm').validate({
                 errorElement: 'span',
                 errorPlacement: function (error, element) {
                     error.addClass('invalid-feedback');
@@ -196,13 +199,15 @@ function edit(id){
 
 function deactivate(id){
     $('#spinnerLoading').show();
-    $.post('php/deleteMachine.php', {userID: id}, function(data){
+    $.post('php/deleteUnit.php', {userID: id}, function(data){
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){
             toastr["success"](obj.message, "Success:");
-            $('#machineTable').DataTable().ajax.reload();
-            $('#spinnerLoading').hide();
+            $.get('units.php', function(data) {
+                $('#mainContents').html(data);
+                $('#spinnerLoading').hide();
+            });
         }
         else if(obj.status === 'failed'){
             toastr["error"](obj.message, "Failed:");

@@ -9,7 +9,10 @@ if(!isset($_SESSION['userID'])){
 }
 else{
   $user = $_SESSION['userID'];
-  $units = $db->query("SELECT * FROM units WHERE deleted = '0'");
+  $machinetypes = $db->query("SELECT * FROM machines WHERE deleted = '0'");
+  $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
+  $capacities = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
+  $validators = $db->query("SELECT * FROM validators WHERE deleted = '0'");
 }
 ?>
 
@@ -17,7 +20,7 @@ else{
     <div class="container-fluid">
         <div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0 text-dark">Capacity</h1>
+				<h1 class="m-0 text-dark">Products</h1>
 			</div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -34,7 +37,7 @@ else{
                         <div class="row">
                             <div class="col-9"></div>
                             <div class="col-3">
-                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addCapacity">Add Capacity</button>
+                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addCapacity">Add Products</button>
                             </div>
                         </div>
                     </div>
@@ -44,8 +47,11 @@ else{
 								<tr>
                                     <th>No.</th>
 									<th>Name</th>
+                                    <th>Machine Type</th>
+                                    <th>Jenis Alat</th>
                                     <th>Capacity</th>
-                                    <th>Units</th>
+                                    <th>Validator</th>
+                                    <th>Price</th>
 									<th>Actions</th>
 								</tr>
 							</thead>
@@ -62,7 +68,7 @@ else{
       <div class="modal-content">
         <form role="form" id="capacityForm">
             <div class="modal-header">
-                <h4 class="modal-title">Add Capacity</h4>
+                <h4 class="modal-title">Add Products</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -73,21 +79,48 @@ else{
                         <input type="hidden" class="form-control" id="id" name="id">
                     </div>
                     <div class="form-group">
-                        <label for="capacity">Capacity Name *</label>
+                        <label for="capacity">Product Name *</label>
                         <input type="text" class="form-control" name="capacityName" id="capacityName" placeholder="Enter Capacity Name" required>
                     </div>
                     <div class="form-group">
-                        <label for="capacity">Capacity *</label>
-                        <input type="number" class="form-control" name="capacity" id="capacity" placeholder="Enter Capacity" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Units *</label>
-                        <select class="form-control" style="width: 100%;" id="unit" name="unit" required>
+                        <label>Machine Type *</label>
+                        <select class="form-control" style="width: 100%;" id="machineType" name="machineType" required>
                             <option selected="selected">-</option>
-                            <?php while($rowVA=mysqli_fetch_assoc($units)){ ?>
-                                <option value="<?=$rowVA['id'] ?>"><?=$rowVA['units'] ?></option>
+                            <?php while($rowS=mysqli_fetch_assoc($machinetypes)){ ?>
+                                <option value="<?=$rowS['id'] ?>"><?=$rowS['machine_type'] ?></option>
                             <?php } ?>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Jenis Alat *</label>
+                        <select class="form-control" style="width: 100%;" id="jenisAlat" name="jenisAlat" required>
+                            <option selected="selected">-</option>
+                            <?php while($rowA=mysqli_fetch_assoc($alats)){ ?>
+                                <option value="<?=$rowA['id'] ?>"><?=$rowA['alat'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Capacity * </label>
+                        <select class="form-control" style="width: 100%;" id="capacity" name="capacity" required>
+                            <option selected="selected">-</option>
+                            <?php while($rowCA=mysqli_fetch_assoc($capacities)){ ?>
+                                <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Validator * </label>
+                        <select class="form-control" style="width: 100%;" id="validator" name="validator" required>
+                            <option selected="selected">-</option>
+                            <?php while($rowVA=mysqli_fetch_assoc($validators)){ ?>
+                                <option value="<?=$rowVA['id'] ?>"><?=$rowVA['validator'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="capacity">Price *</label>
+                        <input type="number" class="form-control" name="price" id="price" placeholder="Enter Price" required>
                     </div>
                 </div>
             </div>
@@ -112,13 +145,16 @@ $(function () {
         'serverMethod': 'post',
         'order': [[ 1, 'asc' ]],
         'ajax': {
-            'url':'php/loadCapacity.php'
+            'url':'php/loadProducts.php'
         },
         'columns': [
             { data: 'counter' },
             { data: 'name' },
+            { data: 'machine_type' },
+            { data: 'alat' },
             { data: 'capacity' },
-            { data: 'units' },
+            { data: 'validator' },
+            { data: 'price' },
             { 
                 data: 'id',
                 render: function ( data, type, row ) {
@@ -134,7 +170,7 @@ $(function () {
     $.validator.setDefaults({
         submitHandler: function () {
             $('#spinnerLoading').show();
-            $.post('php/capacity.php', $('#capacityForm').serialize(), function(data){
+            $.post('php/products.php', $('#capacityForm').serialize(), function(data){
                 var obj = JSON.parse(data); 
                 
                 if(obj.status === 'success'){
@@ -158,8 +194,11 @@ $(function () {
     $('#addCapacity').on('click', function(){
         $('#capacityModal').find('#id').val("");
         $('#capacityModal').find('#capacityName').val("");
+        $('#capacityModal').find('#machineType').val("");
+        $('#capacityModal').find('#jenisAlat').val("");
         $('#capacityModal').find('#capacity').val("");
-        $('#capacityModal').find('#unit').val("");
+        $('#capacityModal').find('#validator').val("");
+        $('#capacityModal').find('#price').val("");
         $('#capacityModal').modal('show');
         
         $('#capacityForm').validate({
@@ -180,14 +219,17 @@ $(function () {
 
 function edit(id){
     $('#spinnerLoading').show();
-    $.post('php/getCapacity.php', {userID: id}, function(data){
+    $.post('php/getProducts.php', {userID: id}, function(data){
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){
             $('#capacityModal').find('#id').val(obj.message.id);
             $('#capacityModal').find('#capacityName').val(obj.message.name);
+            $('#capacityModal').find('#machineType').val(obj.message.machine_type);
+            $('#capacityModal').find('#jenisAlat').val(obj.message.jenis_alat);
             $('#capacityModal').find('#capacity').val(obj.message.capacity);
-            $('#capacityModal').find('#unit').val(obj.message.units);
+            $('#capacityModal').find('#validator').val(obj.message.validator);
+            $('#capacityModal').find('#price').val(obj.message.price);
             $('#capacityModal').modal('show');
             
             $('#capacityForm').validate({

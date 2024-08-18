@@ -7,10 +7,11 @@ session_start();
 $uid = $_SESSION['userID'];
 
 if(isset($_POST['customerType'], $_POST['brand'], $_POST['validator'], $_POST['machineType'], $_POST['jenisAlat'], $_POST['address1']
-, $_POST['model'], $_POST['capacity'], $_POST['serial'])){
+, $_POST['model'], $_POST['capacity'], $_POST['serial'], $_POST['product'])){
 	$customerType = filter_input(INPUT_POST, 'customerType', FILTER_SANITIZE_STRING);
 	$brand = filter_input(INPUT_POST, 'brand', FILTER_SANITIZE_STRING);
 	$validator = filter_input(INPUT_POST, 'validator', FILTER_SANITIZE_STRING);
+	$product = filter_input(INPUT_POST, 'product', FILTER_SANITIZE_STRING);
 	$machineType = filter_input(INPUT_POST, 'machineType', FILTER_SANITIZE_STRING);
 	$jenisAlat = filter_input(INPUT_POST, 'jenisAlat', FILTER_SANITIZE_STRING);
 	$address1 = filter_input(INPUT_POST, 'address1', FILTER_SANITIZE_STRING);
@@ -176,7 +177,7 @@ if(isset($_POST['customerType'], $_POST['brand'], $_POST['validator'], $_POST['m
 	}
 
 	// Logs
-	if(isset($_POST['no'])){
+	/*if(isset($_POST['no'])){
 		$no = $_POST['no'];
 	}
 
@@ -211,17 +212,17 @@ if(isset($_POST['customerType'], $_POST['brand'], $_POST['validator'], $_POST['m
 				"status" => $status[$i] ?? 'Pending'
 			);
 		}
-	}
+	}*/
 
 	if(isset($_POST['id']) && $_POST['id'] != null && $_POST['id'] != ''){
 		if ($update_stmt = $db->prepare("UPDATE stamping SET customers=?, address1=?, address2=?, address3=?, brand=?, machine_type=?, model=?
 		, capacity=?, serial_no=?, validate_by=?, jenis_alat=?, no_daftar=?, pin_keselamatan=?, siri_keselamatan=?, include_cert=?, borang_d=?
 		, invoice_no=?, cash_bill=?, stamping_date=?, due_date=?, pic=?, customer_pic=?, quotation_no=?, quotation_date=?, purchase_no=?, purchase_date=?
-		, remarks=?, unit_price=?, cert_price=?, total_amount=?, sst=?, subtotal_amount=?, log=? WHERE id=?")){
+		, remarks=?, unit_price=?, cert_price=?, total_amount=?, sst=?, subtotal_amount=?, log=?, products=? WHERE id=?")){
 			$data = json_encode($logs);
-			$update_stmt->bind_param('ssssssssssssssssssssssssssssssssss', $customer, $address1, $address2, $address3, $brand, $machineType, $model, $capacity, $serial, 
+			$update_stmt->bind_param('sssssssssssssssssssssssssssssssssss', $customer, $address1, $address2, $address3, $brand, $machineType, $model, $capacity, $serial, 
 			$validator, $jenisAlat, $noDaftar, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $invoice, $cashBill, $stampDate, $dueDate, $uid, $pic, 
-			$quotation, $quotationDate, $poNo, $poDate, $remark, $unitPrice, $certPrice, $totalPrice, $sst, $subtotalPrice, $data, $_POST['id']);
+			$quotation, $quotationDate, $poNo, $poDate, $remark, $unitPrice, $certPrice, $totalPrice, $sst, $subtotalPrice, $data, $product, $_POST['id']);
 		
 			// Execute the prepared query.
 			if (! $update_stmt->execute()){
@@ -256,12 +257,12 @@ if(isset($_POST['customerType'], $_POST['brand'], $_POST['validator'], $_POST['m
 	else{
 		if ($insert_stmt = $db->prepare("INSERT INTO stamping (customer_type, customers, address1, address2, address3, brand, machine_type, model, capacity, serial_no, 
 		validate_by, jenis_alat, no_daftar, pin_keselamatan, siri_keselamatan, include_cert, borang_d, invoice_no, cash_bill, stamping_date, due_date, pic, customer_pic, 
-		quotation_no, quotation_date, purchase_no, purchase_date, remarks, unit_price, cert_price, total_amount, sst, subtotal_amount, log) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+		quotation_no, quotation_date, purchase_no, purchase_date, remarks, unit_price, cert_price, total_amount, sst, subtotal_amount, log, products) 
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
 			$data = json_encode($logs);
-			$insert_stmt->bind_param('ssssssssssssssssssssssssssssssssss', $customerType, $customer, $address1, $address2, $address3, $brand, $machineType, $model, $capacity, $serial, 
+			$insert_stmt->bind_param('sssssssssssssssssssssssssssssssssss', $customerType, $customer, $address1, $address2, $address3, $brand, $machineType, $model, $capacity, $serial, 
 			$validator, $jenisAlat, $noDaftar, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $invoice, $cashBill, $stampDate, $dueDate, $uid, $pic, 
-			$quotation, $quotationDate, $poNo, $poDate, $remark, $unitPrice, $certPrice, $totalPrice, $sst, $subtotalPrice, $data);
+			$quotation, $quotationDate, $poNo, $poDate, $remark, $unitPrice, $certPrice, $totalPrice, $sst, $subtotalPrice, $data, $product);
 			
 			// Execute the prepared query.
 			if (! $insert_stmt->execute()){
