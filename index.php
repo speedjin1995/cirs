@@ -368,7 +368,7 @@ to get the desired effect
                 echo '<li class="nav-item">
                 <a href="#stamping" data-file="stamp.php" class="nav-link link">
                   <i class="nav-icon fas fa-stamp"></i>
-                  <p>All Stamping</p>
+                  <p>Complete Stamping</p>
                 </a></li>';
               }?>
               <li class="nav-item">
@@ -395,6 +395,12 @@ to get the desired effect
                 <a href="#jadual7" data-file="jadual7.php" class="nav-link link">
                   <i class="nav-icon fas fa-receipt"></i>
                   <p>Jadual 7</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#panjang" data-file="panjang.php" class="nav-link link">
+                  <i class="nav-icon fas fa-list"></i>
+                  <p>Borang Panjang</p>
                 </a>
               </li>
             </ul>

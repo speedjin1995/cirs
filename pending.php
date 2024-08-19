@@ -123,7 +123,7 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-10"></div>
+              <div class="col-8"></div>
               <div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
               </div>
@@ -133,9 +133,9 @@ else{
               <!--div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">Upload Excel</button>
               </div-->
-              <!--div class="col-2">
+              <div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-warning btn-sm" onclick="newEntry()">Add New Stamping</button>
-              </div-->
+              </div>
             </div>
           </div>
 
@@ -169,7 +169,7 @@ else{
     <div class="modal-content">
       <form role="form" id="extendForm">
         <div class="modal-header bg-gray-dark color-palette">
-          <h4 class="modal-title">Update Stamping</h4>
+          <h4 class="modal-title">Edit Stamping</h4>
           <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -323,6 +323,15 @@ else{
                 <h4>Stamping Information</h4>
               </div>
               <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Stamping Type * </label>
+                    <select class="form-control" style="width: 100%;" id="newRenew" name="newRenew" required>
+                      <option value="NEW">NEW</option>
+                      <option value="RENEWAL">RENEWAL</option>
+                    </select>
+                  </div>
+                </div>
                 <div class="col-4">
                   <div class="form-group">
                     <label>Validator * </label>
@@ -585,13 +594,13 @@ $(function () {
   $('#fromDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
-    defaultDate: yesterday
+    defaultDate: ''
   });
 
   $('#toDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
-    defaultDate: today
+    defaultDate: ''
   });
 
   $('#datePicker').datetimepicker({
@@ -639,7 +648,7 @@ $(function () {
         fromDate: fromDateValue,
         toDate: toDateValue,
         customer: customerNoFilter
-        //status: statusFilter
+        status: 'Pending'
       } 
     },
     'columns': [
@@ -649,7 +658,7 @@ $(function () {
         className: 'select-checkbox',
         orderable: false,
         render: function (data, type, row) {
-          if (row.status == 'Active') { // Assuming 'isInvoiced' is a boolean field in your row data
+          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
             return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
           } 
           else {
@@ -668,9 +677,14 @@ $(function () {
       { 
         data: 'id',
         render: function ( data, type, row ) {
-          return '<div class="row"><div class="col-4"><button type="button" id="edit'+data+'" onclick="edit('+data+
-          ')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-12"><button type="button" id="delete'+data+'" onclick="deactivate('+data+
-          ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
+          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+            return '<div class="row"><div class="col-4"><button type="button" id="edit'+data+'" onclick="edit('+data+
+            ')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-12"><button type="button" id="delete'+data+'" onclick="deactivate('+data+
+            ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
+          } 
+          else {
+            return ''; // Return an empty string or any other placeholder if the item is invoiced
+          }
         }
       },
       { 
@@ -819,7 +833,7 @@ $(function () {
           fromDate: fromDateValue,
           toDate: toDateValue,
           customer: customerNoFilter
-          //status: statusFilter
+          status: 'Pending'
         } 
       },
       'columns': [
@@ -1357,6 +1371,7 @@ function edit(id) {
       $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
       $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
       $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
+      $('#extendModal').find('#newRenew').val(obj.message.stampType);
       $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
       $('#extendModal').find('#companyText').val('');
       $('#extendModal').find('#product').val(obj.message.products).trigger('change');

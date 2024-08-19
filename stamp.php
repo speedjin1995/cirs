@@ -92,7 +92,7 @@ else{
                 </div>
               </div>
 
-              <div class="col-3">
+              <!--div class="col-3">
                 <div class="form-group">
                   <label>Status</label>
                   <select class="form-control" id="statusFilter" name="statusFilter">
@@ -101,7 +101,7 @@ else{
                     <option value="Complete">Complete</option>
                   </select>
                 </div>
-              </div>
+              </div-->
             </div>
 
             <div class="row">
@@ -123,19 +123,19 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-8"></div>
-              <div class="col-2">
+              <div class="col-12"><p>Completed Stamping</p></div>
+              <!--div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
-              </div>
+              </div-->
               <!--div class="col-2">
                 <a href="/template/Stamping Record Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
               </div-->
               <!--div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">Upload Excel</button>
               </div-->
-              <div class="col-2">
+              <!--div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-warning btn-sm" onclick="newEntry()">Add New Stamping</button>
-              </div>
+              </div-->
             </div>
           </div>
 
@@ -323,6 +323,15 @@ else{
                 <h4>Stamping Information</h4>
               </div>
               <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Stamping Type * </label>
+                    <select class="form-control" style="width: 100%;" id="newRenew" name="newRenew" required>
+                      <option value="NEW">NEW</option>
+                      <option value="RENEWAL">RENEWAL</option>
+                    </select>
+                  </div>
+                </div>
                 <div class="col-4">
                   <div class="form-group">
                     <label>Validator * </label>
@@ -599,6 +608,8 @@ $(function () {
   const yesterday = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
   yesterday.setDate(tomorrow.getDate() - 7);
+  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1); // First day of the current month
+  const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0); // Last day of the current month
 
   $('.select2').select2({
     allowClear: true,
@@ -609,13 +620,13 @@ $(function () {
   $('#fromDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
-    defaultDate: yesterday
+    defaultDate: startOfMonth
   });
 
   $('#toDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
-    defaultDate: today
+    defaultDate: endOfMonth
   });
 
   $('#datePicker').datetimepicker({
@@ -663,7 +674,7 @@ $(function () {
         fromDate: fromDateValue,
         toDate: toDateValue,
         customer: customerNoFilter,
-        status: statusFilter
+        status: 'Complete'
       } 
     },
     'columns': [
@@ -673,7 +684,7 @@ $(function () {
         className: 'select-checkbox',
         orderable: false,
         render: function (data, type, row) {
-          if (row.status == 'Active') { // Assuming 'isInvoiced' is a boolean field in your row data
+          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
             return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
           } 
           else {
@@ -692,9 +703,14 @@ $(function () {
       { 
         data: 'id',
         render: function ( data, type, row ) {
-          return '<div class="row"><div class="col-4"><button type="button" id="edit'+data+'" onclick="edit('+data+
-          ')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-12"><button type="button" id="delete'+data+'" onclick="deactivate('+data+
-          ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
+          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+            return '<div class="row"><div class="col-4"><button type="button" id="edit'+data+'" onclick="edit('+data+
+            ')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-12"><button type="button" id="delete'+data+'" onclick="deactivate('+data+
+            ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
+          } 
+          else {
+            return ''; // Return an empty string or any other placeholder if the item is invoiced
+          }
         }
       },
       { 
@@ -843,7 +859,7 @@ $(function () {
           fromDate: fromDateValue,
           toDate: toDateValue,
           customer: customerNoFilter,
-          status: statusFilter
+          status: 'Complete'
         } 
       },
       'columns': [
@@ -1317,6 +1333,7 @@ function newEntry(){
   $('#extendModal').find('#id').val("");
   $('#extendModal').find('#customerType').val("EXISTING").attr('readonly', false).trigger('change');
   $('#extendModal').find('#brand').val('').trigger('change');
+  $('#extendModal').find('#newRenew').val('NEW');
   $('#extendModal').find('#validator').val('').trigger('change');
   $('#extendModal').find('#product').val('').trigger('change');
   $('#extendModal').find('#company').val('');
@@ -1382,6 +1399,7 @@ function edit(id) {
       $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
       $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
       $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
+      $('#extendModal').find('#newRenew').val(obj.message.stampType);
       $('#extendModal').find('#companyText').val('');
       $('#extendModal').find('#product').val(obj.message.products).trigger('change');
       $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');

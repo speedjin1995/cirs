@@ -1,6 +1,7 @@
 <?php
 // Database connection
-$host = 'localhost';
+$host = 'srv605.hstgr.io';
+//$host = 'localhost';
 $dbname = 'u664110560_cirs';
 $username = 'u664110560_cirs';
 $password = 'Aa@111222333';
@@ -26,8 +27,8 @@ try {
     $insertQuery = "INSERT INTO stamping (customer_type, customers, address1, address2, address3, brand, machine_type, model, capacity, serial_no, 
                     validate_by, jenis_alat, no_daftar, pin_keselamatan, siri_keselamatan, include_cert, borang_d, invoice_no, cash_bill, 
                     stamping_date, due_date, pic, customer_pic, quotation_no, quotation_date, purchase_no, purchase_date, remarks, 
-                    unit_price, cert_price, total_amount, sst, subtotal_amount, products, existing_id, status) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    unit_price, cert_price, total_amount, sst, subtotal_amount, products, existing_id, status, stamping_type) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $insertStmt = $pdo->prepare($insertQuery);
 
     // Loop through the records and insert them as new records
@@ -39,7 +40,7 @@ try {
             $record['include_cert'], $record['borang_d'], $record['invoice_no'], $record['cash_bill'], $record['stamping_date'],
             $record['due_date'], $record['pic'], $record['customer_pic'], $record['quotation_no'], $record['quotation_date'],
             $record['purchase_no'], $record['purchase_date'], $record['remarks'], $record['unit_price'], $record['cert_price'],
-            $record['total_amount'], $record['sst'], $record['subtotal_amount'], $record['products'], $record['id'], 'Pending'
+            $record['total_amount'], $record['sst'], $record['subtotal_amount'], $record['products'], $record['id'], 'Pending', 'RENEWAL'
         ]);
     }
 
