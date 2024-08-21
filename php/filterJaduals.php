@@ -31,6 +31,15 @@ if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] 
 	$searchQuery .= " and customers = '".$_POST['customer']."'";
 }
 
+if($_POST['status'] != null && $_POST['status'] != '' && $_POST['status'] != '-'){
+  if($_POST['status'] == '6'){
+    $searchQuery .= " and stamping_type = 'NEW'";
+  }
+	else if($_POST['status'] == '7'){
+    $searchQuery .= " and stamping_type = 'RENEWAL'";
+  }
+}
+
 if($searchValue != ''){
   $searchQuery = " and (purchase_no like '%".$searchValue."%' OR
   quotation_no like '%".$searchValue."%' OR
@@ -44,12 +53,12 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM stamping WHERE status = 'Pending'".$searchQuery);
+$sel = mysqli_query($db,"select count(*) as allcount FROM stamping WHERE 1=1".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "SELECT * FROM stamping WHERE status = 'Cancelled'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
+$empQuery = "SELECT * FROM stamping WHERE 1=1".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;
@@ -62,6 +71,8 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "address1"=>$row['address1'] ?? '',
     "address2"=>$row['address2'] ?? '',
     "address3"=>$row['address3'] ?? '',
+    "full_address"=>$row['address1'].' '.$row['address2'].' '.$row['address3'],
+    "full_address2"=>$row['address1'].'<br>'.$row['address2'].'<br>'.$row['address3'],
     "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
     "machine_type"=>$row['machine_type'] != null ? searchMachineNameById($row['machine_type'], $db) : '',
     "model"=>$row['model'] != null  ? searchModelNameById($row['model'], $db) : '',
@@ -90,7 +101,10 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "no_daftar"=>$row['no_daftar'] ?? '',
     "pin_keselamatan"=>$row['pin_keselamatan'] ?? '',
     "siri_keselamatan"=>$row['siri_keselamatan'] ?? '',
-    "borang_d"=>$row['borang_d'] ?? ''
+    "borang_d"=>$row['borang_d'] ?? '',
+    "quantity"=>'1',
+    "batch_no"=>'',
+    "reason"=>'SERVICE / STMP'
   );
 
   $counter++;
