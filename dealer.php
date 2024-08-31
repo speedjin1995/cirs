@@ -9,7 +9,6 @@ if(!isset($_SESSION['userID'])){
 }
 else{
   $user = $_SESSION['userID'];
-  $dealer = $db->query("SELECT * FROM dealer WHERE deleted = '0'");
 }
 ?>
 
@@ -17,7 +16,7 @@ else{
     <div class="container-fluid">
         <div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0 text-dark">Customers</h1>
+				<h1 class="m-0 text-dark">Dealer</h1>
 			</div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -34,7 +33,7 @@ else{
               <div class="row">
                   <div class="col-9"></div>
                   <div class="col-3">
-                      <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addCustomers">Add Customers</button>
+                      <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addCustomers">Add Delear</button>
                   </div>
               </div>
           </div>
@@ -42,7 +41,7 @@ else{
 						<table id="customerTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
-                  <th>Code</th>
+                                    <th>Code</th>
 									<th>Name</th>
 									<th>Address</th>
 									<th>Phone</th>
@@ -74,20 +73,11 @@ else{
                   <input type="hidden" class="form-control" id="id" name="id">
                 </div>
                 <div class="form-group">
-                  <label for="code">Dealer</label>
-                  <select class="form-control select2" id="dealer" name="dealer">
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <?php while($rowCustomer2=mysqli_fetch_assoc($dealer)){ ?>
-                      <option value="<?=$rowCustomer2['id'] ?>"><?=$rowCustomer2['customer_name'] ?></option>
-                    <?php } ?>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="code">Customer Code *</label>
+                  <label for="code">Dealer Code *</label>
                   <input type="text" class="form-control" name="code" id="code" placeholder="Enter Customer Code" maxlength="10" required>
                 </div>
                 <div class="form-group">
-                  <label for="name">Customer Name *</label>
+                  <label for="name">Dealer Name *</label>
                   <input type="text" class="form-control" name="name" id="name" placeholder="Enter Customer Name" required>
                 </div>
                 <div class="form-group"> 
@@ -132,7 +122,7 @@ $(function () {
         'serverSide': true,
         'serverMethod': 'post',
         'ajax': {
-            'url':'php/loadCustomers.php'
+            'url':'php/loadDealers.php'
         },
         'columns': [
             { data: 'customer_code' },
@@ -156,7 +146,7 @@ $(function () {
     $.validator.setDefaults({
         submitHandler: function () {
             $('#spinnerLoading').show();
-            $.post('php/customers.php', $('#customerForm').serialize(), function(data){
+            $.post('php/dealer.php', $('#customerForm').serialize(), function(data){
                 var obj = JSON.parse(data); 
                 
                 if(obj.status === 'success'){
@@ -179,7 +169,6 @@ $(function () {
 
     $('#addCustomers').on('click', function(){
         $('#addModal').find('#id').val("");
-        $('#addModal').find('#dealer').val("");
         $('#addModal').find('#code').val("");
         $('#addModal').find('#name').val("");
         $('#addModal').find('#address').val("");
@@ -207,12 +196,11 @@ $(function () {
 
 function edit(id){
     $('#spinnerLoading').show();
-    $.post('php/getCustomer.php', {userID: id}, function(data){
+    $.post('php/getDealer.php', {userID: id}, function(data){
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){
             $('#addModal').find('#id').val(obj.message.id);
-            $('#addModal').find('#dealer').val(obj.message.dealer);
             $('#addModal').find('#code').val(obj.message.customer_code);
             $('#addModal').find('#name').val(obj.message.customer_name);
             $('#addModal').find('#address').val(obj.message.customer_address);
@@ -248,7 +236,7 @@ function edit(id){
 
 function deactivate(id){
     $('#spinnerLoading').show();
-    $.post('php/deleteCustomer.php', {userID: id}, function(data){
+    $.post('php/deleteDealer.php', {userID: id}, function(data){
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){

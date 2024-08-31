@@ -23,6 +23,8 @@ if(isset($_POST['userID'])){
             
             if ($row = $result->fetch_assoc()) {
                 $message['id'] = $row['id'];
+                $message['type'] = $row['type'];
+                $message['dealer'] = $row['dealer'];
                 $message['customer_type'] = $row['customer_type'];
                 $message['customers'] = $row['customers'];
                 $message['address1'] = $row['address1'];

@@ -703,10 +703,9 @@ $(function () {
       { 
         data: 'id',
         render: function ( data, type, row ) {
-          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<div class="row"><div class="col-4"><button type="button" id="edit'+data+'" onclick="edit('+data+
-            ')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-12"><button type="button" id="delete'+data+'" onclick="deactivate('+data+
-            ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
+          if (row.status == 'Cancelled') { // Assuming 'isInvoiced' is a boolean field in your row data
+            return '<div class="row"><div class="col-4"><button title="Revert" type="button" id="revert'+data+'" onclick="revert('+data+
+            ')" class="btn btn-success btn-sm"><i class="fas fa-sync"></i></button></div></div>';
           } 
           else {
             return ''; // Return an empty string or any other placeholder if the item is invoiced
@@ -888,11 +887,13 @@ $(function () {
         { 
           data: 'id',
           render: function ( data, type, row ) {
-            return '<div class="row"><div class="col-3"><button type="button" id="edit'+data+'" onclick="edit('+data+
-            ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button type="button" id="print'+data+'" onclick="print('+data+
-            ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div><div class="col-3"><button type="button" id="complete'+data+'" onclick="complete('+data+
-            ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div><div class="col-3"><button type="button" id="delete'+data+'" onclick="deactivate('+data+
-            ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
+            if (row.status == 'Cancelled') { // Assuming 'isInvoiced' is a boolean field in your row data
+              return '<div class="row"><div class="col-4"><button title="Revert" type="button" id="revert'+data+'" onclick="revert('+data+
+              ')" class="btn btn-success btn-sm"><i class="fas fa-sync"></i></button></div></div>';
+            } 
+            else {
+              return ''; // Return an empty string or any other placeholder if the item is invoiced
+            }
           }
         },
         { 
@@ -1497,6 +1498,27 @@ function edit(id) {
     }
     $('#spinnerLoading').hide();
   });
+}
+
+function revert(id) {
+  if (confirm('Are you sure you want to recall this items?')) {
+    $('#spinnerLoading').show();
+    $.post('php/recallStamp.php', {userID: id}, function(data){
+      var obj = JSON.parse(data);
+
+      if(obj.status === 'success'){
+        toastr["success"](obj.message, "Success:");
+        $('#weightTable').DataTable().ajax.reload();
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when activate", "Failed:");
+      }
+      $('#spinnerLoading').hide();
+    });
+  }
 }
 
 function complete(id) {

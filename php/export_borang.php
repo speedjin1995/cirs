@@ -3,22 +3,36 @@
 require_once 'db_connect.php';
 require_once 'requires/lookup.php';
  
-if(isset($_POST['id'], $_POST['driver'])){
-    $selectedIds = $_POST['id'];
-    $arrayOfId = explode(",", $selectedIds);
-    $driver = filter_input(INPUT_POST, 'driver', FILTER_SANITIZE_STRING);
+if(isset($_POST['driver'])){
+    $searchQuery = '';
+
+    if($_POST['fromDate'] != null && $_POST['fromDate'] != ''){
+        $dateTime = DateTime::createFromFormat('d/m/Y', $_POST['fromDate']);
+        $fromDateTime = $dateTime->format('Y-m-d 00:00:00');
+        $searchQuery = " and stamping_date >= '".$fromDateTime."'";
+    }
+    
+    if($_POST['toDate'] != null && $_POST['toDate'] != ''){
+        $dateTime = DateTime::createFromFormat('d/m/Y', $_POST['toDate']);
+        $toDateTime = $dateTime->format('Y-m-d 23:59:59');
+        $searchQuery .= " and stamping_date <= '".$toDateTime."'";
+    }
+    
+    if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] != '-'){
+        $searchQuery .= " and customers = '".$_POST['customer']."'";
+    }
+    
+
+    $driver = $_POST['driver'];
     $todayDate = date('d/m/Y');
     $todayDate2 = date('d M Y');
     $today = date("Y-m-d 00:00:00");
 
-    $placeholders = implode(',', array_fill(0, count($arrayOfId), '?'));
-    $select_stmt = $db->prepare("SELECT * FROM stamping WHERE id IN ($placeholders)");
+    $select_stmt = $db->prepare("SELECT * FROM stamping WHERE status = 'Complete'".$searchQuery);
 
     // Check if the statement is prepared successfully
     if ($select_stmt) {
         // Bind variables to the prepared statement
-        $types = str_repeat('i', count($arrayOfId)); // Assuming the IDs are integers
-        $select_stmt->bind_param($types, ...$arrayOfId);
         $select_stmt->execute();
         $result = $select_stmt->get_result();
         $num_records = $result->num_rows;

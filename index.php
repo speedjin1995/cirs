@@ -331,7 +331,7 @@ to get the desired effect
               <p>Dashboard</p>
             </a>
           </li-->
-          <!--li class="nav-item has-treeview">
+          <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>Inquries<i class="fas fa-angle-left right"></i></p>
@@ -343,15 +343,15 @@ to get the desired effect
                   <p>Monitoring</p>
                 </a>
               </li>
-              <?php /*if($role == "ADMIN"){
+              <?php if($role == "ADMIN"){
                 echo '<li class="nav-item">
                 <a href="#inquiry" data-file="inquiry.php" class="nav-link link">
                   <i class="nav-icon fas fa-tachometer-alt"></i>
                   <p>Inquries</p>
                 </a></li>';
-              }*/?>
+              }?>
             </ul>
-          </li-->
+          </li>
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-certificate"></i>
@@ -407,12 +407,12 @@ to get the desired effect
           </li>
           <?php 
             if($role == "ADMIN"){
-              echo '<li class="nav-item">
+              /*echo '<li class="nav-item">
                 <a href="#products" data-file="products.php" class="nav-link link">
                   <i class="nav-icon fas fa-thermometer"></i>
                   <p>Products</p>
                 </a>
-              </li>';
+              </li>';*/
             }
           ?>
           <?php 
@@ -469,6 +469,12 @@ to get the desired effect
                     <a href="#problem" data-file="problem.php" class="nav-link link">
                       <i class="nav-icon fas fa-industry"></i>
                       <p>Problems</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#dealer" data-file="dealer.php" class="nav-link link">
+                      <i class="nav-icon fas fa-user"></i>
+                      <p>Dealer</p>
                     </a>
                   </li>
                   <li class="nav-item">
@@ -632,7 +638,7 @@ $(function () {
       });
   });
   
-  $("a[href='#stamping']").click();
+  $("a[href='#pending']").click();
 });
 
 function isValidDate(d) {

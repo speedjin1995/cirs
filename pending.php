@@ -19,6 +19,7 @@ else{
     $role = $row['role_code'];
   }
 
+  $dealer = $db->query("SELECT * FROM dealer WHERE deleted = '0'");
   $customers = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $machinetypes = $db->query("SELECT * FROM machines WHERE deleted = '0'");
@@ -143,7 +144,7 @@ else{
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <th></th>
+                  <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
                   <th>Customers</th>
                   <th>Brands</th>
                   <th>Desc</th>
@@ -177,6 +178,102 @@ else{
 
         <div class="modal-body" >
           <input type="hidden" class="form-control" id="id" name="id">
+          <div class="row">
+            <div class="col-4">
+              <div class="form-group">
+                <label>Own / Dealer * </label>
+                <select class="form-control" style="width: 100%;" id="type" name="type" required>
+                  <option value="OWN">OWN</option>
+                  <option value="DEALER">DEALER</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="card card-primary">
+            <div class="card-body">
+              <div class="row">
+                <h4>Customer Billing Information</h4>
+              </div>
+              <div class="row">
+                <div class="col-4" id="isResseller">
+                  <div class="form-group">
+                    <label for="code">Dealer</label>
+                    <select class="form-control select2" id="dealer" name="dealer">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while($rowD=mysqli_fetch_assoc($dealer)){ ?>
+                        <option value="<?=$rowD['id'] ?>"><?=$rowD['customer_name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4" id="isResseller2">
+                  <div class="form-group">
+                    <label>Billing Address Line 1 * </label>
+                    <input class="form-control" type="text" placeholder="Address Line 1" id="address1s" name="address1s" readonly>
+                  </div>
+                </div>
+                <div class="col-4" id="isResseller3">
+                  <div class="form-group">
+                    <label>Billing Address Line 2 </label>
+                    <input class="form-control" type="text" placeholder="Address Line 2" id="address2s" name="address2s" readonly>
+                  </div>
+                </div>
+                <div class="col-4" id="isResseller4">
+                  <div class="form-group">
+                    <label>Billing Address Line 3 </label>
+                    <input class="form-control" type="text" placeholder="Address Line 3" id="address3s" name="address3s" readonly>
+                  </div>
+                </div>
+                <div class="col-4" id="isResseller5">
+                  <div class="form-group">
+                    <label>P.I.C</label>
+                    <input class="form-control" type="text" placeholder="PIC" id="pics" name="pics" readonly>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Quotation No.</label>
+                    <input class="form-control" type="text" placeholder="PO No" id="quotation" name="quotation">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Quotation Date</label>
+                    <div class='input-group date' id="datePicker3" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker3" id="quotationDate" name="quotationDate"/>
+                      <div class="input-group-append" data-target="#datePicker3" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>PO No.</label>
+                    <input class="form-control" type="text" placeholder="PO No" id="poNo" name="poNo">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>PO Date </label>
+                    <div class='input-group date' id="datePicker4" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker4" id="poDate" name="poDate"/>
+                      <div class="input-group-append" data-target="#datePicker4" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Invoice / Cash Bill No.</label>
+                    <input class="form-control" type="text" placeholder="Invoice No" id="invoice" name="invoice">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="card card-primary">
             <div class="card-body">
               <div class="row">
@@ -257,8 +354,14 @@ else{
                 </div>
                 <div class="col-4">
                   <div class="form-group">
+                    <label>Serial No * </label>
+                    <input class="form-control" type="text" placeholder="Serial No." id="serial" name="serial" required>
+                  </div>
+                </div>
+                <div class="col-4" style="display:none;">
+                  <div class="form-group">
                     <label>Product *</label>
-                    <select class="form-control select2" style="width: 100%;" id="product" name="product" required>
+                    <select class="form-control select2" style="width: 100%;" id="product" name="product">
                       <option selected="selected">-</option>
                       <?php while($rowProduct=mysqli_fetch_assoc($products)){ ?>
                         <option 
@@ -305,12 +408,6 @@ else{
                         <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
                       <?php } ?>
                     </select>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Serial No * </label>
-                    <input class="form-control" type="text" placeholder="Serial No." id="serial" name="serial" required>
                   </div>
                 </div>
               </div>
@@ -405,49 +502,9 @@ else{
           <div class="card card-primary">
             <div class="card-body">
               <div class="row">
-                <h4>Billing Information</h4>
+                <h4>Stamping Fees</h4>
               </div>
               <div class="row">
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Quotation No.</label>
-                    <input class="form-control" type="text" placeholder="PO No" id="quotation" name="quotation">
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Quotation Date</label>
-                    <div class='input-group date' id="datePicker3" data-target-input="nearest">
-                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker3" id="quotationDate" name="quotationDate"/>
-                      <div class="input-group-append" data-target="#datePicker3" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>PO No.</label>
-                    <input class="form-control" type="text" placeholder="PO No" id="poNo" name="poNo">
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>PO Date *</label>
-                    <div class='input-group date' id="datePicker4" data-target-input="nearest">
-                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker4" id="poDate" name="poDate"/>
-                      <div class="input-group-append" data-target="#datePicker4" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Invoice / Cash Bill No.</label>
-                    <input class="form-control" type="text" placeholder="Invoice No" id="invoice" name="invoice">
-                  </div>
-                </div>
                 <div class="col-4">
                   <div class="form-group">
                     <label>Unit Price *</label>
@@ -627,6 +684,11 @@ $(function () {
     defaultDate: today
   });
 
+  $('#selectAllCheckbox').on('change', function() {
+    var checkboxes = $('#weightTable tbody input[type="checkbox"]');
+    checkboxes.prop('checked', $(this).prop('checked')).trigger('change');
+  });
+
   var fromDateValue = $('#fromDate').val();
   var toDateValue = $('#toDate').val();
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
@@ -647,7 +709,7 @@ $(function () {
       'data': {
         fromDate: fromDateValue,
         toDate: toDateValue,
-        customer: customerNoFilter
+        customer: customerNoFilter,
         status: 'Pending'
       } 
     },
@@ -677,14 +739,19 @@ $(function () {
       { 
         data: 'id',
         render: function ( data, type, row ) {
-          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<div class="row"><div class="col-4"><button type="button" id="edit'+data+'" onclick="edit('+data+
-            ')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-12"><button type="button" id="delete'+data+'" onclick="deactivate('+data+
-            ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
-          } 
-          else {
-            return ''; // Return an empty string or any other placeholder if the item is invoiced
-          }
+          if(row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != ''){
+              return '<div class="row"><div class="col-3"><button title="Print" type="button" id="edit'+data+'" onclick="edit('+data+
+                ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+                ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div><div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+                ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div><div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+                ')" class="btn btn-danger btn-sm">X</button></div></div>';
+            }
+            else{
+              return '<div class="row"><div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+                ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+                ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div><div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+                ')" class="btn btn-danger btn-sm">X</button></div></div>';
+            }
         }
       },
       { 
@@ -832,7 +899,7 @@ $(function () {
         'data': {
           fromDate: fromDateValue,
           toDate: toDateValue,
-          customer: customerNoFilter
+          customer: customerNoFilter,
           status: 'Pending'
         } 
       },
@@ -862,11 +929,19 @@ $(function () {
         { 
           data: 'id',
           render: function ( data, type, row ) {
-            return '<div class="row"><div class="col-3"><button type="button" id="edit'+data+'" onclick="edit('+data+
-            ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button type="button" id="print'+data+'" onclick="print('+data+
-            ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div><div class="col-3"><button type="button" id="complete'+data+'" onclick="complete('+data+
-            ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div><div class="col-3"><button type="button" id="delete'+data+'" onclick="deactivate('+data+
-            ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
+            if(row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != ''){
+              return '<div class="row"><div class="col-3"><button title="Print" type="button" id="edit'+data+'" onclick="edit('+data+
+                ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+                ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div><div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+                ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div><div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+                ')" class="btn btn-danger btn-sm">X</button></div></div>';
+            }
+            else{
+              return '<div class="row"><div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+                ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+                ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div><div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+                ')" class="btn btn-danger btn-sm">X</button></div></div>';
+            }
           }
         },
         { 
@@ -1022,6 +1097,86 @@ $(function () {
     reader.readAsBinaryString(file);
   });
 
+  $('#extendModal').find('#type').on('change', function(){
+    if($(this).val() == "OWN"){
+      $('#isResseller').hide();
+      $('#isResseller2').hide();
+      $('#isResseller3').hide();
+      $('#isResseller4').hide();
+      $('#isResseller5').hide();
+    }
+    else{
+      $('#isResseller').show();
+      $('#isResseller2').show();
+      $('#isResseller3').show();
+      $('#isResseller4').show();
+      $('#isResseller5').show();
+    }
+  });
+
+  $('#extendModal').find('#dealer').on('change', function(){
+    if($('#extendModal').find('#type').val() != 'OWN'){
+      var id = $(this).find(":selected").val();
+
+      $.post('php/getDealer.php', {userID: id}, function(data){
+        var obj = JSON.parse(data);
+        
+        if(obj.status === 'success'){
+          $('#extendModal').find('#address1s').val(obj.message.customer_address);
+          $('#extendModal').find('#address2s').val(obj.message.address2);
+          $('#extendModal').find('#address3s').val(obj.message.address3);
+          $('#extendModal').find('#contacts').val(obj.message.customer_phone);
+          $('#extendModal').find('#emails').val(obj.message.customer_email);
+          $('#extendModal').modal('show');
+
+          $('#extendForm').validate({
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+              error.addClass('invalid-feedback');
+              element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+              $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+              $(element).removeClass('is-invalid');
+            }
+          });
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+      });
+
+      $.post('php/listCustomers.php', {hypermarket: id}, function(data){
+        var obj = JSON.parse(data);
+        
+        if(obj.status === 'success'){
+          $('#company').html('');
+          $('#company').append('<option selected="selected">-</option>');
+          $('#extendModal').find('#customerType').val('EXISTING');
+          $('#extendModal').find('#company').show();
+          $('#extendModal').find('#company').parents('.form-group').find('.select2-container').show();
+          $('#extendModal').find('#companyText').hide();
+          $('#extendModal').find('#companyText').val('');
+          for(var i=0; i<obj.message.length; i++){
+            $('#company').append('<option value="'+obj.message[i].id+'">'+obj.message[i].name+'</option>')
+          }
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+        $('#spinnerLoading').hide();
+      });
+    }
+  });
+
   $('#extendModal').find('#stampDate').on('blur', function (e) {
     if($(this).val()){
       var parts = $(this).val().split('/');
@@ -1108,7 +1263,7 @@ $(function () {
     var capacity = parseFloat($(this).find(":selected").attr("data-capacity"));
     var validator = parseFloat($(this).find(":selected").attr("data-validator"));
     var includeCert = $('#includeCert').val();
-    var certPrice = 30;
+    var certPrice = 28.6;
     var sst = 0;
     var totalAmt = price;
 
@@ -1133,10 +1288,32 @@ $(function () {
     $('#subAmount').val((totalAmt + (totalAmt * 0.06)).toFixed(2));
   });
 
+  $('#extendModal').find('#unitPrice').on('change', function(){
+    var price = parseFloat($(this).val());
+    var includeCert = $('#includeCert').val();
+    var certPrice = 28.6;
+    var sst = 0;
+    var totalAmt = price;
+
+    if(includeCert == 'YES'){
+      $('#certPrice').val(certPrice);
+      $('#cerId').show();
+      totalAmt += certPrice;
+    }
+    else{
+      $('#certPrice').val(0.00);
+      $('#cerId').hide();
+    }
+
+    $('#totalAmount').val(totalAmt);
+    $('#sst').val((totalAmt * 0.06).toFixed(2));
+    $('#subAmount').val((totalAmt + (totalAmt * 0.06)).toFixed(2));
+  });
+
   $('#extendModal').find('#includeCert').on('change', function(){
     var price = parseFloat($('#product').find(":selected").attr("data-price"));
     var includeCert = $(this).val();
-    var certPrice = 30;
+    var certPrice = 28.6;
     var sst = 0;
     var totalAmt = price;
 
@@ -1155,6 +1332,90 @@ $(function () {
     $('#totalAmount').val(totalAmt);
     $('#sst').val((totalAmt * 0.06).toFixed(2));
     $('#subAmount').val((totalAmt + (totalAmt * 0.06)).toFixed(2));
+  });
+
+  $('#extendModal').find('#machineType').on('change', function(){
+    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
+      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
+        var obj = JSON.parse(data);
+        
+        if(obj.status === 'success'){
+          $('#product').val(obj.message.id);
+          $('#unitPrice').val(obj.message.price);
+          $('#unitPrice').trigger('change');
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+        //$('#spinnerLoading').hide();
+      });
+    }
+  });
+
+  $('#extendModal').find('#jenisAlat').on('change', function(){
+    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
+      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
+        var obj = JSON.parse(data);
+        
+        if(obj.status === 'success'){
+          $('#product').val(obj.message.id);
+          $('#unitPrice').val(obj.message.price);
+          $('#unitPrice').trigger('change');
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+        $('#spinnerLoading').hide();
+      });
+    }
+  });
+
+  $('#extendModal').find('#capacity').on('change', function(){
+    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
+      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
+        var obj = JSON.parse(data);
+        
+        if(obj.status === 'success'){
+          $('#product').val(obj.message.id);
+          $('#unitPrice').val(obj.message.price);
+          $('#unitPrice').trigger('change');
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+        $('#spinnerLoading').hide();
+      });
+    }
+  });
+
+  $('#extendModal').find('#validator').on('change', function(){
+    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
+      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
+        var obj = JSON.parse(data);
+        
+        if(obj.status === 'success'){
+          $('#product').val(obj.message.id);
+          $('#unitPrice').val(obj.message.price);
+          $('#unitPrice').trigger('change');
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+        $('#spinnerLoading').hide();
+      });
+    }
   });
 
   $(".add-price").click(function(){
@@ -1305,10 +1566,16 @@ function newEntry(){
   var date = new Date();
 
   $('#extendModal').find('#id').val("");
+  $('#extendModal').find('#type').val("OWN");
+  $('#isResseller').hide();
+  $('#isResseller2').hide();
+  $('#isResseller3').hide();
+  $('#isResseller4').hide();
+  $('#isResseller5').hide();
   $('#extendModal').find('#customerType').val("EXISTING").attr('readonly', false).trigger('change');
   $('#extendModal').find('#brand').val('').trigger('change');
   $('#extendModal').find('#validator').val('').trigger('change');
-  $('#extendModal').find('#product').val('').trigger('change');
+  $('#extendModal').find('#product').val('');
   $('#extendModal').find('#company').val('');
   $('#extendModal').find('#companyText').val('').trigger('change');
   $('#extendModal').find('#machineType').val('').trigger('change');
@@ -1365,102 +1632,159 @@ function edit(id) {
   $('#spinnerLoading').show();
   $.post('php/getStamp.php', {userID: id}, function(data){
     var obj = JSON.parse(data);
+    debugger;
     
     if(obj.status === 'success'){
-      $('#extendModal').find('#id').val(obj.message.id);
-      $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
-      $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
-      $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
-      $('#extendModal').find('#newRenew').val(obj.message.stampType);
-      $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
-      $('#extendModal').find('#companyText').val('');
-      $('#extendModal').find('#product').val(obj.message.products).trigger('change');
-      $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
-      $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
-      $('#extendModal').find('#address1').val(obj.message.address1);
-      $('#extendModal').find('#model').val(obj.message.model).trigger('change');
-      $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
-      $('#extendModal').find('#address2').val(obj.message.address2);
-      $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
-      $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
-      $('#extendModal').find('#address3').val(obj.message.address3);
-      $('#extendModal').find('#serial').val(obj.message.serial_no);
-      $('#extendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);
-      $('#extendModal').find('#attnTo').val(obj.message.pic);
-      $('#extendModal').find('#siriKeselamatan').val(obj.message.siri_keselamatan);
-      $('#extendModal').find('#pic').val(obj.message.pic);
-      $('#extendModal').find('#borangD').val(obj.message.borang_d);
-      $('#extendModal').find('#remark').val(obj.message.remarks);
-      $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
-      $('#extendModal').find('#quotation').val(obj.message.quotation_no);
-      $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
-      $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
-      $('#extendModal').find('#poNo').val(obj.message.purchase_no);
-      $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
-      $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
-      $('#extendModal').find('#invoice').val(obj.message.invoice_no);
-      $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
-      $('#extendModal').find('#certPrice').val(obj.message.cert_price);
-      $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
-      $('#extendModal').find('#sst').val(obj.message.sst);
-      $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
+      if(obj.message.type == 'OWN'){
+        $('#extendModal').find('#type').val(obj.message.type).trigger('change');
+        $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
+        $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
+        $('#extendModal').find('#newRenew').val(obj.message.stampType);
+        $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
+        $('#extendModal').find('#companyText').val('');
+        $('#extendModal').find('#product').val(obj.message.products);
+        $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
+        $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
+        $('#extendModal').find('#address1').val(obj.message.address1);
+        $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
+        $('#extendModal').find('#address2').val(obj.message.address2);
+        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
+        $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
+        $('#extendModal').find('#address3').val(obj.message.address3);
+        $('#extendModal').find('#serial').val(obj.message.serial_no);
+        $('#extendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);
+        $('#extendModal').find('#attnTo').val(obj.message.pic);
+        $('#extendModal').find('#siriKeselamatan').val(obj.message.siri_keselamatan);
+        $('#extendModal').find('#pic').val(obj.message.pic);
+        $('#extendModal').find('#borangD').val(obj.message.borang_d);
+        $('#extendModal').find('#remark').val(obj.message.remarks);
+        $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
+        $('#extendModal').find('#quotation').val(obj.message.quotation_no);
+        $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
+        $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
+        $('#extendModal').find('#poNo').val(obj.message.purchase_no);
+        $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
+        $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
+        $('#extendModal').find('#invoice').val(obj.message.invoice_no);
+        $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
+        $('#extendModal').find('#certPrice').val(obj.message.cert_price);
+        $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
+        $('#extendModal').find('#sst').val(obj.message.sst);
+        $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
 
-      $('#pricingTable').html('');
-      pricingCount = 0;
-      
+        $('#pricingTable').html('');
+        pricingCount = 0;
 
-      if(obj.message.log.length > 0){
-        for(var i = 0; i < obj.message.log.length; i++){
-          var item = obj.message.log[i];
-          var $addContents = $("#pricingDetails").clone();
-          $("#pricingTable").append($addContents.html());
+        if(obj.message.log.length > 0){
+          for(var i = 0; i < obj.message.log.length; i++){
+            var item = obj.message.log[i];
+            var $addContents = $("#pricingDetails").clone();
+            $("#pricingTable").append($addContents.html());
 
-          $("#pricingTable").find('.details:last').attr("id", "detail" + pricingCount);
-          $("#pricingTable").find('.details:last').attr("data-index", pricingCount);
-          //$("#pricingTable").find('#remove:last').attr("id", "remove" + pricingCount);
+            $("#pricingTable").find('.details:last').attr("id", "detail" + pricingCount);
+            $("#pricingTable").find('.details:last').attr("data-index", pricingCount);
+            //$("#pricingTable").find('#remove:last').attr("id", "remove" + pricingCount);
 
-          $("#pricingTable").find('#no:last').attr('name', 'no['+pricingCount+']').attr("id", "no" + pricingCount).val(item.no);
-          $("#pricingTable").find('#date:last').attr('name', 'date['+pricingCount+']').attr("id", "date" + pricingCount).val(item.date);
-          $("#pricingTable").find('#notes:last').attr('name', 'notes['+pricingCount+']').attr("id", "notes" + pricingCount).val(item.notes);
-          $("#pricingTable").find('#followUpDate:last').attr('name', 'followUpDate['+pricingCount+']').attr("id", "followUpDate" + pricingCount).val(item.followUpDate);
-          $("#pricingTable").find('#picAttend:last').attr('name', 'picAttend['+pricingCount+']').attr("id", "picAttend" + pricingCount).val(item.picAttend);
-          $("#pricingTable").find('#status').attr('name', 'status['+pricingCount+']').attr("id", "status" + pricingCount).val('Pending').val(item.status);
+            $("#pricingTable").find('#no:last').attr('name', 'no['+pricingCount+']').attr("id", "no" + pricingCount).val(item.no);
+            $("#pricingTable").find('#date:last').attr('name', 'date['+pricingCount+']').attr("id", "date" + pricingCount).val(item.date);
+            $("#pricingTable").find('#notes:last').attr('name', 'notes['+pricingCount+']').attr("id", "notes" + pricingCount).val(item.notes);
+            $("#pricingTable").find('#followUpDate:last').attr('name', 'followUpDate['+pricingCount+']').attr("id", "followUpDate" + pricingCount).val(item.followUpDate);
+            $("#pricingTable").find('#picAttend:last').attr('name', 'picAttend['+pricingCount+']').attr("id", "picAttend" + pricingCount).val(item.picAttend);
+            $("#pricingTable").find('#status').attr('name', 'status['+pricingCount+']').attr("id", "status" + pricingCount).val('Pending').val(item.status);
 
-          var newDatePickerId = "datePicker5" + pricingCount;
+            var newDatePickerId = "datePicker5" + pricingCount;
 
-          // Find the newly added date input and set the new ID
-          var $newDateInputGroup = $("#pricingTable").find('#datePicker5:last');
-          $newDateInputGroup.attr("id", newDatePickerId);
-          $newDateInputGroup.find('input').attr("data-target", "#" + newDatePickerId);
-          $newDateInputGroup.find('.input-group-append').attr("data-target", "#" + newDatePickerId);
+            // Find the newly added date input and set the new ID
+            var $newDateInputGroup = $("#pricingTable").find('#datePicker5:last');
+            $newDateInputGroup.attr("id", newDatePickerId);
+            $newDateInputGroup.find('input').attr("data-target", "#" + newDatePickerId);
+            $newDateInputGroup.find('.input-group-append').attr("data-target", "#" + newDatePickerId);
 
-          // Initialize the date picker on the new element
-          $newDateInputGroup.datetimepicker({
-            icons: { time: 'far fa-calendar' },
-            format: 'DD/MM/YYYY'
-          });
+            // Initialize the date picker on the new element
+            $newDateInputGroup.datetimepicker({
+              icons: { time: 'far fa-calendar' },
+              format: 'DD/MM/YYYY'
+            });
 
-          pricingCount++;
+            pricingCount++;
+          }
         }
+        
+        $('#extendModal').modal('show');
+
+        $('#extendForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
       }
+      else{
+        $('#extendModal').find('#type').val(obj.message.type).trigger('change');
+        $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
+        $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
+        $('#extendModal').find('#newRenew').val(obj.message.stampType);
+        $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
+        $('#extendModal').find('#companyText').val('');
+        $('#extendModal').find('#product').val(obj.message.products);
+        $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
+        $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
+        $('#extendModal').find('#address1').val(obj.message.address1);
+        $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
+        $('#extendModal').find('#address2').val(obj.message.address2);
+        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
+        $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
+        $('#extendModal').find('#address3').val(obj.message.address3);
+        $('#extendModal').find('#serial').val(obj.message.serial_no);
+        $('#extendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);
+        $('#extendModal').find('#attnTo').val(obj.message.pic);
+        $('#extendModal').find('#siriKeselamatan').val(obj.message.siri_keselamatan);
+        $('#extendModal').find('#pic').val(obj.message.pic);
+        $('#extendModal').find('#borangD').val(obj.message.borang_d);
+        $('#extendModal').find('#remark').val(obj.message.remarks);
+        $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
+        $('#extendModal').find('#quotation').val(obj.message.quotation_no);
+        $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
+        $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
+        $('#extendModal').find('#poNo').val(obj.message.purchase_no);
+        $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
+        $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
+        $('#extendModal').find('#invoice').val(obj.message.invoice_no);
+        $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
+        $('#extendModal').find('#certPrice').val(obj.message.cert_price);
+        $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
+        $('#extendModal').find('#sst').val(obj.message.sst);
+        $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
 
+        $('#extendModal').modal('show');
 
-      
-      $('#extendModal').modal('show');
-
-      $('#extendForm').validate({
-        errorElement: 'span',
-        errorPlacement: function (error, element) {
-          error.addClass('invalid-feedback');
-          element.closest('.form-group').append(error);
-        },
-        highlight: function (element, errorClass, validClass) {
-          $(element).addClass('is-invalid');
-        },
-        unhighlight: function (element, errorClass, validClass) {
-          $(element).removeClass('is-invalid');
-        }
-      });
+        $('#extendForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
+      }
     }
     else if(obj.status === 'failed'){
       toastr["error"](obj.message, "Failed:");
@@ -1494,7 +1818,7 @@ function complete(id) {
 }
 
 function deactivate(id) {
-  if (confirm('Are you sure you want to delete this items?')) {
+  if (confirm('Are you sure you want to cancel this items?')) {
     $('#spinnerLoading').show();
     $.post('php/deleteStamp.php', {userID: id}, function(data){
       var obj = JSON.parse(data);

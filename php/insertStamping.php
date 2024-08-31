@@ -6,13 +6,13 @@ session_start();
 
 $uid = $_SESSION['userID'];
 
-if(isset($_POST['customerType'], $_POST['newRenew'], $_POST['brand'], $_POST['validator'], $_POST['machineType'], $_POST['jenisAlat'], $_POST['address1']
-, $_POST['model'], $_POST['capacity'], $_POST['serial'], $_POST['product'])){
+if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['brand'], $_POST['validator'], $_POST['machineType'], $_POST['jenisAlat'], $_POST['address1']
+, $_POST['model'], $_POST['capacity'], $_POST['serial'])){
+	$type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
 	$customerType = filter_input(INPUT_POST, 'customerType', FILTER_SANITIZE_STRING);
 	$brand = filter_input(INPUT_POST, 'brand', FILTER_SANITIZE_STRING);
 	$validator = filter_input(INPUT_POST, 'validator', FILTER_SANITIZE_STRING);
 	$newRenew = filter_input(INPUT_POST, 'newRenew', FILTER_SANITIZE_STRING);
-	$product = filter_input(INPUT_POST, 'product', FILTER_SANITIZE_STRING);
 	$machineType = filter_input(INPUT_POST, 'machineType', FILTER_SANITIZE_STRING);
 	$jenisAlat = filter_input(INPUT_POST, 'jenisAlat', FILTER_SANITIZE_STRING);
 	$address1 = filter_input(INPUT_POST, 'address1', FILTER_SANITIZE_STRING);
@@ -20,6 +20,8 @@ if(isset($_POST['customerType'], $_POST['newRenew'], $_POST['brand'], $_POST['va
 	$capacity = filter_input(INPUT_POST, 'capacity', FILTER_SANITIZE_STRING);
 	$serial = filter_input(INPUT_POST, 'serial', FILTER_SANITIZE_STRING);
 
+	$product = null;
+	$dealer = null;
 	$address2 = null;
 	$address3 = null;
 	$dueDate = null;
@@ -49,6 +51,38 @@ if(isset($_POST['customerType'], $_POST['newRenew'], $_POST['brand'], $_POST['va
 
 	$logs = array();
 
+	if(isset($_POST['product']) && $_POST['product']!=null && $_POST['product']!=""){
+		$product = filter_input(INPUT_POST, 'product', FILTER_SANITIZE_STRING);
+	}
+	else{
+		if ($select_stmtP = $db->prepare("SELECT id FROM products WHERE machine_type=? AND jenis_alat=? AND capacity=? AND validator=?")) {
+			$select_stmtP->bind_param('ssss', $machineType, $jenisAlat, $capacity, $validator);
+			$select_stmtP->execute();
+			$resultP = $select_stmtP->get_result();
+        
+			if ($rowP = $resultP->fetch_assoc()) {
+				$product = $rowP['id'];
+			} 
+			else {
+				if(isset($_POST['unitPrice']) && $_POST['unitPrice']!=null && $_POST['unitPrice']!="" && $_POST['unitPrice']!="0.00"){
+					// Customer does not exist, create a new customer
+					if ($insert_stmtP = $db->prepare("INSERT INTO products (name, machine_type, jenis_alat, capacity, validator, price) VALUES (?, ?, ?, ?, ?, ?)")) {
+						$pname = 'product'.$machineType.$jenisAlat.$capacity.$validator;
+						$insert_stmtP->bind_param('ssssss', $pname , $machineType, $jenisAlat, $capacity, $validator, $_POST['unitPrice']);
+						
+						if ($insert_stmtP->execute()) {
+							$product = $insert_stmtP->insert_id;
+						} 
+					}
+				}
+			}
+		}
+	}
+
+	if(isset($_POST['dealer']) && $_POST['dealer']!=null && $_POST['dealer']!=""){
+		$dealer = $_POST['dealer'];
+	}
+
 	if(isset($_POST['address2']) && $_POST['address2']!=null && $_POST['address2']!=""){
 		$address2 = $_POST['address2'];
 	}
@@ -73,7 +107,7 @@ if(isset($_POST['customerType'], $_POST['newRenew'], $_POST['brand'], $_POST['va
 					$insert_stmt->bind_param('ssss', $_POST['companyText'], $address1, $address2, $address3);
 					
 					if ($insert_stmt->execute()) {
-						$customer = $db->insert_id;
+						$customer = $insert_stmt->insert_id;
 						$customerType = 'EXISTING';
 					} 
 				}
@@ -177,51 +211,13 @@ if(isset($_POST['customerType'], $_POST['newRenew'], $_POST['brand'], $_POST['va
 		$subtotalPrice = $_POST['subAmount'];
 	}
 
-	// Logs
-	/*if(isset($_POST['no'])){
-		$no = $_POST['no'];
-	}
-
-	if(isset($_POST['date'])){
-		$date = $_POST['date'];
-	}
-
-	if(isset($_POST['notes'])){
-		$notes = $_POST['notes'];
-	}
-
-	if(isset($_POST['followUpDate'])){
-		$followUpDate = $_POST['followUpDate'];
-	}
-	
-	if(isset($_POST['picAttend'])){
-		$picAttend = $_POST['picAttend'];
-	}
-
-	if(isset($_POST['status'])){
-		$status = $_POST['status'];
-	}
-
-	if(isset($no) && $no != null && count($no) > 0){
-		for($i=0; $i<count($no); $i++){
-			$logs[] = array(
-				"no" => $no[$i] ?? ($i + 1),
-				"date" => $date[$i] ?? date('d/m/Y'),
-				"notes" => $notes[$i] ?? '',
-				"followUpDate" => $followUpDate[$i] ?? date('d/m/Y'),
-				"picAttend" => $picAttend[$i] ?? $uid,
-				"status" => $status[$i] ?? 'Pending'
-			);
-		}
-	}*/
-
 	if(isset($_POST['id']) && $_POST['id'] != null && $_POST['id'] != ''){
-		if ($update_stmt = $db->prepare("UPDATE stamping SET customers=?, address1=?, address2=?, address3=?, brand=?, machine_type=?, model=?
+		if ($update_stmt = $db->prepare("UPDATE stamping SET type=?, dealer=?, customers=?, address1=?, address2=?, address3=?, brand=?, machine_type=?, model=?
 		, capacity=?, serial_no=?, validate_by=?, jenis_alat=?, no_daftar=?, pin_keselamatan=?, siri_keselamatan=?, include_cert=?, borang_d=?
 		, invoice_no=?, cash_bill=?, stamping_date=?, due_date=?, pic=?, customer_pic=?, quotation_no=?, quotation_date=?, purchase_no=?, purchase_date=?
 		, remarks=?, unit_price=?, cert_price=?, total_amount=?, sst=?, subtotal_amount=?, log=?, products=?, stamping_type=? WHERE id=?")){
 			$data = json_encode($logs);
-			$update_stmt->bind_param('ssssssssssssssssssssssssssssssssssss', $customer, $address1, $address2, $address3, $brand, $machineType, $model, $capacity, $serial, 
+			$update_stmt->bind_param('ssssssssssssssssssssssssssssssssssssss', $type, $dealer, $customer, $address1, $address2, $address3, $brand, $machineType, $model, $capacity, $serial, 
 			$validator, $jenisAlat, $noDaftar, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $invoice, $cashBill, $stampDate, $dueDate, $uid, $pic, 
 			$quotation, $quotationDate, $poNo, $poDate, $remark, $unitPrice, $certPrice, $totalPrice, $sst, $subtotalPrice, $data, $product, $newRenew, $_POST['id']);
 		
@@ -256,12 +252,12 @@ if(isset($_POST['customerType'], $_POST['newRenew'], $_POST['brand'], $_POST['va
 		}
 	}
 	else{
-		if ($insert_stmt = $db->prepare("INSERT INTO stamping (customer_type, customers, address1, address2, address3, brand, machine_type, model, capacity, serial_no, 
+		if ($insert_stmt = $db->prepare("INSERT INTO stamping (type, dealer, customer_type, customers, address1, address2, address3, brand, machine_type, model, capacity, serial_no, 
 		validate_by, jenis_alat, no_daftar, pin_keselamatan, siri_keselamatan, include_cert, borang_d, invoice_no, cash_bill, stamping_date, due_date, pic, customer_pic, 
 		quotation_no, quotation_date, purchase_no, purchase_date, remarks, unit_price, cert_price, total_amount, sst, subtotal_amount, log, products, stamping_type) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
 			$data = json_encode($logs);
-			$insert_stmt->bind_param('ssssssssssssssssssssssssssssssssssss', $customerType, $customer, $address1, $address2, $address3, $brand, $machineType, $model, $capacity, $serial, 
+			$insert_stmt->bind_param('ssssssssssssssssssssssssssssssssssssss', $type, $dealer, $customerType, $customer, $address1, $address2, $address3, $brand, $machineType, $model, $capacity, $serial, 
 			$validator, $jenisAlat, $noDaftar, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $invoice, $cashBill, $stampDate, $dueDate, $uid, $pic, 
 			$quotation, $quotationDate, $poNo, $poDate, $remark, $unitPrice, $certPrice, $totalPrice, $sst, $subtotalPrice, $data, $product, $newRenew);
 			

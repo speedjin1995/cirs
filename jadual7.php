@@ -93,10 +93,10 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-12"><p>Renewal Stamping</p></div>
-              <!--div class="col-2">
+              <div class="col-10"><p>Renewal Stamping</p></div>
+              <div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
-              </div-->
+              </div>
               <!--div class="col-2">
                 <a href="/template/Stamping Record Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
               </div-->
@@ -432,39 +432,29 @@ $(function () {
   });
 
   $('#exportBorangs').on('click', function () {
-    var selectedIds = []; // An array to store the selected 'id' values
-
-    $("#weightTable tbody input[type='checkbox']").each(function () {
-      if (this.checked) {
-        selectedIds.push($(this).val());
+    var fromDateValue = $('#fromDate').val();
+    var toDateValue = $('#toDate').val();
+    var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
+    
+    $.post('php/export_borang.php', {"driver": "7", "fromDate": fromDateValue, "toDate": toDateValue, "customer": customerNoFilter}, function(data){
+      var obj = JSON.parse(data);
+  
+      if(obj.status === 'success'){
+        var printWindow = window.open('', '', 'height=400,width=800');
+        printWindow.document.write(obj.message);
+        printWindow.document.close();
+        setTimeout(function(){
+          printWindow.print();
+          printWindow.close();
+        }, 1000);
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when pull data", "Failed:");
       }
     });
-
-    if (selectedIds.length > 0) {
-      $("#printDOModal").find('#id').val(selectedIds);
-      $("#printDOModal").find('#driver').val('7');
-      $("#printDOModal").modal("show");
-
-      $('#printDOForm').validate({
-        errorElement: 'span',
-        errorPlacement: function (error, element) {
-          error.addClass('invalid-feedback');
-          element.closest('.form-group').append(error);
-        },
-        highlight: function (element, errorClass, validClass) {
-          $(element).addClass('is-invalid');
-        },
-        unhighlight: function (element, errorClass, validClass) {
-          $(element).removeClass('is-invalid');
-        }
-      });
-
-      //$('#printDOForm').submit();
-    } 
-    else {
-      // Optionally, you can display a message or take another action if no IDs are selected
-      alert("Please select at least one DO to Deliver.");
-    }
   });
 });
 
