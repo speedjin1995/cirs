@@ -170,7 +170,7 @@ else{
     <div class="modal-content">
       <form role="form" id="extendForm">
         <div class="modal-header bg-gray-dark color-palette">
-          <h4 class="modal-title">Edit Stamping</h4>
+          <h4 class="modal-title">Stamping Forms</h4>
           <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -1632,10 +1632,10 @@ function edit(id) {
   $('#spinnerLoading').show();
   $.post('php/getStamp.php', {userID: id}, function(data){
     var obj = JSON.parse(data);
-    debugger;
     
     if(obj.status === 'success'){
       if(obj.message.type == 'OWN'){
+        $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
@@ -1730,13 +1730,18 @@ function edit(id) {
         });
       }
       else{
+        $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#newRenew').val(obj.message.stampType);
-        $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
+
+        setTimeout(function(){
+          $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
+        }, 1000);
+
         $('#extendModal').find('#companyText').val('');
         $('#extendModal').find('#product').val(obj.message.products);
         $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');

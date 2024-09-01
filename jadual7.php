@@ -93,13 +93,13 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-10"><p>Renewal Stamping</p></div>
+              <div class="col-8"><p>Renewal Stamping</p></div>
               <div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
               </div>
-              <!--div class="col-2">
-                <a href="/template/Stamping Record Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
-              </div-->
+              <div class="col-2">
+                <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="exportExcel">Export Excel</button>
+              </div>
               <!--div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">Upload Excel</button>
               </div-->
@@ -455,6 +455,15 @@ $(function () {
         toastr["error"]("Something wrong when pull data", "Failed:");
       }
     });
+  });
+
+  $('#exportExcel').on('click', function () {
+    var fromDateValue = $('#fromDate').val();
+    var toDateValue = $('#toDate').val();
+    var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
+    
+    window.open("php/export.php?fromDate="+fromDateValue+"&toDate="+toDateValue+
+    "&customer="+customerNoFilter+"&type=6");
   });
 });
 

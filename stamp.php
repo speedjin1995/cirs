@@ -168,7 +168,7 @@ else{
     <div class="modal-content">
       <form role="form" id="extendForm">
         <div class="modal-header bg-gray-dark color-palette">
-          <h4 class="modal-title">Add New Stamping</h4>
+          <h4 class="modal-title">Stamping Forms</h4>
           <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -176,6 +176,102 @@ else{
 
         <div class="modal-body" >
           <input type="hidden" class="form-control" id="id" name="id">
+          <div class="row">
+            <div class="col-4">
+              <div class="form-group">
+                <label>Own / Dealer * </label>
+                <select class="form-control" style="width: 100%;" id="type" name="type" required>
+                  <option value="OWN">OWN</option>
+                  <option value="DEALER">DEALER</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="card card-primary">
+            <div class="card-body">
+              <div class="row">
+                <h4>Customer Billing Information</h4>
+              </div>
+              <div class="row">
+                <div class="col-4" id="isResseller">
+                  <div class="form-group">
+                    <label for="code">Dealer</label>
+                    <select class="form-control select2" id="dealer" name="dealer">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while($rowD=mysqli_fetch_assoc($dealer)){ ?>
+                        <option value="<?=$rowD['id'] ?>"><?=$rowD['customer_name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4" id="isResseller2">
+                  <div class="form-group">
+                    <label>Billing Address Line 1 * </label>
+                    <input class="form-control" type="text" placeholder="Address Line 1" id="address1s" name="address1s" readonly>
+                  </div>
+                </div>
+                <div class="col-4" id="isResseller3">
+                  <div class="form-group">
+                    <label>Billing Address Line 2 </label>
+                    <input class="form-control" type="text" placeholder="Address Line 2" id="address2s" name="address2s" readonly>
+                  </div>
+                </div>
+                <div class="col-4" id="isResseller4">
+                  <div class="form-group">
+                    <label>Billing Address Line 3 </label>
+                    <input class="form-control" type="text" placeholder="Address Line 3" id="address3s" name="address3s" readonly>
+                  </div>
+                </div>
+                <div class="col-4" id="isResseller5">
+                  <div class="form-group">
+                    <label>P.I.C</label>
+                    <input class="form-control" type="text" placeholder="PIC" id="pics" name="pics" readonly>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Quotation No.</label>
+                    <input class="form-control" type="text" placeholder="PO No" id="quotation" name="quotation">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Quotation Date</label>
+                    <div class='input-group date' id="datePicker3" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker3" id="quotationDate" name="quotationDate"/>
+                      <div class="input-group-append" data-target="#datePicker3" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>PO No.</label>
+                    <input class="form-control" type="text" placeholder="PO No" id="poNo" name="poNo">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>PO Date </label>
+                    <div class='input-group date' id="datePicker4" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker4" id="poDate" name="poDate"/>
+                      <div class="input-group-append" data-target="#datePicker4" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Invoice / Cash Bill No.</label>
+                    <input class="form-control" type="text" placeholder="Invoice No" id="invoice" name="invoice">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="card card-primary">
             <div class="card-body">
               <div class="row">
@@ -256,8 +352,14 @@ else{
                 </div>
                 <div class="col-4">
                   <div class="form-group">
+                    <label>Serial No * </label>
+                    <input class="form-control" type="text" placeholder="Serial No." id="serial" name="serial" required>
+                  </div>
+                </div>
+                <div class="col-4" style="display:none;">
+                  <div class="form-group">
                     <label>Product *</label>
-                    <select class="form-control select2" style="width: 100%;" id="product" name="product" required>
+                    <select class="form-control select2" style="width: 100%;" id="product" name="product">
                       <option selected="selected">-</option>
                       <?php while($rowProduct=mysqli_fetch_assoc($products)){ ?>
                         <option 
@@ -304,12 +406,6 @@ else{
                         <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
                       <?php } ?>
                     </select>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Serial No * </label>
-                    <input class="form-control" type="text" placeholder="Serial No." id="serial" name="serial" required>
                   </div>
                 </div>
               </div>
@@ -404,49 +500,9 @@ else{
           <div class="card card-primary">
             <div class="card-body">
               <div class="row">
-                <h4>Billing Information</h4>
+                <h4>Stamping Fees</h4>
               </div>
               <div class="row">
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Quotation No.</label>
-                    <input class="form-control" type="text" placeholder="PO No" id="quotation" name="quotation">
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Quotation Date</label>
-                    <div class='input-group date' id="datePicker3" data-target-input="nearest">
-                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker3" id="quotationDate" name="quotationDate"/>
-                      <div class="input-group-append" data-target="#datePicker3" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>PO No.</label>
-                    <input class="form-control" type="text" placeholder="PO No" id="poNo" name="poNo">
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>PO Date *</label>
-                    <div class='input-group date' id="datePicker4" data-target-input="nearest">
-                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker4" id="poDate" name="poDate"/>
-                      <div class="input-group-append" data-target="#datePicker4" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Invoice / Cash Bill No.</label>
-                    <input class="form-control" type="text" placeholder="Invoice No" id="invoice" name="invoice">
-                  </div>
-                </div>
                 <div class="col-4">
                   <div class="form-group">
                     <label>Unit Price *</label>
@@ -690,7 +746,7 @@ $(function () {
         render: function ( data, type, row ) {
           if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
             return '<div class="row"><div class="col-4"><button type="button" id="edit'+data+'" onclick="edit('+data+
-            ')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-12"><button type="button" id="delete'+data+'" onclick="deactivate('+data+
+            ')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-4"><button type="button" id="delete'+data+'" onclick="deactivate('+data+
             ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
           } 
           else {
@@ -861,7 +917,7 @@ $(function () {
           render: function ( data, type, row ) {
             if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
               return '<div class="row"><div class="col-4"><button type="button" id="edit'+data+'" onclick="edit('+data+
-              ')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-12"><button type="button" id="delete'+data+'" onclick="deactivate('+data+
+              ')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-4"><button type="button" id="delete'+data+'" onclick="deactivate('+data+
               ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
             } 
             else {
@@ -1368,100 +1424,162 @@ function edit(id) {
     var obj = JSON.parse(data);
     
     if(obj.status === 'success'){
-      $('#extendModal').find('#id').val(obj.message.id);
-      $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
-      $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
-      $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
-      $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
-      $('#extendModal').find('#newRenew').val(obj.message.stampType);
-      $('#extendModal').find('#companyText').val('');
-      $('#extendModal').find('#product').val(obj.message.products).trigger('change');
-      $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
-      $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
-      $('#extendModal').find('#address1').val(obj.message.address1);
-      $('#extendModal').find('#model').val(obj.message.model).trigger('change');
-      $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
-      $('#extendModal').find('#address2').val(obj.message.address2);
-      $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
-      $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
-      $('#extendModal').find('#address3').val(obj.message.address3);
-      $('#extendModal').find('#serial').val(obj.message.serial_no);
-      $('#extendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);
-      $('#extendModal').find('#attnTo').val(obj.message.pic);
-      $('#extendModal').find('#siriKeselamatan').val(obj.message.siri_keselamatan);
-      $('#extendModal').find('#pic').val(obj.message.pic);
-      $('#extendModal').find('#borangD').val(obj.message.borang_d);
-      $('#extendModal').find('#remark').val(obj.message.remarks);
-      $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
-      $('#extendModal').find('#quotation').val(obj.message.quotation_no);
-      $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
-      $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
-      $('#extendModal').find('#poNo').val(obj.message.purchase_no);
-      $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
-      $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
-      $('#extendModal').find('#invoice').val(obj.message.invoice_no);
-      $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
-      $('#extendModal').find('#certPrice').val(obj.message.cert_price);
-      $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
-      $('#extendModal').find('#sst').val(obj.message.sst);
-      $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
+      if(obj.message.type == 'OWN'){
+        $('#extendModal').find('#id').val(obj.message.id);
+        $('#extendModal').find('#type').val(obj.message.type).trigger('change');
+        $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
+        $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
+        $('#extendModal').find('#newRenew').val(obj.message.stampType);
+        $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
+        $('#extendModal').find('#companyText').val('');
+        $('#extendModal').find('#product').val(obj.message.products);
+        $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
+        $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
+        $('#extendModal').find('#address1').val(obj.message.address1);
+        $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
+        $('#extendModal').find('#address2').val(obj.message.address2);
+        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
+        $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
+        $('#extendModal').find('#address3').val(obj.message.address3);
+        $('#extendModal').find('#serial').val(obj.message.serial_no);
+        $('#extendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);
+        $('#extendModal').find('#attnTo').val(obj.message.pic);
+        $('#extendModal').find('#siriKeselamatan').val(obj.message.siri_keselamatan);
+        $('#extendModal').find('#pic').val(obj.message.pic);
+        $('#extendModal').find('#borangD').val(obj.message.borang_d);
+        $('#extendModal').find('#remark').val(obj.message.remarks);
+        $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
+        $('#extendModal').find('#quotation').val(obj.message.quotation_no);
+        $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
+        $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
+        $('#extendModal').find('#poNo').val(obj.message.purchase_no);
+        $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
+        $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
+        $('#extendModal').find('#invoice').val(obj.message.invoice_no);
+        $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
+        $('#extendModal').find('#certPrice').val(obj.message.cert_price);
+        $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
+        $('#extendModal').find('#sst').val(obj.message.sst);
+        $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
 
-      $('#pricingTable').html('');
-      pricingCount = 0;
-      
+        $('#pricingTable').html('');
+        pricingCount = 0;
 
-      if(obj.message.log.length > 0){
-        for(var i = 0; i < obj.message.log.length; i++){
-          var item = obj.message.log[i];
-          var $addContents = $("#pricingDetails").clone();
-          $("#pricingTable").append($addContents.html());
+        if(obj.message.log.length > 0){
+          for(var i = 0; i < obj.message.log.length; i++){
+            var item = obj.message.log[i];
+            var $addContents = $("#pricingDetails").clone();
+            $("#pricingTable").append($addContents.html());
 
-          $("#pricingTable").find('.details:last').attr("id", "detail" + pricingCount);
-          $("#pricingTable").find('.details:last').attr("data-index", pricingCount);
-          //$("#pricingTable").find('#remove:last').attr("id", "remove" + pricingCount);
+            $("#pricingTable").find('.details:last').attr("id", "detail" + pricingCount);
+            $("#pricingTable").find('.details:last').attr("data-index", pricingCount);
+            //$("#pricingTable").find('#remove:last').attr("id", "remove" + pricingCount);
 
-          $("#pricingTable").find('#no:last').attr('name', 'no['+pricingCount+']').attr("id", "no" + pricingCount).val(item.no);
-          $("#pricingTable").find('#date:last').attr('name', 'date['+pricingCount+']').attr("id", "date" + pricingCount).val(item.date);
-          $("#pricingTable").find('#notes:last').attr('name', 'notes['+pricingCount+']').attr("id", "notes" + pricingCount).val(item.notes);
-          $("#pricingTable").find('#followUpDate:last').attr('name', 'followUpDate['+pricingCount+']').attr("id", "followUpDate" + pricingCount).val(item.followUpDate);
-          $("#pricingTable").find('#picAttend:last').attr('name', 'picAttend['+pricingCount+']').attr("id", "picAttend" + pricingCount).val(item.picAttend);
-          $("#pricingTable").find('#status').attr('name', 'status['+pricingCount+']').attr("id", "status" + pricingCount).val('Pending').val(item.status);
+            $("#pricingTable").find('#no:last').attr('name', 'no['+pricingCount+']').attr("id", "no" + pricingCount).val(item.no);
+            $("#pricingTable").find('#date:last').attr('name', 'date['+pricingCount+']').attr("id", "date" + pricingCount).val(item.date);
+            $("#pricingTable").find('#notes:last').attr('name', 'notes['+pricingCount+']').attr("id", "notes" + pricingCount).val(item.notes);
+            $("#pricingTable").find('#followUpDate:last').attr('name', 'followUpDate['+pricingCount+']').attr("id", "followUpDate" + pricingCount).val(item.followUpDate);
+            $("#pricingTable").find('#picAttend:last').attr('name', 'picAttend['+pricingCount+']').attr("id", "picAttend" + pricingCount).val(item.picAttend);
+            $("#pricingTable").find('#status').attr('name', 'status['+pricingCount+']').attr("id", "status" + pricingCount).val('Pending').val(item.status);
 
-          var newDatePickerId = "datePicker5" + pricingCount;
+            var newDatePickerId = "datePicker5" + pricingCount;
 
-          // Find the newly added date input and set the new ID
-          var $newDateInputGroup = $("#pricingTable").find('#datePicker5:last');
-          $newDateInputGroup.attr("id", newDatePickerId);
-          $newDateInputGroup.find('input').attr("data-target", "#" + newDatePickerId);
-          $newDateInputGroup.find('.input-group-append').attr("data-target", "#" + newDatePickerId);
+            // Find the newly added date input and set the new ID
+            var $newDateInputGroup = $("#pricingTable").find('#datePicker5:last');
+            $newDateInputGroup.attr("id", newDatePickerId);
+            $newDateInputGroup.find('input').attr("data-target", "#" + newDatePickerId);
+            $newDateInputGroup.find('.input-group-append').attr("data-target", "#" + newDatePickerId);
 
-          // Initialize the date picker on the new element
-          $newDateInputGroup.datetimepicker({
-            icons: { time: 'far fa-calendar' },
-            format: 'DD/MM/YYYY'
-          });
+            // Initialize the date picker on the new element
+            $newDateInputGroup.datetimepicker({
+              icons: { time: 'far fa-calendar' },
+              format: 'DD/MM/YYYY'
+            });
 
-          pricingCount++;
+            pricingCount++;
+          }
         }
+        
+        $('#extendModal').modal('show');
+
+        $('#extendForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
       }
+      else{
+        $('#extendModal').find('#id').val(obj.message.id);
+        $('#extendModal').find('#type').val(obj.message.type).trigger('change');
+        $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
+        $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
+        $('#extendModal').find('#newRenew').val(obj.message.stampType);
 
+        setTimeout(function(){
+          $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
+        }, 1000);
 
-      
-      $('#extendModal').modal('show');
+        $('#extendModal').find('#companyText').val('');
+        $('#extendModal').find('#product').val(obj.message.products);
+        $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
+        $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
+        $('#extendModal').find('#address1').val(obj.message.address1);
+        $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
+        $('#extendModal').find('#address2').val(obj.message.address2);
+        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
+        $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
+        $('#extendModal').find('#address3').val(obj.message.address3);
+        $('#extendModal').find('#serial').val(obj.message.serial_no);
+        $('#extendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);
+        $('#extendModal').find('#attnTo').val(obj.message.pic);
+        $('#extendModal').find('#siriKeselamatan').val(obj.message.siri_keselamatan);
+        $('#extendModal').find('#pic').val(obj.message.pic);
+        $('#extendModal').find('#borangD').val(obj.message.borang_d);
+        $('#extendModal').find('#remark').val(obj.message.remarks);
+        $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
+        $('#extendModal').find('#quotation').val(obj.message.quotation_no);
+        $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
+        $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
+        $('#extendModal').find('#poNo').val(obj.message.purchase_no);
+        $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
+        $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
+        $('#extendModal').find('#invoice').val(obj.message.invoice_no);
+        $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
+        $('#extendModal').find('#certPrice').val(obj.message.cert_price);
+        $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
+        $('#extendModal').find('#sst').val(obj.message.sst);
+        $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
 
-      $('#extendForm').validate({
-        errorElement: 'span',
-        errorPlacement: function (error, element) {
-          error.addClass('invalid-feedback');
-          element.closest('.form-group').append(error);
-        },
-        highlight: function (element, errorClass, validClass) {
-          $(element).addClass('is-invalid');
-        },
-        unhighlight: function (element, errorClass, validClass) {
-          $(element).removeClass('is-invalid');
-        }
-      });
+        $('#extendModal').modal('show');
+
+        $('#extendForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
+      }
     }
     else if(obj.status === 'failed'){
       toastr["error"](obj.message, "Failed:");

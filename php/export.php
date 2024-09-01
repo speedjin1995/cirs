@@ -1,166 +1,128 @@
 <?php
 
 require_once 'db_connect.php';
-// // Load the database configuration file 
- 
-// Filter the excel data 
+require_once 'requires/lookup.php';
+
+$fileName = 'nothing.xls';
+$excelData = '';
+
 function filterData(&$str){ 
     $str = preg_replace("/\t/", "\\t", $str); 
     $str = preg_replace("/\r?\n/", "\\n", $str); 
     if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"'; 
 } 
  
-// Excel file name for download 
-if($_GET["file"] == 'weight'){
-    $fileName = "Weight-data_" . date('Y-m-d') . ".xls";
-}else{
-    $fileName = "Count-data_" . date('Y-m-d') . ".xls";
-} 
- 
-// Column names 
-if($_GET["file"] == 'weight'){
-    $fields = array('SERIAL NO', 'PRODUCT NO', 'UNIT WEIGHT', 'TARE WEIGHT', 'TOTAL WEIGHT', 'ACTUAL WEIGHT', 'MOQ', 'UNIT PRICE(RM)', 'TOTAL PRICE(RM)', 
-                'ORDER WEIGHT', 'CURRENT WEIGHT','VARIANCE WEIGHT', 'REDUCE WEIGHT', 'INCOMING DATETIME', 'OUTGOING DATETIME', 'VARIANCE %',
-                'VEHICLE NO', 'LOT NO', 'BATCH NO', 'INVOICE NO', 'DELIVERY NO', 'PURCHASE NO', 'CUSTOMER', 'PACKAGE', 'DATE', 'REMARK', 'STATUS', 'DELETED'); 
-}else{
-    $fields = array('SERIAL NO', 'PRODUCT NO', 'UNIT', 'UNIT WEIGHT', 'TARE', 'CURRENT WEIGHT', 'ACTUAL WEIGHT', 'TOTAL PCS','MOQ', 'UNIT PRICE(RM)', 'TOTAL PRICE(RM)',
-    'VEHICLE NO', 'LOT NO', 'BATCH NO', 'INVOICE NO', 'DELIVERY NO', 'PURCHASE NO', 'CUSTOMER', 'PACKAGE', 'DATE', 'REMARK', 'STATUS', 'DELETED');    
-}
+if(isset($_GET['type'])){
+    $searchQuery = '';
 
-// Display column names as first row 
-$excelData = implode("\t", array_values($fields)) . "\n"; 
-
-## Search 
-$searchQuery = " ";
-
-
-if($_GET['fromDate'] != null && $_GET['fromDate'] != ''){
-    if($_GET["file"] == 'weight'){
-        $searchQuery = " and weight.inCDateTime >= '".$_GET['fromDate']."'";
-    }else{
-        $searchQuery = " and count.dateTime >= '".$_GET['fromDate']."'";
+    if($_GET["type"] == '6'){
+        $fileName = "Jadual6_" . date('Y-m-d') . ".xls";
     }
-}
-
-if($_GET['toDate'] != null && $_GET['toDate'] != ''){
-    if($_GET["file"] == 'weight'){
-        $searchQuery = " and weight.inCDateTime <= '".$_GET['toDate']."'";
-    }else{
-        $searchQuery = " and count.dateTime <= '".$_GET['toDate']."'";
+    else if($_GET["type"] == '7'){
+        $fileName = "Jadual7_" . date('Y-m-d') . ".xls";
     }
-}
-
-if($_GET['status'] != null && $_GET['status'] != '' && $_GET['status'] != '-'){
-    if($_GET["file"] == 'weight'){
-        $searchQuery = " and weight.status = '".$_GET['status']."'";
-    }else{
-        $searchQuery = " and count.status = '".$_GET['status']."'";
-    }	
-}
-
-if($_GET['customer'] != null && $_GET['customer'] != '' && $_GET['customer'] != '-'){
-    if($_GET["file"] == 'weight'){
-        $searchQuery = " and weight.customer = '".$_GET['customer']."'";
-    }else{
-        $searchQuery = " and count.customer = '".$_GET['customer']."'";
-    }
-}
-
-if($_GET['vehicle'] != null && $_GET['vehicle'] != '' && $_GET['vehicle'] != '-'){
-    if($_GET["file"] == 'weight'){
-        $searchQuery = " and weight.vehicleNo = '".$_GET['vehicle']."'";
-    }else{
-        $searchQuery = " and count.vehicleNo = '".$_GET['vehicle']."'";
-    }
-}
-
-if($_GET['invoice'] != null && $_GET['invoice'] != ''){
-    if($_GET["file"] == 'weight'){
-        $searchQuery = " and weight.invoiceNo like '%".$_GET['invoice']."%'";
-    }else{
-        $searchQuery = " and count.invoiceNo like '%".$_GET['invoice']."%'";
-    }
-}
-
-if($_GET['batch'] != null && $_GET['batch'] != ''){
-    if($_GET["file"] == 'weight'){
-        $searchQuery = " and weight.batchNo like '%".$_GET['batch']."%'";
-    }else{
-        $searchQuery = " and count.batchNo like '%".$_GET['batch']."%'";
-    }
-}
-
-if($_GET['product'] != null && $_GET['product'] != '' && $_GET['product'] != '-'){
-    if($_GET["file"] == 'weight'){
-        $searchQuery = " and weight.productName = '".$_GET['product']."'";
-    }else{
-        $searchQuery = " and count.productName = '".$_GET['product']."'";
-    }
-}
-
-// Fetch records from database
-if($_GET["file"] == 'weight'){
-    $query = $db->query("select weight.id, weight.serialNo, weight.vehicleNo, weight.lotNo, weight.batchNo, weight.invoiceNo, weight.deliveryNo, users.name,
-    weight.purchaseNo, weight.customer, products.product_name, packages.packages, weight.unitWeight, weight.tare, weight.totalWeight, weight.actualWeight, 
-    weight.supplyWeight, weight.varianceWeight, weight.currentWeight, units.units, weight.moq, weight.dateTime, weight.unitPrice, weight.totalPrice, weight.remark, 
-    weight.status as Status, status.status, weight.manual, weight.manualVehicle, weight.manualOutgoing, weight.reduceWeight, weight.outGDateTime, weight.inCDateTime, 
-    weight.pStatus, weight.variancePerc, weight.transporter from weight, packages, products, units, status, users 
-    WHERE weight.package = packages.id AND users.id = weight.created_by AND weight.pStatus = 'Complete' AND weight.productName = products.id AND status.id=weight.status AND 
-    units.id=weight.unitWeight AND weight.deleted = '0'".$searchQuery."");
-}else{
-    $query = $db->query("select count.id, count.serialNo, vehicles.veh_number, lots.lots_no, count.batchNo, count.invoiceNo, count.deliveryNo, 
-    count.purchaseNo, customers.customer_name, products.product_name, packages.packages, count.unitWeight, count.tare, count.totalWeight, 
-    count.actualWeight, count.currentWeight, units.units, count.moq, count.dateTime, count.unitPrice, count.totalPrice,count.totalPCS, 
-    count.remark, count.deleted, status.status from count, vehicles, packages, lots, customers, products, units, status WHERE 
-    count.vehicleNo = vehicles.id AND count.package = packages.id AND count.lotNo = lots.id AND count.customer = customers.id AND 
-    count.productName = products.id AND status.id=count.status AND units.id=count.unit ".$searchQuery."");
-}
-
-if($query->num_rows > 0){ 
-    // Output each row of the data 
-    while($row = $query->fetch_assoc()){ 
-        $deleted = ($row['deleted'] == 1)?'Active':'Inactive';
-        
-        if($_GET["file"] == 'weight'){
-            $customer = '';
-
-            if($row['Status'] != '1' && $row['Status'] != '2'){
-                $customer = $row['customer'];
-            }
-            else{
-                $cid = $row['customer'];
-            
-                if ($update_stmt = $db->prepare("SELECT * FROM customers WHERE id=?")) {
-                    $update_stmt->bind_param('s', $cid);
-                
-                    // Execute the prepared query.
-                    if ($update_stmt->execute()) {
-                        $result = $update_stmt->get_result();
-                        
-                        if ($row2 = $result->fetch_assoc()) {
-                            $customer = $row2['customer_name'];
-                        }
-                    }
-                }
-            }
-
-            $lineData = array($row['serialNo'], $row['product_name'], $row['units'], $row['tare'], $row['totalWeight'], $row['actualWeight'],
-            $row['moq'], $row['unitPrice'], $row['totalPrice'], $row['supplyWeight'], $row['currentWeight'], $row['varianceWeight'], $row['reduceWeight'],
-            $row['inCDateTime'], $row['outGDateTime'], $row['variancePerc'], $row['vehicleNo'], $row['lotNo'], $row['batchNo'], $row['invoiceNo']
-            , $row['deliveryNo'], $row['purchaseNo'], $customer, $row['packages'], $row['dateTime'], $row['remark'], $row['status'], $deleted);
-        }else{
-            $lineData = array($row['serialNo'], $row['product_name'], $row['units'], $row['unitWeight'], $row['tare'], $row['currentWeight'], $row['actualWeight'],
-            $row['totalPCS'], $row['moq'], $row['unitPrice'], $row['totalPrice'], $row['veh_number'], $row['lots_no'], $row['batchNo'], $row['invoiceNo']
-            , $row['deliveryNo'], $row['purchaseNo'], $row['customer_name'], $row['packages'], $row['dateTime'], $row['remark'], $row['status'], $deleted);
-        }
-
-        array_walk($lineData, 'filterData'); 
-        $excelData .= implode("\t", array_values($lineData)) . "\n"; 
+    else{
+        $fileName = "Panjang_" . date('Y-m-d') . ".xls";
     } 
-}else{ 
+
+    if($_GET['fromDate'] != null && $_GET['fromDate'] != ''){
+        $dateTime = DateTime::createFromFormat('d/m/Y', $_GET['fromDate']);
+        $fromDateTime = $dateTime->format('Y-m-d 00:00:00');
+        $searchQuery = " and stamping_date >= '".$fromDateTime."'";
+    }
+    
+    if($_GET['toDate'] != null && $_GET['toDate'] != ''){
+        $dateTime = DateTime::createFromFormat('d/m/Y', $_GET['toDate']);
+        $toDateTime = $dateTime->format('Y-m-d 23:59:59');
+        $searchQuery .= " and stamping_date <= '".$toDateTime."'";
+    }
+    
+    if($_GET['customer'] != null && $_GET['customer'] != '' && $_GET['customer'] != '-'){
+        $searchQuery .= " and customers = '".$_GET['customer']."'";
+    }
+    
+
+    $driver = $_GET['type'];
+    $todayDate = date('d/m/Y');
+    $todayDate2 = date('d M Y');
+    $today = date("Y-m-d 00:00:00");
+
+    $select_stmt = $db->prepare("SELECT * FROM stamping WHERE status = 'Complete'".$searchQuery);
+
+    // Check if the statement is prepared successfully
+    if ($select_stmt) {
+        // Bind variables to the prepared statement
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        $num_records = $result->num_rows;
+        $totalRecords = $num_records;
+        $total_pages = ceil($num_records / 10);
+        $recordsPerPage = 10;
+        $startIndex = 0;
+        $pages = 0;
+        $message = '';
+
+        if($driver == '6'){
+            $fields = array('DATE', 'ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS', 'CAPACITY', 'QUANTITY', 'REGISTER NO.', 
+            'CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN', 'NAME OF PURCHASE', 'ADDRESS'); 
+                
+            while ($row = $result->fetch_assoc()) {
+                $lineData = array($todayDate2, searchBrandNameById($row['brand'], $db).'\n'.searchModelNameById($row['model'], $db).'\n'.searchAlatNameById($row['jenis_alat'], $db), 
+                searchCapacityNameById($row['capacity'], $db), '1', $row['no_daftar'], $row['siri_keselamatan'], searchCustNameById($row['customers'], $db),
+                $row['address1'].' '.$row['address2'].' '.$row['address3']);
+                
+                array_walk($lineData, 'filterData'); 
+                $excelData .= implode("\t", array_values($lineData)) . "\n"; 
+            }
+        }
+        else if($driver == '7'){
+            $fields = array('BRG E BIL NO.', 'DATE', 'ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS', 'CAPACITY', 'LIST NO. (STMP. NO.)', 
+            'REGISTER NO. (BARU / LAMA)', 'DETAILS OF REPAIR', 'CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN', 'NAME OF PURCHASE', 'ADDRESS', 
+            'FEE');
+
+            while ($row = $result->fetch_assoc()) {
+                $lineData = array('', $todayDate2, searchBrandNameById($row['brand'], $db).'\n'.searchModelNameById($row['model'], $db).'\n'.searchAlatNameById($row['jenis_alat'], $db), 
+                searchCapacityNameById($row['capacity'], $db), $row['pin_keselamatan'], $row['no_daftar'], 'SERVICE / STMP', $row['siri_keselamatan'], searchCustNameById($row['customers'], $db),
+                $row['address1'].' '.$row['address2'].' '.$row['address3'], $row['unit_price']);
+                
+                array_walk($lineData, 'filterData'); 
+                $excelData .= implode("\t", array_values($lineData)) . "\n"; 
+            }
+        }
+        else{
+            $rows = array();
+            $count = 1;
+            $validator = '2';
+
+            $fields = array('Bil.', 'Jenis Alat', 'Had Terima', 'Jenama', 'No. Siri Alat', 
+                'Nama Dan Alamat Pemilik', 'Kod', 'No. Daftar', 'No. Siri Pelekat Keselamatan',  
+                'Fi / Bayaran');
+
+            while ($row = $result->fetch_assoc()) {
+                $validator = $row['validate_by'];
+
+                $lineData = array($count, searchAlatNameById($row['jenis_alat'], $db), searchCapacityNameById($row['capacity'], $db), 
+                searchBrandNameById($row['brand'], $db).'\n'.searchModelNameById($row['model'], $db).'\n'.searchAlatNameById($row['jenis_alat'], $db), 
+                $row['serial_no'], searchCustNameById($row['customers'], $db).'\n'.$row['address1'].' '.$row['address2'].' '.$row['address3'], 
+                $row['no_daftar'], $row['siri_keselamatan'], $row['unit_price']);
+                
+                array_walk($lineData, 'filterData'); 
+                $excelData .= implode("\t", array_values($lineData)) . "\n"; 
+                $count++;
+            }
+        } 
+
+        // Fetch each row
+        $select_stmt->close();
+    } 
+    else {
+        $excelData .= 'No records found...'. "\n"; 
+    }
+}
+else{
     $excelData .= 'No records found...'. "\n"; 
-} 
- 
+}
+
 // Headers for download 
 header("Content-Type: application/vnd.ms-excel"); 
 header("Content-Disposition: attachment; filename=\"$fileName\""); 
