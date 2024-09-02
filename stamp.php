@@ -19,6 +19,7 @@ else{
     $role = $row['role_code'];
   }
 
+  $dealer = $db->query("SELECT * FROM dealer WHERE deleted = '0'");
   $customers = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $machinetypes = $db->query("SELECT * FROM machines WHERE deleted = '0'");

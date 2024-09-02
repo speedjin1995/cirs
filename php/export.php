@@ -66,6 +66,7 @@ if(isset($_GET['type'])){
             $fields = array('DATE', 'ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS', 'CAPACITY', 'QUANTITY', 'REGISTER NO.', 
             'CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN', 'NAME OF PURCHASE', 'ADDRESS'); 
                 
+            $excelData = implode("\t", array_values($fields)) . "\n"; 
             while ($row = $result->fetch_assoc()) {
                 $lineData = array($todayDate2, searchBrandNameById($row['brand'], $db).'\n'.searchModelNameById($row['model'], $db).'\n'.searchAlatNameById($row['jenis_alat'], $db), 
                 searchCapacityNameById($row['capacity'], $db), '1', $row['no_daftar'], $row['siri_keselamatan'], searchCustNameById($row['customers'], $db),
@@ -79,6 +80,7 @@ if(isset($_GET['type'])){
             $fields = array('BRG E BIL NO.', 'DATE', 'ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS', 'CAPACITY', 'LIST NO. (STMP. NO.)', 
             'REGISTER NO. (BARU / LAMA)', 'DETAILS OF REPAIR', 'CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN', 'NAME OF PURCHASE', 'ADDRESS', 
             'FEE');
+            $excelData = implode("\t", array_values($fields)) . "\n"; 
 
             while ($row = $result->fetch_assoc()) {
                 $lineData = array('', $todayDate2, searchBrandNameById($row['brand'], $db).'\n'.searchModelNameById($row['model'], $db).'\n'.searchAlatNameById($row['jenis_alat'], $db), 
@@ -97,6 +99,7 @@ if(isset($_GET['type'])){
             $fields = array('Bil.', 'Jenis Alat', 'Had Terima', 'Jenama', 'No. Siri Alat', 
                 'Nama Dan Alamat Pemilik', 'Kod', 'No. Daftar', 'No. Siri Pelekat Keselamatan',  
                 'Fi / Bayaran');
+            $excelData = implode("\t", array_values($fields)) . "\n"; 
 
             while ($row = $result->fetch_assoc()) {
                 $validator = $row['validate_by'];

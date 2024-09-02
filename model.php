@@ -9,6 +9,7 @@ if(!isset($_SESSION['userID'])){
 }
 else{
   $user = $_SESSION['userID'];
+  $brand = $db->query("SELECT * FROM brand WHERE deleted = '0'");
 }
 ?>
 
@@ -42,6 +43,7 @@ else{
 							<thead>
 								<tr>
 									<th>No.</th>
+                                    <th>Brand</th>
 									<th>Model</th>
 									<th>Actions</th>
 								</tr>
@@ -59,7 +61,7 @@ else{
       <div class="modal-content">
         <form role="form" id="modelForm">
             <div class="modal-header">
-              <h4 class="modal-title">Add Lots</h4>
+              <h4 class="modal-title">Add Models</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -69,6 +71,15 @@ else{
                     <div class="form-group">
     					<input type="hidden" class="form-control" id="id" name="id">
     				</div>
+                    <div class="form-group">
+                        <label for="code">Brand *</label>
+                        <select class="form-control select2" id="brand" name="brand">
+                            <option value="" selected disabled hidden>Please Select</option>
+                            <?php while($rowCustomer2=mysqli_fetch_assoc($brand)){ ?>
+                            <option value="<?=$rowCustomer2['id'] ?>"><?=$rowCustomer2['brand'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
     				<div class="form-group">
     					<label for="model">Model *</label>
     					<input type="text" class="form-control" name="model" id="model" placeholder="Enter Models" required>
@@ -101,6 +112,7 @@ $(function () {
         },
         'columns': [
             { data: 'counter' },
+            { data: 'brand_name' },
             { data: 'model' },
             { 
                 data: 'id',
@@ -141,6 +153,7 @@ $(function () {
 
     $('#addModel').on('click', function(){
         $('#modelModal').find('#id').val("");
+        $('#modelModal').find('#brand').val("");
         $('#modelModal').find('#model').val("");
         $('#modelModal').modal('show');
         
@@ -167,6 +180,7 @@ function edit(id){
         
         if(obj.status === 'success'){
             $('#modelModal').find('#id').val(obj.message.id);
+            $('#modelModal').find('#brand').val(obj.message.brand);
             $('#modelModal').find('#model').val(obj.message.model);
             $('#modelModal').modal('show');
             
