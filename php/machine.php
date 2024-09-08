@@ -8,12 +8,13 @@ if(!isset($_SESSION['userID'])){
     echo 'window.location.href = "../login.html";</script>';
 }
 
-if(isset($_POST['machineTypes'])){
+if(isset($_POST['machineTypes'], $_POST['alat'])){
     $machineTypes = filter_input(INPUT_POST, 'machineTypes', FILTER_SANITIZE_STRING);
+    $alat = filter_input(INPUT_POST, 'alat', FILTER_SANITIZE_STRING);
 
     if($_POST['id'] != null && $_POST['id'] != ''){
-        if ($update_stmt = $db->prepare("UPDATE machines SET machine_type=? WHERE id=?")) {
-            $update_stmt->bind_param('ss', $machineTypes, $_POST['id']);
+        if ($update_stmt = $db->prepare("UPDATE machines SET machine_type=?, jenis_alat=? WHERE id=?")) {
+            $update_stmt->bind_param('sss', $machineTypes, $alat, $_POST['id']);
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
@@ -38,8 +39,8 @@ if(isset($_POST['machineTypes'])){
         }
     }
     else{
-        if ($insert_stmt = $db->prepare("INSERT INTO machines (machine_type) VALUES (?)")) {
-            $insert_stmt->bind_param('s', $machineTypes);
+        if ($insert_stmt = $db->prepare("INSERT INTO machines (machine_type, jenis_alat) VALUES (?, ?)")) {
+            $insert_stmt->bind_param('ss', $machineTypes, $alat);
             
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {

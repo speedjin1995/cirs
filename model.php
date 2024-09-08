@@ -10,6 +10,7 @@ if(!isset($_SESSION['userID'])){
 else{
   $user = $_SESSION['userID'];
   $brand = $db->query("SELECT * FROM brand WHERE deleted = '0'");
+  $country = $db->query("SELECT * FROM country");
 }
 ?>
 
@@ -45,6 +46,7 @@ else{
 									<th>No.</th>
                                     <th>Brand</th>
 									<th>Model</th>
+                                    <th>Make In</th>
 									<th>Actions</th>
 								</tr>
 							</thead>
@@ -76,13 +78,22 @@ else{
                         <select class="form-control select2" id="brand" name="brand">
                             <option value="" selected disabled hidden>Please Select</option>
                             <?php while($rowCustomer2=mysqli_fetch_assoc($brand)){ ?>
-                            <option value="<?=$rowCustomer2['id'] ?>"><?=$rowCustomer2['brand'] ?></option>
+                                <option value="<?=$rowCustomer2['id'] ?>"><?=$rowCustomer2['brand'] ?></option>
                             <?php } ?>
                         </select>
                     </div>
     				<div class="form-group">
     					<label for="model">Model *</label>
     					<input type="text" class="form-control" name="model" id="model" placeholder="Enter Models" required>
+    				</div>
+                    <div class="form-group">
+    					<label for="model">Make In *</label>
+    					<select class="form-control select2" id="country" name="country" required>
+                            <option value="" selected disabled hidden>Please Select</option>
+                            <?php while($rowcountry=mysqli_fetch_assoc($country)){ ?>
+                                <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
+                            <?php } ?>
+                        </select>
     				</div>
     			</div>
             </div>
@@ -114,6 +125,7 @@ $(function () {
             { data: 'counter' },
             { data: 'brand_name' },
             { data: 'model' },
+            { data: 'iso3' },
             { 
                 data: 'id',
                 render: function ( data, type, row ) {
@@ -155,6 +167,7 @@ $(function () {
         $('#modelModal').find('#id').val("");
         $('#modelModal').find('#brand').val("");
         $('#modelModal').find('#model').val("");
+        $('#modelModal').find('#country').val("");
         $('#modelModal').modal('show');
         
         $('#modelForm').validate({
@@ -182,6 +195,7 @@ function edit(id){
             $('#modelModal').find('#id').val(obj.message.id);
             $('#modelModal').find('#brand').val(obj.message.brand);
             $('#modelModal').find('#model').val(obj.message.model);
+            $('#modelModal').find('#country').val(obj.message.make);
             $('#modelModal').modal('show');
             
             $('#modelForm').validate({

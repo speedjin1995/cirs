@@ -18,7 +18,7 @@ if($searchValue != ''){
 }
 
 ## Total number of records without filtering
-$sel = mysqli_query($db,"select count(*) as allcount from machines");
+$sel = mysqli_query($db,"select count(*) as allcount from machines WHERE deleted = '0'");
 $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
@@ -34,13 +34,31 @@ $data = array();
 $counter = 1;
 
 while($row = mysqli_fetch_assoc($empRecords)) {
-    $data[] = array( 
-      "counter"=>$counter,
-      "id"=>$row['id'],
-      "machine_type"=>$row['machine_type']
-    );
+  $jenis_alat = '-';
 
-    $counter++;
+  if($row['jenis_alat'] != null && $row['jenis_alat'] != ''){
+    if ($update_stmt2 = $db->prepare("SELECT * FROM alat WHERE id=?")) {
+      $update_stmt2->bind_param('s', $row['jenis_alat']);
+  
+      if($update_stmt2->execute()) {
+        $result2 = $update_stmt2->get_result();
+  
+        if($row2 = $result2->fetch_assoc()) {
+          $jenis_alat = $row2['alat'];
+        }
+      }
+    }
+  }
+  
+
+  $data[] = array( 
+    "counter"=>$counter,
+    "id"=>$row['id'],
+    "machine_type"=>$row['machine_type'],
+    "jenis_alat"=>$jenis_alat
+  );
+
+  $counter++;
 }
 
 ## Response

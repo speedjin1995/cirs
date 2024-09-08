@@ -21,17 +21,34 @@ if(isset($_POST['userID'])){
             $result = $update_stmt->get_result();
             $message = array();
             
-            while ($row = $result->fetch_assoc()) {
+            if ($row = $result->fetch_assoc()) {
+                $pricing = array();
+
+                if ($update_stmt2 = $db->prepare("SELECT * FROM branches WHERE customer_id=? AND deleted = '0'")) {
+                    $update_stmt2->bind_param('s', $row['id']);
+
+                    if($update_stmt2->execute()) {
+                        $result2 = $update_stmt2->get_result();
+
+                        while($row2 = $result2->fetch_assoc()) {
+                            $pricing[] = array(
+                                "branchid" => $row2['id'],
+                                "address1" => $row2['address'],
+                                "address2" => $row2['address2'],
+                                "address3" => $row2['address3'],
+                                "address4" => $row2['address4'],
+                            );
+                        }
+                    }
+                }
+
                 $message['id'] = $row['id'];
                 $message['dealer'] = $row['dealer'];
                 $message['customer_code'] = $row['customer_code'];
                 $message['customer_name'] = $row['customer_name'];
-                $message['customer_address'] = $row['customer_address'];
-                $message['address2'] = $row['address2'];
-                $message['address3'] = $row['address3'];
-                $message['address4'] = $row['address4'];
                 $message['customer_phone'] = $row['customer_phone'];
                 $message['customer_email'] = $row['customer_email'];
+                $message['pricing'] = $pricing;
             }
             
             echo json_encode(

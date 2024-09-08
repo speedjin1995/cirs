@@ -8,13 +8,14 @@ if(!isset($_SESSION['userID'])){
     echo 'window.location.href = "../login.html";</script>';
 }
 
-if(isset($_POST['brand'], $_POST['model'])){
+if(isset($_POST['brand'], $_POST['model'], $_POST['country'])){
     $brand = filter_input(INPUT_POST, 'brand', FILTER_SANITIZE_STRING);
     $model = filter_input(INPUT_POST, 'model', FILTER_SANITIZE_STRING);
+    $country = filter_input(INPUT_POST, 'country', FILTER_SANITIZE_STRING);
 
     if($_POST['id'] != null && $_POST['id'] != ''){
-        if ($update_stmt = $db->prepare("UPDATE model SET brand=?, model=? WHERE id=?")) {
-            $update_stmt->bind_param('sss', $brand, $model, $_POST['id']);
+        if ($update_stmt = $db->prepare("UPDATE model SET brand=?, model=?, make=? WHERE id=?")) {
+            $update_stmt->bind_param('ssss', $brand, $model, $country, $_POST['id']);
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
@@ -39,8 +40,8 @@ if(isset($_POST['brand'], $_POST['model'])){
         }
     }
     else{
-        if ($insert_stmt = $db->prepare("INSERT INTO model (brand, model) VALUES (?, ?)")) {
-            $insert_stmt->bind_param('ss', $brand, $model);
+        if ($insert_stmt = $db->prepare("INSERT INTO model (brand, model, make) VALUES (?, ?, ?)")) {
+            $insert_stmt->bind_param('sss', $brand, $model, $country);
             
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {

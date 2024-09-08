@@ -33,14 +33,34 @@ $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 
 while($row = mysqli_fetch_assoc($empRecords)) {
-    $data[] = array( 
-      "id"=>$row['id'],
-      "customer_code"=>$row['customer_code'],
-      "customer_name"=>$row['customer_name'],
-      "customer_address"=>$row['customer_address']." ". $row['address2'] ." ". $row['address3'],
-      "customer_phone"=>$row['customer_phone'],
-      "customer_email"=>$row['customer_email']
-    );
+  $pricing = array();
+
+  if ($update_stmt2 = $db->prepare("SELECT * FROM branches WHERE customer_id=? AND deleted = '0'")) {
+    $update_stmt2->bind_param('s', $row['id']);
+
+    if($update_stmt2->execute()) {
+      $result2 = $update_stmt2->get_result();
+
+      while($row2 = $result2->fetch_assoc()) {
+        $pricing[] = array(
+          "branchid" => $row2['id'],
+          "address1" => $row2['address'],
+          "address2" => $row2['address2'],
+          "address3" => $row2['address3'],
+          "address4" => $row2['address4'],
+        );
+      }
+    }
+  }
+
+  $data[] = array( 
+    "id"=>$row['id'],
+    "customer_code"=>$row['customer_code'],
+    "customer_name"=>$row['customer_name'],
+    "customer_phone"=>$row['customer_phone'],
+    "customer_email"=>$row['customer_email'],
+    "log"=> $pricing
+  );
 }
 
 ## Response

@@ -9,6 +9,7 @@ if(!isset($_SESSION['userID'])){
 }
 else{
   $user = $_SESSION['userID'];
+  $alat = $db->query("SELECT * FROM alat WHERE deleted = '0'");
 }
 ?>
 
@@ -43,6 +44,7 @@ else{
 								<tr>
 									<th>No.</th>
 									<th>Machine Type</th>
+                                    <th>Jenis Alat</th>
 									<th>Actions</th>
 								</tr>
 							</thead>
@@ -70,9 +72,18 @@ else{
     					<input type="hidden" class="form-control" id="id" name="id">
     				</div>
     				<div class="form-group">
-    					<label for="machineTypes">Machines Type*</label>
+    					<label for="machineTypes">Machines Type *</label>
     					<input type="text" class="form-control" name="machineTypes" id="machineTypes" placeholder="Enter Machine Type" required>
     				</div>
+                    <div class="form-group">
+                        <label for="code">Jenis Alat *</label>
+                        <select class="form-control select2" id="alat" name="alat">
+                            <option value="" selected disabled hidden>Please Select</option>
+                            <?php while($rowCustomer2=mysqli_fetch_assoc($alat)){ ?>
+                                <option value="<?=$rowCustomer2['id'] ?>"><?=$rowCustomer2['alat'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
     			</div>
             </div>
             <div class="modal-footer justify-content-between">
@@ -102,6 +113,7 @@ $(function () {
         'columns': [
             { data: 'counter' },
             { data: 'machine_type' },
+            { data: 'jenis_alat' },
             { 
                 data: 'id',
                 render: function ( data, type, row ) {
@@ -142,6 +154,7 @@ $(function () {
     $('#addMachine').on('click', function(){
         $('#machineModal').find('#id').val("");
         $('#machineModal').find('#machineTypes').val("");
+        $('#machineModal').find('#alat').val("");
         $('#machineModal').modal('show');
         
         $('#machineForm').validate({
@@ -168,6 +181,7 @@ function edit(id){
         if(obj.status === 'success'){
             $('#machineModal').find('#id').val(obj.message.id);
             $('#machineModal').find('#machineTypes').val(obj.message.machine_type);
+            $('#machineModal').find('#alat').val(obj.message.jenis_alat);
             $('#machineModal').modal('show');
             
             $('#machineForm').validate({

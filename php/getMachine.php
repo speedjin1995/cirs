@@ -21,9 +21,10 @@ if(isset($_POST['userID'])){
             $result = $update_stmt->get_result();
             $message = array();
             
-            while ($row = $result->fetch_assoc()) {
+            if ($row = $result->fetch_assoc()) {
                 $message['id'] = $row['id'];
                 $message['machine_type'] = $row['machine_type'];
+                $message['jenis_alat'] = $row['jenis_alat'];
             }
             
             echo json_encode(
