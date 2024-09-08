@@ -22,6 +22,7 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 
 	$product = null;
 	$dealer = null;
+	$branch = null;
 	$address2 = null;
 	$address3 = null;
 	$dueDate = null;

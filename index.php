@@ -639,6 +639,12 @@ $(function () {
   });
   
   $("a[href='#pending']").click();
+
+  $(document).on('show.bs.modal', '.modal', function (e) {
+    $(this).modal('handleUpdate'); // Ensure modal is updated
+    $(this).data('bs.modal')._config.backdrop = 'static';
+    $(this).data('bs.modal')._config.keyboard = false;
+  });
 });
 
 function isValidDate(d) {

@@ -147,7 +147,6 @@ else{
                   <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
                   <th>Customers</th>
                   <th>Brands</th>
-                  <th>Desc</th>
                   <th>Model</th>
                   <th>Capacity</th>
                   <th>Serial No.</th>
@@ -296,7 +295,13 @@ else{
                     <input class="form-control" type="text" placeholder="Company Name" id="companyText" name="companyText" style="display: none;">
                   </div>
                 </div>
-                <div class="col-4">
+                <div class="col-12">
+                  <div class="form-group">
+                    <label>Branch * </label>
+                    <select class="form-control select2" style="width: 100%;" id="branch" name="branch" required></select>
+                  </div>
+                </div>
+                <!--div class="col-4">
                   <div class="form-group">
                     <label>Address Line 1 * </label>
                     <input class="form-control" type="text" placeholder="Address Line 1" id="address1" name="address1" required>
@@ -319,7 +324,7 @@ else{
                     <label>P.I.C</label>
                     <input class="form-control" type="text" placeholder="PIC" id="pic" name="pic">
                   </div>
-                </div>
+                </div-->
               </div>
             </div>
           </div>
@@ -558,6 +563,30 @@ else{
   </div> <!-- /.modal-dialog -->
 </div> <!-- /.modal -->
 
+<div class="modal fade" id="extraDetModal">
+  <div class="modal-dialog modal-xl" style="max-width: 90%;">
+    <div class="modal-content">
+      <form role="form" id="extraDetForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Extra Information</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body" >
+          <input type="hidden" class="form-control" id="id" name="id">
+        </div>
+
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save</button>
+        </div>
+      </form>
+    </div> <!-- /.modal-content -->
+  </div> <!-- /.modal-dialog -->
+</div> <!-- /.modal -->
+
 <div class="modal fade" id="printDOModal">
   <div class="modal-dialog modal-xl" style="max-width: 50%;">
     <div class="modal-content">
@@ -730,7 +759,6 @@ $(function () {
       },
       { data: 'customers' },
       { data: 'brand' },
-      { data: 'machine_type' },
       { data: 'model' },
       { data: 'capacity' },
       { data: 'serial_no' },
@@ -738,20 +766,36 @@ $(function () {
       { data: 'status' },
       { 
         data: 'id',
-        render: function ( data, type, row ) {
-          if(row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != ''){
-              return '<div class="row"><div class="col-3"><button title="Print" type="button" id="edit'+data+'" onclick="edit('+data+
-                ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div><div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
-                ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div><div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-                ')" class="btn btn-danger btn-sm">X</button></div></div>';
-            }
-            else{
-              return '<div class="row"><div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
-                ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div><div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-                ')" class="btn btn-danger btn-sm">X</button></div></div>';
-            }
+        render: function (data, type, row) {
+          let buttons = '<div class="row">';
+
+          // Edit button
+          buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+                    ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
+
+          // Extra button if validate_by is 3
+          if (row.validate_by == 3) {
+            buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
+                      ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
+          }
+
+          // Print button
+          buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+                    ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+
+          // Complete button if conditions are met
+          if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
+            buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+                      ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
+          }
+
+          // Cancelled button
+          buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+                    ')" class="btn btn-danger btn-sm">X</button></div>';
+
+          buttons += '</div>'; // Closing row div
+
+          return buttons;
         }
       },
       { 
@@ -920,7 +964,6 @@ $(function () {
         },
         { data: 'customers' },
         { data: 'brand' },
-        { data: 'machine_type' },
         { data: 'model' },
         { data: 'capacity' },
         { data: 'serial_no' },
@@ -928,20 +971,36 @@ $(function () {
         { data: 'status' },
         { 
           data: 'id',
-          render: function ( data, type, row ) {
-            if(row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != ''){
-              return '<div class="row"><div class="col-3"><button title="Print" type="button" id="edit'+data+'" onclick="edit('+data+
-                ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div><div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
-                ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div><div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-                ')" class="btn btn-danger btn-sm">X</button></div></div>';
+          render: function (data, type, row) {
+            let buttons = '<div class="row">';
+
+            // Edit button
+            buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+                      ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
+
+            // Extra button if validate_by is 3
+            if (row.validate_by == 3) {
+              buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
+                        ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
             }
-            else{
-              return '<div class="row"><div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
-                ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div><div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-                ')" class="btn btn-danger btn-sm">X</button></div></div>';
+
+            // Print button
+            buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+                      ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+
+            // Complete button if conditions are met
+            if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
+              buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+                        ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
             }
+
+            // Cancelled button
+            buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+                      ')" class="btn btn-danger btn-sm">X</button></div>';
+
+            buttons += '</div>'; // Closing row div
+
+            return buttons;
           }
         },
         { 
@@ -1624,6 +1683,33 @@ function newEntry(){
     },
     unhighlight: function (element, errorClass, validClass) {
       $(element).removeClass('is-invalid');
+    }
+  });
+}
+
+function extraAction(id){
+  $('#spinnerLoading').show();
+  $.post('php/getStamp.php', {userID: id}, function(data){
+    var obj = JSON.parse(data);
+    
+    if(obj.status === 'success'){
+      $('#extraDetModal').find('#id').val(obj.message.id);
+
+      $('#extraDetModal').modal('show');
+
+      $('#extraDetForm').validate({
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        }
+      });
     }
   });
 }
