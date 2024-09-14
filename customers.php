@@ -59,7 +59,7 @@ else{
 </section><!-- /.content -->
 
 <div class="modal fade" id="addModal">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xl" style='max-width:90%;'>
       <div class="modal-content">
         <form role="form" id="customerForm">
             <div class="modal-header">
@@ -105,10 +105,12 @@ else{
                 <table style="width: 100%;">
                   <thead>
                     <tr>
+                        <th>Branch Name</th>
                         <th>Address 1</th>
                         <th>Address 2</th>
                         <th>Address 3</th>
                         <th>Address 4</th>
+                        <th>Map URL</th>
                         <th>Delete</th>
                     </tr>
                   </thead>
@@ -131,6 +133,9 @@ else{
   <tr class="details">
     <td>
       <input type="hidden" class="form-control" id="branch_id">
+      <textarea class="form-control" id="branch_name" placeholder="Enter your branch name" required></textarea>
+    </td>
+    <td>
       <textarea class="form-control" id="address1" placeholder="Enter your address" required></textarea>
     </td>
     <td>
@@ -141,6 +146,9 @@ else{
     </td>
     <td>
       <textarea class="form-control" id="address4" placeholder="Enter your address 4"></textarea>
+    </td>
+    <td>
+      <textarea class="form-control" id="map_url" placeholder="Enter your map url"></textarea>
     </td>
     <td><button class="btn btn-danger btn-sm" id="remove"><i class="fa fa-times"></i></button></td>
   </tr>
@@ -264,10 +272,12 @@ $(function () {
     $("#pricingTable").find('.details:last').attr("data-index", pricingCount);
     $("#pricingTable").find('#remove:last').attr("id", "remove" + pricingCount);
 
+    $("#pricingTable").find('#branch_name:last').attr('name', 'branch_name['+pricingCount+']').attr("id", "branch_name" + pricingCount);
     $("#pricingTable").find('#address1:last').attr('name', 'address1['+pricingCount+']').attr("id", "address1" + pricingCount);
     $("#pricingTable").find('#address2:last').attr('name', 'address2['+pricingCount+']').attr("id", "address2" + pricingCount);
     $("#pricingTable").find('#address3:last').attr('name', 'address3['+pricingCount+']').attr("id", "address3" + pricingCount);
     $("#pricingTable").find('#address4:last').attr('name', 'address4['+pricingCount+']').attr("id", "address4" + pricingCount);
+    $("#pricingTable").find('#map_url:last').attr('name', 'map_url['+pricingCount+']').attr("id", "map_url" + pricingCount);
     $("#pricingTable").find('#branch_id:last').attr('name', 'branch_id['+pricingCount+']').attr("id", "branch_id" + pricingCount);
 
     pricingCount++;
@@ -286,11 +296,11 @@ function format(row) {
   var returnString = "";
 
   if (row.log.length > 0) {
-    returnString += '<h4>Branches</h4><table style="width: 100%;"><thead><tr><th width="8%">No.</th><th width="23%">Address</th><th width="23%">Address 2</th><th width="23%">Address 3</th><th width="23%">Address 4</th></tr></thead><tbody>'
+    returnString += '<h4>Branches</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="15%">Branch Name</th><th width="20%">Address</th><th width="20%">Address 2</th><th width="20%">Address 3</th><th width="20%">Address 4</th></tr></thead><tbody>'
     
     for (var i = 0; i < row.log.length; i++) {
       var item = row.log[i];
-      returnString += '<tr><td>' + (i + 1) + '</td><td>' + item.address1 + '</td><td>' + item.address2 + '</td><td>' + item.address3 + '</td><td>' + item.address4 + '</td></tr>'
+      returnString += '<tr><td>' + (i + 1) + '</td><td><a href="'+item.mapurl+'">'+item.branchname+'</a></td><td>' + item.address1 + '</td><td>' + item.address2 + '</td><td>' + item.address3 + '</td><td>' + item.address4 + '</td></tr>'
     }
 
     returnString += '</tbody></table>';
