@@ -135,6 +135,7 @@ else{
                   <th>CERTIFICATE NO./ <br>NO.SIRI PELEKAT <br>KESELAMATAN</th>
                   <th>NAME OF PURCHASE</th>
                   <th>ADDRESS</th>
+                  <th></th>
                 </tr>
               </thead>
             </table>
@@ -263,7 +264,15 @@ $(function () {
       { data: 'no_daftar' },
       { data: 'siri_keselamatan' },
       { data: 'customers' },
-      { data: 'full_address' }
+      { data: 'full_address' },
+      { 
+        className: 'dt-control',
+        orderable: false,
+        data: null,
+        render: function ( data, type, row ) {
+          return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
+        }
+      }
     ],
   });
   

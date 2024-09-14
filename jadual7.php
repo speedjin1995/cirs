@@ -138,6 +138,7 @@ else{
                   <th>NAME OF PURCHASE</th>
                   <th>ADDRESS</th>
                   <th>FEE</th>
+                  <th></th>
                 </tr>
               </thead>
             </table>
@@ -269,7 +270,15 @@ $(function () {
       { data: 'siri_keselamatan' },
       { data: 'customers' },
       { data: 'full_address' },
-      { data: 'unit_price' }
+      { data: 'unit_price' },
+      { 
+        className: 'dt-control',
+        orderable: false,
+        data: null,
+        render: function ( data, type, row ) {
+          return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
+        }
+      }
     ],
   });
   
