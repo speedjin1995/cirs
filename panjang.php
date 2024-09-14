@@ -20,6 +20,7 @@ else{
   }
 
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
+  $validators = $db->query("SELECT * FROM validators WHERE deleted = '0'");
 }
 ?>
 
@@ -68,6 +69,18 @@ else{
                     <option value="" selected disabled hidden>Please Select</option>
                     <?php while($rowCustomer2=mysqli_fetch_assoc($customers2)){ ?>
                       <option value="<?=$rowCustomer2['id'] ?>"><?=$rowCustomer2['customer_name'] ?></option>
+                    <?php } ?>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-3">
+                <div class="form-group">
+                  <label>Validator</label>
+                  <select class="form-control select2" id="validatorFilter" name="validatorFilter">
+                    <option value="" selected disabled hidden>Please Select</option>
+                    <?php while($rowValidators=mysqli_fetch_assoc($validators)){ ?>
+                      <option value="<?=$rowValidators['id'] ?>"><?=$rowValidators['validator'] ?></option>
                     <?php } ?>
                   </select>
                 </div>
@@ -124,6 +137,7 @@ else{
                   <th>No. Daftar</th>
                   <th>No. Siri Pelekat Keselamatan</th>
                   <th>Fi / Bayaran</th>
+                  <th></th>
                 </tr>
               </thead>
             </table>
@@ -202,6 +216,7 @@ $(function () {
   var fromDateValue = $('#fromDate').val();
   var toDateValue = $('#toDate').val();
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
+  var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
   var statusFilter = 'P';
 
   var table = $("#weightTable").DataTable({
@@ -220,6 +235,7 @@ $(function () {
         fromDate: fromDateValue,
         toDate: toDateValue,
         customer: customerNoFilter,
+        validator: validatorFilter,
         status: statusFilter
       } 
     },
@@ -257,7 +273,15 @@ $(function () {
       { data: 'batch_no' },
       { data: 'no_daftar' },
       { data: 'siri_keselamatan' },
-      { data: 'unit_price' }
+      { data: 'unit_price' },
+      { 
+        className: 'dt-control',
+        orderable: false,
+        data: null,
+        render: function ( data, type, row ) {
+          return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
+        }
+      }
     ],
   });
   
@@ -374,6 +398,7 @@ $(function () {
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
+    var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
     var statusFilter = 'P';
 
     //Destroy the old Datatable
@@ -396,6 +421,7 @@ $(function () {
           fromDate: fromDateValue,
           toDate: toDateValue,
           customer: customerNoFilter,
+          validator: validatorFilter,
           status: statusFilter
         } 
       },
