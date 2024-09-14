@@ -31,6 +31,10 @@ if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] 
 	$searchQuery .= " and customers = '".$_POST['customer']."'";
 }
 
+if($_POST['validator'] != null && $_POST['validator'] != '' && $_POST['validator'] != '-'){
+	$searchQuery .= " and validate_by = '".$_POST['validator']."'";
+}
+
 if($_POST['status'] != null && $_POST['status'] != '' && $_POST['status'] != '-'){
   if($_POST['status'] == '6'){
     $searchQuery .= " and stamping_type = 'NEW'";
@@ -58,7 +62,7 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "SELECT * FROM stamping WHERE 1=1".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
+$empQuery = "SELECT * FROM stamping WHERE 1=1".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;
