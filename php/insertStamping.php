@@ -213,14 +213,17 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 	}
 
 	if(isset($_POST['id']) && $_POST['id'] != null && $_POST['id'] != ''){
+		//Updated datetime
+		$currentDateTime = date('Y-m-d H:i:s');
+
 		if ($update_stmt = $db->prepare("UPDATE stamping SET type=?, dealer=?, customers=?, address1=?, address2=?, address3=?, brand=?, machine_type=?, model=?
 		, capacity=?, serial_no=?, validate_by=?, jenis_alat=?, no_daftar=?, pin_keselamatan=?, siri_keselamatan=?, include_cert=?, borang_d=?
 		, invoice_no=?, cash_bill=?, stamping_date=?, due_date=?, pic=?, customer_pic=?, quotation_no=?, quotation_date=?, purchase_no=?, purchase_date=?
-		, remarks=?, unit_price=?, cert_price=?, total_amount=?, sst=?, subtotal_amount=?, log=?, products=?, stamping_type=? WHERE id=?")){
+		, remarks=?, unit_price=?, cert_price=?, total_amount=?, sst=?, subtotal_amount=?, log=?, products=?, stamping_type=?, updated_date=? WHERE id=?")){
 			$data = json_encode($logs);
-			$update_stmt->bind_param('ssssssssssssssssssssssssssssssssssssss', $type, $dealer, $customer, $address1, $address2, $address3, $brand, $machineType, $model, $capacity, $serial, 
+			$update_stmt->bind_param('sssssssssssssssssssssssssssssssssssssss', $type, $dealer, $customer, $address1, $address2, $address3, $brand, $machineType, $model, $capacity, $serial, 
 			$validator, $jenisAlat, $noDaftar, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $invoice, $cashBill, $stampDate, $dueDate, $uid, $pic, 
-			$quotation, $quotationDate, $poNo, $poDate, $remark, $unitPrice, $certPrice, $totalPrice, $sst, $subtotalPrice, $data, $product, $newRenew, $_POST['id']);
+			$quotation, $quotationDate, $poNo, $poDate, $remark, $unitPrice, $certPrice, $totalPrice, $sst, $subtotalPrice, $data, $product, $newRenew, $currentDateTime, $_POST['id']);
 		
 			// Execute the prepared query.
 			if (! $update_stmt->execute()){

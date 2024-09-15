@@ -151,6 +151,7 @@ else{
                   <th>Capacity</th>
                   <th>Serial No.</th>
                   <th>Next Due Date</th>
+                  <th>Updated Date</th>
                   <th>Status</th>
                   <th></th>
                   <th></th>
@@ -763,6 +764,7 @@ $(function () {
       { data: 'capacity' },
       { data: 'serial_no' },
       { data: 'due_date' },
+      { data: 'updated_datetime' },
       { data: 'status' },
       { 
         data: 'id',
