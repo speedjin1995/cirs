@@ -322,6 +322,12 @@ else{
                     <input class="form-control" type="text" placeholder="Address Line 3" id="address3" name="address3">
                   </div>
                 </div>
+                <div class="col-4" id="addr4" style="display: none;">
+                  <div class="form-group">
+                    <label>Address Line 4 </label>
+                    <input class="form-control" type="text" placeholder="Address Line 4" id="address4" name="address4">
+                  </div>
+                </div>
                 <div class="col-4" id="pic1" style="display: none;">
                   <div class="form-group">
                     <label>P.I.C</label>
@@ -485,9 +491,9 @@ else{
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>Next Due Date *</label>
+                    <label>Next Due Date </label>
                     <div class='input-group date' id="datePicker2" data-target-input="nearest">
-                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker2" id="dueDate" name="dueDate" required/>
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker2" id="dueDate" name="dueDate"/>
                       <div class="input-group-append" data-target="#datePicker2" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                       </div>
@@ -1056,79 +1062,6 @@ $(function () {
     }
   });
 
-  /*$('#refreshBtn').on('click', function(){
-    var fromDateValue = '';
-    var toDateValue = '';
-    var statusFilter = '';
-    var customerNoFilter = '';
-    var vehicleFilter = '';
-    var invoiceFilter = '';
-    var batchFilter = '';
-    var productFilter = '';
-
-    //Destroy the old Datatable
-    $("#weightTable").DataTable().clear().destroy();
-
-    //Create new Datatable
-    table = $("#weightTable").DataTable({
-      "responsive": true,
-      "autoWidth": false,
-      'processing': true,
-      'serverSide': true,
-      'serverMethod': 'post',
-      'searching': true,
-      'order': [[ 1, 'asc' ]],
-      'columnDefs': [ { orderable: false, targets: [0] }],
-      'ajax': {
-        'type': 'POST',
-        'url':'php/filterWeight.php',
-        'data': {
-          fromDate: fromDateValue,
-          toDate: toDateValue,
-          status: statusFilter,
-          customer: customerNoFilter,
-          vehicle: vehicleFilter,
-          invoice: invoiceFilter,
-          batch: batchFilter,
-          product: productFilter,
-        } 
-      },
-      'columns': [
-        { data: 'no' },
-        { data: 'pStatus' },
-        { data: 'status' },
-        { data: 'serialNo' },
-        { data: 'veh_number' },
-        { data: 'product_name' },
-        { data: 'currentWeight' },
-        { data: 'inCDateTime' },
-        { data: 'tare' },
-        { data: 'outGDateTime' },
-        { data: 'totalWeight' },
-        { 
-          className: 'dt-control',
-          orderable: false,
-          data: null,
-          render: function ( data, type, row ) {
-            return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
-          }
-        }
-      ],
-      "rowCallback": function( row, data, index ) {
-        $('td', row).css('background-color', '#E6E6FA');
-      },
-      "drawCallback": function(settings) {
-        $('#salesInfo').text(settings.json.salesTotal);
-        $('#purchaseInfo').text(settings.json.purchaseTotal);
-        $('#localInfo').text(settings.json.localTotal);
-      }
-    });
-  });
-
-  $('#datePicker').on('click', function () {
-    $('#datePicker').attr('data-info', '1');
-  });*/
-
   $('#uploadExccl').on('click', function(){
     $('#uploadModal').modal('show');
 
@@ -1268,13 +1201,20 @@ $(function () {
   $('#extendModal').find('#customerType').on('change', function(){
     if($(this).val() == "NEW"){
       $('#extendModal').find('#company').hide();
-      $('#extendModal').find('#custbranch').show();
+      $('#extendModal').find('#custbranch').hide();
       
-      $('#extendModal').find('#addr1').hide();
-      $('#extendModal').find('#addr2').hide();
-      $('#extendModal').find('#addr3').hide();
-      $('#extendModal').find('#addr4').hide();
-      $('#extendModal').find('#pic1').hide();
+      $('#extendModal').find('#addr1').show();
+      $('#extendModal').find('#addr2').show();
+      $('#extendModal').find('#addr3').show();
+      $('#extendModal').find('#addr4').show();
+      $('#extendModal').find('#pic1').show();
+
+      $('#extendModal').find('#address1').val('');
+      $('#extendModal').find('#address2').val('');
+      $('#extendModal').find('#address3').val('');
+      $('#extendModal').find('#address4').val('');
+      $('#extendModal').find('#contact').val('');
+      $('#extendModal').find('#email').val('');
 
       $('#extendModal').find('#company').parents('.form-group').find('.select2-container').hide();
       $('#extendModal').find('#companyText').show();
@@ -1283,18 +1223,57 @@ $(function () {
     else{
       $('#extendModal').find('#company').html($('select#customerNoHidden').html());
       $('#extendModal').find('#company').show();
-      $('#extendModal').find('#custbranch').hide();
+      $('#extendModal').find('#custbranch').show();
 
-      $('#extendModal').find('#addr1').show();
-      $('#extendModal').find('#addr2').show();
-      $('#extendModal').find('#addr3').show();
-      $('#extendModal').find('#addr4').show();
-      $('#extendModal').find('#pic1').show();
+      $('#extendModal').find('#addr1').hide();
+      $('#extendModal').find('#addr2').hide();
+      $('#extendModal').find('#addr3').hide();
+      $('#extendModal').find('#addr4').hide();
+      $('#extendModal').find('#pic1').hide();
 
       $('#extendModal').find('#company').parents('.form-group').find('.select2-container').show();
       $('#extendModal').find('#companyText').hide();
       $('#extendModal').find('#companyText').val('');
     }
+  });
+
+  $('#extendModal').find('#branch').on('change', function(){
+    //$('#spinnerLoading').show();
+    var id = $(this).find(":selected").val();
+
+    $.post('php/getBranch.php', {userID: id}, function(data){
+      var obj = JSON.parse(data);
+      
+      if(obj.status === 'success'){
+        $('#extendModal').find('#address1').val(obj.message.address1);
+        $('#extendModal').find('#address2').val(obj.message.address2);
+        $('#extendModal').find('#address3').val(obj.message.address3);
+        $('#extendModal').find('#address4').val(obj.message.address4);
+        
+        $('#extendModal').modal('show');
+
+        $('#extendForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when pull data", "Failed:");
+      }
+      //$('#spinnerLoading').hide();
+    });
   });
 
   $('#extendModal').find('#company').on('change', function(){
@@ -1305,11 +1284,17 @@ $(function () {
       var obj = JSON.parse(data);
       
       if(obj.status === 'success'){
-        $('#extendModal').find('#address1').val(obj.message.customer_address);
-        $('#extendModal').find('#address2').val(obj.message.address2);
-        $('#extendModal').find('#address3').val(obj.message.address3);
         $('#extendModal').find('#contact').val(obj.message.customer_phone);
         $('#extendModal').find('#email').val(obj.message.customer_email);
+
+        $('#branch').html('');
+        $('#branch').append('<option selected="selected">-</option>');
+
+        for(var i=0; i<obj.message.pricing.length; i++){
+          var branchInfo = obj.message.pricing[i];
+          $('#branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.address1+' '+branchInfo.address2+' '+branchInfo.address3+' '+branchInfo.address4+'</option>')
+        }
+
         $('#extendModal').modal('show');
 
         $('#extendForm').validate({

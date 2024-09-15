@@ -33,10 +33,11 @@ if(isset($_POST['userID'])){
                         while($row2 = $result2->fetch_assoc()) {
                             $pricing[] = array(
                                 "branchid" => $row2['id'],
-                                "address1" => $row2['address'],
-                                "address2" => $row2['address2'],
-                                "address3" => $row2['address3'],
-                                "address4" => $row2['address4'],
+                                "name" => $row2['branch_name'] ?? '',
+                                "address1" => $row2['address'] ?? '',
+                                "address2" => $row2['address2'] ?? '',
+                                "address3" => $row2['address3'] ?? '',
+                                "address4" => $row2['address4'] ?? '',
                             );
                         }
                     }

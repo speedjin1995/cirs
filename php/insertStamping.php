@@ -25,6 +25,7 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 	$branch = null;
 	$address2 = null;
 	$address3 = null;
+	$address4 = null;
 	$dueDate = null;
 	$stamping = null;
 	$stampDate = null;
@@ -92,6 +93,14 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 		$address3 = $_POST['address3'];
 	}
 
+	if(isset($_POST['address4']) && $_POST['address4']!=null && $_POST['address4']!=""){
+		$address4 = $_POST['address4'];
+	}
+
+	if(isset($_POST['branch']) && $_POST['branch']!=null && $_POST['branch']!=""){
+		$branch = $_POST['branch'];
+	}
+
 	if($customerType == "NEW"){
 		if ($select_stmt = $db->prepare("SELECT id FROM customers WHERE customer_name=?")) {
 			$select_stmt->bind_param('s', $_POST['companyText']);
@@ -103,13 +112,30 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 				$customerType = 'EXISTING';
 			} 
 			else {
+				$email = null;
+				$phone = null;
+				$dealer = null;
+				$branchName = '';
+				$mapUrl = '';
+
+				if(isset($_POST['dealer'] ) && $_POST['dealer'] != null && $_POST['dealer'] != "" && $type == 'DEALER'){
+					$dealer = filter_input(INPUT_POST, 'dealer', FILTER_SANITIZE_STRING);
+				}
+
 				// Customer does not exist, create a new customer
-				if ($insert_stmt = $db->prepare("INSERT INTO customers (customer_name, customer_address, address2, address3) VALUES (?, ?, ?, ?)")) {
-					$insert_stmt->bind_param('ssss', $_POST['companyText'], $address1, $address2, $address3);
+				if ($insert_stmt = $db->prepare("INSERT INTO customers (customer_name, dealer) VALUES (?, ?)")) {
+					$insert_stmt->bind_param('ss', $_POST['companyText'], $dealer);
 					
 					if ($insert_stmt->execute()) {
 						$customer = $insert_stmt->insert_id;
 						$customerType = 'EXISTING';
+
+						if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, branch_name, map_url) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
+                            $insert_stmt2->bind_param('sssssss', $customer, $address1, $address2, $address3, $address4, $branchName, $mapUrl);
+                            $insert_stmt2->execute();
+							$branch = $insert_stmt2->insert_id;
+                            $insert_stmt2->close();
+                        } 
 					} 
 				}
 			}
@@ -219,11 +245,11 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 		if ($update_stmt = $db->prepare("UPDATE stamping SET type=?, dealer=?, customers=?, address1=?, address2=?, address3=?, brand=?, machine_type=?, model=?
 		, capacity=?, serial_no=?, validate_by=?, jenis_alat=?, no_daftar=?, pin_keselamatan=?, siri_keselamatan=?, include_cert=?, borang_d=?
 		, invoice_no=?, cash_bill=?, stamping_date=?, due_date=?, pic=?, customer_pic=?, quotation_no=?, quotation_date=?, purchase_no=?, purchase_date=?
-		, remarks=?, unit_price=?, cert_price=?, total_amount=?, sst=?, subtotal_amount=?, log=?, products=?, stamping_type=?, updated_date=? WHERE id=?")){
+		, remarks=?, unit_price=?, cert_price=?, total_amount=?, sst=?, subtotal_amount=?, log=?, products=?, stamping_type=?, updated_date=?, branch=? WHERE id=?")){
 			$data = json_encode($logs);
-			$update_stmt->bind_param('sssssssssssssssssssssssssssssssssssssss', $type, $dealer, $customer, $address1, $address2, $address3, $brand, $machineType, $model, $capacity, $serial, 
+			$update_stmt->bind_param('ssssssssssssssssssssssssssssssssssssssss', $type, $dealer, $customer, $address1, $address2, $address3, $brand, $machineType, $model, $capacity, $serial, 
 			$validator, $jenisAlat, $noDaftar, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $invoice, $cashBill, $stampDate, $dueDate, $uid, $pic, 
-			$quotation, $quotationDate, $poNo, $poDate, $remark, $unitPrice, $certPrice, $totalPrice, $sst, $subtotalPrice, $data, $product, $newRenew, $currentDateTime, $_POST['id']);
+			$quotation, $quotationDate, $poNo, $poDate, $remark, $unitPrice, $certPrice, $totalPrice, $sst, $subtotalPrice, $data, $product, $newRenew, $currentDateTime, $branch, $_POST['id']);
 		
 			// Execute the prepared query.
 			if (! $update_stmt->execute()){
@@ -258,12 +284,12 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 	else{
 		if ($insert_stmt = $db->prepare("INSERT INTO stamping (type, dealer, customer_type, customers, address1, address2, address3, brand, machine_type, model, capacity, serial_no, 
 		validate_by, jenis_alat, no_daftar, pin_keselamatan, siri_keselamatan, include_cert, borang_d, invoice_no, cash_bill, stamping_date, due_date, pic, customer_pic, 
-		quotation_no, quotation_date, purchase_no, purchase_date, remarks, unit_price, cert_price, total_amount, sst, subtotal_amount, log, products, stamping_type) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+		quotation_no, quotation_date, purchase_no, purchase_date, remarks, unit_price, cert_price, total_amount, sst, subtotal_amount, log, products, stamping_type, branch) 
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
 			$data = json_encode($logs);
-			$insert_stmt->bind_param('ssssssssssssssssssssssssssssssssssssss', $type, $dealer, $customerType, $customer, $address1, $address2, $address3, $brand, $machineType, $model, $capacity, $serial, 
+			$insert_stmt->bind_param('sssssssssssssssssssssssssssssssssssssss', $type, $dealer, $customerType, $customer, $address1, $address2, $address3, $brand, $machineType, $model, $capacity, $serial, 
 			$validator, $jenisAlat, $noDaftar, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $invoice, $cashBill, $stampDate, $dueDate, $uid, $pic, 
-			$quotation, $quotationDate, $poNo, $poDate, $remark, $unitPrice, $certPrice, $totalPrice, $sst, $subtotalPrice, $data, $product, $newRenew);
+			$quotation, $quotationDate, $poNo, $poDate, $remark, $unitPrice, $certPrice, $totalPrice, $sst, $subtotalPrice, $data, $product, $newRenew, $branch);
 			
 			// Execute the prepared query.
 			if (! $insert_stmt->execute()){
