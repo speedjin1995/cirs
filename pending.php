@@ -632,7 +632,7 @@ else{
   </div>
 </div>
 
-<div class="modal fade" id="cancelModal">
+<div class="modal fade" id="cancelModal"> 
   <div class="modal-dialog modal-xl" style="max-width: 50%;">
     <div class="modal-content">
 
@@ -659,7 +659,7 @@ else{
               </div>
             </div>
           </div>  
-          <div class="row">
+          <div class="row" id='otherRow' style="display: none;">
             <div class="col-6">
               <div class="form-group">
                 <label>Other Reason</label>
@@ -1545,6 +1545,17 @@ $(function () {
         }
         $('#spinnerLoading').hide();
       });
+    }
+  });
+
+  $('#cancelModal').find('#cancellationReason').on('change', function(){
+    if($(this).val() == '0'){
+      $('#otherRow').show();
+      $('#otherReason').attr("required", true);
+    }
+    else{
+      $('#otherRow').hide();
+      $('#otherReason').attr("required", false);
     }
   });
 
