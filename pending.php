@@ -34,6 +34,7 @@ else{
   $validators = $db->query("SELECT * FROM validators WHERE deleted = '0'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
+  $cancelledReasons = $db->query("SELECT * FROM reasons WHERE deleted = '0'");
 }
 ?>
 
@@ -625,6 +626,52 @@ else{
   </div>
 </div>
 
+<div class="modal fade" id="cancelModal">
+  <div class="modal-dialog modal-xl" style="max-width: 50%;">
+    <div class="modal-content">
+
+      <form role="form" id="cancelForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Cancellation Reason</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" class="form-control" id="id" name="id">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>Cancellation Reason *</label>
+                <select class="form-control" id="cancellationReason" name="cancellationReason" required>
+                  <option value="" selected disabled hidden>Please Select</option>
+                  <?php while($cancellationReason=mysqli_fetch_assoc($cancelledReasons)){ ?>
+                    <option value="<?=$cancellationReason['id'] ?>"><?=$cancellationReason['reason'] ?></option>
+                  <?php } ?>
+                </select>
+              </div>
+            </div>
+          </div>  
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>Other Reason</label>
+                <textarea class="form-control" id ="otherReason" name="otherReason"></textarea>
+              </div>
+            </div>
+          </div>  
+        </div>
+
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <script type="text/html" id="pricingDetails">
   <tr class="details">
     <td>
@@ -916,6 +963,71 @@ $(function () {
             toastr["error"]("Something wrong when pull data", "Failed:");
           }
         });
+      }
+      else if($('#cancelModal').hasClass('show')){
+        $.post('php/deleteStamp.php', $('#cancelForm').serialize(), function(data){
+          var obj = JSON.parse(data); 
+          if(obj.status === 'success'){
+            $('#cancelModal').modal('hide');
+            toastr["success"](obj.message, "Success:");
+            $('#weightTable').DataTable().ajax.reload();
+          }
+          else if(obj.status === 'failed'){
+            toastr["error"](obj.message, "Failed:");
+          }
+          else{
+            toastr["error"]("Something wrong when edit", "Failed:");
+          }
+
+          $('#spinnerLoading').hide();
+        });
+
+        // // Serialize the form data into an array of objects
+        // var formData = $('#cancelForm').serializeArray(); 
+        // var data = [];
+        // var rowIndex = -1;
+        // formData.forEach(function(field) {
+        //     var match = field.name.match(/([a-zA-Z]+)\[(\d+)\]/);
+        //     if (match) {
+        //       var fieldName = match[1];
+        //       var index = parseInt(match[2], 10);
+        //       if (index !== rowIndex) {
+        //         rowIndex = index;
+        //         data.push({});
+        //       }
+        //       data[index][fieldName] = field.value;
+        //     }
+        // });
+
+        // console.log(formData);
+
+        // return;
+
+        // // Send the JSON array to the server
+        // $.ajax({
+        //     url: 'php/deleteStamp.php',
+        //     type: 'POST',
+        //     contentType: 'application/json',
+        //     data: JSON.stringify(data),
+        //     success: function(response) {
+        //       var obj = JSON.parse(response);
+        //       if (obj.status === 'success') {
+        //         $('#uploadModal').modal('hide');
+        //         toastr["success"](obj.message, "Success:");
+        //         $('#weightTable').DataTable().ajax.reload();
+        //       } 
+        //       else if (obj.status === 'failed') {
+        //         toastr["error"](obj.message, "Failed:");
+        //       } 
+        //       else {
+        //         toastr["error"]("Something went wrong when editing", "Failed:");
+        //       }
+              
+        //       $('#spinnerLoading').hide();
+        //     }
+        // });
+
+        // $.post('php/deleteStamp', )
       }
     }
   });
@@ -1931,21 +2043,53 @@ function complete(id) {
 function deactivate(id) {
   if (confirm('Are you sure you want to cancel this items?')) {
     $('#spinnerLoading').show();
-    $.post('php/deleteStamp.php', {userID: id}, function(data){
+    $.post('php/getStamp.php', {userID: id}, function(data){
       var obj = JSON.parse(data);
 
-      if(obj.status === 'success'){
-        toastr["success"](obj.message, "Success:");
-        $('#weightTable').DataTable().ajax.reload();
-      }
-      else if(obj.status === 'failed'){
+      if(obj.status == 'success'){
+        $('#cancelModal').find('#id').val(obj.message.id);
+        $('#cancelModal').modal('show');
+
+        $('#cancelForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
+      } else if(obj.status === 'failed'){
         toastr["error"](obj.message, "Failed:");
       }
       else{
-        toastr["error"]("Something wrong when activate", "Failed:");
+        toastr["error"]("Something wrong when pull data", "Failed:");
       }
+
       $('#spinnerLoading').hide();
+
     });
+
+
+    // $.post('php/deleteStamp.php', {userID: id}, function(data){
+    //   var obj = JSON.parse(data);
+
+    //   if(obj.status === 'success'){
+    //     toastr["success"](obj.message, "Success:");
+    //     $('#weightTable').DataTable().ajax.reload();
+    //   }
+    //   else if(obj.status === 'failed'){
+    //     toastr["error"](obj.message, "Failed:");
+    //   }
+    //   else{
+    //     toastr["error"]("Something wrong when activate", "Failed:");
+    //   }
+    //   $('#spinnerLoading').hide();
+    // });
   }
 }
 
