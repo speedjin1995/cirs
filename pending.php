@@ -67,7 +67,8 @@ else{
                 <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
                   <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
                   <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
-                  <div class="input-group-text"><i class="fa fa-calendar"></i></div></div>
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
                 </div>
               </div>
 
@@ -181,7 +182,7 @@ else{
           <div class="row">
             <div class="col-4">
               <div class="form-group">
-                <label>Own / Dealer * </label>
+                <label>Own / Reseller * </label>
                 <select class="form-control" style="width: 100%;" id="type" name="type" required>
                   <option value="OWN">OWN</option>
                   <option value="DEALER">DEALER</option>
@@ -296,36 +297,36 @@ else{
                     <input class="form-control" type="text" placeholder="Company Name" id="companyText" name="companyText" style="display: none;">
                   </div>
                 </div>
-                <div class="col-12">
+                <div class="col-12" id="custbranch">
                   <div class="form-group">
                     <label>Branch * </label>
                     <select class="form-control select2" style="width: 100%;" id="branch" name="branch" required></select>
                   </div>
                 </div>
-                <!--div class="col-4">
+                <div class="col-4" id="addr1" style="display: none;">
                   <div class="form-group">
                     <label>Address Line 1 * </label>
-                    <input class="form-control" type="text" placeholder="Address Line 1" id="address1" name="address1" required>
+                    <input class="form-control" type="text" placeholder="Address Line 1" id="address1" name="address1">
                   </div>
                 </div>
-                <div class="col-4">
+                <div class="col-4" id="addr2" style="display: none;">
                   <div class="form-group">
                     <label>Address Line 2 </label>
                     <input class="form-control" type="text" placeholder="Address Line 2" id="address2" name="address2">
                   </div>
                 </div>
-                <div class="col-4">
+                <div class="col-4" id="addr3" style="display: none;">
                   <div class="form-group">
                     <label>Address Line 3 </label>
                     <input class="form-control" type="text" placeholder="Address Line 3" id="address3" name="address3">
                   </div>
                 </div>
-                <div class="col-4">
+                <div class="col-4" id="pic1" style="display: none;">
                   <div class="form-group">
                     <label>P.I.C</label>
                     <input class="form-control" type="text" placeholder="PIC" id="pic" name="pic">
                   </div>
-                </div-->
+                </div>
               </div>
             </div>
           </div>
@@ -1265,6 +1266,14 @@ $(function () {
   $('#extendModal').find('#customerType').on('change', function(){
     if($(this).val() == "NEW"){
       $('#extendModal').find('#company').hide();
+      $('#extendModal').find('#custbranch').show();
+      
+      $('#extendModal').find('#addr1').hide();
+      $('#extendModal').find('#addr2').hide();
+      $('#extendModal').find('#addr3').hide();
+      $('#extendModal').find('#addr4').hide();
+      $('#extendModal').find('#pic1').hide();
+
       $('#extendModal').find('#company').parents('.form-group').find('.select2-container').hide();
       $('#extendModal').find('#companyText').show();
       $('#extendModal').find('#companyText').val('');
@@ -1272,6 +1281,14 @@ $(function () {
     else{
       $('#extendModal').find('#company').html($('select#customerNoHidden').html());
       $('#extendModal').find('#company').show();
+      $('#extendModal').find('#custbranch').hide();
+
+      $('#extendModal').find('#addr1').show();
+      $('#extendModal').find('#addr2').show();
+      $('#extendModal').find('#addr3').show();
+      $('#extendModal').find('#addr4').show();
+      $('#extendModal').find('#pic1').show();
+
       $('#extendModal').find('#company').parents('.form-group').find('.select2-container').show();
       $('#extendModal').find('#companyText').hide();
       $('#extendModal').find('#companyText').val('');

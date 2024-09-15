@@ -9,8 +9,6 @@ if(!isset($_SESSION['userID'])){
 }
 else{
   $user = $_SESSION['userID'];
-  $units = $db->query("SELECT * FROM units WHERE deleted = '0'");
-  $units2 = $db->query("SELECT * FROM units WHERE deleted = '0'");
 }
 ?>
 
@@ -18,7 +16,7 @@ else{
     <div class="container-fluid">
         <div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0 text-dark">Capacity</h1>
+				<h1 class="m-0 text-dark">Reasons</h1>
 			</div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -35,20 +33,16 @@ else{
                         <div class="row">
                             <div class="col-9"></div>
                             <div class="col-3">
-                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addCapacity">Add Capacity</button>
+                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addBrand">Add Reasons</button>
                             </div>
                         </div>
                     </div>
 					<div class="card-body">
-						<table id="capacityTable" class="table table-bordered table-striped">
+						<table id="brandTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
-                                    <th>No.</th>
-									<th>Name</th>
-                                    <th>Capacity</th>
-                                    <th>Units</th>
-                                    <th>Division</th>
-                                    <th>Units</th>
+									<th>No.</th>
+									<th>Reasons</th>
 									<th>Actions</th>
 								</tr>
 							</thead>
@@ -60,56 +54,30 @@ else{
 	</div><!-- /.container-fluid -->
 </section><!-- /.content -->
 
-<div class="modal fade" id="capacityModal">
+<div class="modal fade" id="brandModal">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
-        <form role="form" id="capacityForm">
+        <form role="form" id="brandForm">
             <div class="modal-header">
-                <h4 class="modal-title">Add Capacity</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+              <h4 class="modal-title">Add Status</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
             <div class="modal-body">
                 <div class="card-body">
                     <div class="form-group">
-                        <input type="hidden" class="form-control" id="id" name="id">
-                    </div>
-                    <div class="form-group">
-                        <label for="capacity">Capacity Name *</label>
-                        <input type="text" class="form-control" name="capacityName" id="capacityName" placeholder="Enter Capacity Name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="capacity">Capacity *</label>
-                        <input type="number" class="form-control" name="capacity" id="capacity" placeholder="Enter Capacity" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Units *</label>
-                        <select class="form-control" style="width: 100%;" id="unit" name="unit" required>
-                            <option selected="selected">-</option>
-                            <?php while($rowVA=mysqli_fetch_assoc($units)){ ?>
-                                <option value="<?=$rowVA['id'] ?>"><?=$rowVA['units'] ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="division">Division *</label>
-                        <input type="number" class="form-control" name="division" id="division" placeholder="Enter Division" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Units *</label>
-                        <select class="form-control" style="width: 100%;" id="unitD" name="unitD" required>
-                            <option selected="selected">-</option>
-                            <?php while($rowVA2=mysqli_fetch_assoc($units2)){ ?>
-                                <option value="<?=$rowVA2['id'] ?>"><?=$rowVA2['units'] ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                </div>
+    					<input type="hidden" class="form-control" id="id" name="id">
+    				</div>
+    				<div class="form-group">
+    					<label for="brand">Reasons *</label>
+    					<input type="text" class="form-control" name="brand" id="brand" placeholder="Enter Reasons" required>
+    				</div>
+    			</div>
             </div>
             <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" name="submit" id="submitMember">Submit</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" name="submit" id="submitLot">Submit</button>
             </div>
         </form>
       </div>
@@ -120,23 +88,20 @@ else{
 
 <script>
 $(function () {
-    $("#capacityTable").DataTable({
+    $("#brandTable").DataTable({
         "responsive": true,
         "autoWidth": false,
         'processing': true,
         'serverSide': true,
         'serverMethod': 'post',
         'order': [[ 1, 'asc' ]],
+        'columnDefs': [ { orderable: false, targets: [0] }],
         'ajax': {
-            'url':'php/loadCapacity.php'
+            'url':'php/loadReason.php'
         },
         'columns': [
             { data: 'counter' },
-            { data: 'name' },
-            { data: 'capacity' },
-            { data: 'units' },
-            { data: 'division' },
-            { data: 'division_unit' },
+            { data: 'reason' },
             { 
                 data: 'id',
                 render: function ( data, type, row ) {
@@ -145,20 +110,21 @@ $(function () {
             }
         ],
         "rowCallback": function( row, data, index ) {
+
             $('td', row).css('background-color', '#E6E6FA');
-        },        
+        },       
     });
     
     $.validator.setDefaults({
         submitHandler: function () {
             $('#spinnerLoading').show();
-            $.post('php/capacity.php', $('#capacityForm').serialize(), function(data){
+            $.post('php/reason.php', $('#brandForm').serialize(), function(data){
                 var obj = JSON.parse(data); 
                 
                 if(obj.status === 'success'){
-                    $('#capacityModal').modal('hide');
+                    $('#brandModal').modal('hide');
                     toastr["success"](obj.message, "Success:");
-                    $('#capacityTable').DataTable().ajax.reload();
+                    $('#brandTable').DataTable().ajax.reload();
                     $('#spinnerLoading').hide();
                 }
                 else if(obj.status === 'failed'){
@@ -173,14 +139,12 @@ $(function () {
         }
     });
 
-    $('#addCapacity').on('click', function(){
-        $('#capacityModal').find('#id').val("");
-        $('#capacityModal').find('#capacityName').val("");
-        $('#capacityModal').find('#capacity').val("");
-        $('#capacityModal').find('#unit').val("");
-        $('#capacityModal').modal('show');
+    $('#addBrand').on('click', function(){
+        $('#brandModal').find('#id').val("");
+        $('#brandModal').find('#brand').val("");
+        $('#brandModal').modal('show');
         
-        $('#capacityForm').validate({
+        $('#brandForm').validate({
             errorElement: 'span',
             errorPlacement: function (error, element) {
                 error.addClass('invalid-feedback');
@@ -198,17 +162,15 @@ $(function () {
 
 function edit(id){
     $('#spinnerLoading').show();
-    $.post('php/getCapacity.php', {userID: id}, function(data){
+    $.post('php/getReason.php', {userID: id}, function(data){
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){
-            $('#capacityModal').find('#id').val(obj.message.id);
-            $('#capacityModal').find('#capacityName').val(obj.message.name);
-            $('#capacityModal').find('#capacity').val(obj.message.capacity);
-            $('#capacityModal').find('#unit').val(obj.message.units);
-            $('#capacityModal').modal('show');
+            $('#brandModal').find('#id').val(obj.message.id);
+            $('#brandModal').find('#brand').val(obj.message.reason);
+            $('#brandModal').modal('show');
             
-            $('#capacityForm').validate({
+            $('#brandForm').validate({
                 errorElement: 'span',
                 errorPlacement: function (error, element) {
                     error.addClass('invalid-feedback');
@@ -234,12 +196,12 @@ function edit(id){
 
 function deactivate(id){
     $('#spinnerLoading').show();
-    $.post('php/deleteCapacity.php', {userID: id}, function(data){
+    $.post('php/deleteReason.php', {userID: id}, function(data){
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){
             toastr["success"](obj.message, "Success:");
-            $('#capacityTable').DataTable().ajax.reload();
+            $('#brandTable').DataTable().ajax.reload();
             $('#spinnerLoading').hide();
         }
         else if(obj.status === 'failed'){

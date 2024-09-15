@@ -180,7 +180,7 @@ else{
           <div class="row">
             <div class="col-4">
               <div class="form-group">
-                <label>Own / Dealer * </label>
+                <label>Own / Reseller * </label>
                 <select class="form-control" style="width: 100%;" id="type" name="type" required>
                   <option value="OWN">OWN</option>
                   <option value="DEALER">DEALER</option>

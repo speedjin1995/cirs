@@ -240,4 +240,20 @@ function searchStaffNameById($value, $db) {
 
     return $id;
 }
+
+function searchUnitNameById($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM units WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['units'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
 ?>

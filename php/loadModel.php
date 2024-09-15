@@ -28,7 +28,7 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "select model.*, brand.brand as brand_name, country.iso3 from model, brand, country WHERE model.deleted = '0' and model.brand=brand.id and model.make=country.id".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+$empQuery = "select model.*, brand.brand as brand_name, country.name as iso3 from model, brand, country WHERE model.deleted = '0' and model.brand=brand.id and model.make=country.id".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;

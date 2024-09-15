@@ -331,7 +331,7 @@ to get the desired effect
               <p>Dashboard</p>
             </a>
           </li-->
-          <li class="nav-item has-treeview">
+          <!--li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>Inquries<i class="fas fa-angle-left right"></i></p>
@@ -351,7 +351,7 @@ to get the desired effect
                 </a></li>';
               }?>
             </ul>
-          </li>
+          </li-->
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-certificate"></i>
@@ -407,12 +407,12 @@ to get the desired effect
           </li>
           <?php 
             if($role == "ADMIN"){
-              /*echo '<li class="nav-item">
-                <a href="#products" data-file="products.php" class="nav-link link">
+              echo '<li class="nav-item">
+                <a href="#price" data-file="products.php" class="nav-link link">
                   <i class="nav-icon fas fa-thermometer"></i>
-                  <p>Products</p>
+                  <p>Price</p>
                 </a>
-              </li>';*/
+              </li>';
             }
           ?>
           <?php 
@@ -430,6 +430,18 @@ to get the desired effect
                 </a>
                 <ul class="nav nav-treeview" style="display: none;">
                   <li class="nav-item">
+                    <a href="#dealer" data-file="dealer.php" class="nav-link link">
+                      <i class="nav-icon fas fa-user"></i>
+                      <p>Dealer</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#customers" data-file="customers.php" class="nav-link link">
+                      <i class="nav-icon fas fa-book"></i>
+                      <p>Customers</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
                     <a href="#machine" data-file="machine.php" class="nav-link link">
                       <i class="nav-icon fas fa-store"></i>
                       <p>Machine/Scale Type</p>
@@ -445,6 +457,12 @@ to get the desired effect
                     <a href="#model" data-file="model.php" class="nav-link link">
                       <i class="nav-icon fas fa-tag"></i>
                       <p>Model</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#loads" data-file="loads.php" class="nav-link link">
+                      <i class="nav-icon fas fa-weight-hanging"></i>
+                      <p>Load Cells</p>
                     </a>
                   </li>
                   <li class="nav-item">
@@ -466,21 +484,15 @@ to get the desired effect
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="#problem" data-file="problem.php" class="nav-link link">
-                      <i class="nav-icon fas fa-industry"></i>
-                      <p>Problems</p>
+                    <a href="#validators" data-file="validators.php" class="nav-link link">
+                      <i class="nav-icon fas fa-search"></i>
+                      <p>Validators</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="#dealer" data-file="dealer.php" class="nav-link link">
-                      <i class="nav-icon fas fa-user"></i>
-                      <p>Dealer</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#customers" data-file="customers.php" class="nav-link link">
-                      <i class="nav-icon fas fa-book"></i>
-                      <p>Customers</p>
+                    <a href="#reasons" data-file="reasons.php" class="nav-link link">
+                      <i class="nav-icon fas fa-digital-tachograph"></i>
+                      <p>Reasons</p>
                     </a>
                   </li>
                   <li class="nav-item">
@@ -490,9 +502,9 @@ to get the desired effect
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="#validators" data-file="validators.php" class="nav-link link">
-                      <i class="nav-icon fas fa-search"></i>
-                      <p>Validators</p>
+                    <a href="#problem" data-file="problem.php" class="nav-link link">
+                      <i class="nav-icon fas fa-industry"></i>
+                      <p>Problems</p>
                     </a>
                   </li>
                 </ul>

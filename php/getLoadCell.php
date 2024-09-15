@@ -6,7 +6,7 @@ session_start();
 if(isset($_POST['userID'])){
 	$id = filter_input(INPUT_POST, 'userID', FILTER_SANITIZE_STRING);
 
-    if ($update_stmt = $db->prepare("SELECT * FROM capacity WHERE id=?")) {
+    if ($update_stmt = $db->prepare("SELECT * FROM load_cells WHERE id=?")) {
         $update_stmt->bind_param('s', $id);
         
         // Execute the prepared query.
@@ -21,13 +21,18 @@ if(isset($_POST['userID'])){
             $result = $update_stmt->get_result();
             $message = array();
             
-            while ($row = $result->fetch_assoc()) {
+            if ($row = $result->fetch_assoc()) {
                 $message['id'] = $row['id'];
-                $message['name'] = $row['name'];
-                $message['capacity'] = $row['capacity'];
-                $message['units'] = $row['units'];
-                $message['division'] = $row['division'];
-                $message['division_unit'] = $row['division_unit'];
+                $message['load_cell'] = $row['load_cell'];
+                $message['machine_type'] = $row['machine_type'];
+                $message['brand'] = $row['brand'];
+                $message['model'] = $row['model'];
+                $message['jenis_alat'] = $row['jenis_alat'];
+                $message['made_in'] = $row['made_in'];
+                $message['class'] = $row['class'];
+                $message['pattern_no'] = $row['pattern_no'];
+                $message['pattern_datetime'] = $row['pattern_datetime'];
+                $message['pattern_expiry'] = $row['pattern_expiry'];
             }
             
             echo json_encode(
@@ -43,6 +48,7 @@ else{
         array(
             "status" => "failed",
             "message" => "Missing Attribute"
-            )); 
+        )
+    ); 
 }
 ?>

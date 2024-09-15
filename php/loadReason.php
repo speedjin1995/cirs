@@ -1,7 +1,6 @@
 <?php
 ## Database configuration
 require_once 'db_connect.php';
-require_once 'requires/lookup.php';
 
 ## Read value
 $draw = $_POST['draw'];
@@ -15,21 +14,21 @@ $searchValue = mysqli_real_escape_string($db,$_POST['search']['value']); // Sear
 ## Search 
 $searchQuery = " ";
 if($searchValue != ''){
-   $searchQuery = " AND capacity like '%".$searchValue."%'";
+   $searchQuery = " AND (`reason` like '%".$searchValue."%')";
 }
 
 ## Total number of records without filtering
-$sel = mysqli_query($db,"select count(*) as allcount from capacity, units WHERE capacity.units = units.id AND capacity.deleted = '0'");
+$sel = mysqli_query($db,"select count(*) as allcount from `reasons`");
 $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM capacity, units WHERE capacity.units = units.id AND capacity.deleted = '0'".$searchQuery);
+$sel = mysqli_query($db,"select count(*) as allcount from `reasons` WHERE deleted = '0'".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "select capacity.*, units.units from capacity, units WHERE capacity.units = units.id AND capacity.deleted = '0'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+$empQuery = "select * from reasons WHERE deleted = '0'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;
@@ -38,11 +37,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     $data[] = array( 
       "counter"=>$counter,
       "id"=>$row['id'],
-      "name"=>$row['name'],
-      "capacity"=>$row['capacity'],
-      "units"=>$row['units'],
-      "division"=>$row['division'] ?? '',
-      "division_unit"=>$row['division_unit'] != null ? searchUnitNameById($row['division_unit'], $db) : '',
+      "reason"=>$row['reason']
     );
 
     $counter++;
@@ -53,8 +48,7 @@ $response = array(
   "draw" => intval($draw),
   "iTotalRecords" => $totalRecords,
   "iTotalDisplayRecords" => $totalRecordwithFilter,
-  "aaData" => $data,
-  'empRecords' => $empQuery
+  "aaData" => $data
 );
 
 echo json_encode($response);
