@@ -981,53 +981,6 @@ $(function () {
 
           $('#spinnerLoading').hide();
         });
-
-        // // Serialize the form data into an array of objects
-        // var formData = $('#cancelForm').serializeArray(); 
-        // var data = [];
-        // var rowIndex = -1;
-        // formData.forEach(function(field) {
-        //     var match = field.name.match(/([a-zA-Z]+)\[(\d+)\]/);
-        //     if (match) {
-        //       var fieldName = match[1];
-        //       var index = parseInt(match[2], 10);
-        //       if (index !== rowIndex) {
-        //         rowIndex = index;
-        //         data.push({});
-        //       }
-        //       data[index][fieldName] = field.value;
-        //     }
-        // });
-
-        // console.log(formData);
-
-        // return;
-
-        // // Send the JSON array to the server
-        // $.ajax({
-        //     url: 'php/deleteStamp.php',
-        //     type: 'POST',
-        //     contentType: 'application/json',
-        //     data: JSON.stringify(data),
-        //     success: function(response) {
-        //       var obj = JSON.parse(response);
-        //       if (obj.status === 'success') {
-        //         $('#uploadModal').modal('hide');
-        //         toastr["success"](obj.message, "Success:");
-        //         $('#weightTable').DataTable().ajax.reload();
-        //       } 
-        //       else if (obj.status === 'failed') {
-        //         toastr["error"](obj.message, "Failed:");
-        //       } 
-        //       else {
-        //         toastr["error"]("Something went wrong when editing", "Failed:");
-        //       }
-              
-        //       $('#spinnerLoading').hide();
-        //     }
-        // });
-
-        // $.post('php/deleteStamp', )
       }
     }
   });
