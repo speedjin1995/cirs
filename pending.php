@@ -972,6 +972,7 @@ $(function () {
         { data: 'capacity' },
         { data: 'serial_no' },
         { data: 'due_date' },
+        { data: 'updated_datetime' },
         { data: 'status' },
         { 
           data: 'id',

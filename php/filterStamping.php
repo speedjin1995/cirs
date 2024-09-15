@@ -94,7 +94,8 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "no_daftar"=>$row['no_daftar'] ?? '',
     "pin_keselamatan"=>$row['pin_keselamatan'] ?? '',
     "siri_keselamatan"=>$row['siri_keselamatan'] ?? '',
-    "borang_d"=>$row['borang_d'] ?? ''
+    "borang_d"=>$row['borang_d'] ?? '',
+    "updated_datetime"=>$row['updated_datetime'] ?? ''
   );
 
   $counter++;
