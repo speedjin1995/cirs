@@ -8,6 +8,7 @@ if(!isset($_SESSION['userID'])){
 	echo 'window.location.href = "../login.html";</script>';
 }
 else{
+    $_SESSION['page']='users';
     /*$stmt = $db->prepare("SELECT users.id, users.name, users.email, users.joined_date, users.expired_date, users.status, roles.role_name from users, roles WHERE users.role_code = roles.role_code");
     $stmt->execute();
     $result = $stmt->get_result();*/

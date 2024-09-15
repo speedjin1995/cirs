@@ -282,7 +282,7 @@ to get the desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini sidebar-collapse">
 <div class="loading" id="spinnerLoading">
   <div class='uil-ring-css' style='transform:scale(0.79);'>
     <div></div>
@@ -650,7 +650,7 @@ $(function () {
       });
   });
   
-  $("a[href='#pending']").click();
+  $("a[href='#<?=$_SESSION['page']?>']").click();
 
   $(document).on('show.bs.modal', '.modal', function (e) {
     $(this).modal('handleUpdate'); // Ensure modal is updated

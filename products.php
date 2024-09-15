@@ -9,6 +9,7 @@ if(!isset($_SESSION['userID'])){
 }
 else{
   $user = $_SESSION['userID'];
+  $_SESSION['page']='price';
   $machinetypes = $db->query("SELECT * FROM machines WHERE deleted = '0'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $capacities = $db->query("SELECT * FROM capacity WHERE deleted = '0'");

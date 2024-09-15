@@ -9,6 +9,7 @@ if(!isset($_SESSION['userID'])){
 }
 else{
   $user = $_SESSION['userID'];
+  $_SESSION['page']='machine';
   $alat = $db->query("SELECT * FROM alat WHERE deleted = '0'");
 }
 ?>

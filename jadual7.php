@@ -14,6 +14,7 @@ else{
 	$stmt->execute();
 	$result = $stmt->get_result();
   $role = 'NORMAL';
+  $_SESSION['page']='jadual7';
 	
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];

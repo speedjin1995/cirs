@@ -9,6 +9,7 @@ if(!isset($_SESSION['userID'])){
 }
 else{
   $user = $_SESSION['userID'];
+  $_SESSION['page']='capacity';
   $units = $db->query("SELECT * FROM units WHERE deleted = '0'");
   $units2 = $db->query("SELECT * FROM units WHERE deleted = '0'");
 }
