@@ -84,8 +84,8 @@ else{
                         <input type="text" class="form-control" name="capacityName" id="capacityName" placeholder="Enter Capacity Name" required>
                     </div>
                     <div class="form-group">
-                        <label>Machine Type *</label>
-                        <select class="form-control" style="width: 100%;" id="machineType" name="machineType" required>
+                        <label>Machine Type </label>
+                        <select class="form-control" style="width: 100%;" id="machineType" name="machineType">
                             <option selected="selected">-</option>
                             <?php while($rowS=mysqli_fetch_assoc($machinetypes)){ ?>
                                 <option value="<?=$rowS['id'] ?>"><?=$rowS['machine_type'] ?></option>
@@ -93,8 +93,8 @@ else{
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Jenis Alat *</label>
-                        <select class="form-control" style="width: 100%;" id="jenisAlat" name="jenisAlat" required>
+                        <label>Jenis Alat </label>
+                        <select class="form-control" style="width: 100%;" id="jenisAlat" name="jenisAlat">
                             <option selected="selected">-</option>
                             <?php while($rowA=mysqli_fetch_assoc($alats)){ ?>
                                 <option value="<?=$rowA['id'] ?>"><?=$rowA['alat'] ?></option>
@@ -102,8 +102,8 @@ else{
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Capacity * </label>
-                        <select class="form-control" style="width: 100%;" id="capacity" name="capacity" required>
+                        <label>Capacity </label>
+                        <select class="form-control" style="width: 100%;" id="capacity" name="capacity">
                             <option selected="selected">-</option>
                             <?php while($rowCA=mysqli_fetch_assoc($capacities)){ ?>
                                 <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
@@ -111,12 +111,20 @@ else{
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Validator * </label>
-                        <select class="form-control" style="width: 100%;" id="validator" name="validator" required>
+                        <label>Validator </label>
+                        <select class="form-control" style="width: 100%;" id="validator" name="validator">
                             <option selected="selected">-</option>
                             <?php while($rowVA=mysqli_fetch_assoc($validators)){ ?>
                                 <option value="<?=$rowVA['id'] ?>"><?=$rowVA['validator'] ?></option>
                             <?php } ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="capacity">Type *</label>
+                        <select class="form-control" style="width: 100%;" id="type" name="type">
+                            <option selected="selected">-</option>
+                            <option value="FIXED">FIXED</option>
+                            <option value="PERCENTAGE">PERCENTAGE</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -199,6 +207,7 @@ $(function () {
         $('#capacityModal').find('#jenisAlat').val("");
         $('#capacityModal').find('#capacity').val("");
         $('#capacityModal').find('#validator').val("");
+        $('#capacityModal').find('#type').val("FIXED");
         $('#capacityModal').find('#price').val("");
         $('#capacityModal').modal('show');
         
@@ -230,6 +239,7 @@ function edit(id){
             $('#capacityModal').find('#jenisAlat').val(obj.message.jenis_alat);
             $('#capacityModal').find('#capacity').val(obj.message.capacity);
             $('#capacityModal').find('#validator').val(obj.message.validator);
+            $('#capacityModal').find('#type').val(obj.message.type);
             $('#capacityModal').find('#price').val(obj.message.price);
             $('#capacityModal').modal('show');
             

@@ -261,6 +261,100 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 				);
 			} 
 			else{
+				// For ATK Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '1'){
+					$penentusan_baru = null;
+					$penentusan_semula = null;
+					$kelulusan_mspk = null;
+					$no_kelulusan = null;
+					$indicator_serial = null;
+					$platform_country = null;
+					$platform_type = null;
+					$size = null;
+					$jenis_pelantar = null;
+					$others = null;
+					$load_cell_country = null;
+					$load_cell_no = null;
+					$load_cells_info = [];
+
+					$no = $_POST['no'];
+					$loadCells = $_POST['loadCells'];
+					$loadCellBrand = $_POST['loadCellBrand'];
+					$loadCellModel = $_POST['loadCellModel'];
+					$loadCellCapacity = $_POST['loadCellCapacity'];
+					$loadCellSerial = $_POST['loadCellSerial'];
+
+					if(isset($no) && $no != null && count($no) > 0){
+						for($i=0; $i<count($no); $i++){
+							$load_cells_info[] = array(
+								"no" => $no[$i],
+								"loadCells" => $loadCells[$i],
+								"loadCellBrand" => $loadCellBrand[$i],
+								"loadCellModel" => $loadCellModel[$i],
+								"loadCellCapacity" => $loadCellCapacity[$i],
+								"loadCellSerial" => $loadCellSerial[$i]
+							);
+						}
+					}
+
+					if(isset($_POST['penentusanBaru']) && $_POST['penentusanBaru']!=null && $_POST['penentusanBaru']!=""){
+						$penentusan_baru = $_POST['penentusanBaru'];
+					}
+				
+					if(isset($_POST['penentusanSemula']) && $_POST['penentusanSemula']!=null && $_POST['penentusanSemula']!=""){
+						$penentusan_semula = $_POST['penentusanSemula'];
+					}
+				
+					if(isset($_POST['kelulusanMSPK']) && $_POST['kelulusanMSPK']!=null && $_POST['kelulusanMSPK']!=""){
+						$kelulusan_mspk = $_POST['kelulusanMSPK'];
+					}
+				
+					if(isset($_POST['noMSPK']) && $_POST['noMSPK']!=null && $_POST['noMSPK']!=""){
+						$no_kelulusan = $_POST['noMSPK'];
+					}
+				
+					if(isset($_POST['noSerialIndicator']) && $_POST['noSerialIndicator']!=null && $_POST['noSerialIndicator']!=""){
+						$indicator_serial = $_POST['noSerialIndicator'];
+					}
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+				
+					if(isset($_POST['platformType']) && $_POST['platformType']!=null && $_POST['platformType']!=""){
+						$platform_type = $_POST['platformType'];
+					}
+				
+					if(isset($_POST['size']) && $_POST['size']!=null && $_POST['size']!=""){
+						$size = $_POST['size'];
+					}
+
+					if(isset($_POST['jenisPelantar']) && $_POST['jenisPelantar']!=null && $_POST['jenisPelantar']!=""){
+						$jenis_pelantar = $_POST['jenisPelantar'];
+					}
+				
+					if(isset($_POST['others']) && $_POST['others']!=null && $_POST['others']!=""){
+						$others = $_POST['others'];
+					}
+				
+					if(isset($_POST['loadCellCountry']) && $_POST['loadCellCountry']!=null && $_POST['loadCellCountry']!=""){
+						$load_cell_country = $_POST['loadCellCountry'];
+					}
+
+					if(isset($_POST['noOfLoadCell']) && $_POST['noOfLoadCell']!=null && $_POST['noOfLoadCell']!=""){
+						$load_cell_no = $_POST['noOfLoadCell'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET penentusan_baru = ?, penentusan_semula = ?, kelulusan_mspk = ?, no_kelulusan = ?, indicator_serial = ?, platform_country = ?, platform_type = ?, 
+					size = ?, jenis_pelantar = ?, other_info = ?, load_cell_country = ?, load_cell_no = ?, load_cells_info = ? WHERE stamp_id = ?")){
+						$data = json_encode($load_cells_info);
+						$insert_stmt2->bind_param('ssssssssssssss', $penentusan_baru, $penentusan_semula, $kelulusan_mspk, $no_kelulusan, $indicator_serial, $platform_country, $platform_type, 
+						$size, $jenis_pelantar, $others, $load_cell_country, $load_cell_no, $data, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+				
 				$update_stmt->close();
 				$db->close();
 				
@@ -301,6 +395,102 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 				);
 			} 
 			else{
+				$stamp_id = $insert_stmt->insert_id;
+
+				// For ATK Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '1'){
+					$penentusan_baru = null;
+					$penentusan_semula = null;
+					$kelulusan_mspk = null;
+					$no_kelulusan = null;
+					$indicator_serial = null;
+					$platform_country = null;
+					$platform_type = null;
+					$size = null;
+					$jenis_pelantar = null;
+					$others = null;
+					$load_cell_country = null;
+					$load_cell_no = null;
+					$load_cells_info = [];
+
+					$no = $_POST['no'];
+					$loadCells = $_POST['loadCells'];
+					$loadCellBrand = $_POST['loadCellBrand'];
+					$loadCellModel = $_POST['loadCellModel'];
+					$loadCellCapacity = $_POST['loadCellCapacity'];
+					$loadCellSerial = $_POST['loadCellSerial'];
+
+					if(isset($no) && $no != null && count($no) > 0){
+						for($i=0; $i<count($no); $i++){
+							$load_cells_info[] = array(
+								"no" => $no[$i],
+								"loadCells" => $loadCells[$i],
+								"loadCellBrand" => $loadCellBrand[$i],
+								"loadCellModel" => $loadCellModel[$i],
+								"loadCellCapacity" => $loadCellCapacity[$i],
+								"loadCellSerial" => $loadCellSerial[$i]
+							);
+						}
+					}
+
+					if(isset($_POST['penentusanBaru']) && $_POST['penentusanBaru']!=null && $_POST['penentusanBaru']!=""){
+						$penentusan_baru = $_POST['penentusanBaru'];
+					}
+				
+					if(isset($_POST['penentusanSemula']) && $_POST['penentusanSemula']!=null && $_POST['penentusanSemula']!=""){
+						$penentusan_semula = $_POST['penentusanSemula'];
+					}
+				
+					if(isset($_POST['kelulusanMSPK']) && $_POST['kelulusanMSPK']!=null && $_POST['kelulusanMSPK']!=""){
+						$kelulusan_mspk = $_POST['kelulusanMSPK'];
+					}
+				
+					if(isset($_POST['noMSPK']) && $_POST['noMSPK']!=null && $_POST['noMSPK']!=""){
+						$no_kelulusan = $_POST['noMSPK'];
+					}
+				
+					if(isset($_POST['noSerialIndicator']) && $_POST['noSerialIndicator']!=null && $_POST['noSerialIndicator']!=""){
+						$indicator_serial = $_POST['noSerialIndicator'];
+					}
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+				
+					if(isset($_POST['platformType']) && $_POST['platformType']!=null && $_POST['platformType']!=""){
+						$platform_type = $_POST['platformType'];
+					}
+				
+					if(isset($_POST['size']) && $_POST['size']!=null && $_POST['size']!=""){
+						$size = $_POST['size'];
+					}
+
+					if(isset($_POST['jenisPelantar']) && $_POST['jenisPelantar']!=null && $_POST['jenisPelantar']!=""){
+						$jenis_pelantar = $_POST['jenisPelantar'];
+					}
+				
+					if(isset($_POST['others']) && $_POST['others']!=null && $_POST['others']!=""){
+						$others = $_POST['others'];
+					}
+				
+					if(isset($_POST['loadCellCountry']) && $_POST['loadCellCountry']!=null && $_POST['loadCellCountry']!=""){
+						$load_cell_country = $_POST['loadCellCountry'];
+					}
+
+					if(isset($_POST['noOfLoadCell']) && $_POST['noOfLoadCell']!=null && $_POST['noOfLoadCell']!=""){
+						$load_cell_no = $_POST['noOfLoadCell'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, penentusan_baru, penentusan_semula, kelulusan_mspk, no_kelulusan, indicator_serial, platform_country, 
+						platform_type, size, jenis_pelantar, other_info, load_cell_country, load_cell_no, load_cells_info) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+						$data = json_encode($load_cells_info);
+						$insert_stmt2->bind_param('ssssssssssssss', $stamp_id, $penentusan_baru, $penentusan_semula, $kelulusan_mspk, $no_kelulusan, $indicator_serial, $platform_country, $platform_type, 
+						$size, $jenis_pelantar, $others, $load_cell_country, $load_cell_no, $data);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
 				$insert_stmt->close();
 				$db->close();
 				

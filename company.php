@@ -87,8 +87,6 @@ else{
 					<label for="email">Email address</label>
 					<input type="email" class="form-control" id="email" name="email" value="<?=$data['email'] ?>" placeholder="Enter Email">
 				</div>
-                
-                <br>
 
                 <div class="form-group">
 					<label for="lesen_type">Lesen Type </label>

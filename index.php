@@ -304,10 +304,10 @@ to get the desired effect
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: #3d44c1;">
     <!-- Brand Logo -->
-    <!--a href="#" class="brand-link logo-switch">
-      <img src="assets/logoSmall.png" alt="Sneakercube Logo" class="brand-image-xl logo-xs">
+    <a href="#" class="brand-link logo-switch">
+      <img src="assets/logo.png" alt="Sneakercube Logo" class="brand-image-xl logo-xs">
       <img src="assets/logo.png" alt="Sneakercube Logo" class="brand-image-xl logo-xl">
-    </a-->
+    </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
@@ -375,7 +375,7 @@ to get the desired effect
               }?>
               <li class="nav-item">
                 <a href="#oldstamp" data-file="oldstamp.php" class="nav-link link">
-                  <i class="nav-icon fas fa-window-close"></i>
+                  <i class="nav-icon fas fa-times"></i>
                   <p>Cancelled Stamping</p>
                 </a>
               </li>

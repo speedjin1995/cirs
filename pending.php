@@ -28,6 +28,7 @@ else{
   $models = $db->query("SELECT * FROM model WHERE deleted = '0'");
   $sizes = $db->query("SELECT * FROM size WHERE deleted = '0'");
   $capacities = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
+  $capacities2 = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
   $problems = $db->query("SELECT * FROM problem WHERE deleted = '0'");
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
@@ -35,6 +36,12 @@ else{
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
   $cancelledReasons = $db->query("SELECT * FROM reasons WHERE deleted = '0'");
+  $sizes = $db->query("SELECT * FROM size WHERE deleted = '0'");
+  $country = $db->query("SELECT * FROM country");
+  $country2 = $db->query("SELECT * FROM country");
+  $loadCells = $db->query("SELECT load_cells.*, machines.machine_type AS machinetype, brand.brand AS brand_name, model.model AS model_name, alat.alat, country.nicename 
+FROM load_cells, machines, brand, model, alat, country WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
+AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load_cells.deleted = '0'");
 }
 ?>
 
@@ -187,7 +194,7 @@ else{
                 <label>Own / Reseller * </label>
                 <select class="form-control" style="width: 100%;" id="type" name="type" required>
                   <option value="OWN">OWN</option>
-                  <option value="DEALER">DEALER</option>
+                  <option value="RESELLER">RESELLER</option>
                 </select>
               </div>
             </div>
@@ -195,12 +202,12 @@ else{
           <div class="card card-primary">
             <div class="card-body">
               <div class="row">
-                <h4>Customer Billing Information</h4>
+                <h4>Customer/Reseller Billing Information</h4>
               </div>
               <div class="row">
                 <div class="col-4" id="isResseller">
                   <div class="form-group">
-                    <label for="code">Dealer</label>
+                    <label for="code">Reseller</label>
                     <select class="form-control select2" id="dealer" name="dealer">
                       <option value="" selected disabled hidden>Please Select</option>
                       <?php while($rowD=mysqli_fetch_assoc($dealer)){ ?>
@@ -514,6 +521,8 @@ else{
             </div>
           </div>
 
+          <div id="addtionalSection"></div>
+
           <div class="card card-primary">
             <div class="card-body">
               <div class="row">
@@ -678,6 +687,128 @@ else{
   </div>
 </div>
 
+<script type="text/html" id="atkDetails">
+  <div class="card card-primary">
+    <div class="card-body">
+      <div class="row">
+        <h4>Addtional Information (ATK)</h4>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <div class="form-group">
+            <label>Penentusan Baru *</label>
+            <input type="text" class="form-control" id="penentusanBaru" name="penentusanBaru" required>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+            <label>Penetusan Semula</label>
+            <input type="text" class="form-control" id="penentusanSemula" name="penentusanSemula" >
+          </div>
+        </div>
+        <div class="form-group col-4">
+          <label>Kelulusan MSPK * </label>
+          <select class="form-control" style="width: 100%;" id="kelulusanMSPK" name="kelulusanMSPK" required>
+            <option value="YES">YES</option>
+            <option value="NO">NO</option>
+          </select>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+            <label>No. Kelulusan MSPK</label>
+            <input type="text" class="form-control" id="noMSPK" name="noMSPK">
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+            <label>No. Serial Indicator *</label>
+            <input type="text" class="form-control" id="noSerialIndicator" name="noSerialIndicator">
+          </div>
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Platform Made In *</label>
+          <select class="form-control select2" id="platformCountry" name="platformCountry" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <?php while($rowcountry=mysqli_fetch_assoc($country)){ ?>
+              <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
+            <?php } ?>
+          </select>
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Platform Type *</label>
+          <select class="form-control select2" id="platformType" name="platformType" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <option value="Steel">Steel</option>
+            <option value="Concrete">Concrete</option>
+          </select>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+            <label>Size * </label>
+            <select class="form-control" style="width: 100%;" id="size" name="size" required>
+              <option selected="selected">-</option>
+              <?php while($rowSI=mysqli_fetch_assoc($sizes)){ ?>
+                <option value="<?=$rowSI['id'] ?>"><?=$rowSI['size'] ?></option>
+              <?php } ?>
+            </select>
+          </div>
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Jenis Pelantar *</label>
+          <select class="form-control select2" id="jenisPelantar" name="jenisPelantar" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <option value="Pit">Pit</option>
+            <option value="Pitless">Pitless</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <label>Others</label>
+            <textarea class="form-control" type="text" placeholder="Remark" id="others" name="others"></textarea>
+          </div>
+        </div>
+      </div><hr>
+      <div class="row">
+        <h4>Load Cells</h4>
+      </div>
+      <div class="row">
+        <div class="form-group col-4">
+          <label for="model">Load Cells Made In *</label>
+          <select class="form-control select2" id="loadCellCountry" name="loadCellCountry" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <?php while($rowcountry2=mysqli_fetch_assoc($country2)){ ?>
+              <option value="<?=$rowcountry2['id'] ?>"><?=$rowcountry2['name'] ?></option>
+            <?php } ?>
+          </select>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+            <label>No. of Load Cells *</label>
+            <input type="number" class="form-control" id="noOfLoadCell" name="noOfLoadCell" required>
+          </div>
+        </div>
+        <div class="col-4">
+          <button style="margin-left:auto;margin-right: 25px;" type="button" class="btn btn-primary add-load-cell">Add Load Cells</button>
+        </div>
+      </div>
+      <table style="width: 100%;">
+        <thead>
+          <tr>
+            <th width="5%">Bil</th>
+            <th width="20%">Load Cells</th>
+            <th width="20%">Jenama</th>
+            <th width="20%">Model</th>
+            <th width="20%">Kapasiti</th>
+            <th width="10%">No. Siri</th>
+            <th width="5%">Delete</th>
+          </tr>
+        </thead>
+        <tbody id="loadCellTable"></tbody>
+      </table>
+    </div>
+  </div>
+</script>
+
 <script type="text/html" id="pricingDetails">
   <tr class="details">
     <td>
@@ -715,8 +846,48 @@ else{
   </tr>
 </script>
 
+<script type="text/html" id="loadCellDetails">
+  <tr class="details">
+    <td>
+      <input type="text" class="form-control" id="no" name="no" readonly>
+    </td>
+    <td>
+      <select class="form-control" style="width: 100%;" id="loadCells" name="loadCells">
+        <option selected="selected">-</option>
+        <?php while($rowLC=mysqli_fetch_assoc($loadCells)){ ?>
+          <option 
+            value="<?=$rowLC['id'] ?>" 
+            data-brand="<?=$rowLC['brand_name'] ?>"
+            data-model="<?=$rowLC['model_name'] ?>">
+            <?=$rowLC['load_cell'] ?>
+          </option>
+        <?php } ?>
+      </select>
+    </td>
+    <td>
+      <input type="text" class="form-control" id="loadCellBrand" name="loadCellBrand" readonly>
+    </td>
+    <td>
+      <input type="text" class="form-control" id="loadCellModel" name="loadCellModel" readonly>
+    </td>
+    <td>
+      <select class="form-control select2" style="width: 100%;" id="loadCellCapacity" name="loadCellCapacity" required>
+        <option selected="selected">-</option>
+        <?php while($rowCA2=mysqli_fetch_assoc($capacities2)){ ?>
+          <option value="<?=$rowCA2['id'] ?>"><?=$rowCA2['name'] ?></option>
+        <?php } ?>
+      </select>
+    </td>
+    <td>
+      <input type="text" class="form-control" id="loadCellSerial" name="loadCellSerial" required>
+    </td>
+    <td><button class="btn btn-danger btn-sm" id="remove"><i class="fa fa-times"></i></button></td>
+  </tr>
+</script>
+
 <script>
 var pricingCount = $("#pricingTable").find(".details").length;
+var loadCellCount = $("#loadCellTable").find(".details").length;
 
 $(function () {
   $('#customerNoHidden').hide();
@@ -1504,6 +1675,15 @@ $(function () {
         $('#spinnerLoading').hide();
       });
     }
+
+    if(($('#validator').val() == '10' || $('#validator').val() == '9') && $(this).val() == '1'){
+      $('#addtionalSection').html($('#atkDetails').html());
+      loadCellCount = 0;
+      $("#loadCellTable").html('');
+    }
+    else{
+      $('#addtionalSection').html('');
+    }
   });
 
   $('#extendModal').find('#capacity').on('change', function(){
@@ -1545,6 +1725,15 @@ $(function () {
         }
         $('#spinnerLoading').hide();
       });
+    }
+
+    if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '1'){
+      $('#addtionalSection').html($('#atkDetails').html());
+      loadCellCount = 0;
+      $("#loadCellTable").html('');
+    }
+    else{
+      $('#addtionalSection').html('');
     }
   });
 
@@ -1590,6 +1779,35 @@ $(function () {
     });
 
     pricingCount++;
+  });
+
+  $(document).on('click', '.add-load-cell', function() {
+    var $addContents = $("#loadCellDetails").clone();
+    $("#loadCellTable").append($addContents.html());
+
+    $("#loadCellTable").find('.details:last').attr("id", "detail" + loadCellCount);
+    $("#loadCellTable").find('.details:last').attr("data-index", loadCellCount);
+    $("#loadCellTable").find('#remove:last').attr("id", "remove" + loadCellCount);
+
+    $("#loadCellTable").find('#no:last').attr('name', 'no['+loadCellCount+']').attr("id", "no" + loadCellCount).val((loadCellCount + 1).toString());
+    $("#loadCellTable").find('#loadCells:last').attr('name', 'loadCells['+loadCellCount+']').attr("id", "loadCells" + loadCellCount);
+    $("#loadCellTable").find('#loadCellBrand:last').attr('name', 'loadCellBrand['+loadCellCount+']').attr("id", "loadCellBrand" + loadCellCount);
+    $("#loadCellTable").find('#loadCellModel:last').attr('name', 'loadCellModel['+loadCellCount+']').attr("id", "loadCellModel" + loadCellCount);
+    $("#loadCellTable").find('#loadCellCapacity:last').attr('name', 'loadCellCapacity['+loadCellCount+']').attr("id", "loadCellCapacity" + loadCellCount);
+    $("#loadCellTable").find('#loadCellSerial').attr('name', 'loadCellSerial['+loadCellCount+']').attr("id", "loadCellSerial" + loadCellCount);
+
+    loadCellCount++;
+  });
+
+  // Event delegation: use 'select' instead of 'input' for dropdowns
+  $(document).on('change', 'select[id^="loadCells"]', function(){
+    // Retrieve the selected option's attributes
+    var brand = $(this).find(":selected").attr('data-brand');
+    var model = $(this).find(":selected").attr('data-model');
+
+    // Update the respective inputs for brand and model
+    $(this).closest('.details').find('input[id^="loadCellBrand"]').val(brand);
+    $(this).closest('.details').find('input[id^="loadCellModel"]').val(model);
   });
 });
 
@@ -1816,6 +2034,11 @@ function edit(id) {
         $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
         $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
         $('#extendModal').find('#address1').val(obj.message.address1);
+        
+        setTimeout(function(){
+          $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
+        }, 500);
+
         $('#extendModal').find('#model').val(obj.message.model).trigger('change');
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
@@ -1880,6 +2103,45 @@ function edit(id) {
             pricingCount++;
           }
         }
+
+        if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '1'){
+          $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
+          $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
+          $('#extendModal').find('#kelulusanMSPK').val(obj.message.kelulusan_mspk);
+          $('#extendModal').find('#noMSPK').val(obj.message.no_kelulusan);
+          $('#extendModal').find('#noSerialIndicator').val(obj.message.indicator_serial);
+          $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
+          $('#extendModal').find('#platformType').val(obj.message.platform_type);
+          $('#extendModal').find('#size').val(obj.message.size);
+          $('#extendModal').find('#jenisPelantar').val(obj.message.jenis_pelantar);
+          $('#extendModal').find('#others').val(obj.message.other_info);
+          $('#extendModal').find('#loadCellCountry').val(obj.message.load_cell_country);
+          $('#extendModal').find('#noOfLoadCell').val(obj.message.load_cell_no);
+
+          if(obj.message.load_cells_info.length > 0){
+            $("#loadCellTable").html('');
+            loadCellCount = 0;
+
+            for(var i = 0; i < obj.message.load_cells_info.length; i++){
+              var item = obj.message.load_cells_info[i];
+              var $addContents = $("#loadCellDetails").clone();
+              $("#loadCellTable").append($addContents.html());
+
+              $("#loadCellTable").find('.details:last').attr("id", "detail" + loadCellCount);
+              $("#loadCellTable").find('.details:last').attr("data-index", loadCellCount);
+              $("#loadCellTable").find('#remove:last').attr("id", "remove" + loadCellCount);
+
+              $("#loadCellTable").find('#no:last').attr('name', 'no['+loadCellCount+']').attr("id", "no" + loadCellCount).val(item.no);
+              $("#loadCellTable").find('#loadCells:last').attr('name', 'loadCells['+loadCellCount+']').attr("id", "loadCells" + loadCellCount).val(item.loadCells);
+              $("#loadCellTable").find('#loadCellBrand:last').attr('name', 'loadCellBrand['+loadCellCount+']').attr("id", "loadCellBrand" + loadCellCount).val(item.loadCellBrand);
+              $("#loadCellTable").find('#loadCellModel:last').attr('name', 'loadCellModel['+loadCellCount+']').attr("id", "loadCellModel" + loadCellCount).val(item.loadCellModel);
+              $("#loadCellTable").find('#loadCellCapacity:last').attr('name', 'loadCellCapacity['+loadCellCount+']').attr("id", "loadCellCapacity" + loadCellCount).val(item.loadCellCapacity);
+              $("#loadCellTable").find('#loadCellSerial').attr('name', 'loadCellSerial['+loadCellCount+']').attr("id", "loadCellSerial" + loadCellCount).val(item.loadCellSerial);
+
+              loadCellCount++;
+            }
+          }
+        }
         
         $('#extendModal').modal('show');
 
@@ -1908,6 +2170,10 @@ function edit(id) {
 
         setTimeout(function(){
           $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
+
+          setTimeout(function(){
+            $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
+          }, 500);
         }, 1000);
 
         $('#extendModal').find('#companyText').val('');
@@ -1941,6 +2207,45 @@ function edit(id) {
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
         $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
+
+        if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '1'){
+          $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
+          $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
+          $('#extendModal').find('#kelulusanMSPK').val(obj.message.kelulusan_mspk);
+          $('#extendModal').find('#noMSPK').val(obj.message.no_kelulusan);
+          $('#extendModal').find('#noSerialIndicator').val(obj.message.indicator_serial);
+          $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
+          $('#extendModal').find('#platformType').val(obj.message.platform_type);
+          $('#extendModal').find('#size').val(obj.message.size);
+          $('#extendModal').find('#jenisPelantar').val(obj.message.jenis_pelantar);
+          $('#extendModal').find('#others').val(obj.message.other_info);
+          $('#extendModal').find('#loadCellCountry').val(obj.message.load_cell_country);
+          $('#extendModal').find('#noOfLoadCell').val(obj.message.load_cell_no);
+
+          if(obj.message.load_cells_info.length > 0){
+            $("#loadCellTable").html('');
+            loadCellCount = 0;
+
+            for(var i = 0; i < obj.message.load_cells_info.length; i++){
+              var item = obj.message.load_cells_info[i];
+              var $addContents = $("#loadCellDetails").clone();
+              $("#loadCellTable").append($addContents.html());
+
+              $("#loadCellTable").find('.details:last').attr("id", "detail" + loadCellCount);
+              $("#loadCellTable").find('.details:last').attr("data-index", loadCellCount);
+              $("#loadCellTable").find('#remove:last').attr("id", "remove" + loadCellCount);
+
+              $("#loadCellTable").find('#no:last').attr('name', 'no['+loadCellCount+']').attr("id", "no" + loadCellCount).val(item.no);
+              $("#loadCellTable").find('#loadCells:last').attr('name', 'loadCells['+loadCellCount+']').attr("id", "loadCells" + loadCellCount).val(item.loadCells);
+              $("#loadCellTable").find('#loadCellBrand:last').attr('name', 'loadCellBrand['+loadCellCount+']').attr("id", "loadCellBrand" + loadCellCount).val(item.loadCellBrand);
+              $("#loadCellTable").find('#loadCellModel:last').attr('name', 'loadCellModel['+loadCellCount+']').attr("id", "loadCellModel" + loadCellCount).val(item.loadCellModel);
+              $("#loadCellTable").find('#loadCellCapacity:last').attr('name', 'loadCellCapacity['+loadCellCount+']').attr("id", "loadCellCapacity" + loadCellCount).val(item.loadCellCapacity);
+              $("#loadCellTable").find('#loadCellSerial').attr('name', 'loadCellSerial['+loadCellCount+']').attr("id", "loadCellSerial" + loadCellCount).val(item.loadCellSerial);
+
+              loadCellCount++;
+            }
+          }
+        }
 
         $('#extendModal').modal('show');
 
@@ -2149,5 +2454,4 @@ function displayPreview(data) {
   var previewTable = document.getElementById('previewTable');
   previewTable.innerHTML = htmlTable;
 }
-
 </script>

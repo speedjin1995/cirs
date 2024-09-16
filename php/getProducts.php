@@ -28,6 +28,7 @@ if(isset($_POST['userID'])){
                 $message['jenis_alat'] = $row['jenis_alat'];
                 $message['capacity'] = $row['capacity'];
                 $message['validator'] = $row['validator'];
+                $message['type'] = $row['type'];
                 $message['price'] = $row['price'];
             }
             

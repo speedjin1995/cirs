@@ -30,6 +30,8 @@ if(isset($_POST['userID'])){
                 $message['address1'] = $row['address1'];
                 $message['address2'] = $row['address2'];
                 $message['address3'] = $row['address3'];
+                $message['address4'] = $row['address4'];
+                $message['branch'] = $row['branch'];
                 $message['products'] = $row['products'];
                 $message['stampType'] = $row['stamping_type'];
                 $message['brand'] = $row['brand'];
@@ -63,6 +65,32 @@ if(isset($_POST['userID'])){
                 $message['subtotal_amount'] = $row['subtotal_amount'];
                 $message['status'] = $row['status'];
                 $message['existing_id'] = $row['existing_id'];
+
+                if(($row['validate_by'] == '10' || $row['validate_by'] == '9') && $row['jenis_alat'] == '1'){
+                    if ($update_stmt2 = $db->prepare("SELECT * FROM stamping_ext WHERE stamp_id=?")) {
+                      $update_stmt2->bind_param('s', $row['id']);
+                  
+                      if($update_stmt2->execute()) {
+                        $result2 = $update_stmt2->get_result();
+                  
+                        if($row2 = $result2->fetch_assoc()) {
+                          $message['penentusan_baru'] = $row2['penentusan_baru'] ?? '';
+                          $message['penentusan_semula'] = $row2['penentusan_semula'] ?? '';
+                          $message['kelulusan_mspk'] = $row2['kelulusan_mspk'] ?? '';
+                          $message['no_kelulusan'] = $row2['no_kelulusan'] ?? '';
+                          $message['indicator_serial'] = $row2['indicator_serial'] ?? '';
+                          $message['platform_country'] = $row2['platform_country'] ?? '';
+                          $message['platform_type'] = $row2['platform_type'];
+                          $message['size'] = $row2['size'] ?? '';
+                          $message['jenis_pelantar'] = $row2['jenis_pelantar'] ?? '';
+                          $message['other_info'] = $row2['other_info'] ?? '';
+                          $message['load_cell_country'] = $row2['load_cell_country'] ?? '';
+                          $message['load_cell_no'] = $row2['load_cell_no'] ?? '';
+                          $message['load_cells_info'] = json_decode($row2['load_cells_info'], true);
+                        }
+                      }
+                    }
+                  }
             }
             
             echo json_encode(

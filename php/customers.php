@@ -15,13 +15,13 @@ if(isset($_POST['code'], $_POST['name'])){
     $code = filter_input(INPUT_POST, 'code', FILTER_SANITIZE_STRING);
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
 
-    $address1 = $_POST['address1'];
-    $address2 = $_POST['address2'];
-    $address3 = $_POST['address3'];
-    $address4 = $_POST['address4'];
-    $branchName = $_POST['branch_name'];
-    $mapUrl = $_POST['map_url'];
-    $branchid = $_POST['branch_id'];
+    $address1 = $_POST['address1'] ?? [];
+    $address2 = $_POST['address2'] ?? [];
+    $address3 = $_POST['address3'] ?? [];
+    $address4 = $_POST['address4'] ?? [];
+    $branchName = $_POST['branch_name'] ?? [];
+    $mapUrl = $_POST['map_url'] ?? [];
+    $branchid = $_POST['branch_id'] ?? [];
     $deletedShip = $_POST['deletedShip'] ?? [];
     $deletedBranch = $_POST['deletedBranch'] ?? [];
 
@@ -74,8 +74,8 @@ if(isset($_POST['code'], $_POST['name'])){
                         $addr2 = $address2[$i] ?? '';
                         $addr3 = $address3[$i] ?? '';
                         $addr4 = $address4[$i] ?? '';
-                        $branchName = $branchName[$i] ?? '';
-                        $mapUrl = $mapUrl[$i] ?? '';
+                        $branchName = ($branchName != null && $branchName[$i] != null) ? $branchName[$i] : '';
+                        $mapUrl = ($mapUrl != null && $mapUrl[$i] != null) ? $mapUrl[$i] : '';
 
                         if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, branch_name, map_url) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
                             $insert_stmt2->bind_param('sssssss', $_POST['id'], $addr1, $addr2, $addr3, $addr4, $branchName, $mapUrl);
