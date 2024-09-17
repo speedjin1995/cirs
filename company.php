@@ -880,4 +880,25 @@ function deleteLesenCert(companyid, lesencertid) {
   }
 }
 
+function deleteNmim(companyid, nmimid) {
+  if (confirm('Are you sure you want to cancel this items?')) {
+    $('#spinnerLoading').show();
+    $.post('php/deleteNmim.php', {companyId: companyid, nmimId: nmimid}, function(data){
+      var obj = JSON.parse(data);
+
+      if(obj.status === 'success'){
+        toastr["success"](obj.message, "Success:");
+        $('#nmimTable').DataTable().ajax.reload();
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when activate", "Failed:");
+      }
+      $('#spinnerLoading').hide();
+    });
+  }
+}
+
 </script>
