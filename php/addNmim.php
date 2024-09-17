@@ -59,7 +59,7 @@ if(isset($_POST['id'], $_POST['nmimDetail'], $_POST['nmimApprNo'], $_POST['nmimA
         if ($_FILES['nmimPdf']['error'] === 0) {
             $uploadDir = '../uploads/nmim/'; // Directory to store uploaded files
             $uploadDirDB = '../cirs/uploads/nmim/'; // filepath for db
-            $uploadFile = $uploadDir . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
+            $uploadFile = $uploadDir . '1_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
             $uploadFileDB = $uploadDirDB . '1_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
             
             // Move the uploaded file to the target directory
