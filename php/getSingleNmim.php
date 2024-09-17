@@ -3,12 +3,12 @@ require_once "db_connect.php";
 
 session_start();
 
-if(isset($_POST['companyId'])){
-	$id = filter_input(INPUT_POST, 'companyId', FILTER_SANITIZE_STRING);
-
+if(isset($_POST['companyId']) && isset($_POST['nmimId'])){
+	$companyId = filter_input(INPUT_POST, 'companyId', FILTER_SANITIZE_STRING);
+	$nmimId = filter_input(INPUT_POST, 'nmimId', FILTER_SANITIZE_STRING);
 
     if ($sql = $db->prepare("SELECT nmim FROM companies WHERE id = ?")) {
-        $sql->bind_param('s', $id);
+        $sql->bind_param('s', $companyId);
         
         // Execute the prepared query.
         if (!$sql->execute()) {
@@ -26,21 +26,13 @@ if(isset($_POST['companyId'])){
                 $nmims = json_decode($row['nmim'], true); 
                 if (is_array($nmims)) {
                     foreach ($nmims as $nmim) {
-                        $file_name = basename($nmim['file_path']);
-                        $data[] = array(
-                            $nmim['nmimDetail'],
-                            $nmim['nmimApprNo'],
-                            $nmim['nmimApprDt'],
-                            $nmim['nmimExpDt'],
-                            '<a href="' . $nmim['file_path'] . '" download="' . $file_name . '">
-                                <i class="fa fa-file-pdf-o" style="font-size:150%;color:red"></i>
-                            </a>' 
-                            . 
-                            '<button class="btn" id="editNmim" name="editNmim" onclick="editNmim(' . $id . ', ' . $nmim['id'] . ')">
-                                <i class="fa fa-edit" style="font-size:150%;"></i>
-                            </button>',
-                            $nmim['id']
-                        );
+                        if ($nmim['id'] == $nmimId) { // Check if the nmim id match with $nmimId
+                            $data['nmimDetail'] = $nmim['nmimDetail'];
+                            $data['nmimApprNo'] = $nmim['nmimApprNo'];
+                            $data['nmimApprDt'] = $nmim['nmimApprDt'];
+                            $data['nmimExpDt'] = $nmim['nmimExpDt'];
+                            $data['nmimFilePath'] = $nmim['file_path'];
+                        }
                     }
                 }
             }
