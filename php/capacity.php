@@ -1,5 +1,6 @@
 <?php
 require_once "db_connect.php";
+require_once 'requires/lookup.php';
 
 session_start();
 
@@ -8,10 +9,10 @@ if(!isset($_SESSION['userID'])){
     echo 'window.location.href = "../login.html";</script>';
 }
 
-if(isset($_POST['capacityName'], $_POST['capacity'], $_POST['unit'])){
-    $capacityName = filter_input(INPUT_POST, 'capacityName', FILTER_SANITIZE_STRING);
+if(isset($_POST['capacity'], $_POST['unit'])){
     $capacity = filter_input(INPUT_POST, 'capacity', FILTER_SANITIZE_STRING);
     $unit = filter_input(INPUT_POST, 'unit', FILTER_SANITIZE_STRING);
+    $unitString = searchUnitNameById($unit, $db);
 
     $division = null;
     $dunit = null;
@@ -22,7 +23,10 @@ if(isset($_POST['capacityName'], $_POST['capacity'], $_POST['unit'])){
 
     if(isset($_POST['unitD']) && $_POST['unitD'] != null && $_POST['unitD'] != ''){
         $dunit = filter_input(INPUT_POST, 'unitD', FILTER_SANITIZE_STRING);
+        $dunitString = searchUnitNameById($dunit, $db);
     }
+
+    $capacityName = $capacity.$unitString.' X '.$division.$dunitString;
 
     if($_POST['id'] != null && $_POST['id'] != ''){
         if ($update_stmt = $db->prepare("UPDATE `capacity` SET `name`=?, `capacity`=?, `units`=?, `division`=?, `division_unit`=? WHERE id=?")) {

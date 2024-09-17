@@ -668,7 +668,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               </div>
             </div>
           </div>  
-          <div class="row" id='otherRow' style="display: none;">
+          <div class="row" id='otherRow'>
             <div class="col-6">
               <div class="form-group">
                 <label>Other Reason</label>
@@ -738,13 +738,15 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
           <label for="model">Platform Type *</label>
           <select class="form-control select2" id="platformType" name="platformType" required>
             <option value="" selected disabled hidden>Please Select</option>
-            <option value="Steel">Steel</option>
-            <option value="Concrete">Concrete</option>
+            <option value="MS Steel Deck">MS Steel Deck</option>
+            <option value="Concrete Deck">Concrete Deck</option>
+            <option value="Portable MS Steel Deck">Portable MS Steel Deck</option>
+            <option value="Portable Concrete Deck">Portable Concrete Deck</option>
           </select>
         </div>
         <div class="col-4">
           <div class="form-group">
-            <label>Size * </label>
+            <label>Structure Size * </label>
             <select class="form-control" style="width: 100%;" id="size" name="size" required>
               <option selected="selected">-</option>
               <?php while($rowSI=mysqli_fetch_assoc($sizes)){ ?>
@@ -794,12 +796,12 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
       <table style="width: 100%;">
         <thead>
           <tr>
-            <th width="5%">Bil</th>
-            <th width="20%">Load Cells</th>
-            <th width="20%">Jenama</th>
+            <th width="5%">No.</th>
+            <th width="20%">Load Cells Type</th>
+            <th width="20%">Brand</th>
             <th width="20%">Model</th>
-            <th width="20%">Kapasiti</th>
-            <th width="10%">No. Siri</th>
+            <th width="20%">Load Cell Capacity</th>
+            <th width="10%">Serial No.</th>
             <th width="5%">Delete</th>
           </tr>
         </thead>
@@ -1737,7 +1739,7 @@ $(function () {
     }
   });
 
-  $('#cancelModal').find('#cancellationReason').on('change', function(){
+  /*$('#cancelModal').find('#cancellationReason').on('change', function(){
     if($(this).val() == '0'){
       $('#otherRow').show();
       $('#otherReason').attr("required", true);
@@ -1746,7 +1748,7 @@ $(function () {
       $('#otherRow').hide();
       $('#otherReason').attr("required", false);
     }
-  });
+  });*/
 
   $(".add-price").click(function(){
     var $addContents = $("#pricingDetails").clone();

@@ -76,10 +76,10 @@ else{
                     <div class="form-group">
                         <input type="hidden" class="form-control" id="id" name="id">
                     </div>
-                    <div class="form-group">
+                    <!--div class="form-group">
                         <label for="capacity">Capacity Name *</label>
                         <input type="text" class="form-control" name="capacityName" id="capacityName" placeholder="Enter Capacity Name" required>
-                    </div>
+                    </div-->
                     <div class="form-group">
                         <label for="capacity">Capacity *</label>
                         <input type="number" class="form-control" name="capacity" id="capacity" placeholder="Enter Capacity" required>
@@ -176,9 +176,11 @@ $(function () {
 
     $('#addCapacity').on('click', function(){
         $('#capacityModal').find('#id').val("");
-        $('#capacityModal').find('#capacityName').val("");
+        //$('#capacityModal').find('#capacityName').val("");
         $('#capacityModal').find('#capacity').val("");
         $('#capacityModal').find('#unit').val("");
+        $('#capacityModal').find('#division').val("");
+        $('#capacityModal').find('#unitD').val("");
         $('#capacityModal').modal('show');
         
         $('#capacityForm').validate({
@@ -204,9 +206,11 @@ function edit(id){
         
         if(obj.status === 'success'){
             $('#capacityModal').find('#id').val(obj.message.id);
-            $('#capacityModal').find('#capacityName').val(obj.message.name);
+            //$('#capacityModal').find('#capacityName').val(obj.message.name);
             $('#capacityModal').find('#capacity').val(obj.message.capacity);
             $('#capacityModal').find('#unit').val(obj.message.units);
+            $('#capacityModal').find('#division').val(obj.message.division);
+            $('#capacityModal').find('#unitD').val(obj.message.division_unit);
             $('#capacityModal').modal('show');
             
             $('#capacityForm').validate({

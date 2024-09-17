@@ -284,7 +284,7 @@ to get the desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition sidebar-mini sidebar-collapse">
+<body class="hold-transition sidebar-mini">
 <div class="loading" id="spinnerLoading">
   <div class='uil-ring-css' style='transform:scale(0.79);'>
     <div></div>
@@ -293,7 +293,7 @@ to get the desired effect
 
 <div class="wrapper">
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-primary navbar-light" >
+  <nav class="main-header navbar navbar-expand navbar-primary navbar-light">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -302,7 +302,7 @@ to get the desired effect
     </ul>
   </nav>
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: #3d44c1;">
+  <aside class="main-sidebar sidebar-light-primary elevation-4">
     <!-- Brand Logo -->
     <a href="#" class="brand-link logo-switch">
       <img src="assets/logo.png" alt="Sneakercube Logo" class="brand-image-xl logo-xs">
@@ -434,7 +434,7 @@ to get the desired effect
                   <li class="nav-item">
                     <a href="#dealer" data-file="dealer.php" class="nav-link link">
                       <i class="nav-icon fas fa-user"></i>
-                      <p>Dealer</p>
+                      <p>Reseller</p>
                     </a>
                   </li>
                   <li class="nav-item">
@@ -500,7 +500,7 @@ to get the desired effect
                   <li class="nav-item">
                     <a href="#units" data-file="units.php" class="nav-link link">
                       <i class="nav-icon fas fa-balance-scale"></i>
-                      <p>Units</p>
+                      <p>Unit of Measurement</p>
                     </a>
                   </li>
                   <li class="nav-item">

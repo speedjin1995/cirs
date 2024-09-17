@@ -646,7 +646,7 @@ else{
               </div>
             </div>
           </div>  
-          <div class="row" id='otherRow' style="display: none;">
+          <div class="row" id='otherRow'>
             <div class="col-6">
               <div class="form-group">
                 <label>Other Reason</label>
@@ -941,7 +941,7 @@ $(function () {
     }
   });
 
-  $('#cancelModal').find('#cancellationReason').on('change', function(){
+  /*$('#cancelModal').find('#cancellationReason').on('change', function(){
     if($(this).val() == '0'){
       $('#otherRow').show();
       $('#otherReason').attr("required", true);
@@ -950,7 +950,7 @@ $(function () {
       $('#otherRow').hide();
       $('#otherReason').attr("required", false);
     }
-  });
+  });*/
   
   $('#filterSearch').on('click', function(){
     //$('#spinnerLoading').show();

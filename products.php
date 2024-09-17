@@ -21,7 +21,7 @@ else{
     <div class="container-fluid">
         <div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0 text-dark">Products</h1>
+				<h1 class="m-0 text-dark">Products/Prices</h1>
 			</div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -47,8 +47,8 @@ else{
 							<thead>
 								<tr>
                                     <th>No.</th>
-									<th>Name</th>
-                                    <th>Machine Type</th>
+									<!--th>Name</th-->
+                                    <!--th>Machine Type</th-->
                                     <th>Jenis Alat</th>
                                     <th>Capacity</th>
                                     <th>Validator</th>
@@ -79,7 +79,7 @@ else{
                     <div class="form-group">
                         <input type="hidden" class="form-control" id="id" name="id">
                     </div>
-                    <div class="form-group">
+                    <!--div class="form-group">
                         <label for="capacity">Product Name *</label>
                         <input type="text" class="form-control" name="capacityName" id="capacityName" placeholder="Enter Capacity Name" required>
                     </div>
@@ -91,7 +91,7 @@ else{
                                 <option value="<?=$rowS['id'] ?>"><?=$rowS['machine_type'] ?></option>
                             <?php } ?>
                         </select>
-                    </div>
+                    </div-->
                     <div class="form-group">
                         <label>Jenis Alat </label>
                         <select class="form-control" style="width: 100%;" id="jenisAlat" name="jenisAlat">
@@ -158,9 +158,9 @@ $(function () {
         },
         'columns': [
             { data: 'counter' },
-            { data: 'name' },
-            { data: 'machine_type' },
-            { data: 'alat' },
+            //{ data: 'name' },
+            //{ data: 'machine_type' },
+            { data: 'jenis_alat' },
             { data: 'capacity' },
             { data: 'validator' },
             { data: 'price' },
@@ -202,8 +202,8 @@ $(function () {
 
     $('#addCapacity').on('click', function(){
         $('#capacityModal').find('#id').val("");
-        $('#capacityModal').find('#capacityName').val("");
-        $('#capacityModal').find('#machineType').val("");
+        //$('#capacityModal').find('#capacityName').val("");
+        //$('#capacityModal').find('#machineType').val("");
         $('#capacityModal').find('#jenisAlat').val("");
         $('#capacityModal').find('#capacity').val("");
         $('#capacityModal').find('#validator').val("");
@@ -234,8 +234,8 @@ function edit(id){
         
         if(obj.status === 'success'){
             $('#capacityModal').find('#id').val(obj.message.id);
-            $('#capacityModal').find('#capacityName').val(obj.message.name);
-            $('#capacityModal').find('#machineType').val(obj.message.machine_type);
+            //$('#capacityModal').find('#capacityName').val(obj.message.name);
+            //$('#capacityModal').find('#machineType').val(obj.message.machine_type);
             $('#capacityModal').find('#jenisAlat').val(obj.message.jenis_alat);
             $('#capacityModal').find('#capacity').val(obj.message.capacity);
             $('#capacityModal').find('#validator').val(obj.message.validator);
@@ -269,7 +269,7 @@ function edit(id){
 
 function deactivate(id){
     $('#spinnerLoading').show();
-    $.post('php/deleteCapacity.php', {userID: id}, function(data){
+    $.post('php/deleteProducts.php', {userID: id}, function(data){
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){

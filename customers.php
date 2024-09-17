@@ -84,7 +84,7 @@ else{
                   </div>
                   <div class="form-group col-6">
                     <label for="code">Customer Code *</label>
-                    <input type="text" class="form-control" name="code" id="code" placeholder="Enter Customer Code" maxlength="10" required>
+                    <input type="text" class="form-control" name="code" id="code" placeholder="Enter Customer Code" maxlength="10">
                   </div>
                   <div class="form-group col-6">
                     <label for="name">Customer Name *</label>
@@ -106,13 +106,13 @@ else{
                 <table style="width: 100%;">
                   <thead>
                     <tr>
-                        <th>Branch Name</th>
-                        <th>Address 1</th>
-                        <th>Address 2</th>
-                        <th>Address 3</th>
-                        <th>Address 4</th>
-                        <th>Map URL</th>
-                        <th>Delete</th>
+                      <th>Branch Name</th>
+                      <th>Address 1</th>
+                      <th>Address 2</th>
+                      <th>Address 3</th>
+                      <th>Address 4</th>
+                      <th>Map URL</th>
+                      <th>Delete</th>
                     </tr>
                   </thead>
                   <tbody id="pricingTable"></tbody>
@@ -293,7 +293,7 @@ $(function () {
   });
 });
 
-function format(row) {
+function format(row){
   var returnString = "";
 
   if (row.log.length > 0) {
@@ -301,7 +301,13 @@ function format(row) {
     
     for (var i = 0; i < row.log.length; i++) {
       var item = row.log[i];
-      returnString += '<tr><td>' + (i + 1) + '</td><td><a href="'+item.mapurl+'">'+item.branchname+'</a></td><td>' + item.address1 + '</td><td>' + item.address2 + '</td><td>' + item.address3 + '</td><td>' + item.address4 + '</td></tr>'
+
+      // Check if mapurl is not null
+      var branchNameWithMapIcon = item.mapurl 
+        ? '<a href="' + item.mapurl + '">' + item.branchname + ' <i class="fa fa-map-marker"></i></a>' 
+        : item.branchname;
+
+      returnString += '<tr><td>' + (i + 1) + '</td><td>' + branchNameWithMapIcon + '</td><td>' + item.address1 + '</td><td>' + item.address2 + '</td><td>' + item.address3 + '</td><td>' + item.address4 + '</td></tr>';
     }
 
     returnString += '</tbody></table>';
@@ -341,6 +347,8 @@ function edit(id){
               $("#pricingTable").find('#address3:last').attr('name', 'address3['+pricingCount+']').attr("id", "address3" + pricingCount).val(weightData[i].address3);
               $("#pricingTable").find('#address4:last').attr('name', 'address4['+pricingCount+']').attr("id", "address4" + pricingCount).val(weightData[i].address4);
               $("#pricingTable").find('#branch_id:last').attr('name', 'branch_id['+pricingCount+']').attr("id", "branch_id" + pricingCount).val(weightData[i].branchid);
+              $("#pricingTable").find('#map_url:last').attr('name', 'map_url['+pricingCount+']').attr("id", "map_url" + pricingCount).val(weightData[i].map_url);
+              $("#pricingTable").find('#branch_name:last').attr('name', 'branch_name['+pricingCount+']').attr("id", "branch_name" + pricingCount).val(weightData[i].name);
 
               pricingCount++;
             }
@@ -371,23 +379,23 @@ function edit(id){
 }
 
 function deactivate(id){
-    $('#spinnerLoading').show();
-    $.post('php/deleteCustomer.php', {userID: id}, function(data){
-        var obj = JSON.parse(data);
-        
-        if(obj.status === 'success'){
-            toastr["success"](obj.message, "Success:");
-            $('#customerTable').DataTable().ajax.reload();
-            $('#spinnerLoading').hide();
-        }
-        else if(obj.status === 'failed'){
-            toastr["error"](obj.message, "Failed:");
-            $('#spinnerLoading').hide();
-        }
-        else{
-            toastr["error"]("Something wrong when activate", "Failed:");
-            $('#spinnerLoading').hide();
-        }
-    });
+  $('#spinnerLoading').show();
+  $.post('php/deleteCustomer.php', {userID: id}, function(data){
+    var obj = JSON.parse(data);
+    
+    if(obj.status === 'success'){
+      toastr["success"](obj.message, "Success:");
+      $('#customerTable').DataTable().ajax.reload();
+      $('#spinnerLoading').hide();
+    }
+    else if(obj.status === 'failed'){
+      toastr["error"](obj.message, "Failed:");
+      $('#spinnerLoading').hide();
+    }
+    else{
+      toastr["error"]("Something wrong when activate", "Failed:");
+      $('#spinnerLoading').hide();
+    }
+  });
 }
 </script>

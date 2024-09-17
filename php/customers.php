@@ -11,8 +11,7 @@ else{
     $userId = $_SESSION['userID'];
 }
 
-if(isset($_POST['code'], $_POST['name'])){
-    $code = filter_input(INPUT_POST, 'code', FILTER_SANITIZE_STRING);
+if(isset($_POST['name'])){
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
 
     $address1 = $_POST['address1'] ?? [];
@@ -27,9 +26,14 @@ if(isset($_POST['code'], $_POST['name'])){
 
     //$address3 = "";
     //$address4 = "";
+    $code = null;
     $email = null;
     $phone = null;
     $dealer = null;
+
+    if(isset($_POST['code'] ) && $_POST['code'] != null && $_POST['code'] != ""){
+        $code = filter_input(INPUT_POST, 'code', FILTER_SANITIZE_STRING);
+    }
 
     if(isset($_POST['email'] ) && $_POST['email'] != null && $_POST['email'] != ""){
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
@@ -74,11 +78,11 @@ if(isset($_POST['code'], $_POST['name'])){
                         $addr2 = $address2[$i] ?? '';
                         $addr3 = $address3[$i] ?? '';
                         $addr4 = $address4[$i] ?? '';
-                        $branchName = ($branchName != null && $branchName[$i] != null) ? $branchName[$i] : '';
-                        $mapUrl = ($mapUrl != null && $mapUrl[$i] != null) ? $mapUrl[$i] : '';
+                        $branchNameValue = isset($branchName[$i]) ? $branchName[$i] : '';
+                        $mapUrlValue = isset($mapUrl[$i]) ? $mapUrl[$i] : '';
 
                         if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, branch_name, map_url) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
-                            $insert_stmt2->bind_param('sssssss', $_POST['id'], $addr1, $addr2, $addr3, $addr4, $branchName, $mapUrl);
+                            $insert_stmt2->bind_param('sssssss', $_POST['id'], $addr1, $addr2, $addr3, $addr4, $branchNameValue, $mapUrlValue);
                             $insert_stmt2->execute();
                             $insert_stmt2->close();
                         } 
@@ -125,14 +129,14 @@ if(isset($_POST['code'], $_POST['name'])){
                         $addr2 = $address2[$i] ?? '';
                         $addr3 = $address3[$i] ?? '';
                         $addr4 = $address4[$i] ?? '';
-                        $branchName = $branchName[$i] ?? '';
-                        $mapUrl = $mapUrl[$i] ?? '';
+                        // Use separate variables for current index values
+                        $branchNameValue = isset($branchName[$i]) ? $branchName[$i] : '';
+                        $mapUrlValue = isset($mapUrl[$i]) ? $mapUrl[$i] : '';
 
                         if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, branch_name, map_url) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
-                            // Bind parameters using variables (which are references)
-                            $insert_stmt2->bind_param('issssss', $invid, $addr1, $addr2, $addr3, $addr4, $branchName, $mapUrl);
-                            $insert_stmt2->execute(); // Execute the statement
-                            $insert_stmt2->close(); // Close the insert statement for this loop iteration
+                            $insert_stmt2->bind_param('sssssss', $_POST['id'], $addr1, $addr2, $addr3, $addr4, $branchNameValue, $mapUrlValue);
+                            $insert_stmt2->execute();
+                            $insert_stmt2->close();
                         }
                     }
                 }

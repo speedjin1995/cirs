@@ -8,11 +8,11 @@ if(!isset($_SESSION['userID'])){
     echo 'window.location.href = "../login.html";</script>';
 }
 
-if(isset($_POST['capacityName'], $_POST['type'], $_POST['price'])){
-    $capacityName = filter_input(INPUT_POST, 'capacityName', FILTER_SANITIZE_STRING);
+if(isset($_POST['type'], $_POST['price'])){
     $type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
     $price = filter_input(INPUT_POST, 'price', FILTER_SANITIZE_STRING);
 
+    $capacityName = null;
     $machineType = null;
     $jenisAlat = null;
     $capacity = null;
@@ -36,7 +36,7 @@ if(isset($_POST['capacityName'], $_POST['type'], $_POST['price'])){
 
     if(isset($_POST['id']) && $_POST['id'] != null && $_POST['id'] != ''){
         if ($update_stmt = $db->prepare("UPDATE products SET name=?, machine_type=?, jenis_alat=?, capacity=?, validator=?, type=?, price=? WHERE id=?")) {
-            $update_stmt->bind_param('ssssssss', $capacityName, $machineType, $jenisAlat, $capacity, $validator, $price, $type, $_POST['id']);
+            $update_stmt->bind_param('ssssssss', $capacityName, $machineType, $jenisAlat, $capacity, $validator, $type, $price, $_POST['id']);
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
