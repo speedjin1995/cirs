@@ -20,7 +20,7 @@ if(isset($_POST['companyId'])){
         }
         else{
             $result = $sql->get_result();                 
-            $data = array();
+            $data = array(); 
             
             while ($row = $result->fetch_assoc()) {
                 $nmims = json_decode($row['nmim'], true); 
@@ -32,9 +32,26 @@ if(isset($_POST['companyId'])){
                             $nmim['nmimApprNo'],
                             $nmim['nmimApprDt'],
                             $nmim['nmimExpDt'],
-                            '<a href="' . $nmim['file_path'] . '" download="' . $file_name . '">
-                                <i class="fa fa-file-pdf-o" style="font-size:150%;color:red"></i>
-                            </a>'
+                            '<div class="row">'
+                            .
+                            //Download Button
+                            '<div class="col-2">
+                                <a href="' . $nmim['file_path'] . '" download="' . $file_name . '" class="btn btn-success btn-sm" role="button">
+                                    <i class="fa fa-file-pdf-o"></i>
+                                </a>
+                            </div>'
+                            . 
+                            //Edit Button
+                            '<div class="col-2"><button title="edit" type="button" id="editNmim" name="editNmim" onclick="editNmim(' . $id . ', ' . $nmim['id'] . ')" class="btn btn-warning btn-sm">
+                                <i class="fas fa-pen"></i>
+                            </button></div>'
+                            . 
+                            //Delete Button
+                            '<div class="col-2"><button title="delete" type="button" id="deleteNmim" name="deleteNmim"  onclick="deleteNmim(' . $id . ', ' . $nmim['id'] . ')"" class="btn btn-danger btn-sm">X</button></div>'
+                            .
+                            '</div>'
+                            ,
+                            $nmim['id']
                         );
                     }
                 }

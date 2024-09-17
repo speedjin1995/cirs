@@ -32,9 +32,26 @@ if(isset($_POST['companyId'])){
                             $lesenCert['lesenCertSerialNo'],
                             $lesenCert['lesenCertApprDt'],
                             $lesenCert['lesenCertExpDt'],
-                            '<a href="' . $lesenCert['file_path'] . '" download="' . $file_name . '">
-                                <i class="fa fa-file-pdf-o" style="font-size:150%;color:red"></i>
-                            </a>'
+                            '<div class="row">'
+                            .
+                            //Download Button
+                            '<div class="col-2">
+                                <a href="' . $lesenCert['file_path'] . '" download="' . $file_name . '" class="btn btn-success btn-sm" role="button">
+                                    <i class="fa fa-file-pdf-o"></i>
+                                </a>
+                            </div>'
+                            . 
+                            //Edit Button
+                            '<div class="col-2"><button title="edit" type="button" id="editLesenCert" name="editLesenCert" onclick="editLesenCert(' . $id . ', ' . $lesenCert['id'] . ')" class="btn btn-warning btn-sm">
+                                <i class="fas fa-pen"></i>
+                            </button></div>'
+                            . 
+                            //Delete Button
+                            '<div class="col-2"><button title="delete" type="button" id="deleteLesenCert" name="deleteLesenCert"  onclick="deleteLesenCert(' . $id . ', ' . $lesenCert['id'] . ')"" class="btn btn-danger btn-sm">X</button></div>'
+                            .
+                            '</div>'
+                            ,
+                            $lesenCert['id']
                         );
                     }
                 }

@@ -16,24 +16,6 @@ if(isset($_POST['id'], $_POST['lesenCertDetail'], $_POST['lesenCertSerialNo'], $
         'lesenCertExpDt' => $lesenCertExpDt,
     ];
 
-    // Check if file was uploaded
-    if ($_FILES['lesenCertPdf']['error'] === 0) {
-        $uploadDir = '../uploads/lesenCert/'; // Directory to store uploaded files
-        $uploadDirDB = '../cirs/uploads/lesenCert/'; // filepath for db
-        $uploadFile = $uploadDir . $lesenCertDetail . '_' . $lesenCertSerialNo . '_'. basename($_FILES['lesenCertPdf']['name']);
-        $uploadFileDB = $uploadDirDB . $lesenCertDetail . '_' . $lesenCertSerialNo . '_'. basename($_FILES['lesenCertPdf']['name']);
-        
-        // Move the uploaded file to the target directory
-        if (move_uploaded_file($_FILES['lesenCertPdf']['tmp_name'], $uploadFile)) {
-            $response['file_status'] = "File successfully uploaded.";
-            $data['file_path'] = $uploadFileDB; // Add file path to data
-        } else {
-            $response['file_status'] = "File upload failed.";
-        }
-    } else {
-        $response['file_status'] = "No file uploaded or there was an error.";
-    }
-
     // Retrieve existing certificate data
     $stmt = $db->prepare("SELECT lesen_cert FROM companies WHERE id = ?");
     $stmt->bind_param('s', $id);
@@ -47,10 +29,52 @@ if(isset($_POST['id'], $_POST['lesenCertDetail'], $_POST['lesenCertSerialNo'], $
     if(!empty($existCertLesenJson) && !is_null($existCertLesenJson)){
         $dataArray = json_decode($existCertLesenJson, true);
         if (json_last_error() === JSON_ERROR_NONE) {
+            $prevId = end($dataArray)['id'];
+            $newId = $prevId + 1;
+            $data = array_merge(['id' => $newId], $data); 
+
+            // Check if file was uploaded
+            if ($_FILES['lesenCertPdf']['error'] === 0) {
+                $uploadDir = '../uploads/lesenCert/'; // Directory to store uploaded files
+                $uploadDirDB = '../cirs/uploads/lesenCert/'; // filepath for db
+                $uploadFile = $uploadDir . $newId . '_' . $lesenCertDetail . '_' . $lesenCertSerialNo . '_'. basename($_FILES['lesenCertPdf']['name']);
+                $uploadFileDB = $uploadDirDB . $newId . '_' . $lesenCertDetail . '_' . $lesenCertSerialNo . '_'. basename($_FILES['lesenCertPdf']['name']);
+                
+                // Move the uploaded file to the target directory
+                if (move_uploaded_file($_FILES['lesenCertPdf']['tmp_name'], $uploadFile)) {
+                    $response['file_status'] = "File successfully uploaded.";
+                    $data['file_path'] = $uploadFileDB; // Add file path to data
+                } else {
+                    $response['file_status'] = "File upload failed.";
+                }
+            } else {
+                $response['file_status'] = "No file uploaded or there was an error.";
+            }
+
             $dataArray[] = $data;
             $dataJson = json_encode($dataArray, JSON_PRETTY_PRINT);
         }
     } else {
+        $data = array_merge(['id' => 1], $data);  // Prepend 'id' to the array
+
+        // Check if file was uploaded
+        if ($_FILES['lesenCertPdf']['error'] === 0) {
+            $uploadDir = '../uploads/lesenCert/'; // Directory to store uploaded files
+            $uploadDirDB = '../cirs/uploads/lesenCert/'; // filepath for db
+            $uploadFile = $uploadDir . '1_' . $lesenCertDetail . '_' . $lesenCertSerialNo . '_'. basename($_FILES['lesenCertPdf']['name']);
+            $uploadFileDB = $uploadDirDB . '1_' . $lesenCertDetail . '_' . $lesenCertSerialNo . '_'. basename($_FILES['lesenCertPdf']['name']);
+            
+            // Move the uploaded file to the target directory
+            if (move_uploaded_file($_FILES['lesenCertPdf']['tmp_name'], $uploadFile)) {
+                $response['file_status'] = "File successfully uploaded.";
+                $data['file_path'] = $uploadFileDB; // Add file path to data
+            } else {
+                $response['file_status'] = "File upload failed.";
+            }
+        } else {
+            $response['file_status'] = "No file uploaded or there was an error.";
+        }
+
         $dataJson = json_encode([$data], JSON_PRETTY_PRINT);
     }
 

@@ -16,24 +16,6 @@ if(isset($_POST['id'], $_POST['nmimDetail'], $_POST['nmimApprNo'], $_POST['nmimA
         'nmimExpDt' => $nmimExpDt,
     ];
 
-    // Check if file was uploaded
-    if ($_FILES['nmimPdf']['error'] === 0) {
-        $uploadDir = '../uploads/nmim/'; // Directory to store uploaded files
-        $uploadDirDB = '../cirs/uploads/nmim/'; // filepath for db
-        $uploadFile = $uploadDir . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
-        $uploadFileDB = $uploadDirDB . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
-        
-        // Move the uploaded file to the target directory
-        if (move_uploaded_file($_FILES['nmimPdf']['tmp_name'], $uploadFile)) {
-            $response['file_status'] = "File successfully uploaded.";
-            $data['file_path'] = $uploadFileDB; // Add file path to data
-        } else {
-            $response['file_status'] = "File upload failed.";
-        }
-    } else {
-        $response['file_status'] = "No file uploaded or there was an error.";
-    }
-
     // Retrieve existing certificate data
     $stmt = $db->prepare("SELECT nmim FROM companies WHERE id = ?");
     $stmt->bind_param('s', $id);
@@ -47,10 +29,50 @@ if(isset($_POST['id'], $_POST['nmimDetail'], $_POST['nmimApprNo'], $_POST['nmimA
     if(!empty($existNmimJson) && !is_null($existNmimJson)){
         $dataArray = json_decode($existNmimJson, true);
         if (json_last_error() === JSON_ERROR_NONE) {
+            $prevId = end($dataArray)['id'];
+            $newId = $prevId + 1;
+            $data = array_merge(['id' => $newId], $data); 
+            // Check if file was uploaded
+            if ($_FILES['nmimPdf']['error'] === 0) {
+                $uploadDir = '../uploads/nmim/'; // Directory to store uploaded files
+                $uploadDirDB = '../cirs/uploads/nmim/'; // filepath for db
+                $uploadFile = $uploadDir . $newId . '_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
+                $uploadFileDB = $uploadDirDB . $newId . '_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
+                
+                // Move the uploaded file to the target directory
+                if (move_uploaded_file($_FILES['nmimPdf']['tmp_name'], $uploadFile)) {
+                    $response['file_status'] = "File successfully uploaded.";
+                    $data['file_path'] = $uploadFileDB; // Add file path to data
+                } else {
+                    $response['file_status'] = "File upload failed.";
+                }
+            } else {
+                $response['file_status'] = "No file uploaded or there was an error.";
+            }
+
             $dataArray[] = $data;
             $dataJson = json_encode($dataArray, JSON_PRETTY_PRINT);
         }
     } else {
+        $data = array_merge(['id' => 1], $data);  // Prepend 'id' to the array
+        // Check if file was uploaded
+        if ($_FILES['nmimPdf']['error'] === 0) {
+            $uploadDir = '../uploads/nmim/'; // Directory to store uploaded files
+            $uploadDirDB = '../cirs/uploads/nmim/'; // filepath for db
+            $uploadFile = $uploadDir . '1_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
+            $uploadFileDB = $uploadDirDB . '1_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
+            
+            // Move the uploaded file to the target directory
+            if (move_uploaded_file($_FILES['nmimPdf']['tmp_name'], $uploadFile)) {
+                $response['file_status'] = "File successfully uploaded.";
+                $data['file_path'] = $uploadFileDB; // Add file path to data
+            } else {
+                $response['file_status'] = "File upload failed.";
+            }
+        } else {
+            $response['file_status'] = "No file uploaded or there was an error.";
+        }
+
         $dataJson = json_encode([$data], JSON_PRETTY_PRINT);
     }
 
