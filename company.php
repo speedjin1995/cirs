@@ -241,6 +241,73 @@ else{
 		</div>
 	</div>
 
+	<div class="modal fade" id="editLesenCertModal">
+		<div class="modal-dialog modal-xl" style="max-width: 40%;">
+			<div class="modal-content">
+				<form role="form" id="editLesenCertForm" enctype="multipart/form-data">
+					<div class="modal-header bg-gray-dark color-palette">
+						<h4 class="modal-title"><b>Add Certificate No.Lesen</b></h4>
+						<button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+					<div class="modal-body">
+						<input type="hidden" class="form-control" id="id" name="id">
+						<input type="hidden" class="form-control" id="lesenCertId" name="lesenCertId">
+						<input type="hidden" class="form-control" id="lesenCertFilePath" name="lesenCertFilePath">
+
+						<div class="row">
+							<div class="col-12">
+								<div class="form-group">
+									<label>Details *</label>
+									<input type="text" class="form-control" id="lesenCertDetail" name="lesenCertDetail" required>
+								</div>
+							</div>
+						</div>  
+						<div class="row">
+							<div class="col-12">
+								<div class="form-group">
+									<label>Serial No *</label>
+									<input type="text" class="form-control" id="lesenCertSerialNo" name="lesenCertSerialNo" required>
+								</div>
+							</div>
+						</div>  
+						<div class="row">
+							<div class="col-12">
+								<div class="form-group">
+									<label>Approval Date *</label>
+									<input type="date" class="form-control" id="lesenCertApprDt" name="lesenCertApprDt" required>
+								</div>
+							</div>
+						</div>  
+						<div class="row">
+							<div class="col-12">
+								<div class="form-group">
+									<label>Expire Date *</label>
+									<input type="date" class="form-control" id="lesenCertExpDt" name="lesenCertExpDt" required>
+								</div>
+							</div>
+						</div>  
+						<div class="row">
+							<div class="col-12">
+								<div class="form-group">
+									<label>Upload PDF *</label>
+									<input type="file" class="form-control" id="lesenCertPdf" name="lesenCertPdf">
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="modal-footer justify-content-between bg-gray-dark color-palette">
+						<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
 	<div class="row">
       <div class="col-lg-12">
         <div class="card card-primary">
@@ -433,14 +500,7 @@ $(function () {
 			}
 		},
 		'columns': [
-			{
-				data: null, // No data for this column, Auto increment Column
-				className: 'dt-center',
-				render: function (data, type, row, meta) {
-					// meta.row gives you the index of the row (0-based)
-					return meta.row + 1; // Auto-incrementing value starts from 1
-				},
-			},
+			{ data: 5 },
 			{ data: 0 },  
             { data: 1 }, 
             { data: 2 }, 
@@ -470,6 +530,38 @@ $(function () {
 					$('#addLesenCertModal').modal('hide');
 					toastr["success"](obj.message, "Success:");
 					// $('#lesenCertTable').DataTable().ajax.reload();
+					location.reload(); // Reload the page
+				} else {
+					toastr["error"](obj.message, "Failed:");
+				}
+				$('#spinnerLoading').hide();
+				isModalOpen = false; // Set flag to false on error as well
+			},
+			error: function(xhr, status, error) {
+				console.error("AJAX request failed:", status, error);
+				toastr["error"]("An error occurred while processing the request.", "Failed:");
+				$('#spinnerLoading').hide();
+				isModalOpen = false; // Set flag to false on error as well
+			}
+		});
+	});
+
+	// Bind form submission handler once
+	$('#editLesenCertForm').off('submit').on('submit', function(e) {
+		e.preventDefault(); 
+		var formData = new FormData(this);
+		$.ajax({
+			url: 'php/editLesenCert.php',
+			type: 'POST',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function(data) {
+				var obj = JSON.parse(data); 
+				if (obj.status === 'success') {
+					$('#editLesenCertModal').modal('hide');
+					toastr["success"](obj.message, "Success:");
+					// $('#nmimTable').DataTable().ajax.reload();
 					location.reload(); // Reload the page
 				} else {
 					toastr["error"](obj.message, "Failed:");
@@ -664,6 +756,47 @@ function newLesenCert(id){
 	$('#spinnerLoading').hide();
 }
 
+function editLesenCert(companyid, lesencertid){
+	$('#spinnerLoading').show();
+	$.post('php/getSingleLesenCert.php', {companyId: companyid, lesenCertId: lesencertid}, function(data){
+        var obj = JSON.parse(data);
+		console.log(obj);
+        
+        if(obj.status === 'success'){
+			$('#editLesenCertModal').find('#id').val(companyid);
+			$('#editLesenCertModal').find('#lesenCertId').val(lesencertid);
+			$('#editLesenCertModal').find('#lesenCertDetail').val(obj.message.lesenCertDetail);
+			$('#editLesenCertModal').find('#lesenCertSerialNo').val(obj.message.lesenCertSerialNo);
+			$('#editLesenCertModal').find('#lesenCertApprDt').val(obj.message.lesenCertApprDt);
+			$('#editLesenCertModal').find('#lesenCertExpDt').val(obj.message.lesenCertExpDt);
+			$('#editLesenCertModal').find('#lesenCertFilePath').val(obj.message.lesenCertFilePath);
+			$('#editLesenCertModal').modal('show');
+			isModalOpen = true; // Set flag to true when modal is shown
+            
+            // $('#customerForm').validate({
+            //     errorElement: 'span',
+            //     errorPlacement: function (error, element) {
+            //         error.addClass('invalid-feedback');
+            //         element.closest('.form-group').append(error);
+            //     },
+            //     highlight: function (element, errorClass, validClass) {
+            //         $(element).addClass('is-invalid');
+            //     },
+            //     unhighlight: function (element, errorClass, validClass) {
+            //         $(element).removeClass('is-invalid');
+            //     }
+            // });
+        }
+        else if(obj.status === 'failed'){
+            toastr["error"](obj.message, "Failed:");
+        }
+        else{
+            toastr["error"]("Something wrong when activate", "Failed:");
+        }
+        $('#spinnerLoading').hide();
+    });
+}
+
 function addNmim(id){
 	$('#spinnerLoading').show();
 	$('#addNmimModal').find('#id').val(id);
@@ -725,4 +858,5 @@ function editNmim(companyid, nmimid){
         $('#spinnerLoading').hide();
     });
 }
+
 </script>

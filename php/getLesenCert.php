@@ -35,6 +35,11 @@ if(isset($_POST['companyId'])){
                             '<a href="' . $lesenCert['file_path'] . '" download="' . $file_name . '">
                                 <i class="fa fa-file-pdf-o" style="font-size:150%;color:red"></i>
                             </a>'
+                            . 
+                            '<button class="btn" id="editLesenCert" name="editLesenCert" onclick="editLesenCert(' . $id . ', ' . $lesenCert['id'] . ')">
+                                <i class="fa fa-edit" style="font-size:150%;"></i>
+                            </button>',
+                            $lesenCert['id']
                         );
                     }
                 }
