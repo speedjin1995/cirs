@@ -45,7 +45,7 @@ if(isset($_POST['id'], $_POST['lesenCertId'], $_POST['lesenCertFilePath'], $_POS
                                 // Move the uploaded file to the target directory
                                 if (move_uploaded_file($_FILES['lesenCertPdf']['tmp_name'], $uploadFile)) {
                                     $response['file_status'] = "File successfully uploaded.";
-                                    $nmim['file_path'] = $uploadFileDB; // Add file path to data
+                                    $lesenCert['file_path'] = $uploadFileDB; // Add file path to data
                                 } else {
                                     $response['file_status'] = "File upload failed.";
                                 }
