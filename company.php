@@ -138,7 +138,32 @@ else{
 					<label for="tarikh_dikeluarkan">Tarikh Dikeluarkan </label>
 					<input type="date" class="form-control" id="tarikh_dikeluarkan" name="tarikh_dikeluarkan" value="<?=$data['tarikh_dikeluarkan'] ?>">
 				</div>
-                
+
+				<section class="mt-4">
+					<header class="mb-4">
+						<h6 class="display-4">Engineer / Technician</h6>
+					</header>
+					<div class="form-group">
+						<label for="engineer_name">Name of Engineer / Technician </label>
+						<input type="text" class="form-control" id="engineer_name" name="engineer_name" value="<?=$data['engineer_name'] ?>" placeholder="Enter Name of Engineer / Technician">
+					</div>
+
+					<div class="form-group">
+						<label for="engineer_ic">Engineer IC No. </label>
+						<input type="text" class="form-control" id="engineer_ic" name="engineer_ic" value="<?=$data['engineer_ic'] ?>" placeholder="Enter Engineer / Technician Identification No.">
+					</div>
+
+					<div class="form-group">
+						<label for="engineer_position">Position </label>
+						<input type="text" class="form-control" id="engineer_position" name="engineer_position" value="<?=$data['engineer_position'] ?>" placeholder="Enter Engineer / Technician Position">
+					</div>
+
+					<div class="form-group">
+						<label for="engineer_contact">Contact </label>
+						<input type="text" class="form-control" id="engineer_contact" name="engineer_contact" value="<?=$data['engineer_contact'] ?>" placeholder="Enter Engineer / Technician Contact No.">
+					</div>
+				</section>
+
 			</div>
 			
 			<div class="card-footer">
