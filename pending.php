@@ -191,9 +191,9 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
           <div class="row">
             <div class="col-4">
               <div class="form-group">
-                <label>Own / Reseller * </label>
+                <label>Direct Customer / Reseller * </label>
                 <select class="form-control" style="width: 100%;" id="type" name="type" required>
-                  <option value="OWN">OWN</option>
+                  <option value="DIRECT">DIRECT CUSTOMER</option>
                   <option value="RESELLER">RESELLER</option>
                 </select>
               </div>

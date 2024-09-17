@@ -100,7 +100,7 @@ else{
                   </div>
                 </div><hr>
                 <div class="row">
-                  <h4>Branches & Address</h4>
+                  <h4>Customer Branches & Address</h4>
                   <button style="margin-left:auto;margin-right: 25px;" type="button" class="btn btn-primary add-price">Add Branch</button>
                 </div>
                 <table style="width: 100%;">

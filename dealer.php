@@ -74,11 +74,11 @@ else{
                   <input type="hidden" class="form-control" id="id" name="id">
                 </div>
                 <div class="form-group">
-                  <label for="code">Dealer Code *</label>
+                  <label for="code">Reseller Code *</label>
                   <input type="text" class="form-control" name="code" id="code" placeholder="Enter Customer Code" maxlength="10" required>
                 </div>
                 <div class="form-group">
-                  <label for="name">Dealer Name *</label>
+                  <label for="name">Reseller Name *</label>
                   <input type="text" class="form-control" name="name" id="name" placeholder="Enter Customer Name" required>
                 </div>
                 <div class="form-group"> 
