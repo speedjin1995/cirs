@@ -33,13 +33,37 @@ $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 
 while($row = mysqli_fetch_assoc($empRecords)) {
+    $branches = array();
+
+    if($branch_stmt = $db->prepare("SELECT * FROM reseller_branches WHERE reseller_id=? AND deleted = '0'")){
+      $branch_stmt->bind_param('s', $row['id']);
+
+      if($branch_stmt->execute()){
+        $result = $branch_stmt->get_result();
+
+        while($row2 = $result->fetch_assoc()){
+          $branches[]=array(
+            "branchid" => $row2['id'],
+            "branchname" => $row2['branch_name'],
+            "mapurl" => $row2['map_url'],
+            "branch_address1" => $row2['address'],
+            "branch_address2" => $row2['address2'],
+            "branch_address3" => $row2['address3'],
+            "branch_address4" => $row2['address4'],
+          );
+        }
+
+      }
+    }
+
     $data[] = array( 
       "id"=>$row['id'],
       "customer_code"=>$row['customer_code'],
       "customer_name"=>$row['customer_name'],
       "customer_address"=>$row['customer_address']." ". $row['address2'] ." ". $row['address3'],
       "customer_phone"=>$row['customer_phone'],
-      "customer_email"=>$row['customer_email']
+      "customer_email"=>$row['customer_email'],
+      "log"=>$branches
     );
 }
 
