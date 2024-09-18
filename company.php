@@ -139,9 +139,11 @@ else{
 					<input type="date" class="form-control" id="tarikh_dikeluarkan" name="tarikh_dikeluarkan" value="<?=$data['tarikh_dikeluarkan'] ?>">
 				</div>
 
+				<hr class="mt-4">
+
 				<section class="mt-4">
 					<header class="mb-4">
-						<h6 class="display-4">Engineer / Technician</h6>
+						<h4><b>Engineer / Technician</b></h4>
 					</header>
 					<div class="form-group">
 						<label for="engineer_name">Name of Engineer / Technician </label>
