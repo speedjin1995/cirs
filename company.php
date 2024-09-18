@@ -527,7 +527,12 @@ $(function () {
 			}
 		},
 		'columns': [
-			{ data: 5 },
+			{ 
+				data: null,  
+				render: function (data, type, row, meta) {
+					return meta.row + 1;  
+				}
+			},
 			{ data: 0 },  
             { data: 1 }, 
             { data: 2 }, 
@@ -536,6 +541,13 @@ $(function () {
 				data: 4,    // Attach PDF
 				render: function (data, type, row) {
 					return data; // Render the HTML as is
+				}
+			},
+			{ 
+				data: 5,
+				visible: false,
+				render: function (data, type, row) {
+					return data; 
 				}
 			}
 		],
@@ -630,7 +642,12 @@ $(function () {
 			}
 		},
 		'columns': [
-			{ data: 5 },
+			{ 
+				data: null,  
+				render: function (data, type, row, meta) {
+					return meta.row + 1;  
+				}
+			},
 			{ data: 0 },  
             { data: 1 }, 
             { data: 2 }, 
@@ -640,8 +657,14 @@ $(function () {
 				render: function (data, type, row) {
 					return data; // Render the HTML as is
 				}
+			},
+			{ 
+				data: 5,
+				visible: false,
+				render: function (data, type, row) {
+					return data; 
+				}
 			}
-
 		],
 	});
 
