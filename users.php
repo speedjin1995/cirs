@@ -13,7 +13,7 @@ else{
     $stmt->execute();
     $result = $stmt->get_result();*/
     
-    $stmt2 = $db->prepare("SELECT * FROM roles");
+    $stmt2 = $db->prepare("SELECT * FROM roles where deleted = '0'");
     $stmt2->execute();
     $result2 = $stmt2->get_result();
 }
@@ -23,7 +23,7 @@ else{
     <div class="container-fluid">
         <div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0 text-dark">Members</h1>
+				<h1 class="m-0 text-dark">Users</h1>
 			</div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -40,7 +40,7 @@ else{
                         <div class="row">
                             <div class="col-9"></div>
                             <div class="col-3">
-                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addMembers">Add Members</button>
+                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addMembers">Add Users</button>
                             </div>
                         </div>
                     </div>
@@ -50,8 +50,11 @@ else{
 								<tr>
 									<th>Username</th>
 									<th>Name</th>
-									<th>Role</th>
-									<th>Created Date</th>
+                                    <th>I/C. No</th>
+                                    <th>Job Position</th>
+                                    <th>Contact No(H/P)</th>
+									<th>System Role</th>
+									<th>Status</th>
 									<th>Actions</th>
 								</tr>
 							</thead>
@@ -68,7 +71,7 @@ else{
       <div class="modal-content">
         <form role="form" id="memberForm">
             <div class="modal-header">
-              <h4 class="modal-title">Add Members</h4>
+              <h4 class="modal-title">Add Users</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -83,11 +86,23 @@ else{
     					<input type="text" class="form-control" name="username" id="username" placeholder="Enter Username" required>
     				</div>
                     <div class="form-group">
-    					<label for="name">Name *</label>
+    					<label for="name">Staff Name *</label>
     					<input type="text" class="form-control" name="name" id="name" placeholder="Enter Full Name" required>
     				</div>
                     <div class="form-group">
-						<label>Role *</label>
+    					<label for="name">Staff IC </label>
+    					<input type="text" class="form-control" name="icNo" id="icNo" placeholder="Enter IC">
+    				</div>
+                    <div class="form-group">
+                        <label>Job Position </label>
+						<input type="text" class="form-control" name="position" id="position" placeholder="Enter Position">
+    				</div>
+                    <div class="form-group">
+    					<label for="name">Staff Contact (H/P)</label>
+    					<input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="Enter H/P">
+    				</div>
+                    <div class="form-group">
+						<label>System Role *</label>
 						<select class="form-control" id="userRole" name="userRole" required>
 						    <option select="selected" value="">Please Select</option>
 						    <?php while($row2 = $result2->fetch_assoc()){ ?>
@@ -122,12 +137,20 @@ $(function () {
         'columns': [
             { data: 'username' },
             { data: 'name' },
+            { data: 'ic_number' },
+            { data: 'designation' },
+            { data: 'contact_number' },
             { data: 'role_name' },
-            { data: 'created_date' },
+            { data: 'status' },
             { 
-                data: 'id',
-                render: function ( data, type, row ) {
-                    return '<div class="row"><div class="col-3"><button type="button" id="edit'+data+'" onclick="edit('+data+')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button type="button" id="deactivate'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
+                data: 'deleted',
+                render: function (data, type, row) {
+                    if (data == 0) {
+                        return '<div class="row"><div class="col-3"><button type="button" id="edit' + row.id + '" onclick="edit(' + row.id + ')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button type="button" id="delete' + row.id + '" onclick="deactivate(' + row.id + ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
+                    } 
+                    else{
+                        return '<button type="button" id="reactivate' + row.id + '" onclick="reactivate(' + row.id + ')" class="btn btn-warning btn-sm">Reactivate</button>';
+                    }
                 }
             }
         ],
@@ -165,6 +188,9 @@ $(function () {
         $('#addModal').find('#id').val("");
         $('#addModal').find('#username').val("");
         $('#addModal').find('#name').val("");
+        $('#addModal').find('#icNo').val("");
+        $('#addModal').find('#position').val("");
+        $('#addModal').find('#phoneNumber').val("");
         $('#addModal').find('#userRole').val("");
         $('#addModal').modal('show');
         
@@ -193,6 +219,9 @@ function edit(id){
             $('#addModal').find('#id').val(obj.message.id);
             $('#addModal').find('#username').val(obj.message.username);
             $('#addModal').find('#name').val(obj.message.name);
+            $('#addModal').find('#icNo').val(obj.message.ic_number);
+            $('#addModal').find('#position').val(obj.message.designation);
+            $('#addModal').find('#phoneNumber').val(obj.message.contact_number);
             $('#addModal').find('#userRole').val(obj.message.role_code);
             $('#addModal').modal('show');
             
@@ -239,5 +268,28 @@ function deactivate(id){
             $('#spinnerLoading').hide();
         }
     });
+}
+
+function reactivate(id){
+  if (confirm('Are you sure you want to reactivate this items?')) {
+    $('#spinnerLoading').show();
+    $.post('php/reactivateUser.php', {userID: id}, function(data){
+        var obj = JSON.parse(data);
+        
+        if(obj.status === 'success'){
+            toastr["success"](obj.message, "Success:");
+            $('#memberTable').DataTable().ajax.reload();
+            $('#spinnerLoading').hide();
+        }
+        else if(obj.status === 'failed'){
+            toastr["error"](obj.message, "Failed:");
+            $('#spinnerLoading').hide();
+        }
+        else{
+            toastr["error"]("Something wrong when activate", "Failed:");
+            $('#spinnerLoading').hide();
+        }
+    });
+  }
 }
 </script>

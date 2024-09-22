@@ -475,12 +475,12 @@ to get the desired effect
                       <p>Roles</p>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <!--li class="nav-item">
                     <a href="#modules" data-file="modules.php" class="nav-link link">
                       <i class="nav-icon fas fa-list-alt"></i>
                       <p>Modules</p>
                     </a>
-                  </li>
+                  </li-->
                   <li class="nav-item">
                     <a href="#users" data-file="users.php" class="nav-link link">
                       <i class="nav-icon fas fa-user"></i>

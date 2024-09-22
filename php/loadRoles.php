@@ -14,45 +14,33 @@ $searchValue = mysqli_real_escape_string($db,$_POST['search']['value']); // Sear
 ## Search 
 $searchQuery = " ";
 if($searchValue != ''){
-   $searchQuery = " and (users.name like '%".$searchValue."%' or 
-        users.username like '%".$searchValue."%' or
-        roles.role_name like'%".$searchValue."%' ) ";
+   $searchQuery = " AND role_name like '%".$searchValue."%'";
 }
 
 ## Total number of records without filtering
-$sel = mysqli_query($db,"select count(*) as allcount from users");
+$sel = mysqli_query($db,"select count(*) as allcount from roles");
 $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount from users, roles WHERE users.role_code = roles.role_code".$searchQuery);
+$sel = mysqli_query($db,"select count(*) as allcount from roles WHERE deleted = '0'".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "select users.*, roles.role_name from users, roles WHERE users.role_code = roles.role_code".$searchQuery." order by deleted, ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+$empQuery = "select * from roles WHERE deleted = '0'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
+$counter = 1;
 
 while($row = mysqli_fetch_assoc($empRecords)) {
-    $created_date = '-';
-    
-    if($row['created_date'] != null && $row['created_date'] != ""){
-      $created_date = date("d-m-Y", strtotime($row['created_date']));
-    }
-    
     $data[] = array( 
+      "counter"=>$counter,
       "id"=>$row['id'],
-      "name"=>$row['name'],
-      "username"=>$row['username'],
-      "ic_number"=>$row['ic_number'],
-      "designation"=>$row['designation'],
-      "contact_number"=>$row['contact_number'],
-      "role_name"=>$row['role_name'],
-      "created_date"=>$created_date,
-      "deleted"=>$row['deleted'],
-      "status"=>($row['deleted'] == '0') ? 'Active' : 'Inactive'
+      "role_name"=>$row['role_name']
     );
+
+    $counter++;
 }
 
 ## Response
