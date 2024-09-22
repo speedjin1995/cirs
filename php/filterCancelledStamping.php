@@ -94,6 +94,32 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "updated_datetime"=>$row['updated_datetime'] ?? ''
   );
 
+  if(($row['validate_by'] == '10' || $row['validate_by'] == '9') && $row['jenis_alat'] == '1'){
+    if ($update_stmt2 = $db->prepare("SELECT * FROM stamping_ext WHERE stamp_id=?")) {
+      $update_stmt2->bind_param('s', $row['id']);
+  
+      if($update_stmt2->execute()) {
+        $result2 = $update_stmt2->get_result();
+  
+        if($row2 = $result2->fetch_assoc()) {
+          $data['penentusan_baru'] = $row2['penentusan_baru'] ?? '';
+          $data['penentusan_semula'] = $row2['penentusan_semula'] ?? '';
+          $data['kelulusan_mspk'] = $row2['kelulusan_mspk'] ?? '';
+          $data['no_kelulusan'] = $row2['no_kelulusan'] ?? '';
+          $data['indicator_serial'] = $row2['indicator_serial'] ?? '';
+          $data['platform_country'] = $row2['platform_country'] ?? '';
+          $data['platform_type'] = $row2['platform_type'];
+          $data['size'] = $row2['size'] ?? '';
+          $data['jenis_pelantar'] = $row2['jenis_pelantar'] ?? '';
+          $data['other_info'] = $row2['other_info'] ?? '';
+          $data['load_cell_country'] = $row2['load_cell_country'] ?? '';
+          $data['load_cell_no'] = $row2['load_cell_no'] ?? '';
+          $data['load_cells_info'] = json_decode($row2['load_cells_info'], true);
+        }
+      }
+    }
+  }
+
   $counter++;
 }
 

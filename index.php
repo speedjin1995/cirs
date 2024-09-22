@@ -327,12 +327,12 @@ to get the desired effect
         <ul class="nav nav-pills nav-sidebar flex-column" id="sideMenu" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
             with font-awesome or any other icon font library -->
-          <!--li class="nav-item">
+          <li class="nav-item">
             <a href="#dashboard" data-file="dashboard.php" class="nav-link link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>Dashboard</p>
             </a>
-          </li-->
+          </li>
           <!--li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -357,26 +357,80 @@ to get the desired effect
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-certificate"></i>
-              <p>Stamping<i class="fas fa-angle-left right"></i></p>
+              <p>Government Stamping<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview" style="display: block;">
               <li class="nav-item">
                 <a href="#pending" data-file="pending.php" class="nav-link link">
-                  <i class="nav-icon fas fa-user-check"></i>
+                  <i class="nav-icon far fa-circle"></i>
                   <p>Pending Stamping</p>
                 </a>
               </li>
               <?php if($role == "ADMIN"){
                 echo '<li class="nav-item">
                 <a href="#stamping" data-file="stamp.php" class="nav-link link">
-                  <i class="nav-icon fas fa-stamp"></i>
+                  <i class="nav-icon far fa-circle"></i>
                   <p>Complete Stamping</p>
                 </a></li>';
               }?>
               <li class="nav-item">
                 <a href="#oldstamp" data-file="oldstamp.php" class="nav-link link">
-                  <i class="nav-icon fas fa-times"></i>
+                  <i class="nav-icon far fa-circle"></i>
                   <p>Cancelled Stamping</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-check"></i>
+              <p>Other Validation<i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#pendingvalidation" data-file="pendingvalidation.php" class="nav-link link">
+                  <i class="nav-icon far fa-circle"></i>
+                  <p>Pending Validation</p>
+                </a>
+              </li>
+              <?php if($role == "ADMIN"){
+                echo '<li class="nav-item">
+                <a href="#validation" data-file="validation.php" class="nav-link link">
+                  <i class="nav-icon far fa-circle"></i>
+                  <p>Complete Validation</p>
+                </a></li>';
+              }?>
+              <li class="nav-item">
+                <a href="#oldvalidation" data-file="oldvalidation.php" class="nav-link link">
+                  <i class="nav-icon far fa-circle"></i>
+                  <p>Cancelled Validation</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-align-justify"></i>
+              <p>Inhouse Validation<i class="fas fa-angle-left right"></i></p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="#pendinginhouse" data-file="pendinginhouse.php" class="nav-link link">
+                  <i class="nav-icon far fa-circle"></i>
+                  <p>Pending Validation</p>
+                </a>
+              </li>
+              <?php if($role == "ADMIN"){
+                echo '<li class="nav-item">
+                <a href="#inhouse" data-file="inhouse.php" class="nav-link link">
+                  <i class="nav-icon far fa-circle"></i>
+                  <p>Complete Validation</p>
+                </a></li>';
+              }?>
+              <li class="nav-item">
+                <a href="#oldinhouse" data-file="oldinhouse.php" class="nav-link link">
+                  <i class="nav-icon far fa-circle"></i>
+                  <p>Cancelled Validation</p>
                 </a>
               </li>
             </ul>
@@ -408,22 +462,32 @@ to get the desired effect
             </ul>
           </li>
           <?php 
-            if($role == "ADMIN"){
-              echo '<li class="nav-item">
-                <a href="#price" data-file="products.php" class="nav-link link">
-                  <i class="nav-icon fas fa-thermometer"></i>
-                  <p>Price</p>
-                </a>
-              </li>';
-            }
-          ?>
-          <?php 
               if($role == "ADMIN"){
-                echo '<li class="nav-item">
-                <a href="#users" data-file="users.php" class="nav-link link">
-                  <i class="nav-icon fas fa-user"></i>
-                  <p>Staffs</p>
+                echo '<li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-users"></i>
+                  <p>User Managements<i class="fas fa-angle-left right"></i></p>
                 </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="#roles" data-file="roles.php" class="nav-link link">
+                      <i class="nav-icon fas fa-user-tag"></i>
+                      <p>Roles</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#modules" data-file="modules.php" class="nav-link link">
+                      <i class="nav-icon fas fa-list-alt"></i>
+                      <p>Modules</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#users" data-file="users.php" class="nav-link link">
+                      <i class="nav-icon fas fa-user"></i>
+                      <p>Staffs</p>
+                    </a>
+                  </li>
+                </ul>
               </li>
               <li class="nav-item has-treeview">
                 <a href="#" class="nav-link">
@@ -441,6 +505,12 @@ to get the desired effect
                     <a href="#customers" data-file="customers.php" class="nav-link link">
                       <i class="nav-icon fas fa-book"></i>
                       <p>Customers</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#price" data-file="products.php" class="nav-link link">
+                      <i class="nav-icon fas fa-thermometer"></i>
+                      <p>Price</p>
                     </a>
                   </li>
                   <li class="nav-item">
@@ -503,12 +573,12 @@ to get the desired effect
                       <p>Unit of Measurement</p>
                     </a>
                   </li>
-                  <li class="nav-item">
+                  <!--li class="nav-item">
                     <a href="#problem" data-file="problem.php" class="nav-link link">
                       <i class="nav-icon fas fa-industry"></i>
                       <p>Problems</p>
                     </a>
-                  </li>
+                  </li-->
                 </ul>
               </li>';
               }
@@ -523,11 +593,11 @@ to get the desired effect
               <?php 
                 if($role == "ADMIN"){
                   echo '<li class="nav-item">
-                  <a href="#company" data-file="company.php" class="nav-link link">
-                    <i class="nav-icon fas fa-building"></i>
-                    <p>Company Profile</p>
-                  </a>
-                </li>';
+                      <a href="#company" data-file="company.php" class="nav-link link">
+                        <i class="nav-icon fas fa-building"></i>
+                        <p>Company Profile</p>
+                      </a>
+                    </li>';
                 }
               ?>
 
