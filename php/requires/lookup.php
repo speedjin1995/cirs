@@ -256,4 +256,20 @@ function searchUnitNameById($value, $db) {
 
     return $id;
 }
+
+function searchSizeNameById($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM size WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['size'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
 ?>
