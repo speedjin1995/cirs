@@ -1033,115 +1033,115 @@ $(function () {
 		});
 	});
 
-  // $.validator.setDefaults({
-  //   submitHandler: function () {
-  //     if($('#extendModal').hasClass('show')){
-  //       $('#spinnerLoading').show();
+  $.validator.setDefaults({
+    submitHandler: function () {
+      if($('#cancelModal').hasClass('show')){
+        $.post('php/deleteValidation.php', $('#cancelForm').serialize(), function(data){
+          var obj = JSON.parse(data); 
+          if(obj.status === 'success'){
+            $('#cancelModal').modal('hide');
+            toastr["success"](obj.message, "Success:");
+            $('#weightTable').DataTable().ajax.reload();
+          }
+          else if(obj.status === 'failed'){
+            toastr["error"](obj.message, "Failed:");
+          }
+          else{
+            toastr["error"]("Something wrong when edit", "Failed:");
+          }
 
-  //       $.post('php/insertValidation.php', $('#extendForm').serialize(), function(data){
-  //         var obj = JSON.parse(data); 
-  //         if(obj.status === 'success'){
-  //           $('#extendModal').modal('hide');
-  //           toastr["success"](obj.message, "Success:");
-  //           $('#weightTable').DataTable().ajax.reload();
-  //         }
-  //         else if(obj.status === 'failed'){
-  //           toastr["error"](obj.message, "Failed:");
-  //         }
-  //         else{
-  //           toastr["error"]("Something wrong when edit", "Failed:");
-  //         }
+          $('#spinnerLoading').hide();
+        });
+      }
+      // else if($('#extendModal').hasClass('show')){
+      //   $('#spinnerLoading').show();
 
-  //         $('#spinnerLoading').hide();
-  //       });
-  //     }
-  //     else if($('#uploadModal').hasClass('show')){
-  //       $('#spinnerLoading').show();
+      //   $.post('php/insertValidation.php', $('#extendForm').serialize(), function(data){
+      //     var obj = JSON.parse(data); 
+      //     if(obj.status === 'success'){
+      //       $('#extendModal').modal('hide');
+      //       toastr["success"](obj.message, "Success:");
+      //       $('#weightTable').DataTable().ajax.reload();
+      //     }
+      //     else if(obj.status === 'failed'){
+      //       toastr["error"](obj.message, "Failed:");
+      //     }
+      //     else{
+      //       toastr["error"]("Something wrong when edit", "Failed:");
+      //     }
 
-  //       // Serialize the form data into an array of objects
-  //       var formData = $('#uploadForm').serializeArray();
-  //       var data = [];
-  //       var rowIndex = -1;
-  //       formData.forEach(function(field) {
-  //           var match = field.name.match(/([a-zA-Z]+)\[(\d+)\]/);
-  //           if (match) {
-  //             var fieldName = match[1];
-  //             var index = parseInt(match[2], 10);
-  //             if (index !== rowIndex) {
-  //               rowIndex = index;
-  //               data.push({});
-  //             }
-  //             data[index][fieldName] = field.value;
-  //           }
-  //       });
+      //     $('#spinnerLoading').hide();
+      //   });
+      // }
+      // else if($('#uploadModal').hasClass('show')){
+      //   $('#spinnerLoading').show();
 
-  //       // Send the JSON array to the server
-  //       $.ajax({
-  //           url: 'php/uploadStampings.php',
-  //           type: 'POST',
-  //           contentType: 'application/json',
-  //           data: JSON.stringify(data),
-  //           success: function(response) {
-  //             var obj = JSON.parse(response);
-  //             if (obj.status === 'success') {
-  //               $('#uploadModal').modal('hide');
-  //               toastr["success"](obj.message, "Success:");
-  //               $('#weightTable').DataTable().ajax.reload();
-  //             } 
-  //             else if (obj.status === 'failed') {
-  //               toastr["error"](obj.message, "Failed:");
-  //             } 
-  //             else {
-  //               toastr["error"]("Something went wrong when editing", "Failed:");
-  //             }
+      //   // Serialize the form data into an array of objects
+      //   var formData = $('#uploadForm').serializeArray();
+      //   var data = [];
+      //   var rowIndex = -1;
+      //   formData.forEach(function(field) {
+      //       var match = field.name.match(/([a-zA-Z]+)\[(\d+)\]/);
+      //       if (match) {
+      //         var fieldName = match[1];
+      //         var index = parseInt(match[2], 10);
+      //         if (index !== rowIndex) {
+      //           rowIndex = index;
+      //           data.push({});
+      //         }
+      //         data[index][fieldName] = field.value;
+      //       }
+      //   });
+
+      //   // Send the JSON array to the server
+      //   $.ajax({
+      //       url: 'php/uploadStampings.php',
+      //       type: 'POST',
+      //       contentType: 'application/json',
+      //       data: JSON.stringify(data),
+      //       success: function(response) {
+      //         var obj = JSON.parse(response);
+      //         if (obj.status === 'success') {
+      //           $('#uploadModal').modal('hide');
+      //           toastr["success"](obj.message, "Success:");
+      //           $('#weightTable').DataTable().ajax.reload();
+      //         } 
+      //         else if (obj.status === 'failed') {
+      //           toastr["error"](obj.message, "Failed:");
+      //         } 
+      //         else {
+      //           toastr["error"]("Something went wrong when editing", "Failed:");
+      //         }
               
-  //             $('#spinnerLoading').hide();
-  //           }
-  //       });
-  //     }
-  //     else if($('#printDOModal').hasClass('show')){
-  //       $.post('php/print_borang.php', $('#printDOForm').serialize(), function(data){
-  //         var obj = JSON.parse(data);
+      //         $('#spinnerLoading').hide();
+      //       }
+      //   });
+      // }
+      // else if($('#printDOModal').hasClass('show')){
+      //   $.post('php/print_borang.php', $('#printDOForm').serialize(), function(data){
+      //     var obj = JSON.parse(data);
       
-  //         if(obj.status === 'success'){
-  //           $('#printDOModal').modal('hide');
-  //           $('#weightTable').DataTable().ajax.reload();
-  //           var printWindow = window.open('', '', 'height=400,width=800');
-  //           printWindow.document.write(obj.message);
-  //           printWindow.document.close();
-  //           setTimeout(function(){
-  //             printWindow.print();
-  //             printWindow.close();
-  //           }, 1000);
-  //         }
-  //         else if(obj.status === 'failed'){
-  //           toastr["error"](obj.message, "Failed:");
-  //         }
-  //         else{
-  //           toastr["error"]("Something wrong when pull data", "Failed:");
-  //         }
-  //       });
-  //     }
-  //     else if($('#cancelModal').hasClass('show')){
-  //       $.post('php/deleteStamp.php', $('#cancelForm').serialize(), function(data){
-  //         var obj = JSON.parse(data); 
-  //         if(obj.status === 'success'){
-  //           $('#cancelModal').modal('hide');
-  //           toastr["success"](obj.message, "Success:");
-  //           $('#weightTable').DataTable().ajax.reload();
-  //         }
-  //         else if(obj.status === 'failed'){
-  //           toastr["error"](obj.message, "Failed:");
-  //         }
-  //         else{
-  //           toastr["error"]("Something wrong when edit", "Failed:");
-  //         }
-
-  //         $('#spinnerLoading').hide();
-  //       });
-  //     }
-  //   }
-  // });
+      //     if(obj.status === 'success'){
+      //       $('#printDOModal').modal('hide');
+      //       $('#weightTable').DataTable().ajax.reload();
+      //       var printWindow = window.open('', '', 'height=400,width=800');
+      //       printWindow.document.write(obj.message);
+      //       printWindow.document.close();
+      //       setTimeout(function(){
+      //         printWindow.print();
+      //         printWindow.close();
+      //       }, 1000);
+      //     }
+      //     else if(obj.status === 'failed'){
+      //       toastr["error"](obj.message, "Failed:");
+      //     }
+      //     else{
+      //       toastr["error"]("Something wrong when pull data", "Failed:");
+      //     }
+      //   });
+      // }
+    }
+  });
 
   $('#filterSearch').on('click', function(){
     //$('#spinnerLoading').show();
@@ -1726,7 +1726,7 @@ $(function () {
   //   }
   // });
 
-  /*$('#cancelModal').find('#cancellationReason').on('change', function(){
+  $('#cancelModal').find('#cancellationReason').on('change', function(){
     if($(this).val() == '0'){
       $('#otherRow').show();
       $('#otherReason').attr("required", true);
@@ -1735,40 +1735,40 @@ $(function () {
       $('#otherRow').hide();
       $('#otherReason').attr("required", false);
     }
-  });*/
-
-  $(".add-price").click(function(){
-    var $addContents = $("#pricingDetails").clone();
-    $("#pricingTable").append($addContents.html());
-
-    $("#pricingTable").find('.details:last').attr("id", "detail" + pricingCount);
-    $("#pricingTable").find('.details:last').attr("data-index", pricingCount);
-    //$("#pricingTable").find('#remove:last').attr("id", "remove" + pricingCount);
-
-    $("#pricingTable").find('#no:last').attr('name', 'no['+pricingCount+']').attr("id", "no" + pricingCount).val((pricingCount + 1).toString());
-    $("#pricingTable").find('#date:last').attr('name', 'date['+pricingCount+']').attr("id", "date" + pricingCount).val(formatDate2(today));
-    $("#pricingTable").find('#notes:last').attr('name', 'notes['+pricingCount+']').attr("id", "notes" + pricingCount);
-    $("#pricingTable").find('#followUpDate:last').attr('name', 'followUpDate['+pricingCount+']').attr("id", "followUpDate" + pricingCount).val(formatDate2(today));
-    $("#pricingTable").find('#picAttend:last').attr('name', 'picAttend['+pricingCount+']').attr("id", "picAttend" + pricingCount).val('<?=$user ?>');
-    $("#pricingTable").find('#status').attr('name', 'status['+pricingCount+']').attr("id", "status" + pricingCount).val('Pending');
-
-    var newDatePickerId = "datePicker5" + pricingCount;
-
-    // Find the newly added date input and set the new ID
-    var $newDateInputGroup = $("#pricingTable").find('#datePicker5:last');
-    $newDateInputGroup.attr("id", newDatePickerId);
-    $newDateInputGroup.find('input').attr("data-target", "#" + newDatePickerId);
-    $newDateInputGroup.find('.input-group-append').attr("data-target", "#" + newDatePickerId);
-
-    // Initialize the date picker on the new element
-    $newDateInputGroup.datetimepicker({
-      icons: { time: 'far fa-calendar' },
-      format: 'DD/MM/YYYY',
-      defaultDate: today
-    });
-
-    pricingCount++;
   });
+
+  // $(".add-price").click(function(){
+  //   var $addContents = $("#pricingDetails").clone();
+  //   $("#pricingTable").append($addContents.html());
+
+  //   $("#pricingTable").find('.details:last').attr("id", "detail" + pricingCount);
+  //   $("#pricingTable").find('.details:last').attr("data-index", pricingCount);
+  //   //$("#pricingTable").find('#remove:last').attr("id", "remove" + pricingCount);
+
+  //   $("#pricingTable").find('#no:last').attr('name', 'no['+pricingCount+']').attr("id", "no" + pricingCount).val((pricingCount + 1).toString());
+  //   $("#pricingTable").find('#date:last').attr('name', 'date['+pricingCount+']').attr("id", "date" + pricingCount).val(formatDate2(today));
+  //   $("#pricingTable").find('#notes:last').attr('name', 'notes['+pricingCount+']').attr("id", "notes" + pricingCount);
+  //   $("#pricingTable").find('#followUpDate:last').attr('name', 'followUpDate['+pricingCount+']').attr("id", "followUpDate" + pricingCount).val(formatDate2(today));
+  //   $("#pricingTable").find('#picAttend:last').attr('name', 'picAttend['+pricingCount+']').attr("id", "picAttend" + pricingCount).val('<?=$user ?>');
+  //   $("#pricingTable").find('#status').attr('name', 'status['+pricingCount+']').attr("id", "status" + pricingCount).val('Pending');
+
+  //   var newDatePickerId = "datePicker5" + pricingCount;
+
+  //   // Find the newly added date input and set the new ID
+  //   var $newDateInputGroup = $("#pricingTable").find('#datePicker5:last');
+  //   $newDateInputGroup.attr("id", newDatePickerId);
+  //   $newDateInputGroup.find('input').attr("data-target", "#" + newDatePickerId);
+  //   $newDateInputGroup.find('.input-group-append').attr("data-target", "#" + newDatePickerId);
+
+  //   // Initialize the date picker on the new element
+  //   $newDateInputGroup.datetimepicker({
+  //     icons: { time: 'far fa-calendar' },
+  //     format: 'DD/MM/YYYY',
+  //     defaultDate: today
+  //   });
+
+  //   pricingCount++;
+  // });
 
   $(document).on('click', '#add-calibration-cell', function() {
     var $addContents = $("#loadCalibrationDetails").clone();
@@ -1981,253 +1981,68 @@ function extraAction(id){
 
 function edit(id) {
   $('#spinnerLoading').show();
-  $.post('php/getStamp.php', {userID: id}, function(data){
+  $.post('php/getValidation.php', {validationId: id}, function(data){
     var obj = JSON.parse(data);
-    
     if(obj.status === 'success'){
-      if(obj.message.type == 'OWN'){
-        $('#extendModal').find('#id').val(obj.message.id);
-        $('#extendModal').find('#type').val(obj.message.type).trigger('change');
-        $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
-        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
-        $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
-        $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
-        $('#extendModal').find('#newRenew').val(obj.message.stampType);
-        $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
-        $('#extendModal').find('#companyText').val('');
-        $('#extendModal').find('#product').val(obj.message.products);
-        $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
-        $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
-        $('#extendModal').find('#address1').val(obj.message.address1);
-        
-        setTimeout(function(){
-          $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
-        }, 500);
+      $('#extendModal').find('#id').val(obj.message.id);
+      $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+      $('#extendModal').find('#company').val(obj.message.customer).trigger('change');
+      $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
+      $('#extendModal').find('#autoFormNo').val(obj.message.auto_form_no);
+      setTimeout(function(){
+        $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
+      }, 500);
+      $('#extendModal').find('#machineType').val(obj.message.machines).trigger('change');
+      $('#extendModal').find('#serial').val(obj.message.unit_serial_no);
+      $('#extendModal').find('#manufacturing').val(obj.message.manufacturing).trigger('change');
+      $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
+      $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+      $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
+      $('#extendModal').find('#size').val(obj.message.size).trigger('change');
 
-        $('#extendModal').find('#model').val(obj.message.model).trigger('change');
-        $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
-        $('#extendModal').find('#address2').val(obj.message.address2);
-        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
-        $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
-        $('#extendModal').find('#address3').val(obj.message.address3);
-        $('#extendModal').find('#serial').val(obj.message.serial_no);
-        $('#extendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);
-        $('#extendModal').find('#attnTo').val(obj.message.pic);
-        $('#extendModal').find('#siriKeselamatan').val(obj.message.siri_keselamatan);
-        $('#extendModal').find('#pic').val(obj.message.pic);
-        $('#extendModal').find('#borangD').val(obj.message.borang_d);
-        $('#extendModal').find('#remark').val(obj.message.remarks);
-        $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
-        $('#extendModal').find('#quotation').val(obj.message.quotation_no);
-        $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
-        $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
-        $('#extendModal').find('#poNo').val(obj.message.purchase_no);
-        $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
-        $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
-        $('#extendModal').find('#invoice').val(obj.message.invoice_no);
-        $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
-        $('#extendModal').find('#certPrice').val(obj.message.cert_price);
-        $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
-        $('#extendModal').find('#sst').val(obj.message.sst);
-        $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
+      if(obj.message.calibrations.length > 0){
+        $("#loadCalibrationTable").html('');
+        loadCalibrationCount = 0; 
 
-        $('#pricingTable').html('');
-        pricingCount = 0;
+        for(var i = 0; i < obj.message.calibrations.length; i++){
+          var calibrations = obj.message.calibrations[i];
 
-        if(obj.message.log.length > 0){
-          for(var i = 0; i < obj.message.log.length; i++){
-            var item = obj.message.log[i];
-            var $addContents = $("#pricingDetails").clone();
-            $("#pricingTable").append($addContents.html());
+          for(var j=0; j < calibrations.length; j++){
+            var item = calibrations[j];
+            var $addContents = $("#loadCalibrationDetails").clone();
+            $("#loadCalibrationTable").append($addContents.html());
 
-            $("#pricingTable").find('.details:last').attr("id", "detail" + pricingCount);
-            $("#pricingTable").find('.details:last').attr("data-index", pricingCount);
-            //$("#pricingTable").find('#remove:last').attr("id", "remove" + pricingCount);
+            $("#loadCalibrationTable").find('.details:last').attr("id", "detail" + loadCalibrationCount);
+            $("#loadCalibrationTable").find('.details:last').attr("data-index", loadCalibrationCount);
+            $("#loadCalibrationTable").find('#remove:last').attr("id", "remove" + loadCalibrationCount);
 
-            $("#pricingTable").find('#no:last').attr('name', 'no['+pricingCount+']').attr("id", "no" + pricingCount).val(item.no);
-            $("#pricingTable").find('#date:last').attr('name', 'date['+pricingCount+']').attr("id", "date" + pricingCount).val(item.date);
-            $("#pricingTable").find('#notes:last').attr('name', 'notes['+pricingCount+']').attr("id", "notes" + pricingCount).val(item.notes);
-            $("#pricingTable").find('#followUpDate:last').attr('name', 'followUpDate['+pricingCount+']').attr("id", "followUpDate" + pricingCount).val(item.followUpDate);
-            $("#pricingTable").find('#picAttend:last').attr('name', 'picAttend['+pricingCount+']').attr("id", "picAttend" + pricingCount).val(item.picAttend);
-            $("#pricingTable").find('#status').attr('name', 'status['+pricingCount+']').attr("id", "status" + pricingCount).val('Pending').val(item.status);
-
-            var newDatePickerId = "datePicker5" + pricingCount;
-
-            // Find the newly added date input and set the new ID
-            var $newDateInputGroup = $("#pricingTable").find('#datePicker5:last');
-            $newDateInputGroup.attr("id", newDatePickerId);
-            $newDateInputGroup.find('input').attr("data-target", "#" + newDatePickerId);
-            $newDateInputGroup.find('.input-group-append').attr("data-target", "#" + newDatePickerId);
-
-            // Initialize the date picker on the new element
-            $newDateInputGroup.datetimepicker({
-              icons: { time: 'far fa-calendar' },
-              format: 'DD/MM/YYYY'
-            });
-
-            pricingCount++;
+            $("#loadCalibrationTable").find('#no:last').attr('name', 'no['+loadCalibrationCount+']').attr("id", "no" + loadCalibrationCount).val(item.no);
+            $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate['+loadCalibrationCount+']').attr("id", "lastCalibrationDate" + loadCalibrationCount).val(item.lastCalibrationDate);
+            $("#loadCalibrationTable").find('#uploadlastCalibrationPdf:last').attr('name', 'uploadlastCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadlastCalibrationPdf" + loadCalibrationCount).val(item.uploadlastCalibrationPdf);
+            $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount).val(item.expiredCalibrationDate);
+            $("#loadCalibrationTable").find('#uploadexpiredCalibrationPdf:last').attr('name', 'uploadexpiredCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadexpiredCalibrationPdf" + loadCalibrationCount).val(item.loadCelluploadexpiredCalibrationPdfCapacity);
+            
+            loadCalibrationCount++;
           }
         }
-
-        if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '1'){
-          $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
-          $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
-          $('#extendModal').find('#kelulusanMSPK').val(obj.message.kelulusan_mspk);
-          $('#extendModal').find('#noMSPK').val(obj.message.no_kelulusan);
-          $('#extendModal').find('#noSerialIndicator').val(obj.message.indicator_serial);
-          $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
-          $('#extendModal').find('#platformType').val(obj.message.platform_type);
-          $('#extendModal').find('#size').val(obj.message.size);
-          $('#extendModal').find('#jenisPelantar').val(obj.message.jenis_pelantar);
-          $('#extendModal').find('#others').val(obj.message.other_info);
-          $('#extendModal').find('#loadCellCountry').val(obj.message.load_cell_country);
-          $('#extendModal').find('#noOfLoadCell').val(obj.message.load_cell_no);
-
-          if(obj.message.load_cells_info.length > 0){
-            $("#loadCellTable").html('');
-            loadCellCount = 0;
-
-            for(var i = 0; i < obj.message.load_cells_info.length; i++){
-              var item = obj.message.load_cells_info[i];
-              var $addContents = $("#loadCellDetails").clone();
-              $("#loadCellTable").append($addContents.html());
-
-              $("#loadCellTable").find('.details:last').attr("id", "detail" + loadCellCount);
-              $("#loadCellTable").find('.details:last').attr("data-index", loadCellCount);
-              $("#loadCellTable").find('#remove:last').attr("id", "remove" + loadCellCount);
-
-              $("#loadCellTable").find('#no:last').attr('name', 'no['+loadCellCount+']').attr("id", "no" + loadCellCount).val(item.no);
-              $("#loadCellTable").find('#loadCells:last').attr('name', 'loadCells['+loadCellCount+']').attr("id", "loadCells" + loadCellCount).val(item.loadCells);
-              $("#loadCellTable").find('#loadCellBrand:last').attr('name', 'loadCellBrand['+loadCellCount+']').attr("id", "loadCellBrand" + loadCellCount).val(item.loadCellBrand);
-              $("#loadCellTable").find('#loadCellModel:last').attr('name', 'loadCellModel['+loadCellCount+']').attr("id", "loadCellModel" + loadCellCount).val(item.loadCellModel);
-              $("#loadCellTable").find('#loadCellCapacity:last').attr('name', 'loadCellCapacity['+loadCellCount+']').attr("id", "loadCellCapacity" + loadCellCount).val(item.loadCellCapacity);
-              $("#loadCellTable").find('#loadCellSerial').attr('name', 'loadCellSerial['+loadCellCount+']').attr("id", "loadCellSerial" + loadCellCount).val(item.loadCellSerial);
-
-              loadCellCount++;
-            }
-          }
-        }
-        
-        $('#extendModal').modal('show');
-
-        $('#extendForm').validate({
-          errorElement: 'span',
-          errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-          },
-          highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-          },
-          unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-          }
-        });
       }
-      else{
-        $('#extendModal').find('#id').val(obj.message.id);
-        $('#extendModal').find('#type').val(obj.message.type).trigger('change');
-        $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
-        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
-        $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
-        $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
-        $('#extendModal').find('#newRenew').val(obj.message.stampType);
+    
+      $('#extendModal').modal('show');
 
-        setTimeout(function(){
-          $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
-
-          setTimeout(function(){
-            $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
-          }, 500);
-        }, 1000);
-
-        $('#extendModal').find('#companyText').val('');
-        $('#extendModal').find('#product').val(obj.message.products);
-        $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
-        $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
-        $('#extendModal').find('#address1').val(obj.message.address1);
-        $('#extendModal').find('#model').val(obj.message.model).trigger('change');
-        $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
-        $('#extendModal').find('#address2').val(obj.message.address2);
-        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
-        $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
-        $('#extendModal').find('#address3').val(obj.message.address3);
-        $('#extendModal').find('#serial').val(obj.message.serial_no);
-        $('#extendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);
-        $('#extendModal').find('#attnTo').val(obj.message.pic);
-        $('#extendModal').find('#siriKeselamatan').val(obj.message.siri_keselamatan);
-        $('#extendModal').find('#pic').val(obj.message.pic);
-        $('#extendModal').find('#borangD').val(obj.message.borang_d);
-        $('#extendModal').find('#remark').val(obj.message.remarks);
-        $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
-        $('#extendModal').find('#quotation').val(obj.message.quotation_no);
-        $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
-        $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
-        $('#extendModal').find('#poNo').val(obj.message.purchase_no);
-        $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
-        $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
-        $('#extendModal').find('#invoice').val(obj.message.invoice_no);
-        $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
-        $('#extendModal').find('#certPrice').val(obj.message.cert_price);
-        $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
-        $('#extendModal').find('#sst').val(obj.message.sst);
-        $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
-
-        if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '1'){
-          $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
-          $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
-          $('#extendModal').find('#kelulusanMSPK').val(obj.message.kelulusan_mspk);
-          $('#extendModal').find('#noMSPK').val(obj.message.no_kelulusan);
-          $('#extendModal').find('#noSerialIndicator').val(obj.message.indicator_serial);
-          $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
-          $('#extendModal').find('#platformType').val(obj.message.platform_type);
-          $('#extendModal').find('#size').val(obj.message.size);
-          $('#extendModal').find('#jenisPelantar').val(obj.message.jenis_pelantar);
-          $('#extendModal').find('#others').val(obj.message.other_info);
-          $('#extendModal').find('#loadCellCountry').val(obj.message.load_cell_country);
-          $('#extendModal').find('#noOfLoadCell').val(obj.message.load_cell_no);
-
-          if(obj.message.load_cells_info.length > 0){
-            $("#loadCellTable").html('');
-            loadCellCount = 0;
-
-            for(var i = 0; i < obj.message.load_cells_info.length; i++){
-              var item = obj.message.load_cells_info[i];
-              var $addContents = $("#loadCellDetails").clone();
-              $("#loadCellTable").append($addContents.html());
-
-              $("#loadCellTable").find('.details:last').attr("id", "detail" + loadCellCount);
-              $("#loadCellTable").find('.details:last').attr("data-index", loadCellCount);
-              $("#loadCellTable").find('#remove:last').attr("id", "remove" + loadCellCount);
-
-              $("#loadCellTable").find('#no:last').attr('name', 'no['+loadCellCount+']').attr("id", "no" + loadCellCount).val(item.no);
-              $("#loadCellTable").find('#loadCells:last').attr('name', 'loadCells['+loadCellCount+']').attr("id", "loadCells" + loadCellCount).val(item.loadCells);
-              $("#loadCellTable").find('#loadCellBrand:last').attr('name', 'loadCellBrand['+loadCellCount+']').attr("id", "loadCellBrand" + loadCellCount).val(item.loadCellBrand);
-              $("#loadCellTable").find('#loadCellModel:last').attr('name', 'loadCellModel['+loadCellCount+']').attr("id", "loadCellModel" + loadCellCount).val(item.loadCellModel);
-              $("#loadCellTable").find('#loadCellCapacity:last').attr('name', 'loadCellCapacity['+loadCellCount+']').attr("id", "loadCellCapacity" + loadCellCount).val(item.loadCellCapacity);
-              $("#loadCellTable").find('#loadCellSerial').attr('name', 'loadCellSerial['+loadCellCount+']').attr("id", "loadCellSerial" + loadCellCount).val(item.loadCellSerial);
-
-              loadCellCount++;
-            }
-          }
+      $('#extendForm').validate({
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
         }
-
-        $('#extendModal').modal('show');
-
-        $('#extendForm').validate({
-          errorElement: 'span',
-          errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-          },
-          highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-          },
-          unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-          }
-        });
-      }
+      });
+      
     }
     else if(obj.status === 'failed'){
       toastr["error"](obj.message, "Failed:");
@@ -2263,7 +2078,7 @@ function complete(id) {
 function deactivate(id) {
   if (confirm('Are you sure you want to cancel this items?')) {
     $('#spinnerLoading').show();
-    $.post('php/getStamp.php', {userID: id}, function(data){
+    $.post('php/getValidation.php', {validationId: id}, function(data){
       var obj = JSON.parse(data);
 
       if(obj.status == 'success'){
