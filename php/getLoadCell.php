@@ -24,10 +24,11 @@ if(isset($_POST['userID'])){
             if ($row = $result->fetch_assoc()) {
                 $message['id'] = $row['id'];
                 $message['load_cell'] = $row['load_cell'];
-                $message['machine_type'] = $row['machine_type'];
+                $message['part_no'] = $row['part_no'];
+                $message['capacity'] = $row['capacity'];
                 $message['brand'] = $row['brand'];
                 $message['model'] = $row['model'];
-                $message['jenis_alat'] = $row['jenis_alat'];
+                $message['oiml_approval'] = $row['oiml_approval'];
                 $message['made_in'] = $row['made_in'];
                 $message['class'] = $row['class'];
                 $message['pattern_no'] = $row['pattern_no'];
