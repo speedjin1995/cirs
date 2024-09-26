@@ -16,6 +16,7 @@ if(isset($_POST['code'], $_POST['name'], $_POST['address'], $_POST['address2'], 
 	$address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_STRING);
     $address2 = filter_input(INPUT_POST, 'address2', FILTER_SANITIZE_STRING);
     $address3 = "";
+    $address4 = "";
     $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_STRING);
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
@@ -25,6 +26,10 @@ if(isset($_POST['code'], $_POST['name'], $_POST['address'], $_POST['address2'], 
     $branchAddress2 = $_POST['branch_address2'] ?? [];
     $branchAddress3 = $_POST['branch_address3'] ?? [];
     $branchAddress4 = $_POST['branch_address4'] ?? [];
+    $branchName = $_POST['branch_name'] ?? [];
+    $mapUrl = $_POST['map_url'] ?? [];
+    $branchid = $_POST['branch_id'] ?? [];
+    $deletedShip = $_POST['deletedShip'] ?? [];
     $branchName = $_POST['branch_name'] ?? [];
     $mapUrl = $_POST['map_url'] ?? [];
     $branchid = $_POST['branch_id'] ?? [];

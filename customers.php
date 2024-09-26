@@ -60,7 +60,7 @@ else{
 </section><!-- /.content -->
 
 <div class="modal fade" id="addModal">
-    <div class="modal-dialog modal-xl" style='max-width:90%;'>
+    <div class="modal-dialog modal-xl" style="max-width:90%;">
       <div class="modal-content">
         <form role="form" id="customerForm">
             <div class="modal-header">
