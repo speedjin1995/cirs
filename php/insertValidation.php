@@ -29,60 +29,7 @@ if(isset($_POST['customerType'], $_POST['autoFormNo'], $_POST['validator'], $_PO
 	$email = null;
 	$pic = null;
 	$contact = null;
-	// $pinKeselamatan = null;
-	// $attnTo = null;
-	// $siriKeselamatan = null;
-	// $borangD = null;
-	// $cashBill = null;
-	// $invoice = null;
-	// $pic = null;
-	// $followUpDate = null;
-	// $quotation = null;
-	// $quotationDate = null;
-	// $remark = null;
-	// $customer = "";
-	// $includeCert = "NO";
-	// $poNo = null;
-	// $poDate = null;
-	// $unitPrice = '0.00';
-	// $certPrice = '0.00';
-	// $totalPrice = '0.00';
-	// $sst = '0.00';
-	// $subtoalPrice = '0.00';
-
 	$logs = array();
-
-	// if(isset($_POST['product']) && $_POST['product']!=null && $_POST['product']!=""){
-	// 	$product = filter_input(INPUT_POST, 'product', FILTER_SANITIZE_STRING);
-	// }
-	// else{
-	// 	if ($select_stmtP = $db->prepare("SELECT id FROM products WHERE machine_type=? AND jenis_alat=? AND capacity=? AND validator=?")) {
-	// 		$select_stmtP->bind_param('ssss', $machineType, $jenisAlat, $capacity, $validator);
-	// 		$select_stmtP->execute();
-	// 		$resultP = $select_stmtP->get_result();
-        
-	// 		if ($rowP = $resultP->fetch_assoc()) {
-	// 			$product = $rowP['id'];
-	// 		} 
-	// 		else {
-	// 			if(isset($_POST['unitPrice']) && $_POST['unitPrice']!=null && $_POST['unitPrice']!="" && $_POST['unitPrice']!="0.00"){
-	// 				// Customer does not exist, create a new customer
-	// 				if ($insert_stmtP = $db->prepare("INSERT INTO products (name, machine_type, jenis_alat, capacity, validator, price) VALUES (?, ?, ?, ?, ?, ?)")) {
-	// 					$pname = 'product'.$machineType.$jenisAlat.$capacity.$validator;
-	// 					$insert_stmtP->bind_param('ssssss', $pname , $machineType, $jenisAlat, $capacity, $validator, $_POST['unitPrice']);
-						
-	// 					if ($insert_stmtP->execute()) {
-	// 						$product = $insert_stmtP->insert_id;
-	// 					} 
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// }
-
-	// if(isset($_POST['dealer']) && $_POST['dealer']!=null && $_POST['dealer']!=""){
-	// 	$dealer = $_POST['dealer'];
-	// }
 
 	if(isset($_POST['company']) && $_POST['company']!=null && $_POST['company']!=""){
 		$company = $_POST['company'];
@@ -135,16 +82,9 @@ if(isset($_POST['customerType'], $_POST['autoFormNo'], $_POST['validator'], $_PO
 				$customerType = 'EXISTING';
 			} 
 			else {
-				// $email = null;
-				// $phone = null;
-				// $dealer = null;
 				$branchName = '';
 				$mapUrl = '';
-
-				// if(isset($_POST['dealer'] ) && $_POST['dealer'] != null && $_POST['dealer'] != "" && $type == 'DEALER'){
-				// 	$dealer = filter_input(INPUT_POST, 'dealer', FILTER_SANITIZE_STRING);
-				// }
-
+				
 				// Customer does not exist, create a new customer
 				if ($insert_stmt = $db->prepare("INSERT INTO customers (customer_name, customer_address, address2, address3, address4, customer_phone, customer_email, customer_status, pic, pic_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 					$customer_status = 'CUSTOMER';
@@ -174,9 +114,9 @@ if(isset($_POST['customerType'], $_POST['autoFormNo'], $_POST['validator'], $_PO
 		//Updated datetime
 		$currentDateTime = date('Y-m-d H:i:s');
 		if ($update_stmt = $db->prepare("UPDATE other_validations SET validate_by=?, customer_type=?, customer=?, branch=?, auto_form_no=?, machines=?, unit_serial_no=?, manufacturing=?, brand=?
-		, model=?, capacity=?, size=?, status=?, update_datetime=? WHERE id=?")){
+		, model=?, capacity=?, size=?, update_datetime=? WHERE id=?")){
 			$data = json_encode($logs);
-			$update_stmt->bind_param('sssssssssssssss', $validator, $customerType, $customer, $branch, $autoFormNo, $machineType, $serial, $manufacturing, $brand, $model, $capacity, $size, $status, $currentDateTime, $_POST['id']);
+			$update_stmt->bind_param('ssssssssssssss', $validator, $customerType, $customer, $branch, $autoFormNo, $machineType, $serial, $manufacturing, $brand, $model, $capacity, $size, $currentDateTime, $_POST['id']);
 		
 			// Execute the prepared query.
 			if (! $update_stmt->execute()){
@@ -184,118 +124,117 @@ if(isset($_POST['customerType'], $_POST['autoFormNo'], $_POST['validator'], $_PO
     			$response['message'] = $update_stmt->error;
 			} 
 			else{
-				if ($existCalibration = $db->prepare("SELECT calibrations FROM other_validations WHERE id=?")) {
-					$existCalibration->bind_param('s', $_POST['id']);
+				$lastCalibrationFilePath = '';
+				$expiredCalibrationFilePath = '';
 
-					// Execute the prepared query.
-					if (!$existCalibration->execute()) {
-						$response['status'] = "failed";
-						$response['message'] = "Something went wrong";
-					}else{
-						$result = $existCalibration->get_result();
-						$message = array();
-						if($row = $result->fetch_assoc()){
-							$calibrations = json_decode($row['calibrations'], true); 
+				$no = $_POST['no'];
+				$lastCalibrationDate = $_POST['lastCalibrationDate'];
+				$uploadlastCalibrationPdf = $_FILES['uploadlastCalibrationPdf'];
 
-							foreach ($calibrations[0] as $calibration) {
-								$lastCalibrationFilePath = $calibration['lastCalibrationFilePath']; 
-								$expiredCalibrationFilePath = $calibration['expiredCalibrationFilePath'];
-								if (file_exists($lastCalibrationFilePath)) {
-									unlink($lastCalibrationFilePath);
-								}
-								if (file_exists($expiredCalibrationFilePath)) {
-									unlink($expiredCalibrationFilePath);
-								}
-							}
+				if(isset($_POST['lastCalibrationFilePath']) && $_POST['lastCalibrationFilePath']!=null && $_POST['lastCalibrationFilePath']!=""){
+					$lastCalibrationFilePath = $_POST['lastCalibrationFilePath'];
+				}
+
+				$expiredCalibrationDate = $_POST['expiredCalibrationDate'];
+				$uploadexpiredCalibrationPdf = $_FILES['uploadexpiredCalibrationPdf'];
+
+				if(isset($_POST['expiredCalibrationFilePath']) && $_POST['expiredCalibrationFilePath']!=null && $_POST['expiredCalibrationFilePath']!=""){
+					$expiredCalibrationFilePath = $_POST['expiredCalibrationFilePath'];
+				}
+
+				$ds = DIRECTORY_SEPARATOR;
+				$storeFolder = '../uploads/calibration';
+				$dataJson = '';
+
+				if(isset($no) && $no != null && count($no) > 0){
+					for($i=0; $i<count($no); $i++){
+						$load_calibrations_info[] = array(
+							"no" => $no[$i],
+							"lastCalibrationDate" => $lastCalibrationDate[$i],
+							"expiredCalibrationDate" => $expiredCalibrationDate[$i]
+						);
+
+						if(isset($lastCalibrationFilePath) && $lastCalibrationFilePath!=null && $lastCalibrationFilePath!=""){
+							$load_calibrations_info[$i]['lastCalibrationFilePath'] = $lastCalibrationFilePath[$i];
 						}
 
-						$no = $_POST['no'];
-						$lastCalibrationDate = $_POST['lastCalibrationDate'];
-						$uploadlastCalibrationPdf = $_FILES['uploadlastCalibrationPdf'];
-						$expiredCalibrationDate = $_POST['expiredCalibrationDate'];
-						$uploadexpiredCalibrationPdf = $_FILES['uploadexpiredCalibrationPdf'];
-						$ds = DIRECTORY_SEPARATOR;
-						$storeFolder = '../uploads/calibration';
-						$dataJson = '';
+						if(isset($expiredCalibrationFilePath) && $expiredCalibrationFilePath!=null && $expiredCalibrationFilePath!=""){
+							$load_calibrations_info[$i]['expiredCalibrationFilePath'] = $expiredCalibrationFilePath[$i];
+						}
 
-						if(isset($no) && $no != null && count($no) > 0){
-							for($i=0; $i<count($no); $i++){
-								$load_cells_info[] = array(
-									"no" => $no[$i],
-									"lastCalibrationDate" => $lastCalibrationDate[$i],
-									"expiredCalibrationDate" => $expiredCalibrationDate[$i],
-								);
+						if($uploadlastCalibrationPdf['error'][$i] === 0){
+							if(isset($lastCalibrationFilePath) && $lastCalibrationFilePath!=null && $lastCalibrationFilePath!=""){
+								$updatedLastCalibFilePath = str_replace('../cirs/', '../', $lastCalibrationFilePath[$i]); 
 
-								if($uploadlastCalibrationPdf['error'][$i] === 0){
-									$timestamp = time();
-									$uploadDir = '../uploads/calibration/'; // Directory to store uploaded files
-									$uploadDirDB = '../cirs/uploads/calibration/'; // filepath for db
-									$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadlastCalibrationPdf']['name'][$i]);
-									$uploadFileDB = $uploadDirDB . $timestamp . '_' . basename($_FILES['uploadlastCalibrationPdf']['name'][$i]);
-									$tempFile = $_FILES['uploadlastCalibrationPdf']['tmp_name'][$i];
-								
-									// Move the uploaded file to the target directory
-									if (move_uploaded_file($tempFile, $uploadFile)) {
-										$load_cells_info[$i]['lastCalibrationFilePath'] = $uploadFileDB; // Add file path to data
-									} else {
-										$response['file_status'] = "File upload failed.";
-									}
-								} else {
-									$response['file_status'] = "No file uploaded or there was an error.";
-								}
-
-								if($uploadexpiredCalibrationPdf['error'][$i] === 0){
-									$timestamp = time();
-									$uploadDir = '../uploads/calibration/'; // Directory to store uploaded files
-									$uploadDirDB = '../cirs/uploads/calibration/'; // filepath for db
-									$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadexpiredCalibrationPdf']['name'][$i]);
-									$uploadFileDB = $uploadDirDB . $timestamp . '_' . basename($_FILES['uploadexpiredCalibrationPdf']['name'][$i]);
-									$tempFile = $_FILES['uploadexpiredCalibrationPdf']['tmp_name'][$i];
-
-									// Move the uploaded file to the target directory
-									if (move_uploaded_file($tempFile, $uploadFile)) {
-										$load_cells_info[$i]['expiredCalibrationFilePath'] = $uploadFileDB; // Add file path to data
-									} else {
-										$response['file_status'] = "File upload failed.";
-									}
-								} else {
-									$response['file_status'] = "No file uploaded or there was an error.";
+								if (file_exists($updatedLastCalibFilePath)) {
+									unlink($updatedLastCalibFilePath);
 								}
 							}
+							
+							$timestamp = time();
+							$uploadDir = '../uploads/calibration/'; // Directory to store uploaded files
+							$uploadDirDB = '../cirs/uploads/calibration/'; // filepath for db
+							$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadlastCalibrationPdf']['name'][$i]);
+							$uploadFileDB = $uploadDirDB . $timestamp . '_' . basename($_FILES['uploadlastCalibrationPdf']['name'][$i]);
+							$tempFile = $_FILES['uploadlastCalibrationPdf']['tmp_name'][$i];
+						
+							// Move the uploaded file to the target directory
+							if (move_uploaded_file($tempFile, $uploadFile)) {
+								$load_calibrations_info[$i]['lastCalibrationFilePath'] = $uploadFileDB; // Add file path to data
+							} else {
+								$response['file_status'] = "File upload failed.";
+							}
+						} else {
+							$response['file_status'] = "No file uploaded or there was an error.";
+						}
 
-							$dataJson = json_encode([$load_cells_info], JSON_PRETTY_PRINT);
+						if($uploadexpiredCalibrationPdf['error'][$i] === 0){
+							if(isset($expiredCalibrationFilePath) && $expiredCalibrationFilePath!=null && $expiredCalibrationFilePath!=""){
+								$updatedExpiredCalibFilePath = str_replace('../cirs/', '../', $expiredCalibrationFilePath[$i]); 
+
+								if (file_exists($updatedExpiredCalibFilePath)) {
+									unlink($updatedExpiredCalibFilePath);
+								}
+							}
+							
+							$timestamp = time();
+							$uploadDir = '../uploads/calibration/'; // Directory to store uploaded files
+							$uploadDirDB = '../cirs/uploads/calibration/'; // filepath for db
+							$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadexpiredCalibrationPdf']['name'][$i]);
+							$uploadFileDB = $uploadDirDB . $timestamp . '_' . basename($_FILES['uploadexpiredCalibrationPdf']['name'][$i]);
+							$tempFile = $_FILES['uploadexpiredCalibrationPdf']['tmp_name'][$i];
+
+							// Move the uploaded file to the target directory
+							if (move_uploaded_file($tempFile, $uploadFile)) {
+								$load_calibrations_info[$i]['expiredCalibrationFilePath'] = $uploadFileDB; // Add file path to data
+							} else {
+								$response['file_status'] = "File upload failed.";
+							}
+						} else {
+							$response['file_status'] = "No file uploaded or there was an error.";
 						}
 					}
-				}
-				else{
+
+					$dataJson = json_encode([$load_calibrations_info], JSON_PRETTY_PRINT);
 				}
 
 				// Update certificate data in the database
 				if ($stmt2 = $db->prepare("UPDATE other_validations SET calibrations=? WHERE id=?")) {
-					$stmt2->bind_param('ss', $dataJson, $validation_id);
+					$stmt2->bind_param('ss', $dataJson, $_POST['id']);
 					$stmt2->execute();
 					$stmt2->close();
 				} 
 				
-				
 				$update_stmt->close();
 				$db->close();
 				
-				echo json_encode(
-					array(
-						"status"=> "success", 
-						"message"=> "Updated Successfully!!" 
-					)
-				);
+				$response['status'] = "success";
+				$response['message'] = "Updated Successfully!!";
 			}
 		}
 		else{
-			echo json_encode(
-				array(
-					"status"=> "failed", 
-					"message"=> "Error when creating query"
-				)
-			);
+			$response['status'] = "failed";
+			$response['message'] = "Error when creating query";
 		}
 	}
 	else{

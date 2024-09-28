@@ -522,10 +522,10 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <thead>
                   <tr>
                     <th width="5%">No.</th>
-                    <th width="20%">Last Calibration Date</th>
-                    <th width="20%">Upload PDF</th>
-                    <th width="20%">Expired Calibration Date</th>
-                    <th width="20%">Upload PDF</th>
+                    <th width="15%">Last Calibration Date</th>
+                    <th width="25%">Upload PDF</th>
+                    <th width="15%">Expired Calibration Date</th>
+                    <th width="25%">Upload PDF</th>
                     <th width="5%">Delete</th>
                   </tr>
                 </thead>
@@ -812,21 +812,39 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
 
 <script type="text/html" id="loadCalibrationDetails">
   <tr class="details">
+    <td style="display:none">
+      <input type="text" id="calibrationId" name="calibrationId">
+    </td>
     <td>
       <input type="text" class="form-control" id="no" name="no" readonly>
     </td>
-
     <td>
       <input type="date" id="lastCalibrationDate" name="lastCalibrationDate" style="width: 100%;">
     </td>
     <td>
-      <input type="file" class="form-control" id="uploadlastCalibrationPdf" name="uploadlastCalibrationPdf" required>
+      <div class="row">
+          <div class="col-10">
+            <input type="file" class="form-control" id="uploadlastCalibrationPdf" name="uploadlastCalibrationPdf" required>
+          </div>
+          <div class="col-2 mt-1">
+            <a href="" id="viewLastCalibrationPdf" name="viewLastCalibrationPdf" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
+          </div>
+          <input type="text" id="lastCalibrationFilePath" name="lastCalibrationFilePath"style="display:none">
+      </div>
     </td>
     <td>
       <input type="date" id="expiredCalibrationDate" name="expiredCalibrationDate" style="width: 100%;">
     </td>
     <td>
-      <input type="file" class="form-control" id="uploadexpiredCalibrationPdf" name="uploadexpiredCalibrationPdf" required>
+      <div class="row">
+        <div class="col-10">
+          <input type="file" class="form-control" id="uploadexpiredCalibrationPdf" name="uploadexpiredCalibrationPdf" required>
+        </div>
+        <div class="col-2 mt-1">
+          <a href="" id="viewExpiredCalibrationPdf" name="viewExpiredCalibrationPdf" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
+        </div>
+        <input type="text" id="expiredCalibrationFilePath" name="expiredCalibrationFilePath"style="display:none">
+      </div>
     </td>
     
     <td><button class="btn btn-danger btn-sm" id="remove"><i class="fa fa-times"></i></button></td>
@@ -1833,7 +1851,6 @@ function format (row) {
     for (var i = 0; i < row.calibrations.length; i++) {
       var item = row.calibrations[i][0];
       returnString += '<tr><td>' + item.no + '</td><td>' + item.lastCalibrationDate + '</td><td><a href="' + item.lastCalibrationFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></td><td>' + item.expiredCalibrationDate + '</td><td><a href="' + item.expiredCalibrationFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></td></tr>';
-      // returnString += '<tr><td>' + item.no + '</td><td>' + item.lastCalibrationDate + '</td><td>' + item.lastCalibrationFilePath + '</td><td>' + item.expiredCalibrationDate + '</td><td>' + item.expiredCalibrationFilePath + '</td><td>'
     }
 
     returnString += '</tbody></table>';
@@ -2018,10 +2035,15 @@ function edit(id) {
 
             $("#loadCalibrationTable").find('#no:last').attr('name', 'no['+loadCalibrationCount+']').attr("id", "no" + loadCalibrationCount).val(item.no);
             $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate['+loadCalibrationCount+']').attr("id", "lastCalibrationDate" + loadCalibrationCount).val(item.lastCalibrationDate);
-            $("#loadCalibrationTable").find('#uploadlastCalibrationPdf:last').attr('name', 'uploadlastCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadlastCalibrationPdf" + loadCalibrationCount).val(item.uploadlastCalibrationPdf);
+            $("#loadCalibrationTable").find('#uploadlastCalibrationPdf:last').attr('name', 'uploadlastCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadlastCalibrationPdf" + loadCalibrationCount).removeAttr('required');
+            $("#loadCalibrationTable").find('#viewLastCalibrationPdf:last').attr('name', 'viewLastCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewLastCalibrationPdf" + loadCalibrationCount).attr('href', item.lastCalibrationFilePath).show();
+            $("#loadCalibrationTable").find('#lastCalibrationFilePath:last').attr('name', 'lastCalibrationFilePath['+loadCalibrationCount+']').attr("id", "lastCalibrationFilePath" + loadCalibrationCount).val(item.lastCalibrationFilePath);
+
             $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount).val(item.expiredCalibrationDate);
-            $("#loadCalibrationTable").find('#uploadexpiredCalibrationPdf:last').attr('name', 'uploadexpiredCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadexpiredCalibrationPdf" + loadCalibrationCount).val(item.loadCelluploadexpiredCalibrationPdfCapacity);
-            
+            $("#loadCalibrationTable").find('#uploadexpiredCalibrationPdf:last').attr('name', 'uploadexpiredCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadexpiredCalibrationPdf" + loadCalibrationCount).removeAttr('required');
+            $("#loadCalibrationTable").find('#viewExpiredCalibrationPdf:last').attr('name', 'viewExpiredCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadexpiredCalibrationPdf" + loadCalibrationCount).attr('href', item.expiredCalibrationFilePath).show();
+            $("#loadCalibrationTable").find('#expiredCalibrationFilePath:last').attr('name', 'expiredCalibrationFilePath['+loadCalibrationCount+']').attr("id", "expiredCalibrationFilePath" + loadCalibrationCount).val(item.expiredCalibrationFilePath);
+
             loadCalibrationCount++;
           }
         }
@@ -2051,6 +2073,11 @@ function edit(id) {
       toastr["error"]("Something wrong when pull data", "Failed:");
     }
     $('#spinnerLoading').hide();
+  });
+
+  // Hide the spinner when the modal is closed
+  $('#extendModal').on('hidden.bs.modal', function() {
+    $('#spinnerLoading').hide(); 
   });
 }
 
