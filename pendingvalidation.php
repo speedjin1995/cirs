@@ -158,7 +158,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
             <div class="row">
               <div class="col-8"></div>
               <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
+                <!-- <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button> -->
               </div>
               <!--div class="col-2">
                 <a href="/template/Stamping Record Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
@@ -969,18 +969,18 @@ $(function () {
           buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
                     ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
 
-          // Extra button if validate_by is 3
-          if (row.validate_by == 3) {
-            buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
-                      ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
-          }
+          // // Extra button if validate_by is 3
+          // if (row.validate_by == 3) {
+          //   buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
+          //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
+          // }
 
-          // Print button
-          buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                    ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+          // // Print button
+          // buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+          //           ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
           // Complete button if conditions are met
-          if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
+          if (row.calibrations != '') {
             buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
                       ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
           }
@@ -1227,17 +1227,17 @@ $(function () {
                       ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
 
             // Extra button if validate_by is 3
-            if (row.validate_by == 3) {
-              buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
-                        ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
-            }
+            // if (row.validate_by == 3) {
+            //   buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
+            //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
+            // }
 
             // Print button
-            buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                      ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+            // buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+                      // ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
             // Complete button if conditions are met
-            if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
+            if (row.calibrations != '') {
               buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
                         ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
             }
@@ -2084,7 +2084,7 @@ function edit(id) {
 function complete(id) {
   if (confirm('Are you sure you want to complete this items?')) {
     $('#spinnerLoading').show();
-    $.post('php/completeStamp.php', {userID: id}, function(data){
+    $.post('php/completeValidation.php', {userID: id}, function(data){
       var obj = JSON.parse(data);
 
       if(obj.status === 'success'){
