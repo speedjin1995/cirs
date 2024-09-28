@@ -10,9 +10,11 @@ if(!isset($_SESSION['userID'])){
 if(isset($_POST['userID'])){
 	$id = filter_input(INPUT_POST, 'userID', FILTER_SANITIZE_STRING);
 	$del = "Pending";
+	$reasonId = null;
+	$otherReason = null;
 	
-	if ($stmt2 = $db->prepare("UPDATE other_validations SET status=? WHERE id=?")) {
-		$stmt2->bind_param('ss', $del , $id);
+	if ($stmt2 = $db->prepare("UPDATE other_validations SET status=?, reason_id=?, other_reason=? WHERE id=?")) {
+		$stmt2->bind_param('ssss', $del, $reasonId, $otherReason, $id);
 		
 		if($stmt2->execute()){
 			$stmt2->close();

@@ -14,7 +14,7 @@ else{
 	$stmt->execute();
 	$result = $stmt->get_result();
   $role = 'NORMAL';
-  $_SESSION['page']='validation';
+  $_SESSION['page']='oldvalidation';
 	
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
@@ -57,7 +57,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Complete Validations</h1>
+        <h1 class="m-0 text-dark">Cancelled Validations</h1>
       </div><!-- /.col -->
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
@@ -523,8 +523,9 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                   <tr>
                     <th width="5%">No.</th>
                     <th width="15%">Last Calibration Date</th>
+                    <th width="25%">Upload PDF</th>
                     <th width="15%">Expired Calibration Date</th>
-                    <th width="25%">Upload Attachment</th>
+                    <th width="25%">Upload PDF</th>
                     <th width="5%">Delete</th>
                   </tr>
                 </thead>
@@ -821,17 +822,28 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
       <input type="date" id="lastCalibrationDate" name="lastCalibrationDate" style="width: 100%;">
     </td>
     <td>
+      <div class="row">
+          <div class="col-10">
+            <input type="file" class="form-control" id="uploadlastCalibrationPdf" name="uploadlastCalibrationPdf" required>
+          </div>
+          <div class="col-2 mt-1">
+            <a href="" id="viewLastCalibrationPdf" name="viewLastCalibrationPdf" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
+          </div>
+          <input type="text" id="lastCalibrationFilePath" name="lastCalibrationFilePath"style="display:none">
+      </div>
+    </td>
+    <td>
       <input type="date" id="expiredCalibrationDate" name="expiredCalibrationDate" style="width: 100%;">
     </td>
     <td>
       <div class="row">
         <div class="col-10">
-          <input type="file" class="form-control" id="uploadAttachment" name="uploadAttachment" required>
+          <input type="file" class="form-control" id="uploadexpiredCalibrationPdf" name="uploadexpiredCalibrationPdf" required>
         </div>
         <div class="col-2 mt-1">
-          <a href="" id="viewCalibrationPdf" name="viewCalibrationPdf" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
+          <a href="" id="viewExpiredCalibrationPdf" name="viewExpiredCalibrationPdf" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
         </div>
-        <input type="text" id="calibrationFilePath" name="calibrationFilePath"style="display:none">
+        <input type="text" id="expiredCalibrationFilePath" name="expiredCalibrationFilePath"style="display:none">
       </div>
     </td>
     
@@ -917,7 +929,7 @@ $(function () {
     'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
       'type': 'POST',
-      'url':'php/filterValidation.php',
+      'url':'php/filterCancelledValidation.php',
       'data': {
         fromDate: fromDateValue,
         toDate: toDateValue,
@@ -951,35 +963,13 @@ $(function () {
       { 
         data: 'id',
         render: function ( data, type, row ) {
-          let buttons = '<div class="row">';
-
-          // Edit button
-          buttons += '<div class="col-5"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
-                    ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
-
-          // Extra button if validate_by is 3
-          // if (row.validate_by == 3) {
-          //   buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
-          //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
-          // }
-
-          // Print button
-          // buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                    // ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
-
-          // Complete button if conditions are met
-          // if (row.calibrations != '') {
-          //   buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
-          //             ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
-          // }
-
-          // Cancelled button
-          buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-                    ')" class="btn btn-danger btn-sm">X</button></div>';
-
-          buttons += '</div>'; // Closing row div
-
-          return buttons;
+          if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
+            return '<div class="row"><div class="col-4"><button type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
+            ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
+          } 
+          else {
+            return ''; // Return an empty string or any other placeholder if the item is invoiced
+          }
         }
       },
       { 
@@ -1174,7 +1164,7 @@ $(function () {
       'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
         'type': 'POST',
-        'url':'php/filterValidation.php',
+        'url':'php/filterCancelledValidation.php',
         'data': {
           fromDate: fromDateValue,
           toDate: toDateValue,
@@ -1208,35 +1198,13 @@ $(function () {
         { 
           data: 'id',
           render: function ( data, type, row ) {
-            let buttons = '<div class="row">';
-
-            // Edit button
-            buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
-                      ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
-
-            // Extra button if validate_by is 3
-            // if (row.validate_by == 3) {
-            //   buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
-            //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
-            // }
-
-            // Print button
-            // buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                      // ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
-
-            // Complete button if conditions are met
-            // if (row.calibrations != '') {
-            //   buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
-            //             ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
-            // }
-
-            // Cancelled button
-            buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-                      ')" class="btn btn-danger btn-sm">X</button></div>';
-
-            buttons += '</div>'; // Closing row div
-
-            return buttons;
+            if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
+              return '<div class="row"><div class="col-4"><button type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
+              ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
+            } 
+            else {
+              return ''; // Return an empty string or any other placeholder if the item is invoiced
+            }
           }
         },
         { 
@@ -2024,11 +1992,14 @@ function edit(id) {
 
             $("#loadCalibrationTable").find('#no:last').attr('name', 'no['+loadCalibrationCount+']').attr("id", "no" + loadCalibrationCount).val(item.no);
             $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate['+loadCalibrationCount+']').attr("id", "lastCalibrationDate" + loadCalibrationCount).val(item.lastCalibrationDate);
-            $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount).val(item.expiredCalibrationDate);
+            $("#loadCalibrationTable").find('#uploadlastCalibrationPdf:last').attr('name', 'uploadlastCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadlastCalibrationPdf" + loadCalibrationCount).removeAttr('required');
+            $("#loadCalibrationTable").find('#viewLastCalibrationPdf:last').attr('name', 'viewLastCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewLastCalibrationPdf" + loadCalibrationCount).attr('href', item.lastCalibrationFilePath).show();
+            $("#loadCalibrationTable").find('#lastCalibrationFilePath:last').attr('name', 'lastCalibrationFilePath['+loadCalibrationCount+']').attr("id", "lastCalibrationFilePath" + loadCalibrationCount).val(item.lastCalibrationFilePath);
 
-            $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment['+loadCalibrationCount+']').attr("id", "uploadAttachment" + loadCalibrationCount).removeAttr('required');
-            $("#loadCalibrationTable").find('#viewCalibrationPdf:last').attr('name', 'viewCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewCalibrationPdf" + loadCalibrationCount).attr('href', item.calibrationFilePath).show();
-            $("#loadCalibrationTable").find('#calibrationFilePath:last').attr('name', 'calibrationFilePath['+loadCalibrationCount+']').attr("id", "calibrationFilePath" + loadCalibrationCount).val(item.calibrationFilePath);
+            $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount).val(item.expiredCalibrationDate);
+            $("#loadCalibrationTable").find('#uploadexpiredCalibrationPdf:last').attr('name', 'uploadexpiredCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadexpiredCalibrationPdf" + loadCalibrationCount).removeAttr('required');
+            $("#loadCalibrationTable").find('#viewExpiredCalibrationPdf:last').attr('name', 'viewExpiredCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadexpiredCalibrationPdf" + loadCalibrationCount).attr('href', item.expiredCalibrationFilePath).show();
+            $("#loadCalibrationTable").find('#expiredCalibrationFilePath:last').attr('name', 'expiredCalibrationFilePath['+loadCalibrationCount+']').attr("id", "expiredCalibrationFilePath" + loadCalibrationCount).val(item.expiredCalibrationFilePath);
 
             loadCalibrationCount++;
           }
@@ -2064,7 +2035,6 @@ function edit(id) {
   // Hide the spinner when the modal is closed
   $('#extendModal').on('hidden.bs.modal', function() {
     $('#spinnerLoading').hide(); 
-    location.reload();
   });
 }
 
