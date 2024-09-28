@@ -176,7 +176,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
+                  <!-- <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th> -->
                   <th>Validator</th>
                   <th>Company Name</th>
                   <th>Certificate No.</th>
@@ -940,20 +940,20 @@ $(function () {
       } 
     },
     'columns': [
-      {
-        // Add a checkbox with a unique ID for each row
-        data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-        className: 'select-checkbox',
-        orderable: false,
-        render: function (data, type, row) {
-          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-          } 
-          else {
-            return ''; // Return an empty string or any other placeholder if the item is invoiced
-          }
-        }
-      },
+      // {
+      //   // Add a checkbox with a unique ID for each row
+      //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+      //   className: 'select-checkbox',
+      //   orderable: false,
+      //   render: function (data, type, row) {
+      //     if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+      //       return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+      //     } 
+      //     else {
+      //       return ''; // Return an empty string or any other placeholder if the item is invoiced
+      //     }
+      //   }
+      // },
       { data: 'validate_by' },
       { data: 'customer' },
       { data: 'machines' },
@@ -1197,20 +1197,20 @@ $(function () {
         } 
       },
       'columns': [
-        {
-          // Add a checkbox with a unique ID for each row
-          data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-          className: 'select-checkbox',
-          orderable: false,
-          render: function (data, type, row) {
-            if (row.status == 'Active') { // Assuming 'isInvoiced' is a boolean field in your row data
-              return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-            } 
-            else {
-              return ''; // Return an empty string or any other placeholder if the item is invoiced
-            }
-          }
-        },
+        // {
+        //   // Add a checkbox with a unique ID for each row
+        //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+        //   className: 'select-checkbox',
+        //   orderable: false,
+        //   render: function (data, type, row) {
+        //     if (row.status == 'Active') { // Assuming 'isInvoiced' is a boolean field in your row data
+        //       return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+        //     } 
+        //     else {
+        //       return ''; // Return an empty string or any other placeholder if the item is invoiced
+        //     }
+        //   }
+        // },
         { data: 'validate_by' },
         { data: 'customer' },
         { data: 'machines' },
