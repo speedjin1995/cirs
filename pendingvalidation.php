@@ -1833,7 +1833,7 @@ function newEntry(){
   var date = new Date();
 
   $('#extendModal').find('#id').val("");
-  $('#extendModal').find('#type').val("DIRRECT").trigger('change');
+  $('#extendModal').find('#type').val("DIRECT").trigger('change');
   $('#extendModal').find('#dealer').val('').trigger('change');
   $('#extendModal').find('#reseller_branch').val('').trigger('change');
   // $('#isResseller').hide();
