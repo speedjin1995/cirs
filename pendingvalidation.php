@@ -158,7 +158,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
             <div class="row">
               <div class="col-8"></div>
               <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
+                <!-- <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button> -->
               </div>
               <!--div class="col-2">
                 <a href="/template/Stamping Record Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
@@ -176,7 +176,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
+                  <!-- <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th> -->
                   <th>Validator</th>
                   <th>Company Name</th>
                   <th>Certificate No.</th>
@@ -523,9 +523,8 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                   <tr>
                     <th width="5%">No.</th>
                     <th width="15%">Last Calibration Date</th>
-                    <th width="25%">Upload PDF</th>
                     <th width="15%">Expired Calibration Date</th>
-                    <th width="25%">Upload PDF</th>
+                    <th width="25%">Upload Attachment</th>
                     <th width="5%">Delete</th>
                   </tr>
                 </thead>
@@ -822,28 +821,17 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
       <input type="date" id="lastCalibrationDate" name="lastCalibrationDate" style="width: 100%;">
     </td>
     <td>
-      <div class="row">
-          <div class="col-10">
-            <input type="file" class="form-control" id="uploadlastCalibrationPdf" name="uploadlastCalibrationPdf" required>
-          </div>
-          <div class="col-2 mt-1">
-            <a href="" id="viewLastCalibrationPdf" name="viewLastCalibrationPdf" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
-          </div>
-          <input type="text" id="lastCalibrationFilePath" name="lastCalibrationFilePath"style="display:none">
-      </div>
-    </td>
-    <td>
       <input type="date" id="expiredCalibrationDate" name="expiredCalibrationDate" style="width: 100%;">
     </td>
     <td>
       <div class="row">
         <div class="col-10">
-          <input type="file" class="form-control" id="uploadexpiredCalibrationPdf" name="uploadexpiredCalibrationPdf" required>
+          <input type="file" class="form-control" id="uploadAttachment" name="uploadAttachment" required>
         </div>
         <div class="col-2 mt-1">
-          <a href="" id="viewExpiredCalibrationPdf" name="viewExpiredCalibrationPdf" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
+          <a href="" id="viewCalibrationPdf" name="viewCalibrationPdf" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
         </div>
-        <input type="text" id="expiredCalibrationFilePath" name="expiredCalibrationFilePath"style="display:none">
+        <input type="text" id="calibrationFilePath" name="calibrationFilePath"style="display:none">
       </div>
     </td>
     
@@ -940,20 +928,20 @@ $(function () {
       } 
     },
     'columns': [
-      {
-        // Add a checkbox with a unique ID for each row
-        data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-        className: 'select-checkbox',
-        orderable: false,
-        render: function (data, type, row) {
-          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-          } 
-          else {
-            return ''; // Return an empty string or any other placeholder if the item is invoiced
-          }
-        }
-      },
+      // {
+      //   // Add a checkbox with a unique ID for each row
+      //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+      //   className: 'select-checkbox',
+      //   orderable: false,
+      //   render: function (data, type, row) {
+      //     if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+      //       return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+      //     } 
+      //     else {
+      //       return ''; // Return an empty string or any other placeholder if the item is invoiced
+      //     }
+      //   }
+      // },
       { data: 'validate_by' },
       { data: 'customer' },
       { data: 'machines' },
@@ -969,18 +957,18 @@ $(function () {
           buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
                     ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
 
-          // Extra button if validate_by is 3
-          if (row.validate_by == 3) {
-            buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
-                      ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
-          }
+          // // Extra button if validate_by is 3
+          // if (row.validate_by == 3) {
+          //   buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
+          //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
+          // }
 
-          // Print button
-          buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                    ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+          // // Print button
+          // buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+          //           ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
           // Complete button if conditions are met
-          if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
+          if (row.calibrations != '') {
             buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
                       ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
           }
@@ -1197,20 +1185,20 @@ $(function () {
         } 
       },
       'columns': [
-        {
-          // Add a checkbox with a unique ID for each row
-          data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-          className: 'select-checkbox',
-          orderable: false,
-          render: function (data, type, row) {
-            if (row.status == 'Active') { // Assuming 'isInvoiced' is a boolean field in your row data
-              return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-            } 
-            else {
-              return ''; // Return an empty string or any other placeholder if the item is invoiced
-            }
-          }
-        },
+        // {
+        //   // Add a checkbox with a unique ID for each row
+        //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+        //   className: 'select-checkbox',
+        //   orderable: false,
+        //   render: function (data, type, row) {
+        //     if (row.status == 'Active') { // Assuming 'isInvoiced' is a boolean field in your row data
+        //       return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+        //     } 
+        //     else {
+        //       return ''; // Return an empty string or any other placeholder if the item is invoiced
+        //     }
+        //   }
+        // },
         { data: 'validate_by' },
         { data: 'customer' },
         { data: 'machines' },
@@ -1227,17 +1215,17 @@ $(function () {
                       ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
 
             // Extra button if validate_by is 3
-            if (row.validate_by == 3) {
-              buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
-                        ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
-            }
+            // if (row.validate_by == 3) {
+            //   buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
+            //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
+            // }
 
             // Print button
-            buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                      ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+            // buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+                      // ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
             // Complete button if conditions are met
-            if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
+            if (row.calibrations != '') {
               buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
                         ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
             }
@@ -1798,9 +1786,8 @@ $(function () {
 
     $("#loadCalibrationTable").find('#no:last').attr('name', 'no['+loadCalibrationCount+']').attr("id", "no" + loadCalibrationCount).val((loadCalibrationCount + 1).toString());
     $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate['+loadCalibrationCount+']').attr("id", "lastCalibrationDate" + loadCalibrationCount);
-    $("#loadCalibrationTable").find('#uploadlastCalibrationPdf:last').attr('name', 'uploadlastCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadlastCalibrationPdf" + loadCalibrationCount);
     $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount);
-    $("#loadCalibrationTable").find('#uploadexpiredCalibrationPdf:last').attr('name', 'uploadexpiredCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadexpiredCalibrationPdf" + loadCalibrationCount);
+    $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment['+loadCalibrationCount+']').attr("id", "uploadAttachment" + loadCalibrationCount);
 
     loadCalibrationCount++;
   });
@@ -1845,12 +1832,13 @@ function format (row) {
     </div> 
   `;
   
-  if (row.calibrations.length > 0) {
-    returnString += '<h4>Calibrations</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="20%">Latest Date Calibration</th><th width="20">Latest Calibration Certificate Attachment</th><th width="20%">Expire Date Calibration</th><th width="20%">Expired Calibration Certificate Attachment</th></tr></thead><tbody>'
+  if (row.calibrations[0].length > 0) {
+    returnString += '<h4>Calibrations</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="20%">Latest Date Calibration</th><th width="20%">Expire Date Calibration</th><th width="20%">Calibration Certificate Attachment</th></tr></thead><tbody>'
     
-    for (var i = 0; i < row.calibrations.length; i++) {
-      var item = row.calibrations[i][0];
-      returnString += '<tr><td>' + item.no + '</td><td>' + item.lastCalibrationDate + '</td><td><a href="' + item.lastCalibrationFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></td><td>' + item.expiredCalibrationDate + '</td><td><a href="' + item.expiredCalibrationFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></td></tr>';
+    var calibrations = row.calibrations[0];
+    for (var i = 0; i < calibrations.length; i++) {
+      var item = calibrations[i];
+      returnString += '<tr><td>' + item.no + '</td><td>' + item.lastCalibrationDate + '<td>' + item.expiredCalibrationDate + '</td><td><a href="' + item.calibrationFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></td></tr>';
     }
 
     returnString += '</tbody></table>';
@@ -2035,14 +2023,11 @@ function edit(id) {
 
             $("#loadCalibrationTable").find('#no:last').attr('name', 'no['+loadCalibrationCount+']').attr("id", "no" + loadCalibrationCount).val(item.no);
             $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate['+loadCalibrationCount+']').attr("id", "lastCalibrationDate" + loadCalibrationCount).val(item.lastCalibrationDate);
-            $("#loadCalibrationTable").find('#uploadlastCalibrationPdf:last').attr('name', 'uploadlastCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadlastCalibrationPdf" + loadCalibrationCount).removeAttr('required');
-            $("#loadCalibrationTable").find('#viewLastCalibrationPdf:last').attr('name', 'viewLastCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewLastCalibrationPdf" + loadCalibrationCount).attr('href', item.lastCalibrationFilePath).show();
-            $("#loadCalibrationTable").find('#lastCalibrationFilePath:last').attr('name', 'lastCalibrationFilePath['+loadCalibrationCount+']').attr("id", "lastCalibrationFilePath" + loadCalibrationCount).val(item.lastCalibrationFilePath);
-
             $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount).val(item.expiredCalibrationDate);
-            $("#loadCalibrationTable").find('#uploadexpiredCalibrationPdf:last').attr('name', 'uploadexpiredCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadexpiredCalibrationPdf" + loadCalibrationCount).removeAttr('required');
-            $("#loadCalibrationTable").find('#viewExpiredCalibrationPdf:last').attr('name', 'viewExpiredCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadexpiredCalibrationPdf" + loadCalibrationCount).attr('href', item.expiredCalibrationFilePath).show();
-            $("#loadCalibrationTable").find('#expiredCalibrationFilePath:last').attr('name', 'expiredCalibrationFilePath['+loadCalibrationCount+']').attr("id", "expiredCalibrationFilePath" + loadCalibrationCount).val(item.expiredCalibrationFilePath);
+
+            $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment['+loadCalibrationCount+']').attr("id", "uploadAttachment" + loadCalibrationCount).removeAttr('required');
+            $("#loadCalibrationTable").find('#viewCalibrationPdf:last').attr('name', 'viewCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewCalibrationPdf" + loadCalibrationCount).attr('href', item.calibrationFilePath).show();
+            $("#loadCalibrationTable").find('#calibrationFilePath:last').attr('name', 'calibrationFilePath['+loadCalibrationCount+']').attr("id", "calibrationFilePath" + loadCalibrationCount).val(item.calibrationFilePath);
 
             loadCalibrationCount++;
           }
@@ -2078,13 +2063,14 @@ function edit(id) {
   // Hide the spinner when the modal is closed
   $('#extendModal').on('hidden.bs.modal', function() {
     $('#spinnerLoading').hide(); 
+    location.reload();
   });
 }
 
 function complete(id) {
   if (confirm('Are you sure you want to complete this items?')) {
     $('#spinnerLoading').show();
-    $.post('php/completeStamp.php', {userID: id}, function(data){
+    $.post('php/completeValidation.php', {userID: id}, function(data){
       var obj = JSON.parse(data);
 
       if(obj.status === 'success'){

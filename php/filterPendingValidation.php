@@ -39,12 +39,12 @@ if($_POST['autoFormNo'] != null && $_POST['autoFormNo'] != '' && $_POST['autoFor
 	$searchQuery .= " and auto_form_no = '".$_POST['autoFormNo']."'";
 }
 
-if($searchValue != ''){
-  $searchQuery = " and (purchase_no like '%".$searchValue."%' OR
-  quotation_no like '%".$searchValue."%' OR
-  invoice_no like '%".$searchValue."%' OR
-  cash_bill like '%".$searchValue."%')";
-}
+// if($searchValue != ''){
+//   $searchQuery = " and (purchase_no like '%".$searchValue."%' OR
+//   quotation_no like '%".$searchValue."%' OR
+//   invoice_no like '%".$searchValue."%' OR
+//   cash_bill like '%".$searchValue."%')";
+// }
 
 ## Total number of records without filtering
 $sel = mysqli_query($db,"select count(*) as allcount FROM other_validations");

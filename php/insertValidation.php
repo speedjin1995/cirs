@@ -124,22 +124,15 @@ if(isset($_POST['customerType'], $_POST['autoFormNo'], $_POST['validator'], $_PO
     			$response['message'] = $update_stmt->error;
 			} 
 			else{
-				$lastCalibrationFilePath = '';
-				$expiredCalibrationFilePath = '';
+				$calibrationFilePath = '';
 
 				$no = $_POST['no'];
 				$lastCalibrationDate = $_POST['lastCalibrationDate'];
-				$uploadlastCalibrationPdf = $_FILES['uploadlastCalibrationPdf'];
-
-				if(isset($_POST['lastCalibrationFilePath']) && $_POST['lastCalibrationFilePath']!=null && $_POST['lastCalibrationFilePath']!=""){
-					$lastCalibrationFilePath = $_POST['lastCalibrationFilePath'];
-				}
-
 				$expiredCalibrationDate = $_POST['expiredCalibrationDate'];
-				$uploadexpiredCalibrationPdf = $_FILES['uploadexpiredCalibrationPdf'];
+				$uploadAttachment = $_FILES['uploadAttachment'];
 
-				if(isset($_POST['expiredCalibrationFilePath']) && $_POST['expiredCalibrationFilePath']!=null && $_POST['expiredCalibrationFilePath']!=""){
-					$expiredCalibrationFilePath = $_POST['expiredCalibrationFilePath'];
+				if(isset($_POST['calibrationFilePath']) && $_POST['calibrationFilePath']!=null && $_POST['calibrationFilePath']!=""){
+					$calibrationFilePath = $_POST['calibrationFilePath'];
 				}
 
 				$ds = DIRECTORY_SEPARATOR;
@@ -154,59 +147,29 @@ if(isset($_POST['customerType'], $_POST['autoFormNo'], $_POST['validator'], $_PO
 							"expiredCalibrationDate" => $expiredCalibrationDate[$i]
 						);
 
-						if(isset($lastCalibrationFilePath) && $lastCalibrationFilePath!=null && $lastCalibrationFilePath!=""){
-							$load_calibrations_info[$i]['lastCalibrationFilePath'] = $lastCalibrationFilePath[$i];
+						if(isset($calibrationFilePath) && $calibrationFilePath!=null && $calibrationFilePath!=""){
+							$load_calibrations_info[$i]['calibrationFilePath'] = $calibrationFilePath[$i];
 						}
 
-						if(isset($expiredCalibrationFilePath) && $expiredCalibrationFilePath!=null && $expiredCalibrationFilePath!=""){
-							$load_calibrations_info[$i]['expiredCalibrationFilePath'] = $expiredCalibrationFilePath[$i];
-						}
+						if($uploadAttachment['error'][$i] === 0){
+							if(isset($calibrationFilePath) && $calibrationFilePath!=null && $calibrationFilePath!=""){
+								$calibrationFilePath = str_replace('../cirs/', '../', $calibrationFilePath[$i]); 
 
-						if($uploadlastCalibrationPdf['error'][$i] === 0){
-							if(isset($lastCalibrationFilePath) && $lastCalibrationFilePath!=null && $lastCalibrationFilePath!=""){
-								$updatedLastCalibFilePath = str_replace('../cirs/', '../', $lastCalibrationFilePath[$i]); 
-
-								if (file_exists($updatedLastCalibFilePath)) {
-									unlink($updatedLastCalibFilePath);
+								if (file_exists($calibrationFilePath)) {
+									unlink($calibrationFilePath);
 								}
 							}
 							
 							$timestamp = time();
 							$uploadDir = '../uploads/calibration/'; // Directory to store uploaded files
 							$uploadDirDB = '../cirs/uploads/calibration/'; // filepath for db
-							$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadlastCalibrationPdf']['name'][$i]);
-							$uploadFileDB = $uploadDirDB . $timestamp . '_' . basename($_FILES['uploadlastCalibrationPdf']['name'][$i]);
-							$tempFile = $_FILES['uploadlastCalibrationPdf']['tmp_name'][$i];
-						
-							// Move the uploaded file to the target directory
-							if (move_uploaded_file($tempFile, $uploadFile)) {
-								$load_calibrations_info[$i]['lastCalibrationFilePath'] = $uploadFileDB; // Add file path to data
-							} else {
-								$response['file_status'] = "File upload failed.";
-							}
-						} else {
-							$response['file_status'] = "No file uploaded or there was an error.";
-						}
-
-						if($uploadexpiredCalibrationPdf['error'][$i] === 0){
-							if(isset($expiredCalibrationFilePath) && $expiredCalibrationFilePath!=null && $expiredCalibrationFilePath!=""){
-								$updatedExpiredCalibFilePath = str_replace('../cirs/', '../', $expiredCalibrationFilePath[$i]); 
-
-								if (file_exists($updatedExpiredCalibFilePath)) {
-									unlink($updatedExpiredCalibFilePath);
-								}
-							}
-							
-							$timestamp = time();
-							$uploadDir = '../uploads/calibration/'; // Directory to store uploaded files
-							$uploadDirDB = '../cirs/uploads/calibration/'; // filepath for db
-							$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadexpiredCalibrationPdf']['name'][$i]);
-							$uploadFileDB = $uploadDirDB . $timestamp . '_' . basename($_FILES['uploadexpiredCalibrationPdf']['name'][$i]);
-							$tempFile = $_FILES['uploadexpiredCalibrationPdf']['tmp_name'][$i];
+							$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadAttachment']['name'][$i]);
+							$uploadFileDB = $uploadDirDB . $timestamp . '_' . basename($_FILES['uploadAttachment']['name'][$i]);
+							$tempFile = $_FILES['uploadAttachment']['tmp_name'][$i];
 
 							// Move the uploaded file to the target directory
 							if (move_uploaded_file($tempFile, $uploadFile)) {
-								$load_calibrations_info[$i]['expiredCalibrationFilePath'] = $uploadFileDB; // Add file path to data
+								$load_calibrations_info[$i]['calibrationFilePath'] = $uploadFileDB; // Add file path to data
 							} else {
 								$response['file_status'] = "File upload failed.";
 							}
@@ -254,9 +217,8 @@ if(isset($_POST['customerType'], $_POST['autoFormNo'], $_POST['validator'], $_PO
 				$validation_id = $insert_stmt->insert_id;
 				$no = $_POST['no'];
 				$lastCalibrationDate = $_POST['lastCalibrationDate'];
-				$uploadlastCalibrationPdf = $_FILES['uploadlastCalibrationPdf'];
 				$expiredCalibrationDate = $_POST['expiredCalibrationDate'];
-				$uploadexpiredCalibrationPdf = $_FILES['uploadexpiredCalibrationPdf'];
+				$uploadAttachment = $_FILES['uploadAttachment'];
 				$ds = DIRECTORY_SEPARATOR;
 				$storeFolder = '../uploads/calibration';
 				$dataJson = '';
@@ -269,35 +231,17 @@ if(isset($_POST['customerType'], $_POST['autoFormNo'], $_POST['validator'], $_PO
 							"expiredCalibrationDate" => $expiredCalibrationDate[$i],
 						);
 
-						if($uploadlastCalibrationPdf['error'][$i] === 0){
+						if($uploadAttachment['error'][$i] === 0){
 							$timestamp = time();
 							$uploadDir = '../uploads/calibration/'; // Directory to store uploaded files
 							$uploadDirDB = '../cirs/uploads/calibration/'; // filepath for db
-							$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadlastCalibrationPdf']['name'][$i]);
-							$uploadFileDB = $uploadDirDB . $timestamp . '_' . basename($_FILES['uploadlastCalibrationPdf']['name'][$i]);
-							$tempFile = $_FILES['uploadlastCalibrationPdf']['tmp_name'][$i];
-						
-							// Move the uploaded file to the target directory
-							if (move_uploaded_file($tempFile, $uploadFile)) {
-								$load_cells_info[$i]['lastCalibrationFilePath'] = $uploadFileDB; // Add file path to data
-							} else {
-								$response['file_status'] = "File upload failed.";
-							}
-						} else {
-							$response['file_status'] = "No file uploaded or there was an error.";
-						}
-
-						if($uploadexpiredCalibrationPdf['error'][$i] === 0){
-							$timestamp = time();
-							$uploadDir = '../uploads/calibration/'; // Directory to store uploaded files
-							$uploadDirDB = '../cirs/uploads/calibration/'; // filepath for db
-							$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadexpiredCalibrationPdf']['name'][$i]);
-							$uploadFileDB = $uploadDirDB . $timestamp . '_' . basename($_FILES['uploadexpiredCalibrationPdf']['name'][$i]);
-							$tempFile = $_FILES['uploadexpiredCalibrationPdf']['tmp_name'][$i];
+							$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadAttachment']['name'][$i]);
+							$uploadFileDB = $uploadDirDB . $timestamp . '_' . basename($_FILES['uploadAttachment']['name'][$i]);
+							$tempFile = $_FILES['uploadAttachment']['tmp_name'][$i];
 
 							// Move the uploaded file to the target directory
 							if (move_uploaded_file($tempFile, $uploadFile)) {
-								$load_cells_info[$i]['expiredCalibrationFilePath'] = $uploadFileDB; // Add file path to data
+								$load_cells_info[$i]['calibrationFilePath'] = $uploadFileDB; // Add file path to data
 							} else {
 								$response['file_status'] = "File upload failed.";
 							}
