@@ -484,6 +484,13 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Validation Date * </label>
+                    <input class="form-control" type="text" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate" required>
+                  </div>
+                </div>
+
                 <!-- <div class="col-4" style="display:none;">
                   <div class="form-group">
                     <label>Product *</label>
@@ -1933,6 +1940,7 @@ function newEntry(){
   $('#extendModal').find('#poDate').val('');
   $('#extendModal').find('#cashBill').val("");
   $('#extendModal').find('#invoice').val('');
+  $('#extendModal').find('#validationDate').val(formattedDate);
 
   // $('#pricingTable').html('');
   // pricingCount = 0;
@@ -2007,6 +2015,7 @@ function edit(id) {
       $('#extendModal').find('#model').val(obj.message.model).trigger('change');
       $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
       $('#extendModal').find('#size').val(obj.message.size).trigger('change');
+      $('#extendModal').find('#validationDate').val(obj.message.validation_date);
 
       if(obj.message.calibrations.length > 0){
         $("#loadCalibrationTable").html('');

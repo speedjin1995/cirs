@@ -14,13 +14,13 @@ else{
 	$stmt->execute();
 	$result = $stmt->get_result();
   $role = 'NORMAL';
-  $_SESSION['page']='pendingvalidation';
+  $_SESSION['page']='pendinginhouse';
 	
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
   }
 
-  $autoFormNos = $db->query("SELECT DISTINCT auto_form_no FROM other_validations");
+  $autoFormNos = $db->query("SELECT DISTINCT auto_form_no FROM inhouse_validations");
   $dealer = $db->query("SELECT * FROM dealer WHERE deleted = '0'");
   $customers = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
@@ -57,7 +57,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Pending Validations</h1>
+        <h1 class="m-0 text-dark">Pending In-House Validations</h1>
       </div><!-- /.col -->
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
@@ -71,7 +71,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
       <div class="col-lg-12">
         <div class="card">
           <div class="card-body">
-            <div class="row">
+            <div class="row" style="display:none;">
               <div class="col-4">
                 <div class="form-group">
                   <label>Select Validators</label>
@@ -366,70 +366,101 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
-                <div class="col-3">
-                  <div class="form-group">
-                    <label>Unit Serial No * </label>
-                    <input class="form-control" type="text" placeholder="Serial No." id="serial" name="serial" required>
+                <div class="col-3 d-flex">
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label>Unit Serial No * </label>
+                      <input class="form-control" type="text" placeholder="Serial No." id="serial" name="serial" required>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label>Last Calibration Date * </label>
+                      <input class="form-control" type="date" id="lastCalibrationDate" name="lastCalibrationDate" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3 d-flex">
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label>Expired Date * </label>
+                      <input class="form-control" type="date" id="expiredDate" name="expiredDate" required>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label>Manufacturing *</label>
+                      <select class="form-control select2" style="width: 100%;" id="manufacturing" name="manufacturing" required>
+                        <option selected="selected"></option>
+                        <option value="Local OEM">Local OEM</option>
+                        <option value="Overseas">Overseas</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
                 <div class="col-3">
                   <div class="form-group">
-                    <label>Manufacturing *</label>
-                    <select class="form-control select2" style="width: 100%;" id="manufacturing" name="manufacturing" required>
-                      <option selected="selected"></option>
-                      <option value="Local OEM">Local OEM</option>
-                      <option value="Overseas">Overseas</option>
-                    </select>
+                    <label>Auto Certificate No / Sticker No *</label>
+                    <input class="form-control" type="text" placeholder="Sticker No" id="auto_cert_no" name="auto_cert_no">
+                  </div>
+                </div>
+                <div class="col-3 d-flex">
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label>Brand *</label>
+                      <select class="form-control select2" style="width: 100%;" id="brand" name="brand" required>
+                        <option selected="selected"></option>
+                        <?php while($rowB=mysqli_fetch_assoc($brands)){ ?>
+                          <option value="<?=$rowB['id'] ?>"><?=$rowB['brand'] ?></option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label>Model *</label>
+                      <select class="form-control select2" style="width: 100%;" id="model" name="model" required>
+                        <option selected="selected"></option>
+                        <?php while($rowM=mysqli_fetch_assoc($models)){ ?>
+                          <option value="<?=$rowM['id'] ?>"><?=$rowM['model'] ?></option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3 d-flex">
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label>Capacity * </label>
+                      <select class="form-control select2" style="width: 100%;" id="capacity" name="capacity" required>
+                        <option selected="selected"></option>
+                        <?php while($rowCA=mysqli_fetch_assoc($capacities)){ ?>
+                          <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label>Structure Size * </label>
+                      <select class="form-control select2" style="width: 100%;" id="size" name="size" required>
+                        <option selected="selected"></option>
+                        <?php while($rowSI=mysqli_fetch_assoc($sizes)){ ?>
+                          <option value="<?=$rowSI['id'] ?>"><?=$rowSI['size'] ?></option>
+                        <?php } ?>
+                      </select>
+                    </div>
                   </div>
                 </div>
                 <div class="col-3">
                   <div class="form-group">
-                    <label>Brand *</label>
-                    <select class="form-control select2" style="width: 100%;" id="brand" name="brand" required>
+                    <label>Inhouse Calibrator * </label>
+                    <select class="form-control select2" style="width: 100%;" id="calibrator" name="calibrator" required>
                       <option selected="selected"></option>
-                      <?php while($rowB=mysqli_fetch_assoc($brands)){ ?>
-                        <option value="<?=$rowB['id'] ?>"><?=$rowB['brand'] ?></option>
+                      <?php while($user=mysqli_fetch_assoc($users2)){ ?>
+                        <option value="<?=$user['id'] ?>"><?=$user['name'] ?></option>
                       <?php } ?>
                     </select>
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="form-group">
-                    <label>Model *</label>
-                    <select class="form-control select2" style="width: 100%;" id="model" name="model" required>
-                      <option selected="selected"></option>
-                      <?php while($rowM=mysqli_fetch_assoc($models)){ ?>
-                        <option value="<?=$rowM['id'] ?>"><?=$rowM['model'] ?></option>
-                      <?php } ?>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="form-group">
-                    <label>Capacity * </label>
-                    <select class="form-control select2" style="width: 100%;" id="capacity" name="capacity" required>
-                      <option selected="selected"></option>
-                      <?php while($rowCA=mysqli_fetch_assoc($capacities)){ ?>
-                        <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
-                      <?php } ?>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="form-group">
-                    <label>Structure Size * </label>
-                    <select class="form-control select2" style="width: 100%;" id="size" name="size" required>
-                      <option selected="selected"></option>
-                      <?php while($rowSI=mysqli_fetch_assoc($sizes)){ ?>
-                        <option value="<?=$rowSI['id'] ?>"><?=$rowSI['size'] ?></option>
-                      <?php } ?>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="form-group">
-                    <label>Validation Date * </label>
-                    <input class="form-control" type="text" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate" required>
                   </div>
                 </div>
                 <!-- <div class="col-4" style="display:none;">
@@ -459,24 +490,25 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
             <div class="card-body">
               <div class="row mb-3">
                 <div class="col-10">
-                  <h4>Calibration Information</h4>
+                  <h4>Note - Standard Average Temperature:	(20 + 1)ºC / Average Relative Humidity:	(52 + 1)%RH</h4>
                 </div>
                 <div class="col-2">
-                  <button style="margin-left:auto;margin-right: 25px;" type="button" class="btn btn-primary add-load-cell" id="add-calibration-cell">Add Calibration</button>
+                  <button style="margin-left:auto;margin-right: 25px;" type="button" class="btn btn-primary add-load-cell" id="add-testing-cell">Add Testing</button>
                 </div>
               </div>
               
               <table style="width: 100%;">
                 <thead>
                   <tr>
-                    <th width="5%">No.</th>
-                    <th width="15%">Last Calibration Date</th>
-                    <th width="15%">Expired Calibration Date</th>
-                    <th width="25%">Upload Attachment</th>
+                    <th width="15%">Number of Tests.</th>
+                    <th width="20%">Setting Value Of Standard</th>
+                    <th width="20%">As Received Under Calibration.</th>
+                    <th width="20%">Variance +/- 0.1kg</th>
+                    <th width="20%">Reading After Adjustment.</th>
                     <th width="5%">Delete</th>
                   </tr>
                 </thead>
-                <tbody id="loadCalibrationTable"></tbody>
+                <tbody id="loadTestingTable"></tbody>
               </table>
             </div>
           </div>
@@ -757,29 +789,61 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
   </tr>
 </script>
 
-<script type="text/html" id="loadCalibrationDetails">
+<script type="text/html" id="loadTestingDetails">
   <tr class="details">
-    <td style="display:none">
-      <input type="text" id="calibrationId" name="calibrationId">
-    </td>
     <td>
       <input type="text" class="form-control" id="no" name="no" readonly>
     </td>
     <td>
-      <input type="date" id="lastCalibrationDate" name="lastCalibrationDate" style="width: 100%;">
+      <div class="d-flex mt-1">
+        <div class="col-8">
+          <input type="number" placeholder="0.0" id="standardValue" name="standardValue" style="width: 100%;">
+        </div>
+        <div class="col-2">
+          <i class="fas fa-minus fa-2x"></i>
+        </div>
+        <div class="col-2">
+          <span style="border: 1px solid #ced4da; padding: 2px; display: inline-block; width: 100%; box-sizing: border-box; border-box; background-color:lightgrey;">KG</span>
+        </div>
+      </div>
     </td>
     <td>
-      <input type="date" id="expiredCalibrationDate" name="expiredCalibrationDate" style="width: 100%;">
+      <div class="d-flex mt-1"> 
+        <div class="col-8">
+          <input type="number" placeholder="0.0" id="calibrationReceived" name="calibrationReceived" style="width: 100%;">
+        </div>
+        <div class="col-2">
+          <i class="fas fa-minus fa-2x"></i>
+        </div>
+        <div class="col-2">
+          <span style="border: 1px solid #ced4da; padding: 2px; display: inline-block; width: 100%; box-sizing: border-box; border-box; background-color:lightgrey;">KG</span>
+        </div>
+      </div>
     </td>
     <td>
-      <div class="row">
-        <div class="col-10">
-          <input type="file" class="form-control" id="uploadAttachment" name="uploadAttachment" required>
+      <div class="d-flex mt-1">
+        <div class="col-8">
+          <input type="number" placeholder="0.0" id="variance" name="variance" style="width: 100%; background-color: lightgrey;" readonly>
         </div>
-        <div class="col-2 mt-1">
-          <a href="" id="viewCalibrationPdf" name="viewCalibrationPdf" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
+        <div class="col-2">
+          <i class="fas fa-minus fa-2x"></i>
         </div>
-        <input type="text" id="calibrationFilePath" name="calibrationFilePath"style="display:none">
+        <div class="col-2">
+          <span style="border: 1px solid #ced4da; padding: 2px; display: inline-block; width: 100%; box-sizing: border-box; background-color:lightgrey;">KG</span>
+        </div>
+      </div>
+    </td>
+    <td>
+      <div class="d-flex mt-1">
+        <div class="col-8">
+          <input type="number" placeholder="0.0" id="afterAdjustReading" name="afterAdjustReading" style="width: 100%; background-color: lightgreen;">
+        </div>
+        <div class="col-2">
+          <i class="fas fa-minus fa-2x"></i>
+        </div>
+        <div class="col-2">
+          <span style="border: 1px solid #ced4da; padding: 2px; display: inline-block; width: 100%; box-sizing: border-box; border-box; background-color:lightgrey;">KG</span>
+        </div>
       </div>
     </td>
     
@@ -788,7 +852,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
 </script>
 
 <script>
-var loadCalibrationCount = $("#loadCalibrationTable").find(".details").length;
+var loadTestingCount = $("#loadTestingTable").find(".details").length;
 var isModalOpen = false; // Flag to track modal visibility
 
 $(function () {
@@ -1721,31 +1785,50 @@ $(function () {
   //   pricingCount++;
   // });
 
-  $(document).on('click', '#add-calibration-cell', function() {
-    var $addContents = $("#loadCalibrationDetails").clone();
-    $("#loadCalibrationTable").append($addContents.html());
+  $(document).on('click', '#add-testing-cell', function() {
+    var $addContents = $("#loadTestingDetails").clone();
+    $("#loadTestingTable").append($addContents.html());
 
-    $("#loadCalibrationTable").find('.details:last').attr("id", "detail" + loadCalibrationCount);
-    $("#loadCalibrationTable").find('.details:last').attr("data-index", loadCalibrationCount);
-    $("#loadCalibrationTable").find('#remove:last').attr("id", "remove" + loadCalibrationCount);
+    $("#loadTestingTable").find('.details:last').attr("id", "detail" + loadTestingCount);
+    $("#loadTestingTable").find('.details:last').attr("data-index", loadTestingCount);
+    $("#loadTestingTable").find('#remove:last').attr("id", "remove" + loadTestingCount);
 
-    $("#loadCalibrationTable").find('#no:last').attr('name', 'no['+loadCalibrationCount+']').attr("id", "no" + loadCalibrationCount).val((loadCalibrationCount + 1).toString());
-    $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate['+loadCalibrationCount+']').attr("id", "lastCalibrationDate" + loadCalibrationCount);
-    $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount);
-    $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment['+loadCalibrationCount+']').attr("id", "uploadAttachment" + loadCalibrationCount);
+    $("#loadTestingTable").find('#no:last').attr('name', 'no['+loadTestingCount+']').attr('id', 'no' + loadTestingCount).val((loadTestingCount + 1).toString()).hide().after('<span style="border: 1px solid #ced4da; padding: 2px; display: inline-block; width: 100%; box-sizing: border-box;">Tester / Time: ' + (loadTestingCount + 1) + '</span>');
+    $("#loadTestingTable").find('#standardValue:last').attr('name', 'standardValue['+loadTestingCount+']').attr("id", "standardValue" + loadTestingCount).css('background-color', 'yellow');
+    $("#loadTestingTable").find('#calibrationReceived:last').attr('name', 'calibrationReceived['+loadTestingCount+']').attr("id", "calibrationReceived" + loadTestingCount);
+    $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount);
+    $("#loadTestingTable").find('#afterAdjustReading:last').attr('name', 'afterAdjustReading['+loadTestingCount+']').attr("id", "afterAdjustReading" + loadTestingCount);
 
-    loadCalibrationCount++;
+    loadTestingCount++;
   });
 
   // Event delegation: use 'select' instead of 'input' for dropdowns
-  $(document).on('change', 'select[id^="loadCells"]', function(){
+  $(document).on('change', 'input[id^="standardValue"]', function(){
     // Retrieve the selected option's attributes
-    var brand = $(this).find(":selected").attr('data-brand');
-    var model = $(this).find(":selected").attr('data-model');
+    var standardValue = $(this).val();
+    var calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
+    var varianceCalculated = standardValue - calibrationReceived;
 
-    // Update the respective inputs for brand and model
-    $(this).closest('.details').find('input[id^="loadCellBrand"]').val(brand);
-    $(this).closest('.details').find('input[id^="loadCellModel"]').val(model);
+    // Update the variance input value
+    if(calibrationReceived > 0){
+      $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated).css({'background-color': 'red', 'color': 'white'});
+    }else{
+      $(this).closest('.details').find('input[id^="variance"]').val('').css('background-color', 'lightgrey');
+    }
+  });
+
+  // Event delegation: use 'select' instead of 'input' for dropdowns
+  $(document).on('change', 'input[id^="calibrationReceived"]', function(){
+    var standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
+    var calibrationReceived = $(this).val();
+    var varianceCalculated = standardValue - calibrationReceived;
+
+    // Update the variance input value
+    if(calibrationReceived > 0){
+      $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated).css({'background-color': 'red', 'color': 'white'});
+    }else{
+      $(this).closest('.details').find('input[id^="variance"]').val('').css('background-color', 'lightgrey');
+    }
   });
 });
 
@@ -1839,10 +1922,6 @@ function formatDate(convert1) {
 
 function newEntry(){
   var date = new Date();
-  var todayDay = String(date.getDate()).padStart(2, '0'); // Ensure two digits
-  var todayMonth = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() returns 0-11
-  var todayYear = date.getFullYear();
-  var formattedDate = todayDay + '/' + todayMonth + '/' + todayYear;
 
   $('#extendModal').find('#id').val("");
   $('#extendModal').find('#type').val("DIRECT").trigger('change');
@@ -1883,7 +1962,6 @@ function newEntry(){
   $('#extendModal').find('#poDate').val('');
   $('#extendModal').find('#cashBill').val("");
   $('#extendModal').find('#invoice').val('');
-  $('#extendModal').find('#validationDate').val(formattedDate);
 
   // $('#pricingTable').html('');
   // pricingCount = 0;
@@ -1962,7 +2040,6 @@ function edit(id) {
         $('#extendModal').find('#model').val(obj.message.model).trigger('change');
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#size').val(obj.message.size).trigger('change');
-        $('#extendModal').find('#validationDate').val(obj.message.validation_date);
 
         if(obj.message.calibrations != null && obj.message.calibrations.length > 0){
           $("#loadCalibrationTable").html('');
