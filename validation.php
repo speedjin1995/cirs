@@ -1833,16 +1833,18 @@ function format (row) {
     </div> 
   `;
   
-  if (row.calibrations[0].length > 0) {
-    returnString += '<h4>Calibrations</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="20%">Latest Date Calibration</th><th width="20%">Expire Date Calibration</th><th width="20%">Calibration Certificate Attachment</th></tr></thead><tbody>'
-    
-    var calibrations = row.calibrations[0];
-    for (var i = 0; i < calibrations.length; i++) {
-      var item = calibrations[i];
-      returnString += '<tr><td>' + item.no + '</td><td>' + item.lastCalibrationDate + '<td>' + item.expiredCalibrationDate + '</td><td><a href="' + item.calibrationFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></td></tr>';
-    }
+  if (row.calibrations !== undefined && row.calibrations !== null && row.calibrations !== ''){
+    if (row.calibrations[0].length > 0) {
+      returnString += '<h4>Calibrations</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="20%">Latest Date Calibration</th><th width="20%">Expire Date Calibration</th><th width="20%">Calibration Certificate Attachment</th></tr></thead><tbody>'
+      
+      var calibrations = row.calibrations[0];
+      for (var i = 0; i < calibrations.length; i++) {
+        var item = calibrations[i];
+        returnString += '<tr><td>' + item.no + '</td><td>' + item.lastCalibrationDate + '<td>' + item.expiredCalibrationDate + '</td><td><a href="' + item.calibrationFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></td></tr>';
+      }
 
-    returnString += '</tbody></table>';
+      returnString += '</tbody></table>';
+    }
   }
 
   return returnString;
