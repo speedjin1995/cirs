@@ -6,7 +6,8 @@ session_start();
 
 $uid = $_SESSION['userID'];
 
-if(isset($_POST['customerType'], $_POST['autoFormNo'], $_POST['validator'], $_POST['address1'], $_POST['machineType'], $_POST['serial'], $_POST['manufacturing'], $_POST['brand'], $_POST['model'], $_POST['capacity'], $_POST['size'])){
+if(isset($_POST['type'], $_POST['customerType'], $_POST['autoFormNo'], $_POST['validator'], $_POST['address1'], $_POST['machineType'], $_POST['serial'], $_POST['manufacturing'], $_POST['brand'], $_POST['model'], $_POST['capacity'], $_POST['size'])){
+	$type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
 	$customerType = filter_input(INPUT_POST, 'customerType', FILTER_SANITIZE_STRING);
 	$autoFormNo = filter_input(INPUT_POST, 'autoFormNo', FILTER_SANITIZE_STRING);
 	$validator = filter_input(INPUT_POST, 'validator', FILTER_SANITIZE_STRING);
@@ -19,6 +20,8 @@ if(isset($_POST['customerType'], $_POST['autoFormNo'], $_POST['validator'], $_PO
 	$capacity = filter_input(INPUT_POST, 'capacity', FILTER_SANITIZE_STRING);
 	$size = filter_input(INPUT_POST, 'size', FILTER_SANITIZE_STRING);
 	
+	$dealer = null;
+	$reseller_branch = null;
 	$company = null;
 	$customerText = null;
 	$branch = null;
@@ -30,6 +33,14 @@ if(isset($_POST['customerType'], $_POST['autoFormNo'], $_POST['validator'], $_PO
 	$pic = null;
 	$contact = null;
 	$logs = array();
+
+	if(isset($_POST['dealer']) && $_POST['dealer']!=null && $_POST['dealer']!=""){
+		$dealer = $_POST['dealer'];
+	}
+
+	if(isset($_POST['reseller_branch']) && $_POST['reseller_branch']!=null && $_POST['reseller_branch']!=""){
+		$reseller_branch = $_POST['reseller_branch'];
+	}
 
 	if(isset($_POST['company']) && $_POST['company']!=null && $_POST['company']!=""){
 		$company = $_POST['company'];
@@ -113,11 +124,11 @@ if(isset($_POST['customerType'], $_POST['autoFormNo'], $_POST['validator'], $_PO
 	if(isset($_POST['id']) && $_POST['id'] != null && $_POST['id'] != ''){
 		//Updated datetime
 		$currentDateTime = date('Y-m-d H:i:s');
-		if ($update_stmt = $db->prepare("UPDATE other_validations SET validate_by=?, customer_type=?, customer=?, branch=?, auto_form_no=?, machines=?, unit_serial_no=?, manufacturing=?, brand=?
+		if ($update_stmt = $db->prepare("UPDATE other_validations SET type=?, dealer=?, dealer_branch=?, validate_by=?, customer_type=?, customer=?, branch=?, auto_form_no=?, machines=?, unit_serial_no=?, manufacturing=?, brand=?
 		, model=?, capacity=?, size=?, update_datetime=? WHERE id=?")){
 			$data = json_encode($logs);
-			$update_stmt->bind_param('ssssssssssssss', $validator, $customerType, $customer, $branch, $autoFormNo, $machineType, $serial, $manufacturing, $brand, $model, $capacity, $size, $currentDateTime, $_POST['id']);
-		
+			$update_stmt->bind_param('sssssssssssssssss', $type, $dealer, $reseller_branch, $validator, $customerType, $customer, $branch, $autoFormNo, $machineType, $serial, $manufacturing, $brand, $model, $capacity, $size, $currentDateTime, $_POST['id']);
+			
 			// Execute the prepared query.
 			if (! $update_stmt->execute()){
 				$response['status'] = "failed";
@@ -201,12 +212,12 @@ if(isset($_POST['customerType'], $_POST['autoFormNo'], $_POST['validator'], $_PO
 		}
 	}
 	else{
-		if ($insert_stmt = $db->prepare("INSERT INTO other_validations (validate_by, customer_type, customer, branch, auto_form_no, machines, unit_serial_no, manufacturing, brand, model, capacity, size, status) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+		if ($insert_stmt = $db->prepare("INSERT INTO other_validations (type, dealer, dealer_branch, validate_by, customer_type, customer, branch, auto_form_no, machines, unit_serial_no, manufacturing, brand, model, capacity, size, status) 
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
 			$data = json_encode($logs);
 			$calibrations = null;
 			$status = 'Pending';
-			$insert_stmt->bind_param('sssssssssssss', $validator, $customerType, $customer, $branch, $autoFormNo,$machineType, $serial, $manufacturing, $brand, $model,$capacity, $size, $status);
+			$insert_stmt->bind_param('ssssssssssssssss', $type, $dealer, $reseller_branch, $validator, $customerType, $customer, $branch, $autoFormNo,$machineType, $serial, $manufacturing, $brand, $model,$capacity, $size, $status);
 			
 			// Execute the prepared query.
 			if (! $insert_stmt->execute()){

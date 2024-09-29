@@ -208,7 +208,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
 
         <div class="modal-body" >
           <input type="hidden" class="form-control" id="id" name="id">
-          <!-- <div class="row">
+          <div class="row">
             <div class="col-4">
               <div class="form-group">
                 <label>Direct Customer / Reseller * </label>
@@ -218,14 +218,14 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 </select>
               </div>
             </div>
-          </div> -->
-          <!-- <div class="card card-primary">
+          </div>
+          <div class="card card-primary" id="isResseller" style="display: none;">
             <div class="card-body">
               <div class="row">
-                <h4>Customer/Reseller Billing Information</h4>
+                <h4>Reseller Billing Information</h4>
               </div>
               <div class="row">
-                <div class="col-4" id="isResseller">
+                <div class="col-4">
                   <div class="form-group">
                     <label for="code">Reseller</label>
                     <select class="form-control select2" id="dealer" name="dealer">
@@ -236,73 +236,15 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
-                <div class="col-4" id="isResseller2">
+                <div class="col-12" id="resellerbranch">
                   <div class="form-group">
-                    <label>Billing Address Line 1 * </label>
-                    <input class="form-control" type="text" placeholder="Address Line 1" id="address1s" name="address1s" readonly>
-                  </div>
-                </div>
-                <div class="col-4" id="isResseller3">
-                  <div class="form-group">
-                    <label>Billing Address Line 2 </label>
-                    <input class="form-control" type="text" placeholder="Address Line 2" id="address2s" name="address2s" readonly>
-                  </div>
-                </div>
-                <div class="col-4" id="isResseller4">
-                  <div class="form-group">
-                    <label>Billing Address Line 3 </label>
-                    <input class="form-control" type="text" placeholder="Address Line 3" id="address3s" name="address3s" readonly>
-                  </div>
-                </div>
-                <div class="col-4" id="isResseller5">
-                  <div class="form-group">
-                    <label>P.I.C</label>
-                    <input class="form-control" type="text" placeholder="PIC" id="pics" name="pics" readonly>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Quotation No.</label>
-                    <input class="form-control" type="text" placeholder="PO No" id="quotation" name="quotation">
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Quotation Date</label>
-                    <div class='input-group date' id="datePicker3" data-target-input="nearest">
-                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker3" id="quotationDate" name="quotationDate"/>
-                      <div class="input-group-append" data-target="#datePicker3" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>PO No.</label>
-                    <input class="form-control" type="text" placeholder="PO No" id="poNo" name="poNo">
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>PO Date </label>
-                    <div class='input-group date' id="datePicker4" data-target-input="nearest">
-                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker4" id="poDate" name="poDate"/>
-                      <div class="input-group-append" data-target="#datePicker4" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Invoice / Cash Bill No.</label>
-                    <input class="form-control" type="text" placeholder="Invoice No" id="invoice" name="invoice">
+                    <label>Branch * </label>
+                    <select class="form-control select2" style="width: 100%;" id="reseller_branch" name="reseller_branch"></select>
                   </div>
                 </div>
               </div>
             </div>
-          </div> -->
+          </div>
 
           <div class="card card-primary">
             <div class="card-body">
@@ -1320,36 +1262,31 @@ $(function () {
   });
 
   $('#extendModal').find('#type').on('change', function(){
-    if($(this).val() == "OWN"){
+    if($(this).val() == "DIRECT"){
       $('#isResseller').hide();
-      $('#isResseller2').hide();
-      $('#isResseller3').hide();
-      $('#isResseller4').hide();
-      $('#isResseller5').hide();
     }
     else{
       $('#isResseller').show();
-      $('#isResseller2').show();
-      $('#isResseller3').show();
-      $('#isResseller4').show();
-      $('#isResseller5').show();
     }
   });
 
   $('#extendModal').find('#dealer').on('change', function(){
-    if($('#extendModal').find('#type').val() != 'OWN'){
+    if($('#extendModal').find('#type').val() != 'DIRECT'){
       var id = $(this).find(":selected").val();
 
       $.post('php/getDealer.php', {userID: id}, function(data){
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){
-          $('#extendModal').find('#address1s').val(obj.message.customer_address);
-          $('#extendModal').find('#address2s').val(obj.message.address2);
-          $('#extendModal').find('#address3s').val(obj.message.address3);
-          $('#extendModal').find('#contacts').val(obj.message.customer_phone);
-          $('#extendModal').find('#emails').val(obj.message.customer_email);
-          $('#extendModal').modal('show');
+          
+          $('#reseller_branch').html('');
+          $('#reseller_branch').append('<option selected="selected">-</option>');
+
+          for(var i=0; i<obj.message.branches.length; i++){
+            var branchInfo = obj.message.branches[i];
+            $('#reseller_branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.branch_address1+' '+branchInfo.branch_address2+' '+branchInfo.branch_address3+' '+branchInfo.branch_address4+'</option>')
+          }
+          /*$('#extendModal').modal('show');
 
           $('#extendForm').validate({
             errorElement: 'span',
@@ -1363,7 +1300,7 @@ $(function () {
             unhighlight: function (element, errorClass, validClass) {
               $(element).removeClass('is-invalid');
             }
-          });
+          });*/
         }
         else if(obj.status === 'failed'){
           toastr["error"](obj.message, "Failed:");
@@ -1481,7 +1418,7 @@ $(function () {
         $('#extendModal').find('#address3').val(obj.message.address3);
         $('#extendModal').find('#address4').val(obj.message.address4);
         
-        $('#extendModal').modal('show');
+        /*$('#extendModal').modal('show');
 
         $('#extendForm').validate({
           errorElement: 'span',
@@ -1495,7 +1432,7 @@ $(function () {
           unhighlight: function (element, errorClass, validClass) {
             $(element).removeClass('is-invalid');
           }
-        });
+        });*/
       }
       else if(obj.status === 'failed'){
         toastr["error"](obj.message, "Failed:");
@@ -1523,10 +1460,10 @@ $(function () {
 
         for(var i=0; i<obj.message.pricing.length; i++){
           var branchInfo = obj.message.pricing[i];
-          $('#branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.address1+' '+branchInfo.address2+' '+branchInfo.address3+' '+branchInfo.address4+'</option>')
+          $('#branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.branch_address1+' '+branchInfo.branch_address2+' '+branchInfo.branch_address3+' '+branchInfo.branch_address4+'</option>')
         }
 
-        $('#extendModal').modal('show');
+        /*$('#extendModal').modal('show');
 
         $('#extendForm').validate({
           errorElement: 'span',
@@ -1540,7 +1477,7 @@ $(function () {
           unhighlight: function (element, errorClass, validClass) {
             $(element).removeClass('is-invalid');
           }
-        });
+        });*/
       }
       else if(obj.status === 'failed'){
         toastr["error"](obj.message, "Failed:");
@@ -1896,7 +1833,9 @@ function newEntry(){
   var date = new Date();
 
   $('#extendModal').find('#id').val("");
-  // $('#extendModal').find('#type').val("OWN");
+  $('#extendModal').find('#type').val("DIRRECT").trigger('change');
+  $('#extendModal').find('#dealer').val('').trigger('change');
+  $('#extendModal').find('#reseller_branch').val('').trigger('change');
   // $('#isResseller').hide();
   // $('#isResseller2').hide();
   // $('#isResseller3').hide();
@@ -1991,47 +1930,103 @@ function edit(id) {
   $.post('php/getValidation.php', {validationId: id}, function(data){
     var obj = JSON.parse(data);
     if(obj.status === 'success'){
-      $('#extendModal').find('#id').val(obj.message.id);
-      $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
-      $('#extendModal').find('#company').val(obj.message.customer).trigger('change');
-      $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
-      $('#extendModal').find('#autoFormNo').val(obj.message.auto_form_no);
-      setTimeout(function(){
-        $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
-      }, 500);
-      $('#extendModal').find('#machineType').val(obj.message.machines).trigger('change');
-      $('#extendModal').find('#serial').val(obj.message.unit_serial_no);
-      $('#extendModal').find('#manufacturing').val(obj.message.manufacturing).trigger('change');
-      $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
-      $('#extendModal').find('#model').val(obj.message.model).trigger('change');
-      $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
-      $('#extendModal').find('#size').val(obj.message.size).trigger('change');
+      if(obj.message.type == 'DIRECT'){
+        $('#extendModal').find('#id').val(obj.message.id);
+        $('#extendModal').find('#type').val(obj.message.type).trigger('change');
+        $('#extendModal').find('#dealer').val('');
+        $('#extendModal').find('#reseller_branch').val('');
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#company').val(obj.message.customer).trigger('change');
+        $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
+        $('#extendModal').find('#autoFormNo').val(obj.message.auto_form_no);
+        setTimeout(function(){
+          $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
+        }, 500);
+        $('#extendModal').find('#machineType').val(obj.message.machines).trigger('change');
+        $('#extendModal').find('#serial').val(obj.message.unit_serial_no);
+        $('#extendModal').find('#manufacturing').val(obj.message.manufacturing).trigger('change');
+        $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
+        $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
+        $('#extendModal').find('#size').val(obj.message.size).trigger('change');
 
-      if(obj.message.calibrations.length > 0){
-        $("#loadCalibrationTable").html('');
-        loadCalibrationCount = 0; 
+        if(obj.message.calibrations != null && obj.message.calibrations.length > 0){
+          $("#loadCalibrationTable").html('');
+          loadCalibrationCount = 0; 
 
-        for(var i = 0; i < obj.message.calibrations.length; i++){
-          var calibrations = obj.message.calibrations[i];
+          for(var i = 0; i < obj.message.calibrations.length; i++){
+            var calibrations = obj.message.calibrations[i];
 
-          for(var j=0; j < calibrations.length; j++){
-            var item = calibrations[j];
-            var $addContents = $("#loadCalibrationDetails").clone();
-            $("#loadCalibrationTable").append($addContents.html());
+            for(var j=0; j < calibrations.length; j++){
+              var item = calibrations[j];
+              var $addContents = $("#loadCalibrationDetails").clone();
+              $("#loadCalibrationTable").append($addContents.html());
 
-            $("#loadCalibrationTable").find('.details:last').attr("id", "detail" + loadCalibrationCount);
-            $("#loadCalibrationTable").find('.details:last').attr("data-index", loadCalibrationCount);
-            $("#loadCalibrationTable").find('#remove:last').attr("id", "remove" + loadCalibrationCount);
+              $("#loadCalibrationTable").find('.details:last').attr("id", "detail" + loadCalibrationCount);
+              $("#loadCalibrationTable").find('.details:last').attr("data-index", loadCalibrationCount);
+              $("#loadCalibrationTable").find('#remove:last').attr("id", "remove" + loadCalibrationCount);
 
-            $("#loadCalibrationTable").find('#no:last').attr('name', 'no['+loadCalibrationCount+']').attr("id", "no" + loadCalibrationCount).val(item.no);
-            $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate['+loadCalibrationCount+']').attr("id", "lastCalibrationDate" + loadCalibrationCount).val(item.lastCalibrationDate);
-            $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount).val(item.expiredCalibrationDate);
+              $("#loadCalibrationTable").find('#no:last').attr('name', 'no['+loadCalibrationCount+']').attr("id", "no" + loadCalibrationCount).val(item.no);
+              $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate['+loadCalibrationCount+']').attr("id", "lastCalibrationDate" + loadCalibrationCount).val(item.lastCalibrationDate);
+              $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount).val(item.expiredCalibrationDate);
 
-            $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment['+loadCalibrationCount+']').attr("id", "uploadAttachment" + loadCalibrationCount).removeAttr('required');
-            $("#loadCalibrationTable").find('#viewCalibrationPdf:last').attr('name', 'viewCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewCalibrationPdf" + loadCalibrationCount).attr('href', item.calibrationFilePath).show();
-            $("#loadCalibrationTable").find('#calibrationFilePath:last').attr('name', 'calibrationFilePath['+loadCalibrationCount+']').attr("id", "calibrationFilePath" + loadCalibrationCount).val(item.calibrationFilePath);
+              $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment['+loadCalibrationCount+']').attr("id", "uploadAttachment" + loadCalibrationCount).removeAttr('required');
+              $("#loadCalibrationTable").find('#viewCalibrationPdf:last').attr('name', 'viewCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewCalibrationPdf" + loadCalibrationCount).attr('href', item.calibrationFilePath).show();
+              $("#loadCalibrationTable").find('#calibrationFilePath:last').attr('name', 'calibrationFilePath['+loadCalibrationCount+']').attr("id", "calibrationFilePath" + loadCalibrationCount).val(item.calibrationFilePath);
 
-            loadCalibrationCount++;
+              loadCalibrationCount++;
+            }
+          }
+        }
+      }
+      else{
+        $('#extendModal').find('#id').val(obj.message.id);
+        $('#extendModal').find('#type').val(obj.message.type).trigger('change');
+        $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
+        setTimeout(function(){
+          $('#extendModal').find('#reseller_branch').val(obj.message.dealer_branch).trigger('change');
+        }, 500);
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#company').val(obj.message.customer).trigger('change');
+        $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
+        $('#extendModal').find('#autoFormNo').val(obj.message.auto_form_no);
+        setTimeout(function(){
+          $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
+        }, 1000);
+        $('#extendModal').find('#machineType').val(obj.message.machines).trigger('change');
+        $('#extendModal').find('#serial').val(obj.message.unit_serial_no);
+        $('#extendModal').find('#manufacturing').val(obj.message.manufacturing).trigger('change');
+        $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
+        $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
+        $('#extendModal').find('#size').val(obj.message.size).trigger('change');
+
+        if(obj.message.calibrations != null && obj.message.calibrations.length > 0){
+          $("#loadCalibrationTable").html('');
+          loadCalibrationCount = 0; 
+
+          for(var i = 0; i < obj.message.calibrations.length; i++){
+            var calibrations = obj.message.calibrations[i];
+
+            for(var j=0; j < calibrations.length; j++){
+              var item = calibrations[j];
+              var $addContents = $("#loadCalibrationDetails").clone();
+              $("#loadCalibrationTable").append($addContents.html());
+
+              $("#loadCalibrationTable").find('.details:last').attr("id", "detail" + loadCalibrationCount);
+              $("#loadCalibrationTable").find('.details:last').attr("data-index", loadCalibrationCount);
+              $("#loadCalibrationTable").find('#remove:last').attr("id", "remove" + loadCalibrationCount);
+
+              $("#loadCalibrationTable").find('#no:last').attr('name', 'no['+loadCalibrationCount+']').attr("id", "no" + loadCalibrationCount).val(item.no);
+              $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate['+loadCalibrationCount+']').attr("id", "lastCalibrationDate" + loadCalibrationCount).val(item.lastCalibrationDate);
+              $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount).val(item.expiredCalibrationDate);
+
+              $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment['+loadCalibrationCount+']').attr("id", "uploadAttachment" + loadCalibrationCount).removeAttr('required');
+              $("#loadCalibrationTable").find('#viewCalibrationPdf:last').attr('name', 'viewCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewCalibrationPdf" + loadCalibrationCount).attr('href', item.calibrationFilePath).show();
+              $("#loadCalibrationTable").find('#calibrationFilePath:last').attr('name', 'calibrationFilePath['+loadCalibrationCount+']').attr("id", "calibrationFilePath" + loadCalibrationCount).val(item.calibrationFilePath);
+
+              loadCalibrationCount++;
+            }
           }
         }
       }

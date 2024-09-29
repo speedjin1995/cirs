@@ -73,7 +73,19 @@ else{
               <div class="card-body">
                 <input type="hidden" class="form-control" id="id" name="id">
                 <div class="row">
-                  <div class="form-group col-6">
+                  <div class="form-group col-3">
+                    <label for="code">Customer Code *</label>
+                    <input type="text" class="form-control" name="code" id="code" placeholder="Enter Customer Code" readonly>
+                  </div>
+                  <div class="form-group col-3">
+                    <label for="otherCode">Other Code (AutoCount etc.)</label>
+                    <input type="text" class="form-control" name="otherCode" id="otherCode" placeholder="Enter Other System Code">
+                  </div>
+                  <div class="form-group col-3">
+                    <label for="name">Customer Name *</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter Customer Name" required>
+                  </div>
+                  <div class="form-group col-3">
                     <label for="code">Dealer</label>
                     <select class="form-control select2" id="dealer" name="dealer">
                       <option value="" selected disabled hidden>Please Select</option>
@@ -82,41 +94,44 @@ else{
                       <?php } ?>
                     </select>
                   </div>
-                  <div class="form-group col-6">
-                    <label for="code">Customer Code *</label>
-                    <input type="text" class="form-control" name="code" id="code" placeholder="Enter Customer Code" maxlength="10">
+                  <div class="form-group col-3"> 
+                    <label for="address">Address *</label>
+                    <input class="form-control" id="address" name="address" placeholder="Enter your address 1" required>
                   </div>
-                  <div class="form-group col-6">
-                    <label for="name">Customer Name *</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter Customer Name" required>
+                  <div class="form-group col-3"> 
+                    <label for="address2">Address 2 *</label>
+                    <input class="form-control" id="address2" name="address2" placeholder="Enter your address 2" required>
                   </div>
-                  <div class="form-group col-6">
+                  <div class="form-group col-3"> 
+                    <label for="address3">Address 3</label>
+                    <input class="form-control" id="address3" name="address3" placeholder="Enter your address 3">
+                  </div>
+                  <div class="form-group col-3"> 
+                    <label for="address4">Address 4</label>
+                    <input class="form-control" id="address4" name="address4" placeholder="Enter your address 4">
+                  </div>
+                  <div class="form-group col-3">
                     <label for="phone">Phone </label>
-                    <input type="text" class="form-control" name="phone" id="phone" placeholder="01x-xxxxxxx" >
+                    <input type="text" class="form-control" name="phone" id="phone" placeholder="01x-xxxxxxx">
                   </div>
-                  <div class="form-group col-6"> 
-                    <label for="email">PIC </label>
-                    <input type="text" class="form-control" id="email" name="email" placeholder="Enter your PIC" >
+                  <div class="form-group col-3">
+                    <label for="pic">PIC </label>
+                    <input type="text" class="form-control" name="pic" id="pic" placeholder="Enter PIC">
+                  </div>
+                  <div class="form-group col-3"> 
+                    <label for="picContact">PIC Contact</label>
+                    <input type="text" class="form-control" id="picContact" name="picContact" placeholder="Enter PIC Contact" >
+                  </div>
+                  <div class="form-group col-3"> 
+                    <label for="email">Email </label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your Email">
                   </div>
                 </div><hr>
                 <div class="row">
                   <h4>Customer Branches & Address</h4>
                   <button style="margin-left:auto;margin-right: 25px;" type="button" class="btn btn-primary add-price">Add Branch</button>
-                </div>
-                <table style="width: 100%;">
-                  <thead>
-                    <tr>
-                      <th>Branch Name</th>
-                      <th>Address 1</th>
-                      <th>Address 2</th>
-                      <th>Address 3</th>
-                      <th>Address 4</th>
-                      <th>Map URL</th>
-                      <th>Delete</th>
-                    </tr>
-                  </thead>
-                  <tbody id="pricingTable"></tbody>
-                </table>
+                </div><hr>
+                <div id="pricingTable"></div>
               </div>
             </div>
             <div class="modal-footer justify-content-between">
@@ -131,28 +146,55 @@ else{
 </div>
 
 <script type="text/html" id="pricingDetails">
-  <tr class="details">
-    <td>
+  <div class="details">
+    <div class="row">
       <input type="hidden" class="form-control" id="branch_id">
-      <textarea class="form-control" id="branch_name" placeholder="Enter your branch name" required></textarea>
-    </td>
-    <td>
-      <textarea class="form-control" id="address1" placeholder="Enter your address" required></textarea>
-    </td>
-    <td>
-      <textarea class="form-control" id="address2" placeholder="Enter your address 2" required></textarea>
-    </td>
-    <td>
-      <textarea class="form-control" id="address3" placeholder="Enter your address 3"></textarea>
-    </td>
-    <td>
-      <textarea class="form-control" id="address4" placeholder="Enter your address 4"></textarea>
-    </td>
-    <td>
-      <textarea class="form-control" id="map_url" placeholder="Enter your map url"></textarea>
-    </td>
-    <td><button class="btn btn-danger btn-sm" id="remove"><i class="fa fa-times"></i></button></td>
-  </tr>
+      <div class="form-group col-2"> 
+        <label for="branch_name">Branch Code *</label>
+        <input class="form-control" id="branch_name" placeholder="Enter your branch code" required>
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branch_address1">Address 1 *</label>
+        <input class="form-control" id="branch_address1" placeholder="Enter your address" required>
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branch_address2">Address 2 *</label>
+        <input class="form-control" id="branch_address2" placeholder="Enter your address 2" required>
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branch_address3">Address 3 *</label>
+        <input class="form-control" id="branch_address3" placeholder="Enter your address 3" required>
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branch_address4">Address 4 *</label>
+        <input class="form-control" id="branch_address4" placeholder="Enter your address 4" required>
+      </div>
+      <div class="form-group col-2"> 
+        <label for="map_url">Map URL</label>
+        <input class="form-control" id="map_url" placeholder="Enter your map url">
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branchPhone">Office Phone</label>
+        <input class="form-control" id="branchPhone" placeholder="Enter your phone">
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branchEmail">Email</label>
+        <input class="form-control" id="branchEmail" placeholder="Enter your email">
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branchPic">PIC</label>
+        <input class="form-control" id="branchPic" placeholder="Enter your PIC">
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branchPicContact">PIC Contact</label>
+        <input class="form-control" id="branchPicContact" placeholder="Enter your PIC Contact">
+      </div>
+      <div class="form-group col-2"></div>
+      <div class="form-group col-2"> 
+        <button class="btn btn-danger btn-sm" id="remove"><i class="fa fa-times"></i></button>
+      </div>
+    </div><hr>
+  </div>
 </script>
 
 <script>
@@ -242,9 +284,16 @@ $(function () {
   $('#addCustomers').on('click', function(){
     $('#addModal').find('#id').val("");
     $('#addModal').find('#dealer').val("");
+    $('#addModal').find('#otherCode').val("");
     $('#addModal').find('#code').val("");
     $('#addModal').find('#name').val("");
+    $('#addModal').find('#address').val("");
+    $('#addModal').find('#address2').val("");
+    $('#addModal').find('#address3').val("");
+    $('#addModal').find('#address4').val("");
     $('#addModal').find('#phone').val("");
+    $('#addModal').find('#pic').val("");
+    $('#addModal').find('#picContact').val("");
     $('#addModal').find('#email').val("");
     $('#addModal').find('#pricingTable').html('');
     pricingCount = 0;
@@ -274,12 +323,16 @@ $(function () {
     $("#pricingTable").find('#remove:last').attr("id", "remove" + pricingCount);
 
     $("#pricingTable").find('#branch_name:last').attr('name', 'branch_name['+pricingCount+']').attr("id", "branch_name" + pricingCount);
-    $("#pricingTable").find('#address1:last').attr('name', 'address1['+pricingCount+']').attr("id", "address1" + pricingCount);
-    $("#pricingTable").find('#address2:last').attr('name', 'address2['+pricingCount+']').attr("id", "address2" + pricingCount);
-    $("#pricingTable").find('#address3:last').attr('name', 'address3['+pricingCount+']').attr("id", "address3" + pricingCount);
-    $("#pricingTable").find('#address4:last').attr('name', 'address4['+pricingCount+']').attr("id", "address4" + pricingCount);
+    $("#pricingTable").find('#branch_address1:last').attr('name', 'branch_address1['+pricingCount+']').attr("id", "branch_address1" + pricingCount);
+    $("#pricingTable").find('#branch_address2:last').attr('name', 'branch_address2['+pricingCount+']').attr("id", "branch_address2" + pricingCount);
+    $("#pricingTable").find('#branch_address3:last').attr('name', 'branch_address3['+pricingCount+']').attr("id", "branch_address3" + pricingCount);
+    $("#pricingTable").find('#branch_address4:last').attr('name', 'branch_address4['+pricingCount+']').attr("id", "branch_address4" + pricingCount);
     $("#pricingTable").find('#map_url:last').attr('name', 'map_url['+pricingCount+']').attr("id", "map_url" + pricingCount);
     $("#pricingTable").find('#branch_id:last').attr('name', 'branch_id['+pricingCount+']').attr("id", "branch_id" + pricingCount);
+    $("#pricingTable").find('#branchPhone:last').attr('name', 'branchPhone['+pricingCount+']').attr("id", "branchPhone" + pricingCount);
+    $("#pricingTable").find('#branchEmail:last').attr('name', 'branchEmail['+pricingCount+']').attr("id", "branchEmail" + pricingCount);
+    $("#pricingTable").find('#branchPic:last').attr('name', 'branchPic['+pricingCount+']').attr("id", "branchPic" + pricingCount);
+    $("#pricingTable").find('#branchPicContact:last').attr('name', 'branchPicContact['+pricingCount+']').attr("id", "branchPicContact" + pricingCount);
 
     pricingCount++;
   });
@@ -325,9 +378,16 @@ function edit(id){
             $('#addModal').find('#id').val(obj.message.id);
             $('#addModal').find('#dealer').val(obj.message.dealer);
             $('#addModal').find('#code').val(obj.message.customer_code);
+            $('#addModal').find('#otherCode').val(obj.message.other_code);
             $('#addModal').find('#name').val(obj.message.customer_name);
+            $('#addModal').find('#address').val(obj.message.customer_address);
+            $('#addModal').find('#address2').val(obj.message.address2);
+            $('#addModal').find('#address3').val(obj.message.address3);
+            $('#addModal').find('#address4').val(obj.message.address4);
             $('#addModal').find('#phone').val(obj.message.customer_phone);
             $('#addModal').find('#email').val(obj.message.customer_email);
+            $('#addModal').find('#pic').val(obj.message.customer_email);
+            $('#addModal').find('#picContact').val(obj.message.customer_email);
 
             $('#addModal').find('#pricingTable').html('');
             pricingCount = 0;
@@ -342,13 +402,17 @@ function edit(id){
               $("#pricingTable").find('.details:last').attr("data-index", pricingCount);
               $("#pricingTable").find('#remove:last').attr("id", "remove" + pricingCount);
 
-              $("#pricingTable").find('#address1:last').attr('name', 'address1['+pricingCount+']').attr("id", "address1" + pricingCount).val(weightData[i].address1);
-              $("#pricingTable").find('#address2:last').attr('name', 'address2['+pricingCount+']').attr("id", "address2" + pricingCount).val(weightData[i].address2);
-              $("#pricingTable").find('#address3:last').attr('name', 'address3['+pricingCount+']').attr("id", "address3" + pricingCount).val(weightData[i].address3);
-              $("#pricingTable").find('#address4:last').attr('name', 'address4['+pricingCount+']').attr("id", "address4" + pricingCount).val(weightData[i].address4);
               $("#pricingTable").find('#branch_id:last').attr('name', 'branch_id['+pricingCount+']').attr("id", "branch_id" + pricingCount).val(weightData[i].branchid);
-              $("#pricingTable").find('#map_url:last').attr('name', 'map_url['+pricingCount+']').attr("id", "map_url" + pricingCount).val(weightData[i].map_url);
               $("#pricingTable").find('#branch_name:last').attr('name', 'branch_name['+pricingCount+']').attr("id", "branch_name" + pricingCount).val(weightData[i].name);
+              $("#pricingTable").find('#branch_address1:last').attr('name', 'branch_address1['+pricingCount+']').attr("id", "branch_address1" + pricingCount).val(weightData[i].branch_address1);
+              $("#pricingTable").find('#branch_address2:last').attr('name', 'branch_address2['+pricingCount+']').attr("id", "branch_address2" + pricingCount).val(weightData[i].branch_address2);
+              $("#pricingTable").find('#branch_address3:last').attr('name', 'branch_address3['+pricingCount+']').attr("id", "branch_address3" + pricingCount).val(weightData[i].branch_address3);
+              $("#pricingTable").find('#branch_address4:last').attr('name', 'branch_address4['+pricingCount+']').attr("id", "branch_address4" + pricingCount).val(weightData[i].branch_address4);
+              $("#pricingTable").find('#map_url:last').attr('name', 'map_url['+pricingCount+']').attr("id", "map_url" + pricingCount).val(weightData[i].map_url);
+              $("#pricingTable").find('#branchPhone:last').attr('name', 'branchPhone['+pricingCount+']').attr("id", "branchPhone" + pricingCount).val(weightData[i].office_no);
+              $("#pricingTable").find('#branchEmail:last').attr('name', 'branchEmail['+pricingCount+']').attr("id", "branchEmail" + pricingCount).val(weightData[i].email);
+              $("#pricingTable").find('#branchPic:last').attr('name', 'branchPic['+pricingCount+']').attr("id", "branchPic" + pricingCount).val(weightData[i].pic);
+              $("#pricingTable").find('#branchPicContact:last').attr('name', 'branchPicContact['+pricingCount+']').attr("id", "branchPicContact" + pricingCount).val(weightData[i].pic_contact);
 
               pricingCount++;
             }

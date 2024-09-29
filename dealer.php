@@ -366,7 +366,7 @@ function edit(id){
         if(obj.status === 'success'){
             $('#addModal').find('#id').val(obj.message.id);
             $('#addModal').find('#code').val(obj.message.customer_code);
-            $('#addModal').find('#otherCode').val("");
+            $('#addModal').find('#otherCode').val(obj.message.other_code);
             $('#addModal').find('#name').val(obj.message.customer_name);
             $('#addModal').find('#address').val(obj.message.customer_address);
             $('#addModal').find('#address2').val(obj.message.address2);

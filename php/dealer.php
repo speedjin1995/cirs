@@ -11,7 +11,7 @@ else{
     $userId = $_SESSION['userID'];
 }
 
-if(isset($_POST['code'], $_POST['name'], $_POST['address'], $_POST['address2'], $_POST['phone'], $_POST['email'])){
+if(isset($_POST['name'], $_POST['address'], $_POST['address2'], $_POST['phone'], $_POST['email'])){
     $code = filter_input(INPUT_POST, 'code', FILTER_SANITIZE_STRING);
 	$address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_STRING);
     $address2 = filter_input(INPUT_POST, 'address2', FILTER_SANITIZE_STRING);
@@ -21,6 +21,7 @@ if(isset($_POST['code'], $_POST['name'], $_POST['address'], $_POST['address2'], 
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
 
+    $otherCode = null;
     $pic = null;
     $picContact = null;
 
@@ -32,13 +33,15 @@ if(isset($_POST['code'], $_POST['name'], $_POST['address'], $_POST['address2'], 
     $branchName = $_POST['branch_name'] ?? [];
     $mapUrl = $_POST['map_url'] ?? [];
     $branchid = $_POST['branch_id'] ?? [];
-
     $branchPhone = $_POST['branchPhone'] ?? [];
     $branchEmail = $_POST['branchEmail'] ?? [];
     $branchPic = $_POST['branchPic'] ?? [];
     $branchPicContact = $_POST['branchPicContact'] ?? [];
-
     $deletedShip = $_POST['deletedShip'] ?? [];
+
+    if(isset($_POST['otherCode']) && $_POST['otherCode'] != null && $_POST['otherCode'] != ""){
+        $otherCode = filter_input(INPUT_POST, 'otherCode', FILTER_SANITIZE_STRING);
+    }
 
     if(isset($_POST['address3']) && $_POST['address3'] != null && $_POST['address3'] != ""){
         $address3 = filter_input(INPUT_POST, 'address3', FILTER_SANITIZE_STRING);
@@ -57,8 +60,8 @@ if(isset($_POST['code'], $_POST['name'], $_POST['address'], $_POST['address2'], 
     }
 
     if(isset($_POST['id']) && $_POST['id'] != null && $_POST['id'] != ''){
-        if ($update_stmt = $db->prepare("UPDATE dealer SET customer_code=?, customer_name=?, customer_address=?, address2=?, address3=?, address4=?, customer_phone=?, customer_email=?, pic=?, pic_contact=? WHERE id=?")) {
-            $update_stmt->bind_param('sssssssssss', $code, $name, $address, $address2, $address3, $address4, $phone, $email, $pic, $picContact, $_POST['id']);
+        if ($update_stmt = $db->prepare("UPDATE dealer SET customer_code=?, other_code=?, customer_name=?, customer_address=?, address2=?, address3=?, address4=?, customer_phone=?, customer_email=?, pic=?, pic_contact=? WHERE id=?")) {
+            $update_stmt->bind_param('ssssssssssss', $code, $otherCode, $name, $address, $address2, $address3, $address4, $phone, $email, $pic, $picContact, $_POST['id']);
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
@@ -114,8 +117,8 @@ if(isset($_POST['code'], $_POST['name'], $_POST['address'], $_POST['address2'], 
         }
     }
     else{
-        if ($insert_stmt = $db->prepare("INSERT INTO dealer (customer_code, customer_name, customer_address, address2, address3, address4, customer_phone, customer_email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-            $insert_stmt->bind_param('ssssssssss', $code, $name, $address, $address2, $address3, $address4, $phone, $email, $pic, $picContact);
+        if ($insert_stmt = $db->prepare("INSERT INTO dealer (customer_code, other_code, customer_name, customer_address, address2, address3, address4, customer_phone, customer_email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+            $insert_stmt->bind_param('sssssssssss', $code, $otherCode, $name, $address, $address2, $address3, $address4, $phone, $email, $pic, $picContact);
             
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {
@@ -147,7 +150,7 @@ if(isset($_POST['code'], $_POST['name'], $_POST['address'], $_POST['address2'], 
                         $branchPicContactVAlue = isset($branchPicContact[$i]) ? $branchPicContact[$i] : '';
 
                         if ($insert_stmt2 = $db->prepare("INSERT INTO reseller_branches (reseller_id, address, address2, address3, address4, branch_name, map_url, office_no, email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-                            $insert_stmt2->bind_param('sssssssssss', $_POST['id'], $addr1, $addr2, $addr3, $addr4, $branchNameValue, $mapUrlValue, $branchPhoneValue, $branchEmailValue, $branchPicValue, $branchPicContactVAlue);
+                            $insert_stmt2->bind_param('sssssssssss', $invid, $addr1, $addr2, $addr3, $addr4, $branchNameValue, $mapUrlValue, $branchPhoneValue, $branchEmailValue, $branchPicValue, $branchPicContactVAlue);
                             $insert_stmt2->execute();
                             $insert_stmt2->close();
                         }

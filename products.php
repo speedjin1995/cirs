@@ -38,7 +38,7 @@ else{
                         <div class="row">
                             <div class="col-9"></div>
                             <div class="col-3">
-                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addCapacity">Add Products</button>
+                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addCapacity">Add Price</button>
                             </div>
                         </div>
                     </div>

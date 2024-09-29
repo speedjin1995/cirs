@@ -1333,7 +1333,7 @@ $(function () {
   });
 
   $('#extendModal').find('#type').on('change', function(){
-    if($(this).val() == "OWN"){
+    if($(this).val() == "DIRECT"){
       $('#isResseller').hide();
       $('#isResseller2').hide();
       $('#isResseller3').hide();
@@ -1350,7 +1350,7 @@ $(function () {
   });
 
   $('#extendModal').find('#dealer').on('change', function(){
-    if($('#extendModal').find('#type').val() != 'OWN'){
+    if($('#extendModal').find('#type').val() != 'DIRECT'){
       var id = $(this).find(":selected").val();
 
       $.post('php/getDealer.php', {userID: id}, function(data){
@@ -1927,7 +1927,7 @@ function newEntry(){
   var date = new Date();
 
   $('#extendModal').find('#id').val("");
-  $('#extendModal').find('#type').val("OWN");
+  $('#extendModal').find('#type').val("DIRECT");
   $('#isResseller').hide();
   $('#isResseller2').hide();
   $('#isResseller3').hide();
@@ -2022,7 +2022,7 @@ function edit(id) {
     var obj = JSON.parse(data);
     
     if(obj.status === 'success'){
-      if(obj.message.type == 'OWN'){
+      if(obj.message.type == 'DIRECT'){
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
