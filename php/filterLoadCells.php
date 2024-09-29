@@ -39,6 +39,11 @@ $searchQuery = " ";
 // 	$searchQuery .= " and load_cells.pattern_no like '%".$_POST['patternNo']."%'";
 // }
 
+if($searchValue != ''){
+  $searchQuery .= " AND (load_cells.part_no like '%".$searchValue."%'
+   OR load_cells.load_cell like '%".$searchValue."%')";
+}
+
 ## Total number of records without filtering
 $sel = mysqli_query($db,"select count(*) as allcount FROM load_cells, machines, brand, model, alat, country 
 WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 

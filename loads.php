@@ -25,7 +25,7 @@ else{
 }
 ?>
 
-<!-- <div class="content-header">
+<div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
 			<div class="col-sm-6">
@@ -33,7 +33,7 @@ else{
 			</div>
         </div>
     </div>
-</div> -->
+</div>
 <!-- /.content-header -->
 
 <!-- Main content -->
@@ -114,23 +114,15 @@ else{
 					<div class="card-header">
                         <div class="row">
                             <div class="col-9">
-                                <h4 class="m-0 text-dark"><b>Loads Cell Type</b></h4>
+                                <p>Loads Cell Type</p>
+                            </div>
+                            <div class="col-3">
+                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addBrand">Add New</button>
                             </div>
                         </div>
                     </div>
 					<div class="card-body">
-                        <div class="mb-3">
-                            <div class="row">
-                                <div class="col-9">
-                                    <h4 class="m-0 text-dark">Add Load Cell Details:</h4>
-                                </div>
-                                <div class="col-3">
-                                    <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addBrand">Add New</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-						<table id="brandTable" class="table table-bordered table-striped">
+                        <table id="brandTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
 									<th>No.</th>
@@ -301,7 +293,7 @@ $(function () {
         "autoWidth": false,
         'processing': true,
         'serverSide': true,
-        'searching': false,
+        'searching': true,
         'serverMethod': 'post',
         'order': [[ 1, 'asc' ]],
         'columnDefs': [ { orderable: false, targets: [0] }],

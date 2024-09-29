@@ -47,7 +47,7 @@ else{
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Stamping</h1>
+        <h1 class="m-0 text-dark">Cancelled Stamping</h1>
       </div><!-- /.col -->
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
@@ -124,7 +124,7 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-12"><p>Completed Stamping</p></div>
+              <div class="col-12"><p>Cancelled Stamping</p></div>
               <!--div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
               </div-->
@@ -144,7 +144,7 @@ else{
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <th></th>
+                  <!--th></th-->
                   <th>Customers</th>
                   <th>Brands</th>
                   <th>Desc</th>
@@ -680,7 +680,7 @@ $(function () {
       } 
     },
     'columns': [
-      {
+      /*{
         // Add a checkbox with a unique ID for each row
         data: 'id', // Assuming 'serialNo' is a unique identifier for each row
         className: 'select-checkbox',
@@ -693,7 +693,7 @@ $(function () {
             return ''; // Return an empty string or any other placeholder if the item is invoiced
           }
         }
-      },
+      },*/
       { data: 'customers' },
       { data: 'brand' },
       { data: 'machine_type' },
@@ -865,7 +865,7 @@ $(function () {
         } 
       },
       'columns': [
-        {
+        /*{
           // Add a checkbox with a unique ID for each row
           data: 'id', // Assuming 'serialNo' is a unique identifier for each row
           className: 'select-checkbox',
@@ -878,7 +878,7 @@ $(function () {
               return ''; // Return an empty string or any other placeholder if the item is invoiced
             }
           }
-        },
+        },*/
         { data: 'customers' },
         { data: 'brand' },
         { data: 'machine_type' },

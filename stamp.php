@@ -146,6 +146,7 @@ else{
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
+                  <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
                   <th>Customers</th>
                   <th>Brands</th>
                   <th>Desc</th>
@@ -783,6 +784,20 @@ $(function () {
       } 
     },
     'columns': [
+      {
+        // Add a checkbox with a unique ID for each row
+        data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+        className: 'select-checkbox',
+        orderable: false,
+        render: function (data, type, row) {
+          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+          } 
+          else {
+            return ''; // Return an empty string or any other placeholder if the item is invoiced
+          }
+        }
+      },
       { data: 'customers' },
       { data: 'brand' },
       { data: 'machine_type' },
@@ -951,6 +966,11 @@ $(function () {
       $('#otherReason').attr("required", false);
     }
   });*/
+
+  $('#selectAllCheckbox').on('change', function() {
+    var checkboxes = $('#weightTable tbody input[type="checkbox"]');
+    checkboxes.prop('checked', $(this).prop('checked')).trigger('change');
+  });
   
   $('#filterSearch').on('click', function(){
     //$('#spinnerLoading').show();
@@ -984,6 +1004,20 @@ $(function () {
         } 
       },
       'columns': [
+        {
+          // Add a checkbox with a unique ID for each row
+          data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+          className: 'select-checkbox',
+          orderable: false,
+          render: function (data, type, row) {
+            if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+              return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+            } 
+            else {
+              return ''; // Return an empty string or any other placeholder if the item is invoiced
+            }
+          }
+        },
         { data: 'customers' },
         { data: 'brand' },
         { data: 'machine_type' },
