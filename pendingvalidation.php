@@ -426,6 +426,12 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Validation Date * </label>
+                    <input class="form-control" type="text" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate" required>
+                  </div>
+                </div>
                 <!-- <div class="col-4" style="display:none;">
                   <div class="form-group">
                     <label>Product *</label>
@@ -793,6 +799,8 @@ $(function () {
   const yesterday = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
   yesterday.setDate(tomorrow.getDate() - 7);
+  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1); // First day of the current month
+  const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0); // Last day of the current month
 
   $('.select2').select2({
     allowClear: true,
@@ -803,13 +811,13 @@ $(function () {
   $('#fromDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
-    defaultDate: ''
+    defaultDate: startOfMonth
   });
 
   $('#toDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
-    defaultDate: ''
+    defaultDate: endOfMonth
   });
 
   $('#datePicker').datetimepicker({
@@ -1831,6 +1839,10 @@ function formatDate(convert1) {
 
 function newEntry(){
   var date = new Date();
+  var todayDay = String(date.getDate()).padStart(2, '0'); // Ensure two digits
+  var todayMonth = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() returns 0-11
+  var todayYear = date.getFullYear();
+  var formattedDate = todayDay + '/' + todayMonth + '/' + todayYear;
 
   $('#extendModal').find('#id').val("");
   $('#extendModal').find('#type').val("DIRECT").trigger('change');
@@ -1871,6 +1883,7 @@ function newEntry(){
   $('#extendModal').find('#poDate').val('');
   $('#extendModal').find('#cashBill').val("");
   $('#extendModal').find('#invoice').val('');
+  $('#extendModal').find('#validationDate').val(formattedDate);
 
   // $('#pricingTable').html('');
   // pricingCount = 0;
@@ -1949,6 +1962,7 @@ function edit(id) {
         $('#extendModal').find('#model').val(obj.message.model).trigger('change');
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#size').val(obj.message.size).trigger('change');
+        $('#extendModal').find('#validationDate').val(obj.message.validation_date);
 
         if(obj.message.calibrations != null && obj.message.calibrations.length > 0){
           $("#loadCalibrationTable").html('');
