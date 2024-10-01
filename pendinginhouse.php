@@ -463,6 +463,12 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Validation Date * </label>
+                    <input class="form-control" type="date" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate" required>
+                  </div>
+                </div>
                 <!-- <div class="col-4" style="display:none;">
                   <div class="form-group">
                     <label>Product *</label>
@@ -793,11 +799,12 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
   <tr class="details">
     <td>
       <input type="text" class="form-control" id="no" name="no" readonly>
+      <span class="form-control" id="noText" name="noText"></span>
     </td>
     <td>
       <div class="d-flex mt-1">
         <div class="col-6">
-          <input type="number" placeholder="0.0" id="standardValue" name="standardValue" class="form-control" style="width: 100%;">
+          <input type="number" placeholder="0.0" id="standardValue" name="standardValue" class="form-control" style="width: 100%;" value="0.0">
         </div>
         <div class="col-2">
           <i class="fas fa-minus fa-2x"></i>
@@ -810,7 +817,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
     <td>
       <div class="d-flex mt-1"> 
         <div class="col-6">
-          <input class="form-control" type="number" placeholder="0.0" id="calibrationReceived" name="calibrationReceived" style="width: 100%;">
+          <input class="form-control" type="number" placeholder="0.0" id="calibrationReceived" name="calibrationReceived" style="width: 100%;" value="0.0">
         </div>
         <div class="col-2">
           <i class="fas fa-minus fa-2x"></i>
@@ -823,7 +830,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
     <td>
       <div class="d-flex mt-1">
         <div class="col-6">
-          <input class="form-control" type="number" placeholder="0.0" id="variance" name="variance" style="width: 100%; background-color: lightgrey;" readonly>
+          <input class="form-control" type="number" placeholder="0.0" id="variance" name="variance" style="width: 100%; background-color: lightgrey;" value="0.0" readonly>
         </div>
         <div class="col-2">
           <i class="fas fa-minus fa-2x"></i>
@@ -836,7 +843,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
     <td>
       <div class="d-flex mt-1">
         <div class="col-6">
-          <input class="form-control" type="number" placeholder="0.0" id="afterAdjustReading" name="afterAdjustReading" style="width: 100%; background-color: lightgreen;">
+          <input class="form-control" type="number" placeholder="0.0" id="afterAdjustReading" name="afterAdjustReading" value="0.0" style="width: 100%; background-color: lightgreen;">
         </div>
         <div class="col-2">
           <i class="fas fa-minus fa-2x"></i>
@@ -1024,35 +1031,35 @@ $(function () {
   });
 
   // Bind form submission handler once
-	$('#extendForm').off('submit').on('submit', function(e) {
-		e.preventDefault(); 
-		var formData = new FormData(this); 
-		$.ajax({
-			url: 'php/insertValidation.php',
-			type: 'POST',
-			data: formData,
-			processData: false,
-			contentType: false,
-			success: function(data) {
-				var obj = JSON.parse(data); 
-				if (obj.status === 'success') {
-					$('#extendModal').modal('hide');
-					toastr["success"](obj.message, "Success:");
-					location.reload(); // Reload the page
-				} else {
-					toastr["error"](obj.message, "Failed:");
-				}
-				$('#spinnerLoading').hide();
-				isModalOpen = false; // Set flag to false on error as well
-			},
-			error: function(xhr, status, error) {
-				console.error("AJAX request failed:", status, error);
-				toastr["error"]("An error occurred while processing the request.", "Failed:");
-				$('#spinnerLoading').hide();
-				isModalOpen = false; // Set flag to false on error as well
-			}
-		});
-	});
+	// $('#extendForm').off('submit').on('submit', function(e) {
+	// 	e.preventDefault(); 
+	// 	var formData = new FormData(this); 
+	// 	$.ajax({
+	// 		url: 'php/insertValidation.php',
+	// 		type: 'POST',
+	// 		data: formData,
+	// 		processData: false,
+	// 		contentType: false,
+	// 		success: function(data) {
+	// 			var obj = JSON.parse(data); 
+	// 			if (obj.status === 'success') {
+	// 				$('#extendModal').modal('hide');
+	// 				toastr["success"](obj.message, "Success:");
+	// 				location.reload(); // Reload the page
+	// 			} else {
+	// 				toastr["error"](obj.message, "Failed:");
+	// 			}
+	// 			$('#spinnerLoading').hide();
+	// 			isModalOpen = false; // Set flag to false on error as well
+	// 		},
+	// 		error: function(xhr, status, error) {
+	// 			console.error("AJAX request failed:", status, error);
+	// 			toastr["error"]("An error occurred while processing the request.", "Failed:");
+	// 			$('#spinnerLoading').hide();
+	// 			isModalOpen = false; // Set flag to false on error as well
+	// 		}
+	// 	});
+	// });
 
   $.validator.setDefaults({
     submitHandler: function () {
@@ -1074,26 +1081,26 @@ $(function () {
           $('#spinnerLoading').hide();
         });
       }
-      // else if($('#extendModal').hasClass('show')){
-      //   $('#spinnerLoading').show();
+      else if($('#extendModal').hasClass('show')){
+        $('#spinnerLoading').show();
 
-      //   $.post('php/insertValidation.php', $('#extendForm').serialize(), function(data){
-      //     var obj = JSON.parse(data); 
-      //     if(obj.status === 'success'){
-      //       $('#extendModal').modal('hide');
-      //       toastr["success"](obj.message, "Success:");
-      //       $('#weightTable').DataTable().ajax.reload();
-      //     }
-      //     else if(obj.status === 'failed'){
-      //       toastr["error"](obj.message, "Failed:");
-      //     }
-      //     else{
-      //       toastr["error"]("Something wrong when edit", "Failed:");
-      //     }
+        $.post('php/insertInHouseValidation.php', $('#extendForm').serialize(), function(data){
+          var obj = JSON.parse(data); 
+          if(obj.status === 'success'){
+            $('#extendModal').modal('hide');
+            toastr["success"](obj.message, "Success:");
+            $('#weightTable').DataTable().ajax.reload();
+          }
+          else if(obj.status === 'failed'){
+            toastr["error"](obj.message, "Failed:");
+          }
+          else{
+            toastr["error"]("Something wrong when edit", "Failed:");
+          }
 
-      //     $('#spinnerLoading').hide();
-      //   });
-      // }
+          $('#spinnerLoading').hide();
+        });
+      }
       // else if($('#uploadModal').hasClass('show')){
       //   $('#spinnerLoading').show();
 
@@ -1794,7 +1801,10 @@ $(function () {
     $("#loadTestingTable").find('.details:last').attr("data-index", loadTestingCount);
     $("#loadTestingTable").find('#remove:last').attr("id", "remove" + loadTestingCount);
 
-    $("#loadTestingTable").find('#no:last').attr('name', 'no['+loadTestingCount+']').attr('id', 'no' + loadTestingCount).val((loadTestingCount + 1).toString()).hide().after('<span class="form-control">Tester / Time: ' + (loadTestingCount + 1) + '</span>');
+    $("#loadTestingTable").find('#no:last').attr('name', 'no['+loadTestingCount+']').attr('id', 'no' + loadTestingCount).val((loadTestingCount + 1)).hide();
+
+    var noCount = loadTestingCount + 1;
+    $("#loadTestingTable").find('#noText:last').attr('name', 'noText['+loadTestingCount+']').attr('id', 'noText' + loadTestingCount).text('Tester / Time: ' + noCount);
     $("#loadTestingTable").find('#standardValue:last').attr('name', 'standardValue['+loadTestingCount+']').attr("id", "standardValue" + loadTestingCount).css('background-color', 'yellow');
     $("#loadTestingTable").find('#calibrationReceived:last').attr('name', 'calibrationReceived['+loadTestingCount+']').attr("id", "calibrationReceived" + loadTestingCount);
     $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount);
@@ -1934,51 +1944,39 @@ function newEntry(){
   // $('#isResseller4').hide();
   // $('#isResseller5').hide();
   $('#extendModal').find('#customerType').val("EXISTING").attr('readonly', false).trigger('change');
-  $('#extendModal').find('#brand').val('').trigger('change');
-  $('#extendModal').find('#validator').val('').trigger('change');
-  $('#extendModal').find('#product').val('');
   $('#extendModal').find('#company').val('');
-  $('#extendModal').find('#companyText').val('').trigger('change');
-  $('#extendModal').find('#machineType').val('').trigger('change');
-  $('#extendModal').find('#jenisAlat').val('').trigger('change');
+  $('#extendModal').find('#validator').val('').trigger('change');
+  $('#extendModal').find('#branch').val('').trigger('change');
+  $('#extendModal').find('#autoFormNo').val('');
   $('#extendModal').find('#address1').val('');
-  $('#extendModal').find('#model').val("").trigger('change');
-  $('#extendModal').find('#stampDate').val('');
   $('#extendModal').find('#address2').val('');
-  $('#extendModal').find('#capacity').val('').trigger('change');
-  $('#extendModal').find('#noDaftar').val('');
   $('#extendModal').find('#address3').val('');
+  $('#extendModal').find('#address4').val('');
+  $('#extendModal').find('#phone').val('');
+  $('#extendModal').find('#email').val('');
+  $('#extendModal').find('#pic').val('');
+  $('#extendModal').find('#contact').val('');
+  $('#extendModal').find('#machineType').val('').trigger('change');
   $('#extendModal').find('#serial').val('');
-  $('#extendModal').find('#pinKeselamatan').val('');
-  $('#extendModal').find('#attnTo').val('<?=$user ?>');
-  $('#extendModal').find('#siriKeselamatan').val('');
-  $('#extendModal').find('#pic').val("");
-  $('#extendModal').find('#borangD').val("");
-  $('#extendModal').find('#remark').val("");
-  $('#extendModal').find('#dueDate').val('');
-  $('#extendModal').find('#quotation').val("");
-  $('#extendModal').find('#quotationDate').val('');
-  $('#extendModal').find('#includeCert').val("NO").trigger('change');
-  $('#extendModal').find('#poNo').val("");
-  $('#extendModal').find('#poDate').val('');
-  $('#extendModal').find('#cashBill').val("");
-  $('#extendModal').find('#invoice').val('');
+  $('#extendModal').find('#lastCalibrationDate').val('');
+  $('#extendModal').find('#expiredDate').val('');
+  $('#extendModal').find('#manufacturing').val('').trigger('change');
+  $('#extendModal').find('#auto_cert_no').val('');
+  $('#extendModal').find('#brand').val('').trigger('change');
+  $('#extendModal').find('#model').val("").trigger('change');
+  $('#extendModal').find('#capacity').val('').trigger('change');
+  $('#extendModal').find('#size').val('').trigger('change');
+  $('#extendModal').find('#calibrator').val('').trigger('change');
+  $('#extendModal').find('#companyText').val('').trigger('change');
+  $('#extendModal').find('#validationDate').val('');
 
   $('#loadTestingTable').html('');
+  loadTestingCount = 0;
   for (var i = 0; i < 10; i++) {
-    // Trigger the 'click' event on the element with ID 'add-testing-cell'
-    $('#add-testing-cell').trigger('click');
+      $('#add-testing-cell').trigger('click');
   }
 
-  // pricingCount = 0;
-  // $('#extendModal').find('#unitPrice').val("");
-  // $('#extendModal').find('#certPrice').val('');
-  // $('#extendModal').find('#totalAmount').val("");
-  // $('#extendModal').find('#sst').val('');
-  // $('#extendModal').find('#subAmount').val('');
-  // $('#cerId').hide();
   $('#extendModal').modal('show');
-  isModalOpen = true; // Set flag to true when modal is shown
   
   $('#extendForm').validate({
     errorElement: 'span',
