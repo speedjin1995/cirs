@@ -796,53 +796,53 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
     </td>
     <td>
       <div class="d-flex mt-1">
-        <div class="col-8">
-          <input type="number" placeholder="0.0" id="standardValue" name="standardValue" style="width: 100%;">
+        <div class="col-6">
+          <input type="number" placeholder="0.0" id="standardValue" name="standardValue" class="form-control" style="width: 100%;">
         </div>
         <div class="col-2">
           <i class="fas fa-minus fa-2x"></i>
         </div>
-        <div class="col-2">
-          <span style="border: 1px solid #ced4da; padding: 2px; display: inline-block; width: 100%; box-sizing: border-box; border-box; background-color:lightgrey;">KG</span>
+        <div class="col-4">
+          <span class="form-control" style="background-color:lightgrey;">KG</span>
         </div>
       </div>
     </td>
     <td>
       <div class="d-flex mt-1"> 
-        <div class="col-8">
-          <input type="number" placeholder="0.0" id="calibrationReceived" name="calibrationReceived" style="width: 100%;">
+        <div class="col-6">
+          <input class="form-control" type="number" placeholder="0.0" id="calibrationReceived" name="calibrationReceived" style="width: 100%;">
         </div>
         <div class="col-2">
           <i class="fas fa-minus fa-2x"></i>
         </div>
-        <div class="col-2">
-          <span style="border: 1px solid #ced4da; padding: 2px; display: inline-block; width: 100%; box-sizing: border-box; border-box; background-color:lightgrey;">KG</span>
+        <div class="col-4">
+          <span class="form-control" style="background-color:lightgrey;">KG</span>
         </div>
       </div>
     </td>
     <td>
       <div class="d-flex mt-1">
-        <div class="col-8">
-          <input type="number" placeholder="0.0" id="variance" name="variance" style="width: 100%; background-color: lightgrey;" readonly>
+        <div class="col-6">
+          <input class="form-control" type="number" placeholder="0.0" id="variance" name="variance" style="width: 100%; background-color: lightgrey;" readonly>
         </div>
         <div class="col-2">
           <i class="fas fa-minus fa-2x"></i>
         </div>
-        <div class="col-2">
-          <span style="border: 1px solid #ced4da; padding: 2px; display: inline-block; width: 100%; box-sizing: border-box; background-color:lightgrey;">KG</span>
+        <div class="col-4">
+          <span class="form-control" style="background-color:lightgrey;">KG</span>
         </div>
       </div>
     </td>
     <td>
       <div class="d-flex mt-1">
-        <div class="col-8">
-          <input type="number" placeholder="0.0" id="afterAdjustReading" name="afterAdjustReading" style="width: 100%; background-color: lightgreen;">
+        <div class="col-6">
+          <input class="form-control" type="number" placeholder="0.0" id="afterAdjustReading" name="afterAdjustReading" style="width: 100%; background-color: lightgreen;">
         </div>
         <div class="col-2">
           <i class="fas fa-minus fa-2x"></i>
         </div>
-        <div class="col-2">
-          <span style="border: 1px solid #ced4da; padding: 2px; display: inline-block; width: 100%; box-sizing: border-box; border-box; background-color:lightgrey;">KG</span>
+        <div class="col-4">
+          <span class="form-control" style="background-color:lightgrey;">KG</span>
         </div>
       </div>
     </td>
@@ -857,6 +857,7 @@ var isModalOpen = false; // Flag to track modal visibility
 
 $(function () {
   $('#customerNoHidden').hide();
+  $('#add-testing-cell').hide();
 
   const today = new Date();
   const tomorrow = new Date(today);
@@ -1793,7 +1794,7 @@ $(function () {
     $("#loadTestingTable").find('.details:last').attr("data-index", loadTestingCount);
     $("#loadTestingTable").find('#remove:last').attr("id", "remove" + loadTestingCount);
 
-    $("#loadTestingTable").find('#no:last').attr('name', 'no['+loadTestingCount+']').attr('id', 'no' + loadTestingCount).val((loadTestingCount + 1).toString()).hide().after('<span style="border: 1px solid #ced4da; padding: 2px; display: inline-block; width: 100%; box-sizing: border-box;">Tester / Time: ' + (loadTestingCount + 1) + '</span>');
+    $("#loadTestingTable").find('#no:last').attr('name', 'no['+loadTestingCount+']').attr('id', 'no' + loadTestingCount).val((loadTestingCount + 1).toString()).hide().after('<span class="form-control">Tester / Time: ' + (loadTestingCount + 1) + '</span>');
     $("#loadTestingTable").find('#standardValue:last').attr('name', 'standardValue['+loadTestingCount+']').attr("id", "standardValue" + loadTestingCount).css('background-color', 'yellow');
     $("#loadTestingTable").find('#calibrationReceived:last').attr('name', 'calibrationReceived['+loadTestingCount+']').attr("id", "calibrationReceived" + loadTestingCount);
     $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount);
@@ -1963,7 +1964,12 @@ function newEntry(){
   $('#extendModal').find('#cashBill').val("");
   $('#extendModal').find('#invoice').val('');
 
-  // $('#pricingTable').html('');
+  $('#loadTestingTable').html('');
+  for (var i = 0; i < 10; i++) {
+    // Trigger the 'click' event on the element with ID 'add-testing-cell'
+    $('#add-testing-cell').trigger('click');
+  }
+
   // pricingCount = 0;
   // $('#extendModal').find('#unitPrice').val("");
   // $('#extendModal').find('#certPrice').val('');

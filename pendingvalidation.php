@@ -973,7 +973,7 @@ $(function () {
 				if (obj.status === 'success') {
 					$('#extendModal').modal('hide');
 					toastr["success"](obj.message, "Success:");
-					location.reload(); // Reload the page
+          $('#weightTable').DataTable().ajax.reload();
 				} else {
 					toastr["error"](obj.message, "Failed:");
 				}
@@ -1894,7 +1894,6 @@ function newEntry(){
   // $('#extendModal').find('#subAmount').val('');
   // $('#cerId').hide();
   $('#extendModal').modal('show');
-  isModalOpen = true; // Set flag to true when modal is shown
   
   $('#extendForm').validate({
     errorElement: 'span',
@@ -2072,10 +2071,10 @@ function edit(id) {
   });
 
   // Hide the spinner when the modal is closed
-  $('#extendModal').on('hidden.bs.modal', function() {
-    $('#spinnerLoading').hide(); 
-    location.reload();
-  });
+  // $('#extendModal').on('hidden.bs.modal', function() {
+  //   $('#spinnerLoading').hide(); 
+  //   location.reload();
+  // });
 }
 
 function complete(id) {
