@@ -60,68 +60,71 @@ else{
 </section><!-- /.content -->
 
 <div class="modal fade" id="addModal">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xl" style="max-width:90%;">
       <div class="modal-content">
         <form role="form" id="customerForm">
             <div class="modal-header">
-              <h4 class="modal-title">Add Customers</h4>
+              <h4 class="modal-title">Add Resellers</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
               <div class="card-body">
-                <div class="form-group">
-                  <input type="hidden" class="form-control" id="id" name="id">
-                </div>
-                <div class="form-group">
-                  <label for="code">Reseller Code *</label>
-                  <input type="text" class="form-control" name="code" id="code" placeholder="Enter Customer Code" maxlength="10" required>
-                </div>
-                <div class="form-group">
-                  <label for="name">Reseller Name *</label>
-                  <input type="text" class="form-control" name="name" id="name" placeholder="Enter Customer Name" required>
-                </div>
-                <div class="form-group"> 
-                  <label for="address">Address *</label>
-                  <textarea class="form-control" id="address" name="address" placeholder="Enter your address" required></textarea>
-                </div>
-                <div class="form-group"> 
-                  <label for="address2">Address 2 *</label>
-                  <textarea class="form-control" id="address2" name="address2" placeholder="Enter your address 2" required></textarea>
-                </div>
-                <div class="form-group"> 
-                  <label for="address3">Address 3</label>
-                  <textarea class="form-control" id="address3" name="address3" placeholder="Enter your address 3"></textarea>
-                </div>
-                <div class="form-group">
-                  <label for="phone">Phone *</label>
-                  <input type="text" class="form-control" name="phone" id="phone" placeholder="01x-xxxxxxx" required>
-                </div>
-                <div class="form-group"> 
-                  <label for="email">Email *</label>
-                  <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                <input type="hidden" class="form-control" id="id" name="id">
+                <div class="row">
+                  <div class="form-group col-3">
+                    <label for="code">Reseller Code *</label>
+                    <input type="text" class="form-control" name="code" id="code" placeholder="Enter Reseller Code" readonly>
+                  </div>
+                  <div class="form-group col-3">
+                    <label for="otherCode">Other Code (AutoCount etc.)</label>
+                    <input type="text" class="form-control" name="otherCode" id="otherCode" placeholder="Enter Other System Code">
+                  </div>
+                  <div class="form-group col-6">
+                    <label for="name">Reseller Name *</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter Reseller Name" required>
+                  </div>
+                  <div class="form-group col-3"> 
+                    <label for="address">Address *</label>
+                    <input class="form-control" id="address" name="address" placeholder="Enter your address 1" required>
+                  </div>
+                  <div class="form-group col-3"> 
+                    <label for="address2">Address 2 *</label>
+                    <input class="form-control" id="address2" name="address2" placeholder="Enter your address 2" required>
+                  </div>
+                  <div class="form-group col-3"> 
+                    <label for="address3">Address 3</label>
+                    <input class="form-control" id="address3" name="address3" placeholder="Enter your address 3">
+                  </div>
+                  <div class="form-group col-3"> 
+                    <label for="address4">Address 4</label>
+                    <input class="form-control" id="address4" name="address4" placeholder="Enter your address 4">
+                  </div>
+                  <div class="form-group col-3">
+                    <label for="phone">Office Phone *</label>
+                    <input type="text" class="form-control" name="phone" id="phone" placeholder="01x-xxxxxxx" required>
+                  </div>
+                  <div class="form-group col-3">
+                    <label for="pic">PIC </label>
+                    <input type="text" class="form-control" name="pic" id="pic" placeholder="Enter PIC">
+                  </div>
+                  <div class="form-group col-3"> 
+                    <label for="picContact">PIC Contact</label>
+                    <input type="text" class="form-control" id="picContact" name="picContact" placeholder="Enter PIC Contact" >
+                  </div>
+                  <div class="form-group col-3"> 
+                    <label for="email">Email *</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter Reseller Email">
+                  </div>
                 </div>
 
                 <section class="mt-5 mb-5">
-                    <div class="row mb-3">
-                        <h4>Customer Branches & Address</h4>
-                        <button style="margin-left:auto;margin-right: 25px;" type="button" class="btn btn-primary add-branch">Add Branch</button>
-                    </div>
-                    <table style="width: 100%;">
-                    <thead>
-                        <tr>
-                        <th>Branch Name</th>
-                        <th>Address 1</th>
-                        <th>Address 2</th>
-                        <th>Address 3</th>
-                        <th>Address 4</th>
-                        <th>Map URL</th>
-                        <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody id="branchTable"></tbody>
-                    </table>
+                  <div class="row mb-3">
+                    <h4>Reseller Branches & Address</h4>
+                    <button style="margin-left:auto;margin-right: 25px;" type="button" class="btn btn-primary add-branch">Add Branch</button>
+                  </div><hr>
+                  <div id="branchTable"></div>
                 </section>  
               </div>
             </div>
@@ -137,28 +140,55 @@ else{
 </div>
 
 <script type="text/html" id="branchDetails">
-  <tr class="details">
-    <td>
+  <div class="details">
+    <div class="row">
       <input type="hidden" class="form-control" id="branch_id">
-      <textarea class="form-control" id="branch_name" placeholder="Enter your branch name" required></textarea>
-    </td>
-    <td>
-      <textarea class="form-control" id="branch_address1" placeholder="Enter your address" required></textarea>
-    </td>
-    <td>
-      <textarea class="form-control" id="branch_address2" placeholder="Enter your address 2" required></textarea>
-    </td>
-    <td>
-      <textarea class="form-control" id="branch_address3" placeholder="Enter your address 3"></textarea>
-    </td>
-    <td>
-      <textarea class="form-control" id="branch_address4" placeholder="Enter your address 4"></textarea>
-    </td>
-    <td>
-      <textarea class="form-control" id="map_url" placeholder="Enter your map url"></textarea>
-    </td>
-    <td><button class="btn btn-danger btn-sm" id="remove"><i class="fa fa-times"></i></button></td>
-  </tr>
+      <div class="form-group col-2"> 
+        <label for="branch_name">Branch Code *</label>
+        <input class="form-control" id="branch_name" placeholder="Enter your branch code" required>
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branch_address1">Address 1 *</label>
+        <input class="form-control" id="branch_address1" placeholder="Enter your address" required>
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branch_address2">Address 2 *</label>
+        <input class="form-control" id="branch_address2" placeholder="Enter your address 2" required>
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branch_address3">Address 3 *</label>
+        <input class="form-control" id="branch_address3" placeholder="Enter your address 3" required>
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branch_address4">Address 4 *</label>
+        <input class="form-control" id="branch_address4" placeholder="Enter your address 4" required>
+      </div>
+      <div class="form-group col-2"> 
+        <label for="map_url">Map URL</label>
+        <input class="form-control" id="map_url" placeholder="Enter your map url">
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branchPhone">Office Phone</label>
+        <input class="form-control" id="branchPhone" placeholder="Enter your phone">
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branchEmail">Email</label>
+        <input class="form-control" id="branchEmail" placeholder="Enter your email">
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branchPic">PIC</label>
+        <input class="form-control" id="branchPic" placeholder="Enter your PIC">
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branchPicContact">PIC Contact</label>
+        <input class="form-control" id="branchPicContact" placeholder="Enter your PIC Contact">
+      </div>
+      <div class="form-group col-2"></div>
+      <div class="form-group col-2"> 
+        <button class="btn btn-danger btn-sm" id="remove"><i class="fa fa-times"></i></button>
+      </div>
+    </div><hr>
+  </div>
 </script>
 
 <script>
@@ -244,11 +274,15 @@ $(function () {
     $('#addCustomers').on('click', function(){
         $('#addModal').find('#id').val("");
         $('#addModal').find('#code').val("");
+        $('#addModal').find('#otherCode').val("");
         $('#addModal').find('#name').val("");
         $('#addModal').find('#address').val("");
         $('#addModal').find('#address2').val("");
         $('#addModal').find('#address3').val("");
+        $('#addModal').find('#address4').val("");
         $('#addModal').find('#phone').val("");
+        $('#addModal').find('#pic').val("");
+        $('#addModal').find('#picContact').val("");
         $('#addModal').find('#email').val("");
         branchCount = 0;
         $('#addModal').modal('show');
@@ -283,6 +317,10 @@ $(function () {
         $("#branchTable").find('#branch_address4:last').attr('name', 'branch_address4['+branchCount+']').attr("id", "branch_address4" + branchCount);
         $("#branchTable").find('#map_url:last').attr('name', 'map_url['+branchCount+']').attr("id", "map_url" + branchCount);
         $("#branchTable").find('#branch_id:last').attr('name', 'branch_id['+branchCount+']').attr("id", "branch_id" + branchCount);
+        $("#branchTable").find('#branchPhone:last').attr('name', 'branchPhone['+branchCount+']').attr("id", "branchPhone" + branchCount);
+        $("#branchTable").find('#branchEmail:last').attr('name', 'branchEmail['+branchCount+']').attr("id", "branchEmail" + branchCount);
+        $("#branchTable").find('#branchPic:last').attr('name', 'branchPic['+branchCount+']').attr("id", "branchPic" + branchCount);
+        $("#branchTable").find('#branchPicContact:last').attr('name', 'branchPicContact['+branchCount+']').attr("id", "branchPicContact" + branchCount);
 
         branchCount++;
     });
@@ -328,12 +366,16 @@ function edit(id){
         if(obj.status === 'success'){
             $('#addModal').find('#id').val(obj.message.id);
             $('#addModal').find('#code').val(obj.message.customer_code);
+            $('#addModal').find('#otherCode').val(obj.message.other_code);
             $('#addModal').find('#name').val(obj.message.customer_name);
             $('#addModal').find('#address').val(obj.message.customer_address);
             $('#addModal').find('#address2').val(obj.message.address2);
             $('#addModal').find('#address3').val(obj.message.address3);
+            $('#addModal').find('#address4').val(obj.message.address4);
             $('#addModal').find('#phone').val(obj.message.customer_phone);
             $('#addModal').find('#email').val(obj.message.customer_email);
+            $('#addModal').find('#pic').val(obj.message.customer_email);
+            $('#addModal').find('#picContact').val(obj.message.customer_email);
             branchCount = 0;
 
             var weightData = obj.message.branches;
@@ -345,14 +387,17 @@ function edit(id){
               $("#branchTable").find('.details:last').attr("data-index", branchCount);
               $("#branchTable").find('#remove:last').attr("id", "remove" + branchCount);
 
+              $("#branchTable").find('#branch_id:last').attr('name', 'branch_id['+branchCount+']').attr("id", "branch_id" + branchCount).val(weightData[i].branchid);
+              $("#branchTable").find('#branch_name:last').attr('name', 'branch_name['+branchCount+']').attr("id", "branch_name" + branchCount).val(weightData[i].name);
               $("#branchTable").find('#branch_address1:last').attr('name', 'branch_address1['+branchCount+']').attr("id", "branch_address1" + branchCount).val(weightData[i].branch_address1);
               $("#branchTable").find('#branch_address2:last').attr('name', 'branch_address2['+branchCount+']').attr("id", "branch_address2" + branchCount).val(weightData[i].branch_address2);
               $("#branchTable").find('#branch_address3:last').attr('name', 'branch_address3['+branchCount+']').attr("id", "branch_address3" + branchCount).val(weightData[i].branch_address3);
               $("#branchTable").find('#branch_address4:last').attr('name', 'branch_address4['+branchCount+']').attr("id", "branch_address4" + branchCount).val(weightData[i].branch_address4);
-              $("#branchTable").find('#branch_id:last').attr('name', 'branch_id['+branchCount+']').attr("id", "branch_id" + branchCount).val(weightData[i].branchid);
               $("#branchTable").find('#map_url:last').attr('name', 'map_url['+branchCount+']').attr("id", "map_url" + branchCount).val(weightData[i].map_url);
-              $("#branchTable").find('#branch_name:last').attr('name', 'branch_name['+branchCount+']').attr("id", "branch_name" + branchCount).val(weightData[i].name);
-
+              $("#branchTable").find('#branchPhone:last').attr('name', 'branchPhone['+branchCount+']').attr("id", "branchPhone" + branchCount).val(weightData[i].office_no);
+              $("#branchTable").find('#branchEmail:last').attr('name', 'branchEmail['+branchCount+']').attr("id", "branchEmail" + branchCount).val(weightData[i].email);
+              $("#branchTable").find('#branchPic:last').attr('name', 'branchPic['+branchCount+']').attr("id", "branchPic" + branchCount).val(weightData[i].pic);
+              $("#branchTable").find('#branchPicContact:last').attr('name', 'branchPicContact['+branchCount+']').attr("id", "branchPicContact" + branchCount).val(weightData[i].pic_contact);
               branchCount++;
             }
 

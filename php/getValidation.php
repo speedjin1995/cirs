@@ -23,6 +23,9 @@ if(isset($_POST['validationId'])){
             
             if ($row = $result->fetch_assoc()) {
                 $message['id'] = $row['id'];
+                $message['type'] = $row['type'];
+                $message['dealer'] = $row['dealer'];
+                $message['dealer_branch'] = $row['dealer_branch'];
                 $message['validate_by'] = $row['validate_by'];
                 $message['customer_type'] = $row['customer_type'];
                 $message['customer'] = $row['customer'];
@@ -35,7 +38,7 @@ if(isset($_POST['validationId'])){
                 $message['model'] = $row['model'];
                 $message['capacity'] = $row['capacity'];
                 $message['size'] = $row['size'];
-                $message['calibrations'] = json_decode($row['calibrations'], true);
+                $message['calibrations'] = ($row['calibrations'] != null) ? json_decode($row['calibrations'], true) : [];
                 $message['validation_date'] = $row['validation_date'];
                 $message['status'] = $row['status'];
             }

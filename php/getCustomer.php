@@ -34,11 +34,15 @@ if(isset($_POST['userID'])){
                             $pricing[] = array(
                                 "branchid" => $row2['id'],
                                 "name" => $row2['branch_name'] ?? '',
-                                "address1" => $row2['address'] ?? '',
-                                "address2" => $row2['address2'] ?? '',
-                                "address3" => $row2['address3'] ?? '',
-                                "address4" => $row2['address4'] ?? '',
+                                "branch_address1" => $row2['address'] ?? '',
+                                "branch_address2" => $row2['address2'] ?? '',
+                                "branch_address3" => $row2['address3'] ?? '',
+                                "branch_address4" => $row2['address4'] ?? '',
                                 "map_url" => $row2['map_url'] ?? '',
+                                "pic" => $row2['pic'] ?? '',
+                                "pic_contact" => $row2['pic_contact'] ?? '',
+                                "office_no" => $row2['office_no'] ?? '',
+                                "email" => $row2['email'] ?? ''
                             );
                         }
                     }
@@ -47,9 +51,16 @@ if(isset($_POST['userID'])){
                 $message['id'] = $row['id'];
                 $message['dealer'] = $row['dealer'];
                 $message['customer_code'] = $row['customer_code'];
+                $message['other_code'] = $row['other_code'];
                 $message['customer_name'] = $row['customer_name'];
+                $message['customer_address'] = $row['customer_address'];
+                $message['address2'] = $row['address2'];
+                $message['address3'] = $row['address3'];
+                $message['address4'] = $row['address4'];
                 $message['customer_phone'] = $row['customer_phone'];
                 $message['customer_email'] = $row['customer_email'];
+                $message['pic'] = $row['pic'];
+                $message['pic_contact'] = $row['pic_contact'];
                 $message['pricing'] = $pricing;
             }
             

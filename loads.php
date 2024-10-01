@@ -21,6 +21,7 @@ else{
   $models2 = $db->query("SELECT * FROM model WHERE deleted = '0'");
   $alats2 = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $country2 = $db->query("SELECT * FROM country");
+  $capacity2 = $db->query("SELECT * FROM capacity");
 }
 ?>
 
@@ -28,17 +29,17 @@ else{
     <div class="container-fluid">
         <div class="row mb-2">
 			<div class="col-sm-6">
-				<h1 class="m-0 text-dark">Loads Cells</h1>
-			</div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+				<h1 class="m-0 text-dark">Loads Cell Type</h1>
+			</div>
+        </div>
+    </div>
 </div>
 <!-- /.content-header -->
 
 <!-- Main content -->
 <section class="content">
 	<div class="container-fluid">
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
@@ -106,32 +107,36 @@ else{
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="row">
 			<div class="col-12">
-				<div class="card">
+				<div class="card mt-4">
 					<div class="card-header">
                         <div class="row">
-                            <div class="col-9"></div>
+                            <div class="col-9">
+                                <p>Loads Cell Type</p>
+                            </div>
                             <div class="col-3">
-                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addBrand">Add Load Cell</button>
+                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addBrand">Add New</button>
                             </div>
                         </div>
                     </div>
 					<div class="card-body">
-						<table id="brandTable" class="table table-bordered table-striped">
+                        <table id="brandTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
 									<th>No.</th>
+									<th>Part No.</th>
 									<th>Load Cell Type</th>
-									<th>Brand</th>
-                                    <th>Model</th>
-                                    <th>Jenis Alat</th>
-                                    <th>Made In</th>
+									<th>Load Cell Brand</th>
+                                    <th>Load Cell Model</th>
+                                    <th>Load Cell Capacity</th>
+                                    <th>Load Cell Made In</th>
                                     <th>Class</th>
                                     <th>SIRIM Pattern <br>Approval No.</th>
                                     <th>SIRIM Pattern <br>Approval Date</th>
                                     <th>SIRIM Pattern <br>Expiry Date</th>
+                                    <th>Attach <br>Certificate</th>
                                     <th>Action</th>
 								</tr>
 							</thead>
@@ -156,81 +161,105 @@ else{
             <div class="modal-body">
                 <div class="card-body">
                     <input type="hidden" class="form-control" id="id" name="id">
-    				<div class="form-group">
-    					<label for="brand">Load Cell Type *</label>
-    					<input type="text" class="form-control" name="loadCell" id="loadCell" placeholder="Enter Load Cell Type" required>
-    				</div>
-                    <div class="form-group">
-                        <label>Machine/Scale Type *</label>
-                        <select class="form-control select2" id="machineType" name="machineType" required>
-                            <option value="" selected disabled hidden>Please Select</option>
-                            <?php while($rowM2=mysqli_fetch_assoc($machinetypes2)){ ?>
-                                <option value="<?=$rowM2['id'] ?>"><?=$rowM2['machine_type'] ?></option>
-                            <?php } ?>
-                        </select>
+                    <div class="row">
+                        <div class="form-group col-8">
+                            <label for="brand">Load Cell Type *</label>
+                            <input type="text" class="form-control" name="loadCell" id="loadCell" placeholder="Enter Load Cell Type" required>
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="brand">Part No. *</label>
+                            <input type="text" class="form-control" name="partNo" id="partNo" placeholder="Enter Part No" required>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Brand *</label>
-                        <select class="form-control select2" id="brand" name="brand" required>
-                            <option value="" selected disabled hidden>Please Select</option>
-                            <?php while($rowB2=mysqli_fetch_assoc($brands2)){ ?>
-                                <option value="<?=$rowB2['id'] ?>"><?=$rowB2['brand'] ?></option>
-                            <?php } ?>
-                        </select>
+    				
+                    <div class="row">
+                        <div class="form-group col-4">
+                            <label>Load Cell Model *</label>
+                            <select class="form-control select2" id="model" name="model" required>
+                                <option value="" selected disabled hidden>Please Select</option>
+                                <?php while($rowM2=mysqli_fetch_assoc($models2)){ ?>
+                                    <option value="<?=$rowM2['id'] ?>"><?=$rowM2['model'] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="form-group col-4">
+                            <label>Load Cell Capacity *</label>
+                            <select class="form-control select2" id="capacity" name="capacity" required>
+                                <option value="" selected disabled hidden>Please Select</option>
+                                <?php while($rowM2=mysqli_fetch_assoc($capacity2)){ ?>
+                                    <option value="<?=$rowM2['id'] ?>"><?=$rowM2['name'] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="form-group col-4">
+                            <label>Load Cell Made In *</label>
+                            <select class="form-control select2" id="madeIn" name="madeIn" required>
+                                <option value="" selected disabled hidden>Please Select</option>
+                                <?php while($rowC2=mysqli_fetch_assoc($country2)){ ?>
+                                    <option value="<?=$rowC2['id'] ?>"><?=$rowC2['name'] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Model *</label>
-                        <select class="form-control select2" id="model" name="model" required>
-                            <option value="" selected disabled hidden>Please Select</option>
-                            <?php while($rowM2=mysqli_fetch_assoc($models2)){ ?>
-                                <option value="<?=$rowM2['id'] ?>"><?=$rowM2['model'] ?></option>
-                            <?php } ?>
-                        </select>
+
+                    <div class="row">
+                        <div class="form-group col-4">
+                            <label>Load Cell Brand *</label>
+                            <select class="form-control select2" id="brand" name="brand" required>
+                                <option value="" selected disabled hidden>Please Select</option>
+                                <?php while($rowB2=mysqli_fetch_assoc($brands2)){ ?>
+                                    <option value="<?=$rowB2['id'] ?>"><?=$rowB2['brand'] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="form-group col-4">
+                            <label>Load Cell Class *</label>
+                            <input class="form-control" type="text" placeholder="Class" id="class" name="class" required/>
+                        </div>
+
+                        <div class="form-group col-4">
+                            <label>OIML Approval *</label>
+                            <select class="form-control select2" id="oimlApproval" name="oimlApproval" required>
+                                <option value="" selected disabled hidden>Please Select</option>
+                                <option value="Y">YES</option>
+                                <option value="N">NO</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Jenis Alat *</label>
-                        <select class="form-control select2" id="jenisAlat" name="jenisAlat" required>
-                            <option value="" selected disabled hidden>Please Select</option>
-                            <?php while($rowA2=mysqli_fetch_assoc($alats2)){ ?>
-                                <option value="<?=$rowA2['id'] ?>"><?=$rowA2['alat'] ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Made In *</label>
-                        <select class="form-control select2" id="madeIn" name="madeIn" required>
-                            <option value="" selected disabled hidden>Please Select</option>
-                            <?php while($rowC2=mysqli_fetch_assoc($country2)){ ?>
-                                <option value="<?=$rowC2['id'] ?>"><?=$rowC2['name'] ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Class *</label>
-                        <input class="form-control" type="text" placeholder="Class" id="class" name="class" required/>
-                    </div>
-                    <div class="form-group">
-                        <label>SIRIM Pattern Approval No. *</label>
-                        <input class="form-control" type="text" placeholder="SIRIM Pattern Approval No." id="patternNo" name="patternNo" required/>
-                    </div>
-                    <div class="form-group">
-                        <label>SIRIM Pattern Approval Date *</label>
-                        <div class="input-group date" id="approvalDate" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" data-target="#approvalDate" id="approval_date" name="approvalDate" required/>
-                            <div class="input-group-append" data-target="#approvalDate" data-toggle="datetimepicker">
-                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    
+                    <div class="row">
+                        <div class="form-group col-4">
+                            <label>SIRIM Pattern Approval No. *</label>
+                            <input class="form-control" type="text" placeholder="SIRIM Pattern Approval No." id="patternNo" name="patternNo" required/>
+                        </div>
+                        <div class="form-group col-4">
+                            <label>SIRIM Pattern Approval Date *</label>
+                            <div class="input-group date" id="approvalDate" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#approvalDate" id="approval_date" name="approvalDate" required/>
+                                <div class="input-group-append" data-target="#approvalDate" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-4">
+                            <label>SIRIM Pattern Expiry Date *</label>
+                            <div class="input-group date" id="expiryDate" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#expiryDate" id="expiry_date" name="expiryDate" required/>
+                                <div class="input-group-append" data-target="#expiryDate" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>SIRIM Pattern Expiry Date *</label>
-                        <div class="input-group date" id="expiryDate" data-target-input="nearest">
-                            <input type="text" class="form-control datetimepicker-input" data-target="#expiryDate" id="expiry_date" name="expiryDate" required/>
-                            <div class="input-group-append" data-target="#expiryDate" data-toggle="datetimepicker">
-                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                            </div>
+
+                    <div class="row">
+                        <div class="form-group col-12">
+                            <label>Attach SIRIM Pattern Certificate *</label>
+                            <input class="form-control" type="file" placeholder="Attach SIRIM Pattern Certificate" id="certificate" name="certificate" required/>
                         </div>
                     </div>
+                    
+                    
     			</div>
             </div>
             <div class="modal-footer justify-content-between">
@@ -264,7 +293,7 @@ $(function () {
         "autoWidth": false,
         'processing': true,
         'serverSide': true,
-        'searching': false,
+        'searching': true,
         'serverMethod': 'post',
         'order': [[ 1, 'asc' ]],
         'columnDefs': [ { orderable: false, targets: [0] }],
@@ -272,25 +301,32 @@ $(function () {
             'type': 'POST',
             'url':'php/filterLoadCells.php',
             'data': {
-                machineType: machineTypeFilter,
-                brand: brandFilter,
-                model: modelFilter,
-                jenisAlat: jenisAlatFilter,
-                madeIn: madeInFilter,
-                patternNo: patternNoFilter,
+                // machineType: machineTypeFilter,
+                // brand: brandFilter,
+                // model: modelFilter,
+                // jenisAlat: jenisAlatFilter,
+                // madeIn: madeInFilter,
+                // patternNo: patternNoFilter,
             } 
         },
         'columns': [
             { data: 'no' },
+            { data: 'part_no' },
             { data: 'load_cell' },
             { data: 'brand_name' },
             { data: 'model_name' },
-            { data: 'alat' },
-            { data: 'nicename' },
+            { data: 'capacity' },
+            { data: 'made_in' },
             { data: 'class' },
             { data: 'pattern_no' },
             { data: 'pattern_datetime' },
             { data: 'pattern_expiry' },
+            {
+				data: 'certificate',    // Attach PDF
+				render: function (data, type, row) {
+					return data; // Render the HTML as is
+				}
+			},
             { 
                 data: 'id',
                 render: function ( data, type, row ) {
@@ -302,30 +338,62 @@ $(function () {
             $('td', row).css('background-color', '#E6E6FA');
         },       
     });
+
+    // Bind form submission handler once
+	$('#brandForm').off('submit').on('submit', function(e) {
+        $('#spinnerLoading').show();
+		e.preventDefault(); 
+		var formData = new FormData(this); 
+		$.ajax({
+			url: 'php/loads.php',
+			type: 'POST',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function(data) {
+				var obj = JSON.parse(data); 
+				if (obj.status === 'success') {
+					$('#brandModal').modal('hide');
+					toastr["success"](obj.message, "Success:");
+					location.reload(); // Reload the page
+				} else {
+					toastr["error"](obj.message, "Failed:");
+				}
+				$('#spinnerLoading').hide();
+				// isModalOpen = false; // Set flag to false on error as well
+			},
+			error: function(xhr, status, error) {
+				console.error("AJAX request failed:", status, error);
+				toastr["error"]("An error occurred while processing the request.", "Failed:");
+				$('#spinnerLoading').hide();
+				// isModalOpen = false; // Set flag to false on error as well
+			}
+		});
+	});
     
-    $.validator.setDefaults({
-        submitHandler: function () {
-            $('#spinnerLoading').show();
-            $.post('php/loads.php', $('#brandForm').serialize(), function(data){
-                var obj = JSON.parse(data); 
+    // $.validator.setDefaults({
+    //     submitHandler: function () {
+    //         $('#spinnerLoading').show();
+    //         $.post('php/loads.php', $('#brandForm').serialize(), function(data){
+    //             var obj = JSON.parse(data); 
                 
-                if(obj.status === 'success'){
-                    $('#brandModal').modal('hide');
-                    toastr["success"](obj.message, "Success:");
-                    $('#brandTable').DataTable().ajax.reload();
-                    $('#spinnerLoading').hide();
-                }
-                else if(obj.status === 'failed'){
-                    toastr["error"](obj.message, "Failed:");
-                    $('#spinnerLoading').hide();
-                }
-                else{
-                    toastr["error"]("Something wrong when edit", "Failed:");
-                    $('#spinnerLoading').hide();
-                }
-            });
-        }
-    });
+    //             if(obj.status === 'success'){
+    //                 $('#brandModal').modal('hide');
+    //                 toastr["success"](obj.message, "Success:");
+    //                 $('#brandTable').DataTable().ajax.reload();
+    //                 $('#spinnerLoading').hide();
+    //             }
+    //             else if(obj.status === 'failed'){
+    //                 toastr["error"](obj.message, "Failed:");
+    //                 $('#spinnerLoading').hide();
+    //             }
+    //             else{
+    //                 toastr["error"]("Something wrong when edit", "Failed:");
+    //                 $('#spinnerLoading').hide();
+    //             }
+    //         });
+    //     }
+    // });
 
     $('#filterSearch').on('click', function(){
         var machineTypeFilter = $('#machineTypeFilter').val() ? $('#machineTypeFilter').val() : '';
@@ -433,15 +501,18 @@ function edit(id){
         if(obj.status === 'success'){
             $('#brandModal').find('#id').val(obj.message.id);
             $('#brandModal').find('#loadCell').val(obj.message.load_cell);
-            $('#brandModal').find('#machineType').val(obj.message.machine_type).trigger('change');
-            $('#brandModal').find('#brand').val(obj.message.brand).trigger('change');
+            $('#brandModal').find('#partNo').val(obj.message.part_no);
             $('#brandModal').find('#model').val(obj.message.model).trigger('change');
-            $('#brandModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
+            $('#brandModal').find('#capacity').val(obj.message.capacity).trigger('change');
             $('#brandModal').find('#madeIn').val(obj.message.made_in).trigger('change');
-            $('#brandModal').find('#patternNo').val(obj.message.pattern_no);
+            $('#brandModal').find('#brand').val(obj.message.brand).trigger('change');
             $('#brandModal').find('#class').val(obj.message.class);
+            $('#brandModal').find('#oimlApproval').val(obj.message.oiml_approval);
+            $('#brandModal').find('#patternNo').val(obj.message.pattern_no);
             $('#brandModal').find('#approval_date').val(formatDate3(obj.message.pattern_datetime));
             $('#brandModal').find('#expiry_date').val(formatDate3(obj.message.pattern_expiry));
+            $('#brandModal').find('#certificate').removeAttr('required');
+
             $('#brandModal').modal('show');
             
             $('#brandForm').validate({
@@ -469,23 +540,25 @@ function edit(id){
 }
 
 function deactivate(id){
-    $('#spinnerLoading').show();
-    $.post('php/deleteLoadCell.php', {userID: id}, function(data){
-        var obj = JSON.parse(data);
-        
-        if(obj.status === 'success'){
-            toastr["success"](obj.message, "Success:");
-            $('#brandTable').DataTable().ajax.reload();
-            $('#spinnerLoading').hide();
-        }
-        else if(obj.status === 'failed'){
-            toastr["error"](obj.message, "Failed:");
-            $('#spinnerLoading').hide();
-        }
-        else{
-            toastr["error"]("Something wrong when activate", "Failed:");
-            $('#spinnerLoading').hide();
-        }
-    });
+    if (confirm('Are you sure you want to cancel this items?')) {
+        $('#spinnerLoading').show();
+        $.post('php/deleteLoadCell.php', {userID: id}, function(data){
+            var obj = JSON.parse(data);
+            
+            if(obj.status === 'success'){
+                toastr["success"](obj.message, "Success:");
+                $('#brandTable').DataTable().ajax.reload();
+                $('#spinnerLoading').hide();
+            }
+            else if(obj.status === 'failed'){
+                toastr["error"](obj.message, "Failed:");
+                $('#spinnerLoading').hide();
+            }
+            else{
+                toastr["error"]("Something wrong when activate", "Failed:");
+                $('#spinnerLoading').hide();
+            }
+        });
+    }
 }
 </script>
