@@ -1856,11 +1856,11 @@ function newEntry(){
   $('#extendModal').find('#customerType').val("EXISTING").attr('readonly', false).trigger('change');
   $('#extendModal').find('#brand').val('').trigger('change');
   $('#extendModal').find('#validator').val('').trigger('change');
-  $('#extendModal').find('#product').val('');
+  $('#extendModal').find('#autoFormNo').val('');
   $('#extendModal').find('#company').val('');
   $('#extendModal').find('#companyText').val('').trigger('change');
   $('#extendModal').find('#machineType').val('').trigger('change');
-  $('#extendModal').find('#jenisAlat').val('').trigger('change');
+  $('#extendModal').find('#size').val('').trigger('change');
   $('#extendModal').find('#address1').val('');
   $('#extendModal').find('#model').val("").trigger('change');
   $('#extendModal').find('#stampDate').val('');
@@ -1879,11 +1879,9 @@ function newEntry(){
   $('#extendModal').find('#quotation').val("");
   $('#extendModal').find('#quotationDate').val('');
   $('#extendModal').find('#includeCert').val("NO").trigger('change');
-  $('#extendModal').find('#poNo').val("");
-  $('#extendModal').find('#poDate').val('');
-  $('#extendModal').find('#cashBill').val("");
-  $('#extendModal').find('#invoice').val('');
   $('#extendModal').find('#validationDate').val(formattedDate);
+
+  $('#loadCalibrationTable').html('');
 
   // $('#pricingTable').html('');
   // pricingCount = 0;
