@@ -25,7 +25,7 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['autoFormNo'], $_POST['v
 	$lastCalibrationDate = $_POST['lastCalibrationDate'];
 	$expiredDate = $_POST['expiredDate'];
 
-	$validationDate = \DateTime::createFromFormat('Y-m-d', $validationDate)->format('Y-m-d H:i:s');
+	$validationDate = \DateTime::createFromFormat('Y-m-d', $validationDate)->format('Y-m-d');
 	$lastCalibrationDate = \DateTime::createFromFormat('Y-m-d', $lastCalibrationDate)->format('Y-m-d');
 	$expiredDate = \DateTime::createFromFormat('Y-m-d', $expiredDate)->format('Y-m-d');
 
@@ -133,10 +133,10 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['autoFormNo'], $_POST['v
 	if(isset($_POST['id']) && $_POST['id'] != null && $_POST['id'] != ''){
 		//Updated datetime
 		$currentDateTime = date('Y-m-d H:i:s');
-		if ($update_stmt = $db->prepare("UPDATE other_validations SET type=?, dealer=?, dealer_branch=?, validate_by=?, customer_type=?, customer=?, branch=?, auto_form_no=?, machines=?, unit_serial_no=?, manufacturing=?, brand=?
-		, model=?, capacity=?, size=?, validation_date=?, update_datetime=? WHERE id=?")){
+		if ($update_stmt = $db->prepare("UPDATE inhouse_validations SET type=?, dealer=?, dealer_branch=?, validate_by=?, customer_type=?, customer=?, branch=?, auto_form_no=?, machines=?, unit_serial_no=?, last_calibration_date=?, expired_date=?, manufacturing=?, auto_cert_no=?, brand=?
+		, model=?, capacity=?, size=?, calibrator=?, validation_date=?, update_datetime=? WHERE id=?")){
 			$data = json_encode($logs);
-			$update_stmt->bind_param('ssssssssssssssssss', $type, $dealer, $reseller_branch, $validator, $customerType, $customer, $branch, $autoFormNo, $machineType, $serial, $manufacturing, $brand, $model, $capacity, $size, $validationDate, $currentDateTime, $_POST['id']);
+			$update_stmt->bind_param('ssssssssssssssssssssss', $type, $dealer, $reseller_branch, $validator, $customerType, $customer, $branch, $autoFormNo, $machineType, $serial, $lastCalibrationDate, $expiredDate, $manufacturing, $autoCertNo, $brand, $model, $capacity, $size, $calibrator, $validationDate, $currentDateTime, $_POST['id']);
 			
 			// Execute the prepared query.
 			if (! $update_stmt->execute()){
@@ -144,66 +144,28 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['autoFormNo'], $_POST['v
     			$response['message'] = $update_stmt->error;
 			} 
 			else{
-				$calibrationFilePath = '';
-
-				$no = $_POST['no'];
-				$lastCalibrationDate = $_POST['lastCalibrationDate'];
-				$expiredCalibrationDate = $_POST['expiredCalibrationDate'];
-				$uploadAttachment = $_FILES['uploadAttachment'];
-
-				if(isset($_POST['calibrationFilePath']) && $_POST['calibrationFilePath']!=null && $_POST['calibrationFilePath']!=""){
-					$calibrationFilePath = $_POST['calibrationFilePath'];
-				}
-
-				$ds = DIRECTORY_SEPARATOR;
-				$storeFolder = '../uploads/calibration';
-				$dataJson = '';
+				$no = $_POST['no']; 
+				$standardValue = $_POST['standardValue'];
+				$calibrationReceived = $_POST['calibrationReceived'];
+				$variance = $_POST['variance'];
+				$afterAdjustReading = $_POST['afterAdjustReading'];
 
 				if(isset($no) && $no != null && count($no) > 0){
 					for($i=0; $i<count($no); $i++){
-						$load_calibrations_info[] = array(
+						$loadTestings[] = array(
 							"no" => $no[$i],
-							"lastCalibrationDate" => $lastCalibrationDate[$i],
-							"expiredCalibrationDate" => $expiredCalibrationDate[$i]
+							"standardValue" => $standardValue[$i],
+							"calibrationReceived" => $calibrationReceived[$i],
+							"variance" => $variance[$i],
+							"afterAdjustReading" => $afterAdjustReading[$i],
 						);
-
-						if(isset($calibrationFilePath) && $calibrationFilePath!=null && $calibrationFilePath!=""){
-							$load_calibrations_info[$i]['calibrationFilePath'] = $calibrationFilePath[$i];
-						}
-
-						if($uploadAttachment['error'][$i] === 0){
-							if(isset($calibrationFilePath) && $calibrationFilePath!=null && $calibrationFilePath!=""){
-								$calibrationFilePath = str_replace('../cirs/', '../', $calibrationFilePath[$i]); 
-
-								if (file_exists($calibrationFilePath)) {
-									unlink($calibrationFilePath);
-								}
-							}
-							
-							$timestamp = time();
-							$uploadDir = '../uploads/calibration/'; // Directory to store uploaded files
-							$uploadDirDB = '../cirs/uploads/calibration/'; // filepath for db
-							$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadAttachment']['name'][$i]);
-							$uploadFileDB = $uploadDirDB . $timestamp . '_' . basename($_FILES['uploadAttachment']['name'][$i]);
-							$tempFile = $_FILES['uploadAttachment']['tmp_name'][$i];
-
-							// Move the uploaded file to the target directory
-							if (move_uploaded_file($tempFile, $uploadFile)) {
-								$load_calibrations_info[$i]['calibrationFilePath'] = $uploadFileDB; // Add file path to data
-							} else {
-								$response['file_status'] = "File upload failed.";
-							}
-						} else {
-							$response['file_status'] = "No file uploaded or there was an error.";
-						}
 					}
-
-					$dataJson = json_encode([$load_calibrations_info], JSON_PRETTY_PRINT);
 				}
 
 				// Update certificate data in the database
-				if ($stmt2 = $db->prepare("UPDATE other_validations SET calibrations=? WHERE id=?")) {
-					$stmt2->bind_param('ss', $dataJson, $_POST['id']);
+				if ($stmt2 = $db->prepare("UPDATE inhouse_validations SET tests=? WHERE id=?")) {
+					$data = json_encode([$loadTestings], JSON_PRETTY_PRINT);
+					$stmt2->bind_param('ss', $data, $_POST['id']);
 					$stmt2->execute();
 					$stmt2->close();
 				} 
