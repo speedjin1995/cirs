@@ -150,8 +150,8 @@ else{
     <div class="row">
       <input type="hidden" class="form-control" id="branch_id">
       <div class="form-group col-2"> 
-        <label for="branch_code">Branch Code *</label>
-        <input class="form-control" id="branch_code" placeholder="Enter your branch code" required>
+        <label for="branch_code">Branch Code </label>
+        <input class="form-control" id="branch_code" placeholder="Enter your branch code">
       </div>
       <div class="form-group col-2"> 
         <label for="branch_name">Branch Name *</label>
