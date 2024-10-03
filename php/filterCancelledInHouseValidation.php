@@ -27,17 +27,17 @@ if($_POST['toDate'] != null && $_POST['toDate'] != ''){
 	$searchQuery .= " and validation_date <= '".$toDateTime."'";
 }
 
-if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] != '-'){
-	$searchQuery .= " and customer = '".$_POST['customer']."'";
-}
+// if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] != '-'){
+// 	$searchQuery .= " and customer = '".$_POST['customer']."'";
+// }
 
-if($_POST['validator'] != null && $_POST['validator'] != '' && $_POST['validator'] != '-'){
-	$searchQuery .= " and validate_by = '".$_POST['validator']."'";
-}
+// if($_POST['validator'] != null && $_POST['validator'] != '' && $_POST['validator'] != '-'){
+// 	$searchQuery .= " and validate_by = '".$_POST['validator']."'";
+// }
 
-if($_POST['autoFormNo'] != null && $_POST['autoFormNo'] != '' && $_POST['autoFormNo'] != '-'){
-	$searchQuery .= " and auto_form_no = '".$_POST['autoFormNo']."'";
-}
+// if($_POST['autoFormNo'] != null && $_POST['autoFormNo'] != '' && $_POST['autoFormNo'] != '-'){
+// 	$searchQuery .= " and auto_form_no = '".$_POST['autoFormNo']."'";
+// }
 
 // if($searchValue != ''){
 //   $searchQuery = " and (purchase_no like '%".$searchValue."%' OR
@@ -47,17 +47,17 @@ if($_POST['autoFormNo'] != null && $_POST['autoFormNo'] != '' && $_POST['autoFor
 // }
 
 ## Total number of records without filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM other_validations");
+$sel = mysqli_query($db,"select count(*) as allcount FROM inhouse_validations");
 $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM other_validations WHERE status = 'Cancelled'".$searchQuery);
+$sel = mysqli_query($db,"select count(*) as allcount FROM inhouse_validations WHERE status = 'Cancelled'".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "SELECT * FROM other_validations WHERE status = 'Cancelled'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
+$empQuery = "SELECT * FROM inhouse_validations WHERE status = 'Cancelled'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;
@@ -88,6 +88,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "no"=>$counter,
     "id"=>$row['id'],
     "validate_by"=>$row['validate_by'] != null ? searchValidatorNameById($row['validate_by'], $db) : '',
+    "customer_code"=>$row['customer'] != null ? searchCustCodeById($row['customer'], $db) : '',
     "customer"=>$row['customer'] != null ? searchCustNameById($row['customer'], $db) : '',
     "address1"=>$address1,
     "address2"=>$address2,
@@ -95,18 +96,22 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "address4"=>$address4,
     "pic"=>$pic,
     "pic_phone"=>$pic_phone,
+    "auto_form_no"=>$row['auto_form_no'] ?? '',
     "machines"=>$row['machines'] != null ? searchMachineNameById($row['machines'], $db) : '',
     "unit_serial_no"=>$row['unit_serial_no'] ?? '',
-    "auto_form_no"=>$row['auto_form_no'] ?? '',
     "manufacturing"=>$row['manufacturing'] ?? '',
     "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
     "model"=>$row['model'] != null  ? searchModelNameById($row['model'], $db) : '',
     "capacity"=>$row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '',
     "size"=>$row['size'] != null ? searchSizeNameById($row['size'], $db) : '',
-    "calibrations"=>json_decode($row['calibrations'], true) ?? '',
-    "status"=>$row['status'] ?? '',
+    "calibrator"=>$row['size'] != null ? searchStaffNameById($row['calibrator'], $db) : '',
+    "lastCalibrationDate"=>$row['last_calibration_date'] ?? '',
+    "expiredDate"=>$row['expired_date'] ?? '',
+    "autoCertNo"=>$row['auto_cert_no'] ?? '',
     "validation_date"=>$row['validation_date'] ?? '',
-    "updated_datetime"=>$row['updated_datetime'] ?? ''
+    "status"=>$row['status'] ?? '',
+    "tests"=>json_decode($row['tests'], true) ?? '',
+    "updated_datetime"=>$row['update_datetime'] ?? ''
   ); 
 
   $counter++;

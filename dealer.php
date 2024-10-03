@@ -144,8 +144,12 @@ else{
     <div class="row">
       <input type="hidden" class="form-control" id="branch_id">
       <div class="form-group col-2"> 
-        <label for="branch_name">Branch Code *</label>
-        <input class="form-control" id="branch_name" placeholder="Enter your branch code" required>
+        <label for="branch_code">Branch Code </label>
+        <input class="form-control" id="branch_code" placeholder="Enter your branch code">
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branch_name">Branch Name *</label>
+        <input class="form-control" id="branch_name" placeholder="Enter your branch name" required>
       </div>
       <div class="form-group col-2"> 
         <label for="branch_address1">Address 1 *</label>
@@ -310,6 +314,7 @@ $(function () {
         $("#branchTable").find('.details:last').attr("data-index", branchCount);
         $("#branchTable").find('#remove:last').attr("id", "remove" + branchCount);
 
+        $("#branchTable").find('#branch_code:last').attr('name', 'branch_code['+branchCount+']').attr("id", "branch_code" + branchCount);
         $("#branchTable").find('#branch_name:last').attr('name', 'branch_name['+branchCount+']').attr("id", "branch_name" + branchCount);
         $("#branchTable").find('#branch_address1:last').attr('name', 'branch_address1['+branchCount+']').attr("id", "branch_address1" + branchCount);
         $("#branchTable").find('#branch_address2:last').attr('name', 'branch_address2['+branchCount+']').attr("id", "branch_address2" + branchCount);
@@ -339,17 +344,17 @@ function format(row){
     console.log(row.log.length);
 
     if (row.log.length > 0) {
-        returnString += '<h4>Branches</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="15%">Branch Name</th><th width="20%">Address</th><th width="20%">Address 2</th><th width="20%">Address 3</th><th width="20%">Address 4</th></tr></thead><tbody>'
+        returnString += '<h4>Branches</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="10%">Branch Code</th><th width="10%">Branch Name</th><th width="20%">Address</th><th width="20%">Address 2</th><th width="20%">Address 3</th><th width="20%">Address 4</th></tr></thead><tbody>'
         
         for (var i = 0; i < row.log.length; i++) {
         var item = row.log[i];
 
-        // Check if mapurl is not null
-        var branchNameWithMapIcon = item.mapurl 
+          // Check if mapurl is not null
+          var branchNameWithMapIcon = item.mapurl 
             ? '<a href="' + item.mapurl + '">' + item.branchname + ' <i class="fa fa-map-marker"></i></a>' 
             : item.branchname;
 
-        returnString += '<tr><td>' + (i + 1) + '</td><td>' + branchNameWithMapIcon + '</td><td>' + item.branch_address1 + '</td><td>' + item.branch_address2 + '</td><td>' + item.branch_address3 + '</td><td>' + item.branch_address4 + '</td></tr>';
+          returnString += '<tr><td>' + (i + 1) + '</td><td>' + item.branchcode + '</td><td>' + branchNameWithMapIcon + '</td><td>' + item.branch_address1 + '</td><td>' + item.branch_address2 + '</td><td>' + item.branch_address3 + '</td><td>' + item.branch_address4 + '</td></tr>';
         }
 
         returnString += '</tbody></table>';
@@ -388,6 +393,7 @@ function edit(id){
               $("#branchTable").find('#remove:last').attr("id", "remove" + branchCount);
 
               $("#branchTable").find('#branch_id:last').attr('name', 'branch_id['+branchCount+']').attr("id", "branch_id" + branchCount).val(weightData[i].branchid);
+              $("#branchTable").find('#branch_code:last').attr('name', 'branch_code['+branchCount+']').attr("id", "branch_code" + branchCount).val(weightData[i].code);
               $("#branchTable").find('#branch_name:last').attr('name', 'branch_name['+branchCount+']').attr("id", "branch_name" + branchCount).val(weightData[i].name);
               $("#branchTable").find('#branch_address1:last').attr('name', 'branch_address1['+branchCount+']').attr("id", "branch_address1" + branchCount).val(weightData[i].branch_address1);
               $("#branchTable").find('#branch_address2:last').attr('name', 'branch_address2['+branchCount+']').attr("id", "branch_address2" + branchCount).val(weightData[i].branch_address2);

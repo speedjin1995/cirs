@@ -31,6 +31,7 @@ if(isset($_POST['name'], $_POST['address'], $_POST['address2'], $_POST['phone'],
     $branchAddress3 = $_POST['branch_address3'] ?? [];
     $branchAddress4 = $_POST['branch_address4'] ?? [];
     $branchName = $_POST['branch_name'] ?? [];
+    $branchCode = $_POST['branch_code'] ?? [];
     $mapUrl = $_POST['map_url'] ?? [];
     $branchid = $_POST['branch_id'] ?? [];
     $branchPhone = $_POST['branchPhone'] ?? [];
@@ -90,14 +91,15 @@ if(isset($_POST['name'], $_POST['address'], $_POST['address2'], $_POST['phone'],
                         $addr3 = $branchAddress3[$i] ?? '';
                         $addr4 = $branchAddress4[$i] ?? '';
                         $branchNameValue = isset($branchName[$i]) ? $branchName[$i] : '';
+                        $branchCodeValue = isset($branchCode[$i]) ? $branchCode[$i] : '';
                         $mapUrlValue = isset($mapUrl[$i]) ? $mapUrl[$i] : '';
                         $branchPhoneValue = isset($branchPhone[$i]) ? $branchPhone[$i] : '';
                         $branchEmailValue = isset($branchEmail[$i]) ? $branchEmail[$i] : '';
                         $branchPicValue = isset($branchPic[$i]) ? $branchPic[$i] : '';
                         $branchPicContactVAlue = isset($branchPicContact[$i]) ? $branchPicContact[$i] : '';
 
-                        if ($insert_stmt2 = $db->prepare("INSERT INTO reseller_branches (reseller_id, address, address2, address3, address4, branch_name, map_url, office_no, email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-                            $insert_stmt2->bind_param('sssssssssss', $_POST['id'], $addr1, $addr2, $addr3, $addr4, $branchNameValue, $mapUrlValue, $branchPhoneValue, $branchEmailValue, $branchPicValue, $branchPicContactVAlue);
+                        if ($insert_stmt2 = $db->prepare("INSERT INTO reseller_branches (reseller_id, address, address2, address3, address4, branch_code, branch_name, map_url, office_no, email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                            $insert_stmt2->bind_param('ssssssssssss', $_POST['id'], $addr1, $addr2, $addr3, $addr4, $branchCodeValue, $branchNameValue, $mapUrlValue, $branchPhoneValue, $branchEmailValue, $branchPicValue, $branchPicContactVAlue);
                             $insert_stmt2->execute();
                             $insert_stmt2->close();
                         }
@@ -143,14 +145,15 @@ if(isset($_POST['name'], $_POST['address'], $_POST['address2'], $_POST['phone'],
                         $addr3 = $branchAddress3[$i] ?? '';
                         $addr4 = $branchAddress4[$i] ?? '';
                         $branchNameValue = isset($branchName[$i]) ? $branchName[$i] : '';
+                        $branchCodeValue = isset($branchCode[$i]) ? $branchCode[$i] : '';
                         $mapUrlValue = isset($mapUrl[$i]) ? $mapUrl[$i] : '';
                         $branchPhoneValue = isset($branchPhone[$i]) ? $branchPhone[$i] : '';
                         $branchEmailValue = isset($branchEmail[$i]) ? $branchEmail[$i] : '';
                         $branchPicValue = isset($branchPic[$i]) ? $branchPic[$i] : '';
                         $branchPicContactVAlue = isset($branchPicContact[$i]) ? $branchPicContact[$i] : '';
 
-                        if ($insert_stmt2 = $db->prepare("INSERT INTO reseller_branches (reseller_id, address, address2, address3, address4, branch_name, map_url, office_no, email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-                            $insert_stmt2->bind_param('sssssssssss', $invid, $addr1, $addr2, $addr3, $addr4, $branchNameValue, $mapUrlValue, $branchPhoneValue, $branchEmailValue, $branchPicValue, $branchPicContactVAlue);
+                        if ($insert_stmt2 = $db->prepare("INSERT INTO reseller_branches (reseller_id, address, address2, address3, address4, branch_code, branch_name, map_url, office_no, email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                            $insert_stmt2->bind_param('ssssssssssss', $invid, $addr1, $addr2, $addr3, $addr4, $branchCodeValue, $branchNameValue, $mapUrlValue, $branchPhoneValue, $branchEmailValue, $branchPicValue, $branchPicContactVAlue);
                             $insert_stmt2->execute();
                             $insert_stmt2->close();
                         }

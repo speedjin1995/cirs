@@ -44,6 +44,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
       while($row2 = $result2->fetch_assoc()) {
         $pricing[] = array(
           "branchid" => $row2['id'],
+          "branchcode" => $row2['branch_code'],
           "branchname" => $row2['branch_name'],
           "mapurl" => $row2['map_url'],
           "address1" => $row2['address'],
