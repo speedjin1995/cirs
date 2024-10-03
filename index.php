@@ -520,6 +520,12 @@ to get the desired effect
                     </a>
                   </li>
                   <li class="nav-item">
+                    <a href="#standards" data-file="standards.php" class="nav-link link">
+                      <i class="nav-icon fas fa-newspaper"></i>
+                      <p>Value of Standards</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
                     <a href="#brand" data-file="brand.php" class="nav-link link">
                       <i class="nav-icon fas fa-weight"></i>
                       <p>Brand</p>
