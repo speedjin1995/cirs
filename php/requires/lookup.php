@@ -129,6 +129,23 @@ function searchCustNameById($value, $db) {
     return $id;
 }
 
+// Customer Code by Id
+function searchCustCodeById($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM customers WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['customer_code'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
 function searchBrandNameById($value, $db) {
     $id = null;
 

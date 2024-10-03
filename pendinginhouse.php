@@ -176,12 +176,18 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <!-- <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th> -->
-                  <th>Validator</th>
+                  <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
+                  <th>Cus.Code</th>
                   <th>Company Name</th>
-                  <th>Certificate No.</th>
-                  <th>Description Instruments for Weighing and Measuring</th>
+                  <th>Machines / Instruments</th>
+                  <th>Brand</th>
+                  <th>Model</th>
                   <th>Capacity</th>
+                  <th>Structure Size</th>
+                  <th>Serial No</th>
+                  <th>Last Cal Date</th>
+                  <th>Expired Date</th>
+                  <th>Calibrator By</th>
                   <th>Status</th>
                   <th></th>
                   <th></th>
@@ -461,6 +467,12 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                         <option value="<?=$user['id'] ?>"><?=$user['name'] ?></option>
                       <?php } ?>
                     </select>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Validation Date * </label>
+                    <input class="form-control" type="date" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate" required>
                   </div>
                 </div>
                 <!-- <div class="col-4" style="display:none;">
@@ -793,56 +805,57 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
   <tr class="details">
     <td>
       <input type="text" class="form-control" id="no" name="no" readonly>
+      <span class="form-control" id="noText" name="noText"></span>
     </td>
     <td>
       <div class="d-flex mt-1">
-        <div class="col-8">
-          <input type="number" placeholder="0.0" id="standardValue" name="standardValue" style="width: 100%;">
+        <div class="col-6">
+          <input type="number" placeholder="0.0" id="standardValue" name="standardValue" class="form-control" style="width: 100%;" value="0.0">
         </div>
         <div class="col-2">
           <i class="fas fa-minus fa-2x"></i>
         </div>
-        <div class="col-2">
-          <span style="border: 1px solid #ced4da; padding: 2px; display: inline-block; width: 100%; box-sizing: border-box; border-box; background-color:lightgrey;">KG</span>
+        <div class="col-4">
+          <span class="form-control" style="background-color:lightgrey;">KG</span>
         </div>
       </div>
     </td>
     <td>
       <div class="d-flex mt-1"> 
-        <div class="col-8">
-          <input type="number" placeholder="0.0" id="calibrationReceived" name="calibrationReceived" style="width: 100%;">
+        <div class="col-6">
+          <input class="form-control" type="number" placeholder="0.0" id="calibrationReceived" name="calibrationReceived" style="width: 100%;" value="0.0">
         </div>
         <div class="col-2">
           <i class="fas fa-minus fa-2x"></i>
         </div>
-        <div class="col-2">
-          <span style="border: 1px solid #ced4da; padding: 2px; display: inline-block; width: 100%; box-sizing: border-box; border-box; background-color:lightgrey;">KG</span>
+        <div class="col-4">
+          <span class="form-control" style="background-color:lightgrey;">KG</span>
         </div>
       </div>
     </td>
     <td>
       <div class="d-flex mt-1">
-        <div class="col-8">
-          <input type="number" placeholder="0.0" id="variance" name="variance" style="width: 100%; background-color: lightgrey;" readonly>
+        <div class="col-6">
+          <input class="form-control" type="number" placeholder="0.0" id="variance" name="variance" style="width: 100%; background-color: lightgrey;" value="0.0" readonly>
         </div>
         <div class="col-2">
           <i class="fas fa-minus fa-2x"></i>
         </div>
-        <div class="col-2">
-          <span style="border: 1px solid #ced4da; padding: 2px; display: inline-block; width: 100%; box-sizing: border-box; background-color:lightgrey;">KG</span>
+        <div class="col-4">
+          <span class="form-control" style="background-color:lightgrey;">KG</span>
         </div>
       </div>
     </td>
     <td>
       <div class="d-flex mt-1">
-        <div class="col-8">
-          <input type="number" placeholder="0.0" id="afterAdjustReading" name="afterAdjustReading" style="width: 100%; background-color: lightgreen;">
+        <div class="col-6">
+          <input class="form-control" type="number" placeholder="0.0" id="afterAdjustReading" name="afterAdjustReading" value="0.0" style="width: 100%; background-color: lightgreen;">
         </div>
         <div class="col-2">
           <i class="fas fa-minus fa-2x"></i>
         </div>
-        <div class="col-2">
-          <span style="border: 1px solid #ced4da; padding: 2px; display: inline-block; width: 100%; box-sizing: border-box; border-box; background-color:lightgrey;">KG</span>
+        <div class="col-4">
+          <span class="form-control" style="background-color:lightgrey;">KG</span>
         </div>
       </div>
     </td>
@@ -857,6 +870,7 @@ var isModalOpen = false; // Flag to track modal visibility
 
 $(function () {
   $('#customerNoHidden').hide();
+  $('#add-testing-cell').hide();
 
   const today = new Date();
   const tomorrow = new Date(today);
@@ -927,40 +941,43 @@ $(function () {
     'serverSide': true,
     'serverMethod': 'post',
     'searching': false,
-    'order': [[ 1, 'asc' ]],
+    'order': [[ 2, 'asc' ]],
     'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
       'type': 'POST',
-      'url':'php/filterPendingValidation.php',
+      'url':'php/filterPendingInhouseValidation.php',
       'data': {
         fromDate: fromDateValue,
         toDate: toDateValue,
-        customer: customerNoFilter,
-        validator: validatorFilter,
-        autoFormNo: autoFormNoFilter,
         status: 'Pending'
       } 
     },
     'columns': [
-      // {
-      //   // Add a checkbox with a unique ID for each row
-      //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-      //   className: 'select-checkbox',
-      //   orderable: false,
-      //   render: function (data, type, row) {
-      //     if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-      //       return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-      //     } 
-      //     else {
-      //       return ''; // Return an empty string or any other placeholder if the item is invoiced
-      //     }
-      //   }
-      // },
-      { data: 'validate_by' },
+      {
+        // Add a checkbox with a unique ID for each row
+        data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+        className: 'select-checkbox',
+        orderable: false,
+        render: function (data, type, row) {
+          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+          } 
+          else {
+            return ''; // Return an empty string or any other placeholder if the item is invoiced
+          }
+        }
+      },
+      { data: 'customer_code' },
       { data: 'customer' },
       { data: 'machines' },
-      { data: 'unit_serial_no' },
+      { data: 'brand' },
+      { data: 'model' },
       { data: 'capacity' },
+      { data: 'size' },
+      { data: 'unit_serial_no' },
+      { data: 'lastCalibrationDate' },
+      { data: 'expiredDate' },
+      { data: 'calibrator' },
       { data: 'status' },
       { 
         data: 'id',
@@ -977,9 +994,9 @@ $(function () {
           //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
           // }
 
-          // // Print button
-          // buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-          //           ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+          // Print button
+          buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+                    ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
           // Complete button if conditions are met
           if (row.calibrations != '') {
@@ -1022,41 +1039,10 @@ $(function () {
     }
   });
 
-  // Bind form submission handler once
-	$('#extendForm').off('submit').on('submit', function(e) {
-		e.preventDefault(); 
-		var formData = new FormData(this); 
-		$.ajax({
-			url: 'php/insertValidation.php',
-			type: 'POST',
-			data: formData,
-			processData: false,
-			contentType: false,
-			success: function(data) {
-				var obj = JSON.parse(data); 
-				if (obj.status === 'success') {
-					$('#extendModal').modal('hide');
-					toastr["success"](obj.message, "Success:");
-					location.reload(); // Reload the page
-				} else {
-					toastr["error"](obj.message, "Failed:");
-				}
-				$('#spinnerLoading').hide();
-				isModalOpen = false; // Set flag to false on error as well
-			},
-			error: function(xhr, status, error) {
-				console.error("AJAX request failed:", status, error);
-				toastr["error"]("An error occurred while processing the request.", "Failed:");
-				$('#spinnerLoading').hide();
-				isModalOpen = false; // Set flag to false on error as well
-			}
-		});
-	});
-
   $.validator.setDefaults({
     submitHandler: function () {
       if($('#cancelModal').hasClass('show')){
-        $.post('php/deleteValidation.php', $('#cancelForm').serialize(), function(data){
+        $.post('php/deleteInHouseValidation.php', $('#cancelForm').serialize(), function(data){
           var obj = JSON.parse(data); 
           if(obj.status === 'success'){
             $('#cancelModal').modal('hide');
@@ -1073,26 +1059,26 @@ $(function () {
           $('#spinnerLoading').hide();
         });
       }
-      // else if($('#extendModal').hasClass('show')){
-      //   $('#spinnerLoading').show();
+      else if($('#extendModal').hasClass('show')){
+        $('#spinnerLoading').show();
 
-      //   $.post('php/insertValidation.php', $('#extendForm').serialize(), function(data){
-      //     var obj = JSON.parse(data); 
-      //     if(obj.status === 'success'){
-      //       $('#extendModal').modal('hide');
-      //       toastr["success"](obj.message, "Success:");
-      //       $('#weightTable').DataTable().ajax.reload();
-      //     }
-      //     else if(obj.status === 'failed'){
-      //       toastr["error"](obj.message, "Failed:");
-      //     }
-      //     else{
-      //       toastr["error"]("Something wrong when edit", "Failed:");
-      //     }
+        $.post('php/insertInHouseValidation.php', $('#extendForm').serialize(), function(data){
+          var obj = JSON.parse(data); 
+          if(obj.status === 'success'){
+            $('#extendModal').modal('hide');
+            toastr["success"](obj.message, "Success:");
+            $('#weightTable').DataTable().ajax.reload();
+          }
+          else if(obj.status === 'failed'){
+            toastr["error"](obj.message, "Failed:");
+          }
+          else{
+            toastr["error"]("Something wrong when edit", "Failed:");
+          }
 
-      //     $('#spinnerLoading').hide();
-      //   });
-      // }
+          $('#spinnerLoading').hide();
+        });
+      }
       // else if($('#uploadModal').hasClass('show')){
       //   $('#spinnerLoading').show();
 
@@ -1184,40 +1170,43 @@ $(function () {
       'serverSide': true,
       'serverMethod': 'post',
       'searching': false,
-      'order': [[ 1, 'asc' ]],
+      'order': [[ 2, 'asc' ]],
       'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
         'type': 'POST',
-        'url':'php/filterPendingValidation.php',
+        'url':'php/filterPendingInhouseValidation.php',
         'data': {
           fromDate: fromDateValue,
           toDate: toDateValue,
-          customer: customerNoFilter,
-          validator: validatorFilter,
-          autoFormNo: autoFormNoFilter,
           status: 'Pending'
         } 
       },
       'columns': [
-        // {
-        //   // Add a checkbox with a unique ID for each row
-        //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-        //   className: 'select-checkbox',
-        //   orderable: false,
-        //   render: function (data, type, row) {
-        //     if (row.status == 'Active') { // Assuming 'isInvoiced' is a boolean field in your row data
-        //       return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-        //     } 
-        //     else {
-        //       return ''; // Return an empty string or any other placeholder if the item is invoiced
-        //     }
-        //   }
-        // },
-        { data: 'validate_by' },
+        {
+          // Add a checkbox with a unique ID for each row
+          data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+          className: 'select-checkbox',
+          orderable: false,
+          render: function (data, type, row) {
+            if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+              return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+            } 
+            else {
+              return ''; // Return an empty string or any other placeholder if the item is invoiced
+            }
+          }
+        },
+        { data: 'customer_code' },
         { data: 'customer' },
         { data: 'machines' },
-        { data: 'unit_serial_no' },
+        { data: 'brand' },
+        { data: 'model' },
         { data: 'capacity' },
+        { data: 'size' },
+        { data: 'unit_serial_no' },
+        { data: 'lastCalibrationDate' },
+        { data: 'expiredDate' },
+        { data: 'calibrator' },
         { data: 'status' },
         { 
           data: 'id',
@@ -1235,8 +1224,8 @@ $(function () {
             // }
 
             // Print button
-            // buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                      // ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+            buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+                      ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
             // Complete button if conditions are met
             if (row.calibrations != '') {
@@ -1660,36 +1649,6 @@ $(function () {
     }
   });
 
-  // $('#extendModal').find('#jenisAlat').on('change', function(){
-  //   if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
-  //     $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
-  //       var obj = JSON.parse(data);
-        
-  //       if(obj.status === 'success'){
-  //         $('#product').val(obj.message.id);
-  //         $('#unitPrice').val(obj.message.price);
-  //         $('#unitPrice').trigger('change');
-  //       }
-  //       else if(obj.status === 'failed'){
-  //         toastr["error"](obj.message, "Failed:");
-  //       }
-  //       else{
-  //         toastr["error"]("Something wrong when pull data", "Failed:");
-  //       }
-  //       $('#spinnerLoading').hide();
-  //     });
-  //   }
-
-  //   if(($('#validator').val() == '10' || $('#validator').val() == '9') && $(this).val() == '1'){
-  //     $('#addtionalSection').html($('#atkDetails').html());
-  //     loadCellCount = 0;
-  //     $("#loadCellTable").html('');
-  //   }
-  //   else{
-  //     $('#addtionalSection').html('');
-  //   }
-  // });
-
   $('#extendModal').find('#capacity').on('change', function(){
     if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
       $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
@@ -1752,39 +1711,6 @@ $(function () {
     }
   });
 
-  // $(".add-price").click(function(){
-  //   var $addContents = $("#pricingDetails").clone();
-  //   $("#pricingTable").append($addContents.html());
-
-  //   $("#pricingTable").find('.details:last').attr("id", "detail" + pricingCount);
-  //   $("#pricingTable").find('.details:last').attr("data-index", pricingCount);
-  //   //$("#pricingTable").find('#remove:last').attr("id", "remove" + pricingCount);
-
-  //   $("#pricingTable").find('#no:last').attr('name', 'no['+pricingCount+']').attr("id", "no" + pricingCount).val((pricingCount + 1).toString());
-  //   $("#pricingTable").find('#date:last').attr('name', 'date['+pricingCount+']').attr("id", "date" + pricingCount).val(formatDate2(today));
-  //   $("#pricingTable").find('#notes:last').attr('name', 'notes['+pricingCount+']').attr("id", "notes" + pricingCount);
-  //   $("#pricingTable").find('#followUpDate:last').attr('name', 'followUpDate['+pricingCount+']').attr("id", "followUpDate" + pricingCount).val(formatDate2(today));
-  //   $("#pricingTable").find('#picAttend:last').attr('name', 'picAttend['+pricingCount+']').attr("id", "picAttend" + pricingCount).val('<?=$user ?>');
-  //   $("#pricingTable").find('#status').attr('name', 'status['+pricingCount+']').attr("id", "status" + pricingCount).val('Pending');
-
-  //   var newDatePickerId = "datePicker5" + pricingCount;
-
-  //   // Find the newly added date input and set the new ID
-  //   var $newDateInputGroup = $("#pricingTable").find('#datePicker5:last');
-  //   $newDateInputGroup.attr("id", newDatePickerId);
-  //   $newDateInputGroup.find('input').attr("data-target", "#" + newDatePickerId);
-  //   $newDateInputGroup.find('.input-group-append').attr("data-target", "#" + newDatePickerId);
-
-  //   // Initialize the date picker on the new element
-  //   $newDateInputGroup.datetimepicker({
-  //     icons: { time: 'far fa-calendar' },
-  //     format: 'DD/MM/YYYY',
-  //     defaultDate: today
-  //   });
-
-  //   pricingCount++;
-  // });
-
   $(document).on('click', '#add-testing-cell', function() {
     var $addContents = $("#loadTestingDetails").clone();
     $("#loadTestingTable").append($addContents.html());
@@ -1793,7 +1719,10 @@ $(function () {
     $("#loadTestingTable").find('.details:last').attr("data-index", loadTestingCount);
     $("#loadTestingTable").find('#remove:last').attr("id", "remove" + loadTestingCount);
 
-    $("#loadTestingTable").find('#no:last').attr('name', 'no['+loadTestingCount+']').attr('id', 'no' + loadTestingCount).val((loadTestingCount + 1).toString()).hide().after('<span style="border: 1px solid #ced4da; padding: 2px; display: inline-block; width: 100%; box-sizing: border-box;">Tester / Time: ' + (loadTestingCount + 1) + '</span>');
+    $("#loadTestingTable").find('#no:last').attr('name', 'no['+loadTestingCount+']').attr('id', 'no' + loadTestingCount).val((loadTestingCount + 1)).hide();
+
+    var noCount = loadTestingCount + 1;
+    $("#loadTestingTable").find('#noText:last').attr('name', 'noText['+loadTestingCount+']').attr('id', 'noText' + loadTestingCount).text('Tester / Time: ' + noCount);
     $("#loadTestingTable").find('#standardValue:last').attr('name', 'standardValue['+loadTestingCount+']').attr("id", "standardValue" + loadTestingCount).css('background-color', 'yellow');
     $("#loadTestingTable").find('#calibrationReceived:last').attr('name', 'calibrationReceived['+loadTestingCount+']').attr("id", "calibrationReceived" + loadTestingCount);
     $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount);
@@ -1849,25 +1778,32 @@ function format (row) {
     <!-- Machine Section -->
     <div class="col-6">
       <p><strong>Machines / Instruments:</strong> ${row.machines}</p>
+      <p><strong>Last Calibration Date:</strong> ${row.lastCalibrationDate}</p>
       <p><strong>Manufacturing:</strong> ${row.manufacturing}</p>
-      <p><strong>Model:</strong> ${row.model}</p>
-      <p><strong>Structure Size:</strong> ${row.size}</p>
+      <p><strong>Brand:</strong> ${row.brand}</p>
+      <p><strong>Capacity:</strong> ${row.capacity}</p>
+      <p><strong>Inhouse Calibrator:</strong> ${row.calibrator}</p>
     </div>
     <div class="col-6">
       <p><strong>Unit Serial No:</strong> ${row.unit_serial_no}</p>
-      <p><strong>Brand:</strong> ${row.brand}</p>
-      <p><strong>Capacity:</strong> ${row.capacity}</p>
+      <p><strong>Expired Date:</strong> ${row.expiredDate}</p>
+      <p><strong>Auto Certificate No / Sticker No:</strong> ${row.autoCertNo}</p>
+      <p><strong>Model:</strong> ${row.model}</p>
+      <p><strong>Structure Size:</strong> ${row.size}</p>
+      <p><strong>Validation Date:</strong> ${row.validation_date}</p>
     </div> 
+  </div><hr>
   `;
   
-  if (row.calibrations !== undefined && row.calibrations !== null && row.calibrations !== ''){
-    if (row.calibrations[0].length > 0) {
-      returnString += '<h4>Calibrations</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="20%">Latest Date Calibration</th><th width="20%">Expire Date Calibration</th><th width="20%">Calibration Certificate Attachment</th></tr></thead><tbody>'
+  if (row.tests !== undefined && row.tests !== null && row.tests !== ''){
+    if (row.tests[0].length > 0) {
+      var weightType = 'KG';
+      returnString += '<h4 class="mb-3">Note - Standard Average Temperature: (20 + 1) ºC / Average Relative Humidity: (52 + 1) %RH</h4><table style="width: 100%;"><thead><tr><th width="15%">Number of Tests.</th><th width="20%">Setting Value Of Standard (' +  weightType + ')</th><th width="20%">As Received Under Calibration (' +  weightType + ')</th><th width="20%">Variance +/- 0.1kg (' +  weightType + ')</th><th width="20%">Reading After Adjustment. (' +  weightType + ')</th></tr></thead><tbody>'
       
-      var calibrations = row.calibrations[0];
-      for (var i = 0; i < calibrations.length; i++) {
-        var item = calibrations[i];
-        returnString += '<tr><td>' + item.no + '</td><td>' + item.lastCalibrationDate + '<td>' + item.expiredCalibrationDate + '</td><td><a href="' + item.calibrationFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></td></tr>';
+      var tests = row.tests[0]; 
+      for (var i = 0; i < tests.length; i++) {
+        var item = tests[i];
+        returnString += '<tr><td>Tester / Time: ' + item.no + '</td><td>' + item.standardValue + '</td><td>' + item.calibrationReceived + '</td><td>' + item.variance + '</td><td>' + item.afterAdjustReading + '</td></tr>';
       }
 
       returnString += '</tbody></table>';
@@ -1933,46 +1869,39 @@ function newEntry(){
   // $('#isResseller4').hide();
   // $('#isResseller5').hide();
   $('#extendModal').find('#customerType').val("EXISTING").attr('readonly', false).trigger('change');
-  $('#extendModal').find('#brand').val('').trigger('change');
-  $('#extendModal').find('#validator').val('').trigger('change');
-  $('#extendModal').find('#product').val('');
   $('#extendModal').find('#company').val('');
-  $('#extendModal').find('#companyText').val('').trigger('change');
-  $('#extendModal').find('#machineType').val('').trigger('change');
-  $('#extendModal').find('#jenisAlat').val('').trigger('change');
+  $('#extendModal').find('#validator').val('').trigger('change');
+  $('#extendModal').find('#branch').val('').trigger('change');
+  $('#extendModal').find('#autoFormNo').val('');
   $('#extendModal').find('#address1').val('');
-  $('#extendModal').find('#model').val("").trigger('change');
-  $('#extendModal').find('#stampDate').val('');
   $('#extendModal').find('#address2').val('');
-  $('#extendModal').find('#capacity').val('').trigger('change');
-  $('#extendModal').find('#noDaftar').val('');
   $('#extendModal').find('#address3').val('');
+  $('#extendModal').find('#address4').val('');
+  $('#extendModal').find('#phone').val('');
+  $('#extendModal').find('#email').val('');
+  $('#extendModal').find('#pic').val('');
+  $('#extendModal').find('#contact').val('');
+  $('#extendModal').find('#machineType').val('').trigger('change');
   $('#extendModal').find('#serial').val('');
-  $('#extendModal').find('#pinKeselamatan').val('');
-  $('#extendModal').find('#attnTo').val('<?=$user ?>');
-  $('#extendModal').find('#siriKeselamatan').val('');
-  $('#extendModal').find('#pic').val("");
-  $('#extendModal').find('#borangD').val("");
-  $('#extendModal').find('#remark').val("");
-  $('#extendModal').find('#dueDate').val('');
-  $('#extendModal').find('#quotation').val("");
-  $('#extendModal').find('#quotationDate').val('');
-  $('#extendModal').find('#includeCert').val("NO").trigger('change');
-  $('#extendModal').find('#poNo').val("");
-  $('#extendModal').find('#poDate').val('');
-  $('#extendModal').find('#cashBill').val("");
-  $('#extendModal').find('#invoice').val('');
+  $('#extendModal').find('#lastCalibrationDate').val('');
+  $('#extendModal').find('#expiredDate').val('');
+  $('#extendModal').find('#manufacturing').val('').trigger('change');
+  $('#extendModal').find('#auto_cert_no').val('');
+  $('#extendModal').find('#brand').val('').trigger('change');
+  $('#extendModal').find('#model').val("").trigger('change');
+  $('#extendModal').find('#capacity').val('').trigger('change');
+  $('#extendModal').find('#size').val('').trigger('change');
+  $('#extendModal').find('#calibrator').val('').trigger('change');
+  $('#extendModal').find('#companyText').val('').trigger('change');
+  $('#extendModal').find('#validationDate').val('');
 
-  // $('#pricingTable').html('');
-  // pricingCount = 0;
-  // $('#extendModal').find('#unitPrice').val("");
-  // $('#extendModal').find('#certPrice').val('');
-  // $('#extendModal').find('#totalAmount').val("");
-  // $('#extendModal').find('#sst').val('');
-  // $('#extendModal').find('#subAmount').val('');
-  // $('#cerId').hide();
+  $('#loadTestingTable').html('');
+  loadTestingCount = 0;
+  for (var i = 0; i < 10; i++) {
+      $('#add-testing-cell').trigger('click');
+  }
+
   $('#extendModal').modal('show');
-  isModalOpen = true; // Set flag to true when modal is shown
   
   $('#extendForm').validate({
     errorElement: 'span',
@@ -2018,7 +1947,7 @@ function extraAction(id){
 
 function edit(id) {
   $('#spinnerLoading').show();
-  $.post('php/getValidation.php', {validationId: id}, function(data){
+  $.post('php/getInHouseValidation.php', {validationId: id}, function(data){
     var obj = JSON.parse(data);
     if(obj.status === 'success'){
       if(obj.message.type == 'DIRECT'){
@@ -2040,32 +1969,36 @@ function edit(id) {
         $('#extendModal').find('#model').val(obj.message.model).trigger('change');
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#size').val(obj.message.size).trigger('change');
+        $('#extendModal').find('#lastCalibrationDate').val(obj.message.last_calibration_date);
+        $('#extendModal').find('#expiredDate').val(obj.message.expired_date);
+        $('#extendModal').find('#auto_cert_no').val(obj.message.auto_cert_no);
+        $('#extendModal').find('#validationDate').val(obj.message.validation_date);
+        $('#extendModal').find('#calibrator').val(obj.message.calibrator).trigger('change');
 
-        if(obj.message.calibrations != null && obj.message.calibrations.length > 0){
-          $("#loadCalibrationTable").html('');
-          loadCalibrationCount = 0; 
+        if(obj.message.tests != null && obj.message.tests.length > 0){
+          $("#loadTestingTable").html('');
+          loadTestingCount = 0; 
 
-          for(var i = 0; i < obj.message.calibrations.length; i++){
-            var calibrations = obj.message.calibrations[i];
+          for(var i = 0; i < obj.message.tests.length; i++){
+            var tests = obj.message.tests[i];
 
-            for(var j=0; j < calibrations.length; j++){
-              var item = calibrations[j];
-              var $addContents = $("#loadCalibrationDetails").clone();
-              $("#loadCalibrationTable").append($addContents.html());
+            for(var j=0; j < tests.length; j++){
+              var item = tests[j]; console.log(item);
+              var $addContents = $("#loadTestingDetails").clone();
+              $("#loadTestingTable").append($addContents.html());
 
-              $("#loadCalibrationTable").find('.details:last').attr("id", "detail" + loadCalibrationCount);
-              $("#loadCalibrationTable").find('.details:last').attr("data-index", loadCalibrationCount);
-              $("#loadCalibrationTable").find('#remove:last').attr("id", "remove" + loadCalibrationCount);
+              $("#loadTestingTable").find('.details:last').attr("id", "detail" + loadTestingCount);
+              $("#loadTestingTable").find('.details:last').attr("data-index", loadTestingCount);
+              $("#loadTestingTable").find('#remove:last').attr("id", "remove" + loadTestingCount);
 
-              $("#loadCalibrationTable").find('#no:last').attr('name', 'no['+loadCalibrationCount+']').attr("id", "no" + loadCalibrationCount).val(item.no);
-              $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate['+loadCalibrationCount+']').attr("id", "lastCalibrationDate" + loadCalibrationCount).val(item.lastCalibrationDate);
-              $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount).val(item.expiredCalibrationDate);
+              $("#loadTestingTable").find('#no:last').attr('name', 'no['+loadTestingCount+']').attr("id", "no" + loadTestingCount).val(item.no).hide();
+              $("#loadTestingTable").find('#noText:last').attr('name', 'noText['+loadTestingCount+']').attr('id', 'noText' + loadTestingCount).text('Tester / Time: ' + item.no);
+              $("#loadTestingTable").find('#standardValue:last').attr('name', 'standardValue['+loadTestingCount+']').attr("id", "standardValue" + loadTestingCount).css('background-color', 'yellow').val(item.standardValue);
+              $("#loadTestingTable").find('#calibrationReceived:last').attr('name', 'calibrationReceived['+loadTestingCount+']').attr("id", "calibrationReceived" + loadTestingCount).val(item.calibrationReceived);
+              $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(item.variance);
+              $("#loadTestingTable").find('#afterAdjustReading:last').attr('name', 'afterAdjustReading['+loadTestingCount+']').attr("id", "afterAdjustReading" + loadTestingCount).val(item.afterAdjustReading);
 
-              $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment['+loadCalibrationCount+']').attr("id", "uploadAttachment" + loadCalibrationCount).removeAttr('required');
-              $("#loadCalibrationTable").find('#viewCalibrationPdf:last').attr('name', 'viewCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewCalibrationPdf" + loadCalibrationCount).attr('href', item.calibrationFilePath).show();
-              $("#loadCalibrationTable").find('#calibrationFilePath:last').attr('name', 'calibrationFilePath['+loadCalibrationCount+']').attr("id", "calibrationFilePath" + loadCalibrationCount).val(item.calibrationFilePath);
-
-              loadCalibrationCount++;
+              loadTestingCount++;
             }
           }
         }
@@ -2091,32 +2024,36 @@ function edit(id) {
         $('#extendModal').find('#model').val(obj.message.model).trigger('change');
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#size').val(obj.message.size).trigger('change');
+        $('#extendModal').find('#lastCalibrationDate').val(obj.message.last_calibration_date);
+        $('#extendModal').find('#expiredDate').val(obj.message.expired_date);
+        $('#extendModal').find('#autoCertNo').val(obj.message.auto_cert_no);
+        $('#extendModal').find('#validationDate').val(obj.message.validation_date);
+        $('#extendModal').find('#calibrator').val(obj.message.calibrator).trigger('change');
 
-        if(obj.message.calibrations != null && obj.message.calibrations.length > 0){
-          $("#loadCalibrationTable").html('');
-          loadCalibrationCount = 0; 
+        if(obj.message.tests != null && obj.message.tests.length > 0){
+          $("#loadTestingTable").html('');
+          loadTestingCount = 0; 
 
-          for(var i = 0; i < obj.message.calibrations.length; i++){
-            var calibrations = obj.message.calibrations[i];
+          for(var i = 0; i < obj.message.tests.length; i++){
+            var tests = obj.message.tests[i];
 
-            for(var j=0; j < calibrations.length; j++){
-              var item = calibrations[j];
-              var $addContents = $("#loadCalibrationDetails").clone();
-              $("#loadCalibrationTable").append($addContents.html());
+            for(var j=0; j < tests.length; j++){
+              var item = tests[j]; console.log(item);
+              var $addContents = $("#loadTestingDetails").clone();
+              $("#loadTestingTable").append($addContents.html());
 
-              $("#loadCalibrationTable").find('.details:last').attr("id", "detail" + loadCalibrationCount);
-              $("#loadCalibrationTable").find('.details:last').attr("data-index", loadCalibrationCount);
-              $("#loadCalibrationTable").find('#remove:last').attr("id", "remove" + loadCalibrationCount);
+              $("#loadTestingTable").find('.details:last').attr("id", "detail" + loadTestingCount);
+              $("#loadTestingTable").find('.details:last').attr("data-index", loadTestingCount);
+              $("#loadTestingTable").find('#remove:last').attr("id", "remove" + loadTestingCount);
 
-              $("#loadCalibrationTable").find('#no:last').attr('name', 'no['+loadCalibrationCount+']').attr("id", "no" + loadCalibrationCount).val(item.no);
-              $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate['+loadCalibrationCount+']').attr("id", "lastCalibrationDate" + loadCalibrationCount).val(item.lastCalibrationDate);
-              $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount).val(item.expiredCalibrationDate);
+              $("#loadTestingTable").find('#no:last').attr('name', 'no['+loadTestingCount+']').attr("id", "no" + loadTestingCount).val(item.no).hide();
+              $("#loadTestingTable").find('#noText:last').attr('name', 'noText['+loadTestingCount+']').attr('id', 'noText' + loadTestingCount).text('Tester / Time: ' + item.no);
+              $("#loadTestingTable").find('#standardValue:last').attr('name', 'standardValue['+loadTestingCount+']').attr("id", "standardValue" + loadTestingCount).css('background-color', 'yellow').val(item.standardValue);
+              $("#loadTestingTable").find('#calibrationReceived:last').attr('name', 'calibrationReceived['+loadTestingCount+']').attr("id", "calibrationReceived" + loadTestingCount).val(item.calibrationReceived);
+              $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(item.variance);
+              $("#loadTestingTable").find('#afterAdjustReading:last').attr('name', 'afterAdjustReading['+loadTestingCount+']').attr("id", "afterAdjustReading" + loadTestingCount).val(item.afterAdjustReading);
 
-              $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment['+loadCalibrationCount+']').attr("id", "uploadAttachment" + loadCalibrationCount).removeAttr('required');
-              $("#loadCalibrationTable").find('#viewCalibrationPdf:last').attr('name', 'viewCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewCalibrationPdf" + loadCalibrationCount).attr('href', item.calibrationFilePath).show();
-              $("#loadCalibrationTable").find('#calibrationFilePath:last').attr('name', 'calibrationFilePath['+loadCalibrationCount+']').attr("id", "calibrationFilePath" + loadCalibrationCount).val(item.calibrationFilePath);
-
-              loadCalibrationCount++;
+              loadTestingCount++;
             }
           }
         }
@@ -2149,16 +2086,16 @@ function edit(id) {
   });
 
   // Hide the spinner when the modal is closed
-  $('#extendModal').on('hidden.bs.modal', function() {
-    $('#spinnerLoading').hide(); 
-    location.reload();
-  });
+  // $('#extendModal').on('hidden.bs.modal', function() {
+  //   $('#spinnerLoading').hide(); 
+  //   location.reload();
+  // });
 }
 
 function complete(id) {
   if (confirm('Are you sure you want to complete this items?')) {
     $('#spinnerLoading').show();
-    $.post('php/completeValidation.php', {userID: id}, function(data){
+    $.post('php/completeInHouseValidation.php', {userID: id}, function(data){
       var obj = JSON.parse(data);
 
       if(obj.status === 'success'){
@@ -2179,7 +2116,7 @@ function complete(id) {
 function deactivate(id) {
   if (confirm('Are you sure you want to cancel this items?')) {
     $('#spinnerLoading').show();
-    $.post('php/getValidation.php', {validationId: id}, function(data){
+    $.post('php/getInHouseValidation.php', {validationId: id}, function(data){
       var obj = JSON.parse(data);
 
       if(obj.status == 'success'){

@@ -973,7 +973,7 @@ $(function () {
 				if (obj.status === 'success') {
 					$('#extendModal').modal('hide');
 					toastr["success"](obj.message, "Success:");
-					location.reload(); // Reload the page
+          $('#weightTable').DataTable().ajax.reload();
 				} else {
 					toastr["error"](obj.message, "Failed:");
 				}
@@ -1856,11 +1856,11 @@ function newEntry(){
   $('#extendModal').find('#customerType').val("EXISTING").attr('readonly', false).trigger('change');
   $('#extendModal').find('#brand').val('').trigger('change');
   $('#extendModal').find('#validator').val('').trigger('change');
-  $('#extendModal').find('#product').val('');
+  $('#extendModal').find('#autoFormNo').val('');
   $('#extendModal').find('#company').val('');
   $('#extendModal').find('#companyText').val('').trigger('change');
   $('#extendModal').find('#machineType').val('').trigger('change');
-  $('#extendModal').find('#jenisAlat').val('').trigger('change');
+  $('#extendModal').find('#size').val('').trigger('change');
   $('#extendModal').find('#address1').val('');
   $('#extendModal').find('#model').val("").trigger('change');
   $('#extendModal').find('#stampDate').val('');
@@ -1879,11 +1879,9 @@ function newEntry(){
   $('#extendModal').find('#quotation').val("");
   $('#extendModal').find('#quotationDate').val('');
   $('#extendModal').find('#includeCert').val("NO").trigger('change');
-  $('#extendModal').find('#poNo').val("");
-  $('#extendModal').find('#poDate').val('');
-  $('#extendModal').find('#cashBill').val("");
-  $('#extendModal').find('#invoice').val('');
   $('#extendModal').find('#validationDate').val(formattedDate);
+
+  $('#loadCalibrationTable').html('');
 
   // $('#pricingTable').html('');
   // pricingCount = 0;
@@ -1894,7 +1892,6 @@ function newEntry(){
   // $('#extendModal').find('#subAmount').val('');
   // $('#cerId').hide();
   $('#extendModal').modal('show');
-  isModalOpen = true; // Set flag to true when modal is shown
   
   $('#extendForm').validate({
     errorElement: 'span',
@@ -2072,10 +2069,10 @@ function edit(id) {
   });
 
   // Hide the spinner when the modal is closed
-  $('#extendModal').on('hidden.bs.modal', function() {
-    $('#spinnerLoading').hide(); 
-    location.reload();
-  });
+  // $('#extendModal').on('hidden.bs.modal', function() {
+  //   $('#spinnerLoading').hide(); 
+  //   location.reload();
+  // });
 }
 
 function complete(id) {
