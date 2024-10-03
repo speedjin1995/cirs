@@ -150,8 +150,12 @@ else{
     <div class="row">
       <input type="hidden" class="form-control" id="branch_id">
       <div class="form-group col-2"> 
-        <label for="branch_name">Branch Code *</label>
-        <input class="form-control" id="branch_name" placeholder="Enter your branch code" required>
+        <label for="branch_code">Branch Code *</label>
+        <input class="form-control" id="branch_code" placeholder="Enter your branch code" required>
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branch_name">Branch Name *</label>
+        <input class="form-control" id="branch_name" placeholder="Enter your branch name" required>
       </div>
       <div class="form-group col-2"> 
         <label for="branch_address1">Address 1 *</label>
@@ -322,6 +326,7 @@ $(function () {
     $("#pricingTable").find('.details:last').attr("data-index", pricingCount);
     $("#pricingTable").find('#remove:last').attr("id", "remove" + pricingCount);
 
+    $("#pricingTable").find('#branch_code:last').attr('name', 'branch_code['+pricingCount+']').attr("id", "branch_code" + pricingCount);
     $("#pricingTable").find('#branch_name:last').attr('name', 'branch_name['+pricingCount+']').attr("id", "branch_name" + pricingCount);
     $("#pricingTable").find('#branch_address1:last').attr('name', 'branch_address1['+pricingCount+']').attr("id", "branch_address1" + pricingCount);
     $("#pricingTable").find('#branch_address2:last').attr('name', 'branch_address2['+pricingCount+']').attr("id", "branch_address2" + pricingCount);
@@ -348,9 +353,9 @@ $(function () {
 
 function format(row){
   var returnString = "";
-
+  console.log(row);
   if (row.log.length > 0) {
-    returnString += '<h4>Branches</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="15%">Branch Name</th><th width="20%">Address</th><th width="20%">Address 2</th><th width="20%">Address 3</th><th width="20%">Address 4</th></tr></thead><tbody>'
+    returnString += '<h4>Branches</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="10%">Branch Code</th><th width="10%">Branch Name</th><th width="20%">Address</th><th width="20%">Address 2</th><th width="20%">Address 3</th><th width="20%">Address 4</th></tr></thead><tbody>'
     
     for (var i = 0; i < row.log.length; i++) {
       var item = row.log[i];
@@ -360,7 +365,7 @@ function format(row){
         ? '<a href="' + item.mapurl + '">' + item.branchname + ' <i class="fa fa-map-marker"></i></a>' 
         : item.branchname;
 
-      returnString += '<tr><td>' + (i + 1) + '</td><td>' + branchNameWithMapIcon + '</td><td>' + item.address1 + '</td><td>' + item.address2 + '</td><td>' + item.address3 + '</td><td>' + item.address4 + '</td></tr>';
+      returnString += '<tr><td>' + (i + 1) + '</td><td>' + item.branchcode + '</td><td>' + branchNameWithMapIcon + '</td><td>' + item.address1 + '</td><td>' + item.address2 + '</td><td>' + item.address3 + '</td><td>' + item.address4 + '</td></tr>';
     }
 
     returnString += '</tbody></table>';
@@ -403,6 +408,7 @@ function edit(id){
               $("#pricingTable").find('#remove:last').attr("id", "remove" + pricingCount);
 
               $("#pricingTable").find('#branch_id:last').attr('name', 'branch_id['+pricingCount+']').attr("id", "branch_id" + pricingCount).val(weightData[i].branchid);
+              $("#pricingTable").find('#branch_code:last').attr('name', 'branch_code['+pricingCount+']').attr("id", "branch_code" + pricingCount).val(weightData[i].code);
               $("#pricingTable").find('#branch_name:last').attr('name', 'branch_name['+pricingCount+']').attr("id", "branch_name" + pricingCount).val(weightData[i].name);
               $("#pricingTable").find('#branch_address1:last').attr('name', 'branch_address1['+pricingCount+']').attr("id", "branch_address1" + pricingCount).val(weightData[i].branch_address1);
               $("#pricingTable").find('#branch_address2:last').attr('name', 'branch_address2['+pricingCount+']').attr("id", "branch_address2" + pricingCount).val(weightData[i].branch_address2);
