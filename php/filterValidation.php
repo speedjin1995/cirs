@@ -81,7 +81,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     $address3 = $branchRow['address3'];
     $address4 = $branchRow['address4'];
     $pic = $branchRow['pic'];
-    $pic_phone = $branchRow['pic_phone'];
+    $pic_phone = $branchRow['pic_contact'];
   }
 
   $data[] = array( 
