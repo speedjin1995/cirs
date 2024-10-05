@@ -40,7 +40,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
       "id"=>$row['id'],
       //"name"=>$row['name'] ?? '',
       //"machine_type"=>$row['machine_type'] != null ? searchMachineNameById($row['machine_type'], $db) : '',
-      "capacity"=>$row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '',
+      "capacity"=>$row['capacity'] != null ? searchCapacityById($row['capacity'], $db) : '',
       "jenis_alat"=>$row['jenis_alat'] != null ? searchAlatNameById($row['jenis_alat'], $db) : '',
       "validator"=>$row['validator'] != null ? searchValidatorNameById($row['validator'], $db) : '',
       "type"=>$row['type'],

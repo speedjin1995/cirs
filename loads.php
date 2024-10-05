@@ -126,7 +126,7 @@ else{
 							<thead>
 								<tr>
 									<th>No.</th>
-									<th>Part No.</th>
+									<!--th>Part No.</th-->
 									<th>Load Cell Type</th>
 									<th>Load Cell Brand</th>
                                     <th>Load Cell Model</th>
@@ -166,10 +166,10 @@ else{
                             <label for="brand">Load Cell Type *</label>
                             <input type="text" class="form-control" name="loadCell" id="loadCell" placeholder="Enter Load Cell Type" required>
                         </div>
-                        <div class="form-group col-4">
+                        <!--div class="form-group col-4">
                             <label for="brand">Part No. *</label>
                             <input type="text" class="form-control" name="partNo" id="partNo" placeholder="Enter Part No" required>
-                        </div>
+                        </div-->
                     </div>
     				
                     <div class="row">
@@ -184,12 +184,7 @@ else{
                         </div>
                         <div class="form-group col-4">
                             <label>Load Cell Capacity *</label>
-                            <select class="form-control select2" id="capacity" name="capacity" required>
-                                <option value="" selected disabled hidden>Please Select</option>
-                                <?php while($rowM2=mysqli_fetch_assoc($capacity2)){ ?>
-                                    <option value="<?=$rowM2['id'] ?>"><?=$rowM2['name'] ?></option>
-                                <?php } ?>
-                            </select>
+                            <input class="form-control" type="text" placeholder="capacity" id="capacity" name="capacity" required/>
                         </div>
                         <div class="form-group col-4">
                             <label>Load Cell Made In *</label>
@@ -311,7 +306,7 @@ $(function () {
         },
         'columns': [
             { data: 'no' },
-            { data: 'part_no' },
+            //{ data: 'part_no' },
             { data: 'load_cell' },
             { data: 'brand_name' },
             { data: 'model_name' },

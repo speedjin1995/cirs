@@ -59,8 +59,8 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "SELECT load_cells.*, capacity.name AS capacity, brand.brand AS brand_name, model.model AS model_name, country.nicename 
-FROM load_cells, brand, model, capacity, country WHERE load_cells.capacity = capacity.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
+$empQuery = "SELECT load_cells.*, brand.brand AS brand_name, model.model AS model_name, country.nicename 
+FROM load_cells, brand, model, country WHERE load_cells.brand = brand.id AND load_cells.model = model.id 
 AND load_cells.made_in = country.id AND load_cells.deleted = '0'".$searchQuery." 
 order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;; 
 $empRecords = mysqli_query($db, $empQuery);
@@ -75,7 +75,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "load_cell"=>$row['load_cell'] ?? '',
     "brand_name"=>$row['brand_name'] ?? '',
     "model_name"=>$row['model_name'] ?? '',
-    "capacity"=>$row['capacity'] ?? '',
+    "capacity"=> $row['capacity'] ?? '',
     "made_in"=>$row['made_in'] ?? '',
     "class"=>$row['class'] ?? '',
     "pattern_no"=>$row['pattern_no'] ?? '',

@@ -52,7 +52,7 @@ else{
                                     <th>Jenis Alat</th>
                                     <th>Capacity</th>
                                     <th>Validator</th>
-                                    <th>Price</th>
+                                    <th>Price (RM)</th>
 									<th>Actions</th>
 								</tr>
 							</thead>

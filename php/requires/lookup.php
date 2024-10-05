@@ -210,6 +210,24 @@ function searchCapacityNameById($value, $db) {
     return $id;
 }
 
+function searchCapacityById($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM capacity WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $idname = $row['name'];
+            $id1 = explode("X",$idname)[0];
+            $id = explode("x",$id1)[0];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
 function searchAlatNameById($value, $db) {
     $id = null;
 

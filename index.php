@@ -357,7 +357,7 @@ to get the desired effect
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-certificate"></i>
-              <p>Government Stamping<i class="fas fa-angle-left right"></i></p>
+              <p>Stamping<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview" style="display: block;">
               <li class="nav-item">

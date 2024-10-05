@@ -8,9 +8,9 @@ if(!isset($_SESSION['userID'])){
     echo 'window.location.href = "../login.html";</script>';
 }
 
-if(isset($_POST['loadCell'], $_POST['partNo'], $_POST['model'], $_POST['capacity'], $_POST['madeIn'], $_POST['brand'], $_POST['class'], $_POST['oimlApproval'],   $_POST['patternNo'], $_POST['approvalDate'], $_POST['expiryDate'], $_FILES['certificate'])){
+if(isset($_POST['loadCell'], $_POST['model'], $_POST['capacity'], $_POST['madeIn'], $_POST['brand'], $_POST['class'], $_POST['oimlApproval'],   $_POST['patternNo'], $_POST['approvalDate'], $_POST['expiryDate'], $_FILES['certificate'])){
     $loadCell = filter_input(INPUT_POST, 'loadCell', FILTER_SANITIZE_STRING);
-    $partNo = filter_input(INPUT_POST, 'partNo', FILTER_SANITIZE_STRING);
+    $partNo = null;
     $model = filter_input(INPUT_POST, 'model', FILTER_SANITIZE_STRING);
     $capacity = filter_input(INPUT_POST, 'capacity', FILTER_SANITIZE_STRING);
     $madeIn = filter_input(INPUT_POST, 'madeIn', FILTER_SANITIZE_STRING);
@@ -20,6 +20,10 @@ if(isset($_POST['loadCell'], $_POST['partNo'], $_POST['model'], $_POST['capacity
     $patternNo = filter_input(INPUT_POST, 'patternNo', FILTER_SANITIZE_STRING);
     $approvalDate = filter_input(INPUT_POST, 'approvalDate', FILTER_SANITIZE_STRING);
     $expiryDate = filter_input(INPUT_POST, 'expiryDate', FILTER_SANITIZE_STRING);
+
+    if(isset($_POST['partNo']) && $_POST['partNo'] != null && $_POST['partNo'] != ''){
+        $partNo = filter_input(INPUT_POST, 'partNo', FILTER_SANITIZE_STRING);
+    }
 
     if($_POST['id'] != null && $_POST['id'] != ''){
         if ($update_stmt = $db->prepare("UPDATE load_cells SET load_cell=?, part_no=?, model=?, capacity=?, made_in=?, brand=?, class=?, oiml_approval=?, pattern_no=?, pattern_datetime=?, pattern_expiry=? WHERE id=?")) {
