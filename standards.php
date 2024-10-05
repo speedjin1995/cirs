@@ -44,14 +44,25 @@ else{
 						<table id="capacityTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
-                                    <th>No.</th>
-									<!--th>Name</th-->
-                                    <!--th>Machine Type</th-->
-                                    <th>Jenis Alat</th>
-                                    <th>Capacity</th>
-                                    <th>Validator</th>
-                                    <th>Price</th>
-									<th>Actions</th>
+                                    <th rowspan="2">Std. Avg. <br>Temperature</th>
+									<th rowspan="2">Relative <br>Humidity</th>
+                                    <th rowspan="2">Capacity</th>
+                                    <th rowspan="2">Unit</th>
+                                    <th rowspan="2">Variance</th>
+                                    <th colspan="10">Tester</th>
+									<th rowspan="2">Actions</th>
+								</tr>
+                                <tr>
+                                    <th>1</th>
+                                    <th>2</th>
+                                    <th>3</th>
+                                    <th>4</th>
+                                    <th>5</th>
+                                    <th>6</th>
+                                    <th>7</th>
+                                    <th>8</th>
+                                    <th>9</th>
+                                    <th>10</th>
 								</tr>
 							</thead>
 						</table>
@@ -177,18 +188,26 @@ $(function () {
         'processing': true,
         'serverSide': true,
         'serverMethod': 'post',
-        'order': [[ 1, 'asc' ]],
+        'order': [[ 0, 'asc' ]],
         'ajax': {
             'url':'php/loadStandards.php'
         },
         'columns': [
-            { data: 'counter' },
-            //{ data: 'name' },
-            //{ data: 'machine_type' },
-            { data: 'jenis_alat' },
-            { data: 'capacity' },
-            { data: 'validator' },
-            { data: 'price' },
+            { data: 'standard_avg_temp' },
+            { data: 'relative_humidity' },
+            { data: 'name' },
+            { data: 'units' },
+            { data: 'variance' },
+            { data: 'test_1' },
+            { data: 'test_2' },
+            { data: 'test_3' },
+            { data: 'test_4' },
+            { data: 'test_5' },
+            { data: 'test_6' },
+            { data: 'test_7' },
+            { data: 'test_8' },
+            { data: 'test_9' },
+            { data: 'test_10' },
             { 
                 data: 'id',
                 render: function ( data, type, row ) {

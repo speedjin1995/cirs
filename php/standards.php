@@ -64,7 +64,7 @@ $_POST['tester8'], $_POST['tester9'], $_POST['tester10'])){
 
     if(isset($_POST['id']) && $_POST['id'] != null && $_POST['id'] != ''){
         if ($update_stmt = $db->prepare("UPDATE standard SET standard_avg_temp=?, relative_humidity=?, capacity=?, unit=?, variance=?, test_1=?, test_2=?, test_3=?, test_4=?, test_5=?, test_6=?, test_7=?, test_8=?, test_9=?, test_10=? WHERE id=?")) {
-            $update_stmt->bind_param('sssssssssssssss', $satemperature, $relHumidity, $capacity, $units, $variance, $tester1, $tester2, $tester3, $tester4, $tester5, $tester6, $tester7, $tester8, $tester9, $tester10, $_POST['id']);
+            $update_stmt->bind_param('ssssssssssssssss', $satemperature, $relHumidity, $capacity, $units, $variance, $tester1, $tester2, $tester3, $tester4, $tester5, $tester6, $tester7, $tester8, $tester9, $tester10, $_POST['id']);
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
