@@ -60,6 +60,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     $data[] = array( 
       "id"=>$row['id'],
       "customer_code"=>$row['customer_code'],
+      "other_code"=>$row['other_code'],
       "customer_name"=>$row['customer_name'],
       "customer_address"=>$row['customer_address']." ". $row['address2'] ." ". $row['address3'],
       "customer_phone"=>$row['customer_phone'],

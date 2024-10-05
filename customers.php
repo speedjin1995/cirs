@@ -43,8 +43,10 @@ else{
 						<table id="customerTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
-                  <th>Code</th>
+                  <th>Customer Code</th>
+                  <th>Other Code</th>
 									<th>Name</th>
+                  <th>Address</th>
 									<th>Phone</th>
 									<th>Email</th>
                   <th>Action</th>
@@ -217,7 +219,9 @@ $(function () {
       },
       'columns': [
         { data: 'customer_code' },
+        { data: 'other_code' },
         { data: 'customer_name' },
+        { data: 'customer_address' },
         { data: 'customer_phone' },
         { data: 'customer_email' },
         { 
