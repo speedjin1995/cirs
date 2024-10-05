@@ -14,7 +14,7 @@ else{
 	$stmt->execute();
 	$result = $stmt->get_result();
   $role = 'NORMAL';
-  $_SESSION['page']='oldinhouse';
+  $_SESSION['page']='inhouse';
 	
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
@@ -57,7 +57,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Cancelled In-House Validations</h1>
+        <h1 class="m-0 text-dark">Completed In-House Validations</h1>
       </div><!-- /.col -->
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
@@ -166,9 +166,9 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               <!--div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">Upload Excel</button>
               </div-->
-              <!-- <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" onclick="newEntry()">Add New</button>
-              </div> -->
+              <div class="col-2">
+                <!-- <button type="button" class="btn btn-block bg-gradient-warning btn-sm" onclick="newEntry()">Add New</button> -->
+              </div>
             </div>
           </div>
 
@@ -189,8 +189,8 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                   <th>Expired Date</th>
                   <th>Calibrator By</th>
                   <th>Status</th>
-                  <th></th>
-                  <th></th>
+                  <th width='10%'></th>
+                  <th width='1%'></th>
                 </tr>
               </thead>
             </table>
@@ -438,6 +438,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                   <div class="col-6">
                     <div class="form-group">
                       <label>Capacity * </label>
+                      <input type="hidden" class="form-control" id="capacityUnit" name="capacityUnit">
                       <select class="form-control select2" style="width: 100%;" id="capacity" name="capacity" required>
                         <option selected="selected"></option>
                         <?php while($rowCA=mysqli_fetch_assoc($capacities)){ ?>
@@ -945,7 +946,7 @@ $(function () {
     'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
       'type': 'POST',
-      'url':'php/filterCancelledInHouseValidation.php',
+      'url':'php/filterInHouse.php',
       'data': {
         fromDate: fromDateValue,
         toDate: toDateValue,
@@ -981,50 +982,38 @@ $(function () {
       { data: 'status' },
       { 
         data: 'id',
-        render: function ( data, type, row ) {
-          if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<div class="row"><div class="col-4"><button type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
-            ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
-          } 
-          else {
-            return ''; // Return an empty string or any other placeholder if the item is invoiced
-          }
+        render: function (data, type, row) {
+          let buttons = '<div class="row">';
+
+          // Edit button
+          buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+                    ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
+
+          // // Extra button if validate_by is 3
+          // if (row.validate_by == 3) {
+          //   buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
+          //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
+          // }
+
+          // Print button
+          buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+                    ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+
+          // Complete button if conditions are met
+          // if (row.calibrations != '') {
+          //   buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+          //             ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
+          // }
+
+          // Cancelled button
+          buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+                    ')" class="btn btn-danger btn-sm">X</button></div>';
+
+          buttons += '</div>'; // Closing row div
+
+          return buttons;
         }
       },
-      // { 
-      //   data: 'id',
-      //   render: function (data, type, row) {
-      //     let buttons = '<div class="row">';
-
-      //     // Edit button
-      //     buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
-      //               ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
-
-      //     // // Extra button if validate_by is 3
-      //     // if (row.validate_by == 3) {
-      //     //   buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
-      //     //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
-      //     // }
-
-      //     // Print button
-      //     buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-      //               ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
-
-      //     // Complete button if conditions are met
-      //     if (row.calibrations != '') {
-      //       buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
-      //                 ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
-      //     }
-
-      //     // Cancelled button
-      //     buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-      //               ')" class="btn btn-danger btn-sm">X</button></div>';
-
-      //     buttons += '</div>'; // Closing row div
-
-      //     return buttons;
-      //   }
-      // },
       { 
         className: 'dt-control',
         orderable: false,
@@ -1186,7 +1175,7 @@ $(function () {
       'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
         'type': 'POST',
-        'url':'php/filterCancelledInHouseValidation.php',
+        'url':'php/filterInHouse.php',
         'data': {
           fromDate: fromDateValue,
           toDate: toDateValue,
@@ -1222,50 +1211,38 @@ $(function () {
         { data: 'status' },
         { 
           data: 'id',
-          render: function ( data, type, row ) {
-            if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
-              return '<div class="row"><div class="col-4"><button type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
-              ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
-            } 
-            else {
-              return ''; // Return an empty string or any other placeholder if the item is invoiced
-            }
+          render: function (data, type, row) {
+            let buttons = '<div class="row">';
+
+            // Edit button
+            buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+                      ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
+
+            // Extra button if validate_by is 3
+            // if (row.validate_by == 3) {
+            //   buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
+            //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
+            // }
+
+            // Print button
+            buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+                      ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+
+            // Complete button if conditions are met
+            // if (row.calibrations != '') {
+            //   buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+            //             ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
+            // }
+
+            // Cancelled button
+            buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+                      ')" class="btn btn-danger btn-sm">X</button></div>';
+
+            buttons += '</div>'; // Closing row div
+
+            return buttons;
           }
         },
-        // { 
-        //   data: 'id',
-        //   render: function (data, type, row) {
-        //     let buttons = '<div class="row">';
-
-        //     // Edit button
-        //     buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
-        //               ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
-
-        //     // Extra button if validate_by is 3
-        //     // if (row.validate_by == 3) {
-        //     //   buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
-        //     //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
-        //     // }
-
-        //     // Print button
-        //     buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-        //               ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
-
-        //     // Complete button if conditions are met
-        //     if (row.calibrations != '') {
-        //       buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
-        //                 ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
-        //     }
-
-        //     // Cancelled button
-        //     buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-        //               ')" class="btn btn-danger btn-sm">X</button></div>';
-
-        //     buttons += '</div>'; // Closing row div
-
-        //     return buttons;
-        //   }
-        // },
         { 
           className: 'dt-control',
           orderable: false,
@@ -1821,8 +1798,7 @@ function format (row) {
   
   if (row.tests !== undefined && row.tests !== null && row.tests !== ''){
     if (row.tests[0].length > 0) {
-      var weightType = row.units;
-
+      var weightType = 'KG';
       returnString += '<h4 class="mb-3">Note - Standard Average Temperature: (20 + 1) ºC / Average Relative Humidity: (52 + 1) %RH</h4><table style="width: 100%;"><thead><tr><th width="15%">Number of Tests.</th><th width="20%">Setting Value Of Standard (' +  weightType + ')</th><th width="20%">As Received Under Calibration (' +  weightType + ')</th><th width="20%">Variance +/- 0.1kg (' +  weightType + ')</th><th width="20%">Reading After Adjustment. (' +  weightType + ')</th></tr></thead><tbody>'
       
       var tests = row.tests[0]; 
@@ -1974,6 +1950,7 @@ function edit(id) {
   $('#spinnerLoading').show();
   $.post('php/getInHouseValidation.php', {validationId: id}, function(data){
     var obj = JSON.parse(data);
+    let variance = obj.message.variance;
     if(obj.status === 'success'){
       if(obj.message.type == 'DIRECT'){
         $('#extendModal').find('#id').val(obj.message.id);
@@ -2006,10 +1983,11 @@ function edit(id) {
 
           for(var i = 0; i < obj.message.tests.length; i++){
             var tests = obj.message.tests[i];
-
             for(var j=0; j < tests.length; j++){
               var item = tests[j];
               var $addContents = $("#loadTestingDetails").clone();
+              let varianceCalculated = item.variance; 
+
               $("#loadTestingTable").append($addContents.html());
 
               $("#loadTestingTable").find('.details:last').attr("id", "detail" + loadTestingCount);
@@ -2020,13 +1998,137 @@ function edit(id) {
               $("#loadTestingTable").find('#noText:last').attr('name', 'noText['+loadTestingCount+']').attr('id', 'noText' + loadTestingCount).text('Tester / Time: ' + item.no);
               $("#loadTestingTable").find('#standardValue:last').attr('name', 'standardValue['+loadTestingCount+']').attr("id", "standardValue" + loadTestingCount).css('background-color', 'yellow').val(item.standardValue);
               $("#loadTestingTable").find('#calibrationReceived:last').attr('name', 'calibrationReceived['+loadTestingCount+']').attr("id", "calibrationReceived" + loadTestingCount).val(item.calibrationReceived);
-              $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(item.variance);
               $("#loadTestingTable").find('#afterAdjustReading:last').attr('name', 'afterAdjustReading['+loadTestingCount+']').attr("id", "afterAdjustReading" + loadTestingCount).val(item.afterAdjustReading);
 
+              //Dynamically change unit from capacity
+              $("#loadTestingTable").find('#unitSymbolSV:last').attr('name', 'unitSymbolSV['+loadTestingCount+']').attr("id", "unitSymbolSV" + loadTestingCount).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolCR:last').attr('name', 'unitSymbolCR['+loadTestingCount+']').attr("id", "unitSymbolCR" + loadTestingCount).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolV:last').attr('name', 'unitSymbolV['+loadTestingCount+']').attr("id", "unitSymbolV" + loadTestingCount).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolAR:last').attr('name', 'unitSymbolAR['+loadTestingCount+']').attr("id", "unitSymbolAR" + loadTestingCount).text(obj.message.capacityUnit);
+
+              if (variance != ''){
+                if (varianceCalculated > variance || varianceCalculated < -variance) {
+                  $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'red', 'color': 'white'});
+                }else{
+                  $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'lightgrey', 'color': 'black'});
+                }
+              }else{
+                $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'lightgrey', 'color': 'black'});
+              }
+              
               loadTestingCount++;
             }
           }
         }
+
+        var capacityExist = $('#extendModal').find('#capacity').val();
+
+        if(capacityExist != ''){
+          // Event delegation: use 'select' instead of 'input' for dropdowns
+          $(document).on('change', 'input[id^="standardValue"]', function(){
+            let standardValue = $(this).val();
+            let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
+            let variance = obj.message.variance; 
+            let varianceCalculated = standardValue - calibrationReceived; 
+
+            // Update the variance input value
+            $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+            if (varianceCalculated > variance || varianceCalculated < -variance) {
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+            }else{
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+            }
+          });
+
+          // Event delegation: use 'select' instead of 'input' for dropdowns
+          $(document).on('change', 'input[id^="calibrationReceived"]', function(){
+            let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
+            let calibrationReceived = $(this).val();
+            let varianceCalculated = standardValue - calibrationReceived; 
+
+            // Update the variance input value
+            $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+            if (varianceCalculated > variance || varianceCalculated < -variance) {
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+            }else{
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+            }
+          });
+        }
+
+        $('#extendModal').find('#capacity').change(function() {
+          var capacityId = $(this).val();
+          if (capacityId) {
+            $.post('php/getStandard.php', {userID: capacityId}, function(data){
+              var obj = JSON.parse(data);
+              
+              if(obj.status === 'success'){
+                var unit = obj.message.unit;
+                for (var i = 0; i < 10; i++) {
+                  //Symbol setting
+                  $("#loadTestingTable").find('#unitSymbolSV'+ i).text(unit);
+                  $("#loadTestingTable").find('#unitSymbolCR'+ i).text(unit);
+                  $("#loadTestingTable").find('#unitSymbolV'+ i).text(unit);
+                  $("#loadTestingTable").find('#unitSymbolAR'+ i).text(unit);
+                }          
+                
+                //Standard of Value
+                $("#loadTestingTable").find('#standardValue0').val(obj.message.test_1);
+                $("#loadTestingTable").find('#standardValue1').val(obj.message.test_2);
+                $("#loadTestingTable").find('#standardValue2').val(obj.message.test_3);
+                $("#loadTestingTable").find('#standardValue3').val(obj.message.test_4);
+                $("#loadTestingTable").find('#standardValue4').val(obj.message.test_5);
+                $("#loadTestingTable").find('#standardValue5').val(obj.message.test_6);
+                $("#loadTestingTable").find('#standardValue6').val(obj.message.test_7);
+                $("#loadTestingTable").find('#standardValue7').val(obj.message.test_8);
+                $("#loadTestingTable").find('#standardValue8').val(obj.message.test_9);
+                $("#loadTestingTable").find('#standardValue9').val(obj.message.test_10);
+
+                // Event delegation: use 'select' instead of 'input' for dropdowns
+                $(document).on('change', 'input[id^="standardValue"]', function(){
+                  let standardValue = $(this).val();
+                  let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
+                  let varianceCalculated = standardValue - calibrationReceived; 
+
+                  // Update the variance input value
+                  $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+                  if (varianceCalculated > variance || varianceCalculated < -variance) {
+                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+                  }else{
+                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+                  }
+                });
+
+                // Event delegation: use 'select' instead of 'input' for dropdowns
+                $(document).on('change', 'input[id^="calibrationReceived"]', function(){
+                  let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
+                  let calibrationReceived = $(this).val();
+                  let varianceCalculated = standardValue - calibrationReceived; 
+
+                  // Update the variance input value
+                  $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+                  if (varianceCalculated > variance || varianceCalculated < -variance) {
+                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+                  }else{
+                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+                  }
+                });
+
+              }
+              else if(obj.status === 'failed'){
+                  toastr["error"](obj.message, "Failed:");
+              }
+              else{
+                  toastr["error"]("Something wrong when activate", "Failed:");
+              }
+            });
+          }
+        });
+        
       }
       else{
         $('#extendModal').find('#id').val(obj.message.id);
@@ -2061,10 +2163,11 @@ function edit(id) {
 
           for(var i = 0; i < obj.message.tests.length; i++){
             var tests = obj.message.tests[i];
-
             for(var j=0; j < tests.length; j++){
-              var item = tests[j]; console.log(item);
+              var item = tests[j];
               var $addContents = $("#loadTestingDetails").clone();
+              let varianceCalculated = item.variance;
+
               $("#loadTestingTable").append($addContents.html());
 
               $("#loadTestingTable").find('.details:last').attr("id", "detail" + loadTestingCount);
@@ -2075,13 +2178,136 @@ function edit(id) {
               $("#loadTestingTable").find('#noText:last').attr('name', 'noText['+loadTestingCount+']').attr('id', 'noText' + loadTestingCount).text('Tester / Time: ' + item.no);
               $("#loadTestingTable").find('#standardValue:last').attr('name', 'standardValue['+loadTestingCount+']').attr("id", "standardValue" + loadTestingCount).css('background-color', 'yellow').val(item.standardValue);
               $("#loadTestingTable").find('#calibrationReceived:last').attr('name', 'calibrationReceived['+loadTestingCount+']').attr("id", "calibrationReceived" + loadTestingCount).val(item.calibrationReceived);
-              $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(item.variance);
               $("#loadTestingTable").find('#afterAdjustReading:last').attr('name', 'afterAdjustReading['+loadTestingCount+']').attr("id", "afterAdjustReading" + loadTestingCount).val(item.afterAdjustReading);
+
+              //Dynamically change unit from capacity
+              $("#loadTestingTable").find('#unitSymbolSV:last').attr('name', 'unitSymbolSV['+loadTestingCount+']').attr("id", "unitSymbolSV" + loadTestingCount).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolCR:last').attr('name', 'unitSymbolCR['+loadTestingCount+']').attr("id", "unitSymbolCR" + loadTestingCount).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolV:last').attr('name', 'unitSymbolV['+loadTestingCount+']').attr("id", "unitSymbolV" + loadTestingCount).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolAR:last').attr('name', 'unitSymbolAR['+loadTestingCount+']').attr("id", "unitSymbolAR" + loadTestingCount).text(obj.message.capacityUnit);
+
+              if (variance != ''){
+                if (varianceCalculated > variance || varianceCalculated < -variance) {
+                  $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'red', 'color': 'white'});
+                }else{
+                  $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'lightgrey', 'color': 'black'});
+                }
+              }else{
+                $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'lightgrey', 'color': 'black'});
+              }
 
               loadTestingCount++;
             }
           }
         }
+
+        var capacityExist = $('#extendModal').find('#capacity').val();
+
+        if(capacityExist != ''){
+          // Event delegation: use 'select' instead of 'input' for dropdowns
+          $(document).on('change', 'input[id^="standardValue"]', function(){
+            let standardValue = $(this).val();
+            let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
+            let variance = obj.message.variance; 
+            let varianceCalculated = standardValue - calibrationReceived; 
+
+            // Update the variance input value
+            $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+            if (varianceCalculated > variance || varianceCalculated < -variance) {
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+            }else{
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+            }
+          });
+
+          // Event delegation: use 'select' instead of 'input' for dropdowns
+          $(document).on('change', 'input[id^="calibrationReceived"]', function(){
+            let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
+            let calibrationReceived = $(this).val();
+            let varianceCalculated = standardValue - calibrationReceived; 
+
+            // Update the variance input value
+            $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+            if (varianceCalculated > variance || varianceCalculated < -variance) {
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+            }else{
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+            }
+          });
+        }
+
+        $('#extendModal').find('#capacity').change(function() {
+          var capacityId = $(this).val();
+          if (capacityId) {
+            $.post('php/getStandard.php', {userID: capacityId}, function(data){
+              var obj = JSON.parse(data);
+              
+              if(obj.status === 'success'){
+                var unit = obj.message.unit;
+                for (var i = 0; i < 10; i++) {
+                  //Symbol setting
+                  $("#loadTestingTable").find('#unitSymbolSV'+ i).text(unit);
+                  $("#loadTestingTable").find('#unitSymbolCR'+ i).text(unit);
+                  $("#loadTestingTable").find('#unitSymbolV'+ i).text(unit);
+                  $("#loadTestingTable").find('#unitSymbolAR'+ i).text(unit);
+                }          
+                
+                //Standard of Value
+                $("#loadTestingTable").find('#standardValue0').val(obj.message.test_1);
+                $("#loadTestingTable").find('#standardValue1').val(obj.message.test_2);
+                $("#loadTestingTable").find('#standardValue2').val(obj.message.test_3);
+                $("#loadTestingTable").find('#standardValue3').val(obj.message.test_4);
+                $("#loadTestingTable").find('#standardValue4').val(obj.message.test_5);
+                $("#loadTestingTable").find('#standardValue5').val(obj.message.test_6);
+                $("#loadTestingTable").find('#standardValue6').val(obj.message.test_7);
+                $("#loadTestingTable").find('#standardValue7').val(obj.message.test_8);
+                $("#loadTestingTable").find('#standardValue8').val(obj.message.test_9);
+                $("#loadTestingTable").find('#standardValue9').val(obj.message.test_10);
+
+                // Event delegation: use 'select' instead of 'input' for dropdowns
+                $(document).on('change', 'input[id^="standardValue"]', function(){
+                  let standardValue = $(this).val();
+                  let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
+                  let varianceCalculated = standardValue - calibrationReceived; 
+
+                  // Update the variance input value
+                  $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+                  if (varianceCalculated > variance || varianceCalculated < -variance) {
+                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+                  }else{
+                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+                  }
+                });
+
+                // Event delegation: use 'select' instead of 'input' for dropdowns
+                $(document).on('change', 'input[id^="calibrationReceived"]', function(){
+                  let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
+                  let calibrationReceived = $(this).val();
+                  let varianceCalculated = standardValue - calibrationReceived; 
+
+                  // Update the variance input value
+                  $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+                  if (varianceCalculated > variance || varianceCalculated < -variance) {
+                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+                  }else{
+                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+                  }
+                });
+
+              }
+              else if(obj.status === 'failed'){
+                  toastr["error"](obj.message, "Failed:");
+              }
+              else{
+                  toastr["error"]("Something wrong when activate", "Failed:");
+              }
+            });
+          }
+        });
       }
     
       $('#extendModal').modal('show');
@@ -2171,28 +2397,23 @@ function deactivate(id) {
       $('#spinnerLoading').hide();
 
     });
-  }
-}
 
-function revertToPending(id) {
-  
-  if (confirm('Are you sure you want to set status back to Pending?')) {
-    $('#spinnerLoading').show();
-    $.post('php/changeStatusInHouseValidation.php', {userID: id}, function(data){
-      var obj = JSON.parse(data);
 
-      if(obj.status === 'success'){
-        toastr["success"](obj.message, "Success:");
-        $('#weightTable').DataTable().ajax.reload();
-      }
-      else if(obj.status === 'failed'){
-        toastr["error"](obj.message, "Failed:");
-      }
-      else{
-        toastr["error"]("Something wrong when activate", "Failed:");
-      }
-      $('#spinnerLoading').hide();
-    });
+    // $.post('php/deleteStamp.php', {userID: id}, function(data){
+    //   var obj = JSON.parse(data);
+
+    //   if(obj.status === 'success'){
+    //     toastr["success"](obj.message, "Success:");
+    //     $('#weightTable').DataTable().ajax.reload();
+    //   }
+    //   else if(obj.status === 'failed'){
+    //     toastr["error"](obj.message, "Failed:");
+    //   }
+    //   else{
+    //     toastr["error"]("Something wrong when activate", "Failed:");
+    //   }
+    //   $('#spinnerLoading').hide();
+    // });
   }
 }
 
