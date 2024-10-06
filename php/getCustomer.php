@@ -43,7 +43,11 @@ if(isset($_POST['userID'])){
                                 "pic" => $row2['pic'] ?? '',
                                 "pic_contact" => $row2['pic_contact'] ?? '',
                                 "office_no" => $row2['office_no'] ?? '',
-                                "email" => $row2['email'] ?? ''
+                                "email" => $row2['email'] ?? '',
+                                "address1" => $row2['address'] ?? '',
+                                "address2" => $row2['address2'] ?? '',
+                                "address3" => $row2['address3'] ?? '',
+                                "address4" => $row2['address4'] ?? '',
                             );
                         }
                     }
