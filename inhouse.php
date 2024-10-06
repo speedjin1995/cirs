@@ -2418,7 +2418,7 @@ function deactivate(id) {
 }
 
 function print(id) {
-  $.post('php/print.php', {userID: id, file: 'weight'}, function(data){
+  $.post('php/print_inhouse.php', {id: id}, function(data){
     var obj = JSON.parse(data);
 
     if(obj.status === 'success'){
