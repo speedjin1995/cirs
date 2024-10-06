@@ -57,7 +57,7 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "SELECT * FROM inhouse_validations WHERE status = 'Cancelled'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
+$empQuery = "SELECT a.*, b.unit FROM inhouse_validations a LEFT JOIN standard b ON a.capacity = b.capacity WHERE status = 'Cancelled'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;
@@ -82,6 +82,16 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     $address4 = $branchRow['address4'];
     $pic = $branchRow['pic'];
     $pic_phone = $branchRow['pic_contact'];
+  }
+
+  #added checking in the event where standard value table not setup
+  if(empty($row['unit'])){
+    $capacityId = $row['capacity'];
+    $capacityQuery = "SELECT * FROM capacity WHERE id = $capacityId";
+    $capacityDetail = mysqli_query($db, $capacityQuery);
+    $capacityRow = mysqli_fetch_assoc($capacityDetail);
+
+    $row['unit'] = $capacityRow['units'];
   }
 
   $data[] = array( 
@@ -109,6 +119,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "expiredDate"=>$row['expired_date'] ?? '',
     "autoCertNo"=>$row['auto_cert_no'] ?? '',
     "validation_date"=>$row['validation_date'] ?? '',
+    "units"=> $row['unit'] != null ? searchUnitNameById($row['unit'], $db) : '',
     "status"=>$row['status'] ?? '',
     "tests"=>json_decode($row['tests'], true) ?? '',
     "updated_datetime"=>$row['update_datetime'] ?? ''

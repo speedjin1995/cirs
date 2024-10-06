@@ -35,6 +35,9 @@ if($_POST['toDate'] != null && $_POST['toDate'] != ''){
 // 	$searchQuery .= " and validate_by = '".$_POST['validator']."'";
 // }
 
+// if($_POST['autoFormNo'] != null && $_POST['autoFormNo'] != '' && $_POST['autoFormNo'] != '-'){
+// 	$searchQuery .= " and auto_form_no = '".$_POST['autoFormNo']."'";
+// }
 
 // if($searchValue != ''){
 //   $searchQuery = " and (purchase_no like '%".$searchValue."%' OR
@@ -44,23 +47,22 @@ if($_POST['toDate'] != null && $_POST['toDate'] != ''){
 // }
 
 ## Total number of records without filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM inhouse_validations");
+$sel = mysqli_query($db,"select count(*) as allcount FROM inhouse_validations WHERE status = 'Complete'");
 $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM inhouse_validations WHERE status = 'Pending'".$searchQuery);
+$sel = mysqli_query($db,"select count(*) as allcount FROM inhouse_validations WHERE status = 'Complete'".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$validationQuery = "SELECT a.*, b.unit FROM inhouse_validations a LEFT JOIN standard b ON a.capacity = b.capacity WHERE status = 'Pending'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
-
-$validationRecords = mysqli_query($db, $validationQuery);
+$empQuery = "SELECT a.*, b.unit FROM inhouse_validations a LEFT JOIN standard b ON a.capacity = b.capacity WHERE status = 'Complete'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
+$empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;
 
-while($row = mysqli_fetch_assoc($validationRecords)) {
+while($row = mysqli_fetch_assoc($empRecords)) {
   $branch = $row['branch'];
   $branchQuery = "SELECT * FROM branches WHERE id = $branch";
   $branchDetail = mysqli_query($db, $branchQuery);
@@ -116,8 +118,8 @@ while($row = mysqli_fetch_assoc($validationRecords)) {
     "lastCalibrationDate"=>$row['last_calibration_date'] ?? '',
     "expiredDate"=>$row['expired_date'] ?? '',
     "autoCertNo"=>$row['auto_cert_no'] ?? '',
-    "validation_date"=>$row['validation_date'] ?? '',
     "units"=> $row['unit'] != null ? searchUnitNameById($row['unit'], $db) : '',
+    "validation_date"=>$row['validation_date'] ?? '',
     "status"=>$row['status'] ?? '',
     "tests"=>json_decode($row['tests'], true) ?? '',
     "updated_datetime"=>$row['update_datetime'] ?? ''

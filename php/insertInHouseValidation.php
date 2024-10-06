@@ -154,10 +154,10 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['autoFormNo'], $_POST['v
 					for($i=0; $i<count($no); $i++){
 						$loadTestings[] = array(
 							"no" => $no[$i],
-							"standardValue" => $standardValue[$i],
-							"calibrationReceived" => $calibrationReceived[$i],
-							"variance" => $variance[$i],
-							"afterAdjustReading" => $afterAdjustReading[$i],
+							"standardValue" => $standardValue[$i] != '' ? $standardValue[$i] : '0.0',
+							"calibrationReceived" => $calibrationReceived[$i] != '' ? $calibrationReceived[$i] : '0.0',
+							"variance" => $variance[$i] != '' ? $variance[$i] : '0.0',
+							"afterAdjustReading" => $afterAdjustReading[$i] != '' ? $afterAdjustReading[$i] : '0.0',
 						);
 					}
 				}
@@ -207,10 +207,10 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['autoFormNo'], $_POST['v
 					for($i=0; $i<count($no); $i++){
 						$loadTestings[] = array(
 							"no" => $no[$i],
-							"standardValue" => $standardValue[$i],
-							"calibrationReceived" => $calibrationReceived[$i],
-							"variance" => $variance[$i],
-							"afterAdjustReading" => $afterAdjustReading[$i],
+							"standardValue" => $standardValue[$i] != '' ? $standardValue[$i] : '0.0',
+							"calibrationReceived" => $calibrationReceived[$i] != '' ? $calibrationReceived[$i] : '0.0',
+							"variance" => $variance[$i] != '' ? $variance[$i] : '0.0',
+							"afterAdjustReading" => $afterAdjustReading[$i] != '' ? $afterAdjustReading[$i] : '0.0',
 						);
 					}
 				}

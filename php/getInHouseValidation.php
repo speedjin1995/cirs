@@ -1,12 +1,13 @@
 <?php
 require_once "db_connect.php";
+require_once 'requires/lookup.php';
 
 session_start();
 
 if(isset($_POST['validationId'])){
 	$id = filter_input(INPUT_POST, 'validationId', FILTER_SANITIZE_STRING);
 
-    if ($update_stmt = $db->prepare("SELECT * FROM inhouse_validations WHERE id=?")) {
+    if ($update_stmt = $db->prepare("SELECT a.*, b.unit, b.variance, b.test_1, b.test_2, b.test_3, b.test_4, b.test_5, b.test_6, b.test_7, b.test_8, b.test_9, b.test_10  FROM inhouse_validations a LEFT JOIN standard b ON a.capacity = b.capacity WHERE a.id=?")) {
         $update_stmt->bind_param('s', $id);
         
         // Execute the prepared query.
@@ -21,7 +22,7 @@ if(isset($_POST['validationId'])){
             $result = $update_stmt->get_result();
             $message = array();
             
-            if ($row = $result->fetch_assoc()) {
+            if ($row = $result->fetch_assoc()) { 
                 $message['id'] = $row['id'];
                 $message['type'] = $row['type'];
                 $message['dealer'] = $row['dealer'];
@@ -45,6 +46,21 @@ if(isset($_POST['validationId'])){
                 $message['tests'] = ($row['tests'] != null) ? json_decode($row['tests'], true) : [];
                 $message['validation_date'] = $row['validation_date'];
                 $message['status'] = $row['status'];
+
+                //standard table
+                $message['capacityUnit'] = $row['unit'] != null ? searchUnitNameById($row['unit'], $db) : '';
+                $message['variance'] = $row['variance'] ?? '';
+                $message['test_1'] = $row['test_1'] ?? '';
+                $message['test_2'] = $row['test_2'] ?? '';
+                $message['test_3'] = $row['test_3'] ?? '';
+                $message['test_4'] = $row['test_4'] ?? '';
+                $message['test_5'] = $row['test_5'] ?? '';
+                $message['test_6'] = $row['test_6'] ?? '';
+                $message['test_7'] = $row['test_7'] ?? '';
+                $message['test_8'] = $row['test_8'] ?? '';
+                $message['test_9'] = $row['test_9'] ?? '';
+                $message['test_10'] = $row['test_10'] ?? '';
+
             }
             
             echo json_encode(

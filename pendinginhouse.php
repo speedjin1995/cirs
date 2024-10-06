@@ -176,9 +176,9 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
-                  <th>Cus.Code</th>
-                  <th>Company Name</th>
+                  <th width='1%'><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
+                  <th width='5%'>Cus. Code</th>
+                  <th width='10%'>Company Name</th>
                   <th>Machines / Instruments</th>
                   <th>Brand</th>
                   <th>Model</th>
@@ -816,7 +816,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
           <i class="fas fa-minus fa-2x"></i>
         </div>
         <div class="col-4">
-          <span class="form-control" style="background-color:lightgrey;">KG</span>
+          <span class="form-control" id="unitSymbolSV" style="background-color:lightgrey;"></span>
         </div>
       </div>
     </td>
@@ -829,7 +829,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
           <i class="fas fa-minus fa-2x"></i>
         </div>
         <div class="col-4">
-          <span class="form-control" style="background-color:lightgrey;">KG</span>
+          <span class="form-control" id="unitSymbolCR" style="background-color:lightgrey;"></span>
         </div>
       </div>
     </td>
@@ -842,7 +842,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
           <i class="fas fa-minus fa-2x"></i>
         </div>
         <div class="col-4">
-          <span class="form-control" style="background-color:lightgrey;">KG</span>
+          <span class="form-control" id="unitSymbolV" style="background-color:lightgrey;"></span>
         </div>
       </div>
     </td>
@@ -855,7 +855,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
           <i class="fas fa-minus fa-2x"></i>
         </div>
         <div class="col-4">
-          <span class="form-control" style="background-color:lightgrey;">KG</span>
+          <span class="form-control" id="unitSymbolAR" style="background-color:lightgrey;"></span>
         </div>
       </div>
     </td>
@@ -999,7 +999,7 @@ $(function () {
                     ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
           // Complete button if conditions are met
-          if (row.calibrations != '') {
+          if (row.tests != '') {
             buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
                       ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
           }
@@ -1067,6 +1067,7 @@ $(function () {
           if(obj.status === 'success'){
             $('#extendModal').modal('hide');
             toastr["success"](obj.message, "Success:");
+            // location.reload(); 
             $('#weightTable').DataTable().ajax.reload();
           }
           else if(obj.status === 'failed'){
@@ -1228,7 +1229,7 @@ $(function () {
                       ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
             // Complete button if conditions are met
-            if (row.calibrations != '') {
+            if (row.tests != '') {
               buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
                         ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
             }
@@ -1728,36 +1729,11 @@ $(function () {
     $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount);
     $("#loadTestingTable").find('#afterAdjustReading:last').attr('name', 'afterAdjustReading['+loadTestingCount+']').attr("id", "afterAdjustReading" + loadTestingCount);
 
+    $("#loadTestingTable").find('#unitSymbolSV:last').attr('name', 'unitSymbolSV['+loadTestingCount+']').attr("id", "unitSymbolSV" + loadTestingCount);
+    $("#loadTestingTable").find('#unitSymbolCR:last').attr('name', 'unitSymbolCR['+loadTestingCount+']').attr("id", "unitSymbolCR" + loadTestingCount);
+    $("#loadTestingTable").find('#unitSymbolV:last').attr('name', 'unitSymbolV['+loadTestingCount+']').attr("id", "unitSymbolV" + loadTestingCount);
+    $("#loadTestingTable").find('#unitSymbolAR:last').attr('name', 'unitSymbolAR['+loadTestingCount+']').attr("id", "unitSymbolAR" + loadTestingCount);
     loadTestingCount++;
-  });
-
-  // Event delegation: use 'select' instead of 'input' for dropdowns
-  $(document).on('change', 'input[id^="standardValue"]', function(){
-    // Retrieve the selected option's attributes
-    var standardValue = $(this).val();
-    var calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
-    var varianceCalculated = standardValue - calibrationReceived;
-
-    // Update the variance input value
-    if(calibrationReceived > 0){
-      $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated).css({'background-color': 'red', 'color': 'white'});
-    }else{
-      $(this).closest('.details').find('input[id^="variance"]').val('').css('background-color', 'lightgrey');
-    }
-  });
-
-  // Event delegation: use 'select' instead of 'input' for dropdowns
-  $(document).on('change', 'input[id^="calibrationReceived"]', function(){
-    var standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
-    var calibrationReceived = $(this).val();
-    var varianceCalculated = standardValue - calibrationReceived;
-
-    // Update the variance input value
-    if(calibrationReceived > 0){
-      $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated).css({'background-color': 'red', 'color': 'white'});
-    }else{
-      $(this).closest('.details').find('input[id^="variance"]').val('').css('background-color', 'lightgrey');
-    }
   });
 });
 
@@ -1797,7 +1773,7 @@ function format (row) {
   
   if (row.tests !== undefined && row.tests !== null && row.tests !== ''){
     if (row.tests[0].length > 0) {
-      var weightType = 'KG';
+      var weightType = row.units;
       returnString += '<h4 class="mb-3">Note - Standard Average Temperature: (20 + 1) ºC / Average Relative Humidity: (52 + 1) %RH</h4><table style="width: 100%;"><thead><tr><th width="15%">Number of Tests.</th><th width="20%">Setting Value Of Standard (' +  weightType + ')</th><th width="20%">As Received Under Calibration (' +  weightType + ')</th><th width="20%">Variance +/- 0.1kg (' +  weightType + ')</th><th width="20%">Reading After Adjustment. (' +  weightType + ')</th></tr></thead><tbody>'
       
       var tests = row.tests[0]; 
@@ -1901,6 +1877,79 @@ function newEntry(){
       $('#add-testing-cell').trigger('click');
   }
 
+  $('#extendModal').find('#capacity').change(function() {
+    var capacityId = $(this).val();
+    if (capacityId) {
+      $.post('php/getStandard.php', {userID: capacityId}, function(data){
+        var obj = JSON.parse(data);
+        
+        if(obj.status === 'success'){
+          var unit = obj.message.unit;
+          for (var i = 0; i < 10; i++) {
+            //Symbol setting
+            $("#loadTestingTable").find('#unitSymbolSV'+ i).text(unit);
+            $("#loadTestingTable").find('#unitSymbolCR'+ i).text(unit);
+            $("#loadTestingTable").find('#unitSymbolV'+ i).text(unit);
+            $("#loadTestingTable").find('#unitSymbolAR'+ i).text(unit);
+          }          
+          
+          //Standard of Value
+          $("#loadTestingTable").find('#standardValue0').val(obj.message.test_1);
+          $("#loadTestingTable").find('#standardValue1').val(obj.message.test_2);
+          $("#loadTestingTable").find('#standardValue2').val(obj.message.test_3);
+          $("#loadTestingTable").find('#standardValue3').val(obj.message.test_4);
+          $("#loadTestingTable").find('#standardValue4').val(obj.message.test_5);
+          $("#loadTestingTable").find('#standardValue5').val(obj.message.test_6);
+          $("#loadTestingTable").find('#standardValue6').val(obj.message.test_7);
+          $("#loadTestingTable").find('#standardValue7').val(obj.message.test_8);
+          $("#loadTestingTable").find('#standardValue8').val(obj.message.test_9);
+          $("#loadTestingTable").find('#standardValue9').val(obj.message.test_10);
+
+          // Event delegation: use 'select' instead of 'input' for dropdowns
+          $(document).on('change', 'input[id^="standardValue"]', function(){
+            let standardValue = $(this).val();
+            let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
+            let variance = obj.message.variance; 
+            let varianceCalculated = standardValue - calibrationReceived; 
+
+            // Update the variance input value
+            $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+            if (varianceCalculated > variance || varianceCalculated < -variance) {
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+            }else{
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+            }
+          });
+
+          // Event delegation: use 'select' instead of 'input' for dropdowns
+          $(document).on('change', 'input[id^="calibrationReceived"]', function(){
+            let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
+            let calibrationReceived = $(this).val();
+            let variance = obj.message.variance;
+            let varianceCalculated = standardValue - calibrationReceived; 
+
+            // Update the variance input value
+            $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+            if (varianceCalculated > variance || varianceCalculated < -variance) {
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+            }else{
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+            }
+          });
+
+        }
+        else if(obj.status === 'failed'){
+            toastr["error"](obj.message, "Failed:");
+        }
+        else{
+            toastr["error"]("Something wrong when activate", "Failed:");
+        }
+      });
+    }
+  });
+
   $('#extendModal').modal('show');
   
   $('#extendForm').validate({
@@ -1949,6 +1998,7 @@ function edit(id) {
   $('#spinnerLoading').show();
   $.post('php/getInHouseValidation.php', {validationId: id}, function(data){
     var obj = JSON.parse(data);
+    let variance = obj.message.variance; 
     if(obj.status === 'success'){
       if(obj.message.type == 'DIRECT'){
         $('#extendModal').find('#id').val(obj.message.id);
@@ -1981,10 +2031,11 @@ function edit(id) {
 
           for(var i = 0; i < obj.message.tests.length; i++){
             var tests = obj.message.tests[i];
-
             for(var j=0; j < tests.length; j++){
-              var item = tests[j]; console.log(item);
+              var item = tests[j];
               var $addContents = $("#loadTestingDetails").clone();
+              let varianceCalculated = item.variance; console.log(item.standardValue);
+
               $("#loadTestingTable").append($addContents.html());
 
               $("#loadTestingTable").find('.details:last').attr("id", "detail" + loadTestingCount);
@@ -1995,13 +2046,137 @@ function edit(id) {
               $("#loadTestingTable").find('#noText:last').attr('name', 'noText['+loadTestingCount+']').attr('id', 'noText' + loadTestingCount).text('Tester / Time: ' + item.no);
               $("#loadTestingTable").find('#standardValue:last').attr('name', 'standardValue['+loadTestingCount+']').attr("id", "standardValue" + loadTestingCount).css('background-color', 'yellow').val(item.standardValue);
               $("#loadTestingTable").find('#calibrationReceived:last').attr('name', 'calibrationReceived['+loadTestingCount+']').attr("id", "calibrationReceived" + loadTestingCount).val(item.calibrationReceived);
-              $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(item.variance);
               $("#loadTestingTable").find('#afterAdjustReading:last').attr('name', 'afterAdjustReading['+loadTestingCount+']').attr("id", "afterAdjustReading" + loadTestingCount).val(item.afterAdjustReading);
+
+              //Dynamically change unit from capacity
+              $("#loadTestingTable").find('#unitSymbolSV:last').attr('name', 'unitSymbolSV['+loadTestingCount+']').attr("id", "unitSymbolSV" + loadTestingCount).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolCR:last').attr('name', 'unitSymbolCR['+loadTestingCount+']').attr("id", "unitSymbolCR" + loadTestingCount).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolV:last').attr('name', 'unitSymbolV['+loadTestingCount+']').attr("id", "unitSymbolV" + loadTestingCount).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolAR:last').attr('name', 'unitSymbolAR['+loadTestingCount+']').attr("id", "unitSymbolAR" + loadTestingCount).text(obj.message.capacityUnit);
+
+              if (variance != ''){
+                if (varianceCalculated > variance || varianceCalculated < -variance) {
+                  $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'red', 'color': 'white'});
+                }else{
+                  $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'lightgrey', 'color': 'black'});
+                }
+              }else{
+                $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'lightgrey', 'color': 'black'});
+              }
 
               loadTestingCount++;
             }
           }
         }
+
+        var capacityExist = $('#extendModal').find('#capacity').val();
+
+        if(capacityExist != ''){
+          // Event delegation: use 'select' instead of 'input' for dropdowns
+          $(document).on('change', 'input[id^="standardValue"]', function(){
+            let standardValue = $(this).val();
+            let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
+            let variance = obj.message.variance; 
+            let varianceCalculated = standardValue - calibrationReceived; 
+
+            // Update the variance input value
+            $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+            if (varianceCalculated > variance || varianceCalculated < -variance) {
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+            }else{
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+            }
+          });
+
+          // Event delegation: use 'select' instead of 'input' for dropdowns
+          $(document).on('change', 'input[id^="calibrationReceived"]', function(){
+            let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
+            let calibrationReceived = $(this).val();
+            let varianceCalculated = standardValue - calibrationReceived; 
+
+            // Update the variance input value
+            $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+            if (varianceCalculated > variance || varianceCalculated < -variance) {
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+            }else{
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+            }
+          });
+        }
+
+        $('#extendModal').find('#capacity').change(function() {
+          var capacityId = $(this).val();
+          if (capacityId) {
+            $.post('php/getStandard.php', {userID: capacityId}, function(data){
+              var obj = JSON.parse(data);
+              
+              if(obj.status === 'success'){
+                var unit = obj.message.unit;
+                for (var i = 0; i < 10; i++) {
+                  //Symbol setting
+                  $("#loadTestingTable").find('#unitSymbolSV'+ i).text(unit);
+                  $("#loadTestingTable").find('#unitSymbolCR'+ i).text(unit);
+                  $("#loadTestingTable").find('#unitSymbolV'+ i).text(unit);
+                  $("#loadTestingTable").find('#unitSymbolAR'+ i).text(unit);
+                }          
+                
+                //Standard of Value
+                $("#loadTestingTable").find('#standardValue0').val(obj.message.test_1);
+                $("#loadTestingTable").find('#standardValue1').val(obj.message.test_2);
+                $("#loadTestingTable").find('#standardValue2').val(obj.message.test_3);
+                $("#loadTestingTable").find('#standardValue3').val(obj.message.test_4);
+                $("#loadTestingTable").find('#standardValue4').val(obj.message.test_5);
+                $("#loadTestingTable").find('#standardValue5').val(obj.message.test_6);
+                $("#loadTestingTable").find('#standardValue6').val(obj.message.test_7);
+                $("#loadTestingTable").find('#standardValue7').val(obj.message.test_8);
+                $("#loadTestingTable").find('#standardValue8').val(obj.message.test_9);
+                $("#loadTestingTable").find('#standardValue9').val(obj.message.test_10);
+
+                // Event delegation: use 'select' instead of 'input' for dropdowns
+                $(document).on('change', 'input[id^="standardValue"]', function(){
+                  let standardValue = $(this).val();
+                  let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
+                  let varianceCalculated = standardValue - calibrationReceived; 
+
+                  // Update the variance input value
+                  $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+                  if (varianceCalculated > variance || varianceCalculated < -variance) {
+                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+                  }else{
+                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+                  }
+                });
+
+                // Event delegation: use 'select' instead of 'input' for dropdowns
+                $(document).on('change', 'input[id^="calibrationReceived"]', function(){
+                  let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
+                  let calibrationReceived = $(this).val();
+                  let varianceCalculated = standardValue - calibrationReceived; 
+
+                  // Update the variance input value
+                  $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+                  if (varianceCalculated > variance || varianceCalculated < -variance) {
+                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+                  }else{
+                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+                  }
+                });
+
+              }
+              else if(obj.status === 'failed'){
+                  toastr["error"](obj.message, "Failed:");
+              }
+              else{
+                  toastr["error"]("Something wrong when activate", "Failed:");
+              }
+            });
+          }
+        });
+        
       }
       else{
         $('#extendModal').find('#id').val(obj.message.id);
@@ -2036,10 +2211,11 @@ function edit(id) {
 
           for(var i = 0; i < obj.message.tests.length; i++){
             var tests = obj.message.tests[i];
-
             for(var j=0; j < tests.length; j++){
-              var item = tests[j]; console.log(item);
+              var item = tests[j];
               var $addContents = $("#loadTestingDetails").clone();
+              let varianceCalculated = item.variance; 
+
               $("#loadTestingTable").append($addContents.html());
 
               $("#loadTestingTable").find('.details:last').attr("id", "detail" + loadTestingCount);
@@ -2050,13 +2226,136 @@ function edit(id) {
               $("#loadTestingTable").find('#noText:last').attr('name', 'noText['+loadTestingCount+']').attr('id', 'noText' + loadTestingCount).text('Tester / Time: ' + item.no);
               $("#loadTestingTable").find('#standardValue:last').attr('name', 'standardValue['+loadTestingCount+']').attr("id", "standardValue" + loadTestingCount).css('background-color', 'yellow').val(item.standardValue);
               $("#loadTestingTable").find('#calibrationReceived:last').attr('name', 'calibrationReceived['+loadTestingCount+']').attr("id", "calibrationReceived" + loadTestingCount).val(item.calibrationReceived);
-              $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(item.variance);
               $("#loadTestingTable").find('#afterAdjustReading:last').attr('name', 'afterAdjustReading['+loadTestingCount+']').attr("id", "afterAdjustReading" + loadTestingCount).val(item.afterAdjustReading);
+
+              //Dynamically change unit from capacity
+              $("#loadTestingTable").find('#unitSymbolSV:last').attr('name', 'unitSymbolSV['+loadTestingCount+']').attr("id", "unitSymbolSV" + loadTestingCount).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolCR:last').attr('name', 'unitSymbolCR['+loadTestingCount+']').attr("id", "unitSymbolCR" + loadTestingCount).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolV:last').attr('name', 'unitSymbolV['+loadTestingCount+']').attr("id", "unitSymbolV" + loadTestingCount).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolAR:last').attr('name', 'unitSymbolAR['+loadTestingCount+']').attr("id", "unitSymbolAR" + loadTestingCount).text(obj.message.capacityUnit);
+
+              if (variance != ''){
+                if (varianceCalculated > variance || varianceCalculated < -variance) {
+                  $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'red', 'color': 'white'});
+                }else{
+                  $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'lightgrey', 'color': 'black'});
+                }
+              }else{
+                $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'lightgrey', 'color': 'black'});
+              }
 
               loadTestingCount++;
             }
           }
         }
+
+        var capacityExist = $('#extendModal').find('#capacity').val();
+
+        if(capacityExist != ''){
+          // Event delegation: use 'select' instead of 'input' for dropdowns
+          $(document).on('change', 'input[id^="standardValue"]', function(){
+            let standardValue = $(this).val();
+            let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
+            let variance = obj.message.variance; 
+            let varianceCalculated = standardValue - calibrationReceived; 
+
+            // Update the variance input value
+            $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+            if (varianceCalculated > variance || varianceCalculated < -variance) {
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+            }else{
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+            }
+          });
+
+          // Event delegation: use 'select' instead of 'input' for dropdowns
+          $(document).on('change', 'input[id^="calibrationReceived"]', function(){
+            let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
+            let calibrationReceived = $(this).val();
+            let varianceCalculated = standardValue - calibrationReceived; 
+
+            // Update the variance input value
+            $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+            if (varianceCalculated > variance || varianceCalculated < -variance) {
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+            }else{
+              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+            }
+          });
+        }
+
+        $('#extendModal').find('#capacity').change(function() {
+          var capacityId = $(this).val();
+          if (capacityId) {
+            $.post('php/getStandard.php', {userID: capacityId}, function(data){
+              var obj = JSON.parse(data);
+              
+              if(obj.status === 'success'){
+                var unit = obj.message.unit;
+                for (var i = 0; i < 10; i++) {
+                  //Symbol setting
+                  $("#loadTestingTable").find('#unitSymbolSV'+ i).text(unit);
+                  $("#loadTestingTable").find('#unitSymbolCR'+ i).text(unit);
+                  $("#loadTestingTable").find('#unitSymbolV'+ i).text(unit);
+                  $("#loadTestingTable").find('#unitSymbolAR'+ i).text(unit);
+                }          
+                
+                //Standard of Value
+                $("#loadTestingTable").find('#standardValue0').val(obj.message.test_1);
+                $("#loadTestingTable").find('#standardValue1').val(obj.message.test_2);
+                $("#loadTestingTable").find('#standardValue2').val(obj.message.test_3);
+                $("#loadTestingTable").find('#standardValue3').val(obj.message.test_4);
+                $("#loadTestingTable").find('#standardValue4').val(obj.message.test_5);
+                $("#loadTestingTable").find('#standardValue5').val(obj.message.test_6);
+                $("#loadTestingTable").find('#standardValue6').val(obj.message.test_7);
+                $("#loadTestingTable").find('#standardValue7').val(obj.message.test_8);
+                $("#loadTestingTable").find('#standardValue8').val(obj.message.test_9);
+                $("#loadTestingTable").find('#standardValue9').val(obj.message.test_10);
+
+                // Event delegation: use 'select' instead of 'input' for dropdowns
+                $(document).on('change', 'input[id^="standardValue"]', function(){
+                  let standardValue = $(this).val();
+                  let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
+                  let varianceCalculated = standardValue - calibrationReceived; 
+
+                  // Update the variance input value
+                  $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+                  if (varianceCalculated > variance || varianceCalculated < -variance) {
+                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+                  }else{
+                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+                  }
+                });
+
+                // Event delegation: use 'select' instead of 'input' for dropdowns
+                $(document).on('change', 'input[id^="calibrationReceived"]', function(){
+                  let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
+                  let calibrationReceived = $(this).val();
+                  let varianceCalculated = standardValue - calibrationReceived; 
+
+                  // Update the variance input value
+                  $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+
+                  if (varianceCalculated > variance || varianceCalculated < -variance) {
+                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+                  }else{
+                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+                  }
+                });
+
+              }
+              else if(obj.status === 'failed'){
+                  toastr["error"](obj.message, "Failed:");
+              }
+              else{
+                  toastr["error"]("Something wrong when activate", "Failed:");
+              }
+            });
+          }
+        });
       }
     
       $('#extendModal').modal('show');
