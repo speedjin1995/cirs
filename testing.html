@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DX Weighing | CIRS</title>
+
+    <link rel="icon" href="assets/logoSmall.png" type="image">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+    <!-- IonIcons -->
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- iCheck for checkboxes and radio inputs -->
+    
+    <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Bootstrap Color Picker -->
+    <link rel="stylesheet" href="plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <!-- Bootstrap4 Duallistbox -->
+    <link rel="stylesheet" href="plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
+    <link rel="stylesheet" href="dist/css/adminlte.min.css?v=3.2.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <style>
+        .dotted-line {
+            border: none;        /* Remove default border */
+            border-top: 1px dotted #000; /* Dotted line */
+            width: 100%;        /* Full width */
+            margin: 20px 0;    /* Spacing above and below */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4 mb-4">
+        <div class="header">
+            <img src="dist/img/inhouse-header.png" alt="DX Weighing Solution" width="100%">
+        </div>
+        <table class="mt-4 mb-4">
+            <tbody>
+                <tr style="visibility: hidden;">
+                    <th width="10%">column 1</th>
+                    <th width="25%">column 2</th>
+                    <th width="10%">column 3</th>
+                    <th width="10%">column 4</th>
+                </tr>
+                <tr>
+                    <td class="align-top"><b>To Company:</b></td>
+                    <td class="align-top"><b>CHIN WELL FASTENERS CO. SDN BHD.</b></td>
+                    <td class="align-top"><b>Certificate No:</b></td>
+                    <td class="align-top">DX-23010493-24</td>
+                </tr>
+                <tr>
+                    <td class="align-top"><b>Address:</b></td>
+                    <td class="align-top">
+                        <div class="row">
+                            <div class="col-12" id="address-line1">PRECINCT 8, JALAN FZ1-P8,</div>
+                            <div class="col-12" id="address-line2">PORT KLANG FREE ZONE/KS12,</div>
+                            <div class="col-12" id="address-line3">42920 PULAU INDAH,</div>
+                            <div class="col-12" id="address-line4">SELANGOR DARUL EHSAN</div>
+                            <div class="col-12" id="contact">Tel: 04-507 5858 (EXT:320) | Fax: 04-507 3322</div>
+                            <div class="col-12" id="attending">Attn: En Rosmadi</div>
+                        </div>
+                    </td>
+                    <td class="align-top align-right">
+                        <div class="row">
+                            <div class="col-12"><b>Date of Issue:</b></div>
+                            <div class="col-12"><b>Date of Calibration:</b></div>
+                            <div class="col-12"><b>Next Due Date:</b></div>
+                        </div>
+                    </td>
+                    <td class="align-top">
+                        <div class="row">
+                            <div class="col-12" id="doi">26 AUG 2024</div>
+                            <div class="col-12" id="doc">26 AUG 2024</div>
+                            <div class="col-12" id="ndd">25 AUG 2024</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <table class="table" style="table-layout: fixed;">
+            <tbody>
+                <tr>
+                    <td colspan="2" class="align-top" style="border: none;" width="50%">
+                        <div class="row">
+                            <div class="col-12" id="machines"><b>Instruments:</b> "BDI-2001B" Electronic Floor Scale. (PACKING)</div>
+                            <div class="col-12" id="manufacturer"><b>Manufacturer:</b> - </div>
+                            <div class="col-12" id="capacity"><b>Capacity:</b> 3 Ton X 0.5 Kg</div>
+                        </div>
+                    </td>
+                    <td colspan="2" class="align-top" style="border: none;" width="50%">
+                        <div class="row">
+                            <div class="col-12" id="machines"><b>Model No:</b> - </div>
+                            <div class="col-12" id="manufacturer"><b>Serial No:</b> B219219 </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="align-top" style="border-right: none;">
+                        <div class="row">
+                            <div class="col-12"><b>Instrument Condition When Received:</b> </div>
+                            <div class="col-12"><b>Instrument Condition When Returned:</b> </div>
+                        </div>
+                    </td>
+                    <td colspan="2" class="align-top" style="border-left: none;">
+                        <div class="row">
+                            <div class="col-12" id="machineCondReceived">Physically in good condition.</div>
+                            <div class="col-12" id="machineCondReturned">
+                                <ol class="pl-3">
+                                    <li>Calibrated and test servicable.</li>
+                                    <li>Calibration due date requested by customer.</li>
+                                    <li>The user should be awae that there are a number of factors that may cause this instrument to drift out of calibration before the specified calibration interval has expired.</li>
+
+                                </ol>
+                                
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="align-top" style="border-right: none;"><b>Average Temperature:</b> (20 + 1) C</td>
+                    <td colspan="2" class="align-top" style="border-left: none;"><b>Average Relative Humidity:</b> (52 + 1) %RH</td>
+                </tr>
+                <tr>
+                    <th style="padding: .5rem;">Setting Value Of Standard</th>
+                    <th style="padding: .5rem;">As Received Under Calibration</th>
+                    <th style="padding: .5rem;">Variance +/- (0.5kg)</th>
+                    <th style="padding: .5rem;">Reading After Adjustment</th>
+                </tr>
+                <tr>
+                    <td style="border: none;padding: .5rem;">2500 - kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 - kg</td>
+                    <td style="border: none;padding: .5rem;">0.0</td>
+                    <td style="border: none;padding: .5rem;">2500 - kg</td>
+                </tr>
+                <tr>
+                    <td style="border: none;padding: .5rem;">2000 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">2000 kg</td>
+                </tr>
+                <tr>
+                    <td style="border: none;padding: .5rem;">1500 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">1500 kg</td>
+                </tr>
+                <tr>
+                    <td style="border: none;padding: .5rem;">1000 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">1000 kg</td>
+                </tr>
+                <tr>
+                    <td style="border: none;padding: .5rem;">500 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">500 kg</td>
+                </tr>
+                <tr>
+                    <td style="border: none;padding: .5rem;">500 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">500 kg</td>
+                </tr>
+                <tr>
+                    <td style="border: none;padding: .5rem;">500 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">500 kg</td>
+                </tr>
+                <tr>
+                    <td style="border: none;padding: .5rem;">500 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">500 kg</td>
+                </tr>
+                <tr>
+                    <td style="border: none;padding: .5rem;">500 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">500 kg</td>
+                </tr>
+                <tr>
+                    <td style="border: none;padding: .5rem;">500 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">0.0 kg</td>
+                    <td style="border: none;padding: .5rem;">500 kg</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="align-top" style="border: none;">
+                        <div class="row">
+                            <div class="col-12" id="calibratedDt"><b>Date Calibrated:</b> 26 AUG 2024</div>
+                            <div class="col-12" id="calibratedBy"><b>Calibrated By:</b> Mr. Sara</div>
+                            <div class="col-12" id="standardUsedInstru"><b>Standard Used Instrument:</b> Standard.Weight</div>
+                        </div>
+                    </td>
+                    <td colspan="2" class="align-top" style="border: none;">
+                        <div class="row">
+                            <div class="col-12" id="nextDueDt"><b>Next Due Date:</b> 26 AUG 2024</div>
+                            <div class="col-12" id="calibrationStickerNo"><b>Calibration Sticker No:</b> 23010493</div>
+                            <div class="col-12" id="sirimTrace"><b>SIRIM Traceability:</b> NIM/M-9933-N-1</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <table class="mt-4 mb-4" width="100%">
+            <tbody>
+                <tr style="visibility: hidden;">
+                    <th width="30%">column 1</th>
+                    <th width="45%">column 2</th>
+                    <th width="25%">column 3</th>
+                </tr>
+                <tr>
+                    <td class="align-top"><b>Licensing of Membaiki & Menjual:</b></td>
+                    <td class="align-top">000167</td>
+                </tr>
+                <tr>
+                    <td class="align-top"><b>Weighing Licensing of KPDN:</b></td>
+                    <td class="align-top">00935</td>
+                </tr>
+                <tr>
+                    <td class="align-top"><b>Raj.Transaksi:</b></td>
+                    <td class="align-top">BL22022023111</td>
+                    <td>
+                        <div class="text-center" style="width: 100%;">
+                            <hr class="dotted-line">
+                        </div>
+                        <div class="text-center" style="width: 100%;">
+                            <span><b>Approved Signature</b></span>
+                        </div>
+                        <div class="text-center"style="width: 100%;">
+                            <span>Mr. Eeven Kho</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <span class="font-weight-bold" style="color: red;">The Uncertainties are for a confidence probability of approximately 95%</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <span class="mt-5">This is to confirm that we have perfomed the Service & Calibration for the above Weighing Equipment with our Standard. Weights that has been certified by METROLOGY CORPORATION MALAYSIAN SDN. BHD. & SIRIM SST Malaysia</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</html>
+
+<!-- jQuery -->
+<script src="plugins/jquery/jquery.min.js"></script>
+<script src="plugins/jquery-validation/jquery.validate.min.js"></script>
+<!-- Bootstrap -->
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+<!-- AdminLTE -->
+<script src="dist/js/adminlte.js"></script>
+<!-- OPTIONAL SCRIPTS -->
+<script src="plugins/select2/js/select2.full.min.js"></script>
+<script src="plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+<script src="plugins/moment/moment.min.js"></script>
+<script src="plugins/inputmask/jquery.inputmask.min.js"></script>
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="plugins/toastr/toastr.min.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
+<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<script src="plugins/chart.js/Chart.min.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
+<script src="plugins/sheets/xlsx.full.min.js"></script>
+
+<script>
+$(function () {
+
+});
+</script>
