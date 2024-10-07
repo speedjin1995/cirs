@@ -182,6 +182,8 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                   <th>Certificate No.</th>
                   <th>Description Instruments for Weighing and Measuring</th>
                   <th>Capacity</th>
+                  <th>Created Date</th>
+                  <th>Updated Date</th>
                   <th>Status</th>
                   <th></th>
                   <th></th>
@@ -281,7 +283,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 </div>
                 <div class="col-3">
                   <div class="form-group">
-                    <label>Auto Form No. * </label>
+                    <label>Certificate Number * </label>
                     <input type="text" class="form-control" id="autoFormNo" name="autoFormNo" required>
                   </div>
                 </div>
@@ -377,8 +379,8 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     <label>Manufacturing *</label>
                     <select class="form-control select2" style="width: 100%;" id="manufacturing" name="manufacturing" required>
                       <option selected="selected"></option>
-                      <option value="Local OEM">Local OEM</option>
-                      <option value="Overseas">Overseas</option>
+                      <option value="LOCAL">LOCAL</option>
+                      <option value="OVERSEAS">OVERSEAS</option>
                     </select>
                   </div>
                 </div>
@@ -428,8 +430,8 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 </div>
                 <div class="col-3">
                   <div class="form-group">
-                    <label>Validation Date * </label>
-                    <input class="form-control" type="text" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate" required>
+                    <label>Validation Date </label>
+                    <input class="form-control" type="text" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate">
                   </div>
                 </div>
                 <!-- <div class="col-4" style="display:none;">
@@ -897,6 +899,8 @@ $(function () {
       { data: 'machines' },
       { data: 'unit_serial_no' },
       { data: 'capacity' },
+      { data: 'created_datetime' },
+      { data: 'updated_datetime' },
       { data: 'status' },
       { 
         data: 'id',
@@ -1784,10 +1788,15 @@ function format (row) {
       var calibrations = row.calibrations[0];
       for (var i = 0; i < calibrations.length; i++) {
         var item = calibrations[i];
-        returnString += '<tr><td>' + item.no + '</td><td>' + item.lastCalibrationDate + '<td>' + item.expiredCalibrationDate + '</td><td><a href="' + item.calibrationFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></td></tr>';
+        returnString += '<tr><td>' + item.no + '</td><td>' + item.lastCalibrationDate + '<td>' + item.expiredCalibrationDate + '</td><td>';
+
+        console.log(item.calibrationFilePath);
+        if (item.calibrationFilePath) {
+          returnString += '<a href="' + item.calibrationFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>';
+        }
       }
 
-      returnString += '</tbody></table>';
+      returnString += '</td></tr></tbody></table>';
     }
   }
 
@@ -1982,8 +1991,10 @@ function edit(id) {
               $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount).val(item.expiredCalibrationDate);
 
               $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment['+loadCalibrationCount+']').attr("id", "uploadAttachment" + loadCalibrationCount).removeAttr('required');
-              $("#loadCalibrationTable").find('#viewCalibrationPdf:last').attr('name', 'viewCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewCalibrationPdf" + loadCalibrationCount).attr('href', item.calibrationFilePath).show();
-              $("#loadCalibrationTable").find('#calibrationFilePath:last').attr('name', 'calibrationFilePath['+loadCalibrationCount+']').attr("id", "calibrationFilePath" + loadCalibrationCount).val(item.calibrationFilePath);
+              if(item.calibrationFilePath){
+                $("#loadCalibrationTable").find('#viewCalibrationPdf:last').attr('name', 'viewCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewCalibrationPdf" + loadCalibrationCount).attr('href', item.calibrationFilePath).show();
+                $("#loadCalibrationTable").find('#calibrationFilePath:last').attr('name', 'calibrationFilePath['+loadCalibrationCount+']').attr("id", "calibrationFilePath" + loadCalibrationCount).val(item.calibrationFilePath);
+              }
 
               loadCalibrationCount++;
             }
@@ -2033,9 +2044,12 @@ function edit(id) {
               $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount).val(item.expiredCalibrationDate);
 
               $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment['+loadCalibrationCount+']').attr("id", "uploadAttachment" + loadCalibrationCount).removeAttr('required');
-              $("#loadCalibrationTable").find('#viewCalibrationPdf:last').attr('name', 'viewCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewCalibrationPdf" + loadCalibrationCount).attr('href', item.calibrationFilePath).show();
-              $("#loadCalibrationTable").find('#calibrationFilePath:last').attr('name', 'calibrationFilePath['+loadCalibrationCount+']').attr("id", "calibrationFilePath" + loadCalibrationCount).val(item.calibrationFilePath);
 
+              if(item.calibrationFilePath){
+                $("#loadCalibrationTable").find('#viewCalibrationPdf:last').attr('name', 'viewCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewCalibrationPdf" + loadCalibrationCount).attr('href', item.calibrationFilePath).show();
+                $("#loadCalibrationTable").find('#calibrationFilePath:last').attr('name', 'calibrationFilePath['+loadCalibrationCount+']').attr("id", "calibrationFilePath" + loadCalibrationCount).val(item.calibrationFilePath);
+              }
+             
               loadCalibrationCount++;
             }
           }
