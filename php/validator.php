@@ -8,12 +8,13 @@ if(!isset($_SESSION['userID'])){
     echo 'window.location.href = "../login.html";</script>';
 }
 
-if(isset($_POST['machineTypes'])){
+if(isset($_POST['machineTypes'], $_POST['validatorType'])){
     $machineTypes = filter_input(INPUT_POST, 'machineTypes', FILTER_SANITIZE_STRING);
+    $type = filter_input(INPUT_POST, 'validatorType', FILTER_SANITIZE_STRING);
 
     if($_POST['id'] != null && $_POST['id'] != ''){
-        if ($update_stmt = $db->prepare("UPDATE validators SET validator=? WHERE id=?")) {
-            $update_stmt->bind_param('ss', $machineTypes, $_POST['id']);
+        if ($update_stmt = $db->prepare("UPDATE validators SET validator=?, type=? WHERE id=?")) {
+            $update_stmt->bind_param('sss', $machineTypes, $type, $_POST['id']);
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
@@ -38,8 +39,8 @@ if(isset($_POST['machineTypes'])){
         }
     }
     else{
-        if ($insert_stmt = $db->prepare("INSERT INTO validators (validator) VALUES (?)")) {
-            $insert_stmt->bind_param('s', $machineTypes);
+        if ($insert_stmt = $db->prepare("INSERT INTO validators (validator, type) VALUES (?, ?)")) {
+            $insert_stmt->bind_param('ss', $machineTypes, $type);
             
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {

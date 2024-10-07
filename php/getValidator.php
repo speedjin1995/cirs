@@ -24,6 +24,7 @@ if(isset($_POST['userID'])){
             while ($row = $result->fetch_assoc()) {
                 $message['id'] = $row['id'];
                 $message['validator'] = $row['validator'];
+                $message['type'] = $row['type'];
             }
             
             echo json_encode(
