@@ -182,6 +182,8 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                   <th>Certificate No.</th>
                   <th>Description Instruments for Weighing and Measuring</th>
                   <th>Capacity</th>
+                  <th>Created Date</th>
+                  <th>Updated Date</th>
                   <th>Status</th>
                   <th></th>
                   <th></th>
@@ -959,6 +961,8 @@ $(function () {
       { data: 'machines' },
       { data: 'unit_serial_no' },
       { data: 'capacity' },
+      { data: 'created_datetime' },
+      { data: 'updated_datetime' },
       { data: 'status' },
       { 
         data: 'id',
@@ -1194,6 +1198,8 @@ $(function () {
         { data: 'machines' },
         { data: 'unit_serial_no' },
         { data: 'capacity' },
+        { data: 'created_datetime' },
+        { data: 'updated_datetime' },
         { data: 'status' },
         { 
           data: 'id',
@@ -1808,10 +1814,14 @@ function format (row) {
       var calibrations = row.calibrations[0];
       for (var i = 0; i < calibrations.length; i++) {
         var item = calibrations[i];
-        returnString += '<tr><td>' + item.no + '</td><td>' + item.lastCalibrationDate + '<td>' + item.expiredCalibrationDate + '</td><td><a href="' + item.calibrationFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></td></tr>';
+        returnString += '<tr><td>' + item.no + '</td><td>' + item.lastCalibrationDate + '<td>' + item.expiredCalibrationDate + '</td><td>';
+
+        if (item.calibrationFilePath) {
+          returnString += '<a href="' + item.calibrationFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>';
+        }
       }
 
-      returnString += '</tbody></table>';
+      returnString += '</td></tr></tbody></table>';
     }
   }
 

@@ -34,7 +34,7 @@ else{
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE deleted = '0'");
-  $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0'");
+  $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' and type = 'OTHER'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
   $cancelledReasons = $db->query("SELECT * FROM reasons WHERE deleted = '0'");
@@ -284,7 +284,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <div class="col-3">
                   <div class="form-group">
                     <label>Certificate Number * </label>
-                    <input type="text" class="form-control" id="autoFormNo" name="autoFormNo" required>
+                    <input type="text" class="form-control" id="autoFormNo" name="autoFormNo" placeholder="Certificate Number" required>
                   </div>
                 </div>
                 <div class="col-12" id="custbranch">
@@ -400,9 +400,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     <label>Model *</label>
                     <select class="form-control select2" style="width: 100%;" id="model" name="model" required>
                       <option selected="selected"></option>
-                      <?php while($rowM=mysqli_fetch_assoc($models)){ ?>
-                        <option value="<?=$rowM['id'] ?>"><?=$rowM['model'] ?></option>
-                      <?php } ?>
+                      
                     </select>
                   </div>
                 </div>
@@ -1167,6 +1165,8 @@ $(function () {
         { data: 'machines' },
         { data: 'unit_serial_no' },
         { data: 'capacity' },
+        { data: 'created_datetime' },
+        { data: 'updated_datetime' },
         { data: 'status' },
         { 
           data: 'id',
@@ -1291,6 +1291,32 @@ $(function () {
     }
   });
 
+  $('#extendModal').find('#brand').on('change', function(){
+    var brandId = $(this).find(":selected").val();
+
+    $.post('php/getModelFromBrand.php', {id: brandId}, function (data){
+      var obj = JSON.parse(data);
+
+      if(obj.status === 'success'){
+        $('#model').html('');
+        $('#model').append('<option selected="selected">-</option>');
+
+        for(var i=0; i<obj.message.length; i++){
+          var modelInfo = obj.message[i];
+          $('#model').append('<option value="'+modelInfo.id+'">'+modelInfo.model+'</option>')
+        }
+
+        $('#extendModal').trigger('modelsLoaded');
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when pull data", "Failed:");
+      }
+    });
+  });
+
   $('#extendModal').find('#dealer').on('change', function(){
     if($('#extendModal').find('#type').val() != 'DIRECT'){
       var id = $(this).find(":selected").val();
@@ -1307,21 +1333,6 @@ $(function () {
             var branchInfo = obj.message.branches[i];
             $('#reseller_branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.branch_address1+' '+branchInfo.branch_address2+' '+branchInfo.branch_address3+' '+branchInfo.branch_address4+'</option>')
           }
-          /*$('#extendModal').modal('show');
-
-          $('#extendForm').validate({
-            errorElement: 'span',
-            errorPlacement: function (error, element) {
-              error.addClass('invalid-feedback');
-              element.closest('.form-group').append(error);
-            },
-            highlight: function (element, errorClass, validClass) {
-              $(element).addClass('is-invalid');
-            },
-            unhighlight: function (element, errorClass, validClass) {
-              $(element).removeClass('is-invalid');
-            }
-          });*/
         }
         else if(obj.status === 'failed'){
           toastr["error"](obj.message, "Failed:");
@@ -1465,9 +1476,59 @@ $(function () {
     });
   });
 
+  // $('#extendModal').find('#dealer').on('change', function(){
+  //   if($('#extendModal').find('#type').val() != 'DIRECT'){
+  //     var id = $(this).find(":selected").val();
+
+  //     $.post('php/getDealer.php', {userID: id}, function(data){
+  //       var obj = JSON.parse(data);
+        
+  //       if(obj.status === 'success'){
+          
+  //         $('#reseller_branch').html('');
+  //         $('#reseller_branch').append('<option selected="selected">-</option>');
+
+  //         for(var i=0; i<obj.message.branches.length; i++){
+  //           var branchInfo = obj.message.branches[i];
+  //           $('#reseller_branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.branch_address1+' '+branchInfo.branch_address2+' '+branchInfo.branch_address3+' '+branchInfo.branch_address4+'</option>')
+  //         }
+  //       }
+  //       else if(obj.status === 'failed'){
+  //         toastr["error"](obj.message, "Failed:");
+  //       }
+  //       else{
+  //         toastr["error"]("Something wrong when pull data", "Failed:");
+  //       }
+  //     });
+
+  //     $.post('php/listCustomers.php', {hypermarket: id}, function(data){
+  //       var obj = JSON.parse(data);
+        
+  //       if(obj.status === 'success'){
+  //         $('#company').html('');
+  //         $('#company').append('<option selected="selected">-</option>');
+  //         $('#extendModal').find('#customerType').val('EXISTING');
+  //         $('#extendModal').find('#company').show();
+  //         $('#extendModal').find('#company').parents('.form-group').find('.select2-container').show();
+  //         $('#extendModal').find('#companyText').hide();
+  //         $('#extendModal').find('#companyText').val('');
+  //         for(var i=0; i<obj.message.length; i++){
+  //           $('#company').append('<option value="'+obj.message[i].id+'">'+obj.message[i].name+'</option>')
+  //         }
+  //       }
+  //       else if(obj.status === 'failed'){
+  //         toastr["error"](obj.message, "Failed:");
+  //       }
+  //       else{
+  //         toastr["error"]("Something wrong when pull data", "Failed:");
+  //       }
+  //       $('#spinnerLoading').hide();
+  //     });
+  //   }
+  // });
+
   $('#extendModal').find('#company').on('change', function(){
-    //$('#spinnerLoading').show();
-    var id = $(this).find(":selected").val();
+    var id = $(this).find(":selected").val(); 
 
     $.post('php/getCustomer.php', {userID: id}, function(data){
       var obj = JSON.parse(data);
@@ -1483,22 +1544,6 @@ $(function () {
           var branchInfo = obj.message.pricing[i];
           $('#branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.branch_address1+' '+branchInfo.branch_address2+' '+branchInfo.branch_address3+' '+branchInfo.branch_address4+'</option>')
         }
-
-        /*$('#extendModal').modal('show');
-
-        $('#extendForm').validate({
-          errorElement: 'span',
-          errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-          },
-          highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-          },
-          unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-          }
-        });*/
       }
       else if(obj.status === 'failed'){
         toastr["error"](obj.message, "Failed:");
@@ -1805,7 +1850,6 @@ function format (row) {
         var item = calibrations[i];
         returnString += '<tr><td>' + item.no + '</td><td>' + item.lastCalibrationDate + '<td>' + item.expiredCalibrationDate + '</td><td>';
 
-        console.log(item.calibrationFilePath);
         if (item.calibrationFilePath) {
           returnString += '<a href="' + item.calibrationFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>';
         }
@@ -1872,6 +1916,7 @@ function newEntry(){
   $('#extendModal').find('#type').val("DIRECT").trigger('change');
   $('#extendModal').find('#dealer').val('').trigger('change');
   $('#extendModal').find('#reseller_branch').val('').trigger('change');
+  $('#extendModal').find('#branch').val('').trigger('change');
   // $('#isResseller').hide();
   // $('#isResseller2').hide();
   // $('#isResseller3').hide();
@@ -1902,8 +1947,8 @@ function newEntry(){
   $('#extendModal').find('#dueDate').val('');
   $('#extendModal').find('#quotation').val("");
   $('#extendModal').find('#quotationDate').val('');
-  $('#extendModal').find('#includeCert').val("NO").trigger('change');
-  $('#extendModal').find('#validationDate').val(formattedDate);
+  $('#extendModal').find('#manufacturing').val('').trigger('change');
+  $('#extendModal').find('#validationDate').val('');
 
   loadCalibrationCount = 0; 
   
@@ -1961,12 +2006,14 @@ function extraAction(id){
   });
 }
 
+
 function edit(id) {
   $('#spinnerLoading').show();
   $.post('php/getValidation.php', {validationId: id}, function(data){
-    var obj = JSON.parse(data);
+    var obj = JSON.parse(data); 
     if(obj.status === 'success'){
       if(obj.message.type == 'DIRECT'){
+        console.log(obj.message);
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#dealer').val('');
@@ -1982,7 +2029,9 @@ function edit(id) {
         $('#extendModal').find('#serial').val(obj.message.unit_serial_no);
         $('#extendModal').find('#manufacturing').val(obj.message.manufacturing).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
-        $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        $('#extendModal').on('modelsLoaded', function() {
+            $('#extendModal').find('#model').val(obj.message.model);
+        });
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#size').val(obj.message.size).trigger('change');
         $('#extendModal').find('#validationDate').val(obj.message.validation_date);
@@ -2036,9 +2085,12 @@ function edit(id) {
         $('#extendModal').find('#serial').val(obj.message.unit_serial_no);
         $('#extendModal').find('#manufacturing').val(obj.message.manufacturing).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
-        $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        $('#extendModal').on('modelsLoaded', function() {
+            $('#extendModal').find('#model').val(obj.message.model);
+        });
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#size').val(obj.message.size).trigger('change');
+        $('#extendModal').find('#validationDate').val(obj.message.validation_date);
 
         if(obj.message.calibrations != null && obj.message.calibrations.length > 0){
           $("#loadCalibrationTable").html('');
