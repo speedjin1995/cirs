@@ -247,12 +247,14 @@ $(function () {
         className: 'select-checkbox',
         orderable: false,
         render: function (data, type, row) {
-          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-          } 
-          else {
-            return ''; // Return an empty string or any other placeholder if the item is invoiced
-          }
+          return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+
+          // if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+          //   return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+          // } 
+          // else {
+          //   return ''; // Return an empty string or any other placeholder if the item is invoiced
+          // }
         }
       },
       { data: 'no' },
@@ -374,7 +376,7 @@ $(function () {
           if(obj.status === 'success'){
             $('#printDOModal').modal('hide');
             $('#weightTable').DataTable().ajax.reload();
-            var printWindow = window.open('', '', 'height=400,width=800');
+            var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
             printWindow.document.write(obj.message);
             printWindow.document.close();
             setTimeout(function(){
@@ -433,12 +435,14 @@ $(function () {
           className: 'select-checkbox',
           orderable: false,
           render: function (data, type, row) {
-            if (row.status == 'Active') { // Assuming 'isInvoiced' is a boolean field in your row data
-              return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-            } 
-            else {
-              return ''; // Return an empty string or any other placeholder if the item is invoiced
-            }
+            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+
+            // if (row.status == 'Active') { // Assuming 'isInvoiced' is a boolean field in your row data
+            //   return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+            // } 
+            // else {
+            //   return ''; // Return an empty string or any other placeholder if the item is invoiced
+            // }
           }
         },
         { data: 'no' },
@@ -474,7 +478,7 @@ $(function () {
       var obj = JSON.parse(data);
   
       if(obj.status === 'success'){
-        var printWindow = window.open('', '', 'height=400,width=800');
+        var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
         printWindow.document.write(obj.message);
         printWindow.document.close();
         setTimeout(function(){

@@ -44,6 +44,8 @@ if($_POST['status'] != null && $_POST['status'] != '' && $_POST['status'] != '-'
   }
 }
 
+$searchQuery .= " and status = 'COMPLETE'";
+
 if($searchValue != ''){
   $searchQuery = " and (purchase_no like '%".$searchValue."%' OR
   quotation_no like '%".$searchValue."%' OR
