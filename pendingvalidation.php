@@ -463,11 +463,20 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <div class="col-10">
                   <h4>Calibration Information</h4>
                 </div>
+              </div>
+              <div class="row">
+                <div class="col-10">
+                  <div class="col-4">
+                    <div class="form-group">
+                      <label>No. of Calibrations *</label>
+                      <input type="number" class="form-control" value='0' id="noOfCalibrationCell" name="noOfCalibrationCell" required>
+                    </div>
+                  </div>
+                </div>
                 <div class="col-2">
-                  <button style="margin-left:auto;margin-right: 25px;" type="button" class="btn btn-primary add-load-cell" id="add-calibration-cell">Add Calibration</button>
+                  <button type="button" class="btn btn-primary add-load-cell" id="add-calibration-cell">Add Calibration</button>
                 </div>
               </div>
-              
               <table style="width: 100%;">
                 <thead>
                   <tr>
@@ -1726,19 +1735,25 @@ $(function () {
   // });
 
   $(document).on('click', '#add-calibration-cell', function() {
-    var $addContents = $("#loadCalibrationDetails").clone();
-    $("#loadCalibrationTable").append($addContents.html());
+    var loadCalibrationNoValue = parseInt($('#noOfCalibrationCell').val());
+    console.log(loadCalibrationNoValue);
+    // Trigger the cloning and appending logic loadCellNoValue times
+    for (var i = 0; i < loadCalibrationNoValue; i++) {
+      var $addContents = $("#loadCalibrationDetails").clone();
+      $("#loadCalibrationTable").append($addContents.html());
 
-    $("#loadCalibrationTable").find('.details:last').attr("id", "detail" + loadCalibrationCount);
-    $("#loadCalibrationTable").find('.details:last').attr("data-index", loadCalibrationCount);
-    $("#loadCalibrationTable").find('#remove:last').attr("id", "remove" + loadCalibrationCount);
+      // Update the attributes based on the loadCalibrationCount
+      $("#loadCalibrationTable").find('.details:last').attr("id", "detail" + loadCalibrationCount);
+      $("#loadCalibrationTable").find('.details:last').attr("data-index", loadCalibrationCount);
+      $("#loadCalibrationTable").find('#remove:last').attr("id", "remove" + loadCalibrationCount);
 
-    $("#loadCalibrationTable").find('#no:last').attr('name', 'no['+loadCalibrationCount+']').attr("id", "no" + loadCalibrationCount).val((loadCalibrationCount + 1).toString());
-    $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate['+loadCalibrationCount+']').attr("id", "lastCalibrationDate" + loadCalibrationCount);
-    $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount);
-    $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment['+loadCalibrationCount+']').attr("id", "uploadAttachment" + loadCalibrationCount);
+      $("#loadCalibrationTable").find('#no:last').attr('name', 'no[' + loadCalibrationCount + ']').attr("id", "no" + loadCalibrationCount).val((loadCalibrationCount + 1).toString());
+      $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate[' + loadCalibrationCount + ']').attr("id", "lastCalibrationDate" + loadCalibrationCount);
+      $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate[' + loadCalibrationCount + ']').attr("id", "expiredCalibrationDate" + loadCalibrationCount);
+      $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment[' + loadCalibrationCount + ']').attr("id", "uploadAttachment" + loadCalibrationCount);
 
-    loadCalibrationCount++;
+      loadCalibrationCount++;
+    }
   });
 
   // Event delegation: use 'select' instead of 'input' for dropdowns
