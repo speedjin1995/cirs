@@ -799,6 +799,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
 <script>
 var loadCalibrationCount = $("#loadCalibrationTable").find(".details").length;
 var isModalOpen = false; // Flag to track modal visibility
+var customer = 0;
 
 $(function () {
   $('#customerNoHidden').hide();
@@ -1356,6 +1357,10 @@ $(function () {
           for(var i=0; i<obj.message.length; i++){
             $('#company').append('<option value="'+obj.message[i].id+'">'+obj.message[i].name+'</option>')
           }
+
+          if(customer != 0){
+            $('#extendModal').find('#company').val(customer).trigger('change');
+          }
         }
         else if(obj.status === 'failed'){
           toastr["error"](obj.message, "Failed:");
@@ -1475,57 +1480,6 @@ $(function () {
       //$('#spinnerLoading').hide();
     });
   });
-
-  // $('#extendModal').find('#dealer').on('change', function(){
-  //   if($('#extendModal').find('#type').val() != 'DIRECT'){
-  //     var id = $(this).find(":selected").val();
-
-  //     $.post('php/getDealer.php', {userID: id}, function(data){
-  //       var obj = JSON.parse(data);
-        
-  //       if(obj.status === 'success'){
-          
-  //         $('#reseller_branch').html('');
-  //         $('#reseller_branch').append('<option selected="selected">-</option>');
-
-  //         for(var i=0; i<obj.message.branches.length; i++){
-  //           var branchInfo = obj.message.branches[i];
-  //           $('#reseller_branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.branch_address1+' '+branchInfo.branch_address2+' '+branchInfo.branch_address3+' '+branchInfo.branch_address4+'</option>')
-  //         }
-  //       }
-  //       else if(obj.status === 'failed'){
-  //         toastr["error"](obj.message, "Failed:");
-  //       }
-  //       else{
-  //         toastr["error"]("Something wrong when pull data", "Failed:");
-  //       }
-  //     });
-
-  //     $.post('php/listCustomers.php', {hypermarket: id}, function(data){
-  //       var obj = JSON.parse(data);
-        
-  //       if(obj.status === 'success'){
-  //         $('#company').html('');
-  //         $('#company').append('<option selected="selected">-</option>');
-  //         $('#extendModal').find('#customerType').val('EXISTING');
-  //         $('#extendModal').find('#company').show();
-  //         $('#extendModal').find('#company').parents('.form-group').find('.select2-container').show();
-  //         $('#extendModal').find('#companyText').hide();
-  //         $('#extendModal').find('#companyText').val('');
-  //         for(var i=0; i<obj.message.length; i++){
-  //           $('#company').append('<option value="'+obj.message[i].id+'">'+obj.message[i].name+'</option>')
-  //         }
-  //       }
-  //       else if(obj.status === 'failed'){
-  //         toastr["error"](obj.message, "Failed:");
-  //       }
-  //       else{
-  //         toastr["error"]("Something wrong when pull data", "Failed:");
-  //       }
-  //       $('#spinnerLoading').hide();
-  //     });
-  //   }
-  // });
 
   $('#extendModal').find('#company').on('change', function(){
     var id = $(this).find(":selected").val(); 
@@ -1654,36 +1608,6 @@ $(function () {
     }
   });
 
-  // $('#extendModal').find('#jenisAlat').on('change', function(){
-  //   if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
-  //     $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
-  //       var obj = JSON.parse(data);
-        
-  //       if(obj.status === 'success'){
-  //         $('#product').val(obj.message.id);
-  //         $('#unitPrice').val(obj.message.price);
-  //         $('#unitPrice').trigger('change');
-  //       }
-  //       else if(obj.status === 'failed'){
-  //         toastr["error"](obj.message, "Failed:");
-  //       }
-  //       else{
-  //         toastr["error"]("Something wrong when pull data", "Failed:");
-  //       }
-  //       $('#spinnerLoading').hide();
-  //     });
-  //   }
-
-  //   if(($('#validator').val() == '10' || $('#validator').val() == '9') && $(this).val() == '1'){
-  //     $('#addtionalSection').html($('#atkDetails').html());
-  //     loadCellCount = 0;
-  //     $("#loadCellTable").html('');
-  //   }
-  //   else{
-  //     $('#addtionalSection').html('');
-  //   }
-  // });
-
   $('#extendModal').find('#capacity').on('change', function(){
     if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
       $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
@@ -1705,36 +1629,6 @@ $(function () {
     }
   });
 
-  // $('#extendModal').find('#validator').on('change', function(){
-  //   if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
-  //     $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
-  //       var obj = JSON.parse(data);
-        
-  //       if(obj.status === 'success'){
-  //         $('#product').val(obj.message.id);
-  //         $('#unitPrice').val(obj.message.price);
-  //         $('#unitPrice').trigger('change');
-  //       }
-  //       else if(obj.status === 'failed'){
-  //         toastr["error"](obj.message, "Failed:");
-  //       }
-  //       else{
-  //         toastr["error"]("Something wrong when pull data", "Failed:");
-  //       }
-  //       $('#spinnerLoading').hide();
-  //     });
-  //   }
-
-  //   if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '1'){
-  //     $('#addtionalSection').html($('#atkDetails').html());
-  //     loadCellCount = 0;
-  //     $("#loadCellTable").html('');
-  //   }
-  //   else{
-  //     $('#addtionalSection').html('');
-  //   }
-  // });
-
   $('#cancelModal').find('#cancellationReason').on('change', function(){
     if($(this).val() == '0'){
       $('#otherRow').show();
@@ -1745,39 +1639,6 @@ $(function () {
       $('#otherReason').attr("required", false);
     }
   });
-
-  // $(".add-price").click(function(){
-  //   var $addContents = $("#pricingDetails").clone();
-  //   $("#pricingTable").append($addContents.html());
-
-  //   $("#pricingTable").find('.details:last').attr("id", "detail" + pricingCount);
-  //   $("#pricingTable").find('.details:last').attr("data-index", pricingCount);
-  //   //$("#pricingTable").find('#remove:last').attr("id", "remove" + pricingCount);
-
-  //   $("#pricingTable").find('#no:last').attr('name', 'no['+pricingCount+']').attr("id", "no" + pricingCount).val((pricingCount + 1).toString());
-  //   $("#pricingTable").find('#date:last').attr('name', 'date['+pricingCount+']').attr("id", "date" + pricingCount).val(formatDate2(today));
-  //   $("#pricingTable").find('#notes:last').attr('name', 'notes['+pricingCount+']').attr("id", "notes" + pricingCount);
-  //   $("#pricingTable").find('#followUpDate:last').attr('name', 'followUpDate['+pricingCount+']').attr("id", "followUpDate" + pricingCount).val(formatDate2(today));
-  //   $("#pricingTable").find('#picAttend:last').attr('name', 'picAttend['+pricingCount+']').attr("id", "picAttend" + pricingCount).val('<?=$user ?>');
-  //   $("#pricingTable").find('#status').attr('name', 'status['+pricingCount+']').attr("id", "status" + pricingCount).val('Pending');
-
-  //   var newDatePickerId = "datePicker5" + pricingCount;
-
-  //   // Find the newly added date input and set the new ID
-  //   var $newDateInputGroup = $("#pricingTable").find('#datePicker5:last');
-  //   $newDateInputGroup.attr("id", newDatePickerId);
-  //   $newDateInputGroup.find('input').attr("data-target", "#" + newDatePickerId);
-  //   $newDateInputGroup.find('.input-group-append').attr("data-target", "#" + newDatePickerId);
-
-  //   // Initialize the date picker on the new element
-  //   $newDateInputGroup.datetimepicker({
-  //     icons: { time: 'far fa-calendar' },
-  //     format: 'DD/MM/YYYY',
-  //     defaultDate: today
-  //   });
-
-  //   pricingCount++;
-  // });
 
   $(document).on('click', '#add-calibration-cell', function() {
     var loadCalibrationNoValue = parseInt($('#noOfCalibrationCell').val());
@@ -1950,6 +1811,7 @@ function newEntry(){
   $('#extendModal').find('#manufacturing').val('').trigger('change');
   $('#extendModal').find('#validationDate').val('');
 
+  customer = 0;
   loadCalibrationCount = 0; 
   
   $('#loadCalibrationTable').html('');
@@ -2005,7 +1867,6 @@ function extraAction(id){
     }
   });
 }
-
 
 function edit(id) {
   $('#spinnerLoading').show();
@@ -2073,14 +1934,15 @@ function edit(id) {
         $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
         setTimeout(function(){
           $('#extendModal').find('#reseller_branch').val(obj.message.dealer_branch).trigger('change');
-        }, 500);
+          $('#extendModal').find('#company').val(obj.message.customer).trigger('change');
+
+          setTimeout(function(){
+            $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
+          }, 1000);
+        }, 1000);
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
-        $('#extendModal').find('#company').val(obj.message.customer).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#autoFormNo').val(obj.message.auto_form_no);
-        setTimeout(function(){
-          $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
-        }, 1000);
         $('#extendModal').find('#machineType').val(obj.message.machines).trigger('change');
         $('#extendModal').find('#serial').val(obj.message.unit_serial_no);
         $('#extendModal').find('#manufacturing').val(obj.message.manufacturing).trigger('change');
