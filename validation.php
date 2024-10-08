@@ -1956,6 +1956,8 @@ function newEntry(){
   $('#extendModal').find('#cashBill').val("");
   $('#extendModal').find('#invoice').val('');
   $('#extendModal').find('#validationDate').val(formattedDate);
+  loadCalibrationCount = 0; 
+  $('#loadCalibrationTable').html('');
 
   // $('#pricingTable').html('');
   // pricingCount = 0;
@@ -1966,7 +1968,6 @@ function newEntry(){
   // $('#extendModal').find('#subAmount').val('');
   // $('#cerId').hide();
   $('#extendModal').modal('show');
-  isModalOpen = true; // Set flag to true when modal is shown
   
   $('#extendForm').validate({
     errorElement: 'span',
@@ -2088,10 +2089,10 @@ function edit(id) {
   });
 
   // Hide the spinner when the modal is closed
-  $('#extendModal').on('hidden.bs.modal', function() {
-    $('#spinnerLoading').hide(); 
-    location.reload();
-  });
+  // $('#extendModal').on('hidden.bs.modal', function() {
+  //   $('#spinnerLoading').hide(); 
+  //   location.reload();
+  // });
 }
 
 function complete(id) {

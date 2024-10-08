@@ -1905,6 +1905,8 @@ function newEntry(){
   $('#extendModal').find('#includeCert').val("NO").trigger('change');
   $('#extendModal').find('#validationDate').val(formattedDate);
 
+  loadCalibrationCount = 0; 
+  
   $('#loadCalibrationTable').html('');
 
   // $('#pricingTable').html('');
