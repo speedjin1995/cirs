@@ -500,7 +500,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
             <div class="card-body">
               <div class="row mb-3">
                 <div class="col-10">
-                  <h4>Note - Standard Average Temperature:	(20 + 1)ºC / Average Relative Humidity:	(52 + 1)%RH</h4>
+                  <h4 id="calibrationHeader">Note - Standard Average Temperature:	() / Average Relative Humidity:	()</h4>
                 </div>
                 <div class="col-2">
                   <button style="margin-left:auto;margin-right: 25px;" type="button" class="btn btn-primary add-load-cell" id="add-testing-cell">Add Testing</button>
@@ -1794,8 +1794,21 @@ function format (row) {
   
   if (row.tests !== undefined && row.tests !== null && row.tests !== ''){
     if (row.tests[0].length > 0) {
-      var weightType = 'KG';
-      returnString += '<h4 class="mb-3">Note - Standard Average Temperature: (20 + 1) ºC / Average Relative Humidity: (52 + 1) %RH</h4><table style="width: 100%;"><thead><tr><th width="15%">Number of Tests.</th><th width="20%">Setting Value Of Standard (' +  weightType + ')</th><th width="20%">As Received Under Calibration (' +  weightType + ')</th><th width="20%">Variance +/- 0.1kg (' +  weightType + ')</th><th width="20%">Reading After Adjustment. (' +  weightType + ')</th></tr></thead><tbody>'
+      var weightType = row.units;
+
+      if(row.standard_avg_temp){
+        var standardAvgTemp = row.standard_avg_temp;
+      }else{
+        var standardAvgTemp = '';
+      }
+
+      if(row.relative_humidity){
+        var relHumid = row.relative_humidity;
+      }else{
+        var relHumid = '';
+      }
+
+      returnString += '<h4 class="mb-3">Note - Standard Average Temperature: (' + standardAvgTemp + ') / Average Relative Humidity: (' + relHumid + ')</h4><table style="width: 100%;"><thead><tr><th width="15%">Number of Tests.</th><th width="20%">Setting Value Of Standard (' +  weightType + ')</th><th width="20%">As Received Under Calibration (' +  weightType + ')</th><th width="20%">Variance +/- 0.1kg (' +  weightType + ')</th><th width="20%">Reading After Adjustment. (' +  weightType + ')</th></tr></thead><tbody>';
       
       var tests = row.tests[0]; 
       for (var i = 0; i < tests.length; i++) {
@@ -1947,6 +1960,9 @@ function edit(id) {
   $.post('php/getInHouseValidation.php', {validationId: id}, function(data){
     var obj = JSON.parse(data);
     let variance = obj.message.variance;
+    let varianceDecimalPart = variance.toString().split('.')[1];
+    let varianceDecimalPoint = varianceDecimalPart.length;
+
     if(obj.status === 'success'){
       if(obj.message.type == 'DIRECT'){
         $('#extendModal').find('#id').val(obj.message.id);
@@ -1976,6 +1992,9 @@ function edit(id) {
         if(obj.message.tests != null && obj.message.tests.length > 0){
           $("#loadTestingTable").html('');
           loadTestingCount = 0; 
+          var standardAvTemp = obj.message.standard_avg_temp;
+          var relativeHumidity = obj.message.relative_humidity;
+          $('#calibrationHeader').text('Note - Standard Average Temperature: ('+ standardAvTemp +') / Average Relative Humidity: ('+ relativeHumidity +')');
 
           for(var i = 0; i < obj.message.tests.length; i++){
             var tests = obj.message.tests[i];
@@ -2024,13 +2043,13 @@ function edit(id) {
           $(document).on('change', 'input[id^="standardValue"]', function(){
             let standardValue = $(this).val();
             let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
-            let variance = obj.message.variance; 
             let varianceCalculated = standardValue - calibrationReceived; 
+            let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
 
             // Update the variance input value
-            $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+            $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
 
-            if (varianceCalculated > variance || varianceCalculated < -variance) {
+            if (roundedVariance > variance || roundedVariance < -variance) {
               $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
             }else{
               $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
@@ -2042,11 +2061,12 @@ function edit(id) {
             let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
             let calibrationReceived = $(this).val();
             let varianceCalculated = standardValue - calibrationReceived; 
+            let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
 
             // Update the variance input value
-            $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+            $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
 
-            if (varianceCalculated > variance || varianceCalculated < -variance) {
+            if (roundedVariance > variance || roundedVariance < -variance) {
               $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
             }else{
               $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
@@ -2087,11 +2107,12 @@ function edit(id) {
                   let standardValue = $(this).val();
                   let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
                   let varianceCalculated = standardValue - calibrationReceived; 
+                  let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
 
                   // Update the variance input value
-                  $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+                  $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
 
-                  if (varianceCalculated > variance || varianceCalculated < -variance) {
+                  if (roundedVariance > variance || roundedVariance < -variance) {
                     $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
                   }else{
                     $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
@@ -2103,11 +2124,12 @@ function edit(id) {
                   let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
                   let calibrationReceived = $(this).val();
                   let varianceCalculated = standardValue - calibrationReceived; 
+                  let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
 
                   // Update the variance input value
-                  $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+                  $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
 
-                  if (varianceCalculated > variance || varianceCalculated < -variance) {
+                  if (roundedVariance > variance || roundedVariance < -variance) {
                     $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
                   }else{
                     $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
@@ -2156,6 +2178,9 @@ function edit(id) {
         if(obj.message.tests != null && obj.message.tests.length > 0){
           $("#loadTestingTable").html('');
           loadTestingCount = 0; 
+          var standardAvTemp = obj.message.standard_avg_temp;
+          var relativeHumidity = obj.message.relative_humidity;
+          $('#calibrationHeader').text('Note - Standard Average Temperature: ('+ standardAvTemp +') / Average Relative Humidity: ('+ relativeHumidity +')');
 
           for(var i = 0; i < obj.message.tests.length; i++){
             var tests = obj.message.tests[i];
@@ -2204,13 +2229,13 @@ function edit(id) {
           $(document).on('change', 'input[id^="standardValue"]', function(){
             let standardValue = $(this).val();
             let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
-            let variance = obj.message.variance; 
             let varianceCalculated = standardValue - calibrationReceived; 
+            let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
 
             // Update the variance input value
-            $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+            $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
 
-            if (varianceCalculated > variance || varianceCalculated < -variance) {
+            if (roundedVariance > variance || roundedVariance < -variance) {
               $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
             }else{
               $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
@@ -2222,11 +2247,12 @@ function edit(id) {
             let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
             let calibrationReceived = $(this).val();
             let varianceCalculated = standardValue - calibrationReceived; 
+            let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
 
             // Update the variance input value
-            $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+            $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
 
-            if (varianceCalculated > variance || varianceCalculated < -variance) {
+            if (roundedVariance > variance || roundedVariance < -variance) {
               $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
             }else{
               $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
@@ -2267,11 +2293,12 @@ function edit(id) {
                   let standardValue = $(this).val();
                   let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
                   let varianceCalculated = standardValue - calibrationReceived; 
+                  let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
 
                   // Update the variance input value
-                  $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+                  $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
 
-                  if (varianceCalculated > variance || varianceCalculated < -variance) {
+                  if (roundedVariance > variance || roundedVariance < -variance) {
                     $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
                   }else{
                     $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
@@ -2283,11 +2310,12 @@ function edit(id) {
                   let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
                   let calibrationReceived = $(this).val();
                   let varianceCalculated = standardValue - calibrationReceived; 
+                  let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
 
                   // Update the variance input value
-                  $(this).closest('.details').find('input[id^="variance"]').val(varianceCalculated)
+                  $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
 
-                  if (varianceCalculated > variance || varianceCalculated < -variance) {
+                  if (roundedVariance > variance || roundedVariance < -variance) {
                     $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
                   }else{
                     $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
@@ -2418,7 +2446,7 @@ function print(id) {
     var obj = JSON.parse(data);
 
     if(obj.status === 'success'){
-      var printWindow = window.open('', '', 'height=400,width=800');
+      var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
       printWindow.document.write(obj.message);
       printWindow.document.close();
       setTimeout(function(){
