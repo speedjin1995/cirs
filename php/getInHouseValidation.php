@@ -7,7 +7,7 @@ session_start();
 if(isset($_POST['validationId'])){
 	$id = filter_input(INPUT_POST, 'validationId', FILTER_SANITIZE_STRING);
 
-    if ($update_stmt = $db->prepare("SELECT a.*, b.unit, b.variance, b.test_1, b.test_2, b.test_3, b.test_4, b.test_5, b.test_6, b.test_7, b.test_8, b.test_9, b.test_10  FROM inhouse_validations a LEFT JOIN standard b ON a.capacity = b.capacity WHERE a.id=?")) {
+    if ($update_stmt = $db->prepare("SELECT a.*, b.standard_avg_temp, b.relative_humidity ,b.unit, b.variance, b.test_1, b.test_2, b.test_3, b.test_4, b.test_5, b.test_6, b.test_7, b.test_8, b.test_9, b.test_10 FROM inhouse_validations a LEFT JOIN standard b ON a.capacity = b.capacity WHERE a.id=?")) {
         $update_stmt->bind_param('s', $id);
         
         // Execute the prepared query.
@@ -50,6 +50,8 @@ if(isset($_POST['validationId'])){
                 //standard table
                 $message['capacityUnit'] = $row['unit'] != null ? searchUnitNameById($row['unit'], $db) : '';
                 $message['variance'] = $row['variance'] ?? '';
+                $message['standard_avg_temp'] = $row['standard_avg_temp'] ?? '';
+                $message['relative_humidity'] = $row['relative_humidity'] ?? '';
                 $message['test_1'] = $row['test_1'] ?? '';
                 $message['test_2'] = $row['test_2'] ?? '';
                 $message['test_3'] = $row['test_3'] ?? '';

@@ -84,6 +84,9 @@ while($row = mysqli_fetch_assoc($validationRecords)) {
     $pic_phone = $branchRow['pic_contact'];
   }
 
+  $createdDate = DateTime::createFromFormat('Y-m-d H:i:s', $row['created_datetime']);
+  $updatedDate = DateTime::createFromFormat('Y-m-d H:i:s', $row['update_datetime']);
+
   $data[] = array( 
     "no"=>$counter,
     "id"=>$row['id'],
@@ -106,7 +109,8 @@ while($row = mysqli_fetch_assoc($validationRecords)) {
     "calibrations"=>json_decode($row['calibrations'], true) ?? '',
     "status"=>$row['status'] ?? '',
     "validation_date"=>$row['validation_date'] ?? '',
-    "updated_datetime"=>$row['updated_datetime'] ?? ''
+    "created_datetime"=> $createdDate->format('Y-m-d') ?? '',
+    "updated_datetime"=> $updatedDate->format('Y-m-d') ?? ''
   ); 
 
   $counter++;

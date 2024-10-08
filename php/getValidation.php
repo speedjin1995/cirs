@@ -22,6 +22,12 @@ if(isset($_POST['validationId'])){
             $message = array();
             
             if ($row = $result->fetch_assoc()) {
+                $validationDate = '';
+                if(isset($row['validation_date']) && $row['validation_date'] != ''){
+                    $validationDate = $row['validation_date'];
+                    $validationDate = DateTime::createFromFormat('Y-m-d', $validationDate)->format('d/m/Y');
+                }
+
                 $message['id'] = $row['id'];
                 $message['type'] = $row['type'];
                 $message['dealer'] = $row['dealer'];
@@ -39,7 +45,7 @@ if(isset($_POST['validationId'])){
                 $message['capacity'] = $row['capacity'];
                 $message['size'] = $row['size'];
                 $message['calibrations'] = ($row['calibrations'] != null) ? json_decode($row['calibrations'], true) : [];
-                $message['validation_date'] = $row['validation_date'];
+                $message['validation_date'] = $validationDate;
                 $message['status'] = $row['status'];
             }
             

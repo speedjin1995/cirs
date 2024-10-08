@@ -6,7 +6,7 @@ session_start();
 
 $uid = $_SESSION['userID'];
 
-if(isset($_POST['type'], $_POST['customerType'], $_POST['autoFormNo'], $_POST['validator'], $_POST['address1'], $_POST['machineType'], $_POST['serial'], $_POST['manufacturing'], $_POST['brand'], $_POST['model'], $_POST['capacity'], $_POST['size'], $_POST['validationDate'])){
+if(isset($_POST['type'], $_POST['customerType'], $_POST['autoFormNo'], $_POST['validator'], $_POST['address1'], $_POST['machineType'], $_POST['serial'], $_POST['manufacturing'], $_POST['brand'], $_POST['model'], $_POST['capacity'], $_POST['size'])){
 	$type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
 	$customerType = filter_input(INPUT_POST, 'customerType', FILTER_SANITIZE_STRING);
 	$autoFormNo = filter_input(INPUT_POST, 'autoFormNo', FILTER_SANITIZE_STRING);
@@ -19,8 +19,12 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['autoFormNo'], $_POST['v
 	$model = filter_input(INPUT_POST, 'model', FILTER_SANITIZE_STRING);
 	$capacity = filter_input(INPUT_POST, 'capacity', FILTER_SANITIZE_STRING);
 	$size = filter_input(INPUT_POST, 'size', FILTER_SANITIZE_STRING);
-	$validationDate = $_POST['validationDate'];
-	$validationDate = DateTime::createFromFormat('d/m/Y', $validationDate)->format('Y-m-d H:i:s');
+
+	$validationDate = '';
+	if(isset($_POST['validationDate']) && $_POST['validationDate'] != ''){
+		$validationDate = $_POST['validationDate'];
+		$validationDate = DateTime::createFromFormat('d/m/Y', $validationDate)->format('Y-m-d H:i:s');
+	}
 
 	$dealer = null;
 	$reseller_branch = null;
