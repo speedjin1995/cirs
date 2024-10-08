@@ -57,7 +57,7 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "SELECT a.*, b.unit FROM inhouse_validations a LEFT JOIN standard b ON a.capacity = b.capacity WHERE status = 'Cancelled'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
+$empQuery = "SELECT a.*, b.standard_avg_temp, b.relative_humidity ,b.unit FROM inhouse_validations a LEFT JOIN standard b ON a.capacity = b.capacity WHERE status = 'Cancelled'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;
@@ -122,7 +122,10 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "units"=> $row['unit'] != null ? searchUnitNameById($row['unit'], $db) : '',
     "status"=>$row['status'] ?? '',
     "tests"=>json_decode($row['tests'], true) ?? '',
-    "updated_datetime"=>$row['update_datetime'] ?? ''
+    "updated_datetime"=>$row['update_datetime'] ?? '',
+    'standard_avg_temp'=>$row['standard_avg_temp'],
+    'relative_humidity'=>$row['relative_humidity'],
+
   ); 
 
   $counter++;

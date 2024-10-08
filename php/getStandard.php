@@ -24,6 +24,8 @@ if(isset($_POST['userID'])){
             
             while ($row = $result->fetch_assoc()) { 
                 $message['id'] = $row['id'];
+                $message['standard_avg_temp'] = $row['standard_avg_temp'];
+                $message['relative_humidity'] = $row['relative_humidity'];
                 $message['unit'] = $row['unit'] != null ? searchUnitNameById($row['unit'], $db) : '';
                 $message['variance'] = $row['variance'];
                 $message['test_1'] = $row['test_1'];

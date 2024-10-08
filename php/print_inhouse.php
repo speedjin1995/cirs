@@ -10,7 +10,7 @@ if(isset($_POST['id'])){
     $today = date("Y-m-d 00:00:00");
 
     // $placeholders = implode(',', array_fill(0, count($arrayOfId), '?'));
-    $select_stmt = $db->prepare("SELECT a.*, b.unit FROM inhouse_validations a LEFT JOIN standard b ON a.capacity = b.capacity WHERE a.id=?");
+    $select_stmt = $db->prepare("SELECT a.*, b.standard_avg_temp, b.relative_humidity, b.unit, b.variance FROM inhouse_validations a LEFT JOIN standard b ON a.capacity = b.capacity WHERE a.id=?");
 
     // Check if the statement is prepared successfully
     if ($select_stmt) {
@@ -35,15 +35,23 @@ if(isset($_POST['id'])){
                 $company = searchCustNameById($row['customer'],$db);
                 $branch = $row['branch'];
                 $autoFormNo = $row['auto_form_no'];
-                $validationDate = $row['validation_date'];
-                $calibrationDate = $row['last_calibration_date'];
-                $expiredDate = $row['expired_date'];
+                $validationDate = formatDate($row['validation_date']);
+                $dueDate =  new DateTime($row['validation_date']);
+                $dueDate->modify('+1 year');
+                $dueDate->modify('-1 day');
+                $nextDueDate = $dueDate->format('d M Y');
+                $calibrationDate = formatDate($row['last_calibration_date']);
+                $expiredDate = formatDate($row['expired_date']);
                 $machine = searchMachineNameById($row['machines'],$db);
                 $model = searchModelNameById($row['model'],$db);
                 $manufacturer = $row['manufacturing'];
                 $serialNo = $row['unit_serial_no'];
                 $capacity = searchCapacityNameById($row['capacity'],$db);
+                $calibrator = searchStaffNameById($row['calibrator'],$db);
                 $tests = json_decode($row['tests'], true);
+                $stdAvgTemp = $row['standard_avg_temp'];
+                $relHumid = $row['relative_humidity'];
+                $variance = $row['variance'];
 
                 if(!empty($row['unit'])){
                     $unit = searchUnitNameById($row['unit'],$db);
@@ -215,13 +223,13 @@ if(isset($_POST['id'])){
                                 </td>
                             </tr>
                             <tr>
-                                <td colspan="2" class="align-top" style="border-right: none;"><b>Average Temperature:</b> (20 + 1) C</td>
-                                <td colspan="2" class="align-top" style="border-left: none;"><b>Average Relative Humidity:</b> (52 + 1) %RH</td>
+                                <td colspan="2" class="align-top" style="border-right: none;"><b>Average Temperature:</b> ('. $stdAvgTemp .')</td>
+                                <td colspan="2" class="align-top" style="border-left: none;"><b>Average Relative Humidity:</b> ('. $relHumid .')</td>
                             </tr>
                             <tr>
                                 <th style="padding: .5rem;">Setting Value Of Standard</th>
                                 <th style="padding: .5rem;">As Received Under Calibration</th>
-                                <th style="padding: .5rem;">Variance +/- (0.5kg)</th>
+                                <th style="padding: .5rem;">Variance +/- ('. $variance . " " . $unit .')</th>
                                 <th style="padding: .5rem;">Reading After Adjustment</th>
                             </tr>';
 
@@ -238,33 +246,77 @@ if(isset($_POST['id'])){
                             $variance = $item['variance'];
                             $afterAdjustReading = $item['afterAdjustReading'];
                             $message .= '<tr>
-                                    <td style="border: none;padding: .5rem;">'. $standardValue .' - '. $unit .'</td>
-                                    <td style="border: none;padding: .5rem;">'. $calibrationReceived .' - '. $unit .'</td>
-                                    <td style="border: none;padding: .5rem;">'. $variance .'</td>
-                                    <td style="border: none;padding: .5rem;">'. $afterAdjustReading .' - '. $unit .'</td>
+                                    <td style="border: none;padding: 0;">'. $standardValue .' - '. $unit .'</td>
+                                    <td style="border: none;padding: 0;">'. $calibrationReceived .' - '. $unit .'</td>
+                                    <td style="border: none;padding: 0;">'. $variance .'</td>
+                                    <td style="border: none;padding: 0;">'. $afterAdjustReading .' - '. $unit .'</td>
                                 </tr>';
                         }
                     }    
                 }
                 
-            // $message .= '<tr>
-            //                 <td colspan="2" class="align-top" style="border: none;">
-            //                     <div class="row">
-            //                         <div class="col-12" id="calibratedDt"><b>Date Calibrated:</b> 26 AUG 2024</div>
-            //                         <div class="col-12" id="calibratedBy"><b>Calibrated By:</b> Mr. Sara</div>
-            //                         <div class="col-12" id="standardUsedInstru"><b>Standard Used Instrument:</b> Standard.Weight</div>
-            //                     </div>
-            //                 </td>
-            //                 <td colspan="2" class="align-top" style="border: none;">
-            //                     <div class="row">
-            //                         <div class="col-12" id="nextDueDt"><b>Next Due Date:</b> 26 AUG 2024</div>
-            //                         <div class="col-12" id="calibrationStickerNo"><b>Calibration Sticker No:</b> 23010493</div>
-            //                         <div class="col-12" id="sirimTrace"><b>SIRIM Traceability:</b> NIM/M-9933-N-1</div>
-            //                     </div>
-            //                 </td>
-            //             </tr> 
-            //             </tbody>
-            //         </table>';               
+            $message .= '<tr style="padding-top:5%">
+                            <td colspan="2" class="align-top" style="border: none;">
+                                <div class="row">
+                                    <div class="col-12" id="calibratedDt"><b>Date Calibrated:</b> '. $validationDate .'</div>
+                                    <div class="col-12" id="calibratedBy"><b>Calibrated By:</b> '. $calibrator .'</div>
+                                    <div class="col-12" id="standardUsedInstru"><b>Standard Used Instrument:</b> Standard.Weight</div>
+                                </div>
+                            </td>
+                            <td colspan="2" class="align-top" style="border: none;">
+                                <div class="row">
+                                    <div class="col-12" id="nextDueDt"><b>Next Due Date:</b> '. $nextDueDate .'</div>
+                                    <div class="col-12" id="calibrationStickerNo"><b>Calibration Sticker No:</b> 23010493</div>
+                                    <div class="col-12" id="sirimTrace"><b>SIRIM Traceability:</b> NIM/M-9933-N-1</div>
+                                </div>
+                            </td>
+                        </tr> 
+                        </tbody>
+                    </table>';               
+
+            $message .= '<table class="mt-4 mb-4" width="100%">
+                            <tbody>
+                                <tr style="visibility: hidden;">
+                                    <th width="30%">column 1</th>
+                                    <th width="45%">column 2</th>
+                                    <th width="25%">column 3</th>
+                                </tr>
+                                <tr>
+                                    <td class="align-top"><b>Licensing of Membaiki & Menjual:</b></td>
+                                    <td class="align-top">000167</td>
+                                </tr>
+                                <tr>
+                                    <td class="align-top"><b>Weighing Licensing of KPDN:</b></td>
+                                    <td class="align-top">00935</td>
+                                </tr>
+                                <tr>
+                                    <td class="align-top"><b>Raj.Transaksi:</b></td>
+                                    <td class="align-top">BL22022023111</td>
+                                    <td>
+                                        <div class="text-center" style="width: 100%;">
+                                            <hr class="dotted-line">
+                                        </div>
+                                        <div class="text-center" style="width: 100%;">
+                                            <span><b>Approved Signature</b></span>
+                                        </div>
+                                        <div class="text-center"style="width: 100%;">
+                                            <span>Mr. Eeven Kho</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <span class="font-weight-bold" style="color: red;">The Uncertainties are for a confidence probability of approximately 95%</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <span class="mt-5">This is to confirm that we have perfomed the Service & Calibration for the above Weighing Equipment with our Standard. Weights that has been certified by METROLOGY CORPORATION MALAYSIAN SDN. BHD. & SIRIM SST Malaysia</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>';
                             
                     // // Move to the next page
                     // $startIndex += $recordsPerPage;
@@ -299,5 +351,11 @@ else{
         )
     ); 
 }
+
+function formatDate($dateString) {
+    $date = new DateTime($dateString);
+    return $date->format('d M Y');
+}
+
 
 ?>

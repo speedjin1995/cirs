@@ -1822,8 +1822,20 @@ function format (row) {
   if (row.tests !== undefined && row.tests !== null && row.tests !== ''){
     if (row.tests[0].length > 0) {
       var weightType = row.units;
+      
+      if(row.standard_avg_temp){
+        var standardAvgTemp = row.standard_avg_temp;
+      }else{
+        var standardAvgTemp = '';
+      }
 
-      returnString += '<h4 class="mb-3">Note - Standard Average Temperature: (20 + 1) ºC / Average Relative Humidity: (52 + 1) %RH</h4><table style="width: 100%;"><thead><tr><th width="15%">Number of Tests.</th><th width="20%">Setting Value Of Standard (' +  weightType + ')</th><th width="20%">As Received Under Calibration (' +  weightType + ')</th><th width="20%">Variance +/- 0.1kg (' +  weightType + ')</th><th width="20%">Reading After Adjustment. (' +  weightType + ')</th></tr></thead><tbody>'
+      if(row.relative_humidity){
+        var relHumid = row.relative_humidity;
+      }else{
+        var relHumid = '';
+      }
+
+      returnString += '<h4 class="mb-3">Note - Standard Average Temperature: (' + standardAvgTemp + ') / Average Relative Humidity: (' + relHumid + ')</h4><table style="width: 100%;"><thead><tr><th width="15%">Number of Tests.</th><th width="20%">Setting Value Of Standard (' +  weightType + ')</th><th width="20%">As Received Under Calibration (' +  weightType + ')</th><th width="20%">Variance +/- 0.1kg (' +  weightType + ')</th><th width="20%">Reading After Adjustment. (' +  weightType + ')</th></tr></thead><tbody>';
       
       var tests = row.tests[0]; 
       for (var i = 0; i < tests.length; i++) {
