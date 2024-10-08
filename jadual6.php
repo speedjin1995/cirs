@@ -245,12 +245,12 @@ $(function () {
         className: 'select-checkbox',
         orderable: false,
         render: function (data, type, row) {
-          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-          } 
-          else {
-            return ''; // Return an empty string or any other placeholder if the item is invoiced
-          }
+          return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+          // if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+          // } 
+          // else {
+          //   return ''; // Return an empty string or any other placeholder if the item is invoiced
+          // }
         }
       },
       { data: 'stamping_date' },
@@ -424,12 +424,12 @@ $(function () {
           className: 'select-checkbox',
           orderable: false,
           render: function (data, type, row) {
-            if (row.status == 'Active') { // Assuming 'isInvoiced' is a boolean field in your row data
-              return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-            } 
-            else {
-              return ''; // Return an empty string or any other placeholder if the item is invoiced
-            }
+            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+            // if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+            // } 
+            // else {
+            //   return ''; // Return an empty string or any other placeholder if the item is invoiced
+            // }
           }
         },
         { data: 'stamping_date' },
@@ -444,7 +444,15 @@ $(function () {
         { data: 'no_daftar' },
         { data: 'siri_keselamatan' },
         { data: 'customers' },
-        { data: 'full_address' }
+        { data: 'full_address' },
+        { 
+          className: 'dt-control',
+          orderable: false,
+          data: null,
+          render: function ( data, type, row ) {
+            return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
+          }
+        }
       ],
     });
   });

@@ -248,12 +248,14 @@ $(function () {
         className: 'select-checkbox',
         orderable: false,
         render: function (data, type, row) {
-          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-          } 
-          else {
-            return ''; // Return an empty string or any other placeholder if the item is invoiced
-          }
+          return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+
+          // if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+          //   return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+          // } 
+          // else {
+          //   return ''; // Return an empty string or any other placeholder if the item is invoiced
+          // }
         }
       },
       { data: 'batch_no' },
@@ -430,12 +432,14 @@ $(function () {
           className: 'select-checkbox',
           orderable: false,
           render: function (data, type, row) {
-            if (row.status == 'Active') { // Assuming 'isInvoiced' is a boolean field in your row data
-              return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-            } 
-            else {
-              return ''; // Return an empty string or any other placeholder if the item is invoiced
-            }
+            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+
+            // if (row.status == 'Active') { // Assuming 'isInvoiced' is a boolean field in your row data
+            //   return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+            // } 
+            // else {
+            //   return ''; // Return an empty string or any other placeholder if the item is invoiced
+            // }
           }
         },
         { data: 'batch_no' },
