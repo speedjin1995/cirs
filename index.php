@@ -585,6 +585,12 @@ to get the desired effect
                       <p>Problems</p>
                     </a>
                   </li-->
+                  <li class="nav-item">
+                    <a href="#country" data-file="country.php" class="nav-link link">
+                      <i class="nav-icon fas fa-globe-asia"></i>
+                      <p>Country</p>
+                    </a>
+                  </li>
                 </ul>
               </li>';
               }
