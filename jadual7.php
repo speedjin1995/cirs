@@ -373,7 +373,7 @@ $(function () {
           if(obj.status === 'success'){
             $('#printDOModal').modal('hide');
             $('#weightTable').DataTable().ajax.reload();
-            var printWindow = window.open('', '', 'height=400,width=800');
+            var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
             printWindow.document.write(obj.message);
             printWindow.document.close();
             setTimeout(function(){
@@ -471,7 +471,7 @@ $(function () {
       var obj = JSON.parse(data);
   
       if(obj.status === 'success'){
-        var printWindow = window.open('', '', 'height=400,width=800');
+        var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
         printWindow.document.write(obj.message);
         printWindow.document.close();
         setTimeout(function(){
