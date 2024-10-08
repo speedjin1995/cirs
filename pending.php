@@ -32,7 +32,7 @@ else{
   $problems = $db->query("SELECT * FROM problem WHERE deleted = '0'");
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
-  $validators = $db->query("SELECT * FROM validators WHERE deleted = '0'");
+  $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
   $cancelledReasons = $db->query("SELECT * FROM reasons WHERE deleted = '0'");
@@ -873,12 +873,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
       <input type="text" class="form-control" id="loadCellModel" name="loadCellModel" readonly>
     </td>
     <td>
-      <select class="form-control select2" style="width: 100%;" id="loadCellCapacity" name="loadCellCapacity" required>
-        <option selected="selected">-</option>
-        <?php while($rowCA2=mysqli_fetch_assoc($capacities2)){ ?>
-          <option value="<?=$rowCA2['id'] ?>"><?=$rowCA2['name'] ?></option>
-        <?php } ?>
-      </select>
+      <input type="text" class="form-control" id="loadCellCapacity" name="loadCellCapacity" required>
     </td>
     <td>
       <input type="text" class="form-control" id="loadCellSerial" name="loadCellSerial" required>
@@ -1559,6 +1554,58 @@ $(function () {
     });
   });
 
+  $('#extendModal').find('#brand').on('change', function(){
+    var brandId = $(this).find(":selected").val();
+
+    $.post('php/getModelFromBrand.php', {id: brandId}, function (data){
+      var obj = JSON.parse(data);
+
+      if(obj.status === 'success'){
+        $('#model').html('');
+        $('#model').append('<option selected="selected">-</option>');
+
+        for(var i=0; i<obj.message.length; i++){
+          var modelInfo = obj.message[i];
+          $('#model').append('<option value="'+modelInfo.id+'">'+modelInfo.model+'</option>')
+        }
+
+        $('#extendModal').trigger('modelsLoaded');
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when pull data", "Failed:");
+      }
+    });
+  });
+
+  $('#extendModal').find('#machineType').on('change', function(){
+    var brandId = $(this).find(":selected").val();
+
+    $.post('php/getJAFromMT.php', {id: brandId}, function (data){
+      var obj = JSON.parse(data);
+
+      if(obj.status === 'success'){
+        $('#jenisAlat').html('');
+        $('#jenisAlat').append('<option selected="selected">-</option>');
+
+        for(var i=0; i<obj.message.length; i++){
+          var modelInfo = obj.message[i];
+          $('#jenisAlat').append('<option value="'+modelInfo.id+'">'+modelInfo.jenis_alat+'</option>')
+        }
+
+        $('#extendModal').trigger('jaIsLoaded');
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when pull data", "Failed:");
+      }
+    });
+  });
+
   $('#extendModal').find('#product').on('change', function(){
     var price = parseFloat($(this).find(":selected").attr("data-price"));
     var machine = parseFloat($(this).find(":selected").attr("data-machine"));
@@ -1787,6 +1834,7 @@ $(function () {
     var $addContents = $("#loadCellDetails").clone();
     $("#loadCellTable").append($addContents.html());
 
+    debugger;
     $("#loadCellTable").find('.details:last').attr("id", "detail" + loadCellCount);
     $("#loadCellTable").find('.details:last').attr("data-index", loadCellCount);
     $("#loadCellTable").find('#remove:last').attr("id", "remove" + loadCellCount);

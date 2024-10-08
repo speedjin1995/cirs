@@ -1384,6 +1384,7 @@ $(function () {
       
       // Add 1 year to the date
       date.setFullYear(date.getFullYear() + 1);
+      date.setDate(date.getDate() - 1);
       
       /*/ Format the new date back to 'DD/MM/YYYY'
       var newDay = ("0" + date.getDate()).slice(-2);
