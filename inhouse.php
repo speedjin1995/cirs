@@ -34,7 +34,7 @@ else{
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE deleted = '0'");
-  $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0'");
+  $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'INHOUSE'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
   $cancelledReasons = $db->query("SELECT * FROM reasons WHERE deleted = '0'");
@@ -361,7 +361,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <h4>Machines / Instruments Information</h4>
               </div>
               <div class="row">
-                <div class="col-3">
+              <div class="col-3">
                   <div class="form-group">
                     <label>Machines / Instruments *</label>
                     <select class="form-control select2" style="width: 100%;" id="machineType" name="machineType" required>
@@ -372,93 +372,90 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
-                <div class="col-3 d-flex">
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label>Unit Serial No * </label>
-                      <input class="form-control" type="text" placeholder="Serial No." id="serial" name="serial" required>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label>Last Calibration Date * </label>
-                      <input class="form-control" type="date" id="lastCalibrationDate" name="lastCalibrationDate" required>
-                    </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Unit Serial No * </label>
+                    <input class="form-control" type="text" placeholder="Serial No." id="serial" name="serial" required>
                   </div>
                 </div>
-                <div class="col-3 d-flex">
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label>Expired Date * </label>
-                      <input class="form-control" type="date" id="expiredDate" name="expiredDate" required>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label>Manufacturing *</label>
-                      <select class="form-control select2" style="width: 100%;" id="manufacturing" name="manufacturing" required>
-                        <option selected="selected"></option>
-                        <option value="Local OEM">Local OEM</option>
-                        <option value="Overseas">Overseas</option>
-                      </select>
-                    </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Last Calibration Date * </label>
+                    <input class="form-control" type="date" id="lastCalibrationDate" name="lastCalibrationDate" required>
                   </div>
                 </div>
+                
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Expired Date * </label>
+                    <input class="form-control" type="date" id="expiredDate" name="expiredDate" required>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Manufacturing *</label>
+                    <select class="form-control select2" style="width: 100%;" id="manufacturing" name="manufacturing" required>
+                      <option selected="selected"></option>
+                      <option value="LOCAL">LOCAL</option>
+                      <option value="OVERSEAS">OVERSEAS</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div class="col-3">
                   <div class="form-group">
                     <label>Auto Certificate No / Sticker No *</label>
                     <input class="form-control" type="text" placeholder="Sticker No" id="auto_cert_no" name="auto_cert_no">
                   </div>
                 </div>
-                <div class="col-3 d-flex">
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label>Brand *</label>
-                      <select class="form-control select2" style="width: 100%;" id="brand" name="brand" required>
-                        <option selected="selected"></option>
-                        <?php while($rowB=mysqli_fetch_assoc($brands)){ ?>
-                          <option value="<?=$rowB['id'] ?>"><?=$rowB['brand'] ?></option>
-                        <?php } ?>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label>Model *</label>
-                      <select class="form-control select2" style="width: 100%;" id="model" name="model" required>
-                        <option selected="selected"></option>
-                        <?php while($rowM=mysqli_fetch_assoc($models)){ ?>
-                          <option value="<?=$rowM['id'] ?>"><?=$rowM['model'] ?></option>
-                        <?php } ?>
-                      </select>
-                    </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Brand *</label>
+                    <select class="form-control select2" style="width: 100%;" id="brand" name="brand" required>
+                      <option selected="selected"></option>
+                      <?php while($rowB=mysqli_fetch_assoc($brands)){ ?>
+                        <option value="<?=$rowB['id'] ?>"><?=$rowB['brand'] ?></option>
+                      <?php } ?>
+                    </select>
                   </div>
                 </div>
-                <div class="col-3 d-flex">
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label>Capacity * </label>
-                      <input type="hidden" class="form-control" id="capacityUnit" name="capacityUnit">
-                      <select class="form-control select2" style="width: 100%;" id="capacity" name="capacity" required>
-                        <option selected="selected"></option>
-                        <?php while($rowCA=mysqli_fetch_assoc($capacities)){ ?>
-                          <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
-                        <?php } ?>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label>Structure Size * </label>
-                      <select class="form-control select2" style="width: 100%;" id="size" name="size" required>
-                        <option selected="selected"></option>
-                        <?php while($rowSI=mysqli_fetch_assoc($sizes)){ ?>
-                          <option value="<?=$rowSI['id'] ?>"><?=$rowSI['size'] ?></option>
-                        <?php } ?>
-                      </select>
-                    </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Model *</label>
+                    <select class="form-control select2" style="width: 100%;" id="model" name="model" required>
+                      <option selected="selected"></option>
+                      <?php while($rowM=mysqli_fetch_assoc($models)){ ?>
+                        <option value="<?=$rowM['id'] ?>"><?=$rowM['model'] ?></option>
+                      <?php } ?>
+                    </select>
                   </div>
                 </div>
+                
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Capacity * </label>
+                    <select class="form-control select2" style="width: 100%;" id="capacity" name="capacity" required>
+                      <option selected="selected"></option>
+                      <?php while($rowCA=mysqli_fetch_assoc($capacities)){ ?>
+                        <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Structure Size * </label>
+                    <select class="form-control select2" style="width: 100%;" id="size" name="size" required>
+                      <option selected="selected"></option>
+                      <?php while($rowSI=mysqli_fetch_assoc($sizes)){ ?>
+                        <option value="<?=$rowSI['id'] ?>"><?=$rowSI['size'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                
                 <div class="col-3">
                   <div class="form-group">
                     <label>Inhouse Calibrator * </label>
@@ -1398,27 +1395,26 @@ $(function () {
     }
   });
 
-  $('#extendModal').find('#stampDate').on('blur', function (e) {
+  $('#extendModal').find('#lastCalibrationDate').on('change', function (e) {
     if($(this).val()){
-      var parts = $(this).val().split('/');
-      var day = parseInt(parts[0], 10);
+      var parts = $(this).val().split('-');
+      var day = parseInt(parts[2], 10);
       var month = parseInt(parts[1], 10) - 1; // Months are zero-based
-      var year = parseInt(parts[2], 10);
+      var year = parseInt(parts[0], 10);
 
-      var date = new Date(year, month, day);
+      var date = new Date(year, month, day); console.log(date);
       
-      // Add 1 year to the date
-      date.setFullYear(date.getFullYear() + 1);
-      
-      /*/ Format the new date back to 'DD/MM/YYYY'
+      date.setFullYear(date.getFullYear() + 1);       // Add 1 year to the date
+      date.setDate(date.getDate() - 1);      // Minus 1 day to the date
+
       var newDay = ("0" + date.getDate()).slice(-2);
       var newMonth = ("0" + (date.getMonth() + 1)).slice(-2); // Months are zero-based
       var newYear = date.getFullYear();
       
-      var dueDate = newDay + '/' + newMonth + '/' + newYear;*/
+      var expiredDate = newYear + '-' + newMonth + '-' + newDay;
       
-      // Assign the new date to '#dueDate'
-      $('#extendModal').find('#dueDate').val(formatDate3(date));
+      // Assign the new date to '#expiredDate'
+      $('#extendModal').find('#expiredDate').val(expiredDate);
     }
   });
 
@@ -1871,7 +1867,7 @@ function newEntry(){
   // $('#isResseller5').hide();
   $('#extendModal').find('#customerType').val("EXISTING").attr('readonly', false).trigger('change');
   $('#extendModal').find('#company').val('');
-  $('#extendModal').find('#validator').val('').trigger('change');
+  $('#extendModal').find('#validator').val('3').trigger('change');
   $('#extendModal').find('#branch').val('').trigger('change');
   $('#extendModal').find('#autoFormNo').val('');
   $('#extendModal').find('#address1').val('');
