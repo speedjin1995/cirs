@@ -1900,7 +1900,7 @@ function newEntry(){
         let varianceDecimalPoint = varianceDecimalPart.length;
 
         if(obj.status === 'success'){
-          var unit = obj.message.unit; console.log(obj.message);
+          var unit = obj.message.unit;
           for (var i = 0; i < 10; i++) {
             //Symbol setting
             $("#loadTestingTable").find('#unitSymbolSV'+ i).text(unit);
