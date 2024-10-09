@@ -1547,6 +1547,32 @@ $(function () {
     });
   });
 
+  $('#extendModal').find('#brand').on('change', function(){
+    var brandId = $(this).find(":selected").val();
+
+    $.post('php/getModelFromBrand.php', {id: brandId}, function (data){
+      var obj = JSON.parse(data);
+
+      if(obj.status === 'success'){
+        $('#model').html('');
+        $('#model').append('<option selected="selected">-</option>');
+
+        for(var i=0; i<obj.message.length; i++){
+          var modelInfo = obj.message[i];
+          $('#model').append('<option value="'+modelInfo.id+'">'+modelInfo.model+'</option>')
+        }
+
+        $('#extendModal').trigger('modelsLoaded');
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when pull data", "Failed:");
+      }
+    });
+  });
+  
   $('#extendModal').find('#product').on('change', function(){
     var price = parseFloat($(this).find(":selected").attr("data-price"));
     var machine = parseFloat($(this).find(":selected").attr("data-machine"));
