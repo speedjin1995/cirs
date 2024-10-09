@@ -2429,7 +2429,7 @@ function deactivate(id) {
 }
 
 function print(id) {
-  $.post('php/printBorang.php', {userID: id, file: 'ATK'}, function(data){
+  $.get('php/printBorang.php', {userID: id, file: 'ATK'}, function(data){
     /*var obj = JSON.parse(data);
 
     if(obj.status === 'success'){
