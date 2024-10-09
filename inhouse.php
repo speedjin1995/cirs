@@ -1985,11 +1985,10 @@ function edit(id) {
   $('#spinnerLoading').show();
   $.post('php/getInHouseValidation.php', {validationId: id}, function(data){
     var obj = JSON.parse(data);
-    let variance = obj.message.variance;
-    let varianceDecimalPart = variance.toString().split('.')[1];
-    let varianceDecimalPoint = varianceDecimalPart.length;
-
     if(obj.status === 'success'){
+      let variance = obj.message.variance;
+      let varianceDecimalPart = variance.toString().split('.')[1];
+      let varianceDecimalPoint = varianceDecimalPart.length;
       if(obj.message.type == 'DIRECT'){
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
@@ -2107,26 +2106,52 @@ function edit(id) {
               var obj = JSON.parse(data);
               
               if(obj.status === 'success'){
+                var standardAvTemp = obj.message.standard_avg_temp;
+                var relativeHumidity = obj.message.relative_humidity;
+                let variance = obj.message.variance;
+                let varianceDecimalPart = variance.toString().split('.')[1];
+                let varianceDecimalPoint = varianceDecimalPart.length;
                 var unit = obj.message.unit;
+
+                $('#calibrationHeader').text('Note - Standard Average Temperature: ('+ standardAvTemp +') / Average Relative Humidity: ('+ relativeHumidity +')');
+                $("#loadTestingTable").find('#standardValue0').val(obj.message.test_1.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue1').val(obj.message.test_2.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue2').val(obj.message.test_3.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue3').val(obj.message.test_4.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue4').val(obj.message.test_5.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue5').val(obj.message.test_6.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue6').val(obj.message.test_7.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue7').val(obj.message.test_8.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue8').val(obj.message.test_9.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue9').val(obj.message.test_10.toFixed(varianceDecimalPoint));
+
                 for (var i = 0; i < 10; i++) {
                   //Symbol setting
                   $("#loadTestingTable").find('#unitSymbolSV'+ i).text(unit);
                   $("#loadTestingTable").find('#unitSymbolCR'+ i).text(unit);
                   $("#loadTestingTable").find('#unitSymbolV'+ i).text(unit);
                   $("#loadTestingTable").find('#unitSymbolAR'+ i).text(unit);
+
+                  //Placeholder Value
+                  let placeholderValue = (0).toFixed(varianceDecimalPoint);
+                  $("#loadTestingTable").find('#calibrationReceived'+ i).attr('placeholder', placeholderValue).val(placeholderValue);
+                  $("#loadTestingTable").find('#variance'+ i).attr('placeholder', placeholderValue).val(placeholderValue).css({'background-color': 'lightgrey', 'color': 'black'});
+                  $("#loadTestingTable").find('#afterAdjustReading'+ i).attr('placeholder', placeholderValue).val(placeholderValue);
+
+                  //When user change value
+                  $('#loadTestingTable').find('#standardValue'+ i).change(function() {
+                    let standardValue = parseFloat($(this).val());      
+                    $(this).val(standardValue.toFixed(varianceDecimalPoint)); // Format the value and set it back        
+                  });
+                  $('#loadTestingTable').find('#calibrationReceived'+ i).change(function() {
+                    let calibrationReceived = parseFloat($(this).val());      
+                    $(this).val(calibrationReceived.toFixed(varianceDecimalPoint)); // Format the value and set it back        
+                  });
+                  $('#loadTestingTable').find('#afterAdjustReading'+ i).change(function() {
+                    let afterAdjustReading = parseFloat($(this).val());      
+                    $(this).val(afterAdjustReading.toFixed(varianceDecimalPoint)); // Format the value and set it back        
+                  });
                 }          
-                
-                //Standard of Value
-                $("#loadTestingTable").find('#standardValue0').val(obj.message.test_1);
-                $("#loadTestingTable").find('#standardValue1').val(obj.message.test_2);
-                $("#loadTestingTable").find('#standardValue2').val(obj.message.test_3);
-                $("#loadTestingTable").find('#standardValue3').val(obj.message.test_4);
-                $("#loadTestingTable").find('#standardValue4').val(obj.message.test_5);
-                $("#loadTestingTable").find('#standardValue5').val(obj.message.test_6);
-                $("#loadTestingTable").find('#standardValue6').val(obj.message.test_7);
-                $("#loadTestingTable").find('#standardValue7').val(obj.message.test_8);
-                $("#loadTestingTable").find('#standardValue8').val(obj.message.test_9);
-                $("#loadTestingTable").find('#standardValue9').val(obj.message.test_10);
 
                 // Event delegation: use 'select' instead of 'input' for dropdowns
                 $(document).on('change', 'input[id^="standardValue"]', function(){
@@ -2293,26 +2318,52 @@ function edit(id) {
               var obj = JSON.parse(data);
               
               if(obj.status === 'success'){
+                var standardAvTemp = obj.message.standard_avg_temp;
+                var relativeHumidity = obj.message.relative_humidity;
+                let variance = obj.message.variance;
+                let varianceDecimalPart = variance.toString().split('.')[1];
+                let varianceDecimalPoint = varianceDecimalPart.length;
                 var unit = obj.message.unit;
+
+                $('#calibrationHeader').text('Note - Standard Average Temperature: ('+ standardAvTemp +') / Average Relative Humidity: ('+ relativeHumidity +')');
+                $("#loadTestingTable").find('#standardValue0').val(obj.message.test_1.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue1').val(obj.message.test_2.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue2').val(obj.message.test_3.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue3').val(obj.message.test_4.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue4').val(obj.message.test_5.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue5').val(obj.message.test_6.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue6').val(obj.message.test_7.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue7').val(obj.message.test_8.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue8').val(obj.message.test_9.toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue9').val(obj.message.test_10.toFixed(varianceDecimalPoint));
+
                 for (var i = 0; i < 10; i++) {
                   //Symbol setting
                   $("#loadTestingTable").find('#unitSymbolSV'+ i).text(unit);
                   $("#loadTestingTable").find('#unitSymbolCR'+ i).text(unit);
                   $("#loadTestingTable").find('#unitSymbolV'+ i).text(unit);
                   $("#loadTestingTable").find('#unitSymbolAR'+ i).text(unit);
-                }          
-                
-                //Standard of Value
-                $("#loadTestingTable").find('#standardValue0').val(obj.message.test_1);
-                $("#loadTestingTable").find('#standardValue1').val(obj.message.test_2);
-                $("#loadTestingTable").find('#standardValue2').val(obj.message.test_3);
-                $("#loadTestingTable").find('#standardValue3').val(obj.message.test_4);
-                $("#loadTestingTable").find('#standardValue4').val(obj.message.test_5);
-                $("#loadTestingTable").find('#standardValue5').val(obj.message.test_6);
-                $("#loadTestingTable").find('#standardValue6').val(obj.message.test_7);
-                $("#loadTestingTable").find('#standardValue7').val(obj.message.test_8);
-                $("#loadTestingTable").find('#standardValue8').val(obj.message.test_9);
-                $("#loadTestingTable").find('#standardValue9').val(obj.message.test_10);
+
+                  //Placeholder Value
+                  let placeholderValue = (0).toFixed(varianceDecimalPoint);
+                  $("#loadTestingTable").find('#calibrationReceived'+ i).attr('placeholder', placeholderValue).val(placeholderValue);
+                  $("#loadTestingTable").find('#variance'+ i).attr('placeholder', placeholderValue).val(placeholderValue).css({'background-color': 'lightgrey', 'color': 'black'});
+                  $("#loadTestingTable").find('#afterAdjustReading'+ i).attr('placeholder', placeholderValue).val(placeholderValue);
+
+                  //When user change value
+                  $('#loadTestingTable').find('#standardValue'+ i).change(function() {
+                    let standardValue = parseFloat($(this).val());      
+                    $(this).val(standardValue.toFixed(varianceDecimalPoint)); // Format the value and set it back        
+                  });
+                  $('#loadTestingTable').find('#calibrationReceived'+ i).change(function() {
+                    let calibrationReceived = parseFloat($(this).val());      
+                    $(this).val(calibrationReceived.toFixed(varianceDecimalPoint)); // Format the value and set it back        
+                  });
+                  $('#loadTestingTable').find('#afterAdjustReading'+ i).change(function() {
+                    let afterAdjustReading = parseFloat($(this).val());      
+                    $(this).val(afterAdjustReading.toFixed(varianceDecimalPoint)); // Format the value and set it back        
+                  });
+                }    
 
                 // Event delegation: use 'select' instead of 'input' for dropdowns
                 $(document).on('change', 'input[id^="standardValue"]', function(){

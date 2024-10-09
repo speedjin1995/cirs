@@ -9,6 +9,23 @@ if(isset($_POST['id'])){
     $todayDate2 = date('d M Y');
     $today = date("Y-m-d 00:00:00");
 
+    $company_stmt = $db->prepare("SELECT * FROM companies");
+    if($company_stmt) {
+        $company_stmt->execute();
+        $result2 = $company_stmt->get_result();
+        while ($row2 = $result2->fetch_assoc()) {
+            $certno_lesen = $row2['certno_lesen'];
+            $bless_serahanno = $row2['bless_serahanno'];
+            $failno = $row2['failno'];
+            $person_incharge = $row2['person_incharge'];
+            $nmims = json_decode($row2['nmim'], true);
+            foreach ($nmims as $nmim) {
+                $nmim = $nmim['nmimApprNo'];
+            }
+        }
+    }
+
+
     // $placeholders = implode(',', array_fill(0, count($arrayOfId), '?'));
     $select_stmt = $db->prepare("SELECT a.*, b.standard_avg_temp, b.relative_humidity, b.unit, b.variance FROM inhouse_validations a LEFT JOIN standard b ON a.capacity = b.capacity WHERE a.id=?");
 
@@ -46,6 +63,7 @@ if(isset($_POST['id'])){
                 $model = searchModelNameById($row['model'],$db);
                 $manufacturer = $row['manufacturing'];
                 $serialNo = $row['unit_serial_no'];
+                $autoFormNo = $row['auto_form_no'];
                 $capacity = searchCapacityNameById($row['capacity'],$db);
                 $calibrator = searchStaffNameById($row['calibrator'],$db);
                 $tests = json_decode($row['tests'], true);
@@ -266,8 +284,8 @@ if(isset($_POST['id'])){
                             <td colspan="2" class="align-top" style="border: none;">
                                 <div class="row">
                                     <div class="col-12" id="nextDueDt"><b>Next Due Date:</b> '. $nextDueDate .'</div>
-                                    <div class="col-12" id="calibrationStickerNo"><b>Calibration Sticker No:</b> 23010493</div>
-                                    <div class="col-12" id="sirimTrace"><b>SIRIM Traceability:</b> NIM/M-9933-N-1</div>
+                                    <div class="col-12" id="calibrationStickerNo"><b>Calibration Sticker No:</b> '. $autoFormNo .'</div>
+                                    <div class="col-12" id="sirimTrace"><b>SIRIM Traceability:</b>'. $nmim['nmimApprNo'].'</div>
                                 </div>
                             </td>
                         </tr> 
@@ -283,15 +301,15 @@ if(isset($_POST['id'])){
                                 </tr>
                                 <tr>
                                     <td class="align-top"><b>Licensing of Membaiki & Menjual:</b></td>
-                                    <td class="align-top">000167</td>
+                                    <td class="align-top">'. $certno_lesen .'</td>
                                 </tr>
                                 <tr>
                                     <td class="align-top"><b>Weighing Licensing of KPDN:</b></td>
-                                    <td class="align-top">00935</td>
+                                    <td class="align-top">'. $failno .'</td>
                                 </tr>
                                 <tr>
                                     <td class="align-top"><b>Raj.Transaksi:</b></td>
-                                    <td class="align-top">BL22022023111</td>
+                                    <td class="align-top">'. $bless_serahanno .'</td>
                                     <td>
                                         <div class="text-center" style="width: 100%;">
                                             <hr class="dotted-line">
@@ -300,7 +318,7 @@ if(isset($_POST['id'])){
                                             <span><b>Approved Signature</b></span>
                                         </div>
                                         <div class="text-center"style="width: 100%;">
-                                            <span>Mr. Eeven Kho</span>
+                                            <span>'. $person_incharge .'</span>
                                         </div>
                                     </td>
                                 </tr>
