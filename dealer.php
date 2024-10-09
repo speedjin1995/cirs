@@ -102,21 +102,25 @@ else{
                     <label for="address4">Address 4</label>
                     <input class="form-control" id="address4" name="address4" placeholder="Enter your address 4">
                   </div>
+                  <div class="form-group col-3"> 
+                    <label for="reseller_map_url">Map Url</label>
+                    <input type="text" class="form-control" id="reseller_map_url" name="reseller_map_url" placeholder="Enter Reseller Map Url">
+                  </div>
                   <div class="form-group col-3">
                     <label for="phone">Office Phone *</label>
                     <input type="text" class="form-control" name="phone" id="phone" placeholder="01x-xxxxxxx" required>
                   </div>
                   <div class="form-group col-3">
-                    <label for="pic">PIC </label>
-                    <input type="text" class="form-control" name="pic" id="pic" placeholder="Enter PIC">
+                    <label for="pic">PIC *</label>
+                    <input type="text" class="form-control" name="pic" id="pic" placeholder="Enter PIC" required>
                   </div>
                   <div class="form-group col-3"> 
-                    <label for="picContact">PIC Contact</label>
-                    <input type="text" class="form-control" id="picContact" name="picContact" placeholder="Enter PIC Contact" >
+                    <label for="picContact">PIC Contact *</label>
+                    <input type="text" class="form-control" id="picContact" name="picContact" placeholder="Enter PIC Contact" required>
                   </div>
                   <div class="form-group col-3"> 
                     <label for="email">Email *</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter Reseller Email">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter Reseller Email" required>
                   </div>
                 </div>
 
@@ -286,6 +290,7 @@ $(function () {
         $('#addModal').find('#address2').val("");
         $('#addModal').find('#address3').val("");
         $('#addModal').find('#address4').val("");
+        $('#addModal').find('#reseller_map_url').val("");
         $('#addModal').find('#phone').val("");
         $('#addModal').find('#pic').val("");
         $('#addModal').find('#picContact').val("");
@@ -343,7 +348,6 @@ $(function () {
 
 function format(row){
     var returnString = "";
-    console.log(row.log.length);
 
     if (row.log.length > 0) {
         returnString += '<h4>Branches</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="10%">Branch Code</th><th width="10%">Branch Name</th><th width="20%">Address</th><th width="20%">Address 2</th><th width="20%">Address 3</th><th width="20%">Address 4</th></tr></thead><tbody>'
@@ -353,7 +357,7 @@ function format(row){
 
           // Check if mapurl is not null
           var branchNameWithMapIcon = item.mapurl 
-            ? '<a href="' + item.mapurl + '">' + item.branchname + ' <i class="fa fa-map-marker"></i></a>' 
+            ? '<a href="' + item.mapurl + '" target="_blank">' + item.branchname + ' <i class="fa fa-map-marker"></i></a>' 
             : item.branchname;
 
           returnString += '<tr><td>' + (i + 1) + '</td><td>' + item.branchcode + '</td><td>' + branchNameWithMapIcon + '</td><td>' + item.branch_address1 + '</td><td>' + item.branch_address2 + '</td><td>' + item.branch_address3 + '</td><td>' + item.branch_address4 + '</td></tr>';
@@ -379,6 +383,7 @@ function edit(id){
             $('#addModal').find('#address2').val(obj.message.address2);
             $('#addModal').find('#address3').val(obj.message.address3);
             $('#addModal').find('#address4').val(obj.message.address4);
+            $('#addModal').find('#reseller_map_url').val(obj.message.resellerMapUrl);
             $('#addModal').find('#phone').val(obj.message.customer_phone);
             $('#addModal').find('#email').val(obj.message.customer_email);
             $('#addModal').find('#pic').val(obj.message.customer_email);

@@ -20,10 +20,11 @@ if(isset($_POST['name'], $_POST['address'], $_POST['address2'], $_POST['phone'],
     $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_STRING);
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-
+    
     $otherCode = null;
     $pic = null;
     $picContact = null;
+    $resellerMapUrl = '';
 
     # Branches
     $branchAddress1 = $_POST['branch_address1'] ?? [];
@@ -52,6 +53,10 @@ if(isset($_POST['name'], $_POST['address'], $_POST['address2'], $_POST['phone'],
         $address4 = filter_input(INPUT_POST, 'address4', FILTER_SANITIZE_STRING);
     }
 
+    if(isset($_POST['reseller_map_url']) && $_POST['reseller_map_url'] != null && $_POST['reseller_map_url'] != ""){
+        $resellerMapUrl = $_POST['reseller_map_url'] ?? [];
+    }
+
     if(isset($_POST['pic']) && $_POST['pic'] != null && $_POST['pic'] != ""){
         $pic = filter_input(INPUT_POST, 'pic', FILTER_SANITIZE_STRING);
     }
@@ -61,8 +66,8 @@ if(isset($_POST['name'], $_POST['address'], $_POST['address2'], $_POST['phone'],
     }
 
     if(isset($_POST['id']) && $_POST['id'] != null && $_POST['id'] != ''){
-        if ($update_stmt = $db->prepare("UPDATE dealer SET customer_code=?, other_code=?, customer_name=?, customer_address=?, address2=?, address3=?, address4=?, customer_phone=?, customer_email=?, pic=?, pic_contact=? WHERE id=?")) {
-            $update_stmt->bind_param('ssssssssssss', $code, $otherCode, $name, $address, $address2, $address3, $address4, $phone, $email, $pic, $picContact, $_POST['id']);
+        if ($update_stmt = $db->prepare("UPDATE dealer SET customer_code=?, other_code=?, customer_name=?, customer_address=?, address2=?, address3=?, address4=?, map_url=?, customer_phone=?, customer_email=?, pic=?, pic_contact=? WHERE id=?")) {
+            $update_stmt->bind_param('sssssssssssss', $code, $otherCode, $name, $address, $address2, $address3, $address4, $resellerMapUrl, $phone, $email, $pic, $picContact, $_POST['id']);
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
@@ -119,8 +124,8 @@ if(isset($_POST['name'], $_POST['address'], $_POST['address2'], $_POST['phone'],
         }
     }
     else{
-        if ($insert_stmt = $db->prepare("INSERT INTO dealer (customer_code, other_code, customer_name, customer_address, address2, address3, address4, customer_phone, customer_email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-            $insert_stmt->bind_param('sssssssssss', $code, $otherCode, $name, $address, $address2, $address3, $address4, $phone, $email, $pic, $picContact);
+        if ($insert_stmt = $db->prepare("INSERT INTO dealer (customer_code, other_code, customer_name, customer_address, address2, address3, address4, map_url, customer_phone, customer_email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+            $insert_stmt->bind_param('ssssssssssss', $code, $otherCode, $name, $address, $address2, $address3, $address4, $resellerMapUrl, $phone, $email, $pic, $picContact);
             
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {
