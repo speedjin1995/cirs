@@ -68,9 +68,30 @@ if(isset($_GET['type'])){
                 
             $excelData = implode("\t", array_values($fields)) . "\n"; 
             while ($row = $result->fetch_assoc()) {
+                $branch = $row['branch'];
+                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                $branchDetail = mysqli_query($db, $branchQuery);
+                $branchRow = mysqli_fetch_assoc($branchDetail);
+
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
+
+                if(!empty($branchRow)){
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
+                }
+
                 $lineData = array($todayDate2, searchBrandNameById($row['brand'], $db).'\n'.searchModelNameById($row['model'], $db).'\n'.searchAlatNameById($row['jenis_alat'], $db), 
                 searchCapacityNameById($row['capacity'], $db), '1', $row['no_daftar'], $row['siri_keselamatan'], searchCustNameById($row['customers'], $db),
-                $row['address1'].' '.$row['address2'].' '.$row['address3']);
+                $address1.' '.$address2.' '.$address3.' '.$address4);
                 
                 array_walk($lineData, 'filterData'); 
                 $excelData .= implode("\t", array_values($lineData)) . "\n"; 
@@ -83,9 +104,30 @@ if(isset($_GET['type'])){
             $excelData = implode("\t", array_values($fields)) . "\n"; 
 
             while ($row = $result->fetch_assoc()) {
+                $branch = $row['branch'];
+                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                $branchDetail = mysqli_query($db, $branchQuery);
+                $branchRow = mysqli_fetch_assoc($branchDetail);
+
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
+
+                if(!empty($branchRow)){
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
+                }
+
                 $lineData = array('', $todayDate2, searchBrandNameById($row['brand'], $db).'\n'.searchModelNameById($row['model'], $db).'\n'.searchAlatNameById($row['jenis_alat'], $db), 
                 searchCapacityNameById($row['capacity'], $db), $row['pin_keselamatan'], $row['no_daftar'], 'SERVICE / STMP', $row['siri_keselamatan'], searchCustNameById($row['customers'], $db),
-                $row['address1'].' '.$row['address2'].' '.$row['address3'], $row['unit_price']);
+                $address1.' '.$address2.' '.$address3.' '.$address4, $row['unit_price']);
                 
                 array_walk($lineData, 'filterData'); 
                 $excelData .= implode("\t", array_values($lineData)) . "\n"; 
@@ -103,10 +145,30 @@ if(isset($_GET['type'])){
 
             while ($row = $result->fetch_assoc()) {
                 $validator = $row['validate_by'];
+                $branch = $row['branch'];
+                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                $branchDetail = mysqli_query($db, $branchQuery);
+                $branchRow = mysqli_fetch_assoc($branchDetail);
+
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
+
+                if(!empty($branchRow)){
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
+                }
 
                 $lineData = array($count, searchAlatNameById($row['jenis_alat'], $db), searchCapacityNameById($row['capacity'], $db), 
                 searchBrandNameById($row['brand'], $db).'\n'.searchModelNameById($row['model'], $db).'\n'.searchAlatNameById($row['jenis_alat'], $db), 
-                $row['serial_no'], searchCustNameById($row['customers'], $db).'\n'.$row['address1'].' '.$row['address2'].' '.$row['address3'], 
+                $row['serial_no'], searchCustNameById($row['customers'], $db).'\n'.$address1.' '.$address2.' '.$address3.' '.$address4, 
                 $row['no_daftar'], $row['siri_keselamatan'], $row['unit_price']);
                 
                 array_walk($lineData, 'filterData'); 

@@ -123,6 +123,27 @@ if(isset($_POST['driver'])){
                     </tr>';
 
             while ($row = $result->fetch_assoc()) {
+                $branch = $row['branch'];
+                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                $branchDetail = mysqli_query($db, $branchQuery);
+                $branchRow = mysqli_fetch_assoc($branchDetail);
+
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
+
+                if(!empty($branchRow)){
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
+                }
+
                 $message .= '<tr>
                         <td>'.$todayDate2.'</td>
                         <td>'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
@@ -131,7 +152,7 @@ if(isset($_POST['driver'])){
                         <td>'.$row['no_daftar'].'</td>
                         <td>'.$row['siri_keselamatan'].'</td>
                         <td>'.searchCustNameById($row['customers'], $db).'</td>
-                        <td>'.$row['address1'].' '.$row['address2'].' '.$row['address3'].'</td>
+                        <td>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
                     </tr>';
             }
 
@@ -220,6 +241,27 @@ if(isset($_POST['driver'])){
                     </tr>';
 
             while ($row = $result->fetch_assoc()) {
+                $branch = $row['branch'];
+                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                $branchDetail = mysqli_query($db, $branchQuery);
+                $branchRow = mysqli_fetch_assoc($branchDetail);
+
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
+
+                if(!empty($branchRow)){
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
+                }
+
                 $message .= '<tr>
                         <td></td>
                         <td>'.$todayDate2.'</td>
@@ -230,7 +272,7 @@ if(isset($_POST['driver'])){
                         <td>SERVICE / STMP</td>
                         <td>'.$row['siri_keselamatan'].'</td>
                         <td>'.searchCustNameById($row['customers'], $db).'</td>
-                        <td>'.$row['address1'].' '.$row['address2'].' '.$row['address3'].'</td>
+                        <td>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
                         <td>'.$row['unit_price'].'</td>
                     </tr>';
             }
@@ -244,13 +286,34 @@ if(isset($_POST['driver'])){
 
             while ($row = $result->fetch_assoc()) {
                 $validator = $row['validate_by'];
+                $branch = $row['branch'];
+                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                $branchDetail = mysqli_query($db, $branchQuery);
+                $branchRow = mysqli_fetch_assoc($branchDetail);
+
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
+
+                if(!empty($branchRow)){
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
+                }
+
                 $rows[] = '<tr style="height: 30px;">
                         <td>'.$count.'</td>
                         <td>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
                         <td>'.searchCapacityNameById($row['capacity'], $db).'</td>
                         <td>'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
                         <td>'.$row['serial_no'].'</td>
-                        <td>'.searchCustNameById($row['customers'], $db).'<br>'.$row['address1'].' '.$row['address2'].' '.$row['address3'].'</td>
+                        <td>'.searchCustNameById($row['customers'], $db).'<br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
                         <td></td>
                         <td>'.$row['no_daftar'].'</td>
                         <td>'.$row['siri_keselamatan'].'</td>

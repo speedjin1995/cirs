@@ -199,13 +199,13 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               </div>
             </div>
           </div>
-          <div class="card card-primary">
+          <div class="card card-primary" id="isResseller" style="display: none;">
             <div class="card-body">
               <div class="row">
-                <h4>Customer/Reseller Billing Information</h4>
+                <h4>Reseller Billing Information</h4>
               </div>
               <div class="row">
-                <div class="col-4" id="isResseller">
+                <div class="col-4">
                   <div class="form-group">
                     <label for="code">Reseller</label>
                     <select class="form-control select2" id="dealer" name="dealer">
@@ -216,68 +216,10 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
-                <div class="col-4" id="isResseller2">
+                <div class="col-12" id="resellerbranch">
                   <div class="form-group">
-                    <label>Billing Address Line 1 * </label>
-                    <input class="form-control" type="text" placeholder="Address Line 1" id="address1s" name="address1s" readonly>
-                  </div>
-                </div>
-                <div class="col-4" id="isResseller3">
-                  <div class="form-group">
-                    <label>Billing Address Line 2 </label>
-                    <input class="form-control" type="text" placeholder="Address Line 2" id="address2s" name="address2s" readonly>
-                  </div>
-                </div>
-                <div class="col-4" id="isResseller4">
-                  <div class="form-group">
-                    <label>Billing Address Line 3 </label>
-                    <input class="form-control" type="text" placeholder="Address Line 3" id="address3s" name="address3s" readonly>
-                  </div>
-                </div>
-                <div class="col-4" id="isResseller5">
-                  <div class="form-group">
-                    <label>P.I.C</label>
-                    <input class="form-control" type="text" placeholder="PIC" id="pics" name="pics" readonly>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Quotation No.</label>
-                    <input class="form-control" type="text" placeholder="PO No" id="quotation" name="quotation">
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Quotation Date</label>
-                    <div class='input-group date' id="datePicker3" data-target-input="nearest">
-                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker3" id="quotationDate" name="quotationDate"/>
-                      <div class="input-group-append" data-target="#datePicker3" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>PO No.</label>
-                    <input class="form-control" type="text" placeholder="PO No" id="poNo" name="poNo">
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>PO Date </label>
-                    <div class='input-group date' id="datePicker4" data-target-input="nearest">
-                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker4" id="poDate" name="poDate"/>
-                      <div class="input-group-append" data-target="#datePicker4" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Invoice / Cash Bill No.</label>
-                    <input class="form-control" type="text" placeholder="Invoice No" id="invoice" name="invoice">
+                    <label>Branch * </label>
+                    <select class="form-control select2" style="width: 100%;" id="reseller_branch" name="reseller_branch"></select>
                   </div>
                 </div>
               </div>
@@ -522,6 +464,56 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
           </div>
 
           <div id="addtionalSection"></div>
+
+          <div class="card card-primary">
+            <div class="card-body">
+              <div class="row">
+                <h4>Billing Information</h4>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Quotation No.</label>
+                    <input class="form-control" type="text" placeholder="PO No" id="quotation" name="quotation">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Quotation Date</label>
+                    <div class='input-group date' id="datePicker3" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker3" id="quotationDate" name="quotationDate"/>
+                      <div class="input-group-append" data-target="#datePicker3" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>PO No.</label>
+                    <input class="form-control" type="text" placeholder="PO No" id="poNo" name="poNo">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>PO Date </label>
+                    <div class='input-group date' id="datePicker4" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker4" id="poDate" name="poDate"/>
+                      <div class="input-group-append" data-target="#datePicker4" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Invoice / Cash Bill No.</label>
+                    <input class="form-control" type="text" placeholder="Invoice No" id="invoice" name="invoice">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <div class="card card-primary">
             <div class="card-body">
@@ -885,6 +877,8 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
 <script>
 var pricingCount = $("#pricingTable").find(".details").length;
 var loadCellCount = $("#loadCellTable").find(".details").length;
+var customer = 0;
+var branch = 0;
 
 $(function () {
   $('#customerNoHidden').hide();
@@ -1352,11 +1346,13 @@ $(function () {
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){
-          $('#extendModal').find('#address1s').val(obj.message.customer_address);
-          $('#extendModal').find('#address2s').val(obj.message.address2);
-          $('#extendModal').find('#address3s').val(obj.message.address3);
-          $('#extendModal').find('#contacts').val(obj.message.customer_phone);
-          $('#extendModal').find('#emails').val(obj.message.customer_email);
+          $('#reseller_branch').html('');
+          $('#reseller_branch').append('<option selected="selected">-</option>');
+
+          for(var i=0; i<obj.message.branches.length; i++){
+            var branchInfo = obj.message.branches[i];
+            $('#reseller_branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.branch_address1+' '+branchInfo.branch_address2+' '+branchInfo.branch_address3+' '+branchInfo.branch_address4+'</option>')
+          }
           $('#extendModal').modal('show');
 
           $('#extendForm').validate({
@@ -1394,6 +1390,10 @@ $(function () {
           $('#extendModal').find('#companyText').val('');
           for(var i=0; i<obj.message.length; i++){
             $('#company').append('<option value="'+obj.message[i].id+'">'+obj.message[i].name+'</option>')
+          }
+
+          if(customer != 0){
+            $('#extendModal').find('#company').val(customer).trigger('change');
           }
         }
         else if(obj.status === 'failed'){
@@ -1527,6 +1527,10 @@ $(function () {
           var branchInfo = obj.message.pricing[i];
           $('#branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.address1+' '+branchInfo.address2+' '+branchInfo.address3+' '+branchInfo.address4+'</option>')
         }
+
+        if(branch != 0){
+            $('#extendModal').find('#branch').val(branch).trigger('change');
+          }
 
         $('#extendModal').modal('show');
 
@@ -1729,6 +1733,7 @@ $(function () {
       $('#addtionalSection').html($('#atkDetails').html());
       loadCellCount = 0;
       $("#loadCellTable").html('');
+      $('#extendModal').trigger('atkLoaded')
     }
     else{
       $('#addtionalSection').html('');
@@ -1780,6 +1785,7 @@ $(function () {
       $('#addtionalSection').html($('#atkDetails').html());
       loadCellCount = 0;
       $("#loadCellTable").html('');
+      $('#extendModal').trigger('atkLoaded')
     }
     else{
       $('#addtionalSection').html('');
@@ -1867,7 +1873,8 @@ function format (row) {
     <!-- Customer Section -->
     <div class="col-md-6">
       <p><strong>${row.customers}</strong><br>
-      ${row.address1}<br>${row.address2}<br>${row.address3}</p>
+      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4}
+      <br>PIC: ${row.picontact} PIC Contact: ${row.pic_phone}</p>
     </div>
   </div><hr>
 
@@ -2011,7 +2018,8 @@ function newEntry(){
   $('#extendModal').find('#poDate').val('');
   $('#extendModal').find('#cashBill').val("");
   $('#extendModal').find('#invoice').val('');
-
+  customer = 0;
+  branch = 0;
   $('#pricingTable').html('');
   pricingCount = 0;
   $('#extendModal').find('#unitPrice').val("");
@@ -2073,7 +2081,8 @@ function edit(id) {
       if(obj.message.type == 'DIRECT'){
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
-        $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
+        $('#extendModal').find('#dealer').val('');
+        $('#extendModal').find('#reseller_branch').val('');
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
@@ -2082,14 +2091,21 @@ function edit(id) {
         $('#extendModal').find('#companyText').val('');
         $('#extendModal').find('#product').val(obj.message.products);
         $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
-        $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
-        $('#extendModal').find('#address1').val(obj.message.address1);
+        customer = obj.message.customers;
+        branch = obj.message.branch;
+        $('#extendModal').on('jaIsLoaded', function() {
+          $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
+        });
+        
+        //$('#extendModal').find('#address1').val(obj.message.address1);
         
         setTimeout(function(){
           $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
         }, 500);
 
-        $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        $('#extendModal').on('modelsLoaded', function() {
+          $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        });
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
@@ -2154,44 +2170,47 @@ function edit(id) {
           }
         }
 
-        if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '1'){
-          $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
-          $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
-          $('#extendModal').find('#kelulusanMSPK').val(obj.message.kelulusan_mspk);
-          $('#extendModal').find('#noMSPK').val(obj.message.no_kelulusan);
-          $('#extendModal').find('#noSerialIndicator').val(obj.message.indicator_serial);
-          $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
-          $('#extendModal').find('#platformType').val(obj.message.platform_type);
-          $('#extendModal').find('#size').val(obj.message.size);
-          $('#extendModal').find('#jenisPelantar').val(obj.message.jenis_pelantar);
-          $('#extendModal').find('#others').val(obj.message.other_info);
-          $('#extendModal').find('#loadCellCountry').val(obj.message.load_cell_country);
-          $('#extendModal').find('#noOfLoadCell').val(obj.message.load_cell_no);
+        $('#extendModal').on('atkLoaded', function() {
+          if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '1'){
+            $('#addtionalSection').html($('#atkDetails').html());
+            $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
+            $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
+            $('#extendModal').find('#kelulusanMSPK').val(obj.message.kelulusan_mspk);
+            $('#extendModal').find('#noMSPK').val(obj.message.no_kelulusan);
+            $('#extendModal').find('#noSerialIndicator').val(obj.message.indicator_serial);
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
+            $('#extendModal').find('#platformType').val(obj.message.platform_type);
+            $('#extendModal').find('#size').val(obj.message.size);
+            $('#extendModal').find('#jenisPelantar').val(obj.message.jenis_pelantar);
+            $('#extendModal').find('#others').val(obj.message.other_info);
+            $('#extendModal').find('#loadCellCountry').val(obj.message.load_cell_country);
+            $('#extendModal').find('#noOfLoadCell').val(obj.message.load_cell_no);
 
-          if(obj.message.load_cells_info.length > 0){
-            $("#loadCellTable").html('');
-            loadCellCount = 0;
+            if(obj.message.load_cells_info.length > 0){
+              $("#loadCellTable").html('');
+              loadCellCount = 0;
 
-            for(var i = 0; i < obj.message.load_cells_info.length; i++){
-              var item = obj.message.load_cells_info[i];
-              var $addContents = $("#loadCellDetails").clone();
-              $("#loadCellTable").append($addContents.html());
+              for(var i = 0; i < obj.message.load_cells_info.length; i++){
+                var item = obj.message.load_cells_info[i];
+                var $addContents = $("#loadCellDetails").clone();
+                $("#loadCellTable").append($addContents.html());
 
-              $("#loadCellTable").find('.details:last').attr("id", "detail" + loadCellCount);
-              $("#loadCellTable").find('.details:last').attr("data-index", loadCellCount);
-              $("#loadCellTable").find('#remove:last').attr("id", "remove" + loadCellCount);
+                $("#loadCellTable").find('.details:last').attr("id", "detail" + loadCellCount);
+                $("#loadCellTable").find('.details:last').attr("data-index", loadCellCount);
+                $("#loadCellTable").find('#remove:last').attr("id", "remove" + loadCellCount);
 
-              $("#loadCellTable").find('#no:last').attr('name', 'no['+loadCellCount+']').attr("id", "no" + loadCellCount).val(item.no);
-              $("#loadCellTable").find('#loadCells:last').attr('name', 'loadCells['+loadCellCount+']').attr("id", "loadCells" + loadCellCount).val(item.loadCells);
-              $("#loadCellTable").find('#loadCellBrand:last').attr('name', 'loadCellBrand['+loadCellCount+']').attr("id", "loadCellBrand" + loadCellCount).val(item.loadCellBrand);
-              $("#loadCellTable").find('#loadCellModel:last').attr('name', 'loadCellModel['+loadCellCount+']').attr("id", "loadCellModel" + loadCellCount).val(item.loadCellModel);
-              $("#loadCellTable").find('#loadCellCapacity:last').attr('name', 'loadCellCapacity['+loadCellCount+']').attr("id", "loadCellCapacity" + loadCellCount).val(item.loadCellCapacity);
-              $("#loadCellTable").find('#loadCellSerial').attr('name', 'loadCellSerial['+loadCellCount+']').attr("id", "loadCellSerial" + loadCellCount).val(item.loadCellSerial);
+                $("#loadCellTable").find('#no:last').attr('name', 'no['+loadCellCount+']').attr("id", "no" + loadCellCount).val(item.no);
+                $("#loadCellTable").find('#loadCells:last').attr('name', 'loadCells['+loadCellCount+']').attr("id", "loadCells" + loadCellCount).val(item.loadCells);
+                $("#loadCellTable").find('#loadCellBrand:last').attr('name', 'loadCellBrand['+loadCellCount+']').attr("id", "loadCellBrand" + loadCellCount).val(item.loadCellBrand);
+                $("#loadCellTable").find('#loadCellModel:last').attr('name', 'loadCellModel['+loadCellCount+']').attr("id", "loadCellModel" + loadCellCount).val(item.loadCellModel);
+                $("#loadCellTable").find('#loadCellCapacity:last').attr('name', 'loadCellCapacity['+loadCellCount+']').attr("id", "loadCellCapacity" + loadCellCount).val(item.loadCellCapacity);
+                $("#loadCellTable").find('#loadCellSerial').attr('name', 'loadCellSerial['+loadCellCount+']').attr("id", "loadCellSerial" + loadCellCount).val(item.loadCellSerial);
 
-              loadCellCount++;
+                loadCellCount++;
+              }
             }
           }
-        }
+        });
         
         $('#extendModal').modal('show');
 
@@ -2212,26 +2231,34 @@ function edit(id) {
       else{
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
-        $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#newRenew').val(obj.message.stampType);
-
+        customer = obj.message.customers;
+        branch = obj.message.branch;
         setTimeout(function(){
+          $('#extendModal').find('#reseller_branch').val(obj.message.dealer_branch).trigger('change');
           $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
 
           setTimeout(function(){
             $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
-          }, 500);
+          }, 1500);
         }, 1000);
 
         $('#extendModal').find('#companyText').val('');
         $('#extendModal').find('#product').val(obj.message.products);
         $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
-        $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
-        $('#extendModal').find('#address1').val(obj.message.address1);
-        $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        $('#extendModal').on('jaIsLoaded', function() {
+          $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
+        });
+        
+        //$('#extendModal').find('#address1').val(obj.message.address1);
+
+        $('#extendModal').on('modelsLoaded', function() {
+          $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        });
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
@@ -2258,44 +2285,47 @@ function edit(id) {
         $('#extendModal').find('#sst').val(obj.message.sst);
         $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
 
-        if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '1'){
-          $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
-          $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
-          $('#extendModal').find('#kelulusanMSPK').val(obj.message.kelulusan_mspk);
-          $('#extendModal').find('#noMSPK').val(obj.message.no_kelulusan);
-          $('#extendModal').find('#noSerialIndicator').val(obj.message.indicator_serial);
-          $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
-          $('#extendModal').find('#platformType').val(obj.message.platform_type);
-          $('#extendModal').find('#size').val(obj.message.size);
-          $('#extendModal').find('#jenisPelantar').val(obj.message.jenis_pelantar);
-          $('#extendModal').find('#others').val(obj.message.other_info);
-          $('#extendModal').find('#loadCellCountry').val(obj.message.load_cell_country);
-          $('#extendModal').find('#noOfLoadCell').val(obj.message.load_cell_no);
+        $('#extendModal').on('atkLoaded', function() {
+          if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '1'){
+            $('#addtionalSection').html($('#atkDetails').html());
+            $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
+            $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
+            $('#extendModal').find('#kelulusanMSPK').val(obj.message.kelulusan_mspk);
+            $('#extendModal').find('#noMSPK').val(obj.message.no_kelulusan);
+            $('#extendModal').find('#noSerialIndicator').val(obj.message.indicator_serial);
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
+            $('#extendModal').find('#platformType').val(obj.message.platform_type);
+            $('#extendModal').find('#size').val(obj.message.size);
+            $('#extendModal').find('#jenisPelantar').val(obj.message.jenis_pelantar);
+            $('#extendModal').find('#others').val(obj.message.other_info);
+            $('#extendModal').find('#loadCellCountry').val(obj.message.load_cell_country);
+            $('#extendModal').find('#noOfLoadCell').val(obj.message.load_cell_no);
 
-          if(obj.message.load_cells_info.length > 0){
-            $("#loadCellTable").html('');
-            loadCellCount = 0;
+            if(obj.message.load_cells_info.length > 0){
+              $("#loadCellTable").html('');
+              loadCellCount = 0;
 
-            for(var i = 0; i < obj.message.load_cells_info.length; i++){
-              var item = obj.message.load_cells_info[i];
-              var $addContents = $("#loadCellDetails").clone();
-              $("#loadCellTable").append($addContents.html());
+              for(var i = 0; i < obj.message.load_cells_info.length; i++){
+                var item = obj.message.load_cells_info[i];
+                var $addContents = $("#loadCellDetails").clone();
+                $("#loadCellTable").append($addContents.html());
 
-              $("#loadCellTable").find('.details:last').attr("id", "detail" + loadCellCount);
-              $("#loadCellTable").find('.details:last').attr("data-index", loadCellCount);
-              $("#loadCellTable").find('#remove:last').attr("id", "remove" + loadCellCount);
+                $("#loadCellTable").find('.details:last').attr("id", "detail" + loadCellCount);
+                $("#loadCellTable").find('.details:last').attr("data-index", loadCellCount);
+                $("#loadCellTable").find('#remove:last').attr("id", "remove" + loadCellCount);
 
-              $("#loadCellTable").find('#no:last').attr('name', 'no['+loadCellCount+']').attr("id", "no" + loadCellCount).val(item.no);
-              $("#loadCellTable").find('#loadCells:last').attr('name', 'loadCells['+loadCellCount+']').attr("id", "loadCells" + loadCellCount).val(item.loadCells);
-              $("#loadCellTable").find('#loadCellBrand:last').attr('name', 'loadCellBrand['+loadCellCount+']').attr("id", "loadCellBrand" + loadCellCount).val(item.loadCellBrand);
-              $("#loadCellTable").find('#loadCellModel:last').attr('name', 'loadCellModel['+loadCellCount+']').attr("id", "loadCellModel" + loadCellCount).val(item.loadCellModel);
-              $("#loadCellTable").find('#loadCellCapacity:last').attr('name', 'loadCellCapacity['+loadCellCount+']').attr("id", "loadCellCapacity" + loadCellCount).val(item.loadCellCapacity);
-              $("#loadCellTable").find('#loadCellSerial').attr('name', 'loadCellSerial['+loadCellCount+']').attr("id", "loadCellSerial" + loadCellCount).val(item.loadCellSerial);
+                $("#loadCellTable").find('#no:last').attr('name', 'no['+loadCellCount+']').attr("id", "no" + loadCellCount).val(item.no);
+                $("#loadCellTable").find('#loadCells:last').attr('name', 'loadCells['+loadCellCount+']').attr("id", "loadCells" + loadCellCount).val(item.loadCells);
+                $("#loadCellTable").find('#loadCellBrand:last').attr('name', 'loadCellBrand['+loadCellCount+']').attr("id", "loadCellBrand" + loadCellCount).val(item.loadCellBrand);
+                $("#loadCellTable").find('#loadCellModel:last').attr('name', 'loadCellModel['+loadCellCount+']').attr("id", "loadCellModel" + loadCellCount).val(item.loadCellModel);
+                $("#loadCellTable").find('#loadCellCapacity:last').attr('name', 'loadCellCapacity['+loadCellCount+']').attr("id", "loadCellCapacity" + loadCellCount).val(item.loadCellCapacity);
+                $("#loadCellTable").find('#loadCellSerial').attr('name', 'loadCellSerial['+loadCellCount+']').attr("id", "loadCellSerial" + loadCellCount).val(item.loadCellSerial);
 
-              loadCellCount++;
+                loadCellCount++;
+              }
             }
           }
-        }
+        });
 
         $('#extendModal').modal('show');
 
@@ -2403,7 +2433,7 @@ function print(id) {
     var obj = JSON.parse(data);
 
     if(obj.status === 'success'){
-      var printWindow = window.open('', '', 'height=400,width=800');
+      var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
       printWindow.document.write(obj.message);
       printWindow.document.close();
       setTimeout(function(){
