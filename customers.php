@@ -288,7 +288,7 @@ $(function () {
         });
       }
       else{
-        alert("Please enter at least an address to procedd");
+        alert("Please enter at least an address to proceed");
       }
     }
   });
