@@ -2429,8 +2429,8 @@ function deactivate(id) {
 }
 
 function print(id) {
-  $.post('php/print.php', {userID: id, file: 'weight'}, function(data){
-    var obj = JSON.parse(data);
+  $.post('php/printBorang.php', {userID: id, file: 'ATK'}, function(data){
+    /*var obj = JSON.parse(data);
 
     if(obj.status === 'success'){
       var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
@@ -2440,17 +2440,13 @@ function print(id) {
         printWindow.print();
         printWindow.close();
       }, 500);
-
-      /*$.get('weightPage.php', function(data) {
-        $('#mainContents').html(data);
-      });*/
     }
     else if(obj.status === 'failed'){
       toastr["error"](obj.message, "Failed:");
     }
     else{
       toastr["error"]("Something wrong when activate", "Failed:");
-    }
+    }*/
   });
 }
 
