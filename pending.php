@@ -155,6 +155,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               <thead>
                 <tr>
                   <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
+                  <th>Validator</th>
                   <th>Customers</th>
                   <th>Brands</th>
                   <th>Model</th>
@@ -370,6 +371,17 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                       <option selected="selected">-</option>
                       <?php while($rowCA=mysqli_fetch_assoc($capacities)){ ?>
                         <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4" id="capacityHigh">
+                  <div class="form-group">
+                    <label>Capacity (High) </label>
+                    <select class="form-control select2" style="width: 100%;" id="capacity_high" name="capacity_high">
+                      <option selected="selected">-</option>
+                      <?php while($capacity2=mysqli_fetch_assoc($capacities2)){ ?>
+                        <option value="<?=$capacity2['id'] ?>"><?=$capacity2['name'] ?></option>
                       <?php } ?>
                     </select>
                   </div>
@@ -975,6 +987,7 @@ $(function () {
           }
         }
       },
+      { data: 'validate_by' },
       { data: 'customers' },
       { data: 'brand' },
       { data: 'model' },
@@ -1199,6 +1212,7 @@ $(function () {
             }
           }
         },
+        { data: 'validate_by' },
         { data: 'customers' },
         { data: 'brand' },
         { data: 'model' },
@@ -1876,11 +1890,20 @@ function format (row) {
     <!-- Customer Section -->
     <div class="col-md-6">
       <p><strong>${row.customers}</strong><br>
-      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4}
-      <br>PIC: ${row.picontact} PIC Contact: ${row.pic_phone}</p>
-    </div>
-  </div><hr>
+      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4}`;
+      
+      if (row.picontact) {
+          returnString += `
+              <br>PIC: ${row.picontact} PIC Contact: ${row.pic_phone}</p>
+              </div>
+          </div><hr>`;
+      } else {
+          returnString += `</p>
+          </div>
+      </div><hr>`;
+      }
 
+  returnString += `
   <div class="row">
     <!-- Machine Section -->
     <div class="col-6">
@@ -1888,6 +1911,7 @@ function format (row) {
       <p><strong>Model:</strong> ${row.model}</p>
       <p><strong>Machine Type:</strong> ${row.machine_type}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
+      <p><strong>Capacity (High):</strong> ${row.capacity_high}</p>
       <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
       <p><strong>Serial No:</strong> ${row.serial_no}</p>
     </div>
@@ -1983,6 +2007,7 @@ function formatDate(convert1) {
 
 function newEntry(){
   var date = new Date();
+  $('#capacityHigh').hide();
 
   $('#extendModal').find('#id').val("");
   $('#extendModal').find('#type').val("DIRECT");
@@ -2021,6 +2046,16 @@ function newEntry(){
   $('#extendModal').find('#poDate').val('');
   $('#extendModal').find('#cashBill').val("");
   $('#extendModal').find('#invoice').val('');
+
+  $('#extendModal').find('#jenisAlat').change(function() {
+    if($(this).val() == 1) {
+        $('#extendModal').find('#capacityHigh').show();
+    } else {
+        $('#extendModal').find('#capacityHigh').hide();
+    }
+  });
+
+
   customer = 0;
   branch = 0;
   $('#pricingTable').html('');
@@ -2100,6 +2135,16 @@ function edit(id) {
           $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
         });
         
+        $('#extendModal').find('#jenisAlat').change(function() {
+          if($(this).val() == 1) {
+              $('#extendModal').find('#capacityHigh').show();
+              $('#extendModal').find('#capacity_high').val(obj.message.capacity_high).trigger('change');
+          } else {
+              $('#extendModal').find('#capacityHigh').hide();
+              $('#extendModal').find('#capacity_high').val('');
+          }
+        });
+
         //$('#extendModal').find('#address1').val(obj.message.address1);
         
         setTimeout(function(){
@@ -2257,6 +2302,15 @@ function edit(id) {
           $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
         });
         
+        $('#extendModal').find('#jenisAlat').change(function() {
+          if($(this).val() == 1) {
+              $('#extendModal').find('#capacityHigh').show();
+              $('#extendModal').find('#capacity_high').val(obj.message.capacity_high).trigger('change');
+          } else {
+              $('#extendModal').find('#capacityHigh').hide();
+              $('#extendModal').find('#capacity_high').val('');
+          }
+        });
         //$('#extendModal').find('#address1').val(obj.message.address1);
 
         $('#extendModal').on('modelsLoaded', function() {

@@ -137,7 +137,7 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['autoFormNo'], $_POST['v
 		, model=?, capacity=?, size=?, calibrator=?, validation_date=?, update_datetime=? WHERE id=?")){
 			$data = json_encode($logs);
 			$update_stmt->bind_param('ssssssssssssssssssssss', $type, $dealer, $reseller_branch, $validator, $customerType, $customer, $branch, $autoFormNo, $machineType, $serial, $lastCalibrationDate, $expiredDate, $manufacturing, $autoCertNo, $brand, $model, $capacity, $size, $calibrator, $validationDate, $currentDateTime, $_POST['id']);
-			
+
 			// Execute the prepared query.
 			if (! $update_stmt->execute()){
 				$response['status'] = "failed";
@@ -160,7 +160,7 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['autoFormNo'], $_POST['v
 							"afterAdjustReading" => $afterAdjustReading[$i] != '' ? $afterAdjustReading[$i] : '0.0',
 						);
 					}
-				} var_dump($loadTestings);
+				} 
 
 				// Update certificate data in the database
 				if ($stmt2 = $db->prepare("UPDATE inhouse_validations SET tests=? WHERE id=?")) {

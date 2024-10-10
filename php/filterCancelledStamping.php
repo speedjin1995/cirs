@@ -55,19 +55,45 @@ $data = array();
 $counter = 1;
 
 while($row = mysqli_fetch_assoc($empRecords)) {
+  $branch = $row['branch'];
+  $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+  $branchDetail = mysqli_query($db, $branchQuery);
+  $branchRow = mysqli_fetch_assoc($branchDetail);
+
+  $address1 = null;
+  $address2 = null;
+  $address3 = null;
+  $address4 = null;
+  $pic = null;
+  $pic_phone = null;
+
+  if(!empty($branchRow)){
+    $address1 = $branchRow['address'];
+    $address2 = $branchRow['address2'];
+    $address3 = $branchRow['address3'];
+    $address4 = $branchRow['address4'];
+    $pic = $branchRow['pic'];
+    $pic_phone = $branchRow['pic_contact'];
+  }
+
   $data[] = array( 
     "no"=>$counter,
     "id"=>$row['id'],
     "customers"=>$row['customers'] != null ? searchCustNameById($row['customers'], $db) : '',
-    "address1"=>$row['address1'] ?? '',
-    "address2"=>$row['address2'] ?? '',
-    "address3"=>$row['address3'] ?? '',
+    "branch" => $branch,
+    "address1" => $address1 ?? '',
+    "address2" => $address2 ?? '',
+    "address3" => $address3 ?? '',
+    "address4"=>$address4 ?? '',
+    "picontact"=> $pic ?? '',
+    "pic_phone"=> $pic_phone ?? '',
     "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
     "machine_type"=>$row['machine_type'] != null ? searchMachineNameById($row['machine_type'], $db) : '',
     "model"=>$row['model'] != null  ? searchModelNameById($row['model'], $db) : '',
     "capacity"=>$row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '',
+    "capacity_high"=>$row['capacity_high'] != null ? searchCapacityNameById($row['capacity_high'], $db) : '',
     "serial_no"=>$row['serial_no'] ?? '',
-    "validator"=>$row['validate_by'] != null ? searchValidatorNameById($row['validate_by'], $db) : '',
+    "validate_by"=>$row['validate_by'] != null ? searchValidatorNameById($row['validate_by'], $db) : '',
     "jenis_alat"=>$row['jenis_alat'] != null ? searchAlatNameById($row['jenis_alat'], $db) : '', 
     "cash_bill"=>$row['cash_bill'] ?? '',
     "invoice_no"=>$row['invoice_no'] ?? '',
@@ -94,34 +120,34 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "updated_datetime"=>$row['updated_datetime'] ?? ''
   );
 
-  if(($row['validate_by'] == '10' || $row['validate_by'] == '9') && $row['jenis_alat'] == '1') {
-    if ($update_stmt2 = $db->prepare("SELECT * FROM stamping_ext WHERE stamp_id = ?")) {
-      $update_stmt2->bind_param('s', $row['id']);
+  // if(($row['validate_by'] == '10' || $row['validate_by'] == '9') && $row['jenis_alat'] == '1') {
+  //   if ($update_stmt2 = $db->prepare("SELECT * FROM stamping_ext WHERE stamp_id = ?")) {
+  //     $update_stmt2->bind_param('s', $row['id']);
   
-      if($update_stmt2->execute()) {
-        $result2 = $update_stmt2->get_result();
+  //     if($update_stmt2->execute()) {
+  //       $result2 = $update_stmt2->get_result();
   
-        if($row2 = $result2->fetch_assoc()) {
-          // Update the last item in the $data array with additional fields from stamping_ext
-          $data[$counter - 1] = array_merge($data[$counter - 1], [
-            'penentusan_baru' => $row2['penentusan_baru'] ?? '',
-            'penentusan_semula' => $row2['penentusan_semula'] ?? '',
-            'kelulusan_mspk' => $row2['kelulusan_mspk'] ?? '',
-            'no_kelulusan' => $row2['no_kelulusan'] ?? '',
-            'indicator_serial' => $row2['indicator_serial'] ?? '',
-            'platform_country' => $row2['platform_country'] ?? '',
-            'platform_type' => $row2['platform_type'] ?? '',
-            'size' => $row2['size'] ?? '',
-            'jenis_pelantar' => $row2['jenis_pelantar'] ?? '',
-            'other_info' => $row2['other_info'] ?? '',
-            'load_cell_country' => $row2['load_cell_country'] ?? '',
-            'load_cell_no' => $row2['load_cell_no'] ?? '',
-            'load_cells_info' => json_decode($row2['load_cells_info'], true)
-          ]);
-        }
-      }
-    }
-  }
+  //       if($row2 = $result2->fetch_assoc()) {
+  //         // Update the last item in the $data array with additional fields from stamping_ext
+  //         $data[$counter - 1] = array_merge($data[$counter - 1], [
+  //           'penentusan_baru' => $row2['penentusan_baru'] ?? '',
+  //           'penentusan_semula' => $row2['penentusan_semula'] ?? '',
+  //           'kelulusan_mspk' => $row2['kelulusan_mspk'] ?? '',
+  //           'no_kelulusan' => $row2['no_kelulusan'] ?? '',
+  //           'indicator_serial' => $row2['indicator_serial'] ?? '',
+  //           'platform_country' => $row2['platform_country'] ?? '',
+  //           'platform_type' => $row2['platform_type'] ?? '',
+  //           'size' => $row2['size'] ?? '',
+  //           'jenis_pelantar' => $row2['jenis_pelantar'] ?? '',
+  //           'other_info' => $row2['other_info'] ?? '',
+  //           'load_cell_country' => $row2['load_cell_country'] ?? '',
+  //           'load_cell_no' => $row2['load_cell_no'] ?? '',
+  //           'load_cells_info' => json_decode($row2['load_cells_info'], true)
+  //         ]);
+  //       }
+  //     }
+  //   }
+  // }
 
   $counter++;
 }

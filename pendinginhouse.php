@@ -2072,6 +2072,8 @@ function edit(id) {
       let variance = obj.message.variance;
       let varianceDecimalPart = variance.toString().split('.')[1];
       let varianceDecimalPoint = varianceDecimalPart.length;
+      var unit = obj.message.capacityUnit;
+
       if(obj.message.type == 'DIRECT'){
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
@@ -2097,12 +2099,15 @@ function edit(id) {
         $('#extendModal').find('#validationDate').val(obj.message.validation_date);
         $('#extendModal').find('#calibrator').val(obj.message.calibrator).trigger('change');
 
+        // $('#extendModal').trigger('capacityLoaded');
+
         if(obj.message.tests != null && obj.message.tests.length > 0){
           $("#loadTestingTable").html('');
           loadTestingCount = 0; 
           var standardAvTemp = obj.message.standard_avg_temp;
           var relativeHumidity = obj.message.relative_humidity;
           $('#calibrationHeader').text('Note - Standard Average Temperature: ('+ standardAvTemp +') / Average Relative Humidity: ('+ relativeHumidity +')');
+          $('#varianceHeader').text('Variance +/- '+ variance + unit);
 
           for(var i = 0; i < obj.message.tests.length; i++){
             var tests = obj.message.tests[i];
@@ -2309,12 +2314,16 @@ function edit(id) {
         $('#extendModal').find('#validationDate').val(obj.message.validation_date);
         $('#extendModal').find('#calibrator').val(obj.message.calibrator).trigger('change');
 
+        // $('#extendModal').trigger('capacityLoaded');
+
         if(obj.message.tests != null && obj.message.tests.length > 0){
           $("#loadTestingTable").html('');
           loadTestingCount = 0; 
           var standardAvTemp = obj.message.standard_avg_temp;
           var relativeHumidity = obj.message.relative_humidity;
+
           $('#calibrationHeader').text('Note - Standard Average Temperature: ('+ standardAvTemp +') / Average Relative Humidity: ('+ relativeHumidity +')');
+          $('#varianceHeader').text('Variance +/- '+ variance + unit);
 
           for(var i = 0; i < obj.message.tests.length; i++){
             var tests = obj.message.tests[i];
@@ -2409,6 +2418,8 @@ function edit(id) {
                 var unit = obj.message.unit;
 
                 $('#calibrationHeader').text('Note - Standard Average Temperature: ('+ standardAvTemp +') / Average Relative Humidity: ('+ relativeHumidity +')');
+                $('#varianceHeader').text('Variance +/- '+ variance + unit);
+
                 $("#loadTestingTable").find('#standardValue0').val(obj.message.test_1.toFixed(varianceDecimalPoint));
                 $("#loadTestingTable").find('#standardValue1').val(obj.message.test_2.toFixed(varianceDecimalPoint));
                 $("#loadTestingTable").find('#standardValue2').val(obj.message.test_3.toFixed(varianceDecimalPoint));

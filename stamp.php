@@ -28,13 +28,20 @@ else{
   $models = $db->query("SELECT * FROM model WHERE deleted = '0'");
   $sizes = $db->query("SELECT * FROM size WHERE deleted = '0'");
   $capacities = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
+  $capacities2 = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
   $problems = $db->query("SELECT * FROM problem WHERE deleted = '0'");
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
-  $validators = $db->query("SELECT * FROM validators WHERE deleted = '0'");
+  $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
   $cancelledReasons = $db->query("SELECT * FROM reasons WHERE deleted = '0'");
+  $sizes = $db->query("SELECT * FROM size WHERE deleted = '0'");
+  $country = $db->query("SELECT * FROM country");
+  $country2 = $db->query("SELECT * FROM country");
+  $loadCells = $db->query("SELECT load_cells.*, machines.machine_type AS machinetype, brand.brand AS brand_name, model.model AS model_name, alat.alat, country.nicename 
+FROM load_cells, machines, brand, model, alat, country WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
+AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load_cells.deleted = '0'");
 }
 ?>
 
@@ -69,7 +76,8 @@ else{
                 <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
                   <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
                   <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
-                  <div class="input-group-text"><i class="fa fa-calendar"></i></div></div>
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
                 </div>
               </div>
 
@@ -126,9 +134,9 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-10"><p>Completed Stamping</p></div>
+              <!-- <div class="col-10"><p>Completed Stamping</p></div> -->
               <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
+                <!-- <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button> -->
               </div>
               <!--div class="col-2">
                 <a href="/template/Stamping Record Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
@@ -136,9 +144,9 @@ else{
               <!--div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">Upload Excel</button>
               </div-->
-              <!--div class="col-2">
+              <!-- <div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-warning btn-sm" onclick="newEntry()">Add New Stamping</button>
-              </div-->
+              </div> -->
             </div>
           </div>
 
@@ -146,10 +154,10 @@ else{
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
+                  <!-- <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th> -->
+                  <th>Validator</th>
                   <th>Customers</th>
                   <th>Brands</th>
-                  <th>Desc</th>
                   <th>Model</th>
                   <th>Capacity</th>
                   <th>Serial No.</th>
@@ -184,23 +192,23 @@ else{
           <div class="row">
             <div class="col-4">
               <div class="form-group">
-                <label>Own / Reseller * </label>
+                <label>Direct Customer / Reseller * </label>
                 <select class="form-control" style="width: 100%;" id="type" name="type" required>
-                  <option value="OWN">OWN</option>
-                  <option value="DEALER">DEALER</option>
+                  <option value="DIRECT">DIRECT CUSTOMER</option>
+                  <option value="RESELLER">RESELLER</option>
                 </select>
               </div>
             </div>
           </div>
-          <div class="card card-primary">
+          <div class="card card-primary" id="isResseller" style="display: none;">
             <div class="card-body">
               <div class="row">
-                <h4>Customer Billing Information</h4>
+                <h4>Reseller Billing Information</h4>
               </div>
               <div class="row">
-                <div class="col-4" id="isResseller">
+                <div class="col-4">
                   <div class="form-group">
-                    <label for="code">Dealer</label>
+                    <label for="code">Reseller</label>
                     <select class="form-control select2" id="dealer" name="dealer">
                       <option value="" selected disabled hidden>Please Select</option>
                       <?php while($rowD=mysqli_fetch_assoc($dealer)){ ?>
@@ -209,68 +217,10 @@ else{
                     </select>
                   </div>
                 </div>
-                <div class="col-4" id="isResseller2">
+                <div class="col-12" id="resellerbranch">
                   <div class="form-group">
-                    <label>Billing Address Line 1 * </label>
-                    <input class="form-control" type="text" placeholder="Address Line 1" id="address1s" name="address1s" readonly>
-                  </div>
-                </div>
-                <div class="col-4" id="isResseller3">
-                  <div class="form-group">
-                    <label>Billing Address Line 2 </label>
-                    <input class="form-control" type="text" placeholder="Address Line 2" id="address2s" name="address2s" readonly>
-                  </div>
-                </div>
-                <div class="col-4" id="isResseller4">
-                  <div class="form-group">
-                    <label>Billing Address Line 3 </label>
-                    <input class="form-control" type="text" placeholder="Address Line 3" id="address3s" name="address3s" readonly>
-                  </div>
-                </div>
-                <div class="col-4" id="isResseller5">
-                  <div class="form-group">
-                    <label>P.I.C</label>
-                    <input class="form-control" type="text" placeholder="PIC" id="pics" name="pics" readonly>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Quotation No.</label>
-                    <input class="form-control" type="text" placeholder="PO No" id="quotation" name="quotation">
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Quotation Date</label>
-                    <div class='input-group date' id="datePicker3" data-target-input="nearest">
-                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker3" id="quotationDate" name="quotationDate"/>
-                      <div class="input-group-append" data-target="#datePicker3" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>PO No.</label>
-                    <input class="form-control" type="text" placeholder="PO No" id="poNo" name="poNo">
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>PO Date </label>
-                    <div class='input-group date' id="datePicker4" data-target-input="nearest">
-                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker4" id="poDate" name="poDate"/>
-                      <div class="input-group-append" data-target="#datePicker4" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Invoice / Cash Bill No.</label>
-                    <input class="form-control" type="text" placeholder="Invoice No" id="invoice" name="invoice">
+                    <label>Branch * </label>
+                    <select class="form-control select2" style="width: 100%;" id="reseller_branch" name="reseller_branch"></select>
                   </div>
                 </div>
               </div>
@@ -299,25 +249,37 @@ else{
                     <input class="form-control" type="text" placeholder="Company Name" id="companyText" name="companyText" style="display: none;">
                   </div>
                 </div>
-                <div class="col-4">
+                <div class="col-12" id="custbranch">
                   <div class="form-group">
-                    <label>Address Line 1 * </label>
-                    <input class="form-control" type="text" placeholder="Address Line 1" id="address1" name="address1" required>
+                    <label>Branch * </label>
+                    <select class="form-control select2" style="width: 100%;" id="branch" name="branch" required></select>
                   </div>
                 </div>
-                <div class="col-4">
+                <div class="col-4" id="addr1" style="display: none;">
+                  <div class="form-group">
+                    <label>Address Line 1 * </label>
+                    <input class="form-control" type="text" placeholder="Address Line 1" id="address1" name="address1">
+                  </div>
+                </div>
+                <div class="col-4" id="addr2" style="display: none;">
                   <div class="form-group">
                     <label>Address Line 2 </label>
                     <input class="form-control" type="text" placeholder="Address Line 2" id="address2" name="address2">
                   </div>
                 </div>
-                <div class="col-4">
+                <div class="col-4" id="addr3" style="display: none;">
                   <div class="form-group">
                     <label>Address Line 3 </label>
                     <input class="form-control" type="text" placeholder="Address Line 3" id="address3" name="address3">
                   </div>
                 </div>
-                <div class="col-4">
+                <div class="col-4" id="addr4" style="display: none;">
+                  <div class="form-group">
+                    <label>Address Line 4 </label>
+                    <input class="form-control" type="text" placeholder="Address Line 4" id="address4" name="address4">
+                  </div>
+                </div>
+                <div class="col-4" id="pic1" style="display: none;">
                   <div class="form-group">
                     <label>P.I.C</label>
                     <input class="form-control" type="text" placeholder="PIC" id="pic" name="pic">
@@ -413,6 +375,17 @@ else{
                     </select>
                   </div>
                 </div>
+                <div class="col-4" id="capacityHigh">
+                  <div class="form-group">
+                    <label>Capacity (High) </label>
+                    <select class="form-control select2" style="width: 100%;" id="capacity_high" name="capacity_high">
+                      <option selected="selected">-</option>
+                      <?php while($capacity2=mysqli_fetch_assoc($capacities2)){ ?>
+                        <option value="<?=$capacity2['id'] ?>"><?=$capacity2['name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -480,9 +453,9 @@ else{
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>Next Due Date *</label>
+                    <label>Next Due Date </label>
                     <div class='input-group date' id="datePicker2" data-target-input="nearest">
-                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker2" id="dueDate" name="dueDate" required/>
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker2" id="dueDate" name="dueDate"/>
                       <div class="input-group-append" data-target="#datePicker2" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                       </div>
@@ -496,6 +469,58 @@ else{
                       <option value="YES">YES</option>
                       <option value="NO">NO</option>
                     </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="addtionalSection"></div>
+
+          <div class="card card-primary">
+            <div class="card-body">
+              <div class="row">
+                <h4>Billing Information</h4>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Quotation No.</label>
+                    <input class="form-control" type="text" placeholder="PO No" id="quotation" name="quotation">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Quotation Date</label>
+                    <div class='input-group date' id="datePicker3" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker3" id="quotationDate" name="quotationDate"/>
+                      <div class="input-group-append" data-target="#datePicker3" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>PO No.</label>
+                    <input class="form-control" type="text" placeholder="PO No" id="poNo" name="poNo">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>PO Date </label>
+                    <div class='input-group date' id="datePicker4" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker4" id="poDate" name="poDate"/>
+                      <div class="input-group-append" data-target="#datePicker4" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Invoice / Cash Bill No.</label>
+                    <input class="form-control" type="text" placeholder="Invoice No" id="invoice" name="invoice">
                   </div>
                 </div>
               </div>
@@ -561,29 +586,29 @@ else{
   </div> <!-- /.modal-dialog -->
 </div> <!-- /.modal -->
 
-<div class="modal fade" id="uploadModal">
+<div class="modal fade" id="extraDetModal">
   <div class="modal-dialog modal-xl" style="max-width: 90%;">
     <div class="modal-content">
-      <form role="form" id="uploadForm">
+      <form role="form" id="extraDetForm">
         <div class="modal-header bg-gray-dark color-palette">
-          <h4 class="modal-title">Upload Excel File</h4>
+          <h4 class="modal-title">Extra Information</h4>
           <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
-          <input type="file" id="fileInput">
-          <button id="previewButton">Preview Data</button>
-          <div id="previewTable" style="overflow: auto;"></div>
+
+        <div class="modal-body" >
+          <input type="hidden" class="form-control" id="id" name="id">
         </div>
+
         <div class="modal-footer justify-content-between bg-gray-dark color-palette">
           <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save</button>
         </div>
       </form>
-    </div>
-  </div>
-</div>
+    </div> <!-- /.modal-content -->
+  </div> <!-- /.modal-dialog -->
+</div> <!-- /.modal -->
 
 <div class="modal fade" id="printDOModal">
   <div class="modal-dialog modal-xl" style="max-width: 50%;">
@@ -666,6 +691,130 @@ else{
   </div>
 </div>
 
+<script type="text/html" id="atkDetails">
+  <div class="card card-primary">
+    <div class="card-body">
+      <div class="row">
+        <h4>Addtional Information (ATK)</h4>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <div class="form-group">
+            <label>Penentusan Baru *</label>
+            <input type="text" class="form-control" id="penentusanBaru" name="penentusanBaru" required>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+            <label>Penetusan Semula</label>
+            <input type="text" class="form-control" id="penentusanSemula" name="penentusanSemula" >
+          </div>
+        </div>
+        <div class="form-group col-4">
+          <label>Kelulusan MSPK * </label>
+          <select class="form-control" style="width: 100%;" id="kelulusanMSPK" name="kelulusanMSPK" required>
+            <option value="YES">YES</option>
+            <option value="NO">NO</option>
+          </select>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+            <label>No. Kelulusan MSPK</label>
+            <input type="text" class="form-control" id="noMSPK" name="noMSPK">
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+            <label>No. Serial Indicator *</label>
+            <input type="text" class="form-control" id="noSerialIndicator" name="noSerialIndicator">
+          </div>
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Platform Made In *</label>
+          <select class="form-control select2" id="platformCountry" name="platformCountry" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <?php while($rowcountry=mysqli_fetch_assoc($country)){ ?>
+              <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
+            <?php } ?>
+          </select>
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Platform Type *</label>
+          <select class="form-control select2" id="platformType" name="platformType" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <option value="MS Steel Deck">MS Steel Deck</option>
+            <option value="Concrete Deck">Concrete Deck</option>
+            <option value="Portable MS Steel Deck">Portable MS Steel Deck</option>
+            <option value="Portable Concrete Deck">Portable Concrete Deck</option>
+          </select>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+            <label>Structure Size * </label>
+            <select class="form-control" style="width: 100%;" id="size" name="size" required>
+              <option selected="selected">-</option>
+              <?php while($rowSI=mysqli_fetch_assoc($sizes)){ ?>
+                <option value="<?=$rowSI['id'] ?>"><?=$rowSI['size'] ?></option>
+              <?php } ?>
+            </select>
+          </div>
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Jenis Pelantar *</label>
+          <select class="form-control select2" id="jenisPelantar" name="jenisPelantar" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <option value="Pit">Pit</option>
+            <option value="Pitless">Pitless</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <label>Others</label>
+            <textarea class="form-control" type="text" placeholder="Remark" id="others" name="others"></textarea>
+          </div>
+        </div>
+      </div><hr>
+      <div class="row">
+        <h4>Load Cells</h4>
+      </div>
+      <div class="row">
+        <div class="form-group col-4">
+          <label for="model">Load Cells Made In *</label>
+          <select class="form-control select2" id="loadCellCountry" name="loadCellCountry" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <?php while($rowcountry2=mysqli_fetch_assoc($country2)){ ?>
+              <option value="<?=$rowcountry2['id'] ?>"><?=$rowcountry2['name'] ?></option>
+            <?php } ?>
+          </select>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+            <label>No. of Load Cells *</label>
+            <input type="number" class="form-control" id="noOfLoadCell" name="noOfLoadCell" required>
+          </div>
+        </div>
+        <div class="col-4">
+          <button style="margin-left:auto;margin-right: 25px;" type="button" class="btn btn-primary add-load-cell">Add Load Cells</button>
+        </div>
+      </div>
+      <table style="width: 100%;">
+        <thead>
+          <tr>
+            <th width="5%">No.</th>
+            <th width="20%">Load Cells Type</th>
+            <th width="20%">Brand</th>
+            <th width="20%">Model</th>
+            <th width="20%">Load Cell Capacity</th>
+            <th width="10%">Serial No.</th>
+            <th width="5%">Delete</th>
+          </tr>
+        </thead>
+        <tbody id="loadCellTable"></tbody>
+      </table>
+    </div>
+  </div>
+</script>
+
 <script type="text/html" id="pricingDetails">
   <tr class="details">
     <td>
@@ -703,8 +852,45 @@ else{
   </tr>
 </script>
 
+<script type="text/html" id="loadCellDetails">
+  <tr class="details">
+    <td>
+      <input type="text" class="form-control" id="no" name="no" readonly>
+    </td>
+    <td>
+      <select class="form-control" style="width: 100%;" id="loadCells" name="loadCells">
+        <option selected="selected">-</option>
+        <?php while($rowLC=mysqli_fetch_assoc($loadCells)){ ?>
+          <option 
+            value="<?=$rowLC['id'] ?>" 
+            data-brand="<?=$rowLC['brand_name'] ?>"
+            data-model="<?=$rowLC['model_name'] ?>">
+            <?=$rowLC['load_cell'] ?>
+          </option>
+        <?php } ?>
+      </select>
+    </td>
+    <td>
+      <input type="text" class="form-control" id="loadCellBrand" name="loadCellBrand" readonly>
+    </td>
+    <td>
+      <input type="text" class="form-control" id="loadCellModel" name="loadCellModel" readonly>
+    </td>
+    <td>
+      <input type="text" class="form-control" id="loadCellCapacity" name="loadCellCapacity" required>
+    </td>
+    <td>
+      <input type="text" class="form-control" id="loadCellSerial" name="loadCellSerial" required>
+    </td>
+    <td><button class="btn btn-danger btn-sm" id="remove"><i class="fa fa-times"></i></button></td>
+  </tr>
+</script>
+
 <script>
 var pricingCount = $("#pricingTable").find(".details").length;
+var loadCellCount = $("#loadCellTable").find(".details").length;
+var customer = 0;
+var branch = 0;
 
 $(function () {
   $('#customerNoHidden').hide();
@@ -714,8 +900,6 @@ $(function () {
   const yesterday = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
   yesterday.setDate(tomorrow.getDate() - 7);
-  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1); // First day of the current month
-  const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0); // Last day of the current month
 
   $('.select2').select2({
     allowClear: true,
@@ -726,13 +910,13 @@ $(function () {
   $('#fromDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
-    defaultDate: startOfMonth
+    defaultDate: ''
   });
 
   $('#toDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
-    defaultDate: endOfMonth
+    defaultDate: ''
   });
 
   $('#datePicker').datetimepicker({
@@ -759,10 +943,15 @@ $(function () {
     defaultDate: today
   });
 
+  $('#selectAllCheckbox').on('change', function() {
+    var checkboxes = $('#weightTable tbody input[type="checkbox"]');
+    checkboxes.prop('checked', $(this).prop('checked')).trigger('change');
+  });
+
   var fromDateValue = $('#fromDate').val();
   var toDateValue = $('#toDate').val();
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-  var statusFilter = $('#statusFilter').val() ? $('#statusFilter').val() : '';
+  //var statusFilter = $('#statusFilter').val() ? $('#statusFilter').val() : '';
 
   var table = $("#weightTable").DataTable({
     "responsive": true,
@@ -784,23 +973,23 @@ $(function () {
       } 
     },
     'columns': [
-      {
-        // Add a checkbox with a unique ID for each row
-        data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-        className: 'select-checkbox',
-        orderable: false,
-        render: function (data, type, row) {
-          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-          } 
-          else {
-            return ''; // Return an empty string or any other placeholder if the item is invoiced
-          }
-        }
-      },
+      // {
+      //   // Add a checkbox with a unique ID for each row
+      //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+      //   className: 'select-checkbox',
+      //   orderable: false,
+      //   render: function (data, type, row) {
+      //     if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+      //       return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+      //     } 
+      //     else {
+      //       return ''; // Return an empty string or any other placeholder if the item is invoiced
+      //     }
+      //   }
+      // },
+      { data: 'validate_by' },
       { data: 'customers' },
       { data: 'brand' },
-      { data: 'machine_type' },
       { data: 'model' },
       { data: 'capacity' },
       { data: 'serial_no' },
@@ -809,15 +998,36 @@ $(function () {
       { data: 'status' },
       { 
         data: 'id',
-        render: function ( data, type, row ) {
-          if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<div class="row"><div class="col-4"><button type="button" id="edit'+data+'" onclick="edit('+data+
-            ')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-4"><button type="button" id="delete'+data+'" onclick="deactivate('+data+
-            ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
-          } 
-          else {
-            return ''; // Return an empty string or any other placeholder if the item is invoiced
+        render: function (data, type, row) {
+          let buttons = '<div class="row">';
+
+          // Edit button
+          buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+                    ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
+
+          // Extra button if validate_by is 3
+          if (row.validate_by == 3) {
+            buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
+                      ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
           }
+
+          // Print button
+          // buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+          //           ', \''+row.validator+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+
+          // Complete button if conditions are met
+          // if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
+          //   buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+          //             ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
+          // }
+
+          // Cancelled button
+          buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+                    ')" class="btn btn-danger btn-sm">X</button></div>';
+
+          buttons += '</div>'; // Closing row div
+
+          return buttons;
         }
       },
       { 
@@ -956,29 +1166,13 @@ $(function () {
     }
   });
 
-  /*$('#cancelModal').find('#cancellationReason').on('change', function(){
-    if($(this).val() == '0'){
-      $('#otherRow').show();
-      $('#otherReason').attr("required", true);
-    }
-    else{
-      $('#otherRow').hide();
-      $('#otherReason').attr("required", false);
-    }
-  });*/
-
-  $('#selectAllCheckbox').on('change', function() {
-    var checkboxes = $('#weightTable tbody input[type="checkbox"]');
-    checkboxes.prop('checked', $(this).prop('checked')).trigger('change');
-  });
-  
   $('#filterSearch').on('click', function(){
     //$('#spinnerLoading').show();
 
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-    var statusFilter = $('#statusFilter').val() ? $('#statusFilter').val() : '';
+    //var statusFilter = $('#statusFilter').val() ? $('#statusFilter').val() : '';
 
     //Destroy the old Datatable
     $("#weightTable").DataTable().clear().destroy();
@@ -1004,23 +1198,23 @@ $(function () {
         } 
       },
       'columns': [
-        {
-          // Add a checkbox with a unique ID for each row
-          data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-          className: 'select-checkbox',
-          orderable: false,
-          render: function (data, type, row) {
-            if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-              return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-            } 
-            else {
-              return ''; // Return an empty string or any other placeholder if the item is invoiced
-            }
-          }
-        },
+        // {
+        //   // Add a checkbox with a unique ID for each row
+        //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+        //   className: 'select-checkbox',
+        //   orderable: false,
+        //   render: function (data, type, row) {
+        //     if (row.status == 'Active') { // Assuming 'isInvoiced' is a boolean field in your row data
+        //       return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+        //     } 
+        //     else {
+        //       return ''; // Return an empty string or any other placeholder if the item is invoiced
+        //     }
+        //   }
+        // },
+        { data: 'validate_by' },
         { data: 'customers' },
         { data: 'brand' },
-        { data: 'machine_type' },
         { data: 'model' },
         { data: 'capacity' },
         { data: 'serial_no' },
@@ -1029,15 +1223,36 @@ $(function () {
         { data: 'status' },
         { 
           data: 'id',
-          render: function ( data, type, row ) {
-            if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
-              return '<div class="row"><div class="col-4"><button type="button" id="edit'+data+'" onclick="edit('+data+
-              ')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-4"><button type="button" id="delete'+data+'" onclick="deactivate('+data+
-              ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
-            } 
-            else {
-              return ''; // Return an empty string or any other placeholder if the item is invoiced
+          render: function (data, type, row) {
+            let buttons = '<div class="row">';
+
+            // Edit button
+            buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+                      ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
+
+            // Extra button if validate_by is 3
+            if (row.validate_by == 3) {
+              buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
+                        ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
             }
+
+            // Print button
+            // buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+            //         ', \''+row.validator+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+
+            // Complete button if conditions are met
+            // if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
+            //   buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+            //             ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
+            // }
+
+            // Cancelled button
+            buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+                      ')" class="btn btn-danger btn-sm">X</button></div>';
+
+            buttons += '</div>'; // Closing row div
+
+            return buttons;
           }
         },
         { 
@@ -1088,79 +1303,6 @@ $(function () {
     }
   });
 
-  /*$('#refreshBtn').on('click', function(){
-    var fromDateValue = '';
-    var toDateValue = '';
-    var statusFilter = '';
-    var customerNoFilter = '';
-    var vehicleFilter = '';
-    var invoiceFilter = '';
-    var batchFilter = '';
-    var productFilter = '';
-
-    //Destroy the old Datatable
-    $("#weightTable").DataTable().clear().destroy();
-
-    //Create new Datatable
-    table = $("#weightTable").DataTable({
-      "responsive": true,
-      "autoWidth": false,
-      'processing': true,
-      'serverSide': true,
-      'serverMethod': 'post',
-      'searching': true,
-      'order': [[ 1, 'asc' ]],
-      'columnDefs': [ { orderable: false, targets: [0] }],
-      'ajax': {
-        'type': 'POST',
-        'url':'php/filterWeight.php',
-        'data': {
-          fromDate: fromDateValue,
-          toDate: toDateValue,
-          status: statusFilter,
-          customer: customerNoFilter,
-          vehicle: vehicleFilter,
-          invoice: invoiceFilter,
-          batch: batchFilter,
-          product: productFilter,
-        } 
-      },
-      'columns': [
-        { data: 'no' },
-        { data: 'pStatus' },
-        { data: 'status' },
-        { data: 'serialNo' },
-        { data: 'veh_number' },
-        { data: 'product_name' },
-        { data: 'currentWeight' },
-        { data: 'inCDateTime' },
-        { data: 'tare' },
-        { data: 'outGDateTime' },
-        { data: 'totalWeight' },
-        { 
-          className: 'dt-control',
-          orderable: false,
-          data: null,
-          render: function ( data, type, row ) {
-            return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
-          }
-        }
-      ],
-      "rowCallback": function( row, data, index ) {
-        $('td', row).css('background-color', '#E6E6FA');
-      },
-      "drawCallback": function(settings) {
-        $('#salesInfo').text(settings.json.salesTotal);
-        $('#purchaseInfo').text(settings.json.purchaseTotal);
-        $('#localInfo').text(settings.json.localTotal);
-      }
-    });
-  });
-
-  $('#datePicker').on('click', function () {
-    $('#datePicker').attr('data-info', '1');
-  });*/
-
   $('#uploadExccl').on('click', function(){
     $('#uploadModal').modal('show');
 
@@ -1193,6 +1335,92 @@ $(function () {
     reader.readAsBinaryString(file);
   });
 
+  $('#extendModal').find('#type').on('change', function(){
+    if($(this).val() == "DIRECT"){
+      $('#isResseller').hide();
+      $('#isResseller2').hide();
+      $('#isResseller3').hide();
+      $('#isResseller4').hide();
+      $('#isResseller5').hide();
+    }
+    else{
+      $('#isResseller').show();
+      $('#isResseller2').show();
+      $('#isResseller3').show();
+      $('#isResseller4').show();
+      $('#isResseller5').show();
+    }
+  });
+
+  $('#extendModal').find('#dealer').on('change', function(){
+    if($('#extendModal').find('#type').val() != 'DIRECT'){
+      var id = $(this).find(":selected").val();
+
+      $.post('php/getDealer.php', {userID: id}, function(data){
+        var obj = JSON.parse(data);
+        
+        if(obj.status === 'success'){
+          $('#reseller_branch').html('');
+          $('#reseller_branch').append('<option selected="selected">-</option>');
+
+          for(var i=0; i<obj.message.branches.length; i++){
+            var branchInfo = obj.message.branches[i];
+            $('#reseller_branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.branch_address1+' '+branchInfo.branch_address2+' '+branchInfo.branch_address3+' '+branchInfo.branch_address4+'</option>')
+          }
+          $('#extendModal').modal('show');
+
+          $('#extendForm').validate({
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+              error.addClass('invalid-feedback');
+              element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+              $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+              $(element).removeClass('is-invalid');
+            }
+          });
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+      });
+
+      $.post('php/listCustomers.php', {hypermarket: id}, function(data){
+        var obj = JSON.parse(data);
+        
+        if(obj.status === 'success'){
+          $('#company').html('');
+          $('#company').append('<option selected="selected">-</option>');
+          $('#extendModal').find('#customerType').val('EXISTING');
+          $('#extendModal').find('#company').show();
+          $('#extendModal').find('#company').parents('.form-group').find('.select2-container').show();
+          $('#extendModal').find('#companyText').hide();
+          $('#extendModal').find('#companyText').val('');
+          for(var i=0; i<obj.message.length; i++){
+            $('#company').append('<option value="'+obj.message[i].id+'">'+obj.message[i].name+'</option>')
+          }
+
+          if(customer != 0){
+            $('#extendModal').find('#company').val(customer).trigger('change');
+          }
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+        $('#spinnerLoading').hide();
+      });
+    }
+  });
+
   $('#extendModal').find('#stampDate').on('blur', function (e) {
     if($(this).val()){
       var parts = $(this).val().split('/');
@@ -1220,6 +1448,21 @@ $(function () {
   $('#extendModal').find('#customerType').on('change', function(){
     if($(this).val() == "NEW"){
       $('#extendModal').find('#company').hide();
+      $('#extendModal').find('#custbranch').hide();
+      
+      $('#extendModal').find('#addr1').show();
+      $('#extendModal').find('#addr2').show();
+      $('#extendModal').find('#addr3').show();
+      $('#extendModal').find('#addr4').show();
+      $('#extendModal').find('#pic1').show();
+
+      $('#extendModal').find('#address1').val('');
+      $('#extendModal').find('#address2').val('');
+      $('#extendModal').find('#address3').val('');
+      $('#extendModal').find('#address4').val('');
+      $('#extendModal').find('#contact').val('');
+      $('#extendModal').find('#email').val('');
+
       $('#extendModal').find('#company').parents('.form-group').find('.select2-container').hide();
       $('#extendModal').find('#companyText').show();
       $('#extendModal').find('#companyText').val('');
@@ -1227,25 +1470,33 @@ $(function () {
     else{
       $('#extendModal').find('#company').html($('select#customerNoHidden').html());
       $('#extendModal').find('#company').show();
+      $('#extendModal').find('#custbranch').show();
+
+      $('#extendModal').find('#addr1').hide();
+      $('#extendModal').find('#addr2').hide();
+      $('#extendModal').find('#addr3').hide();
+      $('#extendModal').find('#addr4').hide();
+      $('#extendModal').find('#pic1').hide();
+
       $('#extendModal').find('#company').parents('.form-group').find('.select2-container').show();
       $('#extendModal').find('#companyText').hide();
       $('#extendModal').find('#companyText').val('');
     }
   });
 
-  $('#extendModal').find('#company').on('change', function(){
+  $('#extendModal').find('#branch').on('change', function(){
     //$('#spinnerLoading').show();
     var id = $(this).find(":selected").val();
 
-    $.post('php/getCustomer.php', {userID: id}, function(data){
+    $.post('php/getBranch.php', {userID: id}, function(data){
       var obj = JSON.parse(data);
       
       if(obj.status === 'success'){
-        $('#extendModal').find('#address1').val(obj.message.customer_address);
+        $('#extendModal').find('#address1').val(obj.message.address1);
         $('#extendModal').find('#address2').val(obj.message.address2);
         $('#extendModal').find('#address3').val(obj.message.address3);
-        $('#extendModal').find('#contact').val(obj.message.customer_phone);
-        $('#extendModal').find('#email').val(obj.message.customer_email);
+        $('#extendModal').find('#address4').val(obj.message.address4);
+        
         $('#extendModal').modal('show');
 
         $('#extendForm').validate({
@@ -1272,6 +1523,107 @@ $(function () {
     });
   });
 
+  $('#extendModal').find('#company').on('change', function(){
+    //$('#spinnerLoading').show();
+    var id = $(this).find(":selected").val();
+
+    $.post('php/getCustomer.php', {userID: id}, function(data){
+      var obj = JSON.parse(data);
+      
+      if(obj.status === 'success'){
+        $('#extendModal').find('#contact').val(obj.message.customer_phone);
+        $('#extendModal').find('#email').val(obj.message.customer_email);
+
+        $('#branch').html('');
+        $('#branch').append('<option selected="selected">-</option>');
+
+        for(var i=0; i<obj.message.pricing.length; i++){
+          var branchInfo = obj.message.pricing[i];
+          $('#branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.address1+' '+branchInfo.address2+' '+branchInfo.address3+' '+branchInfo.address4+'</option>')
+        }
+
+        if(branch != 0){
+            $('#extendModal').find('#branch').val(branch).trigger('change');
+          }
+
+        $('#extendModal').modal('show');
+
+        $('#extendForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when pull data", "Failed:");
+      }
+      //$('#spinnerLoading').hide();
+    });
+  });
+
+  $('#extendModal').find('#brand').on('change', function(){
+    var brandId = $(this).find(":selected").val();
+
+    $.post('php/getModelFromBrand.php', {id: brandId}, function (data){
+      var obj = JSON.parse(data);
+
+      if(obj.status === 'success'){
+        $('#model').html('');
+        $('#model').append('<option selected="selected">-</option>');
+
+        for(var i=0; i<obj.message.length; i++){
+          var modelInfo = obj.message[i];
+          $('#model').append('<option value="'+modelInfo.id+'">'+modelInfo.model+'</option>')
+        }
+
+        $('#extendModal').trigger('modelsLoaded');
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when pull data", "Failed:");
+      }
+    });
+  });
+
+  $('#extendModal').find('#machineType').on('change', function(){
+    var brandId = $(this).find(":selected").val();
+
+    $.post('php/getJAFromMT.php', {id: brandId}, function (data){
+      var obj = JSON.parse(data);
+
+      if(obj.status === 'success'){
+        $('#jenisAlat').html('');
+        $('#jenisAlat').append('<option selected="selected">-</option>');
+
+        for(var i=0; i<obj.message.length; i++){
+          var modelInfo = obj.message[i];
+          $('#jenisAlat').append('<option value="'+modelInfo.id+'">'+modelInfo.jenis_alat+'</option>')
+        }
+
+        $('#extendModal').trigger('jaIsLoaded');
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when pull data", "Failed:");
+      }
+    });
+  });
+
   $('#extendModal').find('#product').on('change', function(){
     var price = parseFloat($(this).find(":selected").attr("data-price"));
     var machine = parseFloat($(this).find(":selected").attr("data-machine"));
@@ -1279,7 +1631,7 @@ $(function () {
     var capacity = parseFloat($(this).find(":selected").attr("data-capacity"));
     var validator = parseFloat($(this).find(":selected").attr("data-validator"));
     var includeCert = $('#includeCert').val();
-    var certPrice = 30;
+    var certPrice = 28.6;
     var sst = 0;
     var totalAmt = price;
 
@@ -1304,10 +1656,32 @@ $(function () {
     $('#subAmount').val((totalAmt + (totalAmt * 0.06)).toFixed(2));
   });
 
+  $('#extendModal').find('#unitPrice').on('change', function(){
+    var price = parseFloat($(this).val());
+    var includeCert = $('#includeCert').val();
+    var certPrice = 28.6;
+    var sst = 0;
+    var totalAmt = price;
+
+    if(includeCert == 'YES'){
+      $('#certPrice').val(certPrice);
+      $('#cerId').show();
+      totalAmt += certPrice;
+    }
+    else{
+      $('#certPrice').val(0.00);
+      $('#cerId').hide();
+    }
+
+    $('#totalAmount').val(totalAmt);
+    $('#sst').val((totalAmt * 0.06).toFixed(2));
+    $('#subAmount').val((totalAmt + (totalAmt * 0.06)).toFixed(2));
+  });
+
   $('#extendModal').find('#includeCert').on('change', function(){
     var price = parseFloat($('#product').find(":selected").attr("data-price"));
     var includeCert = $(this).val();
-    var certPrice = 30;
+    var certPrice = 28.6;
     var sst = 0;
     var totalAmt = price;
 
@@ -1327,6 +1701,121 @@ $(function () {
     $('#sst').val((totalAmt * 0.06).toFixed(2));
     $('#subAmount').val((totalAmt + (totalAmt * 0.06)).toFixed(2));
   });
+
+  $('#extendModal').find('#machineType').on('change', function(){
+    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
+      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
+        var obj = JSON.parse(data);
+        
+        if(obj.status === 'success'){
+          $('#product').val(obj.message.id);
+          $('#unitPrice').val(obj.message.price);
+          $('#unitPrice').trigger('change');
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+        //$('#spinnerLoading').hide();
+      });
+    }
+  });
+
+  $('#extendModal').find('#jenisAlat').on('change', function(){
+    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
+      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
+        var obj = JSON.parse(data);
+        
+        if(obj.status === 'success'){
+          $('#product').val(obj.message.id);
+          $('#unitPrice').val(obj.message.price);
+          $('#unitPrice').trigger('change');
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+        $('#spinnerLoading').hide();
+      });
+    }
+
+    if(($('#validator').val() == '10' || $('#validator').val() == '9') && $(this).val() == '1'){
+      $('#addtionalSection').html($('#atkDetails').html());
+      loadCellCount = 0;
+      $("#loadCellTable").html('');
+      $('#extendModal').trigger('atkLoaded')
+    }
+    else{
+      $('#addtionalSection').html('');
+    }
+  });
+
+  $('#extendModal').find('#capacity').on('change', function(){
+    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
+      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
+        var obj = JSON.parse(data);
+        
+        if(obj.status === 'success'){
+          $('#product').val(obj.message.id);
+          $('#unitPrice').val(obj.message.price);
+          $('#unitPrice').trigger('change');
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+        $('#spinnerLoading').hide();
+      });
+    }
+  });
+
+  $('#extendModal').find('#validator').on('change', function(){
+    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
+      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
+        var obj = JSON.parse(data);
+        
+        if(obj.status === 'success'){
+          $('#product').val(obj.message.id);
+          $('#unitPrice').val(obj.message.price);
+          $('#unitPrice').trigger('change');
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+        $('#spinnerLoading').hide();
+      });
+    }
+
+    if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '1'){
+      $('#addtionalSection').html($('#atkDetails').html());
+      loadCellCount = 0;
+      $("#loadCellTable").html('');
+      $('#extendModal').trigger('atkLoaded')
+    }
+    else{
+      $('#addtionalSection').html('');
+    }
+  });
+
+  /*$('#cancelModal').find('#cancellationReason').on('change', function(){
+    if($(this).val() == '0'){
+      $('#otherRow').show();
+      $('#otherReason').attr("required", true);
+    }
+    else{
+      $('#otherRow').hide();
+      $('#otherReason').attr("required", false);
+    }
+  });*/
 
   $(".add-price").click(function(){
     var $addContents = $("#pricingDetails").clone();
@@ -1360,6 +1849,39 @@ $(function () {
 
     pricingCount++;
   });
+
+  $(document).on('click', '.add-load-cell', function() {
+    var loadCellValue = parseInt($('#noOfLoadCell').val());
+    // Trigger the cloning and appending logic loadCellNoValue times
+    for (var i = 0; i < loadCellValue; i++) {
+      var $addContents = $("#loadCellDetails").clone();
+      $("#loadCellTable").append($addContents.html());
+
+      $("#loadCellTable").find('.details:last').attr("id", "detail" + loadCellCount);
+      $("#loadCellTable").find('.details:last').attr("data-index", loadCellCount);
+      $("#loadCellTable").find('#remove:last').attr("id", "remove" + loadCellCount);
+
+      $("#loadCellTable").find('#no:last').attr('name', 'no['+loadCellCount+']').attr("id", "no" + loadCellCount).val((loadCellCount + 1).toString());
+      $("#loadCellTable").find('#loadCells:last').attr('name', 'loadCells['+loadCellCount+']').attr("id", "loadCells" + loadCellCount);
+      $("#loadCellTable").find('#loadCellBrand:last').attr('name', 'loadCellBrand['+loadCellCount+']').attr("id", "loadCellBrand" + loadCellCount);
+      $("#loadCellTable").find('#loadCellModel:last').attr('name', 'loadCellModel['+loadCellCount+']').attr("id", "loadCellModel" + loadCellCount);
+      $("#loadCellTable").find('#loadCellCapacity:last').attr('name', 'loadCellCapacity['+loadCellCount+']').attr("id", "loadCellCapacity" + loadCellCount);
+      $("#loadCellTable").find('#loadCellSerial').attr('name', 'loadCellSerial['+loadCellCount+']').attr("id", "loadCellSerial" + loadCellCount);
+
+      loadCellCount++;
+    }
+  });
+
+  // Event delegation: use 'select' instead of 'input' for dropdowns
+  $(document).on('change', 'select[id^="loadCells"]', function(){
+    // Retrieve the selected option's attributes
+    var brand = $(this).find(":selected").attr('data-brand');
+    var model = $(this).find(":selected").attr('data-model');
+
+    // Update the respective inputs for brand and model
+    $(this).closest('.details').find('input[id^="loadCellBrand"]').val(brand);
+    $(this).closest('.details').find('input[id^="loadCellModel"]').val(model);
+  });
 });
 
 function format (row) {
@@ -1368,10 +1890,20 @@ function format (row) {
     <!-- Customer Section -->
     <div class="col-md-6">
       <p><strong>${row.customers}</strong><br>
-      ${row.address1}<br>${row.address2}<br>${row.address3}</p>
-    </div>
-  </div><hr>
+      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4}`;
+      
+      if (row.picontact) {
+          returnString += `
+              <br>PIC: ${row.picontact} PIC Contact: ${row.pic_phone}</p>
+              </div>
+          </div><hr>`;
+      } else {
+          returnString += `</p>
+          </div>
+      </div><hr>`;
+      }
 
+  returnString += `
   <div class="row">
     <!-- Machine Section -->
     <div class="col-6">
@@ -1379,6 +1911,7 @@ function format (row) {
       <p><strong>Model:</strong> ${row.model}</p>
       <p><strong>Machine Type:</strong> ${row.machine_type}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
+      <p><strong>Capacity (High):</strong> ${row.capacity_high}</p>
       <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
       <p><strong>Serial No:</strong> ${row.serial_no}</p>
     </div>
@@ -1474,13 +2007,19 @@ function formatDate(convert1) {
 
 function newEntry(){
   var date = new Date();
+  $('#capacityHigh').hide();
 
   $('#extendModal').find('#id').val("");
+  $('#extendModal').find('#type').val("DIRECT");
+  $('#isResseller').hide();
+  $('#isResseller2').hide();
+  $('#isResseller3').hide();
+  $('#isResseller4').hide();
+  $('#isResseller5').hide();
   $('#extendModal').find('#customerType').val("EXISTING").attr('readonly', false).trigger('change');
   $('#extendModal').find('#brand').val('').trigger('change');
-  $('#extendModal').find('#newRenew').val('NEW');
   $('#extendModal').find('#validator').val('').trigger('change');
-  $('#extendModal').find('#product').val('').trigger('change');
+  $('#extendModal').find('#product').val('');
   $('#extendModal').find('#company').val('');
   $('#extendModal').find('#companyText').val('').trigger('change');
   $('#extendModal').find('#machineType').val('').trigger('change');
@@ -1508,6 +2047,17 @@ function newEntry(){
   $('#extendModal').find('#cashBill').val("");
   $('#extendModal').find('#invoice').val('');
 
+  $('#extendModal').find('#jenisAlat').change(function() {
+    if($(this).val() == 1) {
+        $('#extendModal').find('#capacityHigh').show();
+    } else {
+        $('#extendModal').find('#capacityHigh').hide();
+    }
+  });
+
+
+  customer = 0;
+  branch = 0;
   $('#pricingTable').html('');
   pricingCount = 0;
   $('#extendModal').find('#unitPrice').val("");
@@ -1533,16 +2083,44 @@ function newEntry(){
   });
 }
 
+function extraAction(id){
+  $('#spinnerLoading').show();
+  $.post('php/getStamp.php', {userID: id}, function(data){
+    var obj = JSON.parse(data);
+    
+    if(obj.status === 'success'){
+      $('#extraDetModal').find('#id').val(obj.message.id);
+
+      $('#extraDetModal').modal('show');
+
+      $('#extraDetForm').validate({
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        }
+      });
+    }
+  });
+}
+
 function edit(id) {
   $('#spinnerLoading').show();
   $.post('php/getStamp.php', {userID: id}, function(data){
     var obj = JSON.parse(data);
     
     if(obj.status === 'success'){
-      if(obj.message.type == 'OWN'){
+      if(obj.message.type == 'DIRECT'){
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
-        $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
+        $('#extendModal').find('#dealer').val('');
+        $('#extendModal').find('#reseller_branch').val('');
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
@@ -1551,9 +2129,31 @@ function edit(id) {
         $('#extendModal').find('#companyText').val('');
         $('#extendModal').find('#product').val(obj.message.products);
         $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
-        $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
-        $('#extendModal').find('#address1').val(obj.message.address1);
-        $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        customer = obj.message.customers;
+        branch = obj.message.branch;
+        $('#extendModal').on('jaIsLoaded', function() {
+          $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
+        });
+        
+        $('#extendModal').find('#jenisAlat').change(function() {
+          if($(this).val() == 1) {
+              $('#extendModal').find('#capacityHigh').show();
+              $('#extendModal').find('#capacity_high').val(obj.message.capacity_high).trigger('change');
+          } else {
+              $('#extendModal').find('#capacityHigh').hide();
+              $('#extendModal').find('#capacity_high').val('');
+          }
+        });
+
+        //$('#extendModal').find('#address1').val(obj.message.address1);
+        
+        setTimeout(function(){
+          $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
+        }, 500);
+
+        $('#extendModal').on('modelsLoaded', function() {
+          $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        });
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
@@ -1617,6 +2217,48 @@ function edit(id) {
             pricingCount++;
           }
         }
+
+        $('#extendModal').on('atkLoaded', function() {
+          if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '1'){
+            $('#addtionalSection').html($('#atkDetails').html());
+            $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
+            $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
+            $('#extendModal').find('#kelulusanMSPK').val(obj.message.kelulusan_mspk);
+            $('#extendModal').find('#noMSPK').val(obj.message.no_kelulusan);
+            $('#extendModal').find('#noSerialIndicator').val(obj.message.indicator_serial);
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
+            $('#extendModal').find('#platformType').val(obj.message.platform_type);
+            $('#extendModal').find('#size').val(obj.message.size);
+            $('#extendModal').find('#jenisPelantar').val(obj.message.jenis_pelantar);
+            $('#extendModal').find('#others').val(obj.message.other_info);
+            $('#extendModal').find('#loadCellCountry').val(obj.message.load_cell_country);
+            $('#extendModal').find('#noOfLoadCell').val(obj.message.load_cell_no);
+
+            if(obj.message.load_cells_info.length > 0){
+              $("#loadCellTable").html('');
+              loadCellCount = 0;
+
+              for(var i = 0; i < obj.message.load_cells_info.length; i++){
+                var item = obj.message.load_cells_info[i];
+                var $addContents = $("#loadCellDetails").clone();
+                $("#loadCellTable").append($addContents.html());
+
+                $("#loadCellTable").find('.details:last').attr("id", "detail" + loadCellCount);
+                $("#loadCellTable").find('.details:last').attr("data-index", loadCellCount);
+                $("#loadCellTable").find('#remove:last').attr("id", "remove" + loadCellCount);
+
+                $("#loadCellTable").find('#no:last').attr('name', 'no['+loadCellCount+']').attr("id", "no" + loadCellCount).val(item.no);
+                $("#loadCellTable").find('#loadCells:last').attr('name', 'loadCells['+loadCellCount+']').attr("id", "loadCells" + loadCellCount).val(item.loadCells);
+                $("#loadCellTable").find('#loadCellBrand:last').attr('name', 'loadCellBrand['+loadCellCount+']').attr("id", "loadCellBrand" + loadCellCount).val(item.loadCellBrand);
+                $("#loadCellTable").find('#loadCellModel:last').attr('name', 'loadCellModel['+loadCellCount+']').attr("id", "loadCellModel" + loadCellCount).val(item.loadCellModel);
+                $("#loadCellTable").find('#loadCellCapacity:last').attr('name', 'loadCellCapacity['+loadCellCount+']').attr("id", "loadCellCapacity" + loadCellCount).val(item.loadCellCapacity);
+                $("#loadCellTable").find('#loadCellSerial').attr('name', 'loadCellSerial['+loadCellCount+']').attr("id", "loadCellSerial" + loadCellCount).val(item.loadCellSerial);
+
+                loadCellCount++;
+              }
+            }
+          }
+        });
         
         $('#extendModal').modal('show');
 
@@ -1637,22 +2279,43 @@ function edit(id) {
       else{
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
-        $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#newRenew').val(obj.message.stampType);
-
+        customer = obj.message.customers;
+        branch = obj.message.branch;
         setTimeout(function(){
+          $('#extendModal').find('#reseller_branch').val(obj.message.dealer_branch).trigger('change');
           $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
+
+          setTimeout(function(){
+            $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
+          }, 1500);
         }, 1000);
 
         $('#extendModal').find('#companyText').val('');
         $('#extendModal').find('#product').val(obj.message.products);
         $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
-        $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
-        $('#extendModal').find('#address1').val(obj.message.address1);
-        $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        $('#extendModal').on('jaIsLoaded', function() {
+          $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
+        });
+        
+        $('#extendModal').find('#jenisAlat').change(function() {
+          if($(this).val() == 1) {
+              $('#extendModal').find('#capacityHigh').show();
+              $('#extendModal').find('#capacity_high').val(obj.message.capacity_high).trigger('change');
+          } else {
+              $('#extendModal').find('#capacityHigh').hide();
+              $('#extendModal').find('#capacity_high').val('');
+          }
+        });
+        //$('#extendModal').find('#address1').val(obj.message.address1);
+
+        $('#extendModal').on('modelsLoaded', function() {
+          $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        });
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
@@ -1678,6 +2341,48 @@ function edit(id) {
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
         $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
+
+        $('#extendModal').on('atkLoaded', function() {
+          if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '1'){
+            $('#addtionalSection').html($('#atkDetails').html());
+            $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
+            $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
+            $('#extendModal').find('#kelulusanMSPK').val(obj.message.kelulusan_mspk);
+            $('#extendModal').find('#noMSPK').val(obj.message.no_kelulusan);
+            $('#extendModal').find('#noSerialIndicator').val(obj.message.indicator_serial);
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
+            $('#extendModal').find('#platformType').val(obj.message.platform_type);
+            $('#extendModal').find('#size').val(obj.message.size);
+            $('#extendModal').find('#jenisPelantar').val(obj.message.jenis_pelantar);
+            $('#extendModal').find('#others').val(obj.message.other_info);
+            $('#extendModal').find('#loadCellCountry').val(obj.message.load_cell_country);
+            $('#extendModal').find('#noOfLoadCell').val(obj.message.load_cell_no);
+
+            if(obj.message.load_cells_info.length > 0){
+              $("#loadCellTable").html('');
+              loadCellCount = 0;
+
+              for(var i = 0; i < obj.message.load_cells_info.length; i++){
+                var item = obj.message.load_cells_info[i];
+                var $addContents = $("#loadCellDetails").clone();
+                $("#loadCellTable").append($addContents.html());
+
+                $("#loadCellTable").find('.details:last').attr("id", "detail" + loadCellCount);
+                $("#loadCellTable").find('.details:last').attr("data-index", loadCellCount);
+                $("#loadCellTable").find('#remove:last').attr("id", "remove" + loadCellCount);
+
+                $("#loadCellTable").find('#no:last').attr('name', 'no['+loadCellCount+']').attr("id", "no" + loadCellCount).val(item.no);
+                $("#loadCellTable").find('#loadCells:last').attr('name', 'loadCells['+loadCellCount+']').attr("id", "loadCells" + loadCellCount).val(item.loadCells);
+                $("#loadCellTable").find('#loadCellBrand:last').attr('name', 'loadCellBrand['+loadCellCount+']').attr("id", "loadCellBrand" + loadCellCount).val(item.loadCellBrand);
+                $("#loadCellTable").find('#loadCellModel:last').attr('name', 'loadCellModel['+loadCellCount+']').attr("id", "loadCellModel" + loadCellCount).val(item.loadCellModel);
+                $("#loadCellTable").find('#loadCellCapacity:last').attr('name', 'loadCellCapacity['+loadCellCount+']').attr("id", "loadCellCapacity" + loadCellCount).val(item.loadCellCapacity);
+                $("#loadCellTable").find('#loadCellSerial').attr('name', 'loadCellSerial['+loadCellCount+']').attr("id", "loadCellSerial" + loadCellCount).val(item.loadCellSerial);
+
+                loadCellCount++;
+              }
+            }
+          }
+        });
 
         $('#extendModal').modal('show');
 
@@ -1728,7 +2433,7 @@ function complete(id) {
 }
 
 function deactivate(id) {
-  if (confirm('Are you sure you want to delete this items?')) {
+  if (confirm('Are you sure you want to cancel this items?')) {
     $('#spinnerLoading').show();
     $.post('php/getStamp.php', {userID: id}, function(data){
       var obj = JSON.parse(data);
@@ -1760,6 +2465,8 @@ function deactivate(id) {
       $('#spinnerLoading').hide();
 
     });
+
+
     // $.post('php/deleteStamp.php', {userID: id}, function(data){
     //   var obj = JSON.parse(data);
 
@@ -1778,22 +2485,19 @@ function deactivate(id) {
   }
 }
 
-function print(id) {
-  $.post('php/print.php', {userID: id, file: 'weight'}, function(data){
+function print(id, validate) {
+  window.open('php/printBorang.php?userID='+id+'&file=ATK&validator='+validate, '_blank');
+  /*$.get('php/printBorang.php', {userID: id, file: 'ATK'}, function(data){
     var obj = JSON.parse(data);
 
     if(obj.status === 'success'){
-      var printWindow = window.open('', '', 'height=400,width=800');
+      var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
       printWindow.document.write(obj.message);
       printWindow.document.close();
       setTimeout(function(){
         printWindow.print();
         printWindow.close();
       }, 500);
-
-      /*$.get('weightPage.php', function(data) {
-        $('#mainContents').html(data);
-      });*/
     }
     else if(obj.status === 'failed'){
       toastr["error"](obj.message, "Failed:");
@@ -1801,7 +2505,7 @@ function print(id) {
     else{
       toastr["error"]("Something wrong when activate", "Failed:");
     }
-  });
+  });*/
 }
 
 function portrait(id) {
@@ -1884,5 +2588,4 @@ function displayPreview(data) {
   var previewTable = document.getElementById('previewTable');
   previewTable.innerHTML = htmlTable;
 }
-
 </script>

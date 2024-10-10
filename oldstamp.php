@@ -124,7 +124,7 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-12"><p>Cancelled Stamping</p></div>
+              <!-- <div class="col-12"><p>Cancelled Stamping</p></div> -->
               <!--div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
               </div-->
@@ -144,7 +144,7 @@ else{
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <!--th></th-->
+                  <th>Validator</th>
                   <th>Customers</th>
                   <th>Brands</th>
                   <th>Desc</th>
@@ -694,6 +694,7 @@ $(function () {
           }
         }
       },*/
+      { data: 'validate_by' },
       { data: 'customers' },
       { data: 'brand' },
       { data: 'machine_type' },
@@ -1228,10 +1229,20 @@ function format (row) {
     <!-- Customer Section -->
     <div class="col-md-6">
       <p><strong>${row.customers}</strong><br>
-      ${row.address1}<br>${row.address2}<br>${row.address3}</p>
-    </div>
-  </div><hr>
+      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4}`;
+      
+      if (row.picontact) {
+          returnString += `
+              <br>PIC: ${row.picontact} PIC Contact: ${row.pic_phone}</p>
+              </div>
+          </div><hr>`;
+      } else {
+          returnString += `</p>
+          </div>
+      </div><hr>`;
+      }
 
+  returnString += `
   <div class="row">
     <!-- Machine Section -->
     <div class="col-6">
@@ -1239,6 +1250,7 @@ function format (row) {
       <p><strong>Model:</strong> ${row.model}</p>
       <p><strong>Machine Type:</strong> ${row.machine_type}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
+      <p><strong>Capacity (High):</strong> ${row.capacity_high}</p>
       <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
       <p><strong>Serial No:</strong> ${row.serial_no}</p>
     </div>
