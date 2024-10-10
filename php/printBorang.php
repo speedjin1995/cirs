@@ -113,52 +113,52 @@ if(isset($_GET['userID'], $_GET["file"])){
                         $pdf->SetXY(75, 100); // Adjust for {Company_Name}
                         $pdf->Write(0, $compname);
 
-                        $pdf->SetXY(50, 150); // Adjust for {No_Lesen}
+                        $pdf->SetXY(55, 105); // Adjust for {No_Lesen}
                         $pdf->Write(0, $compcert);
 
-                        $pdf->SetXY(50, 160); // Adjust for {Tarikh_Tamat_Lesen}
+                        $pdf->SetXY(160, 105); // Adjust for {Tarikh_Tamat_Lesen}
                         $pdf->Write(0, $compexp);
 
-                        $pdf->SetXY(50, 170); // Adjust for {Nama_Wakil_Pembaik}
+                        $pdf->SetXY(75, 110); // Adjust for {Nama_Wakil_Pembaik}
                         $pdf->Write(0, searchStaffNameById($res['pic'], $db));
 
-                        $pdf->SetXY(50, 180); // Adjust for {No_KP}
+                        $pdf->SetXY(150, 110); // Adjust for {No_KP}
                         $pdf->Write(0, searchStaffICById($res['pic'], $db));
 
-                        $pdf->SetXY(50, 190); // Adjust for {Penentusahan_Baru}
+                        $pdf->SetXY(75, 125); // Adjust for {Penentusahan_Baru}
                         $pdf->Write(0, $res['penentusan_baru']);
 
-                        $pdf->SetXY(50, 200); // Adjust for {Penentusahan_Semula}
+                        $pdf->SetXY(160, 125); // Adjust for {Penentusahan_Semula}
                         $pdf->Write(0, $res['penentusan_semula']);
 
-                        $pdf->SetXY(50, 210); // Adjust for {NoKelulusan_MSPK}
+                        $pdf->SetXY(50, 145); // Adjust for {NoKelulusan_MSPK}
                         $pdf->Write(0, $res['kelulusan_mspk']);
 
-                        $pdf->SetXY(50, 220); // Adjust for {Pembuat_Negara_Asal}
+                        $pdf->SetXY(75, 165); // Adjust for {Pembuat_Negara_Asal}
                         $pdf->Write(0, searchCountryById($res['platform_country'], $db));
 
-                        $pdf->SetXY(50, 230); // Adjust for {Jenama}
+                        $pdf->SetXY(155, 165); // Adjust for {Jenama}
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db));
 
-                        $pdf->SetXY(50, 240); // Adjust for {Model#1}
+                        $pdf->SetXY(50, 173); // Adjust for {Model#1}
                         $pdf->Write(0, searchModelNameById($res['model'], $db));
 
-                        $pdf->SetXY(50, 250); // Adjust for {No_Siri}
+                        $pdf->SetXY(155, 173); // Adjust for {No_Siri}
                         $pdf->Write(0, $res['indicator_serial']);
 
-                        $pdf->SetXY(50, 260); // Adjust for {Pembuat_Negara_Asal_2}
+                        $pdf->SetXY(75, 186); // Adjust for {Pembuat_Negara_Asal_2}
                         $pdf->Write(0, searchCountryById($res['platform_country'], $db));
 
-                        $pdf->SetXY(50, 270); // Adjust for {Jenis_Steel_Concrete}
+                        $pdf->SetXY(170, 186); // Adjust for {Jenis_Steel_Concrete}
                         $pdf->Write(0, $res['jenis_pelantar']);
 
-                        $pdf->SetXY(50, 280); // Adjust for {Lainlain_butiran}
-                        $pdf->Write(0, $res['load_cell_no']);
+                        /*$pdf->SetXY(50, 280); // Adjust for {Lainlain_butiran}
+                        $pdf->Write(0, $res['load_cell_no']);*/
 
-                        $pdf->SetXY(50, 290); // Adjust for {Pembuat_Negara_Asal_3}
+                        $pdf->SetXY(70, 212); // Adjust for {Pembuat_Negara_Asal_3}
                         $pdf->Write(0, searchCountryById($res['load_cell_country'], $db));
 
-                        $pdf->SetXY(50, 300); // Adjust for {Bilangan_Load_Cell}
+                        $pdf->SetXY(153, 212); // Adjust for {Bilangan_Load_Cell}
                         $pdf->Write(0, $res['load_cell_no']);
                     }
                 }
