@@ -1000,7 +1000,7 @@ $(function () {
 
           // Print button
           buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                    ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+                    ', '+row.validator+')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
           // Complete button if conditions are met
           if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
@@ -1224,7 +1224,7 @@ $(function () {
 
             // Print button
             buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                      ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+                      ', '+row.validator+')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
             // Complete button if conditions are met
             if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
@@ -2431,8 +2431,8 @@ function deactivate(id) {
   }
 }
 
-function print(id) {
-  window.open('php/printBorang.php?userID='+id+'&file=ATK', '_blank');
+function print(id, validate) {
+  window.open('php/printBorang.php?userID='+id+'&file=ATK&validator='+validate, '_blank');
   /*$.get('php/printBorang.php', {userID: id, file: 'ATK'}, function(data){
     var obj = JSON.parse(data);
 
