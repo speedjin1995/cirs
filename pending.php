@@ -2477,8 +2477,9 @@ function deactivate(id) {
 }
 
 function print(id) {
-  $.get('php/printBorang.php', {userID: id, file: 'ATK'}, function(data){
-    /*var obj = JSON.parse(data);
+  window.open('php/printBorang.php?userID='+id+'&file=ATK', '_blank');
+  /*$.get('php/printBorang.php', {userID: id, file: 'ATK'}, function(data){
+    var obj = JSON.parse(data);
 
     if(obj.status === 'success'){
       var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
@@ -2494,8 +2495,8 @@ function print(id) {
     }
     else{
       toastr["error"]("Something wrong when activate", "Failed:");
-    }*/
-  });
+    }
+  });*/
 }
 
 function portrait(id) {
