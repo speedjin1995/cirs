@@ -29,7 +29,7 @@ function filterData(&$str){
 }
 
 if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
-    if($_GET["file"] == 'ATK' && $_GET["validator"] == '10'){
+    if($_GET["file"] == 'ATK' && $_GET["validator"] == 'METROLOGY'){
         $fillFile = 'forms/ATK_FORM.pdf';
         $pdf = new Fpdi();
         $pageCount = $pdf->setSourceFile($fillFile);
@@ -153,7 +153,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
         $pdf->Output('D', 'filled_ATK_form.pdf');
     }
-    else if($_GET["file"] == 'ATK' && $_GET["validator"] == '9'){
+    else if($_GET["file"] == 'ATK' && $_GET["validator"] == 'DE METROLOGY'){
         $fillFile = 'forms/DMSB_ATK.pdf';
         $pdf = new Fpdi();
         $pageCount = $pdf->setSourceFile($fillFile);
