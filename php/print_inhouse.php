@@ -175,12 +175,12 @@ if(isset($_POST['id'])){
                                     <td class="align-top"><b>Address:</b></td>
                                     <td class="align-top">
                                         <div class="row">
-                                            <div class="col-12" id="address-line1">'. $address1 .'</div>
-                                            <div class="col-12" id="address-line2">'. $address2 .'</div>
-                                            <div class="col-12" id="address-line3">'. $address3 .'</div>
-                                            <div class="col-12" id="address-line4">'. $address4 .'</div>
-                                            <div class="col-12" id="contact">Tel: '. $officeNo .'| Fax: -</div>
-                                            <div class="col-12" id="attending">Attn: '.$pic.'</div>
+                                            <div class="col-12" id="address-line1">'. ($address1 ?? '').'</div>
+                                            <div class="col-12" id="address-line2">'. ($address2 ?? '').'</div>
+                                            <div class="col-12" id="address-line3">'. ($address3 ?? '').'</div>
+                                            <div class="col-12" id="address-line4">'. ($address4 ?? '').'</div>
+                                            <div class="col-12" id="contact">Tel: '. ($officeNo ?? '').'| Fax: -</div>
+                                            <div class="col-12" id="attending">Attn: '.($pic ?? '').'</div>
                                         </div>
                                     </td>
                                     <td class="align-top align-right">
