@@ -35,6 +35,7 @@ if(isset($_POST['userID'])){
                 $message['machine_type'] = $row['machine_type'];
                 $message['model'] = $row['model'];
                 $message['capacity'] = $row['capacity'];
+                $message['capacity_high'] = $row['capacity_high'];
                 $message['serial_no'] = $row['serial_no'];
                 $message['validate_by'] = $row['validate_by'];
                 $message['jenis_alat'] = $row['jenis_alat'];

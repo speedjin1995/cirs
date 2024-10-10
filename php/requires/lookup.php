@@ -195,7 +195,7 @@ function searchMachineNameById($value, $db) {
 }
 
 function searchCapacityNameById($value, $db) {
-    $id = null;
+    $id = '';
 
     if ($select_stmt = $db->prepare("SELECT * FROM capacity WHERE id=?")) {
         $select_stmt->bind_param('s', $value);
@@ -205,7 +205,7 @@ function searchCapacityNameById($value, $db) {
             $id = $row['name'];
         }
         $select_stmt->close();
-    }
+    } 
 
     return $id;
 }
