@@ -1890,11 +1890,20 @@ function format (row) {
     <!-- Customer Section -->
     <div class="col-md-6">
       <p><strong>${row.customers}</strong><br>
-      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4}
-      <br>PIC: ${row.picontact} PIC Contact: ${row.pic_phone}</p>
-    </div>
-  </div><hr>
+      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4}`;
+      
+      if (row.picontact) {
+          returnString += `
+              <br>PIC: ${row.picontact} PIC Contact: ${row.pic_phone}</p>
+              </div>
+          </div><hr>`;
+      } else {
+          returnString += `</p>
+          </div>
+      </div><hr>`;
+      }
 
+  returnString += `
   <div class="row">
     <!-- Machine Section -->
     <div class="col-6">
