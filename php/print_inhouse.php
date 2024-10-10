@@ -19,9 +19,8 @@ if(isset($_POST['id'])){
             $failno = $row2['failno'];
             $person_incharge = $row2['person_incharge'];
             $nmims = json_decode($row2['nmim'], true);
-            foreach ($nmims as $nmim) {
-                $nmim = $nmim['nmimApprNo'];
-            }
+            $latestRecord = end($nmims);
+            $nmim = $latestRecord['nmimApprNo'];
         }
     }
 
@@ -285,7 +284,7 @@ if(isset($_POST['id'])){
                                 <div class="row">
                                     <div class="col-12" id="nextDueDt"><b>Next Due Date:</b> '. $nextDueDate .'</div>
                                     <div class="col-12" id="calibrationStickerNo"><b>Calibration Sticker No:</b> '. $autoFormNo .'</div>
-                                    <div class="col-12" id="sirimTrace"><b>SIRIM Traceability:</b>'. $nmim['nmimApprNo'].'</div>
+                                    <div class="col-12" id="sirimTrace"><b>SIRIM Traceability:</b>'. $nmim.'</div>
                                 </div>
                             </td>
                         </tr> 
