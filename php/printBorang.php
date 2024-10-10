@@ -141,7 +141,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(75, 192); // Adjust for {size}
                         $pdf->Write(0, searchSizeNameById($res['size'], $db));
 
-                        if($res['jenis_pelantar'] == 'Pitless'){
+                        if($res['jenis_pelantar'] == 'Pit'){
                             $pdf->SetXY(150, 193); // Adjust for {Jenis_Steel_Concrete}
                             $pdf->Write(0, '----------');
                         }
@@ -206,6 +206,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
             
             if ($res = $result->fetch_assoc()) {
                 $branch = $res['branch'];
+                $loadcells = json_decode($res['load_cells_info'], true);
                 $branchQuery = "SELECT * FROM branches WHERE id = $branch";
                 $branchDetail = mysqli_query($db, $branchQuery);
                 $branchRow = mysqli_fetch_assoc($branchDetail);
@@ -237,71 +238,101 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
-                        $pdf->SetXY(25, 60); // Adjust these coordinates for each field
+                        $pdf->SetXY(25, 70); // Adjust these coordinates for each field
                         $pdf->Write(0, searchCustNameById($res['customers'], $db)); // {Address1}
 
-                        $pdf->SetXY(25, 65); // Adjust for {Address2}
+                        $pdf->SetXY(25, 75); // Adjust for {Address2}
+                        $pdf->Write(0, $address1.' '.$address2.' '.$address3.' '.$address4);
+
+                        $pdf->SetXY(25, 95); // Adjust for {Stamping_Address1}
                         $pdf->Write(0, $address1.' '.$address2);
 
-                        $pdf->SetXY(25, 80); // Adjust for {Stamping_Address1}
-                        $pdf->Write(0, $address1.' '.$address2);
-
-                        $pdf->SetXY(25, 85); // Adjust for {Stamping_Address2}
+                        $pdf->SetXY(25, 100); // Adjust for {Stamping_Address2}
                         $pdf->Write(0, $address3.' '.$address4);
 
-                        $pdf->SetXY(75, 100); // Adjust for {Company_Name}
+                        $pdf->SetXY(75, 125); // Adjust for {Company_Name}
                         $pdf->Write(0, $compname);
 
-                        $pdf->SetXY(55, 105); // Adjust for {No_Lesen}
+                        $pdf->SetXY(75, 130); // Adjust for {No_Lesen}
                         $pdf->Write(0, $compcert);
 
-                        $pdf->SetXY(160, 105); // Adjust for {Tarikh_Tamat_Lesen}
+                        $pdf->SetXY(75, 135); // Adjust for {Tarikh_Tamat_Lesen}
                         $pdf->Write(0, $compexp);
 
-                        $pdf->SetXY(75, 110); // Adjust for {Nama_Wakil_Pembaik}
+                        $pdf->SetXY(75, 140); // Adjust for {Nama_Wakil_Pembaik}
                         $pdf->Write(0, searchStaffNameById($res['pic'], $db));
 
-                        $pdf->SetXY(150, 110); // Adjust for {No_KP}
+                        $pdf->SetXY(75, 145); // Adjust for {No_KP}
                         $pdf->Write(0, searchStaffICById($res['pic'], $db));
 
-                        $pdf->SetXY(75, 125); // Adjust for {Penentusahan_Baru}
+                        $pdf->SetXY(75, 170); // Adjust for {Penentusahan_Baru}
                         $pdf->Write(0, $res['penentusan_baru']);
 
-                        $pdf->SetXY(160, 125); // Adjust for {Penentusahan_Semula}
+                        $pdf->SetXY(75, 175); // Adjust for {Penentusahan_Semula}
                         $pdf->Write(0, $res['penentusan_semula']);
 
-                        $pdf->SetXY(50, 145); // Adjust for {NoKelulusan_MSPK}
-                        $pdf->Write(0, $res['kelulusan_mspk']);
+                        if($res['kelulusan_mspk'] == 'YES'){
+                            $pdf->SetXY(35, 205); // Adjust for {NoKelulusan_MSPK}
+                            $pdf->Write(0, '/');
+                        }
+                        else{
+                            $pdf->SetXY(35, 210); // Adjust for {NoKelulusan_MSPK}
+                            $pdf->Write(0, '/');
+                        }
 
-                        $pdf->SetXY(75, 165); // Adjust for {Pembuat_Negara_Asal}
+                        $pdf->SetXY(75, 230); // Adjust for {Pembuat_Negara_Asal}
                         $pdf->Write(0, searchCountryById($res['platform_country'], $db));
 
-                        $pdf->SetXY(155, 165); // Adjust for {Jenama}
+                        $pdf->SetXY(75, 235); // Adjust for {Jenama}
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db));
 
-                        $pdf->SetXY(50, 173); // Adjust for {Model#1}
+                        $pdf->SetXY(75, 240); // Adjust for {Model#1}
                         $pdf->Write(0, searchModelNameById($res['model'], $db));
 
-                        $pdf->SetXY(155, 173); // Adjust for {No_Siri}
+                        $pdf->SetXY(75, 245); // Adjust for {No_Siri}
                         $pdf->Write(0, $res['indicator_serial']);
-
-                        $pdf->SetXY(75, 186); // Adjust for {Pembuat_Negara_Asal_2}
-                        $pdf->Write(0, searchCountryById($res['platform_country'], $db));
-
-                        $pdf->SetXY(170, 186); // Adjust for {Jenis_Steel_Concrete}
-                        $pdf->Write(0, $res['jenis_pelantar']);
-
-                        /*$pdf->SetXY(50, 280); // Adjust for {Lainlain_butiran}
-                        $pdf->Write(0, $res['load_cell_no']);*/
-
-                        $pdf->SetXY(70, 212); // Adjust for {Pembuat_Negara_Asal_3}
-                        $pdf->Write(0, searchCountryById($res['load_cell_country'], $db));
-
-                        $pdf->SetXY(153, 212); // Adjust for {Bilangan_Load_Cell}
-                        $pdf->Write(0, $res['load_cell_no']);
                     }
                     else if ($pageNo == 2){
+                        $pdf->SetXY(75, 30); // Adjust for {Pembuat_Negara_Asal_2}
+                        $pdf->Write(0, searchCountryById($res['platform_country'], $db));
 
+                        $pdf->SetXY(75, 35); // Adjust for {Jenis_Steel_Concrete}
+                        $pdf->Write(0, $res['platform_type']);
+
+                        $pdf->SetXY(75, 40); // Adjust for {size}
+                        $pdf->Write(0, searchSizeNameById($res['size'], $db));
+
+                        if($res['jenis_pelantar'] == 'Pit'){
+                            $pdf->SetXY(57, 48); // Adjust for {Jenis_Steel_Concrete}
+                            $pdf->Write(0, '----------');
+                        }
+                        else{
+                            $pdf->SetXY(47, 48); // Adjust for {Jenis_Steel_Concrete}
+                            $pdf->Write(0, '----------');
+                        }
+
+                        $pdf->SetXY(75, 75); // Adjust for {Pembuat_Negara_Asal_3}
+                        $pdf->Write(0, searchCountryById($res['load_cell_country'], $db));
+
+                        $pdf->SetXY(75, 80); // Adjust for {Bilangan_Load_Cell}
+                        $pdf->Write(0, $res['load_cell_no']);
+
+                        $count = 0;
+                        for($i=0; $i<count($loadcells); $i++){
+                            $pdf->SetXY(37, 103 + $count); // Adjust for {Bilangan_Load_Cell}
+                            $pdf->Write(0, $loadcells[$i]['loadCellBrand']);
+
+                            $pdf->SetXY(77, 103 + $count); // Adjust for {Bilangan_Load_Cell}
+                            $pdf->Write(0, $loadcells[$i]['loadCellModel']);
+
+                            $pdf->SetXY(115, 103 + $count); // Adjust for {Bilangan_Load_Cell}
+                            $pdf->Write(0, $loadcells[$i]['loadCellCapacity']);
+
+                            $pdf->SetXY(153, 103 + $count); // Adjust for {Bilangan_Load_Cell}
+                            $pdf->Write(0, $loadcells[$i]['loadCellSerial']);
+
+                            $count += 10;
+                        }
                     }
                 }
             }
