@@ -1837,22 +1837,25 @@ $(function () {
   });
 
   $(document).on('click', '.add-load-cell', function() {
-    var $addContents = $("#loadCellDetails").clone();
-    $("#loadCellTable").append($addContents.html());
+    var loadCellValue = parseInt($('#noOfLoadCell').val());
+    // Trigger the cloning and appending logic loadCellNoValue times
+    for (var i = 0; i < loadCellValue; i++) {
+      var $addContents = $("#loadCellDetails").clone();
+      $("#loadCellTable").append($addContents.html());
 
-    debugger;
-    $("#loadCellTable").find('.details:last').attr("id", "detail" + loadCellCount);
-    $("#loadCellTable").find('.details:last').attr("data-index", loadCellCount);
-    $("#loadCellTable").find('#remove:last').attr("id", "remove" + loadCellCount);
+      $("#loadCellTable").find('.details:last').attr("id", "detail" + loadCellCount);
+      $("#loadCellTable").find('.details:last').attr("data-index", loadCellCount);
+      $("#loadCellTable").find('#remove:last').attr("id", "remove" + loadCellCount);
 
-    $("#loadCellTable").find('#no:last').attr('name', 'no['+loadCellCount+']').attr("id", "no" + loadCellCount).val((loadCellCount + 1).toString());
-    $("#loadCellTable").find('#loadCells:last').attr('name', 'loadCells['+loadCellCount+']').attr("id", "loadCells" + loadCellCount);
-    $("#loadCellTable").find('#loadCellBrand:last').attr('name', 'loadCellBrand['+loadCellCount+']').attr("id", "loadCellBrand" + loadCellCount);
-    $("#loadCellTable").find('#loadCellModel:last').attr('name', 'loadCellModel['+loadCellCount+']').attr("id", "loadCellModel" + loadCellCount);
-    $("#loadCellTable").find('#loadCellCapacity:last').attr('name', 'loadCellCapacity['+loadCellCount+']').attr("id", "loadCellCapacity" + loadCellCount);
-    $("#loadCellTable").find('#loadCellSerial').attr('name', 'loadCellSerial['+loadCellCount+']').attr("id", "loadCellSerial" + loadCellCount);
+      $("#loadCellTable").find('#no:last').attr('name', 'no['+loadCellCount+']').attr("id", "no" + loadCellCount).val((loadCellCount + 1).toString());
+      $("#loadCellTable").find('#loadCells:last').attr('name', 'loadCells['+loadCellCount+']').attr("id", "loadCells" + loadCellCount);
+      $("#loadCellTable").find('#loadCellBrand:last').attr('name', 'loadCellBrand['+loadCellCount+']').attr("id", "loadCellBrand" + loadCellCount);
+      $("#loadCellTable").find('#loadCellModel:last').attr('name', 'loadCellModel['+loadCellCount+']').attr("id", "loadCellModel" + loadCellCount);
+      $("#loadCellTable").find('#loadCellCapacity:last').attr('name', 'loadCellCapacity['+loadCellCount+']').attr("id", "loadCellCapacity" + loadCellCount);
+      $("#loadCellTable").find('#loadCellSerial').attr('name', 'loadCellSerial['+loadCellCount+']').attr("id", "loadCellSerial" + loadCellCount);
 
-    loadCellCount++;
+      loadCellCount++;
+    }
   });
 
   // Event delegation: use 'select' instead of 'input' for dropdowns

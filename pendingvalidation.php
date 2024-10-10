@@ -1643,7 +1643,6 @@ $(function () {
 
   $(document).on('click', '#add-calibration-cell', function() {
     var loadCalibrationNoValue = parseInt($('#noOfCalibrationCell').val());
-    console.log(loadCalibrationNoValue);
     // Trigger the cloning and appending logic loadCellNoValue times
     for (var i = 0; i < loadCalibrationNoValue; i++) {
       var $addContents = $("#loadCalibrationDetails").clone();

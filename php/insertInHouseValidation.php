@@ -160,7 +160,7 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['autoFormNo'], $_POST['v
 							"afterAdjustReading" => $afterAdjustReading[$i] != '' ? $afterAdjustReading[$i] : '0.0',
 						);
 					}
-				}
+				} var_dump($loadTestings);
 
 				// Update certificate data in the database
 				if ($stmt2 = $db->prepare("UPDATE inhouse_validations SET tests=? WHERE id=?")) {

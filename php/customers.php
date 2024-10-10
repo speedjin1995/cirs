@@ -16,6 +16,7 @@ if(isset($_POST['name'])){
     $address2 = filter_input(INPUT_POST, 'address2', FILTER_SANITIZE_STRING);
     $address3 = "";
     $address4 = "";
+    $customerMapUrl = "";
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
 
     $branchAddress1 = $_POST['branch_address1'] ?? [];
@@ -54,9 +55,13 @@ if(isset($_POST['name'])){
         $address4 = filter_input(INPUT_POST, 'address4', FILTER_SANITIZE_STRING);
     }
 
-    if(isset($_POST['code'] ) && $_POST['code'] != null && $_POST['code'] != ""){
-        $code = filter_input(INPUT_POST, 'code', FILTER_SANITIZE_STRING);
+    if(isset($_POST['customer_map_url']) && $_POST['customer_map_url'] != null && $_POST['customer_map_url'] != ""){
+        $customerMapUrl = $_POST['customer_map_url'] ?? [];
     }
+
+    // if(isset($_POST['code'] ) && $_POST['code'] != null && $_POST['code'] != ""){
+    //     $code = filter_input(INPUT_POST, 'code', FILTER_SANITIZE_STRING);
+    // }
 
     if(isset($_POST['email'] ) && $_POST['email'] != null && $_POST['email'] != ""){
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
@@ -77,10 +82,10 @@ if(isset($_POST['name'])){
     if(isset($_POST['picContact']) && $_POST['picContact'] != null && $_POST['picContact'] != ""){
         $picContact = filter_input(INPUT_POST, 'picContact', FILTER_SANITIZE_STRING);
     }
-
+    
     if(isset($_POST['id'] ) && $_POST['id'] != null && $_POST['id'] != ''){
-        if ($update_stmt = $db->prepare("UPDATE customers SET dealer=?, customer_code=?, other_code=?, customer_name=?, customer_address=?, address2=?, address3=?, address4=?, customer_phone=?, customer_email=?, pic=?, pic_contact=? WHERE id=?")) {
-            $update_stmt->bind_param('sssssssssssss', $dealer, $code, $otherCode, $name, $address, $address2, $address3, $address4, $phone, $email, $pic, $picContact, $_POST['id']);
+        if ($update_stmt = $db->prepare("UPDATE customers SET dealer=?, customer_code=?, other_code=?, customer_name=?, customer_address=?, address2=?, address3=?, address4=?, map_url=?, customer_phone=?, customer_email=?, pic=?, pic_contact=? WHERE id=?")) {
+            $update_stmt->bind_param('ssssssssssssss', $dealer, $code, $otherCode, $name, $address, $address2, $address3, $address4, $customerMapUrl, $phone, $email, $pic, $picContact, $_POST['id']);
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
@@ -141,56 +146,106 @@ if(isset($_POST['name'])){
         }
     }
     else{
-        if ($insert_stmt = $db->prepare("INSERT INTO customers (dealer, customer_code, other_code, customer_name, customer_address, address2, address3, address4, customer_phone, customer_email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-            $insert_stmt->bind_param('ssssssssssss', $dealer, $code, $otherCode, $name, $address, $address2, $address3, $address4, $phone, $email, $pic, $picContact);
-            
-            // Execute the prepared query.
-            if (! $insert_stmt->execute()) {
+        # to generate customer code
+        $custNameFirstLetter = substr($name, 0, 1);
+        $firstChar = $custNameFirstLetter;
+
+        if($misc_stmt = $db->prepare("SELECT * FROM miscellaneous WHERE code='customer' AND description=?")){
+            $misc_stmt->bind_param('s', $custNameFirstLetter);
+
+            if(!$misc_stmt->execute()){
                 echo json_encode(
                     array(
-                        "status"=> "failed", 
-                        "message"=> $insert_stmt->error
-                    )
-                );
-            }
-            else{
-                $invid = $insert_stmt->insert_id; // Get the inserted customer ID
-                $insert_stmt->close(); // Close the first insert statement
+                        "status" => "failed",
+                        "message" => "Something went wrong querying miscellaneous"
+                    )); 
+            }else{
+                $result = $misc_stmt->get_result();
+                while ($row = $result->fetch_assoc()){
+                    $charSize = strlen($row['value']);
+                    $misValue = $row['value'];
+                    
+                    $code = 'C-'.strtoupper($custNameFirstLetter);
+                    for($i=0; $i<(4-(int)$charSize); $i++){
+                        $code.='0';  // S0000
+                    }
 
-                // Loop through the addresses and insert into branches
-                for ($i = 0; $i < count($branchAddress1); $i++) {
-                    // Only insert if the index is not in the deletedShip array
-                    if (!in_array($i, $deletedShip)) {
-                        // Assign array elements to variables to pass as references
-                        $addr1 = $branchAddress1[$i] ?? '';
-                        $addr2 = $branchAddress2[$i] ?? '';
-                        $addr3 = $branchAddress3[$i] ?? '';
-                        $addr4 = $branchAddress4[$i] ?? '';
-                        $branchNameValue = isset($branchName[$i]) ? $branchName[$i] : '';
-                        $branchCodeValue = isset($branchCode[$i]) ? $branchCode[$i] : '';
-                        $mapUrlValue = isset($mapUrl[$i]) ? $mapUrl[$i] : '';
-                        $branchPhoneValue = isset($branchPhone[$i]) ? $branchPhone[$i] : '';
-                        $branchEmailValue = isset($branchEmail[$i]) ? $branchEmail[$i] : '';
-                        $branchPicValue = isset($branchPic[$i]) ? $branchPic[$i] : '';
-                        $branchPicContactVAlue = isset($branchPicContact[$i]) ? $branchPicContact[$i] : '';
+                    $code.=$misValue;
 
+                    if ($insert_stmt = $db->prepare("INSERT INTO customers (dealer, customer_code, other_code, customer_name, customer_address, address2, address3, address4, map_url, customer_phone, customer_email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                        $insert_stmt->bind_param('sssssssssssss', $dealer, $code, $otherCode, $name, $address, $address2, $address3, $address4, $customerMapUrl, $phone, $email, $pic, $picContact);
+                        
+                        // Execute the prepared query.
+                        if (! $insert_stmt->execute()) {
+                            echo json_encode(
+                                array(
+                                    "status"=> "failed", 
+                                    "message"=> $insert_stmt->error
+                                )
+                            );
+                        }
+                        else{
+                            $invid = $insert_stmt->insert_id; // Get the inserted customer ID
+                            $insert_stmt->close(); // Close the first insert statement
+            
+                            // Loop through the addresses and insert into branches
+                            for ($i = 0; $i < count($branchAddress1); $i++) {
+                                // Only insert if the index is not in the deletedShip array
+                                if (!in_array($i, $deletedShip)) {
+                                    // Assign array elements to variables to pass as references
+                                    $addr1 = $branchAddress1[$i] ?? '';
+                                    $addr2 = $branchAddress2[$i] ?? '';
+                                    $addr3 = $branchAddress3[$i] ?? '';
+                                    $addr4 = $branchAddress4[$i] ?? '';
+                                    $branchNameValue = isset($branchName[$i]) ? $branchName[$i] : '';
+                                    $branchCodeValue = isset($branchCode[$i]) ? $branchCode[$i] : '';
+                                    $mapUrlValue = isset($mapUrl[$i]) ? $mapUrl[$i] : '';
+                                    $branchPhoneValue = isset($branchPhone[$i]) ? $branchPhone[$i] : '';
+                                    $branchEmailValue = isset($branchEmail[$i]) ? $branchEmail[$i] : '';
+                                    $branchPicValue = isset($branchPic[$i]) ? $branchPic[$i] : '';
+                                    $branchPicContactVAlue = isset($branchPicContact[$i]) ? $branchPicContact[$i] : '';
+            
+            
+                                    if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, branch_code, branch_name, map_url, office_no, email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                                        $insert_stmt2->bind_param('ssssssssssss', $invid, $addr1, $addr2, $addr3, $addr4, $branchCodeValue, $branchNameValue, $mapUrlValue, $branchPhoneValue, $branchEmailValue, $branchPicValue, $branchPicContactVAlue);
+                                        $insert_stmt2->execute();
+                                        $insert_stmt2->close();
+                                    }
+                                }
+                            }
 
-                        if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, branch_code, branch_name, map_url, office_no, email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-                            $insert_stmt2->bind_param('ssssssssssss', $invid, $addr1, $addr2, $addr3, $addr4, $branchCodeValue, $branchNameValue, $mapUrlValue, $branchPhoneValue, $branchEmailValue, $branchPicValue, $branchPicContactVAlue);
-                            $insert_stmt2->execute();
-                            $insert_stmt2->close();
+                            #Update miscellaneous value
+                            $misValue++;
+
+                            if($updmisc_stmt = $db->prepare("UPDATE miscellaneous SET value=? WHERE code='customer' AND description=?")){
+                                $updmisc_stmt->bind_param('ss', $misValue, $firstChar);
+										
+                                // Execute the prepared query.
+                                if (! $updmisc_stmt->execute()){
+                    
+                                    echo json_encode(
+                                        array(
+                                            "status"=> "failed", 
+                                            "message"=> $updmisc_stmt->error
+                                        )
+                                    );
+                                } 
+                                else{
+                                    $updmisc_stmt->close();
+                                    $db->close();
+                                    
+                                    echo json_encode(
+                                        array(
+                                            "status"=> "success", 
+                                            "message"=> "Added Successfully!!" 
+                                        )
+                                    );
+                    
+                                }
+                            }
                         }
                     }
                 }
-
-                $db->close();
-                
-                echo json_encode(
-                    array(
-                        "status"=> "success", 
-                        "message"=> "Added Successfully!!" 
-                    )
-                );
             }
         }
     }

@@ -57,16 +57,23 @@ while($row = mysqli_fetch_assoc($empRecords)) {
       }
     }
 
+    if(isset($row['map_url']) && !empty($row['map_url'])){
+      $customerAddress = '<a href="'.$row['map_url'].'" target="_blank">' .$row['customer_address']." ". $row['address2'] ." ". $row['address3']. ' <i class="fa fa-map-marker"></i></a>';
+    } else {
+      $customerAddress = $row['customer_address']." ". $row['address2'] ." ". $row['address3'];
+    }
+
     $data[] = array( 
       "id"=>$row['id'],
       "customer_code"=>$row['customer_code'],
       "other_code"=>$row['other_code'],
       "customer_name"=>$row['customer_name'],
-      "customer_address"=>$row['customer_address']." ". $row['address2'] ." ". $row['address3'],
       "customer_phone"=>$row['customer_phone'],
       "customer_email"=>$row['customer_email'],
+      "customer_address"=>$customerAddress,
       "log"=>$branches
     );
+    
 }
 
 ## Response

@@ -76,7 +76,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "brand_name"=>$row['brand_name'] ?? '',
     "model_name"=>$row['model_name'] ?? '',
     "capacity"=> $row['capacity'] ?? '',
-    "made_in"=>$row['made_in'] ?? '',
+    "made_in"=> $row['made_in'] != null ? searchCountryNameById($row['made_in'], $db) : '',
     "class"=>$row['class'] ?? '',
     "pattern_no"=>$row['pattern_no'] ?? '',
     "pattern_datetime"=>$row['pattern_datetime'] ?? '',
