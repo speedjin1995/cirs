@@ -4,18 +4,12 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7f626b880f703c4bd3bb306472b20b11
+class ComposerStaticInitced82df0407c8c980c4ac0a88b7225c6
 {
     public static $prefixLengthsPsr4 = array (
         's' => 
         array (
             'setasign\\Fpdi\\' => 14,
-        ),
-        'm' => 
-        array (
-            'mikehaertl\\tmp\\' => 15,
-            'mikehaertl\\shellcommand\\' => 24,
-            'mikehaertl\\pdftk\\' => 17,
         ),
         'Z' => 
         array (
@@ -42,18 +36,6 @@ class ComposerStaticInit7f626b880f703c4bd3bb306472b20b11
         'setasign\\Fpdi\\' => 
         array (
             0 => __DIR__ . '/..' . '/setasign/fpdi/src',
-        ),
-        'mikehaertl\\tmp\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/mikehaertl/php-tmpfile/src',
-        ),
-        'mikehaertl\\shellcommand\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/mikehaertl/php-shellcommand/src',
-        ),
-        'mikehaertl\\pdftk\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/mikehaertl/php-pdftk/src',
         ),
         'ZipStream\\' => 
         array (
@@ -94,9 +76,9 @@ class ComposerStaticInit7f626b880f703c4bd3bb306472b20b11
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7f626b880f703c4bd3bb306472b20b11::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7f626b880f703c4bd3bb306472b20b11::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7f626b880f703c4bd3bb306472b20b11::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitced82df0407c8c980c4ac0a88b7225c6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitced82df0407c8c980c4ac0a88b7225c6::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitced82df0407c8c980c4ac0a88b7225c6::$classMap;
 
         }, null, ClassLoader::class);
     }
