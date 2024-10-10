@@ -263,6 +263,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(153, 212); // Adjust for {Bilangan_Load_Cell}
                         $pdf->Write(0, $res['load_cell_no']);
                     }
+                    else if ($pageNo == 2){
+
+                    }
                 }
             }
         }
