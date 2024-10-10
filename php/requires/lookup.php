@@ -325,7 +325,7 @@ function searchUnitNameById($value, $db) {
 }
 
 function searchSizeNameById($value, $db) {
-    $id = null;
+    $id = '';
 
     if ($select_stmt = $db->prepare("SELECT * FROM size WHERE id=?")) {
         $select_stmt->bind_param('s', $value);
