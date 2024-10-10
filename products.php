@@ -13,7 +13,7 @@ else{
   $machinetypes = $db->query("SELECT * FROM machines WHERE deleted = '0'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $capacities = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
-  $validators = $db->query("SELECT * FROM validators WHERE deleted = '0'");
+  $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
 }
 ?>
 

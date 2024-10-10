@@ -70,15 +70,39 @@ $data = array();
 $counter = 1;
 
 while($row = mysqli_fetch_assoc($empRecords)) {
+  $branch = $row['branch'];
+  $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+  $branchDetail = mysqli_query($db, $branchQuery);
+  $branchRow = mysqli_fetch_assoc($branchDetail);
+
+  $address1 = null;
+  $address2 = null;
+  $address3 = null;
+  $address4 = null;
+  $pic = null;
+  $pic_phone = null;
+
+  if(!empty($branchRow)){
+    $address1 = $branchRow['address'];
+    $address2 = $branchRow['address2'];
+    $address3 = $branchRow['address3'];
+    $address4 = $branchRow['address4'];
+    $pic = $branchRow['pic'];
+    $pic_phone = $branchRow['pic_contact'];
+  }
+
   $data[] = array( 
     "no"=>$counter,
     "id"=>$row['id'],
     "customers"=>$row['customers'] != null ? searchCustNameById($row['customers'], $db) : '',
-    "address1"=>$row['address1'] ?? '',
-    "address2"=>$row['address2'] ?? '',
-    "address3"=>$row['address3'] ?? '',
-    "full_address"=>$row['address1'].' '.$row['address2'].' '.$row['address3'],
-    "full_address2"=>$row['address1'].'<br>'.$row['address2'].'<br>'.$row['address3'],
+    "address1" => $address1 ?? '',
+    "address2" => $address2 ?? '',
+    "address3" => $address3 ?? '',
+    "address4"=>$address4 ?? '',
+    "picontact"=> $pic ?? '',
+    "pic_phone"=> $pic_phone ?? '',
+    "full_address"=>$address1.' '.$address2.' '.$address3.' '.$address4,
+    "full_address2"=>$address1.'<br>'.$address2.'<br>'.$address3.'<br>'.$address4,
     "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
     "machine_type"=>$row['machine_type'] != null ? searchMachineNameById($row['machine_type'], $db) : '',
     "model"=>$row['model'] != null  ? searchModelNameById($row['model'], $db) : '',

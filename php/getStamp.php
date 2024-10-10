@@ -25,12 +25,9 @@ if(isset($_POST['userID'])){
                 $message['id'] = $row['id'];
                 $message['type'] = $row['type'];
                 $message['dealer'] = $row['dealer'];
+                $message['dealer_branch'] = $row['dealer_branch'];
                 $message['customer_type'] = $row['customer_type'];
                 $message['customers'] = $row['customers'];
-                $message['address1'] = $row['address1'];
-                $message['address2'] = $row['address2'];
-                $message['address3'] = $row['address3'];
-                $message['address4'] = $row['address4'];
                 $message['branch'] = $row['branch'];
                 $message['products'] = $row['products'];
                 $message['stampType'] = $row['stamping_type'];
