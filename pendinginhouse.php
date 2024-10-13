@@ -2066,12 +2066,13 @@ function extraAction(id){
 
 function edit(id) {
   $('#spinnerLoading').show();
+
   $.post('php/getInHouseValidation.php', {validationId: id}, function(data){
     var obj = JSON.parse(data);
     if(obj.status === 'success'){
       let variance = obj.message.variance;
       let varianceDecimalPart = variance.toString().split('.')[1];
-      let varianceDecimalPoint = varianceDecimalPart.length;
+      let varianceDecimalPoint = varianceDecimalPart.length; console.log(varianceDecimalPoint);
       var unit = obj.message.capacityUnit;
 
       if(obj.message.type == 'DIRECT'){
@@ -2221,10 +2222,10 @@ function edit(id) {
                   $("#loadTestingTable").find('#unitSymbolAR'+ i).text(unit);
 
                   //Placeholder Value
-                  let placeholderValue = (0).toFixed(varianceDecimalPoint);
-                  $("#loadTestingTable").find('#calibrationReceived'+ i).attr('placeholder', placeholderValue).val(placeholderValue);
-                  $("#loadTestingTable").find('#variance'+ i).attr('placeholder', placeholderValue).val(placeholderValue).css({'background-color': 'lightgrey', 'color': 'black'});
-                  $("#loadTestingTable").find('#afterAdjustReading'+ i).attr('placeholder', placeholderValue).val(placeholderValue);
+                  // let placeholderValue = (0).toFixed(varianceDecimalPoint);
+                  // $("#loadTestingTable").find('#calibrationReceived'+ i).attr('placeholder', placeholderValue).val(placeholderValue);
+                  // $("#loadTestingTable").find('#variance'+ i).attr('placeholder', placeholderValue).val(placeholderValue).css({'background-color': 'lightgrey', 'color': 'black'});
+                  // $("#loadTestingTable").find('#afterAdjustReading'+ i).attr('placeholder', placeholderValue).val(placeholderValue);
 
                   //When user change value
                   $('#loadTestingTable').find('#standardValue'+ i).change(function() {
@@ -2439,10 +2440,10 @@ function edit(id) {
                   $("#loadTestingTable").find('#unitSymbolAR'+ i).text(unit);
 
                   //Placeholder Value
-                  let placeholderValue = (0).toFixed(varianceDecimalPoint);
-                  $("#loadTestingTable").find('#calibrationReceived'+ i).attr('placeholder', placeholderValue).val(placeholderValue);
-                  $("#loadTestingTable").find('#variance'+ i).attr('placeholder', placeholderValue).val(placeholderValue).css({'background-color': 'lightgrey', 'color': 'black'});
-                  $("#loadTestingTable").find('#afterAdjustReading'+ i).attr('placeholder', placeholderValue).val(placeholderValue);
+                  // let placeholderValue = (0).toFixed(varianceDecimalPoint);
+                  // $("#loadTestingTable").find('#calibrationReceived'+ i).attr('placeholder', placeholderValue).val(placeholderValue);
+                  // $("#loadTestingTable").find('#variance'+ i).attr('placeholder', placeholderValue).val(placeholderValue).css({'background-color': 'lightgrey', 'color': 'black'});
+                  // $("#loadTestingTable").find('#afterAdjustReading'+ i).attr('placeholder', placeholderValue).val(placeholderValue);
 
                   //When user change value
                   $('#loadTestingTable').find('#standardValue'+ i).change(function() {
