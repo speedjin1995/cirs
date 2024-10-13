@@ -59,7 +59,7 @@ if(isset($_POST['loadCell'], $_POST['model'], $_POST['capacity'], $_POST['madeIn
 
                                     $timestamp = time();
                                     $uploadDir = '../uploads/loadCell/'; // Directory to store uploaded files
-                                    $uploadDirDB = '../cirs/uploads/loadCell/'; // filepath for db
+                                    $uploadDirDB = '../uploads/loadCell/'; // filepath for db
                                     $uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['certificate']['name']);
                                     $uploadFileDB = $uploadDirDB . $timestamp . '_' . basename($_FILES['certificate']['name']);
                                     $tempFile = $_FILES['certificate']['tmp_name'];
@@ -113,7 +113,7 @@ if(isset($_POST['loadCell'], $_POST['model'], $_POST['capacity'], $_POST['madeIn
                 if($_FILES['certificate']['error'] === 0){
                     $timestamp = time();
                     $uploadDir = '../uploads/loadCell/'; // Directory to store uploaded files
-                    $uploadDirDB = '../cirs/uploads/loadCell/'; // filepath for db
+                    $uploadDirDB = '../uploads/loadCell/'; // filepath for db
                     $uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['certificate']['name']);
                     $uploadFileDB = $uploadDirDB . $timestamp . '_' . basename($_FILES['certificate']['name']);
                     $tempFile = $_FILES['certificate']['tmp_name'];

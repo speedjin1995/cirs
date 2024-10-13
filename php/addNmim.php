@@ -35,7 +35,7 @@ if(isset($_POST['id'], $_POST['nmimDetail'], $_POST['nmimApprNo'], $_POST['nmimA
             // Check if file was uploaded
             if ($_FILES['nmimPdf']['error'] === 0) {
                 $uploadDir = '../uploads/nmim/'; // Directory to store uploaded files
-                $uploadDirDB = '../cirs/uploads/nmim/'; // filepath for db
+                $uploadDirDB = '../uploads/nmim/'; // filepath for db
                 $uploadFile = $uploadDir . $newId . '_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
                 $uploadFileDB = $uploadDirDB . $newId . '_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
                 
@@ -58,7 +58,7 @@ if(isset($_POST['id'], $_POST['nmimDetail'], $_POST['nmimApprNo'], $_POST['nmimA
         // Check if file was uploaded
         if ($_FILES['nmimPdf']['error'] === 0) {
             $uploadDir = '../uploads/nmim/'; // Directory to store uploaded files
-            $uploadDirDB = '../cirs/uploads/nmim/'; // filepath for db
+            $uploadDirDB = '../uploads/nmim/'; // filepath for db
             $uploadFile = $uploadDir . '1_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
             $uploadFileDB = $uploadDirDB . '1_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
             

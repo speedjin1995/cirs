@@ -1936,16 +1936,16 @@ function newEntry(){
 
           $('#calibrationHeader').text('Note - Standard Average Temperature: ('+ standardAvTemp +') / Average Relative Humidity: ('+ relativeHumidity +')');
           $('#varianceHeader').text('Variance +/- '+ variance + unit);
-          $("#loadTestingTable").find('#standardValue0').val(obj.message.test_1.toFixed(varianceDecimalPoint));
-          $("#loadTestingTable").find('#standardValue1').val(obj.message.test_2.toFixed(varianceDecimalPoint));
-          $("#loadTestingTable").find('#standardValue2').val(obj.message.test_3.toFixed(varianceDecimalPoint));
-          $("#loadTestingTable").find('#standardValue3').val(obj.message.test_4.toFixed(varianceDecimalPoint));
-          $("#loadTestingTable").find('#standardValue4').val(obj.message.test_5.toFixed(varianceDecimalPoint));
-          $("#loadTestingTable").find('#standardValue5').val(obj.message.test_6.toFixed(varianceDecimalPoint));
-          $("#loadTestingTable").find('#standardValue6').val(obj.message.test_7.toFixed(varianceDecimalPoint));
-          $("#loadTestingTable").find('#standardValue7').val(obj.message.test_8.toFixed(varianceDecimalPoint));
-          $("#loadTestingTable").find('#standardValue8').val(obj.message.test_9.toFixed(varianceDecimalPoint));
-          $("#loadTestingTable").find('#standardValue9').val(obj.message.test_10.toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#standardValue0').val(parseFloat(obj.message.test_1).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#standardValue1').val(parseFloat(obj.message.test_2).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#standardValue2').val(parseFloat(obj.message.test_3).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#standardValue3').val(parseFloat(obj.message.test_4).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#standardValue4').val(parseFloat(obj.message.test_5).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#standardValue5').val(parseFloat(obj.message.test_6).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#standardValue6').val(parseFloat(obj.message.test_7).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#standardValue7').val(parseFloat(obj.message.test_8).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#standardValue8').val(parseFloat(obj.message.test_9).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#standardValue9').val(parseFloat(obj.message.test_10).toFixed(varianceDecimalPoint));
 
           for (var i = 0; i < 10; i++) {
             //Symbol setting

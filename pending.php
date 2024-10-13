@@ -1013,7 +1013,7 @@ $(function () {
 
           // Print button
           buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                    ', \''+row.validator+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+                    ', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
           // Complete button if conditions are met
           if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
@@ -1238,7 +1238,7 @@ $(function () {
 
             // Print button
             buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                    ', \''+row.validator+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+                    ', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
             // Complete button if conditions are met
             if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
@@ -1852,6 +1852,8 @@ $(function () {
 
   $(document).on('click', '.add-load-cell', function() {
     var loadCellValue = parseInt($('#noOfLoadCell').val());
+    $("#loadCellTable").html('');
+    loadCellCount = 0;
     // Trigger the cloning and appending logic loadCellNoValue times
     for (var i = 0; i < loadCellValue; i++) {
       var $addContents = $("#loadCellDetails").clone();

@@ -36,7 +36,7 @@ if(isset($_POST['id'], $_POST['lesenCertDetail'], $_POST['lesenCertSerialNo'], $
             // Check if file was uploaded
             if ($_FILES['lesenCertPdf']['error'] === 0) {
                 $uploadDir = '../uploads/lesenCert/'; // Directory to store uploaded files
-                $uploadDirDB = '../cirs/uploads/lesenCert/'; // filepath for db
+                $uploadDirDB = '../uploads/lesenCert/'; // filepath for db
                 $uploadFile = $uploadDir . $newId . '_' . $lesenCertDetail . '_' . $lesenCertSerialNo . '_'. basename($_FILES['lesenCertPdf']['name']);
                 $uploadFileDB = $uploadDirDB . $newId . '_' . $lesenCertDetail . '_' . $lesenCertSerialNo . '_'. basename($_FILES['lesenCertPdf']['name']);
                 
@@ -60,7 +60,7 @@ if(isset($_POST['id'], $_POST['lesenCertDetail'], $_POST['lesenCertSerialNo'], $
         // Check if file was uploaded
         if ($_FILES['lesenCertPdf']['error'] === 0) {
             $uploadDir = '../uploads/lesenCert/'; // Directory to store uploaded files
-            $uploadDirDB = '../cirs/uploads/lesenCert/'; // filepath for db
+            $uploadDirDB = '../uploads/lesenCert/'; // filepath for db
             $uploadFile = $uploadDir . '1_' . $lesenCertDetail . '_' . $lesenCertSerialNo . '_'. basename($_FILES['lesenCertPdf']['name']);
             $uploadFileDB = $uploadDirDB . '1_' . $lesenCertDetail . '_' . $lesenCertSerialNo . '_'. basename($_FILES['lesenCertPdf']['name']);
             

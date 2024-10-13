@@ -179,7 +179,7 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['autoFormNo'], $_POST['v
 							
 							$timestamp = time();
 							$uploadDir = '../uploads/calibration/'; // Directory to store uploaded files
-							$uploadDirDB = '../cirs/uploads/calibration/'; // filepath for db
+							$uploadDirDB = '../uploads/calibration/'; // filepath for db
 							$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadAttachment']['name'][$i]);
 							$uploadFileDB = $uploadDirDB . $timestamp . '_' . basename($_FILES['uploadAttachment']['name'][$i]);
 							$tempFile = $_FILES['uploadAttachment']['tmp_name'][$i];
@@ -251,7 +251,7 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['autoFormNo'], $_POST['v
 						if($uploadAttachment['error'][$i] === 0){
 							$timestamp = time();
 							$uploadDir = '../uploads/calibration/'; // Directory to store uploaded files
-							$uploadDirDB = '../cirs/uploads/calibration/'; // filepath for db
+							$uploadDirDB = '../uploads/calibration/'; // filepath for db
 							$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadAttachment']['name'][$i]);
 							$uploadFileDB = $uploadDirDB . $timestamp . '_' . basename($_FILES['uploadAttachment']['name'][$i]);
 							$tempFile = $_FILES['uploadAttachment']['tmp_name'][$i];
