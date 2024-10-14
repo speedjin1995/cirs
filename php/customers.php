@@ -59,9 +59,9 @@ if(isset($_POST['name'])){
         $customerMapUrl = $_POST['customer_map_url'] ?? [];
     }
 
-    // if(isset($_POST['code'] ) && $_POST['code'] != null && $_POST['code'] != ""){
-    //     $code = filter_input(INPUT_POST, 'code', FILTER_SANITIZE_STRING);
-    // }
+    if(isset($_POST['code'] ) && $_POST['code'] != null && $_POST['code'] != ""){
+        $code = filter_input(INPUT_POST, 'code', FILTER_SANITIZE_STRING);
+    }
 
     if(isset($_POST['email'] ) && $_POST['email'] != null && $_POST['email'] != ""){
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
