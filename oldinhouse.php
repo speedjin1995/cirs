@@ -2151,7 +2151,7 @@ function complete(id) {
 }
 
 function deactivate(id) {
-  if (confirm('Are you sure you want to cancel this items?')) {
+  if (confirm('Are you sure you want to cancel this item?')) {
     $('#spinnerLoading').show();
     $.post('php/getInHouseValidation.php', {validationId: id}, function(data){
       var obj = JSON.parse(data);
