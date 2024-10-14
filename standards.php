@@ -107,12 +107,13 @@ else{
                         </div>
                         <div class="form-group col-4">
                             <label>Units *</label>
-                            <select class="form-control" style="width: 100%;" id="units" name="units" required>
+                            <select class="form-control" style="width: 100%;" id="units" name="units" required disabled>
                                 <option selected="selected">-</option>
                                 <?php while($rowVA2=mysqli_fetch_assoc($units)){ ?>
                                     <option value="<?=$rowVA2['id'] ?>"><?=$rowVA2['units'] ?></option>
                                 <?php } ?>
                             </select>
+                            <input type="hidden" id="unitsHidden" name="unitsHidden">
                         </div>
                         <div class="form-group col-4">
                             <label for="variance">Variance +/- *</label>
@@ -241,6 +242,42 @@ $(function () {
                     $('#spinnerLoading').hide();
                 }
             });
+        }
+    });
+
+    $('#capacityModal').find('#capacity').change(function(){
+        var id = $(this).val();
+        $.post('php/getCapacity.php', {userID: id}, function(data){
+            var obj = JSON.parse(data);
+            $('#capacityModal').find('#units').val(obj.message.units);
+            $('#capacityModal').find('#unitsHidden').val(obj.message.units);
+        });
+    });
+
+    for(var i=1; i<11; i++){
+        $('#capacityModal').find('#tester'+i).change(function(){
+            var variance = $('#capacityModal').find('#variance').val();
+            let varianceDecimalPart = variance.toString().split('.')[1];
+            let varianceDecimalPoint = varianceDecimalPart.length;
+
+            var testerValue = $(this).val();
+            var formattedTesterValue = parseFloat(testerValue).toFixed(varianceDecimalPoint);
+            $(this).val(formattedTesterValue);
+        });
+    }
+    
+    $('#capacityModal').find('#variance').change(function(){
+        var variance = $(this).val();
+        let varianceDecimalPart = variance.toString().split('.')[1];
+        let varianceDecimalPoint = varianceDecimalPart.length;
+
+        for(var i=1; i<11; i++){
+            var testerValue = $('#capacityModal').find('#tester'+i).val();
+            if(testerValue > 0){
+                var formattedTesterValue = parseFloat(testerValue).toFixed(varianceDecimalPoint);
+                console.log(formattedTesterValue);
+                $('#capacityModal').find('#tester'+i).val(formattedTesterValue);
+            }
         }
     });
 
