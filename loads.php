@@ -461,7 +461,10 @@ $(function () {
 
     $('#addBrand').on('click', function(){
         $('#brandModal').find('#id').val("");
+        $('#brandModal').find('#loadCell').val("");
         $('#brandModal').find('#machineType').val('').trigger('change');
+        $('#brandModal').find('#capacity').val('').trigger('change');
+        $('#brandModal').find('#oimlApproval').val('').trigger('change');
         $('#brandModal').find('#brand').val("").trigger('change');
         $('#brandModal').find('#model').val('').trigger('change');
         $('#brandModal').find('#jenisAlat').val('').trigger('change');
@@ -469,7 +472,12 @@ $(function () {
         $('#brandModal').find('#patternNo').val('');
         $('#brandModal').find('#class').val('');
         $('#brandModal').find('#approval_date').val(formatDate3(today));
-        $('#brandModal').find('#expiry_date').val(formatDate3(today));
+
+        today.setFullYear(today.getFullYear() + 1); // Add 1 year
+        var expiryDate = today.setDate(today.getDate() - 1); // Subtract 1 day
+
+        $('#brandModal').find('#expiry_date').val(formatDate3(expiryDate));
+        $('#brandModal').find('#certificate').val('');
         $('#brandModal').modal('show');
         
         $('#brandForm').validate({
@@ -535,7 +543,7 @@ function edit(id){
 }
 
 function deactivate(id){
-    if (confirm('Are you sure you want to cancel this items?')) {
+    if (confirm('Are you sure you want to cancel this item?')) {
         $('#spinnerLoading').show();
         $.post('php/deleteLoadCell.php', {userID: id}, function(data){
             var obj = JSON.parse(data);

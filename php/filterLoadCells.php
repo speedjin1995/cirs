@@ -81,11 +81,11 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "pattern_no"=>$row['pattern_no'] ?? '',
     "pattern_datetime"=>$row['pattern_datetime'] ?? '',
     "pattern_expiry"=>$row['pattern_expiry'] ?? '',
-    "certificate"=>'<div class="col-2">
+    "certificate"=>!empty($row['certificate']) ? '<div class="col-2">
                         <a href="' . $row['certificate'] . '" target="_blank" class="btn btn-success btn-sm" role="button">
                             <i class="fa fa-file-pdf-o"></i>
                         </a>
-                    </div>'
+                    </div>' : ''
   );
 
   $counter++;
