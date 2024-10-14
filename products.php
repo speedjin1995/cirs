@@ -146,6 +146,14 @@ else{
 
 <script>
 $(function () {
+
+    $("#capacityModal").find("#price").change(function() {
+        var price = $(this).val();
+        var formattedPrice = parseFloat(price).toFixed(2);
+        $(this).val(formattedPrice);
+    });
+
+
     $("#capacityTable").DataTable({
         "responsive": true,
         "autoWidth": false,
