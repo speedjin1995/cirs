@@ -801,6 +801,65 @@ function formatDate3(date2) {
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+function displayPreview(data) {
+  // Parse the Excel data
+  var workbook = XLSX.read(data, { type: 'binary' });
+
+  // Get the first sheet
+  var sheetName = workbook.SheetNames[0];
+  var sheet = workbook.Sheets[sheetName];
+
+  // Convert the sheet to an array of objects
+  var jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+  // Get the headers
+  var headers = jsonData[0];
+
+  // Ensure we handle cases where there may be less than 15 columns
+  while (headers.length < 15) {
+    headers.push(''); // Adding empty headers to reach 15 columns
+  }
+
+  // Create HTML table headers
+  var htmlTable = '<table style="width:100%;"><thead><tr>';
+  headers.forEach(function(header) {
+      htmlTable += '<th>' + header + '</th>';
+  });
+  htmlTable += '</tr></thead><tbody>';
+
+  // Iterate over the data and create table rows
+  for (var i = 1; i < jsonData.length; i++) {
+      htmlTable += '<tr>';
+      var rowData = jsonData[i];
+
+      // Ensure we handle cases where there may be less than 15 cells in a row
+      while (rowData.length < 15) {
+        rowData.push(''); // Adding empty cells to reach 15 columns
+      }
+
+      for (var j = 0; j < 15; j++) {
+        var cellData = rowData[j];
+        var formattedData = cellData;
+
+        // Check if cellData is a valid Excel date serial number and format it to DD/MM/YYYY
+        if (typeof cellData === 'number' && cellData > 0) {
+            var excelDate = XLSX.SSF.parse_date_code(cellData);
+            if (excelDate) {
+                formattedData = formatDate2(new Date(excelDate.y, excelDate.m - 1, excelDate.d));
+            }
+        }
+
+        htmlTable += '<td><input type="text" id="'+headers[j].replace(/[^a-zA-Z0-9]/g, '')+(i-1)+'" name="'+headers[j].replace(/[^a-zA-Z0-9]/g, '')+'['+(i-1)+']" value="' + (formattedData == null ? '' : formattedData) + '" /></td>';
+      }
+      htmlTable += '</tr>';
+  }
+
+  htmlTable += '</tbody></table>';
+
+  var previewTable = document.getElementById('previewTable');
+  previewTable.innerHTML = htmlTable;
+}
 </script>
 </body>
 </html>

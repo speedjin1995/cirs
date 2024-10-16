@@ -172,12 +172,12 @@ else{
         <input class="form-control" id="branch_address2" placeholder="Enter your address 2" required>
       </div>
       <div class="form-group col-2"> 
-        <label for="branch_address3">Address 3 *</label>
-        <input class="form-control" id="branch_address3" placeholder="Enter your address 3" required>
+        <label for="branch_address3">Address 3 </label>
+        <input class="form-control" id="branch_address3" placeholder="Enter your address 3">
       </div>
       <div class="form-group col-2"> 
-        <label for="branch_address4">Address 4 *</label>
-        <input class="form-control" id="branch_address4" placeholder="Enter your address 4" required>
+        <label for="branch_address4">Address 4 </label>
+        <input class="form-control" id="branch_address4" placeholder="Enter your address 4">
       </div>
       <div class="form-group col-2"> 
         <label for="map_url">Map URL</label>
@@ -266,30 +266,30 @@ $(function () {
   
   $.validator.setDefaults({
     submitHandler: function () {
-      if($("#pricingTable").find(".details").length > 0){
-        $('#spinnerLoading').show();
-        $.post('php/customers.php', $('#customerForm').serialize(), function(data){
-            var obj = JSON.parse(data); 
-            
-            if(obj.status === 'success'){
-                $('#addModal').modal('hide');
-                toastr["success"](obj.message, "Success:");
-                $('#customerTable').DataTable().ajax.reload();
-                $('#spinnerLoading').hide();
-            }
-            else if(obj.status === 'failed'){
-                toastr["error"](obj.message, "Failed:");
-                $('#spinnerLoading').hide();
-            }
-            else{
-                toastr["error"]("Something wrong when edit", "Failed:");
-                $('#spinnerLoading').hide();
-            }
-        });
-      }
+      //if($("#pricingTable").find(".details").length > 0){
+      $('#spinnerLoading').show();
+      $.post('php/customers.php', $('#customerForm').serialize(), function(data){
+        var obj = JSON.parse(data); 
+        
+        if(obj.status === 'success'){
+          $('#addModal').modal('hide');
+          toastr["success"](obj.message, "Success:");
+          $('#customerTable').DataTable().ajax.reload();
+          $('#spinnerLoading').hide();
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+          $('#spinnerLoading').hide();
+        }
+        else{
+          toastr["error"]("Something wrong when edit", "Failed:");
+          $('#spinnerLoading').hide();
+        }
+      });
+      /*}
       else{
         alert("Please enter at least an address to proceed");
-      }
+      }*/
     }
   });
 

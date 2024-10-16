@@ -65,6 +65,21 @@ if(isset($_POST['name'], $_POST['address'], $_POST['address2'], $_POST['phone'],
         $picContact = filter_input(INPUT_POST, 'picContact', FILTER_SANITIZE_STRING);
     }
 
+    // Check the branch
+    if(count($branchAddress1) <= 0){
+        $branchAddress1[] = $address ?? '';
+        $branchAddress2[] = $address2 ?? '';
+        $branchAddress3[] = $address3 ?? '';
+        $branchAddress4[] = $address4 ?? '';
+        $branchName[] = 'HQ';
+        $branchCode[] = '';
+        $mapUrl[] = $resellerMapUrl ?? '';
+        $branchPhone[] = $phone ?? '';
+        $branchEmail[] = $email ?? '';
+        $branchPic[] = $pic ?? '';
+        $branchPicContact[] = $picContact ?? '';
+    }
+
     if(isset($_POST['id']) && $_POST['id'] != null && $_POST['id'] != ''){
         if ($update_stmt = $db->prepare("UPDATE dealer SET customer_code=?, other_code=?, customer_name=?, customer_address=?, address2=?, address3=?, address4=?, map_url=?, customer_phone=?, customer_email=?, pic=?, pic_contact=? WHERE id=?")) {
             $update_stmt->bind_param('sssssssssssss', $code, $otherCode, $name, $address, $address2, $address3, $address4, $resellerMapUrl, $phone, $email, $pic, $picContact, $_POST['id']);

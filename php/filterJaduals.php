@@ -44,7 +44,7 @@ if($_POST['status'] != null && $_POST['status'] != '' && $_POST['status'] != '-'
   }
 }
 
-$searchQuery .= " and status = 'COMPLETE'";
+$searchQuery .= " and status = 'Complete'";
 
 if($searchValue != ''){
   $searchQuery = " and (purchase_no like '%".$searchValue."%' OR
@@ -145,7 +145,8 @@ $response = array(
   "draw" => intval($draw),
   "iTotalRecords" => $totalRecords,
   "iTotalDisplayRecords" => $totalRecordwithFilter,
-  "aaData" => $data
+  "aaData" => $data,
+  "query" => $empQuery
 );
 
 echo json_encode($response);
