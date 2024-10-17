@@ -6,10 +6,9 @@ session_start();
 
 $uid = $_SESSION['userID'];
 
-if(isset($_POST['type'], $_POST['customerType'], $_POST['autoFormNo'], $_POST['validator'], $_POST['address1'], $_POST['machineType'], $_POST['serial'], $_POST['lastCalibrationDate'], $_POST['expiredDate'], $_POST['manufacturing'], $_POST['auto_cert_no'], $_POST['brand'], $_POST['model'], $_POST['capacity'], $_POST['size'], $_POST['calibrator'], $_POST['validationDate'])){
+if(isset($_POST['type'], $_POST['customerType'], $_POST['validator'], $_POST['address1'], $_POST['machineType'], $_POST['serial'], $_POST['lastCalibrationDate'], $_POST['expiredDate'], $_POST['manufacturing'], $_POST['auto_cert_no'], $_POST['brand'], $_POST['model'], $_POST['capacity'], $_POST['size'], $_POST['calibrator'], $_POST['validationDate'])){
 	$type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
 	$customerType = filter_input(INPUT_POST, 'customerType', FILTER_SANITIZE_STRING);
-	$autoFormNo = filter_input(INPUT_POST, 'autoFormNo', FILTER_SANITIZE_STRING);
 	$validator = filter_input(INPUT_POST, 'validator', FILTER_SANITIZE_STRING);
 	$address1 = filter_input(INPUT_POST, 'address1', FILTER_SANITIZE_STRING);
 	$machineType = filter_input(INPUT_POST, 'machineType', FILTER_SANITIZE_STRING);
@@ -183,56 +182,85 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['autoFormNo'], $_POST['v
 		}
 	}
 	else{
-		if ($insert_stmt = $db->prepare("INSERT INTO inhouse_validations (type, dealer, dealer_branch, validate_by, customer_type, customer, branch, auto_form_no, machines, unit_serial_no, last_calibration_date, expired_date, manufacturing, auto_cert_no, brand, model, capacity, size, calibrator, status, validation_date) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
-			$data = json_encode($logs);
-			$loadTestings = null;
-			$status = 'Pending';
-			$insert_stmt->bind_param('sssssssssssssssssssss', $type, $dealer, $reseller_branch, $validator, $customerType, $customer, $branch, $autoFormNo, $machineType, $serial, $lastCalibrationDate, $expiredDate, $manufacturing, $autoCertNo, $brand, $model, $capacity, $size, $calibrator, $status, $validationDate);
-			
-			// Execute the prepared query.
-			if (! $insert_stmt->execute()){
-				$response['status'] = "failed";
-    			$response['message'] = $insert_stmt->error;
-			} 
-			else{
-				$validation_id = $insert_stmt->insert_id;
-				$no = $_POST['no']; 
-				$standardValue = $_POST['standardValue'];
-				$calibrationReceived = $_POST['calibrationReceived'];
-				$variance = $_POST['variance'];
-				$afterAdjustReading = $_POST['afterAdjustReading'];
+		if($misc_stmt = $db->prepare("SELECT * FROM miscellaneous WHERE code='inhouse'")){
+			if(!$misc_stmt->execute()){
+                echo json_encode(
+                    array(
+                        "status" => "failed",
+                        "message" => "Something went wrong querying miscellaneous"
+                    )); 
+            }else{
+                $result = $misc_stmt->get_result();
+                while ($row = $result->fetch_assoc()){
+					$description = $row['description'];
+					$charSize = strlen($row['value']);
+                    $misValue = $row['value'];
+                    
+                    $autoFormNo = $description.'-';
+                    for($i=0; $i<(5-(int)$charSize); $i++){
+                        $autoFormNo.='0';  // S0000
+                    }
 
-				if(isset($no) && $no != null && count($no) > 0){
-					for($i=0; $i<count($no); $i++){
-						$loadTestings[] = array(
-							"no" => $no[$i],
-							"standardValue" => $standardValue[$i] != '' ? $standardValue[$i] : '0.0',
-							"calibrationReceived" => $calibrationReceived[$i] != '' ? $calibrationReceived[$i] : '0.0',
-							"variance" => $variance[$i] != '' ? $variance[$i] : '0.0',
-							"afterAdjustReading" => $afterAdjustReading[$i] != '' ? $afterAdjustReading[$i] : '0.0',
-						);
+                    $autoFormNo.=$misValue;
+
+					if ($insert_stmt = $db->prepare("INSERT INTO inhouse_validations (type, dealer, dealer_branch, validate_by, customer_type, customer, branch, auto_form_no, machines, unit_serial_no, last_calibration_date, expired_date, manufacturing, auto_cert_no, brand, model, capacity, size, calibrator, status, validation_date) 
+					VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+						$data = json_encode($logs);
+						$loadTestings = null;
+						$status = 'Pending';
+						$insert_stmt->bind_param('sssssssssssssssssssss', $type, $dealer, $reseller_branch, $validator, $customerType, $customer, $branch, $autoFormNo, $machineType, $serial, $lastCalibrationDate, $expiredDate, $manufacturing, $autoCertNo, $brand, $model, $capacity, $size, $calibrator, $status, $validationDate);
+						
+						// Execute the prepared query.
+						if (! $insert_stmt->execute()){
+							$response['status'] = "failed";
+							$response['message'] = $insert_stmt->error;
+						} 
+						else{
+							$validation_id = $insert_stmt->insert_id;
+							$no = $_POST['no']; 
+							$standardValue = $_POST['standardValue'];
+							$calibrationReceived = $_POST['calibrationReceived'];
+							$variance = $_POST['variance'];
+							$afterAdjustReading = $_POST['afterAdjustReading'];
+
+							if(isset($no) && $no != null && count($no) > 0){
+								for($i=0; $i<count($no); $i++){
+									$loadTestings[] = array(
+										"no" => $no[$i],
+										"standardValue" => $standardValue[$i] != '' ? $standardValue[$i] : '0.0',
+										"calibrationReceived" => $calibrationReceived[$i] != '' ? $calibrationReceived[$i] : '0.0',
+										"variance" => $variance[$i] != '' ? $variance[$i] : '0.0',
+										"afterAdjustReading" => $afterAdjustReading[$i] != '' ? $afterAdjustReading[$i] : '0.0',
+									);
+								}
+							}
+
+							// Update certificate data in the database
+							if ($stmt2 = $db->prepare("UPDATE inhouse_validations SET tests=? WHERE id=?")) {
+								$data = json_encode([$loadTestings], JSON_PRETTY_PRINT);
+								$stmt2->bind_param('ss', $data, $validation_id);
+								$stmt2->execute();
+								$stmt2->close();
+							} 
+
+							#Update miscellaneous value
+                            $misValue++;
+
+                            if($updmisc_stmt = $db->prepare("UPDATE miscellaneous SET value=? WHERE code='inhouse'")){
+                                $updmisc_stmt->bind_param('s', $misValue);
+								$updmisc_stmt->execute();
+								$updmisc_stmt->close();
+							}
+
+							$insert_stmt->close();
+							$db->close();
+							
+							$response['status'] = "success";
+							$response['message'] = "Added Successfully!!";
+						}
 					}
 				}
-
-				// Update certificate data in the database
-				if ($stmt2 = $db->prepare("UPDATE inhouse_validations SET tests=? WHERE id=?")) {
-					$data = json_encode([$loadTestings], JSON_PRETTY_PRINT);
-					$stmt2->bind_param('ss', $data, $validation_id);
-					$stmt2->execute();
-					$stmt2->close();
-				} 
-
-				$insert_stmt->close();
-				$db->close();
-				
-				$response['status'] = "success";
-				$response['message'] = "Added Successfully!!";
 			}
-		}
-		else{
-			$response['status'] = "failed";
-			$response['message'] = "Error when creating query";
 		}
 	}
 } 
