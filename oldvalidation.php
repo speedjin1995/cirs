@@ -177,15 +177,17 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               <thead>
                 <tr>
                   <!-- <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th> -->
-                  <th>Validator</th>
-                  <th>Company Name</th>
-                  <th>Certificate No.</th>
-                  <th>Description Instruments for Weighing and Measuring</th>
-                  <th>Capacity</th>
                   <th>Created Date</th>
-                  <th>Updated Date</th>
+                  <th>Company Name</th>
+                  <th>Brand</th>
+                  <th>Description Instruments for Weighing and Measuring</th>
+                  <th>Validator By</th>
+                  <th>Capacity</th>
+                  <th>Previous Cert. No</th>
+                  <th>Current Validation Date</th>
+                  <th>Expired Date</th>
                   <th>Status</th>
-                  <th></th>
+                  <th>Action</th>
                   <th></th>
                 </tr>
               </thead>
@@ -956,13 +958,15 @@ $(function () {
       //     }
       //   }
       // },
-      { data: 'validate_by' },
+      { data: 'validation_date' },
       { data: 'customer' },
+      { data: 'brand' },
       { data: 'machines' },
-      { data: 'unit_serial_no' },
+      { data: 'validate_by' },
       { data: 'capacity' },
-      { data: 'created_datetime' },
-      { data: 'updated_datetime' },
+      { data: 'auto_form_no' },
+      { data: 'last_calibration_date' },
+      { data: 'expired_calibration_date' },
       { data: 'status' },
       { 
         data: 'id',
@@ -990,7 +994,7 @@ $(function () {
   // Add event listener for opening and closing details
   $('#weightTable tbody').on('click', 'td.dt-control', function () {
     var tr = $(this).closest('tr');
-    var row = table.row( tr );
+    var row = table.row(tr);
 
     if ( row.child.isShown() ) {
       // This row is already open - close it
@@ -998,7 +1002,12 @@ $(function () {
       tr.removeClass('shown');
     }
     else {
-      row.child( format(row.data()) ).show();tr.addClass("shown");
+      $.post('php/getValidation.php', {validationId: row.data().id, format: 'EXPANDABLE'}, function (data){
+        var obj = JSON.parse(data); 
+        if(obj.status === 'success'){
+          row.child( format(obj.message) ).show();tr.addClass("shown");
+        }
+      });
     }
   });
 
@@ -1193,13 +1202,15 @@ $(function () {
         //     }
         //   }
         // },
-        { data: 'validate_by' },
+        { data: 'validation_date' },
         { data: 'customer' },
+        { data: 'brand' },
         { data: 'machines' },
-        { data: 'unit_serial_no' },
+        { data: 'validate_by' },
         { data: 'capacity' },
-        { data: 'created_datetime' },
-        { data: 'updated_datetime' },
+        { data: 'auto_form_no' },
+        { data: 'last_calibration_date' },
+        { data: 'expired_calibration_date' },
         { data: 'status' },
         { 
           data: 'id',
@@ -1804,26 +1815,47 @@ function format (row) {
       <p><strong>Unit Serial No:</strong> ${row.unit_serial_no}</p>
       <p><strong>Brand:</strong> ${row.brand}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
-    </div> 
-  `;
-  
-  if (row.calibrations !== undefined && row.calibrations !== null && row.calibrations !== ''){
-    if (row.calibrations[0].length > 0) {
-      returnString += '<h4>Calibrations</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="20%">Latest Date Calibration</th><th width="20%">Expire Date Calibration</th><th width="20%">Calibration Certificate Attachment</th></tr></thead><tbody>'
-      
-      var calibrations = row.calibrations[0];
-      for (var i = 0; i < calibrations.length; i++) {
-        var item = calibrations[i];
-        returnString += '<tr><td>' + item.no + '</td><td>' + item.lastCalibrationDate + '<td>' + item.expiredCalibrationDate + '</td><td>';
+    </div>
+  </div><hr>`;
 
-        if (item.calibrationFilePath) {
-          returnString += '<a href="' + item.calibrationFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>';
-        }
+  if(row.lastCalibrationDate && row.expiredCalibrationDate && row.auto_form_no){
+    returnString += `
+                <div class="row mb-3">
+                  <h3 class="m-0 text-dark">Calibration Information</h3>
+                </div>
+                <div class="row">
+                  <!-- Calibration Section -->
+                  <div class="col-6">
+                    <p><strong>Last Calibration Date:</strong> ${row.lastCalibrationDate}</p>
+                    <p><strong>Certificate Number:</strong> ${row.auto_form_no}</p>
+                  </div>
+                  <div class="col-6">
+                    <p><strong>Expired Calibration Date:</strong> ${row.expiredCalibrationDate}</p>
+                    <p><strong>Certificate Attachment:</strong>
+                `;
+
+      if(row.certFilePath){
+        returnString += '<a href="' + row.certFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></p></div></div>';
       }
-
-      returnString += '</td></tr></tbody></table>';
-    }
   }
+  
+  // if (row.calibrations !== undefined && row.calibrations !== null && row.calibrations !== ''){
+  //   if (row.calibrations[0].length > 0) {
+  //     returnString += '<h4>Calibrations</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="20%">Latest Date Calibration</th><th width="20%">Expire Date Calibration</th><th width="20%">Calibration Certificate Attachment</th></tr></thead><tbody>'
+      
+  //     var calibrations = row.calibrations[0];
+  //     for (var i = 0; i < calibrations.length; i++) {
+  //       var item = calibrations[i];
+  //       returnString += '<tr><td>' + item.no + '</td><td>' + item.lastCalibrationDate + '<td>' + item.expiredCalibrationDate + '</td><td>';
+
+  //       if (item.calibrationFilePath) {
+  //         returnString += '<a href="' + item.calibrationFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>';
+  //       }
+  //     }
+
+  //     returnString += '</td></tr></tbody></table>';
+  //   }
+  // }
 
   return returnString;
 }
