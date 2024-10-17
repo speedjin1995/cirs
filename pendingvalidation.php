@@ -1188,13 +1188,15 @@ $(function () {
         //     }
         //   }
         // },
-        { data: 'validate_by' },
+        { data: 'validation_date' },
         { data: 'customer' },
+        { data: 'brand' },
         { data: 'machines' },
-        { data: 'unit_serial_no' },
+        { data: 'validate_by' },
         { data: 'capacity' },
-        { data: 'created_datetime' },
-        { data: 'updated_datetime' },
+        { data: 'auto_form_no' },
+        { data: 'last_calibration_date' },
+        { data: 'expired_calibration_date' },
         { data: 'status' },
         { 
           data: 'id',
@@ -1205,21 +1207,19 @@ $(function () {
             buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
                       ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
 
-            // Extra button if validate_by is 3
+            // // Extra button if validate_by is 3
             // if (row.validate_by == 3) {
             //   buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
             //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
             // }
 
-            // Print button
+            // // Print button
             // buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                      // ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+            //           ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
             // Complete button if conditions are met
-            if (row.calibrations != '') {
-              buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
-                        ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
-            }
+            buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+                      ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
 
             // Cancelled button
             buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
