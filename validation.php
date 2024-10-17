@@ -984,7 +984,7 @@ $(function () {
   // Add event listener for opening and closing details
   $('#weightTable tbody').on('click', 'td.dt-control', function () {
     var tr = $(this).closest('tr');
-    var row = table.row( tr );
+    var row = table.row(tr);
 
     if ( row.child.isShown() ) {
       // This row is already open - close it
@@ -992,7 +992,12 @@ $(function () {
       tr.removeClass('shown');
     }
     else {
-      row.child( format(row.data()) ).show();tr.addClass("shown");
+      $.post('php/getValidation.php', {validationId: row.data().id, format: 'EXPANDABLE'}, function (data){
+        var obj = JSON.parse(data); 
+        if(obj.status === 'success'){
+          row.child( format(obj.message) ).show();tr.addClass("shown");
+        }
+      });
     }
   });
 
