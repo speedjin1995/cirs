@@ -31,13 +31,19 @@ else{
 			<div class="col-12">
 				<div class="card">
 					<div class="card-header">
-                        <div class="row">
-                            <div class="col-9"></div>
-                            <div class="col-3">
-                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addCustomers">Add Reseller</button>
-                            </div>
-                        </div>
-                    </div>
+              <div class="row">
+                  <div class="col-6"></div>
+                  <div class="col-2">
+                    <a href="/template/Reseller_Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
+                  </div>
+                  <div class="col-2">
+                    <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">Upload Excel</button>
+                  </div>
+                  <div class="col-2">
+                    <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addCustomers">Add Reseller</button>
+                  </div>
+              </div>
+          </div>
 					<div class="card-body">
 						<table id="customerTable" class="table table-bordered table-striped">
 							<thead>
@@ -144,6 +150,30 @@ else{
     <!-- /.modal-dialog -->
 </div>
 
+<div class="modal fade" id="uploadModal">
+  <div class="modal-dialog modal-xl" style="max-width: 90%;">
+    <div class="modal-content">
+      <form role="form" id="uploadForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Upload Excel File</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="file" id="fileInput">
+          <button type="button" id="previewButton">Preview Data</button>
+          <div id="previewTable" style="overflow: auto;"></div>
+        </div>
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <script type="text/html" id="branchDetails">
   <div class="details">
     <div class="row">
@@ -165,12 +195,12 @@ else{
         <input class="form-control" id="branch_address2" placeholder="Enter your address 2" required>
       </div>
       <div class="form-group col-2"> 
-        <label for="branch_address3">Address 3 *</label>
-        <input class="form-control" id="branch_address3" placeholder="Enter your address 3" required>
+        <label for="branch_address3">Address 3 </label>
+        <input class="form-control" id="branch_address3" placeholder="Enter your address 3">
       </div>
       <div class="form-group col-2"> 
-        <label for="branch_address4">Address 4 *</label>
-        <input class="form-control" id="branch_address4" placeholder="Enter your address 4" required>
+        <label for="branch_address4">Address 4 </label>
+        <input class="form-control" id="branch_address4" placeholder="Enter your address 4">
       </div>
       <div class="form-group col-2"> 
         <label for="map_url">Map URL</label>
@@ -204,145 +234,223 @@ else{
 var branchCount = $("#branchTable").find(".details").length;
 
 $(function () {
-    var table = $("#customerTable").DataTable({
-        "responsive": true,
-        "autoWidth": false,
-        'processing': true,
-        'serverSide': true,
-        'serverMethod': 'post',
-        'ajax': {
-            'url':'php/loadDealers.php'
-        },
-        'columns': [
-            { data: 'customer_code' },
-            { data: 'other_code' },
-            { data: 'customer_name' },
-            { data: 'customer_address' },
-            { data: 'customer_phone' },
-            { data: 'customer_email' },
-            { 
-                data: 'id',
-                render: function ( data, type, row ) {
-                    return '<div class="row"><div class="col-3"><button type="button" id="edit'+data+'" onclick="edit('+data+')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button type="button" id="deactivate'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
-                }
-            },
-            { 
-            className: 'dt-control',
-            orderable: false,
-            data: null,
-            render: function ( data, type, row ) {
-                return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.id+'"><i class="fas fa-angle-down"></i></td>';
+  var table = $("#customerTable").DataTable({
+      "responsive": true,
+      "autoWidth": false,
+      'processing': true,
+      'serverSide': true,
+      'serverMethod': 'post',
+      'ajax': {
+          'url':'php/loadDealers.php'
+      },
+      'columns': [
+          { data: 'customer_code' },
+          { data: 'other_code' },
+          { data: 'customer_name' },
+          { data: 'customer_address' },
+          { data: 'customer_phone' },
+          { data: 'customer_email' },
+          { 
+              data: 'id',
+              render: function ( data, type, row ) {
+                  return '<div class="row"><div class="col-3"><button type="button" id="edit'+data+'" onclick="edit('+data+')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button type="button" id="deactivate'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
+              }
+          },
+          { 
+          className: 'dt-control',
+          orderable: false,
+          data: null,
+          render: function ( data, type, row ) {
+              return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.id+'"><i class="fas fa-angle-down"></i></td>';
+          }
+          }
+      ],
+      "rowCallback": function( row, data, index ) {
+
+          $('td', row).css('background-color', '#E6E6FA');
+      },        
+  });
+
+  // Add event listener for opening and closing details
+  $('#customerTable tbody').on('click', 'td.dt-control', function () {
+      var tr = $(this).closest('tr');
+      var row = table.row( tr );
+
+      if ( row.child.isShown() ) {
+          // This row is already open - close it
+          row.child.hide();
+          tr.removeClass('shown');
+      }
+      else {
+          row.child( format(row.data()) ).show();tr.addClass("shown");
+      }
+  });
+  
+  $.validator.setDefaults({
+      submitHandler: function () {
+        if($('#addModal').hasClass('show')){
+          $('#spinnerLoading').show();
+          $.post('php/dealer.php', $('#customerForm').serialize(), function(data){
+            var obj = JSON.parse(data); 
+            
+            if(obj.status === 'success'){
+              $('#addModal').modal('hide');
+              toastr["success"](obj.message, "Success:");
+              $('#customerTable').DataTable().ajax.reload();
+              $('#spinnerLoading').hide();
             }
+            else if(obj.status === 'failed'){
+              toastr["error"](obj.message, "Failed:");
+              $('#spinnerLoading').hide();
             }
-        ],
-        "rowCallback": function( row, data, index ) {
-
-            $('td', row).css('background-color', '#E6E6FA');
-        },        
-    });
-
-    // Add event listener for opening and closing details
-    $('#customerTable tbody').on('click', 'td.dt-control', function () {
-        var tr = $(this).closest('tr');
-        var row = table.row( tr );
-
-        if ( row.child.isShown() ) {
-            // This row is already open - close it
-            row.child.hide();
-            tr.removeClass('shown');
+            else{
+              toastr["error"]("Something wrong when edit", "Failed:");
+              $('#spinnerLoading').hide();
+            }
+          });
         }
-        else {
-            row.child( format(row.data()) ).show();tr.addClass("shown");
-        }
-    });
-    
-    $.validator.setDefaults({
-        submitHandler: function () {
-            $('#spinnerLoading').show();
-            $.post('php/dealer.php', $('#customerForm').serialize(), function(data){
-                var obj = JSON.parse(data); 
-                
-                if(obj.status === 'success'){
-                    $('#addModal').modal('hide');
-                    toastr["success"](obj.message, "Success:");
-                    $('#customerTable').DataTable().ajax.reload();
-                    $('#spinnerLoading').hide();
-                    location.reload();
-                }
-                else if(obj.status === 'failed'){
-                    toastr["error"](obj.message, "Failed:");
-                    $('#spinnerLoading').hide();
-                }
-                else{
-                    toastr["error"]("Something wrong when edit", "Failed:");
-                    $('#spinnerLoading').hide();
-                }
-            });
-        }
-    });
+        else if($('#uploadModal').hasClass('show')){
+          $('#spinnerLoading').show();
 
-    $('#addCustomers').on('click', function(){
-        $('#addModal').find('#id').val("");
-        $('#addModal').find('#code').val("");
-        $('#addModal').find('#otherCode').val("");
-        $('#addModal').find('#name').val("");
-        $('#addModal').find('#address').val("");
-        $('#addModal').find('#address2').val("");
-        $('#addModal').find('#address3').val("");
-        $('#addModal').find('#address4').val("");
-        $('#addModal').find('#reseller_map_url').val("");
-        $('#addModal').find('#phone').val("");
-        $('#addModal').find('#pic').val("");
-        $('#addModal').find('#picContact').val("");
-        $('#addModal').find('#email').val("");
-        branchCount = 0;
-        $('#addModal').modal('show');
+          // Serialize the form data into an array of objects
+          var formData = $('#uploadForm').serializeArray();
+          var data = [];
+          var rowIndex = -1;
+          formData.forEach(function(field) {
+            var match = field.name.match(/([a-zA-Z0-9]+)\[(\d+)\]/);
+            if (match) {
+              var fieldName = match[1];
+              var index = parseInt(match[2], 10);
+              if (index !== rowIndex) {
+                rowIndex = index;
+                data.push({});
+              }
+              data[index][fieldName] = field.value;
+            }
+          });
+
+          // Send the JSON array to the server
+          $.ajax({
+            url: 'php/uploadResellers.php',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+              var obj = JSON.parse(response);
+              if (obj.status === 'success') {
+                $('#uploadModal').modal('hide');
+                toastr["success"](obj.message, "Success:");
+                $('#weightTable').DataTable().ajax.reload();
+              } 
+              else if (obj.status === 'failed') {
+                toastr["error"](obj.message, "Failed:");
+              } 
+              else {
+                toastr["error"]("Something went wrong when editing", "Failed:");
+              }
+              
+              $('#spinnerLoading').hide();
+            }
+          });
+        }
         
-        $('#customerForm').validate({
-            errorElement: 'span',
-            errorPlacement: function (error, element) {
-                error.addClass('invalid-feedback');
-                element.closest('.form-group').append(error);
-            },
-            highlight: function (element, errorClass, validClass) {
-                $(element).addClass('is-invalid');
-            },
-            unhighlight: function (element, errorClass, validClass) {
-                $(element).removeClass('is-invalid');
-            }
-        });
-    });
+      }
+  });
 
-    $(".add-branch").click(function(){
-        var $addContents = $("#branchDetails").clone();
-        $("#branchTable").append($addContents.html());
+  $('#addCustomers').on('click', function(){
+      $('#addModal').find('#id').val("");
+      $('#addModal').find('#code').val("");
+      $('#addModal').find('#otherCode').val("");
+      $('#addModal').find('#name').val("");
+      $('#addModal').find('#address').val("");
+      $('#addModal').find('#address2').val("");
+      $('#addModal').find('#address3').val("");
+      $('#addModal').find('#address4').val("");
+      $('#addModal').find('#reseller_map_url').val("");
+      $('#addModal').find('#phone').val("");
+      $('#addModal').find('#pic').val("");
+      $('#addModal').find('#picContact').val("");
+      $('#addModal').find('#email').val("");
+      branchCount = 0;
+      $('#addModal').modal('show');
+      
+      $('#customerForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+              error.addClass('invalid-feedback');
+              element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+              $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+              $(element).removeClass('is-invalid');
+          }
+      });
+  });
 
-        $("#branchTable").find('.details:last').attr("id", "detail" + branchCount);
-        $("#branchTable").find('.details:last').attr("data-index", branchCount);
-        $("#branchTable").find('#remove:last').attr("id", "remove" + branchCount);
+  $(".add-branch").click(function(){
+      var $addContents = $("#branchDetails").clone();
+      $("#branchTable").append($addContents.html());
 
-        $("#branchTable").find('#branch_code:last').attr('name', 'branch_code['+branchCount+']').attr("id", "branch_code" + branchCount);
-        $("#branchTable").find('#branch_name:last').attr('name', 'branch_name['+branchCount+']').attr("id", "branch_name" + branchCount);
-        $("#branchTable").find('#branch_address1:last').attr('name', 'branch_address1['+branchCount+']').attr("id", "branch_address1" + branchCount);
-        $("#branchTable").find('#branch_address2:last').attr('name', 'branch_address2['+branchCount+']').attr("id", "branch_address2" + branchCount);
-        $("#branchTable").find('#branch_address3:last').attr('name', 'branch_address3['+branchCount+']').attr("id", "branch_address3" + branchCount);
-        $("#branchTable").find('#branch_address4:last').attr('name', 'branch_address4['+branchCount+']').attr("id", "branch_address4" + branchCount);
-        $("#branchTable").find('#map_url:last').attr('name', 'map_url['+branchCount+']').attr("id", "map_url" + branchCount);
-        $("#branchTable").find('#branch_id:last').attr('name', 'branch_id['+branchCount+']').attr("id", "branch_id" + branchCount);
-        $("#branchTable").find('#branchPhone:last').attr('name', 'branchPhone['+branchCount+']').attr("id", "branchPhone" + branchCount);
-        $("#branchTable").find('#branchEmail:last').attr('name', 'branchEmail['+branchCount+']').attr("id", "branchEmail" + branchCount);
-        $("#branchTable").find('#branchPic:last').attr('name', 'branchPic['+branchCount+']').attr("id", "branchPic" + branchCount);
-        $("#branchTable").find('#branchPicContact:last').attr('name', 'branchPicContact['+branchCount+']').attr("id", "branchPicContact" + branchCount);
+      $("#branchTable").find('.details:last').attr("id", "detail" + branchCount);
+      $("#branchTable").find('.details:last').attr("data-index", branchCount);
+      $("#branchTable").find('#remove:last').attr("id", "remove" + branchCount);
 
-        branchCount++;
-    });
+      $("#branchTable").find('#branch_code:last').attr('name', 'branch_code['+branchCount+']').attr("id", "branch_code" + branchCount);
+      $("#branchTable").find('#branch_name:last').attr('name', 'branch_name['+branchCount+']').attr("id", "branch_name" + branchCount);
+      $("#branchTable").find('#branch_address1:last').attr('name', 'branch_address1['+branchCount+']').attr("id", "branch_address1" + branchCount);
+      $("#branchTable").find('#branch_address2:last').attr('name', 'branch_address2['+branchCount+']').attr("id", "branch_address2" + branchCount);
+      $("#branchTable").find('#branch_address3:last').attr('name', 'branch_address3['+branchCount+']').attr("id", "branch_address3" + branchCount);
+      $("#branchTable").find('#branch_address4:last').attr('name', 'branch_address4['+branchCount+']').attr("id", "branch_address4" + branchCount);
+      $("#branchTable").find('#map_url:last').attr('name', 'map_url['+branchCount+']').attr("id", "map_url" + branchCount);
+      $("#branchTable").find('#branch_id:last').attr('name', 'branch_id['+branchCount+']').attr("id", "branch_id" + branchCount);
+      $("#branchTable").find('#branchPhone:last').attr('name', 'branchPhone['+branchCount+']').attr("id", "branchPhone" + branchCount);
+      $("#branchTable").find('#branchEmail:last').attr('name', 'branchEmail['+branchCount+']').attr("id", "branchEmail" + branchCount);
+      $("#branchTable").find('#branchPic:last').attr('name', 'branchPic['+branchCount+']').attr("id", "branchPic" + branchCount);
+      $("#branchTable").find('#branchPicContact:last').attr('name', 'branchPicContact['+branchCount+']').attr("id", "branchPicContact" + branchCount);
 
-    $("#branchTable").on('click', 'button[id^="remove"]', function () {
+      branchCount++;
+  });
+
+  $("#branchTable").on('click', 'button[id^="remove"]', function () {
     var index = $(this).parents('.details').attr('data-index');
     var branchId = $(this).parents('.details').find('input[id^="branch_id"]').val();
     $("#branchTable").append('<input type="hidden" name="deletedShip[]" value="'+index+'"/>');
     //pricingCount--;
     $(this).parents('.details').remove();
+  });
+
+  $('#uploadExccl').on('click', function(){
+    $('#uploadModal').modal('show');
+
+    $('#uploadForm').validate({
+      errorElement: 'span',
+      errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      }
+    });
+  });
+
+  $('#uploadModal').find('#previewButton').on('click', function(){
+    var fileInput = document.getElementById('fileInput');
+    var file = fileInput.files[0];
+    var reader = new FileReader();
+    
+    reader.onload = function(e) {
+      var data = e.target.result;
+      // Process data and display preview
+      displayPreview(data);
+    };
+
+    reader.readAsBinaryString(file);
   });
 });
 
