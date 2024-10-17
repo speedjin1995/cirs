@@ -7,7 +7,7 @@ session_start();
 if(isset($_POST['userID'])){
 	$capacity = filter_input(INPUT_POST, 'userID', FILTER_SANITIZE_STRING);
 
-    if ($update_stmt = $db->prepare("SELECT * FROM standard WHERE capacity=?")) {
+    if ($update_stmt = $db->prepare("SELECT * FROM standard WHERE capacity=? and deleted='0'")) {
         $update_stmt->bind_param('s', $capacity);
         
         // Execute the prepared query.

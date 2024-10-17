@@ -64,25 +64,25 @@ $counter = 1;
 
 while($row = mysqli_fetch_assoc($empRecords)) {
   $branch = $row['branch'];
-  $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-  $branchDetail = mysqli_query($db, $branchQuery);
-  $branchRow = mysqli_fetch_assoc($branchDetail);
+  // $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+  // $branchDetail = mysqli_query($db, $branchQuery);
+  // $branchRow = mysqli_fetch_assoc($branchDetail);
 
-  $address1 = null;
-  $address2 = null;
-  $address3 = null;
-  $address4 = null;
-  $pic = null;
-  $pic_phone = null;
+  // $address1 = null;
+  // $address2 = null;
+  // $address3 = null;
+  // $address4 = null;
+  // $pic = null;
+  // $pic_phone = null;
 
-  if(!empty($branchRow)){
-    $address1 = $branchRow['address'];
-    $address2 = $branchRow['address2'];
-    $address3 = $branchRow['address3'];
-    $address4 = $branchRow['address4'];
-    $pic = $branchRow['pic'];
-    $pic_phone = $branchRow['pic_contact'];
-  }
+  // if(!empty($branchRow)){
+  //   $address1 = $branchRow['address'];
+  //   $address2 = $branchRow['address2'];
+  //   $address3 = $branchRow['address3'];
+  //   $address4 = $branchRow['address4'];
+  //   $pic = $branchRow['pic'];
+  //   $pic_phone = $branchRow['pic_contact'];
+  // }
 
   $createdDate = DateTime::createFromFormat('Y-m-d H:i:s', $row['created_datetime']);
   $updatedDate = DateTime::createFromFormat('Y-m-d H:i:s', $row['update_datetime']);
@@ -90,27 +90,29 @@ while($row = mysqli_fetch_assoc($empRecords)) {
   $data[] = array( 
     "no"=>$counter,
     "id"=>$row['id'],
-    "validate_by"=>$row['validate_by'] != null ? searchValidatorNameById($row['validate_by'], $db) : '',
-    "customer"=>$row['customer'] != null ? searchCustNameById($row['customer'], $db) : '',
-    "address1"=>$address1,
-    "address2"=>$address2,
-    "address3"=>$address3,
-    "address4"=>$address4,
-    "pic"=>$pic,
-    "pic_phone"=>$pic_phone,
-    "machines"=>$row['machines'] != null ? searchMachineNameById($row['machines'], $db) : '',
-    "unit_serial_no"=>$row['unit_serial_no'] ?? '',
-    "auto_form_no"=>$row['auto_form_no'] ?? '',
-    "manufacturing"=>$row['manufacturing'] ?? '',
-    "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
-    "model"=>$row['model'] != null  ? searchModelNameById($row['model'], $db) : '',
-    "capacity"=>$row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '',
-    "size"=>$row['size'] != null ? searchSizeNameById($row['size'], $db) : '',
-    "calibrations"=>json_decode($row['calibrations'], true) ?? '',
-    "status"=>$row['status'] ?? '',
     "validation_date"=>$row['validation_date'] ?? '',
-    "created_datetime"=> $createdDate->format('Y-m-d') ?? '',
-    "updated_datetime"=> $updatedDate->format('Y-m-d') ?? ''
+    "customer"=>$row['customer'] != null ? searchCustNameById($row['customer'], $db) : '',
+    "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
+    "machines"=>$row['machines'] != null ? searchMachineNameById($row['machines'], $db) : '',
+    "validate_by"=>$row['validate_by'] != null ? searchValidatorNameById($row['validate_by'], $db) : '',
+    "capacity"=>$row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '',
+    "auto_form_no"=>$row['auto_form_no'] ?? '',
+    "last_calibration_date"=>$row['last_calibration_date'] ?? '',
+    "expired_calibration_date"=>$row['expired_calibration_date'] ?? '',
+    // "address1"=>$address1,
+    // "address2"=>$address2,
+    // "address3"=>$address3,
+    // "address4"=>$address4,
+    // "pic"=>$pic,
+    // "pic_phone"=>$pic_phone,
+    // "unit_serial_no"=>$row['unit_serial_no'] ?? '',
+    // "manufacturing"=>$row['manufacturing'] ?? '',
+    // "model"=>$row['model'] != null  ? searchModelNameById($row['model'], $db) : '',
+    // "size"=>$row['size'] != null ? searchSizeNameById($row['size'], $db) : '',
+    // "calibrations"=>json_decode($row['calibrations'], true) ?? '',
+    "status"=>$row['status'] ?? '',
+    // "created_datetime"=> $createdDate->format('Y-m-d') ?? '',
+    // "updated_datetime"=> $updatedDate->format('Y-m-d') ?? ''
   ); 
 
   $counter++;
