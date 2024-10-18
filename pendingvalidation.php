@@ -156,7 +156,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-8"></div>
+              <div class="col-8"><h4>Other Validation Record Pending / Expired Status :</h4></div>
               <div class="col-2">
                 <!-- <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button> -->
               </div>
