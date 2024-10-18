@@ -49,20 +49,20 @@ else{
                                     <th rowspan="2">Capacity</th>
                                     <th rowspan="2">Unit</th>
                                     <th rowspan="2">Variance</th>
-                                    <th colspan="10">Tester</th>
+                                    <th colspan="10">Description Instruments for Weighing and Measuring Tester</th>
 									<th rowspan="2">Actions</th>
 								</tr>
                                 <tr>
-                                    <th>1</th>
-                                    <th>2</th>
-                                    <th>3</th>
-                                    <th>4</th>
-                                    <th>5</th>
-                                    <th>6</th>
-                                    <th>7</th>
-                                    <th>8</th>
-                                    <th>9</th>
-                                    <th>10</th>
+                                    <th>Load: 1</th>
+                                    <th>Load: 2</th>
+                                    <th>Load: 3</th>
+                                    <th>Load: 4</th>
+                                    <th>Load: 5</th>
+                                    <th>Load: 6</th>
+                                    <th>Load: 7</th>
+                                    <th>Load: 8</th>
+                                    <th>Load: 9</th>
+                                    <th>Load: 10</th>
 								</tr>
 							</thead>
 						</table>
@@ -212,7 +212,7 @@ $(function () {
             { 
                 data: 'id',
                 render: function ( data, type, row ) {
-                    return '<div class="row"><div class="col-3"><button type="button" id="edit'+data+'" onclick="edit('+data+')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button type="button" id="deactivate'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
+                    return '<div class="row"><div class="col-4"><button type="button" id="edit'+data+'" onclick="edit('+data+')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button type="button" id="deactivate'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
                 }
             }
         ],
