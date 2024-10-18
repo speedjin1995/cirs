@@ -64,26 +64,26 @@ $data = array();
 $counter = 1;
 
 while($row = mysqli_fetch_assoc($empRecords)) {
-  $branch = $row['branch'];
-  $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-  $branchDetail = mysqli_query($db, $branchQuery);
-  $branchRow = mysqli_fetch_assoc($branchDetail);
+  // $branch = $row['branch'];
+  // $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+  // $branchDetail = mysqli_query($db, $branchQuery);
+  // $branchRow = mysqli_fetch_assoc($branchDetail);
 
-  $address1 = null;
-  $address2 = null;
-  $address3 = null;
-  $address4 = null;
-  $pic = null;
-  $pic_phone = null;
+  // $address1 = null;
+  // $address2 = null;
+  // $address3 = null;
+  // $address4 = null;
+  // $pic = null;
+  // $pic_phone = null;
 
-  if(!empty($branchRow)){
-    $address1 = $branchRow['address'];
-    $address2 = $branchRow['address2'];
-    $address3 = $branchRow['address3'];
-    $address4 = $branchRow['address4'];
-    $pic = $branchRow['pic'];
-    $pic_phone = $branchRow['pic_contact'];
-  }
+  // if(!empty($branchRow)){
+  //   $address1 = $branchRow['address'];
+  //   $address2 = $branchRow['address2'];
+  //   $address3 = $branchRow['address3'];
+  //   $address4 = $branchRow['address4'];
+  //   $pic = $branchRow['pic'];
+  //   $pic_phone = $branchRow['pic_contact'];
+  // }
 
   #added checking in the event where standard value table not setup
   if(empty($row['unit'])){
@@ -98,34 +98,35 @@ while($row = mysqli_fetch_assoc($empRecords)) {
   $data[] = array( 
     "no"=>$counter,
     "id"=>$row['id'],
-    "validate_by"=>$row['validate_by'] != null ? searchValidatorNameById($row['validate_by'], $db) : '',
-    "customer_code"=>$row['customer'] != null ? searchCustCodeById($row['customer'], $db) : '',
-    "customer"=>$row['customer'] != null ? searchCustNameById($row['customer'], $db) : '',
-    "address1"=>$address1,
-    "address2"=>$address2,
-    "address3"=>$address3,
-    "address4"=>$address4,
-    "pic"=>$pic,
-    "pic_phone"=>$pic_phone,
-    "auto_form_no"=>$row['auto_form_no'] ?? '',
-    "machines"=>$row['machines'] != null ? searchMachineNameById($row['machines'], $db) : '',
-    "unit_serial_no"=>$row['unit_serial_no'] ?? '',
-    "manufacturing"=>$row['manufacturing'] ?? '',
-    "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
-    "model"=>$row['model'] != null  ? searchModelNameById($row['model'], $db) : '',
-    "capacity"=>$row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '',
-    "size"=>$row['size'] != null ? searchSizeNameById($row['size'], $db) : '',
-    "calibrator"=>$row['size'] != null ? searchStaffNameById($row['calibrator'], $db) : '',
-    "lastCalibrationDate"=>$row['last_calibration_date'] ?? '',
-    "expiredDate"=>$row['expired_date'] ?? '',
-    "autoCertNo"=>$row['auto_cert_no'] ?? '',
     "validation_date"=>$row['validation_date'] ?? '',
-    "units"=> $row['unit'] != null ? searchUnitNameById($row['unit'], $db) : '',
+    "customer"=>$row['customer'] != null ? searchCustNameById($row['customer'], $db) : '',
+    "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
+    "machines"=>$row['machines'] != null ? searchMachineNameById($row['machines'], $db) : '',
+    "capacity"=>$row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '',
+    "autoCertNo"=>$row['auto_cert_no'] ?? '',
+    "expiredDate"=>$row['expired_date'] ?? '',
+    "calibrator"=>$row['size'] != null ? searchStaffNameById($row['calibrator'], $db) : '',
     "status"=>$row['status'] ?? '',
-    "tests"=>json_decode($row['tests'], true) ?? '',
-    "updated_datetime"=>$row['update_datetime'] ?? '',
-    'standard_avg_temp'=>$row['standard_avg_temp'],
-    'relative_humidity'=>$row['relative_humidity'],
+
+    // "validate_by"=>$row['validate_by'] != null ? searchValidatorNameById($row['validate_by'], $db) : '',
+    // "customer_code"=>$row['customer'] != null ? searchCustCodeById($row['customer'], $db) : '',
+    // "address1"=>$address1,
+    // "address2"=>$address2,
+    // "address3"=>$address3,
+    // "address4"=>$address4,
+    // "pic"=>$pic,
+    // "pic_phone"=>$pic_phone,
+    // "auto_form_no"=>$row['auto_form_no'] ?? '',
+    // "unit_serial_no"=>$row['unit_serial_no'] ?? '',
+    // "manufacturing"=>$row['manufacturing'] ?? '',
+    // "model"=>$row['model'] != null  ? searchModelNameById($row['model'], $db) : '',
+    // "size"=>$row['size'] != null ? searchSizeNameById($row['size'], $db) : '',
+    // "lastCalibrationDate"=>$row['last_calibration_date'] ?? '',
+    // "units"=> $row['unit'] != null ? searchUnitNameById($row['unit'], $db) : '',
+    // "tests"=>json_decode($row['tests'], true) ?? '',
+    // "updated_datetime"=>$row['update_datetime'] ?? '',
+    // 'standard_avg_temp'=>$row['standard_avg_temp'],
+    // 'relative_humidity'=>$row['relative_humidity'],
 
   ); 
 
