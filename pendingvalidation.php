@@ -156,7 +156,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-8"></div>
+              <div class="col-8"><h4>Other Validation Record Pending / Expired Status :</h4></div>
               <div class="col-2">
                 <!-- <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button> -->
               </div>
@@ -177,15 +177,17 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               <thead>
                 <tr>
                   <!-- <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th> -->
-                  <th>Validator</th>
-                  <th>Company Name</th>
-                  <th>Certificate No.</th>
-                  <th>Description Instruments for Weighing and Measuring</th>
-                  <th>Capacity</th>
                   <th>Created Date</th>
-                  <th>Updated Date</th>
+                  <th>Company Name</th>
+                  <th>Brand</th>
+                  <th>Description Instruments for Weighing and Measuring</th>
+                  <th>Validator By</th>
+                  <th>Capacity</th>
+                  <th>Previous Cert. No</th>
+                  <th>Current Validation Date</th>
+                  <th>Expired Date</th>
                   <th>Status</th>
-                  <th></th>
+                  <th>Action</th>
                   <th></th>
                 </tr>
               </thead>
@@ -281,12 +283,6 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
-                <div class="col-3">
-                  <div class="form-group">
-                    <label>Certificate Number * </label>
-                    <input type="text" class="form-control" id="autoFormNo" name="autoFormNo" placeholder="Certificate Number" required>
-                  </div>
-                </div>
                 <div class="col-12" id="custbranch">
                   <div class="form-group">
                     <label>Branch * </label>
@@ -370,22 +366,6 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 </div>
                 <div class="col-3">
                   <div class="form-group">
-                    <label>Unit Serial No * </label>
-                    <input class="form-control" type="text" placeholder="Serial No." id="serial" name="serial" required>
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="form-group">
-                    <label>Manufacturing *</label>
-                    <select class="form-control select2" style="width: 100%;" id="manufacturing" name="manufacturing" required>
-                      <option selected="selected"></option>
-                      <option value="LOCAL">LOCAL</option>
-                      <option value="OVERSEAS">OVERSEAS</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="form-group">
                     <label>Brand *</label>
                     <select class="form-control select2" style="width: 100%;" id="brand" name="brand" required>
                       <option selected="selected"></option>
@@ -417,6 +397,22 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 </div>
                 <div class="col-3">
                   <div class="form-group">
+                    <label>Unit Serial No * </label>
+                    <input class="form-control" type="text" placeholder="Serial No." id="serial" name="serial" required>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Manufacturing *</label>
+                    <select class="form-control select2" style="width: 100%;" id="manufacturing" name="manufacturing" required>
+                      <option selected="selected"></option>
+                      <option value="LOCAL">LOCAL</option>
+                      <option value="OVERSEAS">OVERSEAS</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
                     <label>Structure Size * </label>
                     <select class="form-control select2" style="width: 100%;" id="size" name="size" required>
                       <option selected="selected"></option>
@@ -428,34 +424,57 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 </div>
                 <div class="col-3">
                   <div class="form-group">
-                    <label>Validation Date </label>
+                    <label>Create Date </label>
                     <input class="form-control" type="text" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate">
                   </div>
                 </div>
-                <!-- <div class="col-4" style="display:none;">
-                  <div class="form-group">
-                    <label>Product *</label>
-                    <select class="form-control select2" style="width: 100%;" id="product" name="product">
-                      <option selected="selected">-</option>
-                      <?php while($rowProduct=mysqli_fetch_assoc($products)){ ?>
-                        <option 
-                          value="<?=$rowProduct['id'] ?>" 
-                          data-price="<?=$rowProduct['price'] ?>" 
-                          data-machine="<?=$rowProduct['machine_type'] ?>" 
-                          data-alat="<?=$rowProduct['jenis_alat'] ?>" 
-                          data-capacity="<?=$rowProduct['capacity'] ?>" 
-                          data-validator="<?=$rowProduct['validator'] ?>">
-                          <?=$rowProduct['name'] ?>
-                        </option>
-                      <?php } ?>
-                    </select>
-                  </div>
-                </div> -->
               </div>
             </div>
           </div>
 
           <div class="card card-primary">
+            <div class="card-body">
+              <div class="row">
+                <h4>Calibration Information</h4>
+              </div>
+              <div class="row">
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Last Calibration Date</label>
+                    <input class="form-control" type="date" id="lastCalibrationDate" name="lastCalibrationDate">
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Expired Calibration Date</label>
+                    <input class="form-control" type="date" id="expiredCalibrationDate" name="expiredCalibrationDate">
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Certificate Number</label>
+                    <input class="form-control" type="text" placeholder="Certificate No." id="autoFormNo" name="autoFormNo">
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Upload Attachment Certificate</label>
+                    <div class="d-flex">
+                      <div class="col-10">
+                        <input type="file" class="form-control" id="uploadAttachment" name="uploadAttachment">
+                      </div>
+                      <div class="col-2 mt-1">
+                        <a href="" id="viewCalibrationPdf" name="viewCalibrationPdf" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
+                      </div>
+                    </div>
+                    <input type="text" id="calibrationFilePath" name="calibrationFilePath"style="display:none">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="card card-primary">
             <div class="card-body">
               <div class="row mb-3">
                 <div class="col-10">
@@ -472,7 +491,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                   </div>
                 </div>
                 <div class="col-2">
-                  <button type="button" class="btn btn-primary add-load-cell" id="add-calibration-cell">Add Calibration</button>
+                  <button type="button" class="btn btn-primary add-load-cell" id="add-calibration-cell" hidden>Add Calibration</button>
                 </div>
               </div>
               <table style="width: 100%;">
@@ -481,14 +500,14 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     <th width="5%">No.</th>
                     <th width="15%">Last Calibration Date</th>
                     <th width="15%">Expired Calibration Date</th>
+                    <th width="15%">Certificate Number</th>
                     <th width="25%">Upload Attachment</th>
-                    <th width="5%">Delete</th>
                   </tr>
                 </thead>
                 <tbody id="loadCalibrationTable"></tbody>
               </table>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <div class="modal-footer justify-content-between bg-gray-dark color-palette">
@@ -781,6 +800,9 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
       <input type="date" id="expiredCalibrationDate" name="expiredCalibrationDate" style="width: 100%;">
     </td>
     <td>
+      <input type="text" id="autoFormNo" name="autoFormNo" placeholder="Certificate Number" style="width: 100%;">
+    </td>
+    <td>
       <div class="row">
         <div class="col-10">
           <input type="file" class="form-control" id="uploadAttachment" name="uploadAttachment" required>
@@ -791,8 +813,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
         <input type="text" id="calibrationFilePath" name="calibrationFilePath"style="display:none">
       </div>
     </td>
-    
-    <td><button class="btn btn-danger btn-sm" id="remove"><i class="fa fa-times"></i></button></td>
+    <!-- <td><button class="btn btn-danger btn-sm" id="remove"><i class="fa fa-times"></i></button></td> -->
   </tr>
 </script>
 
@@ -902,13 +923,16 @@ $(function () {
       //     }
       //   }
       // },
-      { data: 'validate_by' },
+
+      { data: 'validation_date' },
       { data: 'customer' },
+      { data: 'brand' },
       { data: 'machines' },
-      { data: 'unit_serial_no' },
+      { data: 'validate_by' },
       { data: 'capacity' },
-      { data: 'created_datetime' },
-      { data: 'updated_datetime' },
+      { data: 'auto_form_no' },
+      { data: 'last_calibration_date' },
+      { data: 'expired_calibration_date' },
       { data: 'status' },
       { 
         data: 'id',
@@ -930,10 +954,8 @@ $(function () {
           //           ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
           // Complete button if conditions are met
-          if (row.calibrations != '') {
-            buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
-                      ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
-          }
+          buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+                    ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
 
           // Cancelled button
           buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
@@ -958,7 +980,7 @@ $(function () {
   // Add event listener for opening and closing details
   $('#weightTable tbody').on('click', 'td.dt-control', function () {
     var tr = $(this).closest('tr');
-    var row = table.row( tr );
+    var row = table.row(tr);
 
     if ( row.child.isShown() ) {
       // This row is already open - close it
@@ -966,7 +988,12 @@ $(function () {
       tr.removeClass('shown');
     }
     else {
-      row.child( format(row.data()) ).show();tr.addClass("shown");
+      $.post('php/getValidation.php', {validationId: row.data().id, format: 'EXPANDABLE'}, function (data){
+        var obj = JSON.parse(data); 
+        if(obj.status === 'success'){
+          row.child( format(obj.message) ).show();tr.addClass("shown");
+        }
+      });
     }
   });
 
@@ -1161,13 +1188,15 @@ $(function () {
         //     }
         //   }
         // },
-        { data: 'validate_by' },
+        { data: 'validation_date' },
         { data: 'customer' },
+        { data: 'brand' },
         { data: 'machines' },
-        { data: 'unit_serial_no' },
+        { data: 'validate_by' },
         { data: 'capacity' },
-        { data: 'created_datetime' },
-        { data: 'updated_datetime' },
+        { data: 'auto_form_no' },
+        { data: 'last_calibration_date' },
+        { data: 'expired_calibration_date' },
         { data: 'status' },
         { 
           data: 'id',
@@ -1178,21 +1207,19 @@ $(function () {
             buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
                       ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
 
-            // Extra button if validate_by is 3
+            // // Extra button if validate_by is 3
             // if (row.validate_by == 3) {
             //   buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
             //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
             // }
 
-            // Print button
+            // // Print button
             // buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                      // ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+            //           ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
             // Complete button if conditions are met
-            if (row.calibrations != '') {
-              buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
-                        ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
-            }
+            buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+                      ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
 
             // Cancelled button
             buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
@@ -1398,6 +1425,31 @@ $(function () {
     }
   });
 
+  $('#extendModal').find('#stampDate').on('blur', function (e) {
+    if($(this).val()){
+      var parts = $(this).val().split('/');
+      var day = parseInt(parts[0], 10);
+      var month = parseInt(parts[1], 10) - 1; // Months are zero-based
+      var year = parseInt(parts[2], 10);
+
+      var date = new Date(year, month, day);
+      
+      // Add 1 year to the date
+      date.setFullYear(date.getFullYear() + 1);
+      date.setDate(date.getDate() - 1);
+      
+      /*/ Format the new date back to 'DD/MM/YYYY'
+      var newDay = ("0" + date.getDate()).slice(-2);
+      var newMonth = ("0" + (date.getMonth() + 1)).slice(-2); // Months are zero-based
+      var newYear = date.getFullYear();
+      
+      var dueDate = newDay + '/' + newMonth + '/' + newYear;*/
+      
+      // Assign the new date to '#dueDate'
+      $('#extendModal').find('#dueDate').val(formatDate3(date));
+    }
+  });
+
   $('#extendModal').find('#customerType').on('change', function(){
     if($(this).val() == "NEW"){
       $('#extendModal').find('#company').hide();
@@ -1447,39 +1499,41 @@ $(function () {
     //$('#spinnerLoading').show();
     var id = $(this).find(":selected").val();
 
-    $.post('php/getBranch.php', {userID: id}, function(data){
-      var obj = JSON.parse(data);
-      
-      if(obj.status === 'success'){
-        $('#extendModal').find('#address1').val(obj.message.address1);
-        $('#extendModal').find('#address2').val(obj.message.address2);
-        $('#extendModal').find('#address3').val(obj.message.address3);
-        $('#extendModal').find('#address4').val(obj.message.address4);
+    if(id){
+      $.post('php/getBranch.php', {userID: id}, function(data){
+        var obj = JSON.parse(data);
         
-        /*$('#extendModal').modal('show');
+        if(obj.status === 'success'){
+          $('#extendModal').find('#address1').val(obj.message.address1);
+          $('#extendModal').find('#address2').val(obj.message.address2);
+          $('#extendModal').find('#address3').val(obj.message.address3);
+          $('#extendModal').find('#address4').val(obj.message.address4);
+          
+          /*$('#extendModal').modal('show');
 
-        $('#extendForm').validate({
-          errorElement: 'span',
-          errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-          },
-          highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-          },
-          unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-          }
-        });*/
-      }
-      else if(obj.status === 'failed'){
-        toastr["error"](obj.message, "Failed:");
-      }
-      else{
-        toastr["error"]("Something wrong when pull data", "Failed:");
-      }
-      //$('#spinnerLoading').hide();
-    });
+          $('#extendForm').validate({
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+              error.addClass('invalid-feedback');
+              element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+              $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+              $(element).removeClass('is-invalid');
+            }
+          });*/
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+        //$('#spinnerLoading').hide();
+      });
+    }
   });
 
   $('#extendModal').find('#company').on('change', function(){
@@ -1630,6 +1684,29 @@ $(function () {
     }
   });
 
+  $('#extendModal').find('#lastCalibrationDate').on('change', function(){
+    if($(this).val()){
+      var parts = $(this).val().split('-');
+      var day = parseInt(parts[2], 10);
+      var month = parseInt(parts[1], 10) - 1; // Months are zero-based
+      var year = parseInt(parts[0], 10);
+
+      var date = new Date(year, month, day); console.log(date);
+      
+      date.setFullYear(date.getFullYear() + 1);       // Add 1 year to the date
+      date.setDate(date.getDate() - 1);      // Minus 1 day to the date
+
+      var newDay = ("0" + date.getDate()).slice(-2);
+      var newMonth = ("0" + (date.getMonth() + 1)).slice(-2); // Months are zero-based
+      var newYear = date.getFullYear();
+      
+      var expiredDate = newYear + '-' + newMonth + '-' + newDay;
+      
+      // Assign the new date to '#expiredDate'
+      $('#extendModal').find('#expiredCalibrationDate').val(expiredDate);
+    }
+  });
+
   $('#cancelModal').find('#cancellationReason').on('change', function(){
     if($(this).val() == '0'){
       $('#otherRow').show();
@@ -1642,9 +1719,6 @@ $(function () {
   });
 
   $(document).on('click', '#add-calibration-cell', function() {
-    var loadCalibrationNoValue = parseInt($('#noOfCalibrationCell').val());
-    // Trigger the cloning and appending logic loadCellNoValue times
-    for (var i = 0; i < loadCalibrationNoValue; i++) {
       var $addContents = $("#loadCalibrationDetails").clone();
       $("#loadCalibrationTable").append($addContents.html());
 
@@ -1656,10 +1730,10 @@ $(function () {
       $("#loadCalibrationTable").find('#no:last').attr('name', 'no[' + loadCalibrationCount + ']').attr("id", "no" + loadCalibrationCount).val((loadCalibrationCount + 1).toString());
       $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate[' + loadCalibrationCount + ']').attr("id", "lastCalibrationDate" + loadCalibrationCount);
       $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate[' + loadCalibrationCount + ']').attr("id", "expiredCalibrationDate" + loadCalibrationCount);
+      $("#loadCalibrationTable").find('#autoFormNo:last').attr('name', 'autoFormNo[' + loadCalibrationCount + ']').attr("id", "autoFormNo" + loadCalibrationCount);
       $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment[' + loadCalibrationCount + ']').attr("id", "uploadAttachment" + loadCalibrationCount);
 
       loadCalibrationCount++;
-    }
   });
 
   // Event delegation: use 'select' instead of 'input' for dropdowns
@@ -1699,26 +1773,47 @@ function format (row) {
       <p><strong>Unit Serial No:</strong> ${row.unit_serial_no}</p>
       <p><strong>Brand:</strong> ${row.brand}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
-    </div> 
-  `;
-  
-  if (row.calibrations !== undefined && row.calibrations !== null && row.calibrations !== ''){
-    if (row.calibrations[0].length > 0) {
-      returnString += '<h4>Calibrations</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="20%">Latest Date Calibration</th><th width="20%">Expire Date Calibration</th><th width="20%">Calibration Certificate Attachment</th></tr></thead><tbody>'
-      
-      var calibrations = row.calibrations[0];
-      for (var i = 0; i < calibrations.length; i++) {
-        var item = calibrations[i];
-        returnString += '<tr><td>' + item.no + '</td><td>' + item.lastCalibrationDate + '<td>' + item.expiredCalibrationDate + '</td><td>';
+    </div>
+  </div><hr>`;
 
-        if (item.calibrationFilePath) {
-          returnString += '<a href="' + item.calibrationFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>';
-        }
+  if(row.lastCalibrationDate && row.expiredCalibrationDate && row.auto_form_no){
+    returnString += `
+                <div class="row mb-3">
+                  <h3 class="m-0 text-dark">Calibration Information</h3>
+                </div>
+                <div class="row">
+                  <!-- Calibration Section -->
+                  <div class="col-6">
+                    <p><strong>Last Calibration Date:</strong> ${row.lastCalibrationDate}</p>
+                    <p><strong>Certificate Number:</strong> ${row.auto_form_no}</p>
+                  </div>
+                  <div class="col-6">
+                    <p><strong>Expired Calibration Date:</strong> ${row.expiredCalibrationDate}</p>
+                    <p><strong>Certificate Attachment:</strong>
+                `;
+
+      if(row.certFilePath){
+        returnString += '<a href="' + row.certFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></p></div></div>';
       }
-
-      returnString += '</td></tr></tbody></table>';
-    }
   }
+  
+  // if (row.calibrations !== undefined && row.calibrations !== null && row.calibrations !== ''){
+  //   if (row.calibrations[0].length > 0) {
+  //     returnString += '<h4>Calibrations</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="20%">Latest Date Calibration</th><th width="20%">Expire Date Calibration</th><th width="20%">Calibration Certificate Attachment</th></tr></thead><tbody>'
+      
+  //     var calibrations = row.calibrations[0];
+  //     for (var i = 0; i < calibrations.length; i++) {
+  //       var item = calibrations[i];
+  //       returnString += '<tr><td>' + item.no + '</td><td>' + item.lastCalibrationDate + '<td>' + item.expiredCalibrationDate + '</td><td>';
+
+  //       if (item.calibrationFilePath) {
+  //         returnString += '<a href="' + item.calibrationFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>';
+  //       }
+  //     }
+
+  //     returnString += '</td></tr></tbody></table>';
+  //   }
+  // }
 
   return returnString;
 }
@@ -1793,28 +1888,25 @@ function newEntry(){
   $('#extendModal').find('#size').val('').trigger('change');
   $('#extendModal').find('#address1').val('');
   $('#extendModal').find('#model').val("").trigger('change');
-  $('#extendModal').find('#stampDate').val('');
   $('#extendModal').find('#address2').val('');
   $('#extendModal').find('#capacity').val('').trigger('change');
-  $('#extendModal').find('#noDaftar').val('');
   $('#extendModal').find('#address3').val('');
-  $('#extendModal').find('#serial').val('');
-  $('#extendModal').find('#pinKeselamatan').val('');
-  $('#extendModal').find('#attnTo').val('<?=$user ?>');
-  $('#extendModal').find('#siriKeselamatan').val('');
   $('#extendModal').find('#pic').val("");
-  $('#extendModal').find('#borangD').val("");
   $('#extendModal').find('#remark').val("");
   $('#extendModal').find('#dueDate').val('');
-  $('#extendModal').find('#quotation').val("");
-  $('#extendModal').find('#quotationDate').val('');
   $('#extendModal').find('#manufacturing').val('').trigger('change');
-  $('#extendModal').find('#validationDate').val('');
+  $('#extendModal').find('#validationDate').val(formatDate3(date));
+  $('#extendModal').find('#lastCalibrationDate').val('');
+  $('#extendModal').find('#expiredCalibrationDate').val('');
+  $('#extendModal').find('#autoFormNo').val('');
+  $('#extendModal').find('#uploadAttachment').val('');
+  $('#extendModal').find('#serial').val('');
 
   customer = 0;
-  loadCalibrationCount = 0; 
+  // loadCalibrationCount = 0; 
   
-  $('#loadCalibrationTable').html('');
+  // $('#loadCalibrationTable').html('');
+  // $('#add-calibration-cell').trigger('click');
 
   // $('#pricingTable').html('');
   // pricingCount = 0;
@@ -1896,37 +1988,43 @@ function edit(id) {
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#size').val(obj.message.size).trigger('change');
         $('#extendModal').find('#validationDate').val(obj.message.validation_date);
-
-        if(obj.message.calibrations != null && obj.message.calibrations.length > 0){
-          $("#loadCalibrationTable").html('');
-          loadCalibrationCount = 0; 
-
-          for(var i = 0; i < obj.message.calibrations.length; i++){
-            var calibrations = obj.message.calibrations[i];
-
-            for(var j=0; j < calibrations.length; j++){
-              var item = calibrations[j];
-              var $addContents = $("#loadCalibrationDetails").clone();
-              $("#loadCalibrationTable").append($addContents.html());
-
-              $("#loadCalibrationTable").find('.details:last').attr("id", "detail" + loadCalibrationCount);
-              $("#loadCalibrationTable").find('.details:last').attr("data-index", loadCalibrationCount);
-              $("#loadCalibrationTable").find('#remove:last').attr("id", "remove" + loadCalibrationCount);
-
-              $("#loadCalibrationTable").find('#no:last').attr('name', 'no['+loadCalibrationCount+']').attr("id", "no" + loadCalibrationCount).val(item.no);
-              $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate['+loadCalibrationCount+']').attr("id", "lastCalibrationDate" + loadCalibrationCount).val(item.lastCalibrationDate);
-              $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount).val(item.expiredCalibrationDate);
-
-              $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment['+loadCalibrationCount+']').attr("id", "uploadAttachment" + loadCalibrationCount).removeAttr('required');
-              if(item.calibrationFilePath){
-                $("#loadCalibrationTable").find('#viewCalibrationPdf:last').attr('name', 'viewCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewCalibrationPdf" + loadCalibrationCount).attr('href', item.calibrationFilePath).show();
-                $("#loadCalibrationTable").find('#calibrationFilePath:last').attr('name', 'calibrationFilePath['+loadCalibrationCount+']').attr("id", "calibrationFilePath" + loadCalibrationCount).val(item.calibrationFilePath);
-              }
-
-              loadCalibrationCount++;
-            }
-          }
+        $('#extendModal').find('#lastCalibrationDate').val(obj.message.lastCalibrationDate);
+        $('#extendModal').find('#expiredCalibrationDate').val(obj.message.expiredCalibrationDate);
+        $('#extendModal').find('#uploadAttachment').val('');
+        if(obj.message.certFilePath){
+          $('#extendModal').find('#viewCalibrationPdf').attr('href', obj.message.certFilePath).show();
+          $('#extendModal').find('#calibrationFilePath').val(obj.message.certFilePath);
         }
+        // if(obj.message.calibrations != null && obj.message.calibrations.length > 0){
+        //   $("#loadCalibrationTable").html('');
+        //   loadCalibrationCount = 0; 
+
+        //   for(var i = 0; i < obj.message.calibrations.length; i++){
+        //     var calibrations = obj.message.calibrations[i];
+
+        //     for(var j=0; j < calibrations.length; j++){
+        //       var item = calibrations[j];
+        //       var $addContents = $("#loadCalibrationDetails").clone();
+        //       $("#loadCalibrationTable").append($addContents.html());
+
+        //       $("#loadCalibrationTable").find('.details:last').attr("id", "detail" + loadCalibrationCount);
+        //       $("#loadCalibrationTable").find('.details:last').attr("data-index", loadCalibrationCount);
+        //       $("#loadCalibrationTable").find('#remove:last').attr("id", "remove" + loadCalibrationCount);
+
+        //       $("#loadCalibrationTable").find('#no:last').attr('name', 'no['+loadCalibrationCount+']').attr("id", "no" + loadCalibrationCount).val(item.no);
+        //       $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate['+loadCalibrationCount+']').attr("id", "lastCalibrationDate" + loadCalibrationCount).val(item.lastCalibrationDate);
+        //       $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount).val(item.expiredCalibrationDate);
+
+        //       $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment['+loadCalibrationCount+']').attr("id", "uploadAttachment" + loadCalibrationCount).removeAttr('required');
+        //       if(item.calibrationFilePath){
+        //         $("#loadCalibrationTable").find('#viewCalibrationPdf:last').attr('name', 'viewCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewCalibrationPdf" + loadCalibrationCount).attr('href', item.calibrationFilePath).show();
+        //         $("#loadCalibrationTable").find('#calibrationFilePath:last').attr('name', 'calibrationFilePath['+loadCalibrationCount+']').attr("id", "calibrationFilePath" + loadCalibrationCount).val(item.calibrationFilePath);
+        //       }
+
+        //       loadCalibrationCount++;
+        //     }
+        //   }
+        // }
       }
       else{
         $('#extendModal').find('#id').val(obj.message.id);
@@ -1953,38 +2051,45 @@ function edit(id) {
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#size').val(obj.message.size).trigger('change');
         $('#extendModal').find('#validationDate').val(obj.message.validation_date);
-
-        if(obj.message.calibrations != null && obj.message.calibrations.length > 0){
-          $("#loadCalibrationTable").html('');
-          loadCalibrationCount = 0; 
-
-          for(var i = 0; i < obj.message.calibrations.length; i++){
-            var calibrations = obj.message.calibrations[i];
-
-            for(var j=0; j < calibrations.length; j++){
-              var item = calibrations[j];
-              var $addContents = $("#loadCalibrationDetails").clone();
-              $("#loadCalibrationTable").append($addContents.html());
-
-              $("#loadCalibrationTable").find('.details:last').attr("id", "detail" + loadCalibrationCount);
-              $("#loadCalibrationTable").find('.details:last').attr("data-index", loadCalibrationCount);
-              $("#loadCalibrationTable").find('#remove:last').attr("id", "remove" + loadCalibrationCount);
-
-              $("#loadCalibrationTable").find('#no:last').attr('name', 'no['+loadCalibrationCount+']').attr("id", "no" + loadCalibrationCount).val(item.no);
-              $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate['+loadCalibrationCount+']').attr("id", "lastCalibrationDate" + loadCalibrationCount).val(item.lastCalibrationDate);
-              $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount).val(item.expiredCalibrationDate);
-
-              $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment['+loadCalibrationCount+']').attr("id", "uploadAttachment" + loadCalibrationCount).removeAttr('required');
-
-              if(item.calibrationFilePath){
-                $("#loadCalibrationTable").find('#viewCalibrationPdf:last').attr('name', 'viewCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewCalibrationPdf" + loadCalibrationCount).attr('href', item.calibrationFilePath).show();
-                $("#loadCalibrationTable").find('#calibrationFilePath:last').attr('name', 'calibrationFilePath['+loadCalibrationCount+']').attr("id", "calibrationFilePath" + loadCalibrationCount).val(item.calibrationFilePath);
-              }
-             
-              loadCalibrationCount++;
-            }
-          }
+        $('#extendModal').find('#lastCalibrationDate').val(obj.message.lastCalibrationDate);
+        $('#extendModal').find('#expiredCalibrationDate').val(obj.message.expiredCalibrationDate);
+        $('#extendModal').find('#uploadAttachment').val('');
+        if(obj.message.certFilePath){
+          $('#extendModal').find('#viewCalibrationPdf').attr('href', obj.message.certFilePath).show();
+          $('#extendModal').find('#calibrationFilePath').val(obj.message.certFilePath);
         }
+
+        // if(obj.message.calibrations != null && obj.message.calibrations.length > 0){
+        //   $("#loadCalibrationTable").html('');
+        //   loadCalibrationCount = 0; 
+
+        //   for(var i = 0; i < obj.message.calibrations.length; i++){
+        //     var calibrations = obj.message.calibrations[i];
+
+        //     for(var j=0; j < calibrations.length; j++){
+        //       var item = calibrations[j];
+        //       var $addContents = $("#loadCalibrationDetails").clone();
+        //       $("#loadCalibrationTable").append($addContents.html());
+
+        //       $("#loadCalibrationTable").find('.details:last').attr("id", "detail" + loadCalibrationCount);
+        //       $("#loadCalibrationTable").find('.details:last').attr("data-index", loadCalibrationCount);
+        //       $("#loadCalibrationTable").find('#remove:last').attr("id", "remove" + loadCalibrationCount);
+
+        //       $("#loadCalibrationTable").find('#no:last').attr('name', 'no['+loadCalibrationCount+']').attr("id", "no" + loadCalibrationCount).val(item.no);
+        //       $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate['+loadCalibrationCount+']').attr("id", "lastCalibrationDate" + loadCalibrationCount).val(item.lastCalibrationDate);
+        //       $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount).val(item.expiredCalibrationDate);
+
+        //       $("#loadCalibrationTable").find('#uploadAttachment:last').attr('name', 'uploadAttachment['+loadCalibrationCount+']').attr("id", "uploadAttachment" + loadCalibrationCount).removeAttr('required');
+
+        //       if(item.calibrationFilePath){
+        //         $("#loadCalibrationTable").find('#viewCalibrationPdf:last').attr('name', 'viewCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewCalibrationPdf" + loadCalibrationCount).attr('href', item.calibrationFilePath).show();
+        //         $("#loadCalibrationTable").find('#calibrationFilePath:last').attr('name', 'calibrationFilePath['+loadCalibrationCount+']').attr("id", "calibrationFilePath" + loadCalibrationCount).val(item.calibrationFilePath);
+        //       }
+             
+        //       loadCalibrationCount++;
+        //     }
+        //   }
+        // }
       }
     
       $('#extendModal').modal('show');

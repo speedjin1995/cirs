@@ -28,7 +28,7 @@ else{
   $brands = $db->query("SELECT * FROM brand WHERE deleted = '0'");
   $models = $db->query("SELECT * FROM model WHERE deleted = '0'");
   $sizes = $db->query("SELECT * FROM size WHERE deleted = '0'");
-  $capacities = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
+  $capacities = $db->query("SELECT * FROM capacity WHERE deleted = '0' order by id asc");
   $capacities2 = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
   $problems = $db->query("SELECT * FROM problem WHERE deleted = '0'");
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
@@ -287,8 +287,8 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 </div>
                 <div class="col-3">
                   <div class="form-group">
-                    <label>Auto Form No. * </label>
-                    <input type="text" class="form-control" id="autoFormNo" name="autoFormNo" required>
+                    <label>Auto Form No. </label>
+                    <input type="text" class="form-control" id="autoFormNo" name="autoFormNo" readonly>
                   </div>
                 </div>
                 <div class="col-12" id="custbranch">
@@ -1980,7 +1980,7 @@ function newEntry(){
             let standardValue = $(this).val();
             let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
             let varianceCalculated = standardValue - calibrationReceived; 
-            let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
+            let roundedVariance = parseFloat(varianceCalculated).toFixed(varianceDecimalPoint);
 
             // Update the variance input value
             $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
@@ -1997,7 +1997,7 @@ function newEntry(){
             let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
             let calibrationReceived = $(this).val();
             let varianceCalculated = standardValue - calibrationReceived; 
-            let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
+            let roundedVariance = parseFloat(varianceCalculated).toFixed(varianceDecimalPoint);
 
             // Update the variance input value
             $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
@@ -2072,7 +2072,7 @@ function edit(id) {
     if(obj.status === 'success'){
       let variance = obj.message.variance;
       let varianceDecimalPart = variance.toString().split('.')[1];
-      let varianceDecimalPoint = varianceDecimalPart.length; console.log(varianceDecimalPoint);
+      let varianceDecimalPoint = varianceDecimalPart.length;
       var unit = obj.message.capacityUnit;
 
       if(obj.message.type == 'DIRECT'){
@@ -2091,7 +2091,9 @@ function edit(id) {
         $('#extendModal').find('#serial').val(obj.message.unit_serial_no);
         $('#extendModal').find('#manufacturing').val(obj.message.manufacturing).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
-        $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        setTimeout(function(){
+          $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        }, 500);
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#size').val(obj.message.size).trigger('change');
         $('#extendModal').find('#lastCalibrationDate').val(obj.message.last_calibration_date);
@@ -2099,8 +2101,6 @@ function edit(id) {
         $('#extendModal').find('#auto_cert_no').val(obj.message.auto_cert_no);
         $('#extendModal').find('#validationDate').val(obj.message.validation_date);
         $('#extendModal').find('#calibrator').val(obj.message.calibrator).trigger('change');
-
-        // $('#extendModal').trigger('capacityLoaded');
 
         if(obj.message.tests != null && obj.message.tests.length > 0){
           $("#loadTestingTable").html('');
@@ -2158,7 +2158,7 @@ function edit(id) {
             let standardValue = $(this).val();
             let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
             let varianceCalculated = standardValue - calibrationReceived; 
-            let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
+            let roundedVariance = parseFloat(varianceCalculated).toFixed(varianceDecimalPoint);
 
             // Update the variance input value
             $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
@@ -2175,7 +2175,7 @@ function edit(id) {
             let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
             let calibrationReceived = $(this).val();
             let varianceCalculated = standardValue - calibrationReceived; 
-            let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
+            let roundedVariance = parseFloat(varianceCalculated).toFixed(varianceDecimalPoint);
 
             // Update the variance input value
             $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
@@ -2203,16 +2203,17 @@ function edit(id) {
                 var unit = obj.message.unit;
 
                 $('#calibrationHeader').text('Note - Standard Average Temperature: ('+ standardAvTemp +') / Average Relative Humidity: ('+ relativeHumidity +')');
-                $("#loadTestingTable").find('#standardValue0').val(obj.message.test_1.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue1').val(obj.message.test_2.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue2').val(obj.message.test_3.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue3').val(obj.message.test_4.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue4').val(obj.message.test_5.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue5').val(obj.message.test_6.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue6').val(obj.message.test_7.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue7').val(obj.message.test_8.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue8').val(obj.message.test_9.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue9').val(obj.message.test_10.toFixed(varianceDecimalPoint));
+                $('#varianceHeader').text('Variance +/- '+ variance + unit);
+                $("#loadTestingTable").find('#standardValue0').val(parseFloat(obj.message.test_1).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue1').val(parseFloat(obj.message.test_2).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue2').val(parseFloat(obj.message.test_3).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue3').val(parseFloat(obj.message.test_4).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue4').val(parseFloat(obj.message.test_5).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue5').val(parseFloat(obj.message.test_6).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue6').val(parseFloat(obj.message.test_7).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue7').val(parseFloat(obj.message.test_8).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue8').val(parseFloat(obj.message.test_9).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue9').val(parseFloat(obj.message.test_10).toFixed(varianceDecimalPoint));
 
                 for (var i = 0; i < 10; i++) {
                   //Symbol setting
@@ -2229,7 +2230,7 @@ function edit(id) {
 
                   //When user change value
                   $('#loadTestingTable').find('#standardValue'+ i).change(function() {
-                    let standardValue = parseFloat($(this).val());      
+                    var standardValue = parseFloat($(this).val());      
                     $(this).val(standardValue.toFixed(varianceDecimalPoint)); // Format the value and set it back        
                   });
                   $('#loadTestingTable').find('#calibrationReceived'+ i).change(function() {
@@ -2247,7 +2248,7 @@ function edit(id) {
                   let standardValue = $(this).val();
                   let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
                   let varianceCalculated = standardValue - calibrationReceived; 
-                  let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
+                  let roundedVariance = parseFloat(varianceCalculated).toFixed(varianceDecimalPoint);
 
                   // Update the variance input value
                   $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
@@ -2264,7 +2265,7 @@ function edit(id) {
                   let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
                   let calibrationReceived = $(this).val();
                   let varianceCalculated = standardValue - calibrationReceived; 
-                  let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
+                  let roundedVariance = parseFloat(varianceCalculated).toFixed(varianceDecimalPoint);
 
                   // Update the variance input value
                   $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
@@ -2374,7 +2375,7 @@ function edit(id) {
             let standardValue = $(this).val();
             let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
             let varianceCalculated = standardValue - calibrationReceived; 
-            let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
+            let roundedVariance = parseFloat(varianceCalculated).toFixed(varianceDecimalPoint);
 
             // Update the variance input value
             $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
@@ -2391,7 +2392,7 @@ function edit(id) {
             let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
             let calibrationReceived = $(this).val();
             let varianceCalculated = standardValue - calibrationReceived; 
-            let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
+            let roundedVariance = parseFloat(varianceCalculated).toFixed(varianceDecimalPoint);
 
             // Update the variance input value
             $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
@@ -2465,7 +2466,7 @@ function edit(id) {
                   let standardValue = $(this).val();
                   let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
                   let varianceCalculated = standardValue - calibrationReceived; 
-                  let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
+                  let roundedVariance = parseFloat(varianceCalculated).toFixed(varianceDecimalPoint);
 
                   // Update the variance input value
                   $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
@@ -2482,7 +2483,7 @@ function edit(id) {
                   let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
                   let calibrationReceived = $(this).val();
                   let varianceCalculated = standardValue - calibrationReceived; 
-                  let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
+                  let roundedVariance = parseFloat(varianceCalculated).toFixed(varianceDecimalPoint);
 
                   // Update the variance input value
                   $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
