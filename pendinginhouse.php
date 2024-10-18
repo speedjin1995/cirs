@@ -176,20 +176,18 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <th width='1%'><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
-                  <th width='5%'>Cus. Code</th>
-                  <th width='10%'>Company Name</th>
-                  <th>Machines / Instruments</th>
+                  <!-- <th width='1%'><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th> -->
+                  <th>Created Date</th>
+                  <th>Company Name</th>
                   <th>Brand</th>
-                  <th>Model</th>
+                  <th>Description Instruments for Weighing and Measuring</th>
                   <th>Capacity</th>
-                  <th>Structure Size</th>
-                  <th>Serial No</th>
-                  <th>Last Cal Date</th>
+                  <th>Previous Cert. No</th>
+                  <th>Current Validation Date</th>
                   <th>Expired Date</th>
                   <th>Calibrator By</th>
                   <th>Status</th>
-                  <th></th>
+                  <th>Action</th>
                   <th></th>
                 </tr>
               </thead>
@@ -473,25 +471,6 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     <input class="form-control" type="date" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate" required>
                   </div>
                 </div>
-                <!-- <div class="col-4" style="display:none;">
-                  <div class="form-group">
-                    <label>Product *</label>
-                    <select class="form-control select2" style="width: 100%;" id="product" name="product">
-                      <option selected="selected">-</option>
-                      <?php while($rowProduct=mysqli_fetch_assoc($products)){ ?>
-                        <option 
-                          value="<?=$rowProduct['id'] ?>" 
-                          data-price="<?=$rowProduct['price'] ?>" 
-                          data-machine="<?=$rowProduct['machine_type'] ?>" 
-                          data-alat="<?=$rowProduct['jenis_alat'] ?>" 
-                          data-capacity="<?=$rowProduct['capacity'] ?>" 
-                          data-validator="<?=$rowProduct['validator'] ?>">
-                          <?=$rowProduct['name'] ?>
-                        </option>
-                      <?php } ?>
-                    </select>
-                  </div>
-                </div> -->
               </div>
             </div>
           </div>
@@ -951,29 +930,27 @@ $(function () {
       } 
     },
     'columns': [
-      {
-        // Add a checkbox with a unique ID for each row
-        data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-        className: 'select-checkbox',
-        orderable: false,
-        render: function (data, type, row) {
-          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-          } 
-          else {
-            return ''; // Return an empty string or any other placeholder if the item is invoiced
-          }
-        }
-      },
-      { data: 'customer_code' },
+      // {
+      //   // Add a checkbox with a unique ID for each row
+      //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+      //   className: 'select-checkbox',
+      //   orderable: false,
+      //   render: function (data, type, row) {
+      //     if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+      //       return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+      //     } 
+      //     else {
+      //       return ''; // Return an empty string or any other placeholder if the item is invoiced
+      //     }
+      //   }
+      // },
+      { data: 'validation_date' },
       { data: 'customer' },
-      { data: 'machines' },
       { data: 'brand' },
-      { data: 'model' },
+      { data: 'machines' },
       { data: 'capacity' },
-      { data: 'size' },
-      { data: 'unit_serial_no' },
-      { data: 'lastCalibrationDate' },
+      { data: 'autoCertNo' },
+      { data: 'validation_date' },
       { data: 'expiredDate' },
       { data: 'calibrator' },
       { data: 'status' },
