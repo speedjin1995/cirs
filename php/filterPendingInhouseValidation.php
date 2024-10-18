@@ -61,26 +61,26 @@ $data = array();
 $counter = 1;
 
 while($row = mysqli_fetch_assoc($validationRecords)) {
-  $branch = $row['branch'];
-  $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-  $branchDetail = mysqli_query($db, $branchQuery);
-  $branchRow = mysqli_fetch_assoc($branchDetail);
+  // $branch = $row['branch'];
+  // $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+  // $branchDetail = mysqli_query($db, $branchQuery);
+  // $branchRow = mysqli_fetch_assoc($branchDetail);
 
-  $address1 = null;
-  $address2 = null;
-  $address3 = null;
-  $address4 = null;
-  $pic = null;
-  $pic_phone = null;
+  // $address1 = null;
+  // $address2 = null;
+  // $address3 = null;
+  // $address4 = null;
+  // $pic = null;
+  // $pic_phone = null;
 
-  if(!empty($branchRow)){
-    $address1 = $branchRow['address'];
-    $address2 = $branchRow['address2'];
-    $address3 = $branchRow['address3'];
-    $address4 = $branchRow['address4'];
-    $pic = $branchRow['pic'];
-    $pic_phone = $branchRow['pic_contact'];
-  }
+  // if(!empty($branchRow)){
+  //   $address1 = $branchRow['address'];
+  //   $address2 = $branchRow['address2'];
+  //   $address3 = $branchRow['address3'];
+  //   $address4 = $branchRow['address4'];
+  //   $pic = $branchRow['pic'];
+  //   $pic_phone = $branchRow['pic_contact'];
+  // }
 
   #added checking in the event where standard value table not setup
   if(empty($row['unit'])){

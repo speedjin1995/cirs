@@ -156,7 +156,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-8"></div>
+              <div class="col-8"><h4>InHouse Validation Record Pending / Expired Status :</h4></div>
               <div class="col-2">
                 <!-- <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button> -->
               </div>
@@ -176,20 +176,18 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <th width='1%'><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
-                  <th width='5%'>Cus. Code</th>
-                  <th width='10%'>Company Name</th>
-                  <th>Machines / Instruments</th>
+                  <!-- <th width='1%'><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th> -->
+                  <th>Created Date</th>
+                  <th>Company Name</th>
                   <th>Brand</th>
-                  <th>Model</th>
+                  <th>Description Instruments for Weighing and Measuring</th>
                   <th>Capacity</th>
-                  <th>Structure Size</th>
-                  <th>Serial No</th>
-                  <th>Last Cal Date</th>
+                  <th>Previous Cert. No</th>
+                  <th>Current Validation Date</th>
                   <th>Expired Date</th>
                   <th>Calibrator By</th>
                   <th>Status</th>
-                  <th></th>
+                  <th>Action</th>
                   <th></th>
                 </tr>
               </thead>
@@ -475,30 +473,101 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     <input class="form-control" type="date" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate" required>
                   </div>
                 </div>
-                <!-- <div class="col-4" style="display:none;">
-                  <div class="form-group">
-                    <label>Product *</label>
-                    <select class="form-control select2" style="width: 100%;" id="product" name="product">
-                      <option selected="selected">-</option>
-                      <?php while($rowProduct=mysqli_fetch_assoc($products)){ ?>
-                        <option 
-                          value="<?=$rowProduct['id'] ?>" 
-                          data-price="<?=$rowProduct['price'] ?>" 
-                          data-machine="<?=$rowProduct['machine_type'] ?>" 
-                          data-alat="<?=$rowProduct['jenis_alat'] ?>" 
-                          data-capacity="<?=$rowProduct['capacity'] ?>" 
-                          data-validator="<?=$rowProduct['validator'] ?>">
-                          <?=$rowProduct['name'] ?>
-                        </option>
-                      <?php } ?>
-                    </select>
-                  </div>
-                </div> -->
               </div>
             </div>
           </div>
 
-          <div class="card card-primary">
+          div class="card card-primary">
+            <div class="card-body">
+              <div class="row mb-3">
+                <div class="col-10">
+                  <h4 id="calibrationHeader">Note - Standard Average Temperature:	() / Average Relative Humidity:	()</h4>
+                </div>
+                <!-- <div class="col-2">
+                  <button style="margin-left:auto;margin-right: 25px;" type="button" class="btn btn-primary add-load-cell" id="add-testing-cell">Add Testing</button>
+                </div> -->
+              </div>
+              
+              <table style="width: 100%;">
+                <thead>
+                  <tr>
+                    <th width="10%">Number of Tests.</th>
+                    <th width="20%">Setting Value Of Standard</th>
+                    <th width="20%">As Received Under Calibration.</th>
+                    <th width="20%" id="varianceHeader">Variance +/- </th>
+                    <th width="20%">Reading After Adjustment.</th>
+                  </tr>
+                </thead>
+                <tbody id="loadTestingTable">
+                  <?php
+                    for ($i=1; $i <=10; $i++){
+                      echo "
+                        <tr class='details'>
+                          <td class='pr-5'>
+                            <input type='text' class='form-control' id='no$i' name='no$i' value='$i' readonly>
+                          </td>   
+                          <td>
+                            <div class='d-flex mt-1'>
+                              <div class='col-6'>
+                                <input type='number' placeholder='0.0' id='standardValue$i' name='standardValue$i' class='form-control' style='width: 100%;' value='0.0'>
+                              </div>
+                              <div class='col-2'>
+                                <i class='fas fa-minus fa-2x'></i>
+                              </div>
+                              <div class='col-3'>
+                                <span class='form-control' id='unitSymbolSV$i' style='background-color:lightgrey;'></span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class='d-flex mt-1'> 
+                              <div class='col-6'>
+                                <input class='form-control' type='number' placeholder='0.0' id='calibrationReceived$i' name='calibrationReceived$i' style='width: 100%;' value='0.0'>
+                              </div>
+                              <div class='col-2'>
+                                <i class='fas fa-minus fa-2x'></i>
+                              </div>
+                              <div class='col-3'>
+                                <span class='form-control' id='unitSymbolCR$i' style='background-color:lightgrey;'></span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class='d-flex mt-1'>
+                              <div class='col-6'>
+                                <input class='form-control' type='number' placeholder='0.0' id='variance$i' name='variance$i' style='width: 100%; background-color: lightgrey;' value='0.0' readonly>
+                              </div>
+                              <div class='col-2'>
+                                <i class='fas fa-minus fa-2x'></i>
+                              </div>
+                              <div class='col-3'>
+                                <span class='form-control' id='unitSymbolV$i' style='background-color:lightgrey;'></span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class='d-flex mt-1'>
+                              <div class='col-6'>
+                                <input class='form-control' type='number' placeholder='0.0' id='afterAdjustReading$i' name='afterAdjustReading$i' value='0.0' style='width: 100%; background-color: lightgreen;'>
+                              </div>
+                              <div class='col-2'>
+                                <i class='fas fa-minus fa-2x'></i>
+                              </div>
+                              <div class='col-3'>
+                                <span class='form-control' id='unitSymbolAR$i' style='background-color:lightgrey;'></span>
+                              </div>
+                            </div>
+                          </td>   
+                        </tr>        
+                      ";
+                    }
+                  ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- <div class="card card-primary">
             <div class="card-body">
               <div class="row mb-3">
                 <div class="col-10">
@@ -523,7 +592,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <tbody id="loadTestingTable"></tbody>
               </table>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <div class="modal-footer justify-content-between bg-gray-dark color-palette">
@@ -953,29 +1022,27 @@ $(function () {
       } 
     },
     'columns': [
-      {
-        // Add a checkbox with a unique ID for each row
-        data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-        className: 'select-checkbox',
-        orderable: false,
-        render: function (data, type, row) {
-          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-          } 
-          else {
-            return ''; // Return an empty string or any other placeholder if the item is invoiced
-          }
-        }
-      },
-      { data: 'customer_code' },
+      // {
+      //   // Add a checkbox with a unique ID for each row
+      //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+      //   className: 'select-checkbox',
+      //   orderable: false,
+      //   render: function (data, type, row) {
+      //     if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+      //       return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+      //     } 
+      //     else {
+      //       return ''; // Return an empty string or any other placeholder if the item is invoiced
+      //     }
+      //   }
+      // },
+      { data: 'validation_date' },
       { data: 'customer' },
-      { data: 'machines' },
       { data: 'brand' },
-      { data: 'model' },
+      { data: 'machines' },
       { data: 'capacity' },
-      { data: 'size' },
-      { data: 'unit_serial_no' },
-      { data: 'lastCalibrationDate' },
+      { data: 'autoCertNo' },
+      { data: 'validation_date' },
       { data: 'expiredDate' },
       { data: 'calibrator' },
       { data: 'status' },
@@ -1036,10 +1103,9 @@ $(function () {
     ],
   });
   
-  // Add event listener for opening and closing details
   $('#weightTable tbody').on('click', 'td.dt-control', function () {
     var tr = $(this).closest('tr');
-    var row = table.row( tr );
+    var row = table.row(tr);
 
     if ( row.child.isShown() ) {
       // This row is already open - close it
@@ -1047,7 +1113,12 @@ $(function () {
       tr.removeClass('shown');
     }
     else {
-      row.child( format(row.data()) ).show();tr.addClass("shown");
+      $.post('php/getInHouseValidation.php', {validationId: row.data().id, format: 'EXPANDABLE'}, function (data){
+        var obj = JSON.parse(data); 
+        if(obj.status === 'success'){
+          row.child( format(obj.message) ).show();tr.addClass("shown");
+        }
+      });
     }
   });
 
@@ -1194,29 +1265,27 @@ $(function () {
         } 
       },
       'columns': [
-        {
-          // Add a checkbox with a unique ID for each row
-          data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-          className: 'select-checkbox',
-          orderable: false,
-          render: function (data, type, row) {
-            if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-              return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-            } 
-            else {
-              return ''; // Return an empty string or any other placeholder if the item is invoiced
-            }
-          }
-        },
-        { data: 'customer_code' },
+        // {
+        //   // Add a checkbox with a unique ID for each row
+        //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+        //   className: 'select-checkbox',
+        //   orderable: false,
+        //   render: function (data, type, row) {
+        //     if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+        //       return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+        //     } 
+        //     else {
+        //       return ''; // Return an empty string or any other placeholder if the item is invoiced
+        //     }
+        //   }
+        // },
+        { data: 'validation_date' },
         { data: 'customer' },
-        { data: 'machines' },
         { data: 'brand' },
-        { data: 'model' },
+        { data: 'machines' },
         { data: 'capacity' },
-        { data: 'size' },
-        { data: 'unit_serial_no' },
-        { data: 'lastCalibrationDate' },
+        { data: 'autoCertNo' },
+        { data: 'validation_date' },
         { data: 'expiredDate' },
         { data: 'calibrator' },
         { data: 'status' },
@@ -1802,7 +1871,7 @@ function format (row) {
     <!-- Machine Section -->
     <div class="col-6">
       <p><strong>Machines / Instruments:</strong> ${row.machines}</p>
-      <p><strong>Last Calibration Date:</strong> ${row.lastCalibrationDate}</p>
+      <p><strong>Current Validation Date:</strong> ${row.validation_date}</p>
       <p><strong>Manufacturing:</strong> ${row.manufacturing}</p>
       <p><strong>Brand:</strong> ${row.brand}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
@@ -1810,18 +1879,19 @@ function format (row) {
     </div>
     <div class="col-6">
       <p><strong>Unit Serial No:</strong> ${row.unit_serial_no}</p>
-      <p><strong>Expired Date:</strong> ${row.expiredDate}</p>
-      <p><strong>Auto Certificate No / Sticker No:</strong> ${row.autoCertNo}</p>
+      <p><strong>Expired Date:</strong> ${row.expired_date}</p>
+      <p><strong>Auto Certificate No / Sticker No:</strong> ${row.auto_cert_no}</p>
       <p><strong>Model:</strong> ${row.model}</p>
       <p><strong>Structure Size:</strong> ${row.size}</p>
-      <p><strong>Validation Date:</strong> ${row.validation_date}</p>
+      <p><strong>Created Date:</strong> ${row.validation_date}</p>
     </div> 
   </div><hr>
   `;
   
   if (row.tests !== undefined && row.tests !== null && row.tests !== ''){
     if (row.tests[0].length > 0) {
-      var weightType = row.units;
+      var weightType = row.capacityUnit;
+      var variance = row.variance;
       
       if(row.standard_avg_temp){
         var standardAvgTemp = row.standard_avg_temp;
@@ -1835,7 +1905,7 @@ function format (row) {
         var relHumid = '';
       }
 
-      returnString += '<h4 class="mb-3">Note - Standard Average Temperature: (' + standardAvgTemp + ') / Average Relative Humidity: (' + relHumid + ')</h4><table style="width: 100%;"><thead><tr><th width="15%">Number of Tests.</th><th width="20%">Setting Value Of Standard (' +  weightType + ')</th><th width="20%">As Received Under Calibration (' +  weightType + ')</th><th width="20%">Variance +/- 0.1kg (' +  weightType + ')</th><th width="20%">Reading After Adjustment. (' +  weightType + ')</th></tr></thead><tbody>';
+      returnString += '<h4 class="mb-3">Note - Standard Average Temperature: (' + standardAvgTemp + ') / Average Relative Humidity: (' + relHumid + ')</h4><table style="width: 100%;"><thead><tr><th width="15%">Number of Tests.</th><th width="20%">Setting Value Of Standard (' +  weightType + ')</th><th width="20%">As Received Under Calibration (' +  weightType + ')</th><th width="20%">Variance +/- '+variance+weightType+'</th><th width="20%">Reading After Adjustment. (' +  weightType + ')</th></tr></thead><tbody>';
       
       var tests = row.tests[0]; 
       for (var i = 0; i < tests.length; i++) {

@@ -156,7 +156,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-8"></div>
+              <div class="col-8"><h4>InHouse Validation Record Pending / Expired Status :</h4></div>
               <div class="col-2">
                 <!-- <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button> -->
               </div>
@@ -176,21 +176,19 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <th width='1%'><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
-                  <th width='5%'>Cus. Code</th>
-                  <th width='10%'>Company Name</th>
-                  <th>Machines / Instruments</th>
+                  <!-- <th width='1%'><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th> -->
+                  <th>Created Date</th>
+                  <th>Company Name</th>
                   <th>Brand</th>
-                  <th>Model</th>
+                  <th>Description Instruments for Weighing and Measuring</th>
                   <th>Capacity</th>
-                  <th>Structure Size</th>
-                  <th>Serial No</th>
-                  <th>Last Cal Date</th>
+                  <th>Previous Cert. No</th>
+                  <th>Current Validation Date</th>
                   <th>Expired Date</th>
                   <th>Calibrator By</th>
                   <th>Status</th>
-                  <th width='10%'></th>
-                  <th width='1%'></th>
+                  <th>Action</th>
+                  <th></th>
                 </tr>
               </thead>
             </table>
@@ -361,7 +359,19 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <h4>Machines / Instruments Information</h4>
               </div>
               <div class="row">
-              <div class="col-3">
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Validation Date * </label>
+                    <input class="form-control" type="date" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate" required>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Expired Date * </label>
+                    <input class="form-control" type="date" id="expiredDate" name="expiredDate" required>
+                  </div>
+                </div>
+                <div class="col-3">
                   <div class="form-group">
                     <label>Machines / Instruments *</label>
                     <select class="form-control select2" style="width: 100%;" id="machineType" name="machineType" required>
@@ -374,25 +384,6 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 </div>
                 <div class="col-3">
                   <div class="form-group">
-                    <label>Unit Serial No * </label>
-                    <input class="form-control" type="text" placeholder="Serial No." id="serial" name="serial" required>
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="form-group">
-                    <label>Last Calibration Date * </label>
-                    <input class="form-control" type="date" id="lastCalibrationDate" name="lastCalibrationDate" required>
-                  </div>
-                </div>
-                
-                <div class="col-3">
-                  <div class="form-group">
-                    <label>Expired Date * </label>
-                    <input class="form-control" type="date" id="expiredDate" name="expiredDate" required>
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="form-group">
                     <label>Manufacturing *</label>
                     <select class="form-control select2" style="width: 100%;" id="manufacturing" name="manufacturing" required>
                       <option selected="selected"></option>
@@ -401,14 +392,6 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
-
-                <div class="col-3">
-                  <div class="form-group">
-                    <label>Auto Certificate No / Sticker No *</label>
-                    <input class="form-control" type="text" placeholder="Sticker No" id="auto_cert_no" name="auto_cert_no">
-                  </div>
-                </div>
-
                 <div class="col-3">
                   <div class="form-group">
                     <label>Brand *</label>
@@ -420,19 +403,12 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
-
                 <div class="col-3">
                   <div class="form-group">
-                    <label>Model *</label>
-                    <select class="form-control select2" style="width: 100%;" id="model" name="model" required>
-                      <option selected="selected"></option>
-                      <?php while($rowM=mysqli_fetch_assoc($models)){ ?>
-                        <option value="<?=$rowM['id'] ?>"><?=$rowM['model'] ?></option>
-                      <?php } ?>
-                    </select>
+                    <label>Unit Serial No * </label>
+                    <input class="form-control" type="text" placeholder="Serial No." id="serial" name="serial" required>
                   </div>
                 </div>
-                
                 <div class="col-3">
                   <div class="form-group">
                     <label>Capacity * </label>
@@ -440,6 +416,17 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                       <option selected="selected"></option>
                       <?php while($rowCA=mysqli_fetch_assoc($capacities)){ ?>
                         <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Model *</label>
+                    <select class="form-control select2" style="width: 100%;" id="model" name="model" required>
+                      <option selected="selected"></option>
+                      <?php while($rowM=mysqli_fetch_assoc($models)){ ?>
+                        <option value="<?=$rowM['id'] ?>"><?=$rowM['model'] ?></option>
                       <?php } ?>
                     </select>
                   </div>
@@ -455,7 +442,12 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
-                
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Auto Certificate No / Sticker No *</label>
+                    <input class="form-control" type="text" placeholder="Sticker No" id="auto_cert_no" name="auto_cert_no">
+                  </div>
+                </div>
                 <div class="col-3">
                   <div class="form-group">
                     <label>Inhouse Calibrator * </label>
@@ -467,29 +459,10 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
-                <div class="col-3">
+                <!-- <div class="col-3">
                   <div class="form-group">
-                    <label>Validation Date * </label>
-                    <input class="form-control" type="date" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate" required>
-                  </div>
-                </div>
-                <!-- <div class="col-4" style="display:none;">
-                  <div class="form-group">
-                    <label>Product *</label>
-                    <select class="form-control select2" style="width: 100%;" id="product" name="product">
-                      <option selected="selected">-</option>
-                      <?php while($rowProduct=mysqli_fetch_assoc($products)){ ?>
-                        <option 
-                          value="<?=$rowProduct['id'] ?>" 
-                          data-price="<?=$rowProduct['price'] ?>" 
-                          data-machine="<?=$rowProduct['machine_type'] ?>" 
-                          data-alat="<?=$rowProduct['jenis_alat'] ?>" 
-                          data-capacity="<?=$rowProduct['capacity'] ?>" 
-                          data-validator="<?=$rowProduct['validator'] ?>">
-                          <?=$rowProduct['name'] ?>
-                        </option>
-                      <?php } ?>
-                    </select>
+                    <label>Last Calibration Date * </label>
+                    <input class="form-control" type="date" id="lastCalibrationDate" name="lastCalibrationDate" required>
                   </div>
                 </div> -->
               </div>
@@ -497,6 +470,96 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
           </div>
 
           <div class="card card-primary">
+            <div class="card-body">
+              <div class="row mb-3">
+                <div class="col-10">
+                  <h4 id="calibrationHeader">Note - Standard Average Temperature:	() / Average Relative Humidity:	()</h4>
+                </div>
+                <!-- <div class="col-2">
+                  <button style="margin-left:auto;margin-right: 25px;" type="button" class="btn btn-primary add-load-cell" id="add-testing-cell">Add Testing</button>
+                </div> -->
+              </div>
+              
+              <table style="width: 100%;">
+                <thead>
+                  <tr>
+                    <th width="10%">Number of Tests.</th>
+                    <th width="20%">Setting Value Of Standard</th>
+                    <th width="20%">As Received Under Calibration.</th>
+                    <th width="20%" id="varianceHeader">Variance +/- </th>
+                    <th width="20%">Reading After Adjustment.</th>
+                  </tr>
+                </thead>
+                <tbody id="loadTestingTable">
+                  <?php
+                    for ($i=1; $i <=10; $i++){
+                      echo "
+                        <tr class='details'>
+                          <td class='pr-5'>
+                            <input type='text' class='form-control' id='no$i' name='no$i' value='$i' readonly>
+                          </td>   
+                          <td>
+                            <div class='d-flex mt-1'>
+                              <div class='col-6'>
+                                <input type='number' placeholder='0.0' id='standardValue$i' name='standardValue$i' class='form-control' style='width: 100%;' value='0.0'>
+                              </div>
+                              <div class='col-2'>
+                                <i class='fas fa-minus fa-2x'></i>
+                              </div>
+                              <div class='col-3'>
+                                <span class='form-control' id='unitSymbolSV$i' style='background-color:lightgrey;'></span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class='d-flex mt-1'> 
+                              <div class='col-6'>
+                                <input class='form-control' type='number' placeholder='0.0' id='calibrationReceived$i' name='calibrationReceived$i' style='width: 100%;' value='0.0'>
+                              </div>
+                              <div class='col-2'>
+                                <i class='fas fa-minus fa-2x'></i>
+                              </div>
+                              <div class='col-3'>
+                                <span class='form-control' id='unitSymbolCR$i' style='background-color:lightgrey;'></span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class='d-flex mt-1'>
+                              <div class='col-6'>
+                                <input class='form-control' type='number' placeholder='0.0' id='variance$i' name='variance$i' style='width: 100%; background-color: lightgrey;' value='0.0' readonly>
+                              </div>
+                              <div class='col-2'>
+                                <i class='fas fa-minus fa-2x'></i>
+                              </div>
+                              <div class='col-3'>
+                                <span class='form-control' id='unitSymbolV$i' style='background-color:lightgrey;'></span>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div class='d-flex mt-1'>
+                              <div class='col-6'>
+                                <input class='form-control' type='number' placeholder='0.0' id='afterAdjustReading$i' name='afterAdjustReading$i' value='0.0' style='width: 100%; background-color: lightgreen;'>
+                              </div>
+                              <div class='col-2'>
+                                <i class='fas fa-minus fa-2x'></i>
+                              </div>
+                              <div class='col-3'>
+                                <span class='form-control' id='unitSymbolAR$i' style='background-color:lightgrey;'></span>
+                              </div>
+                            </div>
+                          </td>   
+                        </tr>        
+                      ";
+                    }
+                  ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- <div class="card card-primary">
             <div class="card-body">
               <div class="row mb-3">
                 <div class="col-10">
@@ -521,7 +584,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <tbody id="loadTestingTable"></tbody>
               </table>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <div class="modal-footer justify-content-between bg-gray-dark color-palette">
@@ -947,33 +1010,31 @@ $(function () {
       'data': {
         fromDate: fromDateValue,
         toDate: toDateValue,
-        status: 'Pending'
+        status: 'Complete'
       } 
     },
     'columns': [
-      {
-        // Add a checkbox with a unique ID for each row
-        data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-        className: 'select-checkbox',
-        orderable: false,
-        render: function (data, type, row) {
-          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-          } 
-          else {
-            return ''; // Return an empty string or any other placeholder if the item is invoiced
-          }
-        }
-      },
-      { data: 'customer_code' },
+      // {
+      //   // Add a checkbox with a unique ID for each row
+      //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+      //   className: 'select-checkbox',
+      //   orderable: false,
+      //   render: function (data, type, row) {
+      //     if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+      //       return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+      //     } 
+      //     else {
+      //       return ''; // Return an empty string or any other placeholder if the item is invoiced
+      //     }
+      //   }
+      // },
+      { data: 'validation_date' },
       { data: 'customer' },
-      { data: 'machines' },
       { data: 'brand' },
-      { data: 'model' },
+      { data: 'machines' },
       { data: 'capacity' },
-      { data: 'size' },
-      { data: 'unit_serial_no' },
-      { data: 'lastCalibrationDate' },
+      { data: 'autoCertNo' },
+      { data: 'validation_date' },
       { data: 'expiredDate' },
       { data: 'calibrator' },
       { data: 'status' },
@@ -1022,10 +1083,9 @@ $(function () {
     ],
   });
   
-  // Add event listener for opening and closing details
   $('#weightTable tbody').on('click', 'td.dt-control', function () {
     var tr = $(this).closest('tr');
-    var row = table.row( tr );
+    var row = table.row(tr);
 
     if ( row.child.isShown() ) {
       // This row is already open - close it
@@ -1033,7 +1093,12 @@ $(function () {
       tr.removeClass('shown');
     }
     else {
-      row.child( format(row.data()) ).show();tr.addClass("shown");
+      $.post('php/getInHouseValidation.php', {validationId: row.data().id, format: 'EXPANDABLE'}, function (data){
+        var obj = JSON.parse(data); 
+        if(obj.status === 'success'){
+          row.child( format(obj.message) ).show();tr.addClass("shown");
+        }
+      });
     }
   });
 
@@ -1180,29 +1245,27 @@ $(function () {
         } 
       },
       'columns': [
-        {
-          // Add a checkbox with a unique ID for each row
-          data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-          className: 'select-checkbox',
-          orderable: false,
-          render: function (data, type, row) {
-            if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-              return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-            } 
-            else {
-              return ''; // Return an empty string or any other placeholder if the item is invoiced
-            }
-          }
-        },
-        { data: 'customer_code' },
+        // {
+        //   // Add a checkbox with a unique ID for each row
+        //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+        //   className: 'select-checkbox',
+        //   orderable: false,
+        //   render: function (data, type, row) {
+        //     if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+        //       return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+        //     } 
+        //     else {
+        //       return ''; // Return an empty string or any other placeholder if the item is invoiced
+        //     }
+        //   }
+        // },
+        { data: 'validation_date' },
         { data: 'customer' },
-        { data: 'machines' },
         { data: 'brand' },
-        { data: 'model' },
+        { data: 'machines' },
         { data: 'capacity' },
-        { data: 'size' },
-        { data: 'unit_serial_no' },
-        { data: 'lastCalibrationDate' },
+        { data: 'autoCertNo' },
+        { data: 'validation_date' },
         { data: 'expiredDate' },
         { data: 'calibrator' },
         { data: 'status' },
@@ -1801,7 +1864,7 @@ function format (row) {
     <!-- Machine Section -->
     <div class="col-6">
       <p><strong>Machines / Instruments:</strong> ${row.machines}</p>
-      <p><strong>Last Calibration Date:</strong> ${row.lastCalibrationDate}</p>
+      <p><strong>Current Validation Date:</strong> ${row.validation_date}</p>
       <p><strong>Manufacturing:</strong> ${row.manufacturing}</p>
       <p><strong>Brand:</strong> ${row.brand}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
@@ -1809,19 +1872,20 @@ function format (row) {
     </div>
     <div class="col-6">
       <p><strong>Unit Serial No:</strong> ${row.unit_serial_no}</p>
-      <p><strong>Expired Date:</strong> ${row.expiredDate}</p>
-      <p><strong>Auto Certificate No / Sticker No:</strong> ${row.autoCertNo}</p>
+      <p><strong>Expired Date:</strong> ${row.expired_date}</p>
+      <p><strong>Auto Certificate No / Sticker No:</strong> ${row.auto_cert_no}</p>
       <p><strong>Model:</strong> ${row.model}</p>
       <p><strong>Structure Size:</strong> ${row.size}</p>
-      <p><strong>Validation Date:</strong> ${row.validation_date}</p>
+      <p><strong>Created Date:</strong> ${row.validation_date}</p>
     </div> 
   </div><hr>
   `;
   
   if (row.tests !== undefined && row.tests !== null && row.tests !== ''){
     if (row.tests[0].length > 0) {
-      var weightType = row.units;
-
+      var weightType = row.capacityUnit;
+      var variance = row.variance;
+      
       if(row.standard_avg_temp){
         var standardAvgTemp = row.standard_avg_temp;
       }else{
@@ -1834,7 +1898,7 @@ function format (row) {
         var relHumid = '';
       }
 
-      returnString += '<h4 class="mb-3">Note - Standard Average Temperature: (' + standardAvgTemp + ') / Average Relative Humidity: (' + relHumid + ')</h4><table style="width: 100%;"><thead><tr><th width="15%">Number of Tests.</th><th width="20%">Setting Value Of Standard (' +  weightType + ')</th><th width="20%">As Received Under Calibration (' +  weightType + ')</th><th width="20%">Variance +/- 0.1kg (' +  weightType + ')</th><th width="20%">Reading After Adjustment. (' +  weightType + ')</th></tr></thead><tbody>';
+      returnString += '<h4 class="mb-3">Note - Standard Average Temperature: (' + standardAvgTemp + ') / Average Relative Humidity: (' + relHumid + ')</h4><table style="width: 100%;"><thead><tr><th width="15%">Number of Tests.</th><th width="20%">Setting Value Of Standard (' +  weightType + ')</th><th width="20%">As Received Under Calibration (' +  weightType + ')</th><th width="20%">Variance +/- '+variance+weightType+'</th><th width="20%">Reading After Adjustment. (' +  weightType + ')</th></tr></thead><tbody>';
       
       var tests = row.tests[0]; 
       for (var i = 0; i < tests.length; i++) {
@@ -1983,12 +2047,15 @@ function extraAction(id){
 
 function edit(id) {
   $('#spinnerLoading').show();
+
   $.post('php/getInHouseValidation.php', {validationId: id}, function(data){
     var obj = JSON.parse(data);
     if(obj.status === 'success'){
       let variance = obj.message.variance;
       let varianceDecimalPart = variance.toString().split('.')[1];
       let varianceDecimalPoint = varianceDecimalPart.length;
+      var unit = obj.message.capacityUnit;
+
       if(obj.message.type == 'DIRECT'){
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
@@ -2005,7 +2072,9 @@ function edit(id) {
         $('#extendModal').find('#serial').val(obj.message.unit_serial_no);
         $('#extendModal').find('#manufacturing').val(obj.message.manufacturing).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
-        $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        setTimeout(function(){
+          $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        }, 600);
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#size').val(obj.message.size).trigger('change');
         $('#extendModal').find('#lastCalibrationDate').val(obj.message.last_calibration_date);
@@ -2015,88 +2084,56 @@ function edit(id) {
         $('#extendModal').find('#calibrator').val(obj.message.calibrator).trigger('change');
 
         if(obj.message.tests != null && obj.message.tests.length > 0){
-          $("#loadTestingTable").html('');
-          loadTestingCount = 0; 
+          // $("#loadTestingTable").html('');
+          // loadTestingCount = 0; 
           var standardAvTemp = obj.message.standard_avg_temp;
           var relativeHumidity = obj.message.relative_humidity;
           $('#calibrationHeader').text('Note - Standard Average Temperature: ('+ standardAvTemp +') / Average Relative Humidity: ('+ relativeHumidity +')');
+          $('#varianceHeader').text('Variance +/- '+ variance + unit);
 
-          for(var i = 0; i < obj.message.tests.length; i++){
-            var tests = obj.message.tests[i];
+          for(var i = 0; i <= obj.message.tests.length; i++){
+            var tests = obj.message.tests[0];
             for(var j=0; j < tests.length; j++){
               var item = tests[j];
-              var $addContents = $("#loadTestingDetails").clone();
               let varianceCalculated = item.variance; 
-
-              $("#loadTestingTable").append($addContents.html());
-
-              $("#loadTestingTable").find('.details:last').attr("id", "detail" + loadTestingCount);
-              $("#loadTestingTable").find('.details:last').attr("data-index", loadTestingCount);
-              $("#loadTestingTable").find('#remove:last').attr("id", "remove" + loadTestingCount);
-
-              $("#loadTestingTable").find('#no:last').attr('name', 'no['+loadTestingCount+']').attr("id", "no" + loadTestingCount).val(item.no).hide();
-              $("#loadTestingTable").find('#noText:last').attr('name', 'noText['+loadTestingCount+']').attr('id', 'noText' + loadTestingCount).text('Tester / Time: ' + item.no);
-              $("#loadTestingTable").find('#standardValue:last').attr('name', 'standardValue['+loadTestingCount+']').attr("id", "standardValue" + loadTestingCount).css('background-color', 'yellow').val(item.standardValue);
-              $("#loadTestingTable").find('#calibrationReceived:last').attr('name', 'calibrationReceived['+loadTestingCount+']').attr("id", "calibrationReceived" + loadTestingCount).val(item.calibrationReceived);
-              $("#loadTestingTable").find('#afterAdjustReading:last').attr('name', 'afterAdjustReading['+loadTestingCount+']').attr("id", "afterAdjustReading" + loadTestingCount).val(item.afterAdjustReading);
+              var count = j+1;
+              $("#loadTestingTable").find('#no'+count).val(item.no);
+              $("#loadTestingTable").find('#standardValue'+count).css('background-color', 'yellow').val(item.standardValue);
+              $("#loadTestingTable").find('#calibrationReceived'+count).val(item.calibrationReceived);
+              $("#loadTestingTable").find('#variance'+count).val(item.variance);
+              $("#loadTestingTable").find('#afterAdjustReading'+count).val(item.afterAdjustReading);
 
               //Dynamically change unit from capacity
-              $("#loadTestingTable").find('#unitSymbolSV:last').attr('name', 'unitSymbolSV['+loadTestingCount+']').attr("id", "unitSymbolSV" + loadTestingCount).text(obj.message.capacityUnit);
-              $("#loadTestingTable").find('#unitSymbolCR:last').attr('name', 'unitSymbolCR['+loadTestingCount+']').attr("id", "unitSymbolCR" + loadTestingCount).text(obj.message.capacityUnit);
-              $("#loadTestingTable").find('#unitSymbolV:last').attr('name', 'unitSymbolV['+loadTestingCount+']').attr("id", "unitSymbolV" + loadTestingCount).text(obj.message.capacityUnit);
-              $("#loadTestingTable").find('#unitSymbolAR:last').attr('name', 'unitSymbolAR['+loadTestingCount+']').attr("id", "unitSymbolAR" + loadTestingCount).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolSV'+count).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolCR'+count).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolV'+count).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolAR'+count).text(obj.message.capacityUnit);
 
-              if (variance != ''){
-                if (varianceCalculated > variance || varianceCalculated < -variance) {
-                  $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'red', 'color': 'white'});
-                }else{
-                  $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'lightgrey', 'color': 'black'});
-                }
-              }else{
-                $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'lightgrey', 'color': 'black'});
+              if (varianceCalculated > variance || varianceCalculated < -variance) {
+                $("#loadTestingTable").find('#variance'+count).css({'background-color': 'red', 'color': 'white'});
+              } else {
+                $("#loadTestingTable").find('#variance'+count).css({'background-color': 'lightgrey', 'color': 'black'});
               }
-              
-              loadTestingCount++;
+
+              // Event delegation: use 'select' instead of 'input' for dropdowns
+              $(document).on('change', 'input[id^="standardValue"], input[id^="calibrationReceived"]', function() {
+                let $row = $(this).closest('.details');
+                let standardValue = parseFloat($row.find('input[id^="standardValue"]').val());
+                let calibrationReceived = parseFloat($row.find('input[id^="calibrationReceived"]').val());
+                let varianceCalculated = standardValue - calibrationReceived;
+                let roundedVariance = varianceCalculated.toFixed(varianceDecimalPoint); // assuming 2 decimal points, adjust as needed
+
+                // Update the variance input value
+                $row.find('input[id^="variance"]').val(roundedVariance);
+
+                if (roundedVariance > variance || roundedVariance < -variance) {
+                  $row.find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+                } else {
+                  $row.find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+                }
+              });
             }
           }
-        }
-
-        var capacityExist = $('#extendModal').find('#capacity').val();
-
-        if(capacityExist != ''){
-          // Event delegation: use 'select' instead of 'input' for dropdowns
-          $(document).on('change', 'input[id^="standardValue"]', function(){
-            let standardValue = $(this).val();
-            let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
-            let varianceCalculated = standardValue - calibrationReceived; 
-            let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
-
-            // Update the variance input value
-            $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
-
-            if (roundedVariance > variance || roundedVariance < -variance) {
-              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
-            }else{
-              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
-            }
-          });
-
-          // Event delegation: use 'select' instead of 'input' for dropdowns
-          $(document).on('change', 'input[id^="calibrationReceived"]', function(){
-            let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
-            let calibrationReceived = $(this).val();
-            let varianceCalculated = standardValue - calibrationReceived; 
-            let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
-
-            // Update the variance input value
-            $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
-
-            if (roundedVariance > variance || roundedVariance < -variance) {
-              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
-            }else{
-              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
-            }
-          });
         }
 
         $('#extendModal').find('#capacity').change(function() {
@@ -2114,33 +2151,42 @@ function edit(id) {
                 var unit = obj.message.unit;
 
                 $('#calibrationHeader').text('Note - Standard Average Temperature: ('+ standardAvTemp +') / Average Relative Humidity: ('+ relativeHumidity +')');
-                $("#loadTestingTable").find('#standardValue0').val(obj.message.test_1.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue1').val(obj.message.test_2.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue2').val(obj.message.test_3.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue3').val(obj.message.test_4.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue4').val(obj.message.test_5.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue5').val(obj.message.test_6.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue6').val(obj.message.test_7.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue7').val(obj.message.test_8.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue8').val(obj.message.test_9.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue9').val(obj.message.test_10.toFixed(varianceDecimalPoint));
+                $('#varianceHeader').text('Variance +/- '+ variance + unit);
+                $("#loadTestingTable").find('#standardValue1').val(parseFloat(obj.message.test_1).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue2').val(parseFloat(obj.message.test_2).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue3').val(parseFloat(obj.message.test_3).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue4').val(parseFloat(obj.message.test_4).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue5').val(parseFloat(obj.message.test_5).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue6').val(parseFloat(obj.message.test_6).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue7').val(parseFloat(obj.message.test_7).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue8').val(parseFloat(obj.message.test_8).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue9').val(parseFloat(obj.message.test_9).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue10').val(parseFloat(obj.message.test_10).toFixed(varianceDecimalPoint));
 
-                for (var i = 0; i < 10; i++) {
+                for (var i = 1; i <= 10; i++) {
                   //Symbol setting
                   $("#loadTestingTable").find('#unitSymbolSV'+ i).text(unit);
                   $("#loadTestingTable").find('#unitSymbolCR'+ i).text(unit);
                   $("#loadTestingTable").find('#unitSymbolV'+ i).text(unit);
                   $("#loadTestingTable").find('#unitSymbolAR'+ i).text(unit);
 
-                  //Placeholder Value
-                  // let placeholderValue = (0).toFixed(varianceDecimalPoint);
-                  // $("#loadTestingTable").find('#calibrationReceived'+ i).attr('placeholder', placeholderValue).val(placeholderValue);
-                  // $("#loadTestingTable").find('#variance'+ i).attr('placeholder', placeholderValue).val(placeholderValue).css({'background-color': 'lightgrey', 'color': 'black'});
-                  // $("#loadTestingTable").find('#afterAdjustReading'+ i).attr('placeholder', placeholderValue).val(placeholderValue);
+                  //Format decimal point
+                  var calibrationReceivedVal = $("#loadTestingTable").find('#calibrationReceived'+ i).val();
+                  $("#loadTestingTable").find('#calibrationReceived'+ i).val(parseFloat(calibrationReceivedVal).toFixed(varianceDecimalPoint));
+                  var varianceVal = $("#loadTestingTable").find('#variance'+ i).val();
+                  $("#loadTestingTable").find('#variance'+ i).val(parseFloat(varianceVal).toFixed(varianceDecimalPoint));
+                  var afterAdjustReadingVal = $("#loadTestingTable").find('#afterAdjustReading'+ i).val();
+                  $("#loadTestingTable").find('#afterAdjustReading'+ i).val(parseFloat(afterAdjustReadingVal).toFixed(varianceDecimalPoint));
 
+                  if (varianceVal > variance || varianceVal < -variance) {
+                    $("#loadTestingTable").find('#variance'+count).css({'background-color': 'red', 'color': 'white'});
+                  } else {
+                    $("#loadTestingTable").find('#variance'+count).css({'background-color': 'lightgrey', 'color': 'black'});
+                  }
+                  
                   //When user change value
                   $('#loadTestingTable').find('#standardValue'+ i).change(function() {
-                    let standardValue = parseFloat($(this).val());      
+                    var standardValue = parseFloat($(this).val());      
                     $(this).val(standardValue.toFixed(varianceDecimalPoint)); // Format the value and set it back        
                   });
                   $('#loadTestingTable').find('#calibrationReceived'+ i).change(function() {
@@ -2154,39 +2200,22 @@ function edit(id) {
                 }          
 
                 // Event delegation: use 'select' instead of 'input' for dropdowns
-                $(document).on('change', 'input[id^="standardValue"]', function(){
-                  let standardValue = $(this).val();
-                  let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
-                  let varianceCalculated = standardValue - calibrationReceived; 
-                  let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
+                $(document).on('change', 'input[id^="standardValue"], input[id^="calibrationReceived"]', function() {
+                  let $row = $(this).closest('.details');
+                  let standardValue = parseFloat($row.find('input[id^="standardValue"]').val());
+                  let calibrationReceived = parseFloat($row.find('input[id^="calibrationReceived"]').val());
+                  let varianceCalculated = standardValue - calibrationReceived;
+                  let roundedVariance = varianceCalculated.toFixed(varianceDecimalPoint); // assuming 2 decimal points, adjust as needed
 
                   // Update the variance input value
-                  $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
+                  $row.find('input[id^="variance"]').val(roundedVariance);
 
                   if (roundedVariance > variance || roundedVariance < -variance) {
-                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
-                  }else{
-                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+                    $row.find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+                  } else {
+                    $row.find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
                   }
                 });
-
-                // Event delegation: use 'select' instead of 'input' for dropdowns
-                $(document).on('change', 'input[id^="calibrationReceived"]', function(){
-                  let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
-                  let calibrationReceived = $(this).val();
-                  let varianceCalculated = standardValue - calibrationReceived; 
-                  let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
-
-                  // Update the variance input value
-                  $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
-
-                  if (roundedVariance > variance || roundedVariance < -variance) {
-                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
-                  }else{
-                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
-                  }
-                });
-
               }
               else if(obj.status === 'failed'){
                   toastr["error"](obj.message, "Failed:");
@@ -2227,88 +2256,38 @@ function edit(id) {
         $('#extendModal').find('#calibrator').val(obj.message.calibrator).trigger('change');
 
         if(obj.message.tests != null && obj.message.tests.length > 0){
-          $("#loadTestingTable").html('');
-          loadTestingCount = 0; 
+          // $("#loadTestingTable").html('');
+          // loadTestingCount = 0; 
           var standardAvTemp = obj.message.standard_avg_temp;
           var relativeHumidity = obj.message.relative_humidity;
           $('#calibrationHeader').text('Note - Standard Average Temperature: ('+ standardAvTemp +') / Average Relative Humidity: ('+ relativeHumidity +')');
+          $('#varianceHeader').text('Variance +/- '+ variance + unit);
 
-          for(var i = 0; i < obj.message.tests.length; i++){
-            var tests = obj.message.tests[i];
+          for(var i = 0; i <= obj.message.tests.length; i++){
+            var tests = obj.message.tests[0];
             for(var j=0; j < tests.length; j++){
               var item = tests[j];
-              var $addContents = $("#loadTestingDetails").clone();
-              let varianceCalculated = item.variance;
-
-              $("#loadTestingTable").append($addContents.html());
-
-              $("#loadTestingTable").find('.details:last').attr("id", "detail" + loadTestingCount);
-              $("#loadTestingTable").find('.details:last').attr("data-index", loadTestingCount);
-              $("#loadTestingTable").find('#remove:last').attr("id", "remove" + loadTestingCount);
-
-              $("#loadTestingTable").find('#no:last').attr('name', 'no['+loadTestingCount+']').attr("id", "no" + loadTestingCount).val(item.no).hide();
-              $("#loadTestingTable").find('#noText:last').attr('name', 'noText['+loadTestingCount+']').attr('id', 'noText' + loadTestingCount).text('Tester / Time: ' + item.no);
-              $("#loadTestingTable").find('#standardValue:last').attr('name', 'standardValue['+loadTestingCount+']').attr("id", "standardValue" + loadTestingCount).css('background-color', 'yellow').val(item.standardValue);
-              $("#loadTestingTable").find('#calibrationReceived:last').attr('name', 'calibrationReceived['+loadTestingCount+']').attr("id", "calibrationReceived" + loadTestingCount).val(item.calibrationReceived);
-              $("#loadTestingTable").find('#afterAdjustReading:last').attr('name', 'afterAdjustReading['+loadTestingCount+']').attr("id", "afterAdjustReading" + loadTestingCount).val(item.afterAdjustReading);
+              let varianceCalculated = item.variance; 
+              var count = j+1;
+              $("#loadTestingTable").find('#no'+count).val(item.no);
+              $("#loadTestingTable").find('#standardValue'+count).css('background-color', 'yellow').val(item.standardValue);
+              $("#loadTestingTable").find('#calibrationReceived'+count).val(item.calibrationReceived);
+              $("#loadTestingTable").find('#variance'+count).val(item.variance);
+              $("#loadTestingTable").find('#afterAdjustReading'+count).val(item.afterAdjustReading);
 
               //Dynamically change unit from capacity
-              $("#loadTestingTable").find('#unitSymbolSV:last').attr('name', 'unitSymbolSV['+loadTestingCount+']').attr("id", "unitSymbolSV" + loadTestingCount).text(obj.message.capacityUnit);
-              $("#loadTestingTable").find('#unitSymbolCR:last').attr('name', 'unitSymbolCR['+loadTestingCount+']').attr("id", "unitSymbolCR" + loadTestingCount).text(obj.message.capacityUnit);
-              $("#loadTestingTable").find('#unitSymbolV:last').attr('name', 'unitSymbolV['+loadTestingCount+']').attr("id", "unitSymbolV" + loadTestingCount).text(obj.message.capacityUnit);
-              $("#loadTestingTable").find('#unitSymbolAR:last').attr('name', 'unitSymbolAR['+loadTestingCount+']').attr("id", "unitSymbolAR" + loadTestingCount).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolSV'+count).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolCR'+count).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolV'+count).text(obj.message.capacityUnit);
+              $("#loadTestingTable").find('#unitSymbolAR'+count).text(obj.message.capacityUnit);
 
-              if (variance != ''){
-                if (varianceCalculated > variance || varianceCalculated < -variance) {
-                  $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'red', 'color': 'white'});
-                }else{
-                  $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'lightgrey', 'color': 'black'});
-                }
-              }else{
-                $("#loadTestingTable").find('#variance:last').attr('name', 'variance['+loadTestingCount+']').attr("id", "variance" + loadTestingCount).val(varianceCalculated).css({'background-color': 'lightgrey', 'color': 'black'});
+              if (varianceCalculated > variance || varianceCalculated < -variance) {
+                $("#loadTestingTable").find('#variance'+count).css({'background-color': 'red', 'color': 'white'});
+              } else {
+                $("#loadTestingTable").find('#variance'+count).css({'background-color': 'lightgrey', 'color': 'black'});
               }
-
-              loadTestingCount++;
             }
           }
-        }
-
-        var capacityExist = $('#extendModal').find('#capacity').val();
-
-        if(capacityExist != ''){
-          // Event delegation: use 'select' instead of 'input' for dropdowns
-          $(document).on('change', 'input[id^="standardValue"]', function(){
-            let standardValue = $(this).val();
-            let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
-            let varianceCalculated = standardValue - calibrationReceived; 
-            let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
-
-            // Update the variance input value
-            $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
-
-            if (roundedVariance > variance || roundedVariance < -variance) {
-              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
-            }else{
-              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
-            }
-          });
-
-          // Event delegation: use 'select' instead of 'input' for dropdowns
-          $(document).on('change', 'input[id^="calibrationReceived"]', function(){
-            let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
-            let calibrationReceived = $(this).val();
-            let varianceCalculated = standardValue - calibrationReceived; 
-            let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
-
-            // Update the variance input value
-            $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
-
-            if (roundedVariance > variance || roundedVariance < -variance) {
-              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
-            }else{
-              $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
-            }
-          });
         }
 
         $('#extendModal').find('#capacity').change(function() {
@@ -2326,33 +2305,42 @@ function edit(id) {
                 var unit = obj.message.unit;
 
                 $('#calibrationHeader').text('Note - Standard Average Temperature: ('+ standardAvTemp +') / Average Relative Humidity: ('+ relativeHumidity +')');
-                $("#loadTestingTable").find('#standardValue0').val(obj.message.test_1.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue1').val(obj.message.test_2.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue2').val(obj.message.test_3.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue3').val(obj.message.test_4.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue4').val(obj.message.test_5.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue5').val(obj.message.test_6.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue6').val(obj.message.test_7.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue7').val(obj.message.test_8.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue8').val(obj.message.test_9.toFixed(varianceDecimalPoint));
-                $("#loadTestingTable").find('#standardValue9').val(obj.message.test_10.toFixed(varianceDecimalPoint));
+                $('#varianceHeader').text('Variance +/- '+ variance + unit);
+                $("#loadTestingTable").find('#standardValue1').val(parseFloat(obj.message.test_1).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue2').val(parseFloat(obj.message.test_2).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue3').val(parseFloat(obj.message.test_3).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue4').val(parseFloat(obj.message.test_4).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue5').val(parseFloat(obj.message.test_5).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue6').val(parseFloat(obj.message.test_6).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue7').val(parseFloat(obj.message.test_7).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue8').val(parseFloat(obj.message.test_8).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue9').val(parseFloat(obj.message.test_9).toFixed(varianceDecimalPoint));
+                $("#loadTestingTable").find('#standardValue10').val(parseFloat(obj.message.test_10).toFixed(varianceDecimalPoint));
 
-                for (var i = 0; i < 10; i++) {
+                for (var i = 1; i <= 10; i++) {
                   //Symbol setting
                   $("#loadTestingTable").find('#unitSymbolSV'+ i).text(unit);
                   $("#loadTestingTable").find('#unitSymbolCR'+ i).text(unit);
                   $("#loadTestingTable").find('#unitSymbolV'+ i).text(unit);
                   $("#loadTestingTable").find('#unitSymbolAR'+ i).text(unit);
 
-                  //Placeholder Value
-                  // let placeholderValue = (0).toFixed(varianceDecimalPoint);
-                  // $("#loadTestingTable").find('#calibrationReceived'+ i).attr('placeholder', placeholderValue).val(placeholderValue);
-                  // $("#loadTestingTable").find('#variance'+ i).attr('placeholder', placeholderValue).val(placeholderValue).css({'background-color': 'lightgrey', 'color': 'black'});
-                  // $("#loadTestingTable").find('#afterAdjustReading'+ i).attr('placeholder', placeholderValue).val(placeholderValue);
+                  //Format decimal point
+                  var calibrationReceivedVal = $("#loadTestingTable").find('#calibrationReceived'+ i).val();
+                  $("#loadTestingTable").find('#calibrationReceived'+ i).val(parseFloat(calibrationReceivedVal).toFixed(varianceDecimalPoint));
+                  var varianceVal = $("#loadTestingTable").find('#variance'+ i).val();
+                  $("#loadTestingTable").find('#variance'+ i).val(parseFloat(varianceVal).toFixed(varianceDecimalPoint));
+                  var afterAdjustReadingVal = $("#loadTestingTable").find('#afterAdjustReading'+ i).val();
+                  $("#loadTestingTable").find('#afterAdjustReading'+ i).val(parseFloat(afterAdjustReadingVal).toFixed(varianceDecimalPoint));
 
+                  if (varianceVal > variance || varianceVal < -variance) {
+                    $("#loadTestingTable").find('#variance'+count).css({'background-color': 'red', 'color': 'white'});
+                  } else {
+                    $("#loadTestingTable").find('#variance'+count).css({'background-color': 'lightgrey', 'color': 'black'});
+                  }
+                  
                   //When user change value
                   $('#loadTestingTable').find('#standardValue'+ i).change(function() {
-                    let standardValue = parseFloat($(this).val());      
+                    var standardValue = parseFloat($(this).val());      
                     $(this).val(standardValue.toFixed(varianceDecimalPoint)); // Format the value and set it back        
                   });
                   $('#loadTestingTable').find('#calibrationReceived'+ i).change(function() {
@@ -2363,42 +2351,25 @@ function edit(id) {
                     let afterAdjustReading = parseFloat($(this).val());      
                     $(this).val(afterAdjustReading.toFixed(varianceDecimalPoint)); // Format the value and set it back        
                   });
-                }    
+                }          
 
                 // Event delegation: use 'select' instead of 'input' for dropdowns
-                $(document).on('change', 'input[id^="standardValue"]', function(){
-                  let standardValue = $(this).val();
-                  let calibrationReceived = $(this).closest('.details').find('input[id^="calibrationReceived"]').val();
-                  let varianceCalculated = standardValue - calibrationReceived; 
-                  let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
+                $(document).on('change', 'input[id^="standardValue"], input[id^="calibrationReceived"]', function() {
+                  let $row = $(this).closest('.details');
+                  let standardValue = parseFloat($row.find('input[id^="standardValue"]').val());
+                  let calibrationReceived = parseFloat($row.find('input[id^="calibrationReceived"]').val());
+                  let varianceCalculated = standardValue - calibrationReceived;
+                  let roundedVariance = varianceCalculated.toFixed(varianceDecimalPoint); // assuming 2 decimal points, adjust as needed
 
                   // Update the variance input value
-                  $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
+                  $row.find('input[id^="variance"]').val(roundedVariance);
 
                   if (roundedVariance > variance || roundedVariance < -variance) {
-                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
-                  }else{
-                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
+                    $row.find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
+                  } else {
+                    $row.find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
                   }
                 });
-
-                // Event delegation: use 'select' instead of 'input' for dropdowns
-                $(document).on('change', 'input[id^="calibrationReceived"]', function(){
-                  let standardValue = $(this).closest('.details').find('input[id^="standardValue"]').val();
-                  let calibrationReceived = $(this).val();
-                  let varianceCalculated = standardValue - calibrationReceived; 
-                  let roundedVariance = parseFloat(varianceCalculated.toFixed(varianceDecimalPoint));
-
-                  // Update the variance input value
-                  $(this).closest('.details').find('input[id^="variance"]').val(roundedVariance)
-
-                  if (roundedVariance > variance || roundedVariance < -variance) {
-                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'red', 'color': 'white'});
-                  }else{
-                    $(this).closest('.details').find('input[id^="variance"]').css({'background-color': 'lightgrey', 'color': 'black'});
-                  }
-                });
-
               }
               else if(obj.status === 'failed'){
                   toastr["error"](obj.message, "Failed:");
