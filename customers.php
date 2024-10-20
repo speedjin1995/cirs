@@ -88,7 +88,7 @@ else{
                     <input type="text" class="form-control" name="name" id="name" placeholder="Enter Customer Name" required>
                   </div>
                   <div class="form-group col-3">
-                    <label for="code">Dealer</label>
+                    <label for="code">Reseller</label>
                     <select class="form-control select2" id="dealer" name="dealer">
                       <option value="" selected disabled hidden>Please Select</option>
                       <?php while($rowCustomer2=mysqli_fetch_assoc($dealer)){ ?>
