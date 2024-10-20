@@ -1537,7 +1537,7 @@ $(function () {
   });
 
   $('#extendModal').find('#company').on('change', function(){
-    var id = $(this).find(":selected").val(); 
+    var id = $(this).find(":selected").val();
 
     $.post('php/getCustomer.php', {userID: id}, function(data){
       var obj = JSON.parse(data);
@@ -1754,10 +1754,29 @@ function format (row) {
     <!-- Customer Section -->
     <div class="col-md-6">
       <p><strong>${row.customer}</strong><br>
-      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4}</p>
-    </div>
-  </div><hr>
+      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4} `;
 
+      if (row.pic) {
+          returnString += `
+              <br><b>PIC:</b> ${row.pic} <b>PIC Contact:</b> ${row.pic_phone}`;
+      }     
+      returnString += `</p></div>`;
+
+  if (row.dealer){
+    returnString += `
+    <!-- Reseller Section -->
+    <div class="col-md-6">
+      <p><strong>${row.dealer}</strong><br>
+      ${row.reseller_address1}<br>${row.reseller_address2}<br>${row.reseller_address3}<br>${row.reseller_address4} `;
+      
+      if (row.reseller_pic) {
+          returnString += `
+              <br><b>PIC:</b> ${row.reseller_pic} <b>PIC Contact:</b> ${row.reseller_pic_phone}`;
+      }     
+      returnString += `</p></div>`;
+  }
+    
+  returnString += `</div><hr>
   <div class="row mb-3">
     <h3 class="m-0 text-dark">Machines / Instruments Information</h3>
   </div>
@@ -1774,11 +1793,11 @@ function format (row) {
       <p><strong>Brand:</strong> ${row.brand}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
     </div>
-  </div><hr>`;
+  </div>`;
 
   if(row.lastCalibrationDate && row.expiredCalibrationDate && row.auto_form_no){
     returnString += `
-                <div class="row mb-3">
+                <<hr>div class="row mb-3">
                   <h3 class="m-0 text-dark">Calibration Information</h3>
                 </div>
                 <div class="row">
@@ -1966,7 +1985,6 @@ function edit(id) {
     var obj = JSON.parse(data); 
     if(obj.status === 'success'){
       if(obj.message.type == 'DIRECT'){
-        console.log(obj.message);
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#dealer').val('');
