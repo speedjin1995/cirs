@@ -263,6 +263,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                       <option value="NEW">NEW</option>
                       <option value="EXISTING">EXISTING</option>
                     </select>
+                    <input type="hidden" id="customerTypeEdit" name="customerTypeEdit">
                   </div>
                 </div>
                 <div class="col-3" id="otherCodeView" style="display: none;">
@@ -1941,7 +1942,7 @@ function newEntry(){
   // $('#isResseller3').hide();
   // $('#isResseller4').hide();
   // $('#isResseller5').hide();
-  $('#extendModal').find('#customerType').val("EXISTING").attr('readonly', false).trigger('change');
+  $('#extendModal').find('#customerType').val("EXISTING").attr('disabled', false).trigger('change');
   $('#extendModal').find('#brand').val('').trigger('change');
   $('#extendModal').find('#validator').val('').trigger('change');
   $('#extendModal').find('#autoFormNo').val('');
@@ -2035,14 +2036,15 @@ function edit(id) {
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#dealer').val('');
         $('#extendModal').find('#reseller_branch').val('');
-        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
+        $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
         $('#extendModal').find('#company').val(obj.message.customer).trigger('change');
         $('#extendModal').find('#companyText').val('');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#autoFormNo').val(obj.message.auto_form_no);
         setTimeout(function(){
           $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
-        }, 500);
+        }, 1000);
         $('#extendModal').find('#machineType').val(obj.message.machines).trigger('change');
         $('#extendModal').find('#serial').val(obj.message.unit_serial_no);
         $('#extendModal').find('#manufacturing').val(obj.message.manufacturing).trigger('change');
@@ -2103,7 +2105,8 @@ function edit(id) {
             $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
           }, 1000);
         }, 1000);
-        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
+        $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#autoFormNo').val(obj.message.auto_form_no);
         $('#extendModal').find('#machineType').val(obj.message.machines).trigger('change');

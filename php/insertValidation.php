@@ -6,9 +6,15 @@ session_start();
 
 $uid = $_SESSION['userID'];
 
-if(isset($_POST['type'], $_POST['customerType'], $_POST['validator'], $_POST['address1'], $_POST['machineType'], $_POST['serial'], $_POST['manufacturing'], $_POST['brand'], $_POST['model'], $_POST['capacity'], $_POST['size'])){
+if(isset($_POST['customerType'])){
+	$customerType = $_POST['customerType'];
+}else{
+	$customerType = $_POST['customerTypeEdit'];
+}
+
+if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'], $_POST['machineType'], $_POST['serial'], $_POST['manufacturing'], $_POST['brand'], $_POST['model'], $_POST['capacity'], $_POST['size'])){
 	$type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
-	$customerType = filter_input(INPUT_POST, 'customerType', FILTER_SANITIZE_STRING);
+	// $customerType = filter_input(INPUT_POST, 'customerType', FILTER_SANITIZE_STRING);
 	$validator = filter_input(INPUT_POST, 'validator', FILTER_SANITIZE_STRING);
 	$address1 = filter_input(INPUT_POST, 'address1', FILTER_SANITIZE_STRING);
 	$machineType = filter_input(INPUT_POST, 'machineType', FILTER_SANITIZE_STRING);
