@@ -1360,7 +1360,6 @@ $(function () {
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){
-          
           $('#reseller_branch').html('');
           $('#reseller_branch').append('<option selected="selected">-</option>');
 
@@ -1368,6 +1367,21 @@ $(function () {
             var branchInfo = obj.message.branches[i];
             $('#reseller_branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.branch_address1+' '+branchInfo.branch_address2+' '+branchInfo.branch_address3+' '+branchInfo.branch_address4+'</option>')
           }
+          $('#extendModal').modal('show');
+
+          $('#extendForm').validate({
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+              error.addClass('invalid-feedback');
+              element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+              $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+              $(element).removeClass('is-invalid');
+            }
+          });
         }
         else if(obj.status === 'failed'){
           toastr["error"](obj.message, "Failed:");
@@ -1546,7 +1560,8 @@ $(function () {
   });
 
   $('#extendModal').find('#company').on('change', function(){
-    var id = $('#extendModal').find('#company').val(); console.log(id);
+    //$('#spinnerLoading').show();
+    var id = $(this).find(":selected").val(); console.log(id);
 
     $.post('php/getCustomer.php', {userID: id}, function(data){
       var obj = JSON.parse(data);
@@ -1560,8 +1575,28 @@ $(function () {
 
         for(var i=0; i<obj.message.pricing.length; i++){
           var branchInfo = obj.message.pricing[i];
-          $('#branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.branch_address1+' '+branchInfo.branch_address2+' '+branchInfo.branch_address3+' '+branchInfo.branch_address4+'</option>')
+          $('#branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.address1+' '+branchInfo.address2+' '+branchInfo.address3+' '+branchInfo.address4+'</option>')
         }
+
+        if(branch != 0){
+            $('#extendModal').find('#branch').val(branch).trigger('change');
+          }
+
+        $('#extendModal').modal('show');
+
+        $('#extendForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
       }
       else if(obj.status === 'failed'){
         toastr["error"](obj.message, "Failed:");
@@ -2001,11 +2036,8 @@ function edit(id) {
         $('#extendModal').find('#dealer').val('');
         $('#extendModal').find('#reseller_branch').val('');
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
-        $('#extendModal').find('#company').val(obj.message.customer);
-        console.log(obj.message.customer);
-        
-        // .trigger('change');
-
+        $('#extendModal').find('#company').val(obj.message.customer).trigger('change');
+        $('#extendModal').find('#companyText').val('');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#autoFormNo').val(obj.message.auto_form_no);
         setTimeout(function(){

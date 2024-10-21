@@ -150,7 +150,7 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['validator'], $_POST['ad
 
 							// Customer does not exist, create a new customer
 							if ($insert_stmt = $db->prepare("INSERT INTO customers (customer_name, customer_code, customer_address, address2, address3, address4, customer_phone, customer_email, customer_status, pic, pic_contact, other_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-								$customer_status = 'CUSTOMER';
+								$customer_status = 'CUSTOMERS';
 								$insert_stmt->bind_param('ssssssssssss', $companyText, $code, $address1, $address2, $address3, $address4, $phone, $email, $customer_status, $pic, $contact, $otherCode);
 								
 								if ($insert_stmt->execute()) {
