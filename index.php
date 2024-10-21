@@ -357,7 +357,7 @@ to get the desired effect
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-certificate"></i>
-              <p>Stamping<i class="fas fa-angle-left right"></i></p>
+              <p>Govt. Stamping<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview" style="display: block;">
               <li class="nav-item">
@@ -384,7 +384,7 @@ to get the desired effect
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-check"></i>
-              <p>Other Validation<i class="fas fa-angle-left right"></i></p>
+              <p>Other Validations<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
@@ -411,7 +411,7 @@ to get the desired effect
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-align-justify"></i>
-              <p>Inhouse Validation<i class="fas fa-angle-left right"></i></p>
+              <p>Inhouse Validations<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
@@ -438,7 +438,7 @@ to get the desired effect
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-file-contract"></i>
-              <p>Reports<i class="fas fa-angle-left right"></i></p>
+              <p>Recorded View<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview" style="display: none;">
               <li class="nav-item">

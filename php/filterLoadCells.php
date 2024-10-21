@@ -46,14 +46,14 @@ if($searchValue != ''){
 
 ## Total number of records without filtering
 $sel = mysqli_query($db,"select count(*) as allcount FROM load_cells, machines, brand, model, alat, country 
-WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
+WHERE load_cells.brand = brand.id AND load_cells.model = model.id 
 AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load_cells.deleted = '0'");
 $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
 $sel = mysqli_query($db,"select count(*) as allcount FROM load_cells, machines, brand, model, alat, country 
-WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
+WHERE load_cells.brand = brand.id AND load_cells.model = model.id 
 AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load_cells.deleted = '0'".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
