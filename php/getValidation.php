@@ -136,9 +136,6 @@ if(isset($_POST['validationId'])){
                     $message['validation_date'] = $validationDate;
                     $message['status'] = $row['status'];
                 }
-                
-
-                
             }
             
             echo json_encode(

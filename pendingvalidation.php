@@ -255,7 +255,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               <div class="row">
                 <h4>Customer Information</h4>
               </div>
-              <div class="row">
+              <div class="row col-12">
                 <div class="col-3">
                   <div class="form-group">
                     <label>Customer Type * </label>
@@ -263,6 +263,13 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                       <option value="NEW">NEW</option>
                       <option value="EXISTING">EXISTING</option>
                     </select>
+                    <input type="hidden" id="customerTypeEdit" name="customerTypeEdit">
+                  </div>
+                </div>
+                <div class="col-3" id="otherCodeView" style="display: none;">
+                  <div class="form-group">
+                    <label>Other Code (AutoCount etc.)</label>
+                    <input class="form-control" type="text" placeholder="Enter Other System Code" id="otherCode" name="otherCode">
                   </div>
                 </div>
                 <div class="col-3">
@@ -283,67 +290,68 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
+              </div>
+              <div class="row col-12">
                 <div class="col-12" id="custbranch">
                   <div class="form-group">
                     <label>Branch * </label>
                     <select class="form-control select2" style="width: 100%;" id="branch" name="branch" required></select>
                   </div>
                 </div>
-                
-                <div class="row col-12">
-                  <div class="col-3" id="addr1" style="display: none;">
-                    <div class="form-group">
-                      <label>Address Line 1 * </label>
-                      <input class="form-control" type="text" placeholder="Address Line 1" id="address1" name="address1">
-                    </div>
-                  </div>
-                  <div class="col-3" id="addr2" style="display: none;">
-                    <div class="form-group">
-                      <label>Address Line 2 </label>
-                      <input class="form-control" type="text" placeholder="Address Line 2" id="address2" name="address2">
-                    </div>
-                  </div>
-                  <div class="col-3" id="addr3" style="display: none;">
-                    <div class="form-group">
-                      <label>Address Line 3 </label>
-                      <input class="form-control" type="text" placeholder="Address Line 3" id="address3" name="address3">
-                    </div>
-                  </div>
-                  <div class="col-3" id="addr4" style="display: none;">
-                    <div class="form-group">
-                      <label>Address Line 4 </label>
-                      <input class="form-control" type="text" placeholder="Address Line 4" id="address4" name="address4">
-                    </div>
-                  </div>
-                </div>
-                <div class="row col-12">
-                  <div class="col-3" id="phone" style="display: none;">
-                    <div class="form-group">
-                      <label>Tel</label>
-                      <input class="form-control" type="text" placeholder="Phone" id="phone" name="phone">
-                    </div>
-                  </div>
-                  <div class="col-3" id="email" style="display: none;">
-                    <div class="form-group">
-                      <label>Email</label>
-                      <input class="form-control" type="text" placeholder="Email" id="email" name="email">
-                    </div>
-                  </div>
-                  <div class="col-3" id="pic" style="display: none;">
-                    <div class="form-group">
-                      <label>P.I.C</label>
-                      <input class="form-control" type="text" placeholder="PIC" id="pic" name="pic">
-                    </div>
-                  </div>
-                  <div class="col-3" id="contact" style="display: none;">
-                    <div class="form-group">
-                      <label>P.I.C Contact No.</label>
-                      <input class="form-control" type="text" placeholder="PIC Contact" id="contact" name="contact">
-                    </div>
-                  </div>
-                </div>
-                
               </div>
+              <div class="row col-12">
+                <div class="col-3" id="addr1" style="display: none;">
+                  <div class="form-group">
+                    <label>Address Line 1 * </label>
+                    <input class="form-control" type="text" placeholder="Address Line 1" id="address1" name="address1">
+                  </div>
+                </div>
+                <div class="col-3" id="addr2" style="display: none;">
+                  <div class="form-group">
+                    <label>Address Line 2 </label>
+                    <input class="form-control" type="text" placeholder="Address Line 2" id="address2" name="address2">
+                  </div>
+                </div>
+                <div class="col-3" id="addr3" style="display: none;">
+                  <div class="form-group">
+                    <label>Address Line 3 </label>
+                    <input class="form-control" type="text" placeholder="Address Line 3" id="address3" name="address3">
+                  </div>
+                </div>
+                <div class="col-3" id="addr4" style="display: none;">
+                  <div class="form-group">
+                    <label>Address Line 4 </label>
+                    <input class="form-control" type="text" placeholder="Address Line 4" id="address4" name="address4">
+                  </div>
+                </div>
+              </div>
+              <div class="row col-12">
+                <div class="col-3" id="phone" style="display: none;">
+                  <div class="form-group">
+                    <label>Tel</label>
+                    <input class="form-control" type="text" placeholder="Phone" id="phone" name="phone">
+                  </div>
+                </div>
+                <div class="col-3" id="email" style="display: none;">
+                  <div class="form-group">
+                    <label>Email</label>
+                    <input class="form-control" type="text" placeholder="Email" id="email" name="email">
+                  </div>
+                </div>
+                <div class="col-3" id="pic" style="display: none;">
+                  <div class="form-group">
+                    <label>P.I.C</label>
+                    <input class="form-control" type="text" placeholder="PIC" id="pic" name="pic">
+                  </div>
+                </div>
+                <div class="col-3" id="contact" style="display: none;">
+                  <div class="form-group">
+                    <label>P.I.C Contact No.</label>
+                    <input class="form-control" type="text" placeholder="PIC Contact" id="contact" name="contact">
+                  </div>
+                </div>
+              </div>
+                
             </div>
           </div>
 
@@ -1353,7 +1361,6 @@ $(function () {
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){
-          
           $('#reseller_branch').html('');
           $('#reseller_branch').append('<option selected="selected">-</option>');
 
@@ -1361,6 +1368,21 @@ $(function () {
             var branchInfo = obj.message.branches[i];
             $('#reseller_branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.branch_address1+' '+branchInfo.branch_address2+' '+branchInfo.branch_address3+' '+branchInfo.branch_address4+'</option>')
           }
+          $('#extendModal').modal('show');
+
+          $('#extendForm').validate({
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+              error.addClass('invalid-feedback');
+              element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+              $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+              $(element).removeClass('is-invalid');
+            }
+          });
         }
         else if(obj.status === 'failed'){
           toastr["error"](obj.message, "Failed:");
@@ -1453,6 +1475,7 @@ $(function () {
   $('#extendModal').find('#customerType').on('change', function(){
     if($(this).val() == "NEW"){
       $('#extendModal').find('#company').hide();
+      $('#extendModal').find('#otherCodeView').show();
       $('#extendModal').find('#custbranch').hide();
       
       $('#extendModal').find('#addr1').show();
@@ -1478,6 +1501,7 @@ $(function () {
     else{
       $('#extendModal').find('#company').html($('select#customerNoHidden').html());
       $('#extendModal').find('#company').show();
+      $('#extendModal').find('#otherCodeView').hide();
       $('#extendModal').find('#custbranch').show();
 
       $('#extendModal').find('#addr1').hide();
@@ -1537,7 +1561,8 @@ $(function () {
   });
 
   $('#extendModal').find('#company').on('change', function(){
-    var id = $(this).find(":selected").val();
+    //$('#spinnerLoading').show();
+    var id = $(this).find(":selected").val(); console.log(id);
 
     $.post('php/getCustomer.php', {userID: id}, function(data){
       var obj = JSON.parse(data);
@@ -1551,8 +1576,28 @@ $(function () {
 
         for(var i=0; i<obj.message.pricing.length; i++){
           var branchInfo = obj.message.pricing[i];
-          $('#branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.branch_address1+' '+branchInfo.branch_address2+' '+branchInfo.branch_address3+' '+branchInfo.branch_address4+'</option>')
+          $('#branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.address1+' '+branchInfo.address2+' '+branchInfo.address3+' '+branchInfo.address4+'</option>')
         }
+
+        if(branch != 0){
+            $('#extendModal').find('#branch').val(branch).trigger('change');
+          }
+
+        $('#extendModal').modal('show');
+
+        $('#extendForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
       }
       else if(obj.status === 'failed'){
         toastr["error"](obj.message, "Failed:");
@@ -1897,19 +1942,21 @@ function newEntry(){
   // $('#isResseller3').hide();
   // $('#isResseller4').hide();
   // $('#isResseller5').hide();
-  $('#extendModal').find('#customerType').val("EXISTING").attr('readonly', false).trigger('change');
+  $('#extendModal').find('#customerType').val("EXISTING").attr('disabled', false).trigger('change');
   $('#extendModal').find('#brand').val('').trigger('change');
   $('#extendModal').find('#validator').val('').trigger('change');
   $('#extendModal').find('#autoFormNo').val('');
-  $('#extendModal').find('#company').val('');
-  $('#extendModal').find('#companyText').val('').trigger('change');
+  $('#extendModal').find('#company').val('').trigger('change');
+  $('#extendModal').find('#otherCode').val('');
+  $('#extendModal').find('#companyText').val('')
   $('#extendModal').find('#machineType').val('').trigger('change');
   $('#extendModal').find('#size').val('').trigger('change');
-  $('#extendModal').find('#address1').val('');
   $('#extendModal').find('#model').val("").trigger('change');
-  $('#extendModal').find('#address2').val('');
   $('#extendModal').find('#capacity').val('').trigger('change');
+  $('#extendModal').find('#address1').val('');
+  $('#extendModal').find('#address2').val('');
   $('#extendModal').find('#address3').val('');
+  $('#extendModal').find('#email').val('');
   $('#extendModal').find('#pic').val("");
   $('#extendModal').find('#remark').val("");
   $('#extendModal').find('#dueDate').val('');
@@ -1983,19 +2030,21 @@ function edit(id) {
   $('#spinnerLoading').show();
   $.post('php/getValidation.php', {validationId: id}, function(data){
     var obj = JSON.parse(data); 
-    if(obj.status === 'success'){
+    if(obj.status === 'success'){ 
       if(obj.message.type == 'DIRECT'){
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#dealer').val('');
         $('#extendModal').find('#reseller_branch').val('');
-        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
+        $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
         $('#extendModal').find('#company').val(obj.message.customer).trigger('change');
+        $('#extendModal').find('#companyText').val('');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#autoFormNo').val(obj.message.auto_form_no);
         setTimeout(function(){
           $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
-        }, 500);
+        }, 1000);
         $('#extendModal').find('#machineType').val(obj.message.machines).trigger('change');
         $('#extendModal').find('#serial').val(obj.message.unit_serial_no);
         $('#extendModal').find('#manufacturing').val(obj.message.manufacturing).trigger('change');
@@ -2056,7 +2105,8 @@ function edit(id) {
             $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
           }, 1000);
         }, 1000);
-        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
+        $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#autoFormNo').val(obj.message.auto_form_no);
         $('#extendModal').find('#machineType').val(obj.message.machines).trigger('change');

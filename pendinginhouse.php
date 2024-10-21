@@ -263,6 +263,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                       <option value="NEW">NEW</option>
                       <option value="EXISTING">EXISTING</option>
                     </select>
+                    <input type="hidden" id="customerTypeEdit" name="customerTypeEdit">
                   </div>
                 </div>
                 <div class="col-3">
@@ -270,6 +271,12 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     <label>Customer * </label>
                     <select class="form-control select2" style="width: 100%;" id="company" name="company" required></select>
                     <input class="form-control" type="text" placeholder="Company Name" id="companyText" name="companyText" style="display: none;">
+                  </div>
+                </div>
+                <div class="col-3" id="otherCodeView" style="display: none;">
+                  <div class="form-group">
+                    <label>Other Code (AutoCount etc.)</label>
+                    <input class="form-control" type="text" placeholder="Enter Other System Code" id="otherCode" name="otherCode">
                   </div>
                 </div>
                 <div class="col-3">
@@ -296,7 +303,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                   </div>
                 </div>
                 
-                <div class="row col-12">
+                <!-- <div class="row col-12"> -->
                   <div class="col-3" id="addr1" style="display: none;">
                     <div class="form-group">
                       <label>Address Line 1 * </label>
@@ -321,8 +328,8 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                       <input class="form-control" type="text" placeholder="Address Line 4" id="address4" name="address4">
                     </div>
                   </div>
-                </div>
-                <div class="row col-12">
+                <!-- </div> -->
+                <!-- <div class="row col-12"> -->
                   <div class="col-3" id="phone" style="display: none;">
                     <div class="form-group">
                       <label>Tel</label>
@@ -347,7 +354,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                       <input class="form-control" type="text" placeholder="PIC Contact" id="contact" name="contact">
                     </div>
                   </div>
-                </div>
+                <!-- </div> -->
                 
               </div>
             </div>
@@ -1485,6 +1492,7 @@ $(function () {
   $('#extendModal').find('#customerType').on('change', function(){
     if($(this).val() == "NEW"){
       $('#extendModal').find('#company').hide();
+      $('#extendModal').find('#otherCodeView').show();
       $('#extendModal').find('#custbranch').hide();
       
       $('#extendModal').find('#addr1').show();
@@ -1510,6 +1518,7 @@ $(function () {
     else{
       $('#extendModal').find('#company').html($('select#customerNoHidden').html());
       $('#extendModal').find('#company').show();
+      $('#extendModal').find('#otherCodeView').hide();
       $('#extendModal').find('#custbranch').show();
 
       $('#extendModal').find('#addr1').hide();
@@ -1941,8 +1950,9 @@ function newEntry(){
   // $('#isResseller3').hide();
   // $('#isResseller4').hide();
   // $('#isResseller5').hide();
-  $('#extendModal').find('#customerType').val("EXISTING").attr('readonly', false).trigger('change');
+  $('#extendModal').find('#customerType').val("EXISTING").attr('disabled', false).trigger('change');
   $('#extendModal').find('#company').val('');
+  $('#extendModal').find('#otherCode').val('');
   $('#extendModal').find('#validator').val('').trigger('change');
   $('#extendModal').find('#branch').val('').trigger('change');
   $('#extendModal').find('#autoFormNo').val('');
@@ -2143,7 +2153,8 @@ function edit(id) {
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#dealer').val('');
         $('#extendModal').find('#reseller_branch').val('');
-        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
+        $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
         $('#extendModal').find('#company').val(obj.message.customer).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#autoFormNo').val(obj.message.auto_form_no);
@@ -2317,7 +2328,8 @@ function edit(id) {
         setTimeout(function(){
           $('#extendModal').find('#reseller_branch').val(obj.message.dealer_branch).trigger('change');
         }, 500);
-        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
+        $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
         $('#extendModal').find('#company').val(obj.message.customer).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#autoFormNo').val(obj.message.auto_form_no);

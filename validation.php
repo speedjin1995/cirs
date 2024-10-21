@@ -255,7 +255,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               <div class="row">
                 <h4>Customer Information</h4>
               </div>
-              <div class="row">
+              <div class="row col-12">
                 <div class="col-3">
                   <div class="form-group">
                     <label>Customer Type * </label>
@@ -263,6 +263,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                       <option value="NEW">NEW</option>
                       <option value="EXISTING">EXISTING</option>
                     </select>
+                    <input type="hidden" id="customerTypeEdit" name="customerTypeEdit">
                   </div>
                 </div>
                 <div class="col-3">
@@ -283,73 +284,68 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
-                <!-- <div class="col-3">
-                  <div class="form-group">
-                    <label>Certificate Number * </label>
-                    <input type="text" class="form-control" id="autoFormNo" name="autoFormNo" required>
-                  </div>
-                </div> -->
+              </div>
+              <div class="row col-12">
                 <div class="col-12" id="custbranch">
                   <div class="form-group">
                     <label>Branch * </label>
                     <select class="form-control select2" style="width: 100%;" id="branch" name="branch" required></select>
                   </div>
                 </div>
-                
-                <div class="row col-12">
-                  <div class="col-3" id="addr1" style="display: none;">
-                    <div class="form-group">
-                      <label>Address Line 1 * </label>
-                      <input class="form-control" type="text" placeholder="Address Line 1" id="address1" name="address1">
-                    </div>
-                  </div>
-                  <div class="col-3" id="addr2" style="display: none;">
-                    <div class="form-group">
-                      <label>Address Line 2 </label>
-                      <input class="form-control" type="text" placeholder="Address Line 2" id="address2" name="address2">
-                    </div>
-                  </div>
-                  <div class="col-3" id="addr3" style="display: none;">
-                    <div class="form-group">
-                      <label>Address Line 3 </label>
-                      <input class="form-control" type="text" placeholder="Address Line 3" id="address3" name="address3">
-                    </div>
-                  </div>
-                  <div class="col-3" id="addr4" style="display: none;">
-                    <div class="form-group">
-                      <label>Address Line 4 </label>
-                      <input class="form-control" type="text" placeholder="Address Line 4" id="address4" name="address4">
-                    </div>
-                  </div>
-                </div>
-                <div class="row col-12">
-                  <div class="col-3" id="phone" style="display: none;">
-                    <div class="form-group">
-                      <label>Tel</label>
-                      <input class="form-control" type="text" placeholder="Phone" id="phone" name="phone">
-                    </div>
-                  </div>
-                  <div class="col-3" id="email" style="display: none;">
-                    <div class="form-group">
-                      <label>Email</label>
-                      <input class="form-control" type="text" placeholder="Email" id="email" name="email">
-                    </div>
-                  </div>
-                  <div class="col-3" id="pic" style="display: none;">
-                    <div class="form-group">
-                      <label>P.I.C</label>
-                      <input class="form-control" type="text" placeholder="PIC" id="pic" name="pic">
-                    </div>
-                  </div>
-                  <div class="col-3" id="contact" style="display: none;">
-                    <div class="form-group">
-                      <label>P.I.C Contact No.</label>
-                      <input class="form-control" type="text" placeholder="PIC Contact" id="contact" name="contact">
-                    </div>
-                  </div>
-                </div>
-                
               </div>
+              <div class="row col-12">
+                <div class="col-3" id="addr1" style="display: none;">
+                  <div class="form-group">
+                    <label>Address Line 1 * </label>
+                    <input class="form-control" type="text" placeholder="Address Line 1" id="address1" name="address1">
+                  </div>
+                </div>
+                <div class="col-3" id="addr2" style="display: none;">
+                  <div class="form-group">
+                    <label>Address Line 2 </label>
+                    <input class="form-control" type="text" placeholder="Address Line 2" id="address2" name="address2">
+                  </div>
+                </div>
+                <div class="col-3" id="addr3" style="display: none;">
+                  <div class="form-group">
+                    <label>Address Line 3 </label>
+                    <input class="form-control" type="text" placeholder="Address Line 3" id="address3" name="address3">
+                  </div>
+                </div>
+                <div class="col-3" id="addr4" style="display: none;">
+                  <div class="form-group">
+                    <label>Address Line 4 </label>
+                    <input class="form-control" type="text" placeholder="Address Line 4" id="address4" name="address4">
+                  </div>
+                </div>
+              </div>
+              <div class="row col-12">
+                <div class="col-3" id="phone" style="display: none;">
+                  <div class="form-group">
+                    <label>Tel</label>
+                    <input class="form-control" type="text" placeholder="Phone" id="phone" name="phone">
+                  </div>
+                </div>
+                <div class="col-3" id="email" style="display: none;">
+                  <div class="form-group">
+                    <label>Email</label>
+                    <input class="form-control" type="text" placeholder="Email" id="email" name="email">
+                  </div>
+                </div>
+                <div class="col-3" id="pic" style="display: none;">
+                  <div class="form-group">
+                    <label>P.I.C</label>
+                    <input class="form-control" type="text" placeholder="PIC" id="pic" name="pic">
+                  </div>
+                </div>
+                <div class="col-3" id="contact" style="display: none;">
+                  <div class="form-group">
+                    <label>P.I.C Contact No.</label>
+                    <input class="form-control" type="text" placeholder="PIC Contact" id="contact" name="contact">
+                  </div>
+                </div>
+              </div>
+                
             </div>
           </div>
 
@@ -1818,7 +1814,7 @@ $(function () {
       var month = parseInt(parts[1], 10) - 1; // Months are zero-based
       var year = parseInt(parts[0], 10);
 
-      var date = new Date(year, month, day); console.log(date);
+      var date = new Date(year, month, day);
       
       date.setFullYear(date.getFullYear() + 1);       // Add 1 year to the date
       date.setDate(date.getDate() - 1);      // Minus 1 day to the date
@@ -1880,7 +1876,6 @@ $(function () {
 
   $(document).on('click', '#add-calibration-cell', function() {
     var loadCalibrationNoValue = parseInt($('#noOfCalibrationCell').val());
-    console.log(loadCalibrationNoValue);
     // Trigger the cloning and appending logic loadCellNoValue times
     for (var i = 0; i < loadCalibrationNoValue; i++) {
       var $addContents = $("#loadCalibrationDetails").clone();
@@ -1912,7 +1907,7 @@ $(function () {
   });
 });
 
-function format (row) { console.log(row);
+function format (row) {
   var returnString = `
   <div class="row">
     <!-- Customer Section -->
@@ -2146,18 +2141,18 @@ function edit(id) {
     var obj = JSON.parse(data); 
     if(obj.status === 'success'){
       if(obj.message.type == 'DIRECT'){
-        console.log(obj.message);
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#dealer').val('');
         $('#extendModal').find('#reseller_branch').val('');
-        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
+        $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
         $('#extendModal').find('#company').val(obj.message.customer).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#autoFormNo').val(obj.message.auto_form_no);
         setTimeout(function(){
           $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
-        }, 500);
+        }, 1000);
         $('#extendModal').find('#machineType').val(obj.message.machines).trigger('change');
         $('#extendModal').find('#serial').val(obj.message.unit_serial_no);
         $('#extendModal').find('#manufacturing').val(obj.message.manufacturing).trigger('change');
@@ -2218,7 +2213,8 @@ function edit(id) {
             $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
           }, 1000);
         }, 1000);
-        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
+        $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#autoFormNo').val(obj.message.auto_form_no);
         $('#extendModal').find('#machineType').val(obj.message.machines).trigger('change');

@@ -6,9 +6,15 @@ session_start();
 
 $uid = $_SESSION['userID'];
 
-if(isset($_POST['type'], $_POST['customerType'], $_POST['validator'], $_POST['address1'], $_POST['machineType'], $_POST['serial'], $_POST['manufacturing'], $_POST['brand'], $_POST['model'], $_POST['capacity'], $_POST['size'])){
+if(isset($_POST['customerType'])){
+	$customerType = $_POST['customerType'];
+}else{
+	$customerType = $_POST['customerTypeEdit'];
+}
+
+if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'], $_POST['machineType'], $_POST['serial'], $_POST['manufacturing'], $_POST['brand'], $_POST['model'], $_POST['capacity'], $_POST['size'])){
 	$type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
-	$customerType = filter_input(INPUT_POST, 'customerType', FILTER_SANITIZE_STRING);
+	// $customerType = filter_input(INPUT_POST, 'customerType', FILTER_SANITIZE_STRING);
 	$validator = filter_input(INPUT_POST, 'validator', FILTER_SANITIZE_STRING);
 	$address1 = filter_input(INPUT_POST, 'address1', FILTER_SANITIZE_STRING);
 	$machineType = filter_input(INPUT_POST, 'machineType', FILTER_SANITIZE_STRING);
@@ -29,6 +35,7 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['validator'], $_POST['ad
 	$reseller_branch = null;
 	$company = null;
 	$customerText = null;
+	$otherCode = null;
 	$branch = null;
 	$address2 = null;
 	$address3 = null;
@@ -57,6 +64,10 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['validator'], $_POST['ad
 
 	if(isset($_POST['companyText']) && $_POST['companyText']!=null && $_POST['companyText']!=""){
 		$companyText = $_POST['companyText'];
+	}
+
+	if(isset($_POST['otherCode']) && $_POST['otherCode']!=null && $_POST['otherCode']!=""){
+		$otherCode = $_POST['otherCode'];
 	}
 
 	if(isset($_POST['address2']) && $_POST['address2']!=null && $_POST['address2']!=""){
@@ -105,7 +116,7 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['validator'], $_POST['ad
 
 	if($customerType == "NEW"){
 		if ($select_stmt = $db->prepare("SELECT id FROM customers WHERE customer_name=?")) {
-			$select_stmt->bind_param('s', $_POST['companyText']);
+			$select_stmt->bind_param('s', $companyText);
 			$select_stmt->execute();
 			$result = $select_stmt->get_result();
         
@@ -117,22 +128,69 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['validator'], $_POST['ad
 				$branchName = '';
 				$mapUrl = '';
 				
-				// Customer does not exist, create a new customer
-				if ($insert_stmt = $db->prepare("INSERT INTO customers (customer_name, customer_address, address2, address3, address4, customer_phone, customer_email, customer_status, pic, pic_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-					$customer_status = 'CUSTOMER';
-					$insert_stmt->bind_param('ssssssssss', $_POST['companyText'], $address1, $address2, $address3, $address4, $phone, $email, $customer_status, $pic, $contact);
-					
-					if ($insert_stmt->execute()) {
-						$customer = $insert_stmt->insert_id;
-						$customerType = 'EXISTING';
+				# to generate customer code
+				$custNameFirstLetter = substr($companyText, 0, 1);
+				$firstChar = $custNameFirstLetter;
+		
+				if($misc_stmt = $db->prepare("SELECT * FROM miscellaneous WHERE code='customer' AND description=?")){
+					$misc_stmt->bind_param('s', $custNameFirstLetter);
+		
+					if(!$misc_stmt->execute()){
+						echo json_encode(
+							array(
+								"status" => "failed",
+								"message" => "Something went wrong querying miscellaneous"
+							)); 
+					}else{
+						$result = $misc_stmt->get_result();
+						while ($row = $result->fetch_assoc()){
+							$charSize = strlen($row['value']);
+							$misValue = $row['value'];
+							
+							$code = 'C-'.strtoupper($custNameFirstLetter);
+							for($i=0; $i<(4-(int)$charSize); $i++){
+								$code.='0';  // S0000
+							}
 
-						if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, branch_name, map_url, pic, pic_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-                            $insert_stmt2->bind_param('sssssssss', $customer, $address1, $address2, $address3, $address4, $branchName, $mapUrl, $pic, $contact);
-                            $insert_stmt2->execute();
-							$branch = $insert_stmt2->insert_id;
-                            $insert_stmt2->close();
-                        } 
-					} 
+							$code.=$misValue;
+
+							// Customer does not exist, create a new customer
+							if ($insert_stmt = $db->prepare("INSERT INTO customers (customer_name, customer_code, customer_address, address2, address3, address4, customer_phone, customer_email, customer_status, pic, pic_contact, other_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+								$customer_status = 'CUSTOMERS';
+								$insert_stmt->bind_param('ssssssssssss', $companyText, $code, $address1, $address2, $address3, $address4, $phone, $email, $customer_status, $pic, $contact, $otherCode);
+								
+								if ($insert_stmt->execute()) {
+									$customer = $insert_stmt->insert_id;
+									$customerType = 'EXISTING';
+
+									if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, branch_name, map_url, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+										$insert_stmt2->bind_param('sssssssss', $customer, $address1, $address2, $address3, $address4, $branchName, $mapUrl, $pic, $contact);
+										$insert_stmt2->execute();
+										$branch = $insert_stmt2->insert_id;
+										$insert_stmt2->close();
+									} 
+								} 
+							}
+
+							#Update miscellaneous value
+                            $misValue++;
+
+                            if($updmisc_stmt = $db->prepare("UPDATE miscellaneous SET value=? WHERE code='customer' AND description=?")){
+                                $updmisc_stmt->bind_param('ss', $misValue, $firstChar);
+										
+                                // Execute the prepared query.
+                                if (! $updmisc_stmt->execute()){
+                    
+                                    echo json_encode(
+                                        array(
+                                            "status"=> "failed", 
+                                            "message"=> $updmisc_stmt->error
+                                        )
+                                    );
+                                }
+                            }
+						}
+					}
 				}
 			}
 		}
