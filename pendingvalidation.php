@@ -255,7 +255,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               <div class="row">
                 <h4>Customer Information</h4>
               </div>
-              <div class="row">
+              <div class="row col-12">
                 <div class="col-3">
                   <div class="form-group">
                     <label>Customer Type * </label>
@@ -263,6 +263,12 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                       <option value="NEW">NEW</option>
                       <option value="EXISTING">EXISTING</option>
                     </select>
+                  </div>
+                </div>
+                <div class="col-3" id="otherCodeView" style="display: none;">
+                  <div class="form-group">
+                    <label>Other Code (AutoCount etc.)</label>
+                    <input class="form-control" type="text" placeholder="Enter Other System Code" id="otherCode" name="otherCode">
                   </div>
                 </div>
                 <div class="col-3">
@@ -283,67 +289,68 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
+              </div>
+              <div class="row col-12">
                 <div class="col-12" id="custbranch">
                   <div class="form-group">
                     <label>Branch * </label>
                     <select class="form-control select2" style="width: 100%;" id="branch" name="branch" required></select>
                   </div>
                 </div>
-                
-                <div class="row col-12">
-                  <div class="col-3" id="addr1" style="display: none;">
-                    <div class="form-group">
-                      <label>Address Line 1 * </label>
-                      <input class="form-control" type="text" placeholder="Address Line 1" id="address1" name="address1">
-                    </div>
-                  </div>
-                  <div class="col-3" id="addr2" style="display: none;">
-                    <div class="form-group">
-                      <label>Address Line 2 </label>
-                      <input class="form-control" type="text" placeholder="Address Line 2" id="address2" name="address2">
-                    </div>
-                  </div>
-                  <div class="col-3" id="addr3" style="display: none;">
-                    <div class="form-group">
-                      <label>Address Line 3 </label>
-                      <input class="form-control" type="text" placeholder="Address Line 3" id="address3" name="address3">
-                    </div>
-                  </div>
-                  <div class="col-3" id="addr4" style="display: none;">
-                    <div class="form-group">
-                      <label>Address Line 4 </label>
-                      <input class="form-control" type="text" placeholder="Address Line 4" id="address4" name="address4">
-                    </div>
-                  </div>
-                </div>
-                <div class="row col-12">
-                  <div class="col-3" id="phone" style="display: none;">
-                    <div class="form-group">
-                      <label>Tel</label>
-                      <input class="form-control" type="text" placeholder="Phone" id="phone" name="phone">
-                    </div>
-                  </div>
-                  <div class="col-3" id="email" style="display: none;">
-                    <div class="form-group">
-                      <label>Email</label>
-                      <input class="form-control" type="text" placeholder="Email" id="email" name="email">
-                    </div>
-                  </div>
-                  <div class="col-3" id="pic" style="display: none;">
-                    <div class="form-group">
-                      <label>P.I.C</label>
-                      <input class="form-control" type="text" placeholder="PIC" id="pic" name="pic">
-                    </div>
-                  </div>
-                  <div class="col-3" id="contact" style="display: none;">
-                    <div class="form-group">
-                      <label>P.I.C Contact No.</label>
-                      <input class="form-control" type="text" placeholder="PIC Contact" id="contact" name="contact">
-                    </div>
-                  </div>
-                </div>
-                
               </div>
+              <div class="row col-12">
+                <div class="col-3" id="addr1" style="display: none;">
+                  <div class="form-group">
+                    <label>Address Line 1 * </label>
+                    <input class="form-control" type="text" placeholder="Address Line 1" id="address1" name="address1">
+                  </div>
+                </div>
+                <div class="col-3" id="addr2" style="display: none;">
+                  <div class="form-group">
+                    <label>Address Line 2 </label>
+                    <input class="form-control" type="text" placeholder="Address Line 2" id="address2" name="address2">
+                  </div>
+                </div>
+                <div class="col-3" id="addr3" style="display: none;">
+                  <div class="form-group">
+                    <label>Address Line 3 </label>
+                    <input class="form-control" type="text" placeholder="Address Line 3" id="address3" name="address3">
+                  </div>
+                </div>
+                <div class="col-3" id="addr4" style="display: none;">
+                  <div class="form-group">
+                    <label>Address Line 4 </label>
+                    <input class="form-control" type="text" placeholder="Address Line 4" id="address4" name="address4">
+                  </div>
+                </div>
+              </div>
+              <div class="row col-12">
+                <div class="col-3" id="phone" style="display: none;">
+                  <div class="form-group">
+                    <label>Tel</label>
+                    <input class="form-control" type="text" placeholder="Phone" id="phone" name="phone">
+                  </div>
+                </div>
+                <div class="col-3" id="email" style="display: none;">
+                  <div class="form-group">
+                    <label>Email</label>
+                    <input class="form-control" type="text" placeholder="Email" id="email" name="email">
+                  </div>
+                </div>
+                <div class="col-3" id="pic" style="display: none;">
+                  <div class="form-group">
+                    <label>P.I.C</label>
+                    <input class="form-control" type="text" placeholder="PIC" id="pic" name="pic">
+                  </div>
+                </div>
+                <div class="col-3" id="contact" style="display: none;">
+                  <div class="form-group">
+                    <label>P.I.C Contact No.</label>
+                    <input class="form-control" type="text" placeholder="PIC Contact" id="contact" name="contact">
+                  </div>
+                </div>
+              </div>
+                
             </div>
           </div>
 
@@ -1453,6 +1460,7 @@ $(function () {
   $('#extendModal').find('#customerType').on('change', function(){
     if($(this).val() == "NEW"){
       $('#extendModal').find('#company').hide();
+      $('#extendModal').find('#otherCodeView').show();
       $('#extendModal').find('#custbranch').hide();
       
       $('#extendModal').find('#addr1').show();
@@ -1478,6 +1486,7 @@ $(function () {
     else{
       $('#extendModal').find('#company').html($('select#customerNoHidden').html());
       $('#extendModal').find('#company').show();
+      $('#extendModal').find('#otherCodeView').hide();
       $('#extendModal').find('#custbranch').show();
 
       $('#extendModal').find('#addr1').hide();
@@ -1537,7 +1546,7 @@ $(function () {
   });
 
   $('#extendModal').find('#company').on('change', function(){
-    var id = $(this).find(":selected").val();
+    var id = $('#extendModal').find('#company').val(); console.log(id);
 
     $.post('php/getCustomer.php', {userID: id}, function(data){
       var obj = JSON.parse(data);
@@ -1901,15 +1910,17 @@ function newEntry(){
   $('#extendModal').find('#brand').val('').trigger('change');
   $('#extendModal').find('#validator').val('').trigger('change');
   $('#extendModal').find('#autoFormNo').val('');
-  $('#extendModal').find('#company').val('');
-  $('#extendModal').find('#companyText').val('').trigger('change');
+  $('#extendModal').find('#company').val('').trigger('change');
+  $('#extendModal').find('#otherCode').val('');
+  $('#extendModal').find('#companyText').val('')
   $('#extendModal').find('#machineType').val('').trigger('change');
   $('#extendModal').find('#size').val('').trigger('change');
-  $('#extendModal').find('#address1').val('');
   $('#extendModal').find('#model').val("").trigger('change');
-  $('#extendModal').find('#address2').val('');
   $('#extendModal').find('#capacity').val('').trigger('change');
+  $('#extendModal').find('#address1').val('');
+  $('#extendModal').find('#address2').val('');
   $('#extendModal').find('#address3').val('');
+  $('#extendModal').find('#email').val('');
   $('#extendModal').find('#pic').val("");
   $('#extendModal').find('#remark').val("");
   $('#extendModal').find('#dueDate').val('');
@@ -1983,14 +1994,18 @@ function edit(id) {
   $('#spinnerLoading').show();
   $.post('php/getValidation.php', {validationId: id}, function(data){
     var obj = JSON.parse(data); 
-    if(obj.status === 'success'){
+    if(obj.status === 'success'){ 
       if(obj.message.type == 'DIRECT'){
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#dealer').val('');
         $('#extendModal').find('#reseller_branch').val('');
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
-        $('#extendModal').find('#company').val(obj.message.customer).trigger('change');
+        $('#extendModal').find('#company').val(obj.message.customer);
+        console.log(obj.message.customer);
+        
+        // .trigger('change');
+
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#autoFormNo').val(obj.message.auto_form_no);
         setTimeout(function(){
