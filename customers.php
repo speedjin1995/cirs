@@ -33,8 +33,14 @@ else{
 				<div class="card">
 					<div class="card-header">
               <div class="row">
-                  <div class="col-9"></div>
-                  <div class="col-3">
+                  <div class="col-6"></div>
+                  <div class="col-2">
+                    <a href="/template/Reseller_Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
+                  </div>
+                  <div class="col-2">
+                    <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">Upload Excel</button>
+                  </div>
+                  <div class="col-2">
                       <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addCustomers">Add Customers</button>
                   </div>
               </div>
@@ -149,6 +155,30 @@ else{
       <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="uploadModal">
+  <div class="modal-dialog modal-xl" style="max-width: 90%;">
+    <div class="modal-content">
+      <form role="form" id="uploadForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Upload Excel File</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="file" id="fileInput">
+          <button type="button" id="previewButton">Preview Data</button>
+          <div id="previewTable" style="overflow: auto;"></div>
+        </div>
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <script type="text/html" id="pricingDetails">
@@ -266,30 +296,71 @@ $(function () {
   
   $.validator.setDefaults({
     submitHandler: function () {
-      //if($("#pricingTable").find(".details").length > 0){
-      $('#spinnerLoading').show();
-      $.post('php/customers.php', $('#customerForm').serialize(), function(data){
-        var obj = JSON.parse(data); 
-        
-        if(obj.status === 'success'){
-          $('#addModal').modal('hide');
-          toastr["success"](obj.message, "Success:");
-          $('#customerTable').DataTable().ajax.reload();
-          $('#spinnerLoading').hide();
-        }
-        else if(obj.status === 'failed'){
-          toastr["error"](obj.message, "Failed:");
-          $('#spinnerLoading').hide();
-        }
-        else{
-          toastr["error"]("Something wrong when edit", "Failed:");
-          $('#spinnerLoading').hide();
-        }
-      });
-      /*}
-      else{
-        alert("Please enter at least an address to proceed");
-      }*/
+      if($('#addModal').hasClass('show')){
+        $('#spinnerLoading').show();
+        $.post('php/customers.php', $('#customerForm').serialize(), function(data){
+          var obj = JSON.parse(data); 
+          
+          if(obj.status === 'success'){
+            $('#addModal').modal('hide');
+            toastr["success"](obj.message, "Success:");
+            $('#customerTable').DataTable().ajax.reload();
+            $('#spinnerLoading').hide();
+          }
+          else if(obj.status === 'failed'){
+            toastr["error"](obj.message, "Failed:");
+            $('#spinnerLoading').hide();
+          }
+          else{
+            toastr["error"]("Something wrong when edit", "Failed:");
+            $('#spinnerLoading').hide();
+          }
+        });
+      }
+      else if($('#uploadModal').hasClass('show')){
+        $('#spinnerLoading').show();
+
+        // Serialize the form data into an array of objects
+        var formData = $('#uploadForm').serializeArray();
+        var data = [];
+        var rowIndex = -1;
+        formData.forEach(function(field) {
+          var match = field.name.match(/([a-zA-Z0-9]+)\[(\d+)\]/);
+          if (match) {
+            var fieldName = match[1];
+            var index = parseInt(match[2], 10);
+            if (index !== rowIndex) {
+              rowIndex = index;
+              data.push({});
+            }
+            data[index][fieldName] = field.value;
+          }
+        });
+
+        // Send the JSON array to the server
+        $.ajax({
+          url: 'php/uploadCustomers.php',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify(data),
+          success: function(response) {
+            var obj = JSON.parse(response);
+            if (obj.status === 'success') {
+              $('#uploadModal').modal('hide');
+              toastr["success"](obj.message, "Success:");
+              $('#customerTable').DataTable().ajax.reload();
+            } 
+            else if (obj.status === 'failed') {
+              toastr["error"](obj.message, "Failed:");
+            } 
+            else {
+              toastr["error"]("Something went wrong when editing", "Failed:");
+            }
+            
+            $('#spinnerLoading').hide();
+          }
+        });
+      }
     }
   });
 
@@ -357,6 +428,38 @@ $(function () {
     $("#pricingTable").append('<input type="hidden" name="deletedShip[]" value="'+index+'"/>');
     //pricingCount--;
     $(this).parents('.details').remove();
+  });
+
+  $('#uploadExccl').on('click', function(){
+    $('#uploadModal').modal('show');
+
+    $('#uploadForm').validate({
+      errorElement: 'span',
+      errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      }
+    });
+  });
+
+  $('#uploadModal').find('#previewButton').on('click', function(){
+    var fileInput = document.getElementById('fileInput');
+    var file = fileInput.files[0];
+    var reader = new FileReader();
+    
+    reader.onload = function(e) {
+      var data = e.target.result;
+      // Process data and display preview
+      displayPreview(data);
+    };
+
+    reader.readAsBinaryString(file);
   });
 });
 
