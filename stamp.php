@@ -1044,7 +1044,7 @@ $(function () {
   // Add event listener for opening and closing details
   $('#weightTable tbody').on('click', 'td.dt-control', function () {
     var tr = $(this).closest('tr');
-    var row = table.row( tr );
+    var row = table.row(tr);
 
     if ( row.child.isShown() ) {
       // This row is already open - close it
@@ -1052,7 +1052,12 @@ $(function () {
       tr.removeClass('shown');
     }
     else {
-      row.child( format(row.data()) ).show();tr.addClass("shown");
+      $.post('php/getStamp.php', {userID: row.data().id, format: 'EXPANDABLE'}, function (data){
+        var obj = JSON.parse(data); 
+        if(obj.status === 'success'){ console.log(obj.message);
+          row.child( format(obj.message) ).show();tr.addClass("shown");
+        }
+      });
     }
   });
 
@@ -1890,20 +1895,29 @@ function format (row) {
     <!-- Customer Section -->
     <div class="col-md-6">
       <p><strong>${row.customers}</strong><br>
-      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4}`;
-      
-      if (row.picontact) {
-          returnString += `
-              <br>PIC: ${row.picontact} PIC Contact: ${row.pic_phone}</p>
-              </div>
-          </div><hr>`;
-      } else {
-          returnString += `</p>
-          </div>
-      </div><hr>`;
-      }
+      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4} `;
 
-  returnString += `
+      if (row.pic) {
+          returnString += `
+              <br><b>PIC:</b> ${row.pic} <b>PIC Contact:</b> ${row.pic_phone}`;
+      }     
+      returnString += `</p></div>`;
+
+  if (row.dealer){
+    returnString += `
+    <!-- Reseller Section -->
+    <div class="col-md-6">
+      <p><strong>${row.dealer}</strong><br>
+      ${row.reseller_address1}<br>${row.reseller_address2}<br>${row.reseller_address3}<br>${row.reseller_address4} `;
+      
+      if (row.reseller_pic) {
+          returnString += `
+              <br><b>PIC:</b> ${row.reseller_pic} <b>PIC Contact:</b> ${row.reseller_pic_phone}`;
+      }     
+      returnString += `</p></div>`;
+  }
+
+  returnString += `</div><hr>
   <div class="row">
     <!-- Machine Section -->
     <div class="col-6">

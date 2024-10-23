@@ -96,6 +96,22 @@ function searchCapacityIdByName($value, $db) {
     return $id;
 }
 
+function searchJenisAlatNameByid($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM alat WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['alat'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
 function searchJenisAlatIdByName($value, $db) {
     $id = null;
 

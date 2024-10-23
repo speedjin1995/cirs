@@ -675,7 +675,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
           <div class="row" id='otherRow'>
             <div class="col-6">
               <div class="form-group">
-                <label>Other Reason</label>
+                <label>Remarks / Other Reasons</label>
                 <textarea class="form-control" id ="otherReason" name="otherReason"></textarea>
               </div>
             </div>
@@ -1044,7 +1044,7 @@ $(function () {
   // Add event listener for opening and closing details
   $('#weightTable tbody').on('click', 'td.dt-control', function () {
     var tr = $(this).closest('tr');
-    var row = table.row( tr );
+    var row = table.row(tr);
 
     if ( row.child.isShown() ) {
       // This row is already open - close it
@@ -1052,8 +1052,12 @@ $(function () {
       tr.removeClass('shown');
     }
     else {
-      row.child( format(row.data()) ).show();tr.addClass("shown");
+      $.post('php/getStamp.php', {userID: row.data().id, format: 'EXPANDABLE'}, function (data){
+        var obj = JSON.parse(data); 
+        if(obj.status === 'success'){ console.log(obj.message);
           row.child( format(obj.message) ).show();tr.addClass("shown");
+        }
+      });
     }
   });
 
@@ -1576,53 +1580,57 @@ $(function () {
   $('#extendModal').find('#brand').on('change', function(){
     var brandId = $(this).find(":selected").val();
 
-    $.post('php/getModelFromBrand.php', {id: brandId}, function (data){
-      var obj = JSON.parse(data);
+    if(brandId){
+      $.post('php/getModelFromBrand.php', {id: brandId}, function (data){
+        var obj = JSON.parse(data);
 
-      if(obj.status === 'success'){
-        $('#model').html('');
-        $('#model').append('<option selected="selected">-</option>');
+        if(obj.status === 'success'){
+          $('#model').html('');
+          $('#model').append('<option selected="selected">-</option>');
 
-        for(var i=0; i<obj.message.length; i++){
-          var modelInfo = obj.message[i];
-          $('#model').append('<option value="'+modelInfo.id+'">'+modelInfo.model+'</option>')
+          for(var i=0; i<obj.message.length; i++){
+            var modelInfo = obj.message[i];
+            $('#model').append('<option value="'+modelInfo.id+'">'+modelInfo.model+'</option>')
+          }
+
+          $('#extendModal').trigger('modelsLoaded');
         }
-
-        $('#extendModal').trigger('modelsLoaded');
-      }
-      else if(obj.status === 'failed'){
-        toastr["error"](obj.message, "Failed:");
-      }
-      else{
-        toastr["error"]("Something wrong when pull data", "Failed:");
-      }
-    });
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+      });
+    }
   });
 
   $('#extendModal').find('#machineType').on('change', function(){
     var brandId = $(this).find(":selected").val();
 
-    $.post('php/getJAFromMT.php', {id: brandId}, function (data){
-      var obj = JSON.parse(data);
+    if(brandId){
+      $.post('php/getJAFromMT.php', {id: brandId}, function (data){
+        var obj = JSON.parse(data);
 
-      if(obj.status === 'success'){
-        $('#jenisAlat').html('');
-        $('#jenisAlat').append('<option selected="selected">-</option>');
+        if(obj.status === 'success'){
+          $('#jenisAlat').html('');
+          $('#jenisAlat').append('<option selected="selected">-</option>');
 
-        for(var i=0; i<obj.message.length; i++){
-          var modelInfo = obj.message[i];
-          $('#jenisAlat').append('<option value="'+modelInfo.id+'">'+modelInfo.jenis_alat+'</option>')
+          for(var i=0; i<obj.message.length; i++){
+            var modelInfo = obj.message[i];
+            $('#jenisAlat').append('<option value="'+modelInfo.id+'">'+modelInfo.jenis_alat+'</option>')
+          }
+
+          $('#extendModal').trigger('jaIsLoaded');
         }
-
-        $('#extendModal').trigger('jaIsLoaded');
-      }
-      else if(obj.status === 'failed'){
-        toastr["error"](obj.message, "Failed:");
-      }
-      else{
-        toastr["error"]("Something wrong when pull data", "Failed:");
-      }
-    });
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+      });
+    }
   });
 
   $('#extendModal').find('#product').on('change', function(){
@@ -1893,20 +1901,29 @@ function format (row) {
     <!-- Customer Section -->
     <div class="col-md-6">
       <p><strong>${row.customers}</strong><br>
-      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4}`;
-      
-      if (row.picontact) {
-          returnString += `
-              <br>PIC: ${row.picontact} PIC Contact: ${row.pic_phone}</p>
-              </div>
-          </div><hr>`;
-      } else {
-          returnString += `</p>
-          </div>
-      </div><hr>`;
-      }
+      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4} `;
 
-  returnString += `
+      if (row.pic) {
+          returnString += `
+              <br><b>PIC:</b> ${row.pic} <b>PIC Contact:</b> ${row.pic_phone}`;
+      }     
+      returnString += `</p></div>`;
+
+  if (row.dealer){
+    returnString += `
+    <!-- Reseller Section -->
+    <div class="col-md-6">
+      <p><strong>${row.dealer}</strong><br>
+      ${row.reseller_address1}<br>${row.reseller_address2}<br>${row.reseller_address3}<br>${row.reseller_address4} `;
+      
+      if (row.reseller_pic) {
+          returnString += `
+              <br><b>PIC:</b> ${row.reseller_pic} <b>PIC Contact:</b> ${row.reseller_pic_phone}`;
+      }     
+      returnString += `</p></div>`;
+  }
+
+  returnString += `</div><hr>
   <div class="row">
     <!-- Machine Section -->
     <div class="col-6">
