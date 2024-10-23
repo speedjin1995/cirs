@@ -38,7 +38,7 @@ if(isset($_POST['units'])){
         }
     }
     else{
-        if ($insert_stmt = $db->prepare("INSERT INTO units (units) VALUES (?)")) {
+        if ($insert_stmt = $db->prepare("INSERT INTO country (name) VALUES (?)")) {
             $insert_stmt->bind_param('s', $lotsNumber);
             
             // Execute the prepared query.
