@@ -707,9 +707,16 @@ $(function () {
       { 
         data: 'id',
         render: function ( data, type, row ) {
-          if (row.status == 'Cancelled') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<div class="row"><div class="col-4"><button title="Revert" type="button" id="revert'+data+'" onclick="revert('+data+
-            ')" class="btn btn-success btn-sm"><i class="fas fa-sync"></i></button></div></div>';
+          let buttons = '<div class="row">';
+
+          if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
+            buttons +=  '<div class="col-4"><button title="Revert" type="button" id="pendingBtn'+data+'" onclick="revert('+data+
+            ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
+
+            buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm">X</button></div>';
+
+
+            return buttons;
           } 
           else {
             return ''; // Return an empty string or any other placeholder if the item is invoiced
@@ -880,6 +887,7 @@ $(function () {
             }
           }
         },*/
+        { data: 'validate_by' },
         { data: 'customers' },
         { data: 'brand' },
         { data: 'machine_type' },
@@ -892,9 +900,16 @@ $(function () {
         { 
           data: 'id',
           render: function ( data, type, row ) {
-            if (row.status == 'Cancelled') { // Assuming 'isInvoiced' is a boolean field in your row data
-              return '<div class="row"><div class="col-4"><button title="Revert" type="button" id="revert'+data+'" onclick="revert('+data+
-              ')" class="btn btn-success btn-sm"><i class="fas fa-sync"></i></button></div></div>';
+            let buttons = '<div class="row">';
+
+            if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
+              buttons +=  '<div class="col-4"><button title="Revert" type="button" id="pendingBtn'+data+'" onclick="revert('+data+
+              ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
+
+              buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm">X</button></div>';
+
+
+              return buttons;
             } 
             else {
               return ''; // Return an empty string or any other placeholder if the item is invoiced
@@ -1517,7 +1532,7 @@ function edit(id) {
 }
 
 function revert(id) {
-  if (confirm('Are you sure you want to recall this items?')) {
+  if (confirm('DO YOU CONFIRMED TO REVERT?')) {
     $('#spinnerLoading').show();
     $.post('php/recallStamp.php', {userID: id}, function(data){
       var obj = JSON.parse(data);
@@ -1559,9 +1574,9 @@ function complete(id) {
 }
 
 function deactivate(id) {
-  if (confirm('Are you sure you want to cancel this item?')) {
+  if (confirm('DO YOU CONFIRMED TO DELETE THE FOLLOWING DETAILS?')) {
     $('#spinnerLoading').show();
-    $.post('php/deleteStamp.php', {userID: id}, function(data){
+    $.post('php/deleteStamp.php', {id: id, status: 'DELETE'}, function(data){
       var obj = JSON.parse(data);
 
       if(obj.status === 'success'){

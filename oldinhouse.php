@@ -1052,10 +1052,10 @@ $(function () {
           let buttons = '<div class="row">';
 
             if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
-              buttons +=  '<div class="col-4"><button type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
+              buttons +=  '<div class="col-4"><button title="Revert" type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
               ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
 
-              buttons += '<div class="col-4"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm">X</button></div>';
+              buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm">X</button></div>';
 
 
               return buttons;
@@ -1302,10 +1302,10 @@ $(function () {
             let buttons = '<div class="row">';
 
             if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
-              buttons +=  '<div class="col-4"><button type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
+              buttons +=  '<div class="col-4"><button title="Revert" type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
               ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
 
-              buttons += '<div class="col-4"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm">X</button></div>';
+              buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm">X</button></div>';
 
 
               return buttons;
