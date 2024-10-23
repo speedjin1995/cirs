@@ -665,7 +665,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
           <div class="row" id='otherRow'>
             <div class="col-6">
               <div class="form-group">
-                <label>Other Reason</label>
+                <label>Remarks / Other Reasons</label>
                 <textarea class="form-control" id ="otherReason" name="otherReason"></textarea>
               </div>
             </div>
@@ -1773,16 +1773,16 @@ $(function () {
   //   }
   // });
 
-  $('#cancelModal').find('#cancellationReason').on('change', function(){
-    if($(this).val() == '0'){
-      $('#otherRow').show();
-      $('#otherReason').attr("required", true);
-    }
-    else{
-      $('#otherRow').hide();
-      $('#otherReason').attr("required", false);
-    }
-  });
+  // $('#cancelModal').find('#cancellationReason').on('change', function(){
+  //   if($(this).val() == '0'){
+  //     $('#otherRow').show();
+  //     $('#otherReason').attr("required", true);
+  //   }
+  //   else{
+  //     $('#otherRow').hide();
+  //     $('#otherReason').attr("required", false);
+  //   }
+  // });
 
   // $(document).on('click', '#add-testing-cell', function() {
   //   var $addContents = $("#loadTestingDetails").clone();
