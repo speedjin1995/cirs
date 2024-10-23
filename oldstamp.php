@@ -124,7 +124,10 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <!-- <div class="col-12"><p>Cancelled Stamping</p></div> -->
+              <div class="col-10"><h4>Cancelled Stamping</h4></div>
+              <div class="col-2">
+                <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="exportExcel">Export Excel</button>
+              </div>
               <!--div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
               </div-->
@@ -144,6 +147,7 @@ else{
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
+                  <th></th>
                   <th>Validator</th>
                   <th>Customers</th>
                   <th>Brands</th>
@@ -680,20 +684,15 @@ $(function () {
       } 
     },
     'columns': [
-      /*{
+      {
         // Add a checkbox with a unique ID for each row
         data: 'id', // Assuming 'serialNo' is a unique identifier for each row
         className: 'select-checkbox',
         orderable: false,
         render: function (data, type, row) {
-          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-          } 
-          else {
-            return ''; // Return an empty string or any other placeholder if the item is invoiced
-          }
+          return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
         }
-      },*/
+      },
       { data: 'validate_by' },
       { data: 'customers' },
       { data: 'brand' },
@@ -878,20 +877,15 @@ $(function () {
         } 
       },
       'columns': [
-        /*{
+        {
           // Add a checkbox with a unique ID for each row
           data: 'id', // Assuming 'serialNo' is a unique identifier for each row
           className: 'select-checkbox',
           orderable: false,
           render: function (data, type, row) {
-            if (row.status == 'Active') { // Assuming 'isInvoiced' is a boolean field in your row data
-              return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-            } 
-            else {
-              return ''; // Return an empty string or any other placeholder if the item is invoiced
-            }
+            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
           }
-        },*/
+        },
         { data: 'validate_by' },
         { data: 'customers' },
         { data: 'brand' },
@@ -967,6 +961,21 @@ $(function () {
       // Optionally, you can display a message or take another action if no IDs are selected
       alert("Please select at least one DO to Deliver.");
     }
+  });
+
+  $('#exportExcel').on('click', function () {
+    var fromDateValue = $('#fromDate').val();
+    var toDateValue = $('#toDate').val();
+
+    let selectedIds = [];
+    $("#weightTable tbody input[type='checkbox']").each(function () {
+      if (this.checked) {
+        selectedIds.push($(this).val());
+      }
+    });
+
+    window.open("php/export.php?fromDate="+fromDateValue+"&toDate="+toDateValue+
+    "&stamps="+selectedIds+"&type=cancelledStamp");    
   });
 
   /*$('#refreshBtn').on('click', function(){
