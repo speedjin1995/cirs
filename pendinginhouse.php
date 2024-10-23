@@ -508,7 +508,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                           <td>
                             <div class='d-flex mt-1'>
                               <div class='col-6'>
-                                <input type='number' placeholder='0.0' id='standardValue$i' name='standardValue$i' class='form-control' style='width: 100%;' value='0.0'>
+                                <input type='number' placeholder='0.0' id='standardValue$i' name='standardValue$i' class='form-control' style='width: 100%;background-color: yellow' value='0.0'>
                               </div>
                               <div class='col-2'>
                                 <i class='fas fa-minus fa-2x'></i>

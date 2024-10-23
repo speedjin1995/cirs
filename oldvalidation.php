@@ -2144,7 +2144,7 @@ function deactivate(id){
       
       if(obj.status === 'success'){
         toastr["success"](obj.message, "Success:");
-        $('#customerTable').DataTable().ajax.reload();
+        $('#weightTable').DataTable().ajax.reload();
         $('#spinnerLoading').hide();
       }
       else if(obj.status === 'failed'){
