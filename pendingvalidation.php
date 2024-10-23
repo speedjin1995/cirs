@@ -1752,16 +1752,11 @@ $(function () {
     }
   });
 
-  // $('#cancelModal').find('#cancellationReason').on('change', function(){
-  //   if($(this).val() == '0'){
-  //     $('#otherRow').show();
-  //     $('#otherReason').attr("required", true);
-  //   }
-  //   else{
-  //     $('#otherRow').hide();
-  //     $('#otherReason').attr("required", false);
-  //   }
-  // });
+  $('#cancelModal').find('#cancellationReason').on('change', function(){
+    if($(this).val() == '0'){
+      $('#otherReason').attr("required", true);
+    }
+  });
 
   $(document).on('click', '#add-calibration-cell', function() {
       var $addContents = $("#loadCalibrationDetails").clone();
