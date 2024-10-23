@@ -973,7 +973,6 @@ $(function () {
         render: function ( data, type, row ) {
           let buttons = '<div class="row">';
 
-
           if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
             buttons +=  '<div class="col-4"><button type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
             ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
@@ -1223,9 +1222,16 @@ $(function () {
         { 
           data: 'id',
           render: function ( data, type, row ) {
+            let buttons = '<div class="row">';
+
             if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
-              return '<div class="row"><div class="col-4"><button type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
+              buttons +=  '<div class="col-4"><button type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
               ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
+
+              buttons += '<div class="col-4"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm">X</button></div>';
+
+
+              return buttons;
             } 
             else {
               return ''; // Return an empty string or any other placeholder if the item is invoiced
