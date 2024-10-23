@@ -26,7 +26,6 @@ if($_POST['toDate'] != null && $_POST['toDate'] != ''){
   $toDateTime = $dateTime->format('Y-m-d 23:59:59');
 	$searchQuery .= " and validation_date <= '".$toDateTime."'";
 }
-
 // if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] != '-'){
 // 	$searchQuery .= " and customer = '".$_POST['customer']."'";
 // }
@@ -57,8 +56,8 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$searchQuery .= " and b.deleted = 0";
-$empQuery = "SELECT a.*, b.standard_avg_temp, b.relative_humidity ,b.unit FROM inhouse_validations a LEFT JOIN standard b ON a.capacity = b.capacity WHERE status = 'Cancelled'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
+$searchQuery .= " and b.deleted = 0 and a.deleted = 0";
+$empQuery = "SELECT a.*, b.standard_avg_temp, b.relative_humidity ,b.unit FROM inhouse_validations a LEFT JOIN standard b ON a.capacity = b.capacity WHERE status = 'Cancelled'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;

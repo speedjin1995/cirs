@@ -32,10 +32,10 @@ else{
 				<div class="card">
 					<div class="card-header">
                         <div class="row">
-                            <div class="col-12"></div>
-                            <!--div class="col-3">
-                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addUnits">Add Units</button>
-                            </div-->
+                            <div class="col-9"></div>
+                            <div class="col-3">
+                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addUnits">Add Country</button>
+                            </div>
                         </div>
                     </div>
 					<div class="card-body">

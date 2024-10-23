@@ -124,7 +124,10 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <!-- <div class="col-12"><p>Cancelled Stamping</p></div> -->
+              <div class="col-10"><h4>Cancelled Stamping</h4></div>
+              <div class="col-2">
+                <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="exportExcel">Export Excel</button>
+              </div>
               <!--div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
               </div-->
@@ -144,6 +147,7 @@ else{
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
+                  <th></th>
                   <th>Validator</th>
                   <th>Customers</th>
                   <th>Brands</th>
@@ -680,20 +684,15 @@ $(function () {
       } 
     },
     'columns': [
-      /*{
+      {
         // Add a checkbox with a unique ID for each row
         data: 'id', // Assuming 'serialNo' is a unique identifier for each row
         className: 'select-checkbox',
         orderable: false,
         render: function (data, type, row) {
-          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-          } 
-          else {
-            return ''; // Return an empty string or any other placeholder if the item is invoiced
-          }
+          return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
         }
-      },*/
+      },
       { data: 'validate_by' },
       { data: 'customers' },
       { data: 'brand' },
@@ -707,9 +706,16 @@ $(function () {
       { 
         data: 'id',
         render: function ( data, type, row ) {
-          if (row.status == 'Cancelled') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<div class="row"><div class="col-4"><button title="Revert" type="button" id="revert'+data+'" onclick="revert('+data+
-            ')" class="btn btn-success btn-sm"><i class="fas fa-sync"></i></button></div></div>';
+          let buttons = '<div class="row">';
+
+          if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
+            buttons +=  '<div class="col-4"><button title="Revert" type="button" id="pendingBtn'+data+'" onclick="revert('+data+
+            ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
+
+            buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm">X</button></div>';
+
+
+            return buttons;
           } 
           else {
             return ''; // Return an empty string or any other placeholder if the item is invoiced
@@ -730,7 +736,7 @@ $(function () {
   // Add event listener for opening and closing details
   $('#weightTable tbody').on('click', 'td.dt-control', function () {
     var tr = $(this).closest('tr');
-    var row = table.row( tr );
+    var row = table.row(tr);
 
     if ( row.child.isShown() ) {
       // This row is already open - close it
@@ -738,7 +744,12 @@ $(function () {
       tr.removeClass('shown');
     }
     else {
-      row.child( format(row.data()) ).show();tr.addClass("shown");
+      $.post('php/getStamp.php', {userID: row.data().id, format: 'EXPANDABLE'}, function (data){
+        var obj = JSON.parse(data); 
+        if(obj.status === 'success'){ console.log(obj.message);
+          row.child( format(obj.message) ).show();tr.addClass("shown");
+        }
+      });
     }
   });
 
@@ -866,20 +877,16 @@ $(function () {
         } 
       },
       'columns': [
-        /*{
+        {
           // Add a checkbox with a unique ID for each row
           data: 'id', // Assuming 'serialNo' is a unique identifier for each row
           className: 'select-checkbox',
           orderable: false,
           render: function (data, type, row) {
-            if (row.status == 'Active') { // Assuming 'isInvoiced' is a boolean field in your row data
-              return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-            } 
-            else {
-              return ''; // Return an empty string or any other placeholder if the item is invoiced
-            }
+            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
           }
-        },*/
+        },
+        { data: 'validate_by' },
         { data: 'customers' },
         { data: 'brand' },
         { data: 'machine_type' },
@@ -892,9 +899,16 @@ $(function () {
         { 
           data: 'id',
           render: function ( data, type, row ) {
-            if (row.status == 'Cancelled') { // Assuming 'isInvoiced' is a boolean field in your row data
-              return '<div class="row"><div class="col-4"><button title="Revert" type="button" id="revert'+data+'" onclick="revert('+data+
-              ')" class="btn btn-success btn-sm"><i class="fas fa-sync"></i></button></div></div>';
+            let buttons = '<div class="row">';
+
+            if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
+              buttons +=  '<div class="col-4"><button title="Revert" type="button" id="pendingBtn'+data+'" onclick="revert('+data+
+              ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
+
+              buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm">X</button></div>';
+
+
+              return buttons;
             } 
             else {
               return ''; // Return an empty string or any other placeholder if the item is invoiced
@@ -947,6 +961,21 @@ $(function () {
       // Optionally, you can display a message or take another action if no IDs are selected
       alert("Please select at least one DO to Deliver.");
     }
+  });
+
+  $('#exportExcel').on('click', function () {
+    var fromDateValue = $('#fromDate').val();
+    var toDateValue = $('#toDate').val();
+
+    let selectedIds = [];
+    $("#weightTable tbody input[type='checkbox']").each(function () {
+      if (this.checked) {
+        selectedIds.push($(this).val());
+      }
+    });
+
+    window.open("php/export.php?fromDate="+fromDateValue+"&toDate="+toDateValue+
+    "&stamps="+selectedIds+"&type=cancelledStamp");    
   });
 
   /*$('#refreshBtn').on('click', function(){
@@ -1229,20 +1258,29 @@ function format (row) {
     <!-- Customer Section -->
     <div class="col-md-6">
       <p><strong>${row.customers}</strong><br>
-      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4}`;
-      
-      if (row.picontact) {
-          returnString += `
-              <br>PIC: ${row.picontact} PIC Contact: ${row.pic_phone}</p>
-              </div>
-          </div><hr>`;
-      } else {
-          returnString += `</p>
-          </div>
-      </div><hr>`;
-      }
+      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4} `;
 
-  returnString += `
+      if (row.pic) {
+          returnString += `
+              <br><b>PIC:</b> ${row.pic} <b>PIC Contact:</b> ${row.pic_phone}`;
+      }     
+      returnString += `</p></div>`;
+
+  if (row.dealer){
+    returnString += `
+    <!-- Reseller Section -->
+    <div class="col-md-6">
+      <p><strong>${row.dealer}</strong><br>
+      ${row.reseller_address1}<br>${row.reseller_address2}<br>${row.reseller_address3}<br>${row.reseller_address4} `;
+      
+      if (row.reseller_pic) {
+          returnString += `
+              <br><b>PIC:</b> ${row.reseller_pic} <b>PIC Contact:</b> ${row.reseller_pic_phone}`;
+      }     
+      returnString += `</p></div>`;
+  }
+
+  returnString += `</div><hr>
   <div class="row">
     <!-- Machine Section -->
     <div class="col-6">
@@ -1517,7 +1555,7 @@ function edit(id) {
 }
 
 function revert(id) {
-  if (confirm('Are you sure you want to recall this items?')) {
+  if (confirm('DO YOU CONFIRMED TO REVERT?')) {
     $('#spinnerLoading').show();
     $.post('php/recallStamp.php', {userID: id}, function(data){
       var obj = JSON.parse(data);
@@ -1559,9 +1597,9 @@ function complete(id) {
 }
 
 function deactivate(id) {
-  if (confirm('Are you sure you want to cancel this item?')) {
+  if (confirm('DO YOU CONFIRMED TO DELETE THE FOLLOWING DETAILS?')) {
     $('#spinnerLoading').show();
-    $.post('php/deleteStamp.php', {userID: id}, function(data){
+    $.post('php/deleteStamp.php', {id: id, status: 'DELETE'}, function(data){
       var obj = JSON.parse(data);
 
       if(obj.status === 'success'){

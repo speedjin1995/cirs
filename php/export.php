@@ -21,6 +21,9 @@ if(isset($_GET['type'])){
     else if($_GET["type"] == '7'){
         $fileName = "Jadual7_" . date('Y-m-d') . ".xls";
     }
+    else if($_GET['type'] == 'cancelledStamp') {
+        $fileName = "CancelledStamping_" . date('Y-m-d'). ".xls";
+    } 
     else{
         $fileName = "Panjang_" . date('Y-m-d') . ".xls";
     } 
@@ -37,17 +40,25 @@ if(isset($_GET['type'])){
         $searchQuery .= " and stamping_date <= '".$toDateTime."'";
     }
     
-    if($_GET['customer'] != null && $_GET['customer'] != '' && $_GET['customer'] != '-'){
-        $searchQuery .= " and customers = '".$_GET['customer']."'";
-    }
-    
-
     $driver = $_GET['type'];
     $todayDate = date('d/m/Y');
     $todayDate2 = date('d M Y');
     $today = date("Y-m-d 00:00:00");
 
-    $select_stmt = $db->prepare("SELECT * FROM stamping WHERE status = 'Complete'".$searchQuery);
+    if($_GET['type'] == 'cancelledStamp'){
+        if($_GET['stamps'] != null && $_GET['stamps'] != '' && $_GET['stamps'] != '-'){
+            $stamps = $_GET['stamps'];
+            $searchQuery .= " and id IN ($stamps)";
+        }
+
+        $select_stmt = $db->prepare("SELECT * FROM stamping WHERE status = 'Cancelled'".$searchQuery);
+    }else{
+        if($_GET['customer'] != null && $_GET['customer'] != '' && $_GET['customer'] != '-'){
+            $searchQuery .= " and customers = '".$_GET['customer']."'";
+        }
+    
+        $select_stmt = $db->prepare("SELECT * FROM stamping WHERE status = 'Complete'".$searchQuery);
+    }
 
     // Check if the statement is prepared successfully
     if ($select_stmt) {
@@ -128,6 +139,20 @@ if(isset($_GET['type'])){
                 $lineData = array('', $todayDate2, searchBrandNameById($row['brand'], $db).'\n'.searchModelNameById($row['model'], $db).'\n'.searchAlatNameById($row['jenis_alat'], $db), 
                 searchCapacityNameById($row['capacity'], $db), $row['pin_keselamatan'], $row['no_daftar'], 'SERVICE / STMP', $row['siri_keselamatan'], searchCustNameById($row['customers'], $db),
                 $address1.' '.$address2.' '.$address3.' '.$address4, $row['unit_price']);
+                
+                array_walk($lineData, 'filterData'); 
+                $excelData .= implode("\t", array_values($lineData)) . "\n"; 
+            }
+        }
+        else if($driver == 'cancelledStamp'){
+            $fields = array('VALIDATOR', 'CUSTOMERS', 'BRANDS', 'ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS', 'MODEL', 
+            'CAPACITY', 'SERIAL NO.', 'NEXT DUE DATE', 'UPDATED DATE', 'STATUS');
+            $excelData = implode("\t", array_values($fields)) . "\n"; 
+
+            while ($row = $result->fetch_assoc()) {
+                $branch = $row['branch'];
+
+                $lineData = array(searchValidatorNameById($row['validate_by'], $db), searchCustNameById($row['customers'], $db), searchBrandNameById($row['brand'], $db),searchMachineNameById($row['machine_type'], $db), searchModelNameById($row['model'], $db), searchCapacityNameById($row['capacity'], $db), $row['serial_no'], $row['due_date'], $row['updated_datetime'], $row['status']);
                 
                 array_walk($lineData, 'filterData'); 
                 $excelData .= implode("\t", array_values($lineData)) . "\n"; 

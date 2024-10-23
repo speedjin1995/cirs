@@ -1049,13 +1049,20 @@ $(function () {
       { 
         data: 'id',
         render: function ( data, type, row ) {
-          if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
-            return '<div class="row"><div class="col-4"><button type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
-            ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
-          } 
-          else {
-            return ''; // Return an empty string or any other placeholder if the item is invoiced
-          }
+          let buttons = '<div class="row">';
+
+            if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
+              buttons +=  '<div class="col-4"><button title="Revert" type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
+              ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
+
+              buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm">X</button></div>';
+
+
+              return buttons;
+            } 
+            else {
+              return ''; // Return an empty string or any other placeholder if the item is invoiced
+            }
         }
       },
       // { 
@@ -1292,9 +1299,16 @@ $(function () {
         { 
           data: 'id',
           render: function ( data, type, row ) {
+            let buttons = '<div class="row">';
+
             if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
-              return '<div class="row"><div class="col-4"><button type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
+              buttons +=  '<div class="col-4"><button title="Revert" type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
               ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
+
+              buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm">X</button></div>';
+
+
+              return buttons;
             } 
             else {
               return ''; // Return an empty string or any other placeholder if the item is invoiced
@@ -2239,45 +2253,32 @@ function complete(id) {
   }
 }
 
-function deactivate(id) {
-  if (confirm('Are you sure you want to cancel this item?')) {
+function deactivate(id){
+  if (confirm('DO YOU CONFIRMED TO DELETE FOLLOWING DETAILS?')) {
     $('#spinnerLoading').show();
-    $.post('php/getInHouseValidation.php', {validationId: id}, function(data){
+    $.post('php/deleteInHouseValidation.php', {id: id, status: 'DELETE'}, function(data){
       var obj = JSON.parse(data);
-
-      if(obj.status == 'success'){
-        $('#cancelModal').find('#id').val(obj.message.id);
-        $('#cancelModal').modal('show');
-
-        $('#cancelForm').validate({
-          errorElement: 'span',
-          errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-          },
-          highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-          },
-          unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-          }
-        });
-      } else if(obj.status === 'failed'){
+      
+      if(obj.status === 'success'){
+        toastr["success"](obj.message, "Success:");
+        $('#weightTable').DataTable().ajax.reload();
+        $('#spinnerLoading').hide();
+      }
+      else if(obj.status === 'failed'){
         toastr["error"](obj.message, "Failed:");
+        $('#spinnerLoading').hide();
       }
       else{
-        toastr["error"]("Something wrong when pull data", "Failed:");
+        toastr["error"]("Something wrong when activate", "Failed:");
+        $('#spinnerLoading').hide();
       }
-
-      $('#spinnerLoading').hide();
-
     });
   }
 }
 
 function revertToPending(id) {
   
-  if (confirm('Are you sure you want to set status back to Pending?')) {
+  if (confirm('DO YOU CONFIRMED TO REVERT TO PENDING?')) {
     $('#spinnerLoading').show();
     $.post('php/changeStatusInHouseValidation.php', {userID: id}, function(data){
       var obj = JSON.parse(data);
