@@ -39,6 +39,8 @@ if($_POST['autoFormNo'] != null && $_POST['autoFormNo'] != '' && $_POST['autoFor
 	$searchQuery .= " and auto_form_no = '".$_POST['autoFormNo']."'";
 }
 
+$searchQuery .= " and deleted = 0";
+
 // if($searchValue != ''){
 //   $searchQuery = " and (purchase_no like '%".$searchValue."%' OR
 //   quotation_no like '%".$searchValue."%' OR

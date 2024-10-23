@@ -1053,6 +1053,7 @@ $(function () {
     }
     else {
       row.child( format(row.data()) ).show();tr.addClass("shown");
+          row.child( format(obj.message) ).show();tr.addClass("shown");
     }
   });
 
