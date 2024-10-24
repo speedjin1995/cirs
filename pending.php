@@ -1013,7 +1013,7 @@ $(function () {
 
           // Print button
           buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                    ', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+                    ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
           // Complete button if conditions are met
           if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
@@ -1243,7 +1243,7 @@ $(function () {
 
             // Print button
             buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                    ', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+                    ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
             // Complete button if conditions are met
             if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
@@ -2500,8 +2500,9 @@ function deactivate(id) {
   }
 }
 
-function print(id, validate) {
-  window.open('php/printBorang.php?userID='+id+'&file=ATK&validator='+validate, '_blank');
+function print(id, type, validate) {
+  //var optionText = $('#jenisAlat option[value="' + type + '"]').text();
+  window.open('php/printBorang.php?userID='+id+'&file='+type+'&validator='+validate, '_blank');
   /*$.get('php/printBorang.php', {userID: id, file: 'ATK'}, function(data){
     var obj = JSON.parse(data);
 
