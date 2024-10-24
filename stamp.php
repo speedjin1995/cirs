@@ -2494,8 +2494,9 @@ function deactivate(id) {
   }
 }
 
-function print(id, validate) {
-  window.open('php/printBorang.php?userID='+id+'&file=ATK&validator='+validate, '_blank');
+function print(id, type, validate) {
+  var optionText = $('#jenisAlat option[value="' + type + '"]').text();
+  window.open('php/printBorang.php?userID='+id+'&file='+optionText+'&validator='+validate, '_blank');
   /*$.get('php/printBorang.php', {userID: id, file: 'ATK'}, function(data){
     var obj = JSON.parse(data);
 
