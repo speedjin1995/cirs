@@ -20,7 +20,7 @@ else{
     $role = $row['role_code'];
   }
 
-  $autoFormNos = $db->query("SELECT DISTINCT auto_form_no FROM other_validations");
+  $autoFormNos = $db->query("SELECT DISTINCT auto_form_no FROM other_validations WHERE deleted = '0'");
   $dealer = $db->query("SELECT * FROM dealer WHERE deleted = '0'");
   $customers = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
@@ -850,13 +850,13 @@ $(function () {
   $('#fromDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
-    defaultDate: startOfMonth
+    // defaultDate: startOfMonth
   });
 
   $('#toDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
-    defaultDate: endOfMonth
+    // defaultDate: endOfMonth
   });
 
   $('#datePicker').datetimepicker({

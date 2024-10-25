@@ -20,7 +20,7 @@ else{
     $role = $row['role_code'];
   }
 
-  $autoFormNos = $db->query("SELECT DISTINCT auto_form_no FROM inhouse_validations");
+  $autoFormNos = $db->query("SELECT DISTINCT auto_form_no FROM inhouse_validations WHERE deleted = '0'");
   $dealer = $db->query("SELECT * FROM dealer WHERE deleted = '0'");
   $customers = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
@@ -33,7 +33,7 @@ else{
   $problems = $db->query("SELECT * FROM problem WHERE deleted = '0'");
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
-  $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' ");
+  $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'INHOUSE'");
   $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'INHOUSE'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
@@ -71,7 +71,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
       <div class="col-lg-12">
         <div class="card">
           <div class="card-body">
-            <div class="row" style="display:none;">
+            <div class="row">
               <div class="col-4">
                 <div class="form-group">
                   <label>Select Validators</label>
@@ -105,21 +105,10 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                   </select>
                 </div>
               </div>
-
-              <!--div class="col-3">
-                <div class="form-group">
-                  <label>Status</label>
-                  <select class="form-control" id="statusFilter" name="statusFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <option value="Active">Active</option>
-                    <option value="Complete">Complete</option>
-                  </select>
-                </div>
-              </div-->
             </div>
 
             <div class="row">
-            <div class="form-group col-4">
+              <div class="form-group col-4">
                 <label>From Date:</label>
                 <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
                   <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
@@ -930,13 +919,13 @@ $(function () {
   $('#fromDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
-    defaultDate: startOfMonth
+    // defaultDate: startOfMonth
   });
 
   $('#toDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
-    defaultDate: endOfMonth
+    // defaultDate: endOfMonth
   });
 
   $('#datePicker').datetimepicker({
@@ -968,6 +957,7 @@ $(function () {
     checkboxes.prop('checked', $(this).prop('checked')).trigger('change');
   });
 
+  $('#validatorFilter').val(15).trigger('change');
   var fromDateValue = $('#fromDate').val();
   var toDateValue = $('#toDate').val();
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
@@ -990,6 +980,9 @@ $(function () {
       'data': {
         fromDate: fromDateValue,
         toDate: toDateValue,
+        customer: customerNoFilter,
+        validator: validatorFilter,
+        autoFormNo: autoFormNoFilter,
         status: 'Pending'
       } 
     },
@@ -1223,6 +1216,9 @@ $(function () {
         'data': {
           fromDate: fromDateValue,
           toDate: toDateValue,
+          customer: customerNoFilter,
+          validator: validatorFilter,
+          autoFormNo: autoFormNoFilter,
           status: 'Pending'
         } 
       },
