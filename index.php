@@ -312,15 +312,15 @@ to get the desired effect
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
-      <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image" style="align-self: center;">
             <img src="assets/user-avatar.png" class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info" style="white-space: nowrap;">
             <p style="font-size:0.75rem; color:#E3E3E3; margin-bottom:0rem; color:#1888CA">Welcome</p>
             <a href="#myprofile" data-file="myprofile.php" id="goToProfile" class="d-block"><?=$name ?></a>
-          </div> -->
-      <!-- </div> -->
+          </div>
+      </div>
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
