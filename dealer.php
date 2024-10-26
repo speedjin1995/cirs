@@ -493,8 +493,10 @@ function edit(id){
             $('#addModal').find('#reseller_map_url').val(obj.message.resellerMapUrl);
             $('#addModal').find('#phone').val(obj.message.customer_phone);
             $('#addModal').find('#email').val(obj.message.customer_email);
-            $('#addModal').find('#pic').val(obj.message.customer_email);
-            $('#addModal').find('#picContact').val(obj.message.customer_email);
+            $('#addModal').find('#pic').val(obj.message.pic);
+            $('#addModal').find('#picContact').val(obj.message.pic_contact);
+
+            $('#addModal').find('#branchTable').html('');
             branchCount = 0;
 
             var weightData = obj.message.branches;
