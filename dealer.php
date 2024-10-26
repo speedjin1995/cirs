@@ -370,6 +370,7 @@ $(function () {
       $('#addModal').find('#pic').val("");
       $('#addModal').find('#picContact').val("");
       $('#addModal').find('#email').val("");
+      $('#addModal').find('#branchTable').html('');
       branchCount = 0;
       $('#addModal').modal('show');
       
