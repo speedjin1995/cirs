@@ -11,7 +11,7 @@ else{
   $user = $_SESSION['userID'];
   $_SESSION['page']='model';
   $brand = $db->query("SELECT * FROM brand WHERE deleted = '0'");
-  $country = $db->query("SELECT * FROM country");
+  $country = $db->query("SELECT * FROM country WHERE deleted = '0'");
 }
 ?>
 
