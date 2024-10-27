@@ -24,10 +24,15 @@ if(isset($_POST['userID'])){
             while ($row = $result->fetch_assoc()) {
                 $message['id'] = $row['id'];
                 $message['name'] = $row['name'];
+                $message['range_type'] = $row['range_type'];
                 $message['capacity'] = $row['capacity'];
                 $message['units'] = $row['units'];
                 $message['division'] = $row['division'];
                 $message['division_unit'] = $row['division_unit'];
+                $message['capacity2'] = $row['capacity2'];
+                $message['units2'] = $row['units2'];
+                $message['division2'] = $row['division2'];
+                $message['division_unit2'] = $row['division_unit2'];
             }
             
             echo json_encode(

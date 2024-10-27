@@ -15,21 +15,21 @@ $searchValue = mysqli_real_escape_string($db,$_POST['search']['value']); // Sear
 ## Search 
 $searchQuery = " ";
 if($searchValue != ''){
-   $searchQuery = " AND capacity like '%".$searchValue."%'";
+   $searchQuery = " AND (capacity like '%".$searchValue."%' OR name like '%".$searchValue."%')";
 }
 
 ## Total number of records without filtering
-$sel = mysqli_query($db,"select count(*) as allcount from capacity, units WHERE capacity.units = units.id AND capacity.deleted = '0'");
+$sel = mysqli_query($db,"select count(*) as allcount from capacity WHERE deleted = '0'");
 $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM capacity, units WHERE capacity.units = units.id AND capacity.deleted = '0'".$searchQuery);
+$sel = mysqli_query($db,"select count(*) as allcount FROM capacity WHERE deleted = '0'".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "select capacity.*, units.units from capacity, units WHERE capacity.units = units.id AND capacity.deleted = '0'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+$empQuery = "select * from capacity WHERE deleted = '0'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;
@@ -39,10 +39,15 @@ while($row = mysqli_fetch_assoc($empRecords)) {
       "counter"=>$counter,
       "id"=>$row['id'],
       "name"=>$row['name'],
+      "range_type"=>$row['range_type'],
       "capacity"=>$row['capacity'],
-      "units"=>$row['units'],
+      "units"=>searchUnitNameById($row['units'], $db),
       "division"=>$row['division'] ?? '',
       "division_unit"=>$row['division_unit'] != null ? searchUnitNameById($row['division_unit'], $db) : '',
+      "capacity2"=>$row['capacity2'],
+      "units2"=>$row['units2'] != null ? searchUnitNameById($row['units2'], $db) : '',
+      "division2"=>$row['division2'] ?? '',
+      "division_unit2"=>$row['division_unit2'] != null ? searchUnitNameById($row['division_unit2'], $db) : '',
     );
 
     $counter++;
