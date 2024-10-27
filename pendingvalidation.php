@@ -2095,10 +2095,9 @@ function edit(id) {
         setTimeout(function(){
           $('#extendModal').find('#reseller_branch').val(obj.message.dealer_branch).trigger('change');
           $('#extendModal').find('#company').val(obj.message.customer).trigger('change');
-
-          setTimeout(function(){
-            $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
-          }, 1000);
+        }, 500);
+        setTimeout(function(){
+          $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
         }, 1000);
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
         $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
