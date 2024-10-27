@@ -25,7 +25,7 @@ else{
   $customers = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $machinetypes = $db->query("SELECT * FROM machines WHERE deleted = '0'");
-  $brands = $db->query("SELECT * FROM brand WHERE deleted = '0'");
+  $brands = $db->query("SELECT * FROM brand WHERE deleted = '0' ORDER BY brand ASC");
   $models = $db->query("SELECT * FROM model WHERE deleted = '0'");
   $sizes = $db->query("SELECT * FROM size WHERE deleted = '0'");
   $capacities = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
