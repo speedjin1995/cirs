@@ -1977,16 +1977,6 @@ function newEntry(){
 
   $('#calibrationHeader').text('Note - Standard Average Temperature: () / Average Relative Humidity: ()');
   $('#varianceHeader').text('Variance +/- ');
-  $("#loadTestingTable").find('#standardValue1').val('');
-  $("#loadTestingTable").find('#standardValue2').val('');
-  $("#loadTestingTable").find('#standardValue3').val('');
-  $("#loadTestingTable").find('#standardValue4').val('');
-  $("#loadTestingTable").find('#standardValue5').val('');
-  $("#loadTestingTable").find('#standardValue6').val('');
-  $("#loadTestingTable").find('#standardValue7').val('');
-  $("#loadTestingTable").find('#standardValue8').val('');
-  $("#loadTestingTable").find('#standardValue9').val('');
-  $("#loadTestingTable").find('#standardValue10').val('');
 
   for (var i = 1; i <= 10; i++) {
     //Symbol setting
@@ -1996,6 +1986,7 @@ function newEntry(){
     $("#loadTestingTable").find('#unitSymbolAR'+ i).text('');
 
     //Placeholder Value
+    $("#loadTestingTable").find('#standardValue' + i).val('');
     $("#loadTestingTable").find('#calibrationReceived'+ i).attr('placeholder', '0.0').val('0.0');
     $("#loadTestingTable").find('#variance'+ i).attr('placeholder', '0.0').val('0.0').css({'background-color': 'lightgrey', 'color': 'black'});
     $("#loadTestingTable").find('#afterAdjustReading'+ i).attr('placeholder', '0.0').val('0.0');
@@ -2016,6 +2007,7 @@ function newEntry(){
 
           $('#calibrationHeader').text('Note - Standard Average Temperature: ('+ standardAvTemp +') / Average Relative Humidity: ('+ relativeHumidity +')');
           $('#varianceHeader').text('Variance +/- '+ variance + unit);
+          // change standard value 
           $("#loadTestingTable").find('#standardValue1').val(parseFloat(obj.message.test_1).toFixed(varianceDecimalPoint));
           $("#loadTestingTable").find('#standardValue2').val(parseFloat(obj.message.test_2).toFixed(varianceDecimalPoint));
           $("#loadTestingTable").find('#standardValue3').val(parseFloat(obj.message.test_3).toFixed(varianceDecimalPoint));
@@ -2026,6 +2018,17 @@ function newEntry(){
           $("#loadTestingTable").find('#standardValue8').val(parseFloat(obj.message.test_8).toFixed(varianceDecimalPoint));
           $("#loadTestingTable").find('#standardValue9').val(parseFloat(obj.message.test_9).toFixed(varianceDecimalPoint));
           $("#loadTestingTable").find('#standardValue10').val(parseFloat(obj.message.test_10).toFixed(varianceDecimalPoint));
+          // Change After adjustment value
+          $("#loadTestingTable").find('#afterAdjustReading1').val(parseFloat(obj.message.test_1).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#afterAdjustReading2').val(parseFloat(obj.message.test_2).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#afterAdjustReading3').val(parseFloat(obj.message.test_3).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#afterAdjustReading4').val(parseFloat(obj.message.test_4).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#afterAdjustReading5').val(parseFloat(obj.message.test_5).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#afterAdjustReading6').val(parseFloat(obj.message.test_6).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#afterAdjustReading7').val(parseFloat(obj.message.test_7).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#afterAdjustReading8').val(parseFloat(obj.message.test_8).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#afterAdjustReading9').val(parseFloat(obj.message.test_9).toFixed(varianceDecimalPoint));
+          $("#loadTestingTable").find('#afterAdjustReading10').val(parseFloat(obj.message.test_10).toFixed(varianceDecimalPoint));
 
           for (var i = 1; i <= 10; i++) {
             //Symbol setting
@@ -2156,9 +2159,9 @@ function edit(id) {
         $('#extendModal').find('#serial').val(obj.message.unit_serial_no);
         $('#extendModal').find('#manufacturing').val(obj.message.manufacturing).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
-        setTimeout(function(){
-          $('#extendModal').find('#model').val(obj.message.model).trigger('change');
-        }, 600);
+        $('#extendModal').on('modelsLoaded', function() {
+            $('#extendModal').find('#model').val(obj.message.model);
+        });
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#size').val(obj.message.size).trigger('change');
         $('#extendModal').find('#lastCalibrationDate').val(obj.message.last_calibration_date);
@@ -2331,7 +2334,9 @@ function edit(id) {
         $('#extendModal').find('#serial').val(obj.message.unit_serial_no);
         $('#extendModal').find('#manufacturing').val(obj.message.manufacturing).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
-        $('#extendModal').find('#model').val(obj.message.model).trigger('change');
+        $('#extendModal').on('modelsLoaded', function() {
+            $('#extendModal').find('#model').val(obj.message.model);
+        });
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#size').val(obj.message.size).trigger('change');
         $('#extendModal').find('#lastCalibrationDate').val(obj.message.last_calibration_date);
