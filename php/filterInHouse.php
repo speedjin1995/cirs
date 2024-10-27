@@ -26,17 +26,18 @@ if($_POST['toDate'] != null && $_POST['toDate'] != ''){
   $toDateTime = $dateTime->format('Y-m-d 23:59:59');
 	$searchQuery .= " and validation_date <= '".$toDateTime."'";
 }
-// if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] != '-'){
-// 	$searchQuery .= " and customer = '".$_POST['customer']."'";
-// }
 
-// if($_POST['validator'] != null && $_POST['validator'] != '' && $_POST['validator'] != '-'){
-// 	$searchQuery .= " and validate_by = '".$_POST['validator']."'";
-// }
+if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] != '-'){
+	$searchQuery .= " and customer = '".$_POST['customer']."'";
+}
 
-// if($_POST['autoFormNo'] != null && $_POST['autoFormNo'] != '' && $_POST['autoFormNo'] != '-'){
-// 	$searchQuery .= " and auto_form_no = '".$_POST['autoFormNo']."'";
-// }
+if($_POST['validator'] != null && $_POST['validator'] != '' && $_POST['validator'] != '-'){
+	$searchQuery .= " and validate_by = '".$_POST['validator']."'";
+}
+
+if($_POST['autoFormNo'] != null && $_POST['autoFormNo'] != '' && $_POST['autoFormNo'] != '-'){
+	$searchQuery .= " and auto_form_no = '".$_POST['autoFormNo']."'";
+}
 
 // if($searchValue != ''){
 //   $searchQuery = " and (purchase_no like '%".$searchValue."%' OR
