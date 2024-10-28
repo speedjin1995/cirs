@@ -25,7 +25,7 @@ else{
   $customers = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $machinetypes = $db->query("SELECT * FROM machines WHERE deleted = '0'");
-  $brands = $db->query("SELECT * FROM brand WHERE deleted = '0'");
+  $brands = $db->query("SELECT * FROM brand WHERE deleted = '0' ORDER BY brand ASC");
   $models = $db->query("SELECT * FROM model WHERE deleted = '0'");
   $sizes = $db->query("SELECT * FROM size WHERE deleted = '0'");
   $capacities = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
@@ -2095,10 +2095,9 @@ function edit(id) {
         setTimeout(function(){
           $('#extendModal').find('#reseller_branch').val(obj.message.dealer_branch).trigger('change');
           $('#extendModal').find('#company').val(obj.message.customer).trigger('change');
-
-          setTimeout(function(){
-            $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
-          }, 1000);
+        }, 500);
+        setTimeout(function(){
+          $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
         }, 1000);
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
         $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
