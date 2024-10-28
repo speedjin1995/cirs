@@ -27,8 +27,8 @@ else{
   $brands = $db->query("SELECT * FROM brand WHERE deleted = '0'");
   $models = $db->query("SELECT * FROM model WHERE deleted = '0'");
   $sizes = $db->query("SELECT * FROM size WHERE deleted = '0'");
-  $capacities = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
-  $capacities2 = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
+  $singleCapacities = $db->query("SELECT * FROM capacity WHERE range_type = 'SINGLE' AND deleted = '0'");
+  $multiCapacities = $db->query("SELECT * FROM capacity WHERE range_type = 'MULTI' AND deleted = '0'");
   $problems = $db->query("SELECT * FROM problem WHERE deleted = '0'");
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
@@ -367,23 +367,29 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <div class="col-4">
                   <div class="form-group">
                     <label>Capacity * </label>
-                    <select class="form-control select2" style="width: 100%;" id="capacity" name="capacity" required>
-                      <option selected="selected">-</option>
-                      <?php while($rowCA=mysqli_fetch_assoc($capacities)){ ?>
-                        <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
-                      <?php } ?>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-4" id="capacityHigh">
-                  <div class="form-group">
-                    <label>Capacity (High) </label>
-                    <select class="form-control select2" style="width: 100%;" id="capacity_high" name="capacity_high">
-                      <option selected="selected">-</option>
-                      <?php while($capacity2=mysqli_fetch_assoc($capacities2)){ ?>
-                        <option value="<?=$capacity2['id'] ?>"><?=$capacity2['name'] ?></option>
-                      <?php } ?>
-                    </select>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" id="toggleMultiRange">
+                      <label class="form-check-label" for="toggleMultiRange">Multi Range</label>
+                    </div>
+                    
+                    <div id="capacitySingle">
+                      <select class="form-control select2" style="width: 100%;" id="capacity_single" name="capacity_single">
+                        <option selected="selected">-</option>
+                        <?php while($rowCA=mysqli_fetch_assoc($singleCapacities)){ ?>
+                          <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                    
+                    <div id="capacityMulti" style="display:none">
+                      <select class="form-control select2" style="width: 100%;" id="capacity_multi" name="capacity_multi">
+                        <option selected="selected">-</option>
+                        <?php while($capacity2=mysqli_fetch_assoc($multiCapacities)){ ?>
+                          <option value="<?=$capacity2['id'] ?>"><?=$capacity2['name'] ?></option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                    
                   </div>
                 </div>
               </div>
@@ -1765,9 +1771,35 @@ $(function () {
     }
   });
 
-  $('#extendModal').find('#capacity').on('change', function(){
-    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
-      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
+  $('#extendModal').find('#toggleMultiRange').on('change', function() {
+    $('#extendModal').find('#capacitySingle').val('').hide();
+    $('#extendModal').find('#capacityMulti').val('').show();
+  });
+
+  $('#extendModal').find('#capacitySingle').on('change', function(){
+    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacitySingle').val() && $('#validator').val()){
+      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacitySingle').val(), validator: $('#validator').val()}, function(data){
+        var obj = JSON.parse(data);
+        
+        if(obj.status === 'success'){
+          $('#product').val(obj.message.id);
+          $('#unitPrice').val(obj.message.price);
+          $('#unitPrice').trigger('change');
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+        $('#spinnerLoading').hide();
+      });
+    }
+  });
+  
+  $('#extendModal').find('#capacityMulti').on('change', function(){
+    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacityMulti').val() && $('#validator').val()){
+      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacityMulti').val(), validator: $('#validator').val()}, function(data){
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){
