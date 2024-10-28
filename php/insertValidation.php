@@ -218,38 +218,51 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 				// $no = $_POST['no'];
 				// $lastCalibrationDate = $_POST['lastCalibrationDate'];
 				// $expiredCalibrationDate = $_POST['expiredCalibrationDate'];
-				$uploadAttachment = null;
-				if(isset($_FILES['uploadAttachment']) && $_FILES['uploadAttachment']!=null && $_FILES['uploadAttachment']!=""){
-					$uploadAttachment = $_FILES['uploadAttachment'];
-				}
-				$ds = DIRECTORY_SEPARATOR;
-				$storeFolder = '../uploads/calibration';
-				$dataJson = '';
-				if($uploadAttachment['error'] === 0){
-					# Delete Existing File
-					if(isset($_POST['calibrationFilePath']) && $_POST['calibrationFilePath']!=null && $_POST['calibrationFilePath']!=""){
-						$calibrationFilePath = $_POST['calibrationFilePath'];
-						if (file_exists($calibrationFilePath)) {
-							unlink($calibrationFilePath);
+				$attachments = [];
+				for ($i = 1; $i <= 5; $i++) {
+					$fileKey = 'uploadAttachment' . $i;
+					$pathKey = 'calibrationFilePath' . $i;
+
+					// Check if the file is uploaded and has no error
+					if (isset($_FILES[$fileKey]) && $_FILES[$fileKey]['error'] === 0) {
+						$attachments[$i] = $_FILES[$fileKey];
+
+						// Delete existing file if it exists
+						if (isset($_POST[$pathKey]) && $_POST[$pathKey] != "") {
+							$existingFilePath = $_POST[$pathKey];
+							if (file_exists($existingFilePath)) {
+								unlink($existingFilePath);
+							}
 						}
 					}
+				}
 
+				$ds = DIRECTORY_SEPARATOR;
+				$storeFolder = '../uploads/calibration';
+
+				foreach ($attachments as $index => $file) {
 					$timestamp = time();
-					$uploadDir = '../uploads/calibration/'; // Directory to store uploaded files
-					$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadAttachment']['name']);
-					$tempFile = $_FILES['uploadAttachment']['tmp_name'];
+					$uploadDir = $storeFolder . $ds;
+					$uploadFile = $uploadDir . $timestamp . '_' . basename($file['name']);
+					$tempFile = $file['tmp_name'];
 
 					// Move the uploaded file to the target directory
 					if (move_uploaded_file($tempFile, $uploadFile)) {
 						$certFilePath = $uploadFile;
-						// Update certificate data in the database
-						if ($stmt2 = $db->prepare("UPDATE other_validations SET cert_file_path=? WHERE id=?")) {
+
+						// Prepare the column name for the current file path
+						$columnName = "cert_file_path" . $index;
+
+						// Update the specific certificate data column in the database
+						$query = "UPDATE other_validations SET $columnName=? WHERE id=?";
+						if ($stmt2 = $db->prepare($query)) {
 							$stmt2->bind_param('ss', $certFilePath, $_POST['id']);
 							$stmt2->execute();
 							$stmt2->close();
-						} 
-					} 
+						}
+					}
 				}
+
 
 				// if(isset($no) && $no != null && count($no) > 0){
 				// 	for($i=0; $i<count($no); $i++){
@@ -330,30 +343,39 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 				// $no = $_POST['no'];
 				// $lastCalibrationDate = $_POST['lastCalibrationDate'];
 				// $expiredCalibrationDate = $_POST['expiredCalibrationDate'];
-				$uploadAttachment = null;
-				if(isset($_FILES['uploadAttachment']) && $_FILES['uploadAttachment']!=null && $_FILES['uploadAttachment']!=""){
-					$uploadAttachment = $_FILES['uploadAttachment'];
+
+				$attachments = [];
+				for ($i = 1; $i <= 5; $i++) {
+					$fileKey = 'uploadAttachment' . $i;
+					if (isset($_FILES[$fileKey]) && $_FILES[$fileKey]['error'] === 0) {
+						$attachments[$i] = $_FILES[$fileKey]; // Store each file with its index
+					}
 				}
+
 				$ds = DIRECTORY_SEPARATOR;
 				$storeFolder = '../uploads/calibration';
-				$dataJson = '';
-				if($uploadAttachment['error'] === 0){
+
+				foreach ($attachments as $index => $file) {
 					$timestamp = time();
-					$uploadDir = '../uploads/calibration/'; // Directory to store uploaded files
-					$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadAttachment']['name']);
-					$tempFile = $_FILES['uploadAttachment']['tmp_name'];
+					$uploadDir = $storeFolder . $ds; // Directory to store uploaded files
+					$uploadFile = $uploadDir . $timestamp . '_' . basename($file['name']);
+					$tempFile = $file['tmp_name'];
 
 					// Move the uploaded file to the target directory
 					if (move_uploaded_file($tempFile, $uploadFile)) {
 						$certFilePath = $uploadFile;
-						// Update certificate data in the database
-						if ($stmt2 = $db->prepare("UPDATE other_validations SET cert_file_path=? WHERE id=?")) {
+
+						// Prepare the column name based on the index
+						$columnName = "cert_file_path" . $index;
+
+						// Update the specific certificate data column in the database
+						$query = "UPDATE other_validations SET $columnName=? WHERE id=?";
+						if ($stmt2 = $db->prepare($query)) {
 							$stmt2->bind_param('ss', $certFilePath, $validation_id);
 							$stmt2->execute();
 							$stmt2->close();
 						} 
-						// $load_cells_info[$i]['calibrationFilePath'] = $uploadFileDB; // Add file path to data
-					} 
+					}
 				}
 
 				// if(isset($no) && $no != null && count($no) > 0){

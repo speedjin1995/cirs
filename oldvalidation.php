@@ -1804,7 +1804,7 @@ $(function () {
   });
 });
 
-function format (row) { console.log(row);
+function format (row) {
   var returnString = `
   <div class="row">
     <!-- Customer Section -->
@@ -1851,9 +1851,9 @@ function format (row) { console.log(row);
     </div>
   </div>`;
 
-  if(row.lastCalibrationDate && row.expiredCalibrationDate && row.auto_form_no){
+  if (row.lastCalibrationDate && row.expiredCalibrationDate && row.auto_form_no) {
     returnString += `
-                <<hr>div class="row mb-3">
+                <hr><div class="row mb-3">
                   <h3 class="m-0 text-dark">Calibration Information</h3>
                 </div>
                 <div class="row">
@@ -1864,13 +1864,23 @@ function format (row) { console.log(row);
                   </div>
                   <div class="col-6">
                     <p><strong>Expired Calibration Date:</strong> ${row.expiredCalibrationDate}</p>
-                    <p><strong>Certificate Attachment:</strong>
-                `;
+                    <p><strong>Certificate Attachments:</strong></p>
+    `;
 
-      if(row.certFilePath){
-        returnString += '<a href="' + row.certFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></p></div></div>';
-      }
+    // Check each certFilePath individually and add tooltips
+    for (let i = 1; i <= 5; i++) {
+        let filePath = row[`certFilePath${i}`];
+        if (filePath) {
+            returnString += `
+                <a href="${filePath}" target="_blank" class="btn btn-success btn-sm" role="button" title="View Certificate Attachment ${i}">
+                    <i class="fa fa-file-pdf-o"></i>
+                </a> `;
+        }
+    }
+
+    returnString += '</p></div></div>';
   }
+
   
   // if (row.calibrations !== undefined && row.calibrations !== null && row.calibrations !== ''){
   //   if (row.calibrations[0].length > 0) {
