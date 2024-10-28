@@ -147,18 +147,17 @@ else{
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <th></th>
-                  <th>Validator</th>
-                  <th>Customers</th>
+                  <!-- <th></th> -->
+                  <th>Created Date</th>
+                  <th>Company Name</th>
                   <th>Brands</th>
-                  <th>Desc</th>
-                  <th>Model</th>
+                  <th>Description Instruments for Weighing And Measuring</th>
                   <th>Capacity</th>
-                  <th>Serial No.</th>
-                  <th>Next Due Date</th>
-                  <th>Updated Date</th>
+                  <th>Validator By</th>
+                  <th>Previous Stamp Date</th>
+                  <th>Expired Date</th>
                   <th>Status</th>
-                  <th></th>
+                  <th>Action</th>
                   <th></th>
                 </tr>
               </thead>
@@ -684,24 +683,23 @@ $(function () {
       } 
     },
     'columns': [
-      {
-        // Add a checkbox with a unique ID for each row
-        data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-        className: 'select-checkbox',
-        orderable: false,
-        render: function (data, type, row) {
-          return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-        }
-      },
-      { data: 'validate_by' },
+      // {
+      //   // Add a checkbox with a unique ID for each row
+      //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+      //   className: 'select-checkbox',
+      //   orderable: false,
+      //   render: function (data, type, row) {
+      //     return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+      //   }
+      // },
+      { data: 'created_datetime' },
       { data: 'customers' },
       { data: 'brand' },
       { data: 'machine_type' },
-      { data: 'model' },
       { data: 'capacity' },
-      { data: 'serial_no' },
+      { data: 'validate_by' },
+      { data: 'stamping_date' },
       { data: 'due_date' },
-      { data: 'updated_datetime' },
       { data: 'status' },
       { 
         data: 'id',
@@ -877,24 +875,23 @@ $(function () {
         } 
       },
       'columns': [
-        {
-          // Add a checkbox with a unique ID for each row
-          data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-          className: 'select-checkbox',
-          orderable: false,
-          render: function (data, type, row) {
-            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-          }
-        },
-        { data: 'validate_by' },
+        // {
+        //   // Add a checkbox with a unique ID for each row
+        //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+        //   className: 'select-checkbox',
+        //   orderable: false,
+        //   render: function (data, type, row) {
+        //     return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+        //   }
+        // },
+        { data: 'created_datetime' },
         { data: 'customers' },
         { data: 'brand' },
         { data: 'machine_type' },
-        { data: 'model' },
         { data: 'capacity' },
-        { data: 'serial_no' },
+        { data: 'validate_by' },
+        { data: 'stamping_date' },
         { data: 'due_date' },
-        { data: 'updated_datetime' },
         { data: 'status' },
         { 
           data: 'id',
