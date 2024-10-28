@@ -12,6 +12,8 @@ else{
   $_SESSION['page']='capacity';
   $units = $db->query("SELECT * FROM units WHERE deleted = '0'");
   $units2 = $db->query("SELECT * FROM units WHERE deleted = '0'");
+  $units3 = $db->query("SELECT * FROM units WHERE deleted = '0'");
+  $units4 = $db->query("SELECT * FROM units WHERE deleted = '0'");
 }
 ?>
 
@@ -72,39 +74,79 @@ else{
                 </button>
             </div>
             <div class="modal-body">
-                <div class="card-body">
-                    <div class="form-group">
-                        <input type="hidden" class="form-control" id="id" name="id">
+                <input type="hidden" class="form-control" id="id" name="id">
+                <div class="form-group">
+                    <label>Range Type *</label>
+                    <select class="form-control" style="width: 100%;" id="range_type" name="range_type" required>
+                        <option value="SINGLE" selected="selected">SINGLE</option>
+                        <option value="MULTI">MULTI</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="card card-primary">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="capacity">Capacity *</label>
+                                    <input type="number" class="form-control" name="capacity" id="capacity" placeholder="Enter Capacity" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Units *</label>
+                                    <select class="form-control" style="width: 100%;" id="unit" name="unit" required>
+                                        <option selected="selected">-</option>
+                                        <?php while($rowVA=mysqli_fetch_assoc($units)){ ?>
+                                            <option value="<?=$rowVA['id'] ?>"><?=$rowVA['units'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="division">Division *</label>
+                                    <input type="number" class="form-control" name="division" id="division" placeholder="Enter Division" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Units *</label>
+                                    <select class="form-control" style="width: 100%;" id="unitD" name="unitD" required>
+                                        <option selected="selected">-</option>
+                                        <?php while($rowVA2=mysqli_fetch_assoc($units2)){ ?>
+                                            <option value="<?=$rowVA2['id'] ?>"><?=$rowVA2['units'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <!--div class="form-group">
-                        <label for="capacity">Capacity Name *</label>
-                        <input type="text" class="form-control" name="capacityName" id="capacityName" placeholder="Enter Capacity Name" required>
-                    </div-->
-                    <div class="form-group">
-                        <label for="capacity">Capacity *</label>
-                        <input type="number" class="form-control" name="capacity" id="capacity" placeholder="Enter Capacity" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Units *</label>
-                        <select class="form-control" style="width: 100%;" id="unit" name="unit" required>
-                            <option selected="selected">-</option>
-                            <?php while($rowVA=mysqli_fetch_assoc($units)){ ?>
-                                <option value="<?=$rowVA['id'] ?>"><?=$rowVA['units'] ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="division">Division *</label>
-                        <input type="number" class="form-control" name="division" id="division" placeholder="Enter Division" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Units *</label>
-                        <select class="form-control" style="width: 100%;" id="unitD" name="unitD" required>
-                            <option selected="selected">-</option>
-                            <?php while($rowVA2=mysqli_fetch_assoc($units2)){ ?>
-                                <option value="<?=$rowVA2['id'] ?>"><?=$rowVA2['units'] ?></option>
-                            <?php } ?>
-                        </select>
+                    <div class="col-6">
+                        <div class="card card-primary" id="rangeDiv" style="display:none;">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="capacity">Capacity 2 *</label>
+                                    <input type="number" class="form-control" name="capacity2" id="capacity2" placeholder="Enter Capacity" >
+                                </div>
+                                <div class="form-group">
+                                    <label>Units 2 *</label>
+                                    <select class="form-control" style="width: 100%;" id="unit2" name="unit2" >
+                                        <option selected="selected">-</option>
+                                        <?php while($rowVA3=mysqli_fetch_assoc($units3)){ ?>
+                                            <option value="<?=$rowVA3['id'] ?>"><?=$rowVA3['units'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="division">Division 2 *</label>
+                                    <input type="number" class="form-control" name="division2" id="division2" placeholder="Enter Division" >
+                                </div>
+                                <div class="form-group">
+                                    <label>Units 2 *</label>
+                                    <select class="form-control" style="width: 100%;" id="unitD2" name="unitD2" >
+                                        <option selected="selected">-</option>
+                                        <?php while($rowVA4=mysqli_fetch_assoc($units4)){ ?>
+                                            <option value="<?=$rowVA4['id'] ?>"><?=$rowVA4['units'] ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -121,6 +163,8 @@ else{
 
 <script>
 $(function () {
+    $('#rangeDiv').hide();
+
     $("#capacityTable").DataTable({
         "responsive": true,
         "autoWidth": false,
@@ -134,10 +178,42 @@ $(function () {
         'columns': [
             { data: 'counter' },
             { data: 'name' },
-            { data: 'capacity' },
-            { data: 'units' },
-            { data: 'division' },
-            { data: 'division_unit' },
+            { 
+                data: 'capacity',
+                render: function (data, type, row) {
+                    if (row.range_type === 'MULTI') {
+                        return row.capacity + '<br>' + row.capacity2;  // Display capacity and capacity2 on separate lines
+                    }
+                    return row.capacity;  // Default if range_type is not 'multi'
+                }
+            },
+            { 
+                data: 'units',
+                render: function (data, type, row) {
+                    if (row.range_type === 'MULTI') {
+                        return row.units + '<br>' + row.units2;
+                    }
+                    return row.units;
+                }
+            },
+            { 
+                data: 'division',
+                render: function (data, type, row) {
+                    if (row.range_type === 'MULTI') {
+                        return row.division + '<br>' + row.division2;
+                    }
+                    return row.division;
+                }
+            },
+            { 
+                data: 'division_unit',
+                render: function (data, type, row) {
+                    if (row.range_type === 'MULTI') {
+                        return row.division_unit + '<br>' + row.division_unit2;
+                    }
+                    return row.division_unit;
+                }
+            },
             { 
                 data: 'id',
                 render: function ( data, type, row ) {
@@ -176,11 +252,15 @@ $(function () {
 
     $('#addCapacity').on('click', function(){
         $('#capacityModal').find('#id').val("");
-        //$('#capacityModal').find('#capacityName').val("");
+        $('#capacityModal').find('#range_type').val("SINGLE").trigger('change');
         $('#capacityModal').find('#capacity').val("");
         $('#capacityModal').find('#unit').val("");
         $('#capacityModal').find('#division').val("");
         $('#capacityModal').find('#unitD').val("");
+        $('#capacityModal').find('#capacity2').val("");
+        $('#capacityModal').find('#unit2').val("");
+        $('#capacityModal').find('#division2').val("");
+        $('#capacityModal').find('#unitD2').val("");
         $('#capacityModal').modal('show');
         
         $('#capacityForm').validate({
@@ -197,6 +277,15 @@ $(function () {
             }
         });
     });
+
+    $('#range_type').on('change', function(){
+        if($(this).val() == 'SINGLE'){
+            $('#rangeDiv').hide();
+        }
+        else{
+            $('#rangeDiv').show();
+        }
+    });
 });
 
 function edit(id){
@@ -206,11 +295,15 @@ function edit(id){
         
         if(obj.status === 'success'){
             $('#capacityModal').find('#id').val(obj.message.id);
-            //$('#capacityModal').find('#capacityName').val(obj.message.name);
+            $('#capacityModal').find('#range_type').val(obj.message.range_type).trigger('change');
             $('#capacityModal').find('#capacity').val(obj.message.capacity);
             $('#capacityModal').find('#unit').val(obj.message.units);
             $('#capacityModal').find('#division').val(obj.message.division);
             $('#capacityModal').find('#unitD').val(obj.message.division_unit);
+            $('#capacityModal').find('#capacity2').val(obj.message.capacity2);
+            $('#capacityModal').find('#unit2').val(obj.message.units2);
+            $('#capacityModal').find('#division2').val(obj.message.division2);
+            $('#capacityModal').find('#unitD2').val(obj.message.division_unit2);
             $('#capacityModal').modal('show');
             
             $('#capacityForm').validate({
