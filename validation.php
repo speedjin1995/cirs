@@ -463,18 +463,79 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
 
                 <div class="col-3">
                   <div class="form-group">
-                    <label>Upload Attachment Certificate</label>
+                    <label>Upload Attachment Certificate 1</label>
                     <div class="d-flex">
                       <div class="col-10">
-                        <input type="file" class="form-control" id="uploadAttachment" name="uploadAttachment">
+                        <input type="file" class="form-control" id="uploadAttachment1" name="uploadAttachment1">
                       </div>
                       <div class="col-2 mt-1">
-                        <a href="" id="viewCalibrationPdf" name="viewCalibrationPdf" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
+                        <a href="" id="viewCalibrationPdf1" name="viewCalibrationPdf1" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
                       </div>
                     </div>
-                    <input type="text" id="calibrationFilePath" name="calibrationFilePath"style="display:none">
+                    <input type="text" id="calibrationFilePath1" name="calibrationFilePath1" style="display:none">
                   </div>
                 </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Upload Attachment Certificate 2</label>
+                    <div class="d-flex">
+                      <div class="col-10">
+                        <input type="file" class="form-control" id="uploadAttachment2" name="uploadAttachment2">
+                      </div>
+                      <div class="col-2 mt-1">
+                        <a href="" id="viewCalibrationPdf2" name="viewCalibrationPdf2" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
+                      </div>
+                    </div>
+                    <input type="text" id="calibrationFilePath2" name="calibrationFilePath2" style="display:none">
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Upload Attachment Certificate 3</label>
+                    <div class="d-flex">
+                      <div class="col-10">
+                        <input type="file" class="form-control" id="uploadAttachment3" name="uploadAttachment3">
+                      </div>
+                      <div class="col-2 mt-1">
+                        <a href="" id="viewCalibrationPdf3" name="viewCalibrationPdf3" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
+                      </div>
+                    </div>
+                    <input type="text" id="calibrationFilePath3" name="calibrationFilePath3" style="display:none">
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Upload Attachment Certificate 4</label>
+                    <div class="d-flex">
+                      <div class="col-10">
+                        <input type="file" class="form-control" id="uploadAttachment4" name="uploadAttachment4">
+                      </div>
+                      <div class="col-2 mt-1">
+                        <a href="" id="viewCalibrationPdf4" name="viewCalibrationPdf4" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
+                      </div>
+                    </div>
+                    <input type="text" id="calibrationFilePath4" name="calibrationFilePath4" style="display:none">
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Upload Attachment Certificate 5</label>
+                    <div class="d-flex">
+                      <div class="col-10">
+                        <input type="file" class="form-control" id="uploadAttachment5" name="uploadAttachment5">
+                      </div>
+                      <div class="col-2 mt-1">
+                        <a href="" id="viewCalibrationPdf5" name="viewCalibrationPdf5" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
+                      </div>
+                    </div>
+                    <input type="text" id="calibrationFilePath5" name="calibrationFilePath5" style="display:none">
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
@@ -1949,9 +2010,9 @@ function format (row) {
     </div>
   </div>`;
 
-  if(row.lastCalibrationDate && row.expiredCalibrationDate && row.auto_form_no){
+  if (row.lastCalibrationDate && row.expiredCalibrationDate && row.auto_form_no) {
     returnString += `
-                <<hr>div class="row mb-3">
+                <hr><div class="row mb-3">
                   <h3 class="m-0 text-dark">Calibration Information</h3>
                 </div>
                 <div class="row">
@@ -1962,13 +2023,23 @@ function format (row) {
                   </div>
                   <div class="col-6">
                     <p><strong>Expired Calibration Date:</strong> ${row.expiredCalibrationDate}</p>
-                    <p><strong>Certificate Attachment:</strong>
-                `;
+                    <p><strong>Certificate Attachments:</strong></p>
+    `;
 
-      if(row.certFilePath){
-        returnString += '<a href="' + row.certFilePath + '" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></p></div></div>';
-      }
+    // Check each certFilePath individually and add tooltips
+    for (let i = 1; i <= 5; i++) {
+        let filePath = row[`certFilePath${i}`];
+        if (filePath) {
+            returnString += `
+                <a href="${filePath}" target="_blank" class="btn btn-success btn-sm" role="button" title="View Certificate Attachment ${i}">
+                    <i class="fa fa-file-pdf-o"></i>
+                </a> `;
+        }
+    }
+
+    returnString += '</p></div></div>';
   }
+
   
   // if (row.calibrations !== undefined && row.calibrations !== null && row.calibrations !== ''){
   //   if (row.calibrations[0].length > 0) {
@@ -2161,10 +2232,16 @@ function edit(id) {
         $('#extendModal').find('#validationDate').val(obj.message.validation_date);
         $('#extendModal').find('#lastCalibrationDate').val(obj.message.lastCalibrationDate);
         $('#extendModal').find('#expiredCalibrationDate').val(obj.message.expiredCalibrationDate);
-        $('#extendModal').find('#uploadAttachment').val('');
-        if(obj.message.certFilePath){
-          $('#extendModal').find('#viewCalibrationPdf').attr('href', obj.message.certFilePath).show();
-          $('#extendModal').find('#calibrationFilePath').val(obj.message.certFilePath);
+        for (let i = 1; i <= 5; i++) {
+          // Clear the file input for each attachment
+          $('#extendModal').find(`#uploadAttachment${i}`).val('');
+
+          // Check if the certFilePath exists and update the modal
+          if (obj.message[`certFilePath${i}`]) {
+              const certFilePath = obj.message[`certFilePath${i}`];
+              $('#extendModal').find(`#viewCalibrationPdf${i}`).attr('href', certFilePath).show();
+              $('#extendModal').find(`#calibrationFilePath${i}`).val(certFilePath);
+          }
         }
         // if(obj.message.calibrations != null && obj.message.calibrations.length > 0){
         //   $("#loadCalibrationTable").html('');
@@ -2224,10 +2301,16 @@ function edit(id) {
         $('#extendModal').find('#validationDate').val(obj.message.validation_date);
         $('#extendModal').find('#lastCalibrationDate').val(obj.message.lastCalibrationDate);
         $('#extendModal').find('#expiredCalibrationDate').val(obj.message.expiredCalibrationDate);
-        $('#extendModal').find('#uploadAttachment').val('');
-        if(obj.message.certFilePath){
-          $('#extendModal').find('#viewCalibrationPdf').attr('href', obj.message.certFilePath).show();
-          $('#extendModal').find('#calibrationFilePath').val(obj.message.certFilePath);
+        for (let i = 1; i <= 5; i++) {
+          // Clear the file input for each attachment
+          $('#extendModal').find(`#uploadAttachment${i}`).val('');
+
+          // Check if the certFilePath exists and update the modal
+          if (obj.message[`certFilePath${i}`]) {
+              const certFilePath = obj.message[`certFilePath${i}`];
+              $('#extendModal').find(`#viewCalibrationPdf${i}`).attr('href', certFilePath).show();
+              $('#extendModal').find(`#calibrationFilePath${i}`).val(certFilePath);
+          }
         }
 
         // if(obj.message.calibrations != null && obj.message.calibrations.length > 0){

@@ -134,7 +134,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <!-- <div class="col-10"><p>Completed Stamping</p></div> -->
+              <div class="col-8"><h4>Company Weight And Measure Details</h4></div>
               <div class="col-2">
                 <!-- <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button> -->
               </div>
@@ -155,16 +155,16 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               <thead>
                 <tr>
                   <!-- <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th> -->
-                  <th>Validator</th>
-                  <th>Customers</th>
+                  <th>Created Date</th>
+                  <th>Company Name</th>
                   <th>Brands</th>
-                  <th>Model</th>
+                  <th>Description Instruments for Weighing And Measuring</th>
                   <th>Capacity</th>
-                  <th>Serial No.</th>
-                  <th>Next Due Date</th>
-                  <th>Updated Date</th>
+                  <th>Validator By</th>
+                  <th>Previous Stamp Date</th>
+                  <th>Expired Date</th>
                   <th>Status</th>
-                  <th></th>
+                  <th>Action</th>
                   <th></th>
                 </tr>
               </thead>
@@ -987,14 +987,14 @@ $(function () {
       //     }
       //   }
       // },
-      { data: 'validate_by' },
+      { data: 'created_datetime' },
       { data: 'customers' },
       { data: 'brand' },
-      { data: 'model' },
+      { data: 'machine_type' },
       { data: 'capacity' },
-      { data: 'serial_no' },
+      { data: 'validate_by' },
+      { data: 'stamping_date' },
       { data: 'due_date' },
-      { data: 'updated_datetime' },
       { data: 'status' },
       { 
         data: 'id',
@@ -1217,14 +1217,14 @@ $(function () {
         //     }
         //   }
         // },
-        { data: 'validate_by' },
+        { data: 'created_datetime' },
         { data: 'customers' },
         { data: 'brand' },
-        { data: 'model' },
+        { data: 'machine_type' },
         { data: 'capacity' },
-        { data: 'serial_no' },
+        { data: 'validate_by' },
+        { data: 'stamping_date' },
         { data: 'due_date' },
-        { data: 'updated_datetime' },
         { data: 'status' },
         { 
           data: 'id',
@@ -1493,39 +1493,41 @@ $(function () {
     //$('#spinnerLoading').show();
     var id = $(this).find(":selected").val();
 
-    $.post('php/getBranch.php', {userID: id}, function(data){
-      var obj = JSON.parse(data);
-      
-      if(obj.status === 'success'){
-        $('#extendModal').find('#address1').val(obj.message.address1);
-        $('#extendModal').find('#address2').val(obj.message.address2);
-        $('#extendModal').find('#address3').val(obj.message.address3);
-        $('#extendModal').find('#address4').val(obj.message.address4);
+    if (id){
+      $.post('php/getBranch.php', {userID: id}, function(data){
+        var obj = JSON.parse(data);
         
-        $('#extendModal').modal('show');
+        if(obj.status === 'success'){
+          $('#extendModal').find('#address1').val(obj.message.address1);
+          $('#extendModal').find('#address2').val(obj.message.address2);
+          $('#extendModal').find('#address3').val(obj.message.address3);
+          $('#extendModal').find('#address4').val(obj.message.address4);
+          
+          $('#extendModal').modal('show');
 
-        $('#extendForm').validate({
-          errorElement: 'span',
-          errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-          },
-          highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-          },
-          unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-          }
-        });
-      }
-      else if(obj.status === 'failed'){
-        toastr["error"](obj.message, "Failed:");
-      }
-      else{
-        toastr["error"]("Something wrong when pull data", "Failed:");
-      }
-      //$('#spinnerLoading').hide();
-    });
+          $('#extendForm').validate({
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+              error.addClass('invalid-feedback');
+              element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+              $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+              $(element).removeClass('is-invalid');
+            }
+          });
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+        //$('#spinnerLoading').hide();
+      });
+    }
   });
 
   $('#extendModal').find('#company').on('change', function(){

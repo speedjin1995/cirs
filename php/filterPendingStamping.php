@@ -98,8 +98,8 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "jenis_alat"=>$row['jenis_alat'] != null ? searchAlatNameById($row['jenis_alat'], $db) : '', 
     "cash_bill"=>$row['cash_bill'] ?? '',
     "invoice_no"=>$row['invoice_no'] ?? '',
-    "stamping_date"=>$row['stamping_date'] ?? '',
-    "due_date"=>$row['due_date'] ?? '',
+    "stamping_date"=>$row['stamping_date'] != null ? convertDatetimeToDate($row['stamping_date']) : '',
+    "due_date"=>$row['due_date'] != null ? convertDatetimeToDate($row['due_date']) : '',
     "pic"=>$row['pic'] != null ? searchStaffNameById($row['pic'], $db) : '',
     "customer_pic"=>$row['customer_pic'] ?? '',
     "quotation_date"=>$row['quotation_date'] ?? '',
@@ -118,7 +118,8 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "pin_keselamatan"=>$row['pin_keselamatan'] ?? '',
     "siri_keselamatan"=>$row['siri_keselamatan'] ?? '',
     "borang_d"=>$row['borang_d'] ?? '',
-    "updated_datetime"=>$row['updated_datetime'] ?? ''
+    "created_datetime"=>$row['created_datetime'] != null ? convertDatetimeToDate($row['created_datetime']) : '',
+    "updated_datetime"=>$row['updated_datetime'] != null ? convertDatetimeToDate($row['updated_datetime']) : ''
   );
 
   $counter++;
@@ -133,5 +134,11 @@ $response = array(
 );
 
 echo json_encode($response);
+
+function convertDatetimeToDate($datetime){
+  $date = new DateTime($datetime);
+
+  return $date->format('Y-m-d'); 
+}
 
 ?>

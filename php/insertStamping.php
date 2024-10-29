@@ -7,7 +7,7 @@ session_start();
 $uid = $_SESSION['userID'];
 
 if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['brand'], $_POST['validator'], $_POST['machineType'], $_POST['jenisAlat']
-, $_POST['model'], $_POST['capacity'], $_POST['serial'])){
+, $_POST['model'], $_POST['serial'])){
 	$type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
 	$customerType = filter_input(INPUT_POST, 'customerType', FILTER_SANITIZE_STRING);
 	$brand = filter_input(INPUT_POST, 'brand', FILTER_SANITIZE_STRING);
@@ -16,10 +16,10 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 	$machineType = filter_input(INPUT_POST, 'machineType', FILTER_SANITIZE_STRING);
 	$jenisAlat = filter_input(INPUT_POST, 'jenisAlat', FILTER_SANITIZE_STRING);
 	$model = filter_input(INPUT_POST, 'model', FILTER_SANITIZE_STRING);
-	$capacity = filter_input(INPUT_POST, 'capacity', FILTER_SANITIZE_STRING);
 	$serial = filter_input(INPUT_POST, 'serial', FILTER_SANITIZE_STRING);
 
-	$capacity_high = null;
+	$capacitySingle = null;
+	$capacityMulti = null;
 	$product = null;
 	$dealer = null;
 	$reseller_branch = null;
@@ -248,8 +248,12 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 		$subtotalPrice = $_POST['subAmount'];
 	}
 
-	if(isset($_POST['capacity_high']) && $_POST['capacity_high']!=null && $_POST['capacity_high']!=""){
-		$capacity_high = $_POST['capacity_high'];
+	if(isset($_POST['capacity_single']) && $_POST['capacity_single']!=null && $_POST['capacity_single']!=""){
+		$capacitySingle = $_POST['capacity_single'];
+	}
+
+	if(isset($_POST['capacity_multi']) && $_POST['capacity_multi']!=null && $_POST['capacity_multi']!=""){
+		$capacityMulti = $_POST['capacity_multi'];
 	}
 
 	if(isset($_POST['id']) && $_POST['id'] != null && $_POST['id'] != ''){

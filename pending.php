@@ -27,8 +27,8 @@ else{
   $brands = $db->query("SELECT * FROM brand WHERE deleted = '0'");
   $models = $db->query("SELECT * FROM model WHERE deleted = '0'");
   $sizes = $db->query("SELECT * FROM size WHERE deleted = '0'");
-  $capacities = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
-  $capacities2 = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
+  $singleCapacities = $db->query("SELECT * FROM capacity WHERE range_type = 'SINGLE' AND deleted = '0'");
+  $multiCapacities = $db->query("SELECT * FROM capacity WHERE range_type = 'MULTI' AND deleted = '0'");
   $problems = $db->query("SELECT * FROM problem WHERE deleted = '0'");
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
@@ -55,8 +55,8 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
 <div class="content-header">
   <div class="container-fluid">
     <div class="row mb-2">
-      <div class="col-sm-6">
-        <h1 class="m-0 text-dark">Pending/Expired Stamping</h1>
+      <div class="col-sm-12">
+        <h3 class="m-0 text-dark">Pending/Expired Yearly Stamping Metrology & DE Metrology Pending Status</h3>
       </div><!-- /.col -->
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
@@ -134,7 +134,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-8"></div>
+              <div class="col-8"><h4>Company Weight And Measure Details</h4></div>
               <div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
               </div>
@@ -155,16 +155,16 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               <thead>
                 <tr>
                   <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
-                  <th>Validator</th>
-                  <th>Customers</th>
+                  <th>Created Date</th>
+                  <th>Company Name</th>
                   <th>Brands</th>
-                  <th>Model</th>
+                  <th>Description Instruments for Weighing And Measuring</th>
                   <th>Capacity</th>
-                  <th>Serial No.</th>
-                  <th>Next Due Date</th>
-                  <th>Updated Date</th>
+                  <th>Validator By</th>
+                  <th>Previous Stamp Date</th>
+                  <th>Expired Date</th>
                   <th>Status</th>
-                  <th></th>
+                  <th>Action</th>
                   <th></th>
                 </tr>
               </thead>
@@ -367,23 +367,29 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <div class="col-4">
                   <div class="form-group">
                     <label>Capacity * </label>
-                    <select class="form-control select2" style="width: 100%;" id="capacity" name="capacity" required>
-                      <option selected="selected">-</option>
-                      <?php while($rowCA=mysqli_fetch_assoc($capacities)){ ?>
-                        <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
-                      <?php } ?>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-4" id="capacityHigh">
-                  <div class="form-group">
-                    <label>Capacity (High) </label>
-                    <select class="form-control select2" style="width: 100%;" id="capacity_high" name="capacity_high">
-                      <option selected="selected">-</option>
-                      <?php while($capacity2=mysqli_fetch_assoc($capacities2)){ ?>
-                        <option value="<?=$capacity2['id'] ?>"><?=$capacity2['name'] ?></option>
-                      <?php } ?>
-                    </select>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" id="toggleMultiRange">
+                      <label class="form-check-label" for="toggleMultiRange">Multi Range</label>
+                    </div>
+                    
+                    <div id="capacitySingle">
+                      <select class="form-control select2" style="width: 100%;" id="capacity_single" name="capacity_single">
+                        <option selected="selected">-</option>
+                        <?php while($rowCA=mysqli_fetch_assoc($singleCapacities)){ ?>
+                          <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                    
+                    <div id="capacityMulti" style="display:none">
+                      <select class="form-control select2" style="width: 100%;" id="capacity_multi" name="capacity_multi">
+                        <option selected="selected">-</option>
+                        <?php while($capacity2=mysqli_fetch_assoc($multiCapacities)){ ?>
+                          <option value="<?=$capacity2['id'] ?>"><?=$capacity2['name'] ?></option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                    
                   </div>
                 </div>
               </div>
@@ -987,14 +993,14 @@ $(function () {
           }
         }
       },
-      { data: 'validate_by' },
+      { data: 'created_datetime' },
       { data: 'customers' },
       { data: 'brand' },
-      { data: 'model' },
+      { data: 'machine_type' },
       { data: 'capacity' },
-      { data: 'serial_no' },
+      { data: 'validate_by' },
+      { data: 'stamping_date' },
       { data: 'due_date' },
-      { data: 'updated_datetime' },
       { data: 'status' },
       { 
         data: 'id',
@@ -1209,7 +1215,7 @@ $(function () {
           className: 'select-checkbox',
           orderable: false,
           render: function (data, type, row) {
-            if (row.status == 'Active') { // Assuming 'isInvoiced' is a boolean field in your row data
+            if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
               return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
             } 
             else {
@@ -1217,14 +1223,14 @@ $(function () {
             }
           }
         },
-        { data: 'validate_by' },
+        { data: 'created_datetime' },
         { data: 'customers' },
         { data: 'brand' },
-        { data: 'model' },
+        { data: 'machine_type' },
         { data: 'capacity' },
-        { data: 'serial_no' },
+        { data: 'validate_by' },
+        { data: 'stamping_date' },
         { data: 'due_date' },
-        { data: 'updated_datetime' },
         { data: 'status' },
         { 
           data: 'id',
@@ -1493,39 +1499,41 @@ $(function () {
     //$('#spinnerLoading').show();
     var id = $(this).find(":selected").val();
 
-    $.post('php/getBranch.php', {userID: id}, function(data){
-      var obj = JSON.parse(data);
-      
-      if(obj.status === 'success'){
-        $('#extendModal').find('#address1').val(obj.message.address1);
-        $('#extendModal').find('#address2').val(obj.message.address2);
-        $('#extendModal').find('#address3').val(obj.message.address3);
-        $('#extendModal').find('#address4').val(obj.message.address4);
+    if (id){
+      $.post('php/getBranch.php', {userID: id}, function(data){
+        var obj = JSON.parse(data);
         
-        $('#extendModal').modal('show');
+        if(obj.status === 'success'){
+          $('#extendModal').find('#address1').val(obj.message.address1);
+          $('#extendModal').find('#address2').val(obj.message.address2);
+          $('#extendModal').find('#address3').val(obj.message.address3);
+          $('#extendModal').find('#address4').val(obj.message.address4);
+          
+          $('#extendModal').modal('show');
 
-        $('#extendForm').validate({
-          errorElement: 'span',
-          errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-          },
-          highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-          },
-          unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-          }
-        });
-      }
-      else if(obj.status === 'failed'){
-        toastr["error"](obj.message, "Failed:");
-      }
-      else{
-        toastr["error"]("Something wrong when pull data", "Failed:");
-      }
-      //$('#spinnerLoading').hide();
-    });
+          $('#extendForm').validate({
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+              error.addClass('invalid-feedback');
+              element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+              $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+              $(element).removeClass('is-invalid');
+            }
+          });
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+        //$('#spinnerLoading').hide();
+      });
+    }
   });
 
   $('#extendModal').find('#company').on('change', function(){
@@ -1763,9 +1771,35 @@ $(function () {
     }
   });
 
-  $('#extendModal').find('#capacity').on('change', function(){
-    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
-      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
+  $('#extendModal').find('#toggleMultiRange').on('change', function() {
+    $('#extendModal').find('#capacitySingle').val('').hide();
+    $('#extendModal').find('#capacityMulti').val('').show();
+  });
+
+  $('#extendModal').find('#capacitySingle').on('change', function(){
+    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacitySingle').val() && $('#validator').val()){
+      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacitySingle').val(), validator: $('#validator').val()}, function(data){
+        var obj = JSON.parse(data);
+        
+        if(obj.status === 'success'){
+          $('#product').val(obj.message.id);
+          $('#unitPrice').val(obj.message.price);
+          $('#unitPrice').trigger('change');
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+        $('#spinnerLoading').hide();
+      });
+    }
+  });
+  
+  $('#extendModal').find('#capacityMulti').on('change', function(){
+    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacityMulti').val() && $('#validator').val()){
+      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacityMulti').val(), validator: $('#validator').val()}, function(data){
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){
