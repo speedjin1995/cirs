@@ -37,8 +37,8 @@ else{
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
   $cancelledReasons = $db->query("SELECT * FROM reasons WHERE deleted = '0'");
   $sizes = $db->query("SELECT * FROM size WHERE deleted = '0'");
-  $country = $db->query("SELECT * FROM country");
-  $country2 = $db->query("SELECT * FROM country");
+  $country = $db->query("SELECT * FROM country WHERE deleted = '0'");
+  $country2 = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $loadCells = $db->query("SELECT load_cells.*, machines.machine_type AS machinetype, brand.brand AS brand_name, model.model AS model_name, alat.alat, country.nicename 
 FROM load_cells, machines, brand, model, alat, country WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
 AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load_cells.deleted = '0'");
@@ -389,7 +389,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                         <?php } ?>
                       </select>
                     </div>
-                    
+                    <input class="form-control" type="text" id="capacity" name="capacity" style="display: none;">
                   </div>
                 </div>
               </div>
@@ -1060,7 +1060,7 @@ $(function () {
     else {
       $.post('php/getStamp.php', {userID: row.data().id, format: 'EXPANDABLE'}, function (data){
         var obj = JSON.parse(data); 
-        if(obj.status === 'success'){ console.log(obj.message);
+        if(obj.status === 'success'){
           row.child( format(obj.message) ).show();tr.addClass("shown");
         }
       });
@@ -1772,36 +1772,30 @@ $(function () {
   });
 
   $('#extendModal').find('#toggleMultiRange').on('change', function() {
-    $('#extendModal').find('#capacitySingle').val('').hide();
-    $('#extendModal').find('#capacityMulti').val('').show();
-  });
-
-  $('#extendModal').find('#capacitySingle').on('change', function(){
-    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacitySingle').val() && $('#validator').val()){
-      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacitySingle').val(), validator: $('#validator').val()}, function(data){
-        var obj = JSON.parse(data);
-        
-        if(obj.status === 'success'){
-          $('#product').val(obj.message.id);
-          $('#unitPrice').val(obj.message.price);
-          $('#unitPrice').trigger('change');
-        }
-        else if(obj.status === 'failed'){
-          toastr["error"](obj.message, "Failed:");
-        }
-        else{
-          toastr["error"]("Something wrong when pull data", "Failed:");
-        }
-        $('#spinnerLoading').hide();
-      });
+    if ($('#extendModal').find('#toggleMultiRange').prop('checked')) {
+      $('#extendModal').find('#capacityMulti').val('').show();
+      $('#extendModal').find('#capacitySingle').val('').hide();
+    } else {
+      $('#extendModal').find('#capacityMulti').val('').hide();
+      $('#extendModal').find('#capacitySingle').val('').show();
     }
   });
-  
-  $('#extendModal').find('#capacityMulti').on('change', function(){
-    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacityMulti').val() && $('#validator').val()){
-      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacityMulti').val(), validator: $('#validator').val()}, function(data){
+
+  $('#extendModal').find('#capacity_single').on('change', function(){
+    capacityId = $(this).val();
+    $('#extendModal').find('#capacity').val(capacityId);
+  });
+
+  $('#extendModal').find('#capacity_multi').on('change', function(){
+    capacityId = $(this).val();
+    $('#extendModal').find('#capacity').val(capacityId);
+  });
+
+  $('#extendModal').find('#capacity').on('change', function(){
+    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
+      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
         var obj = JSON.parse(data);
-        
+
         if(obj.status === 'success'){
           $('#product').val(obj.message.id);
           $('#unitPrice').val(obj.message.price);
@@ -1960,7 +1954,6 @@ function format (row) {
       <p><strong>Model:</strong> ${row.model}</p>
       <p><strong>Machine Type:</strong> ${row.machine_type}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
-      <p><strong>Capacity (High):</strong> ${row.capacity_high}</p>
       <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
       <p><strong>Serial No:</strong> ${row.serial_no}</p>
     </div>
@@ -2183,16 +2176,14 @@ function edit(id) {
         $('#extendModal').on('jaIsLoaded', function() {
           $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
         });
-        
-        $('#extendModal').find('#jenisAlat').change(function() {
-          if($(this).val() == 1) {
-              $('#extendModal').find('#capacityHigh').show();
-              $('#extendModal').find('#capacity_high').val(obj.message.capacity_high).trigger('change');
-          } else {
-              $('#extendModal').find('#capacityHigh').hide();
-              $('#extendModal').find('#capacity_high').val('');
-          }
-        });
+        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
+        if(obj.message.capacity_range == 'MULTI'){
+          $('#extendModal').find('#toggleMultiRange').prop('checked', true).trigger('change');
+          $('#extendModal').find('#capacity_multi').val(obj.message.capacity).trigger('change');
+        }else{
+          $('#extendModal').find('#toggleMultiRange').prop('checked', false).trigger('change');
+          $('#extendModal').find('#capacity_single').val(obj.message.capacity).trigger('change');
+        }
 
         //$('#extendModal').find('#address1').val(obj.message.address1);
         
@@ -2205,7 +2196,6 @@ function edit(id) {
         });
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
-        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
         $('#extendModal').find('#address3').val(obj.message.address3);
         $('#extendModal').find('#serial').val(obj.message.serial_no);
@@ -2351,15 +2341,14 @@ function edit(id) {
           $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
         });
         
-        $('#extendModal').find('#jenisAlat').change(function() {
-          if($(this).val() == 1) {
-              $('#extendModal').find('#capacityHigh').show();
-              $('#extendModal').find('#capacity_high').val(obj.message.capacity_high).trigger('change');
-          } else {
-              $('#extendModal').find('#capacityHigh').hide();
-              $('#extendModal').find('#capacity_high').val('');
-          }
-        });
+        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
+        if(obj.message.capacity_range == 'MULTI'){
+          $('#extendModal').find('#toggleMultiRange').prop('checked', true).trigger('change');
+          $('#extendModal').find('#capacity_multi').val(obj.message.capacity).trigger('change');
+        }else{
+          $('#extendModal').find('#toggleMultiRange').prop('checked', false).trigger('change');
+          $('#extendModal').find('#capacity_single').val(obj.message.capacity).trigger('change');
+        }
         //$('#extendModal').find('#address1').val(obj.message.address1);
 
         $('#extendModal').on('modelsLoaded', function() {
@@ -2367,7 +2356,6 @@ function edit(id) {
         });
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
-        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
         $('#extendModal').find('#address3').val(obj.message.address3);
         $('#extendModal').find('#serial').val(obj.message.serial_no);

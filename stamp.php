@@ -27,8 +27,8 @@ else{
   $brands = $db->query("SELECT * FROM brand WHERE deleted = '0'");
   $models = $db->query("SELECT * FROM model WHERE deleted = '0'");
   $sizes = $db->query("SELECT * FROM size WHERE deleted = '0'");
-  $capacities = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
-  $capacities2 = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
+  $singleCapacities = $db->query("SELECT * FROM capacity WHERE range_type = 'SINGLE' AND deleted = '0'");
+  $multiCapacities = $db->query("SELECT * FROM capacity WHERE range_type = 'MULTI' AND deleted = '0'");
   $problems = $db->query("SELECT * FROM problem WHERE deleted = '0'");
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
@@ -37,8 +37,8 @@ else{
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
   $cancelledReasons = $db->query("SELECT * FROM reasons WHERE deleted = '0'");
   $sizes = $db->query("SELECT * FROM size WHERE deleted = '0'");
-  $country = $db->query("SELECT * FROM country");
-  $country2 = $db->query("SELECT * FROM country");
+  $country = $db->query("SELECT * FROM country WHERE deleted = '0'");
+  $country2 = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $loadCells = $db->query("SELECT load_cells.*, machines.machine_type AS machinetype, brand.brand AS brand_name, model.model AS model_name, alat.alat, country.nicename 
 FROM load_cells, machines, brand, model, alat, country WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
 AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load_cells.deleted = '0'");
@@ -367,23 +367,29 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <div class="col-4">
                   <div class="form-group">
                     <label>Capacity * </label>
-                    <select class="form-control select2" style="width: 100%;" id="capacity" name="capacity" required>
-                      <option selected="selected">-</option>
-                      <?php while($rowCA=mysqli_fetch_assoc($capacities)){ ?>
-                        <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
-                      <?php } ?>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-4" id="capacityHigh">
-                  <div class="form-group">
-                    <label>Capacity (High) </label>
-                    <select class="form-control select2" style="width: 100%;" id="capacity_high" name="capacity_high">
-                      <option selected="selected">-</option>
-                      <?php while($capacity2=mysqli_fetch_assoc($capacities2)){ ?>
-                        <option value="<?=$capacity2['id'] ?>"><?=$capacity2['name'] ?></option>
-                      <?php } ?>
-                    </select>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" id="toggleMultiRange">
+                      <label class="form-check-label" for="toggleMultiRange">Multi Range</label>
+                    </div>
+                    
+                    <div id="capacitySingle">
+                      <select class="form-control select2" style="width: 100%;" id="capacity_single" name="capacity_single">
+                        <option selected="selected">-</option>
+                        <?php while($rowCA=mysqli_fetch_assoc($singleCapacities)){ ?>
+                          <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                    
+                    <div id="capacityMulti" style="display:none">
+                      <select class="form-control select2" style="width: 100%;" id="capacity_multi" name="capacity_multi">
+                        <option selected="selected">-</option>
+                        <?php while($capacity2=mysqli_fetch_assoc($multiCapacities)){ ?>
+                          <option value="<?=$capacity2['id'] ?>"><?=$capacity2['name'] ?></option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                    <input class="form-control" type="text" id="capacity" name="capacity" style="display: none;">
                   </div>
                 </div>
               </div>
@@ -1054,7 +1060,7 @@ $(function () {
     else {
       $.post('php/getStamp.php', {userID: row.data().id, format: 'EXPANDABLE'}, function (data){
         var obj = JSON.parse(data); 
-        if(obj.status === 'success'){ console.log(obj.message);
+        if(obj.status === 'success'){
           row.child( format(obj.message) ).show();tr.addClass("shown");
         }
       });
@@ -1761,6 +1767,26 @@ $(function () {
     }
   });
 
+  $('#extendModal').find('#toggleMultiRange').on('change', function() {
+    if ($('#extendModal').find('#toggleMultiRange').prop('checked')) {
+      $('#extendModal').find('#capacityMulti').val('').show();
+      $('#extendModal').find('#capacitySingle').val('').hide();
+    } else {
+      $('#extendModal').find('#capacityMulti').val('').hide();
+      $('#extendModal').find('#capacitySingle').val('').show();
+    }
+  });
+
+  $('#extendModal').find('#capacity_single').on('change', function(){
+    capacityId = $(this).val();
+    $('#extendModal').find('#capacity').val(capacityId);
+  });
+
+  $('#extendModal').find('#capacity_multi').on('change', function(){
+    capacityId = $(this).val();
+    $('#extendModal').find('#capacity').val(capacityId);
+  });
+
   $('#extendModal').find('#capacity').on('change', function(){
     if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
       $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
@@ -1922,7 +1948,6 @@ function format (row) {
       <p><strong>Model:</strong> ${row.model}</p>
       <p><strong>Machine Type:</strong> ${row.machine_type}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
-      <p><strong>Capacity (High):</strong> ${row.capacity_high}</p>
       <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
       <p><strong>Serial No:</strong> ${row.serial_no}</p>
     </div>
@@ -2145,16 +2170,14 @@ function edit(id) {
         $('#extendModal').on('jaIsLoaded', function() {
           $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
         });
-        
-        $('#extendModal').find('#jenisAlat').change(function() {
-          if($(this).val() == 1) {
-              $('#extendModal').find('#capacityHigh').show();
-              $('#extendModal').find('#capacity_high').val(obj.message.capacity_high).trigger('change');
-          } else {
-              $('#extendModal').find('#capacityHigh').hide();
-              $('#extendModal').find('#capacity_high').val('');
-          }
-        });
+        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
+        if(obj.message.capacity_range == 'MULTI'){
+          $('#extendModal').find('#toggleMultiRange').prop('checked', true).trigger('change');
+          $('#extendModal').find('#capacity_multi').val(obj.message.capacity).trigger('change');
+        }else{
+          $('#extendModal').find('#toggleMultiRange').prop('checked', false).trigger('change');
+          $('#extendModal').find('#capacity_single').val(obj.message.capacity).trigger('change');
+        }
 
         //$('#extendModal').find('#address1').val(obj.message.address1);
         
@@ -2167,7 +2190,6 @@ function edit(id) {
         });
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
-        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
         $('#extendModal').find('#address3').val(obj.message.address3);
         $('#extendModal').find('#serial').val(obj.message.serial_no);
@@ -2313,15 +2335,14 @@ function edit(id) {
           $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
         });
         
-        $('#extendModal').find('#jenisAlat').change(function() {
-          if($(this).val() == 1) {
-              $('#extendModal').find('#capacityHigh').show();
-              $('#extendModal').find('#capacity_high').val(obj.message.capacity_high).trigger('change');
-          } else {
-              $('#extendModal').find('#capacityHigh').hide();
-              $('#extendModal').find('#capacity_high').val('');
-          }
-        });
+        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
+        if(obj.message.capacity_range == 'MULTI'){
+          $('#extendModal').find('#toggleMultiRange').prop('checked', true).trigger('change');
+          $('#extendModal').find('#capacity_multi').val(obj.message.capacity).trigger('change');
+        }else{
+          $('#extendModal').find('#toggleMultiRange').prop('checked', false).trigger('change');
+          $('#extendModal').find('#capacity_single').val(obj.message.capacity).trigger('change');
+        }
         //$('#extendModal').find('#address1').val(obj.message.address1);
 
         $('#extendModal').on('modelsLoaded', function() {
@@ -2329,7 +2350,6 @@ function edit(id) {
         });
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
-        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
         $('#extendModal').find('#address3').val(obj.message.address3);
         $('#extendModal').find('#serial').val(obj.message.serial_no);
