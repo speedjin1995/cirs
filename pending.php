@@ -1622,7 +1622,7 @@ $(function () {
 
         if(obj.status === 'success'){
           $('#jenisAlat').html('');
-          $('#jenisAlat').append('<option selected="selected">-</option>');
+          // $('#jenisAlat').append('<option selected="selected">-</option>');
 
           for(var i=0; i<obj.message.length; i++){
             var modelInfo = obj.message[i];
