@@ -706,14 +706,14 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
       <div class="row">
         <div class="col-4">
           <div class="form-group">
-            <label>Penentusan Baru *</label>
-            <input type="text" class="form-control" id="penentusanBaru" name="penentusanBaru" required>
+            <label>Penentusan Baru</label>
+            <input type="text" class="form-control" id="penentusanBaru" name="penentusanBaru">
           </div>
         </div>
         <div class="col-4">
           <div class="form-group">
             <label>Penetusan Semula</label>
-            <input type="text" class="form-control" id="penentusanSemula" name="penentusanSemula" >
+            <input type="text" class="form-control" id="penentusanSemula" name="penentusanSemula">
           </div>
         </div>
         <div class="form-group col-4">
@@ -1764,7 +1764,12 @@ $(function () {
       $('#addtionalSection').html($('#atkDetails').html());
       loadCellCount = 0;
       $("#loadCellTable").html('');
-      $('#extendModal').trigger('atkLoaded')
+      $('#extendModal').trigger('atkLoaded');
+
+      type = $('#extendModal').find('#type').val();
+      if(type == 'RESELLER'){
+        $('#extendModal').find('#penentusanSemula').attr('required', true);
+      }
     }
     else{
       $('#addtionalSection').html('');
@@ -1836,7 +1841,12 @@ $(function () {
       $('#addtionalSection').html($('#atkDetails').html());
       loadCellCount = 0;
       $("#loadCellTable").html('');
-      $('#extendModal').trigger('atkLoaded')
+      $('#extendModal').trigger('atkLoaded');
+
+      type = $('#extendModal').find('#type').val();
+      if(type == 'RESELLER'){
+        $('#extendModal').find('#penentusanSemula').attr('required', true);
+      }
     }
     else{
       $('#addtionalSection').html('');
