@@ -1773,10 +1773,10 @@ $(function () {
   });
 
   $('#extendModal').find('#toggleMultiRange').on('change', function() {
-    if ($('#extendModal').find('#toggleMultiRange').prop('checked')) {
+    if ($('#extendModal').find('#toggleMultiRange').is(':checked')) {
       $('#extendModal').find('#capacityMulti').val('').show();
       $('#extendModal').find('#capacitySingle').val('').hide();
-    } else {
+    }else{
       $('#extendModal').find('#capacityMulti').val('').hide();
       $('#extendModal').find('#capacitySingle').val('').show();
     }
