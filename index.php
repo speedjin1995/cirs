@@ -366,13 +366,13 @@ to get the desired effect
                   <p>Pending Stamping</p>
                 </a>
               </li>
-              <?php if($role == "ADMIN"){
+              <?php //if($role == "ADMIN"){
                 echo '<li class="nav-item">
                 <a href="#stamping" data-file="stamp.php" class="nav-link link">
                   <i class="nav-icon far fa-circle"></i>
                   <p>Complete Stamping</p>
                 </a></li>';
-              }?>
+              //}?>
               <li class="nav-item">
                 <a href="#oldstamp" data-file="oldstamp.php" class="nav-link link">
                   <i class="nav-icon far fa-circle"></i>
@@ -393,13 +393,13 @@ to get the desired effect
                   <p>Pending Validation</p>
                 </a>
               </li>
-              <?php if($role == "ADMIN"){
+              <?php //if($role == "ADMIN"){
                 echo '<li class="nav-item">
                 <a href="#validation" data-file="validation.php" class="nav-link link">
                   <i class="nav-icon far fa-circle"></i>
                   <p>Complete Validation</p>
                 </a></li>';
-              }?>
+              //}?>
               <li class="nav-item">
                 <a href="#oldvalidation" data-file="oldvalidation.php" class="nav-link link">
                   <i class="nav-icon far fa-circle"></i>
@@ -420,13 +420,13 @@ to get the desired effect
                   <p>Pending Validation</p>
                 </a>
               </li>
-              <?php if($role == "ADMIN"){
+              <?php //if($role == "ADMIN"){
                 echo '<li class="nav-item">
                 <a href="#inhouse" data-file="inhouse.php" class="nav-link link">
                   <i class="nav-icon far fa-circle"></i>
                   <p>Complete Validation</p>
                 </a></li>';
-              }?>
+              //}?>
               <li class="nav-item">
                 <a href="#oldinhouse" data-file="oldinhouse.php" class="nav-link link">
                   <i class="nav-icon far fa-circle"></i>
@@ -475,12 +475,12 @@ to get the desired effect
                       <p>Roles</p>
                     </a>
                   </li>
-                  <!--li class="nav-item">
+                  <li class="nav-item">
                     <a href="#modules" data-file="modules.php" class="nav-link link">
                       <i class="nav-icon fas fa-list-alt"></i>
                       <p>Modules</p>
                     </a>
-                  </li-->
+                  </li>
                   <li class="nav-item">
                     <a href="#users" data-file="users.php" class="nav-link link">
                       <i class="nav-icon fas fa-user"></i>
