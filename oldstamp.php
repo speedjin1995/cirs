@@ -1285,7 +1285,6 @@ function format (row) {
       <p><strong>Model:</strong> ${row.model}</p>
       <p><strong>Machine Type:</strong> ${row.machine_type}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
-      <p><strong>Capacity (High):</strong> ${row.capacity_high}</p>
       <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
       <p><strong>Serial No:</strong> ${row.serial_no}</p>
     </div>
