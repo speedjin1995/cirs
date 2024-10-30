@@ -1038,9 +1038,9 @@ $(function () {
       { data: 'brand' },
       { data: 'machines' },
       { data: 'capacity' },
-      { data: 'autoCertNo' },
+      { data: 'auto_cert_no' },
       { data: 'validation_date' },
-      { data: 'expiredDate' },
+      { data: 'expired_date' },
       { data: 'calibrator' },
       { data: 'status' },
       { 
@@ -1272,9 +1272,9 @@ $(function () {
         { data: 'brand' },
         { data: 'machines' },
         { data: 'capacity' },
-        { data: 'autoCertNo' },
+        { data: 'auto_cert_no' },
         { data: 'validation_date' },
-        { data: 'expiredDate' },
+        { data: 'expired_date' },
         { data: 'calibrator' },
         { data: 'status' },
         { 

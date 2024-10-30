@@ -103,8 +103,8 @@ while($row = mysqli_fetch_assoc($validationRecords)) {
     "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
     "machines"=>$row['machines'] != null ? searchMachineNameById($row['machines'], $db) : '',
     "capacity"=>$row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '',
-    "autoCertNo"=>$row['auto_cert_no'] ?? '',
-    "expiredDate"=>$row['expired_date'] ?? '',
+    "auto_cert_no"=>$row['auto_cert_no'] ?? '',
+    "expired_date"=>$row['expired_date'] ?? '',
     "calibrator"=>$row['size'] != null ? searchStaffNameById($row['calibrator'], $db) : '',
     "status"=>$row['status'] ?? '',
 
