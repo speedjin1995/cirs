@@ -77,6 +77,19 @@ if(isset($_POST['userID'])){
                     }
                 }
 
+                $capacityId = $row['capacity'];
+                $capacityType = '';
+                $capacityName = '';
+                if (isset($row['capacity']) && $row['capacity'] != ''){
+                    $capacityQuery = "SELECT * FROM capacity WHERE id = $capacityId";
+                    $capacityDetail = mysqli_query($db, $capacityQuery);
+                    $capacityRow = mysqli_fetch_assoc($capacityDetail);
+                    if(!empty($capacityRow)){
+                        $capacityType = $capacityRow['range_type'];
+                        $capacityName = $capacityRow['name'];
+                    }
+                }
+
                 if($format == 'EXPANDABLE') {
                     $message['id'] = $row['id'];
                     $message['type'] = $row['type'];
@@ -102,8 +115,8 @@ if(isset($_POST['userID'])){
                     $message['brand'] = $row['brand'];
                     $message['machine_type'] = $row['machine_type'] != null ? searchMachineNameById($row['machine_type'], $db) : '';
                     $message['model'] = $row['model'] != null ? searchModelNameById($row['model'], $db) : '';
-                    $message['capacity'] = $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '';
-                    $message['capacity_high'] = $row['capacity_high'] != null ? searchCapacityNameById($row['capacity_high'], $db) : '';
+                    $message['capacity'] = $row['capacity'] != null ? $capacityName : '';
+                    $message['capacity_range'] = $capacityType;
                     $message['serial_no'] = $row['serial_no'];
                     $message['validate_by'] = $row['validate_by'];
                     $message['jenis_alat'] = $row['jenis_alat'] != null ? searchJenisAlatNameByid($row['jenis_alat'], $db) : '';
@@ -170,7 +183,7 @@ if(isset($_POST['userID'])){
                     $message['machine_type'] = $row['machine_type'];
                     $message['model'] = $row['model'];
                     $message['capacity'] = $row['capacity'];
-                    $message['capacity_high'] = $row['capacity_high'];
+                    $message['capacity_range'] = $capacityType;
                     $message['serial_no'] = $row['serial_no'];
                     $message['validate_by'] = $row['validate_by'];
                     $message['jenis_alat'] = $row['jenis_alat'];
