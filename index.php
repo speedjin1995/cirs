@@ -488,8 +488,9 @@ to get the desired effect
                     </a>
                   </li>
                 </ul>
-              </li>
-              <li class="nav-item has-treeview">
+              </li>';}
+
+              echo '<li class="nav-item has-treeview">
                 <a href="#" class="nav-link">
                   <i class="nav-icon fas fa-database"></i>
                   <p>Master Data<i class="fas fa-angle-left right"></i></p>
@@ -593,7 +594,7 @@ to get the desired effect
                   </li>
                 </ul>
               </li>';
-              }
+              //}
           ?>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
