@@ -38,6 +38,7 @@ if($searchValue != ''){
   cash_bill like '%".$searchValue."%')";
 }
 
+$searchQuery .= " and id = 25";
 ## Total number of records without filtering
 $sel = mysqli_query($db,"select count(*) as allcount FROM stamping");
 $records = mysqli_fetch_assoc($sel);
