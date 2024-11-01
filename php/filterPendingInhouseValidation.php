@@ -98,13 +98,13 @@ while($row = mysqli_fetch_assoc($validationRecords)) {
   $data[] = array( 
     "no"=>$counter,
     "id"=>$row['id'],
-    "validation_date"=>$row['validation_date'] ?? '',
+    "validation_date"=>$row['validation_date'] != null ? convertDatetimeToDate($row['validation_date']) : '',
     "customer"=>$row['customer'] != null ? searchCustNameById($row['customer'], $db) : '',
     "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
     "machines"=>$row['machines'] != null ? searchMachineNameById($row['machines'], $db) : '',
     "capacity"=>$row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '',
     "auto_cert_no"=>$row['auto_cert_no'] ?? '',
-    "expired_date"=>$row['expired_date'] ?? '',
+    "expired_date"=>$row['expired_date'] != null ? convertDatetimeToDate($row['expired_date']) : '',
     "calibrator"=>$row['size'] != null ? searchStaffNameById($row['calibrator'], $db) : '',
     "status"=>$row['status'] ?? '',
 

@@ -449,13 +449,25 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <div class="col-3">
                   <div class="form-group">
                     <label>Last Calibration Date</label>
-                    <input class="form-control" type="date" id="lastCalibrationDate" name="lastCalibrationDate">
+                    <div class='input-group date' id="datePicker" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker" id="lastCalibrationDate" name="lastCalibrationDate"/>
+                      <div class="input-group-append" data-target="#datePicker" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                    <!-- <input class="form-control" type="date" id="lastCalibrationDate" name="lastCalibrationDate"> -->
                   </div>
                 </div>
                 <div class="col-3">
                   <div class="form-group">
                     <label>Expired Calibration Date</label>
-                    <input class="form-control" type="date" id="expiredCalibrationDate" name="expiredCalibrationDate">
+                    <div class='input-group date' id="datePicker2" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker2" id="expiredCalibrationDate" name="expiredCalibrationDate"/>
+                      <div class="input-group-append" data-target="#datePicker2" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                    <!-- <input class="form-control" type="date" id="expiredCalibrationDate" name="expiredCalibrationDate"> -->
                   </div>
                 </div>
                 <div class="col-3">
@@ -1793,26 +1805,21 @@ $(function () {
     }
   });
 
-  $('#extendModal').find('#lastCalibrationDate').on('change', function(){
+  $('#extendModal').find('#lastCalibrationDate').on('blur', function (e) {
     if($(this).val()){
-      var parts = $(this).val().split('-');
-      var day = parseInt(parts[2], 10);
+      var parts = $(this).val().split('/');
+      var day = parseInt(parts[0], 10);
       var month = parseInt(parts[1], 10) - 1; // Months are zero-based
-      var year = parseInt(parts[0], 10);
+      var year = parseInt(parts[2], 10);
 
-      var date = new Date(year, month, day); console.log(date);
+      var date = new Date(year, month, day);
       
-      date.setFullYear(date.getFullYear() + 1);       // Add 1 year to the date
+      // Add 1 year to the date
+      date.setFullYear(date.getFullYear() + 1);
       date.setDate(date.getDate() - 1);      // Minus 1 day to the date
-
-      var newDay = ("0" + date.getDate()).slice(-2);
-      var newMonth = ("0" + (date.getMonth() + 1)).slice(-2); // Months are zero-based
-      var newYear = date.getFullYear();
       
-      var expiredDate = newYear + '-' + newMonth + '-' + newDay;
-      
-      // Assign the new date to '#expiredDate'
-      $('#extendModal').find('#expiredCalibrationDate').val(expiredDate);
+      // Assign the new date to '#expiredCalibrationDate'
+      $('#extendModal').find('#expiredCalibrationDate').val(formatDate3(date));
     }
   });
 

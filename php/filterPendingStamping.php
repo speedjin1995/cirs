@@ -38,7 +38,6 @@ if($searchValue != ''){
   cash_bill like '%".$searchValue."%')";
 }
 
-$searchQuery .= " and id = 25";
 ## Total number of records without filtering
 $sel = mysqli_query($db,"select count(*) as allcount FROM stamping");
 $records = mysqli_fetch_assoc($sel);
@@ -135,11 +134,5 @@ $response = array(
 );
 
 echo json_encode($response);
-
-function convertDatetimeToDate($datetime){
-  $date = new DateTime($datetime);
-
-  return $date->format('Y-m-d'); 
-}
 
 ?>

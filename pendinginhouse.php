@@ -358,13 +358,25 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <div class="col-3">
                   <div class="form-group">
                     <label>Validation Date * </label>
-                    <input class="form-control" type="date" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate" required>
+                    <div class='input-group date' id="datePicker" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker" id="validationDate" name="validationDate"/>
+                      <div class="input-group-append" data-target="#datePicker" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                    <!-- <input class="form-control" type="date" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate" required> -->
                   </div>
                 </div>
                 <div class="col-3">
                   <div class="form-group">
                     <label>Expired Date * </label>
-                    <input class="form-control" type="date" id="expiredDate" name="expiredDate" required>
+                    <div class='input-group date' id="datePicker2" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker2" id="expiredDate" name="expiredDate"/>
+                      <div class="input-group-append" data-target="#datePicker2" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                    <!-- <input class="form-control" type="date" id="expiredDate" name="expiredDate" required> -->
                   </div>
                 </div>
                 <div class="col-3">
