@@ -5,7 +5,7 @@ session_start();
 
 if(!isset($_SESSION['userID'])){
     echo '<script type="text/javascript">';
-    echo 'window.location.href = "../login.html";</script>';
+    echo 'window.location.href = "../login.php";</script>';
 }
 
 if(isset($_POST['satemperature'], $_POST['capacity'], $_POST['unitsHidden'], $_POST['variance'], $_POST['tester1'], 

@@ -5,7 +5,7 @@ session_start();
 
 if(!isset($_SESSION['userID'])){
     echo '<script type="text/javascript">';
-    echo 'window.location.href = "../login.html";</script>';
+    echo 'window.location.href = "../login.php";</script>';
 }
 else{
     $userId = $_SESSION['userID'];

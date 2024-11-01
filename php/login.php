@@ -26,12 +26,12 @@ if(($row = $result->fetch_assoc()) !== null){
 	} 
 	else{
 		echo '<script type="text/javascript">alert("Login unsuccessful, password or username is not matched");';
-		echo 'window.location.href = "../login.html";</script>';
+		echo 'window.location.href = "../login.php";</script>';
 	}
 	
 } 
 else{
 	 echo '<script type="text/javascript">alert("Login unsuccessful, password or username is not matched");';
-	 echo 'window.location.href = "../login.html";</script>';
+	 echo 'window.location.href = "../login.php";</script>';
 }
 ?>

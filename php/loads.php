@@ -5,7 +5,7 @@ session_start();
 
 if(!isset($_SESSION['userID'])){
     echo '<script type="text/javascript">';
-    echo 'window.location.href = "../login.html";</script>';
+    echo 'window.location.href = "../login.php";</script>';
 }
 
 if(isset($_POST['loadCell'], $_POST['model'], $_POST['capacity'], $_POST['madeIn'], $_POST['brand'], $_POST['class'], $_POST['oimlApproval'],   $_POST['patternNo'], $_POST['approvalDate'], $_POST['expiryDate'], $_FILES['certificate'])){
