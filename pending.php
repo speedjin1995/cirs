@@ -5,7 +5,7 @@ session_start();
 
 if(!isset($_SESSION['userID'])){
   echo '<script type="text/javascript">';
-  echo 'window.location.href = "login.html";</script>';
+  echo 'window.location.href = "login.php";</script>';
 }
 else{
   $user = $_SESSION['userID'];
@@ -907,9 +907,13 @@ $(function () {
   tomorrow.setDate(tomorrow.getDate() + 1);
   yesterday.setDate(tomorrow.getDate() - 7);
 
-  $('.select2').select2({
-    allowClear: true,
-    placeholder: "Please Select"
+  $('.select2').each(function() {
+    $(this).select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        // Conditionally set dropdownParent based on the element’s location
+        dropdownParent: $(this).closest('.modal').length ? $(this).closest('.modal-body') : undefined
+    });
   });
 
   //Date picker

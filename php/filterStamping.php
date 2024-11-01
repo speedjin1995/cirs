@@ -169,10 +169,4 @@ $response = array(
 
 echo json_encode($response);
 
-function convertDatetimeToDate($datetime){
-  $date = new DateTime($datetime);
-
-  return $date->format('Y-m-d'); 
-}
-
 ?>

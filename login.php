@@ -1,3 +1,16 @@
+<?php
+    require_once 'php/db_connect.php';
+    $company_name = '';
+    $result = $db->query("SELECT name FROM companies LIMIT 1");
+
+    if ($result && $result->num_rows > 0) {
+        $company = $result->fetch_assoc();
+        $company_name = htmlspecialchars($company['name']); // Store name in variable
+    }
+
+    $db->close();
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,6 +35,10 @@
 <div class="login-box">
   <div class="login-logo">
     <a href="#"><img src="assets/logo.png" height="auto" width="100%"/></a>
+  </div>
+  <div class="text-center font-weight-bold">
+    <p>Licensed By :</p>
+    <p><?php echo $company_name; ?></p>
   </div>
   <!-- /.login-logo -->
   <div class="card">

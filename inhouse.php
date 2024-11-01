@@ -5,7 +5,7 @@ session_start();
 
 if(!isset($_SESSION['userID'])){
   echo '<script type="text/javascript">';
-  echo 'window.location.href = "login.html";</script>';
+  echo 'window.location.href = "login.php";</script>';
 }
 else{
   $user = $_SESSION['userID'];
@@ -360,16 +360,28 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <h4>Machines / Instruments Information</h4>
               </div>
               <div class="row">
-                <div class="col-3">
+              <div class="col-3">
                   <div class="form-group">
                     <label>Validation Date * </label>
-                    <input class="form-control" type="date" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate" required>
+                    <div class='input-group date' id="datePicker" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker" id="validationDate" name="validationDate"/>
+                      <div class="input-group-append" data-target="#datePicker" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                    <!-- <input class="form-control" type="date" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate" required> -->
                   </div>
                 </div>
                 <div class="col-3">
                   <div class="form-group">
                     <label>Expired Date * </label>
-                    <input class="form-control" type="date" id="expiredDate" name="expiredDate" required>
+                    <div class='input-group date' id="datePicker2" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker2" id="expiredDate" name="expiredDate"/>
+                      <div class="input-group-append" data-target="#datePicker2" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                    <!-- <input class="form-control" type="date" id="expiredDate" name="expiredDate" required> -->
                   </div>
                 </div>
                 <div class="col-3">
@@ -942,9 +954,13 @@ $(function () {
   const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1); // First day of the current month
   const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0); // Last day of the current month
 
-  $('.select2').select2({
-    allowClear: true,
-    placeholder: "Please Select"
+  $('.select2').each(function() {
+    $(this).select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        // Conditionally set dropdownParent based on the element’s location
+        dropdownParent: $(this).closest('.modal').length ? $(this).closest('.modal-body') : undefined
+    });
   });
 
   //Date picker

@@ -404,4 +404,10 @@ function searchCountryNameById($value, $db) {
 
     return $id;
 }
+
+function convertDatetimeToDate($datetime){
+    $date = new DateTime($datetime);
+  
+    return $date->format('d/m/Y'); 
+}
 ?>

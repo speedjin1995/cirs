@@ -6,7 +6,7 @@ session_start();
 
 if(!isset($_SESSION['userID'])){
     echo '<script type="text/javascript">';
-    echo 'window.location.href = "../login.html";</script>';
+    echo 'window.location.href = "../login.php";</script>';
 }
 
 if(isset($_POST['range_type'], $_POST['capacity'], $_POST['unit'])){

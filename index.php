@@ -5,7 +5,7 @@ session_start();
 
 if(!isset($_SESSION['userID'])){
   echo '<script type="text/javascript">';
-  echo 'window.location.href = "login.html";</script>';
+  echo 'window.location.href = "login.php";</script>';
 }
 else{
   $user = $_SESSION['userID'];
@@ -19,6 +19,14 @@ else{
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
     $name = $row['name'];
+  }
+
+  $company_name = '';
+  $result = $db->query("SELECT name FROM companies LIMIT 1");
+
+  if ($result && $result->num_rows > 0) {
+      $company = $result->fetch_assoc();
+      $company_name = htmlspecialchars($company['name']); // Store name in variable
   }
 }
 ?>
@@ -307,8 +315,11 @@ to get the desired effect
     <a href="#" class="brand-link logo-switch">
       <img src="assets/logo.png" alt="Sneakercube Logo" class="brand-image-xl logo-xs">
       <img src="assets/logo.png" alt="Sneakercube Logo" class="brand-image-xl logo-xl">
+      <div class="text-center mt-4">
+        <h6 style="font-size:60%"><b><?php echo $company_name ?></b></h6>
+      </div>
     </a>
-
+    
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->

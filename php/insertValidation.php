@@ -104,10 +104,12 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 
 	if(isset($_POST['lastCalibrationDate']) && $_POST['lastCalibrationDate']!=null && $_POST['lastCalibrationDate']!=""){
 		$lastCalibrationDate = $_POST['lastCalibrationDate'];
+		$lastCalibrationDate = DateTime::createFromFormat('d/m/Y', $lastCalibrationDate)->format('Y-m-d H:i:s');
 	}
 
 	if(isset($_POST['expiredCalibrationDate']) && $_POST['expiredCalibrationDate']!=null && $_POST['expiredCalibrationDate']!=""){
 		$expiredCalibrationDate = $_POST['expiredCalibrationDate'];
+		$expiredCalibrationDate = DateTime::createFromFormat('d/m/Y', $expiredCalibrationDate)->format('Y-m-d H:i:s');
 	}
 
 	if(isset($_POST['autoFormNo']) && $_POST['autoFormNo']!=null && $_POST['autoFormNo']!=""){
