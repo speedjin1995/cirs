@@ -1478,26 +1478,21 @@ $(function () {
     }
   });
 
-  $('#extendModal').find('#lastCalibrationDate').on('change', function (e) {
+  $('#extendModal').find('#validationDate').on('blur', function (e) {
     if($(this).val()){
-      var parts = $(this).val().split('-');
-      var day = parseInt(parts[2], 10);
+      var parts = $(this).val().split('/');
+      var day = parseInt(parts[0], 10);
       var month = parseInt(parts[1], 10) - 1; // Months are zero-based
-      var year = parseInt(parts[0], 10);
+      var year = parseInt(parts[2], 10);
 
       var date = new Date(year, month, day);
       
-      date.setFullYear(date.getFullYear() + 1);       // Add 1 year to the date
+      // Add 1 year to the date
+      date.setFullYear(date.getFullYear() + 1);
       date.setDate(date.getDate() - 1);      // Minus 1 day to the date
-
-      var newDay = ("0" + date.getDate()).slice(-2);
-      var newMonth = ("0" + (date.getMonth() + 1)).slice(-2); // Months are zero-based
-      var newYear = date.getFullYear();
-      
-      var expiredDate = newYear + '-' + newMonth + '-' + newDay;
       
       // Assign the new date to '#expiredDate'
-      $('#extendModal').find('#expiredDate').val(expiredDate);
+      $('#extendModal').find('#expiredDate').val(formatDate3(date));
     }
   });
 
@@ -1983,13 +1978,13 @@ function newEntry(){
   $('#extendModal').find('#size').val('').trigger('change');
   $('#extendModal').find('#calibrator').val('').trigger('change');
   $('#extendModal').find('#companyText').val('').trigger('change');
-  $('#extendModal').find('#validationDate').val(today);
-  $('#extendModal').find('#expiredDate').val(getExpiredDt(today));
-  
-  $('#extendModal').find('#validationDate').change(function(){
-    var date = $(this).val();
-    $('#extendModal').find('#expiredDate').val(getExpiredDt(date));
-  });
+  $('#extendModal').find('#validationDate').val(formatDate3(today));
+  $('#extendModal').find('#expiredDate').val(formatDate3(getExpiredDt(today)));
+
+  // $('#extendModal').find('#validationDate').change(function(){
+  //   var date = $(this).val();
+  //   $('#extendModal').find('#expiredDate').val(getExpiredDt(date));
+  // });
 
   $('#calibrationHeader').text('Note - Standard Average Temperature: () / Average Relative Humidity: ()');
   $('#varianceHeader').text('Variance +/- ');
@@ -2182,10 +2177,10 @@ function edit(id) {
         });
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#size').val(obj.message.size).trigger('change');
-        $('#extendModal').find('#lastCalibrationDate').val(obj.message.last_calibration_date);
-        $('#extendModal').find('#expiredDate').val(obj.message.expired_date);
+        $('#extendModal').find('#lastCalibrationDate').val(formatDate3(obj.message.last_calibration_date));
+        $('#extendModal').find('#expiredDate').val(formatDate3(obj.message.expired_date));
         $('#extendModal').find('#auto_cert_no').val(obj.message.auto_cert_no);
-        $('#extendModal').find('#validationDate').val(obj.message.validation_date);
+        $('#extendModal').find('#validationDate').val(formatDate3(obj.message.validation_date));
         $('#extendModal').find('#calibrator').val(obj.message.calibrator).trigger('change');
 
         if(obj.message.tests != null && obj.message.tests.length > 0){
@@ -2376,10 +2371,10 @@ function edit(id) {
         });
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#size').val(obj.message.size).trigger('change');
-        $('#extendModal').find('#lastCalibrationDate').val(obj.message.last_calibration_date);
+        $('#extendModal').find('#lastCalibrationDate').val(formatDate3(obj.message.last_calibration_date));
         $('#extendModal').find('#expiredDate').val(obj.message.expired_date);
         $('#extendModal').find('#autoCertNo').val(obj.message.auto_cert_no);
-        $('#extendModal').find('#validationDate').val(obj.message.validation_date);
+        $('#extendModal').find('#validationDate').val(formatDate3(obj.message.validation_date));
         $('#extendModal').find('#calibrator').val(obj.message.calibrator).trigger('change');
 
         if(obj.message.tests != null && obj.message.tests.length > 0){

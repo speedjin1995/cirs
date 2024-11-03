@@ -25,12 +25,12 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 	$capacity = filter_input(INPUT_POST, 'capacity', FILTER_SANITIZE_STRING);
 	$size = filter_input(INPUT_POST, 'size', FILTER_SANITIZE_STRING);
 
-	$validationDate = '';
-	if(isset($_POST['validationDate']) && $_POST['validationDate'] != ''){
+	$validationDate = null;
+	if(isset($_POST['validationDate']) && $_POST['validationDate']!=null && $_POST['validationDate']!=""){
 		$validationDate = $_POST['validationDate'];
 		$validationDate = DateTime::createFromFormat('d/m/Y', $validationDate)->format('Y-m-d H:i:s');
 	}
-
+	
 	$dealer = null;
 	$reseller_branch = null;
 	$company = null;
