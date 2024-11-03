@@ -33,6 +33,7 @@ else{
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
+  $states = $db->query("SELECT * FROM state WHERE deleted = '0'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
   $cancelledReasons = $db->query("SELECT * FROM reasons WHERE deleted = '0'");
@@ -366,29 +367,42 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 </div>
                 <div class="col-4">
                   <div class="form-group">
+                    <label>Trade / Non-Trade *</label>
+                    <select class="form-control select2" style="width: 100%;" id="trade" name="trade" required>
+                      <option selected="selected"></option>
+                      <option value="TRADE">TRADE</option>
+                      <option value="NON-TRADE">NON-TRADE</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
                     <label>Capacity * </label>
-                    <div class="form-check">
-                      <input type="checkbox" class="form-check-input" id="toggleMultiRange">
-                      <label class="form-check-label" for="toggleMultiRange">Multi Range</label>
+                    <div class="d-flex align-items-center">
+                      <div class="form-check mr-3">
+                        <input type="checkbox" class="form-check-input" id="toggleMultiRange">
+                        <label class="form-check-label" for="toggleMultiRange">Multi Range</label>
+                      </div>
+
+                      <div id="capacitySingle" class="flex-grow-1">
+                        <select class="form-control select2" style="width: 100%;" id="capacity_single" name="capacity_single">
+                          <option selected="selected">-</option>
+                          <?php while($rowCA=mysqli_fetch_assoc($singleCapacities)){ ?>
+                            <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
+                          <?php } ?>
+                        </select>
+                      </div>
+                      
+                      <div id="capacityMulti" style="display:none" class="flex-grow-1">
+                        <select class="form-control select2" style="width: 100%;" id="capacity_multi" name="capacity_multi">
+                          <option selected="selected">-</option>
+                          <?php while($capacity2=mysqli_fetch_assoc($multiCapacities)){ ?>
+                            <option value="<?=$capacity2['id'] ?>"><?=$capacity2['name'] ?></option>
+                          <?php } ?>
+                        </select>
+                      </div>
                     </div>
                     
-                    <div id="capacitySingle">
-                      <select class="form-control select2" style="width: 100%;" id="capacity_single" name="capacity_single">
-                        <option selected="selected">-</option>
-                        <?php while($rowCA=mysqli_fetch_assoc($singleCapacities)){ ?>
-                          <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
-                        <?php } ?>
-                      </select>
-                    </div>
-                    
-                    <div id="capacityMulti" style="display:none">
-                      <select class="form-control select2" style="width: 100%;" id="capacity_multi" name="capacity_multi">
-                        <option selected="selected">-</option>
-                        <?php while($capacity2=mysqli_fetch_assoc($multiCapacities)){ ?>
-                          <option value="<?=$capacity2['id'] ?>"><?=$capacity2['name'] ?></option>
-                        <?php } ?>
-                      </select>
-                    </div>
                     <input class="form-control" type="text" id="capacity" name="capacity" style="display: none;">
                   </div>
                 </div>
@@ -424,13 +438,13 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>Stamping Date</label>
-                    <div class='input-group date' id="datePicker" data-target-input="nearest">
-                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker" id="stampDate" name="stampDate"/>
-                      <div class="input-group-append" data-target="#datePicker" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                      </div>
-                    </div>
+                    <label>Cawangan * </label>
+                    <select class="form-control select2" style="width: 100%;" id="cawangan" name="cawangan" required>
+                      <option selected="selected"></option>
+                      <?php while($state=mysqli_fetch_assoc($states)){ ?>
+                        <option value="<?=$state['id'] ?>"><?=$state['state'] ?></option>
+                      <?php } ?>
+                    </select>
                   </div>
                 </div>
                 <div class="col-4">
@@ -441,8 +455,8 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>No PIN Pelekat Keselamatan </label>
-                    <input class="form-control" type="text" placeholder="No PIN Pelekat Keselamatan" id="pinKeselamatan" name="pinKeselamatan">
+                    <label>No. Borang D</label>
+                    <input class="form-control" type="text" placeholder="No. Borang D" id="borangD" name="borangD">
                   </div>
                 </div>
                 <div class="col-4">
@@ -453,8 +467,13 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>No. Borang D</label>
-                    <input class="form-control" type="text" placeholder="No. Borang D" id="borangD" name="borangD">
+                    <label>Stamping Date</label>
+                    <div class='input-group date' id="datePicker" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker" id="stampDate" name="stampDate"/>
+                      <div class="input-group-append" data-target="#datePicker" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-4">
@@ -477,6 +496,12 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
+                <!-- <div class="col-4">
+                  <div class="form-group">
+                    <label>No PIN Pelekat Keselamatan </label>
+                    <input class="form-control" type="text" placeholder="No PIN Pelekat Keselamatan" id="pinKeselamatan" name="pinKeselamatan">
+                  </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -2174,6 +2199,8 @@ function edit(id) {
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
+        $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
+        $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
         $('#extendModal').find('#newRenew').val(obj.message.stampType);
         $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
         $('#extendModal').find('#companyText').val('');
@@ -2330,6 +2357,8 @@ function edit(id) {
         $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
+        $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
+        $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
         $('#extendModal').find('#newRenew').val(obj.message.stampType);
         customer = obj.message.customers;
         branch = obj.message.branch;
