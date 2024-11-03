@@ -603,6 +603,12 @@ to get the desired effect
                       <p>Country</p>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="#state" data-file="state.php" class="nav-link link">
+                      <i class="nav-icon fas fa-map-marker-alt"></i>
+                      <p>State</p>
+                    </a>
+                  </li>
                 </ul>
               </li>';
               //}
