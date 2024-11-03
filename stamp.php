@@ -1648,7 +1648,7 @@ $(function () {
     var capacity = parseFloat($(this).find(":selected").attr("data-capacity"));
     var validator = parseFloat($(this).find(":selected").attr("data-validator"));
     var includeCert = $('#includeCert').val();
-    var certPrice = 28.6;
+    var certPrice = 28.5;
     var sst = 0;
     var totalAmt = price;
 
@@ -1676,7 +1676,7 @@ $(function () {
   $('#extendModal').find('#unitPrice').on('change', function(){
     var price = parseFloat($(this).val());
     var includeCert = $('#includeCert').val();
-    var certPrice = 28.6;
+    var certPrice = 28.5;
     var sst = 0;
     var totalAmt = price;
 
@@ -1698,7 +1698,7 @@ $(function () {
   $('#extendModal').find('#includeCert').on('change', function(){
     var price = parseFloat($('#product').find(":selected").attr("data-price"));
     var includeCert = $(this).val();
-    var certPrice = 28.6;
+    var certPrice = 28.5;
     var sst = 0;
     var totalAmt = price;
 
