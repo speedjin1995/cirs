@@ -25,6 +25,7 @@ else{
         // $address = $row['address'];
         // $phone = $row['phone'];
         // $email = $row['email'];
+		$filepath = $row['signature'];
     }
 }
 ?>
@@ -53,9 +54,7 @@ else{
 						<label for="old_roc">Company OLD. ROC.</label>
 						<input type="text" class="form-control" id="old_roc" name="old_roc" value="<?=$data['old_roc'] ?>" placeholder="Enter Company OLD. ROC.">
 					</div>
-				</div>
-				
-				<div class="row">
+
 					<div class="form`-group col-6">
 						<label for="name">Company Name *</label>
 						<input type="text" class="form-control" id="name" name="name" value="<?=$data['name'] ?>" placeholder="Enter Company Name" required="">
@@ -65,9 +64,7 @@ else{
 						<label for="address">Company Address *</label>
 						<textarea class="form-control" name="address" id="address" rows="3" placeholder="Enter Address" required=""><?=$data['address'] ?></textarea>
 					</div>
-				</div>
 
-				<div class="row">
 					<div class="form-group col-6">
 						<label for="phone">Company Phone </label>
 						<input type="text" class="form-control" id="phone" name="phone" value="<?=$data['phone'] ?>" placeholder="Enter Phone">
@@ -77,9 +74,7 @@ else{
 						<label for="fax">Company Fax </label>
 						<input type="text" class="form-control" id="fax" name="fax" value="<?=$data['fax'] ?>" placeholder="Enter Fax">
 					</div>
-				</div>
 
-				<div class="row">
 					<div class="form-group col-6">
 						<label for="person_incharge">Person Incharge </label>
 						<input type="text" class="form-control" id="person_incharge" name="person_incharge" value="<?=$data['person_incharge'] ?>" placeholder="Enter Person Incharge">
@@ -89,8 +84,7 @@ else{
 						<label for="contact_no">Contact No </label>
 						<input type="text" class="form-control" id="contact_no" name="contact_no" value="<?=$data['contact_no'] ?>" placeholder="Enter Contact No">
 					</div>
-				</div>
-				<div class="row">
+
 					<div class="form-group col-6">
 						<label for="email">Email address</label>
 						<input type="email" class="form-control" id="email" name="email" value="<?=$data['email'] ?>" placeholder="Enter Email">
@@ -106,8 +100,7 @@ else{
 							<option value="membaiki" <?php if ($data['lesen_type'] == 'membaiki') echo 'selected'; ?>>Membaiki</option>
 						</select>
 					</div>
-				</div>
-				<div class="row">
+
 					<div class="form-group col-6">
 						<label for="certno_lesen">Certificate No.Lesen </label>
 						<input type="text" class="form-control" id="certno_lesen" name="certno_lesen" value="<?=$data['certno_lesen'] ?>" placeholder="Enter Certificate No.Lesen">
@@ -117,8 +110,7 @@ else{
 						<label for="certats_serialno">Certificate ATS Serial No. </label>
 						<input type="text" class="form-control" id="certats_serialno" name="certats_serialno" value="<?=$data['certats_serialno'] ?>" placeholder="Enter Certificate ATS Serial No.">
 					</div>
-				</div>
-				<div class="row">
+
 					<div class="form-group col-6">
 						<label for="failno">No.Fail </label>
 						<input type="text" class="form-control" id="failno" name="failno" value="<?=$data['failno'] ?>" placeholder="Enter No.Fail">
@@ -128,8 +120,7 @@ else{
 						<label for="bless_serahanno">No. Serahan BLESS </label>
 						<input type="text" class="form-control" id="bless_serahanno" name="bless_serahanno" value="<?=$data['bless_serahanno'] ?>" placeholder="Enter No. Serahan BLESS">
 					</div>
-				</div>
-				<div class="row">
+
 					<div class="form-group col-6">
 						<label for="resitno">No. Resit </label>
 						<input type="text" class="form-control" id="resitno" name="resitno" value="<?=$data['resitno'] ?>" placeholder="Enter No. Resit">
@@ -139,8 +130,7 @@ else{
 						<label for="tarikh_kuatkuasa">Tarikh Kuatkuasa </label>
 						<input type="date" class="form-control" id="tarikh_kuatkuasa" name="tarikh_kuatkuasa" value="<?=$data['tarikh_kuatkuasa'] ?>">
 					</div>
-				</div>
-				<div class="row">
+
 					<div class="form-group col-6">
 						<label for="tarikh_luput">Tarikh Luput </label>
 						<input type="date" class="form-control" id="tarikh_luput" name="tarikh_luput" value="<?=$data['tarikh_luput'] ?>">
@@ -149,6 +139,26 @@ else{
 					<div class="form-group col-6">
 						<label for="tarikh_dikeluarkan">Tarikh Dikeluarkan </label>
 						<input type="date" class="form-control" id="tarikh_dikeluarkan" name="tarikh_dikeluarkan" value="<?=$data['tarikh_dikeluarkan'] ?>">
+					</div>
+
+					<div class="form-group col-6">
+						<label for="signature">Signature </label>
+						<div class="d-flex">
+							<div class="col-11">
+								<input type="file" class="form-control" id="uploadAttachment" name="uploadAttachment" accept="image/*" required>
+							</div>
+							<div class="col-1 mt-1">
+								<?php 
+									if (isset($data['signature']) && !empty($data['signature'])) {
+										echo '<a href="' . htmlspecialchars($data['signature'], ENT_QUOTES, 'UTF-8') . '" id="viewSignPdf" name="viewSignPdf" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>';
+									}else{
+										echo '<a href="" id="viewSignPdf" name="viewSignPdf" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>';
+									}
+								?>
+								
+							</div>
+						</div>
+						<input type="text" id="signFilePath" name="signFilePath" value="<?php echo htmlspecialchars($filepath, ENT_QUOTES, 'UTF-8'); ?>" style="display:none;">
 					</div>
 				</div>
 			</div>
@@ -717,33 +727,61 @@ $(function () {
 		});
 	});
 
-    $.validator.setDefaults({
-        submitHandler: function () {
-            $('#spinnerLoading').show();
-			if (!isModalOpen) {
-				$.post('php/updateCompany.php', $('#profileForm').serialize(), function(data){
-					var obj = JSON.parse(data); 
-					
-					if(obj.status === 'success'){
-						toastr["success"](obj.message, "Success:");
-						
-						$.get('company.php', function(data) {
-							$('#mainContents').html(data);
-							$('#spinnerLoading').hide();
-						});
-					}
-					else if(obj.status === 'failed'){
-						toastr["error"](obj.message, "Failed:");
-						$('#spinnerLoading').hide();
-					}
-					else{
-						toastr["error"]("Failed to update profile", "Failed:");
-						$('#spinnerLoading').hide();
-					}
-				});
+	// Bind form submission handler once
+	$('#profileForm').off('submit').on('submit', function(e) {
+		e.preventDefault(); 
+		var formData = new FormData(this);
+		$.ajax({
+			url: 'php/updateCompany.php',
+			type: 'POST',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function(data) {
+				var obj = JSON.parse(data); 
+				if (obj.status === 'success') {
+					toastr["success"](obj.message, "Success:");
+					location.reload(); // Reload the page
+				} else {
+					toastr["error"](obj.message, "Failed:");
+				}
+				$('#spinnerLoading').hide();
+			},
+			error: function(xhr, status, error) {
+				console.error("AJAX request failed:", status, error);
+				toastr["error"]("An error occurred while processing the request.", "Failed:");
+				$('#spinnerLoading').hide();
 			}
-        }
-    });
+		});
+	});
+
+    // $.validator.setDefaults({
+    //     submitHandler: function () {
+    //         $('#spinnerLoading').show();
+	// 		if (!isModalOpen) {
+	// 			$.post('php/updateCompany.php', $('#profileForm').serialize(), function(data){
+	// 				var obj = JSON.parse(data); 
+					
+	// 				if(obj.status === 'success'){
+	// 					toastr["success"](obj.message, "Success:");
+						
+	// 					$.get('company.php', function(data) {
+	// 						$('#mainContents').html(data);
+	// 						$('#spinnerLoading').hide();
+	// 					});
+	// 				}
+	// 				else if(obj.status === 'failed'){
+	// 					toastr["error"](obj.message, "Failed:");
+	// 					$('#spinnerLoading').hide();
+	// 				}
+	// 				else{
+	// 					toastr["error"]("Failed to update profile", "Failed:");
+	// 					$('#spinnerLoading').hide();
+	// 				}
+	// 			});
+	// 		}
+    //     }
+    // });
     
     $('#profileForm').validate({
         rules: {

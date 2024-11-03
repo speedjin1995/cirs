@@ -26,11 +26,16 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 	$capacity = filter_input(INPUT_POST, 'capacity', FILTER_SANITIZE_STRING);
 	$size = filter_input(INPUT_POST, 'size', FILTER_SANITIZE_STRING);
 	$calibrator = filter_input(INPUT_POST, 'calibrator', FILTER_SANITIZE_STRING);
-	$validationDate = $_POST['validationDate'];
-	$expiredDate = $_POST['expiredDate'];
 
-	$validationDate = \DateTime::createFromFormat('Y-m-d', $validationDate)->format('Y-m-d');
-	$expiredDate = \DateTime::createFromFormat('Y-m-d', $expiredDate)->format('Y-m-d');
+	if(isset($_POST['validationDate']) && $_POST['validationDate']!=null && $_POST['validationDate']!=""){
+		$validationDate = $_POST['validationDate'];
+		$validationDate = DateTime::createFromFormat('d/m/Y', $validationDate)->format('Y-m-d H:i:s');
+	}
+
+	if(isset($_POST['expiredDate']) && $_POST['expiredDate']!=null && $_POST['expiredDate']!=""){
+		$expiredDate = $_POST['expiredDate'];
+		$expiredDate = DateTime::createFromFormat('d/m/Y', $expiredDate)->format('Y-m-d H:i:s');
+	}
 
 	$dealer = null;
 	$reseller_branch = null;

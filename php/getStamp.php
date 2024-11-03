@@ -186,7 +186,9 @@ if(isset($_POST['userID'])){
                     $message['capacity_range'] = $capacityType;
                     $message['serial_no'] = $row['serial_no'];
                     $message['validate_by'] = $row['validate_by'];
+                    $message['cawangan'] = $row['cawangan'];
                     $message['jenis_alat'] = $row['jenis_alat'];
+                    $message['trade'] = $row['trade'];
                     $message['no_daftar'] = $row['no_daftar'];
                     $message['pin_keselamatan'] = $row['pin_keselamatan'];
                     $message['siri_keselamatan'] = $row['siri_keselamatan'];

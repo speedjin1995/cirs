@@ -48,6 +48,7 @@ else{
 								<tr>
                                     <th>No.</th>
 									<th>Name</th>
+									<th>Weight Range</th>
                                     <th>Capacity</th>
                                     <th>Units</th>
                                     <th>Division</th>
@@ -178,6 +179,16 @@ $(function () {
         'columns': [
             { data: 'counter' },
             { data: 'name' },
+            { 
+                data: 'range_type',
+                render: function (data, type, row) {
+                    if (row.range_type === 'MULTI') {
+                        return 'MULTI - RANGE'; 
+                    }else if (row.range_type === 'SINGLE') {
+                        return 'SINGLE - RANGE';
+                    }
+                }
+            },
             { 
                 data: 'capacity',
                 render: function (data, type, row) {

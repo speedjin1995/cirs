@@ -433,7 +433,13 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <div class="col-3">
                   <div class="form-group">
                     <label>Create Date </label>
-                    <input class="form-control" type="text" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate">
+                    <div class='input-group date' id="datePicker3" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker3" id="validationDate" name="validationDate"/>
+                      <div class="input-group-append" data-target="#datePicker3" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                    <!-- <input class="form-control" type="text" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate"> -->
                   </div>
                 </div>
               </div>
@@ -2130,9 +2136,9 @@ function edit(id) {
         });
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#size').val(obj.message.size).trigger('change');
-        $('#extendModal').find('#validationDate').val(obj.message.validation_date);
-        $('#extendModal').find('#lastCalibrationDate').val(obj.message.lastCalibrationDate);
-        $('#extendModal').find('#expiredCalibrationDate').val(obj.message.expiredCalibrationDate);
+        $('#extendModal').find('#validationDate').val(formatDate3(obj.message.validation_date));
+        $('#extendModal').find('#lastCalibrationDate').val(formatDate3(obj.message.lastCalibrationDate));
+        $('#extendModal').find('#expiredCalibrationDate').val(formatDate3(obj.message.expiredCalibrationDate));
         for (let i = 1; i <= 5; i++) {
           // Clear the file input for each attachment
           $('#extendModal').find(`#uploadAttachment${i}`).val('');
@@ -2199,9 +2205,9 @@ function edit(id) {
         });
         $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         $('#extendModal').find('#size').val(obj.message.size).trigger('change');
-        $('#extendModal').find('#validationDate').val(obj.message.validation_date);
-        $('#extendModal').find('#lastCalibrationDate').val(obj.message.lastCalibrationDate);
-        $('#extendModal').find('#expiredCalibrationDate').val(obj.message.expiredCalibrationDate);
+        $('#extendModal').find('#validationDate').val(formatDate3(obj.message.validation_date));
+        $('#extendModal').find('#lastCalibrationDate').val(formatDate3(obj.message.lastCalibrationDate));
+        $('#extendModal').find('#expiredCalibrationDate').val(formatDate3(obj.message.expiredCalibrationDate));
         for (let i = 1; i <= 5; i++) {
           // Clear the file input for each attachment
           $('#extendModal').find(`#uploadAttachment${i}`).val('');
