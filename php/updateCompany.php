@@ -108,6 +108,40 @@ if(isset($_POST['new_roc'], $_POST['name'], $_POST['address'])){
 		$stmt2->bind_param('sssssssssssssssssss', $new_roc, $old_roc, $name, $address, $phone, $fax, $person_incharge, $contact_no, $email, $lesen_type, $certno_lesen, $certats_serialno, $failno, $bless_serahanno, $resitno, $tarikh_kuatkuasa, $tarikh_luput, $tarikh_dikeluarkan, $id);
 		
 		if($stmt2->execute()){
+			$uploadAttachment = null;
+			if(isset($_FILES['uploadAttachment']) && $_FILES['uploadAttachment']!=null && $_FILES['uploadAttachment']!=""){
+				$uploadAttachment = $_FILES['uploadAttachment'];
+
+				$ds = DIRECTORY_SEPARATOR;
+				$storeFolder = '../uploads/signature';
+				$dataJson = '';
+				if($uploadAttachment['error'] === 0){
+					# Delete Existing File
+					if(isset($_POST['signFilePath']) && $_POST['signFilePath']!=null && $_POST['signFilePath']!=""){
+						$signFilePath = $_POST['signFilePath'];
+						if (file_exists($signFilePath)) {
+							unlink($signFilePath);
+						}
+					}
+
+					$timestamp = time();
+					$uploadDir = '../uploads/signature/'; // Directory to store uploaded files
+					$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadAttachment']['name']);
+					$tempFile = $_FILES['uploadAttachment']['tmp_name'];
+
+					// Move the uploaded file to the target directory
+					if (move_uploaded_file($tempFile, $uploadFile)) {
+						$signatureFilePath = $uploadFile;
+						// Update certificate data in the database
+						if ($stmt3 = $db->prepare("UPDATE companies SET signature=? WHERE id=?")) {
+							$stmt3->bind_param('ss', $signatureFilePath, $id);
+							$stmt3->execute();
+							$stmt3->close();
+						} 
+					} 
+				}
+			}
+
 			$stmt2->close();
 			$db->close();
 			
