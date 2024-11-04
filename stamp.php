@@ -1994,7 +1994,6 @@ function format (row) {
     <!-- Stamping Section -->
     <div class="col-6">
       <p><strong>No. Daftar:</strong> ${row.no_daftar}</p>
-      <p><strong>PIN Keselamatan:</strong> ${row.pin_keselamatan}</p>
       <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
       <p><strong>Borang D:</strong> ${row.borang_d}</p>
       <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>

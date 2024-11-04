@@ -1051,7 +1051,7 @@ $(function () {
                     ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
           // Complete button if conditions are met
-          if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
+          if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '') {
             buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
                       ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
           }
@@ -1281,7 +1281,7 @@ $(function () {
                     ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
             // Complete button if conditions are met
-            if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
+            if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '') {
               buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
                         ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
             }
@@ -2000,7 +2000,6 @@ function format (row) {
     <!-- Stamping Section -->
     <div class="col-6">
       <p><strong>No. Daftar:</strong> ${row.no_daftar}</p>
-      <p><strong>PIN Keselamatan:</strong> ${row.pin_keselamatan}</p>
       <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
       <p><strong>Borang D:</strong> ${row.borang_d}</p>
       <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
