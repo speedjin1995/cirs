@@ -112,7 +112,7 @@ if(isset($_POST['userID'])){
                     $message['branch'] = $row['branch'];
                     $message['products'] = $row['products'];
                     $message['stampType'] = $row['stamping_type'];
-                    $message['brand'] = $row['brand'];
+                    $message['brand'] = $row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '';
                     $message['machine_type'] = $row['machine_type'] != null ? searchMachineNameById($row['machine_type'], $db) : '';
                     $message['model'] = $row['model'] != null ? searchModelNameById($row['model'], $db) : '';
                     $message['capacity'] = $row['capacity'] != null ? $capacityName : '';
@@ -127,13 +127,13 @@ if(isset($_POST['userID'])){
                     $message['borang_d'] = $row['borang_d'];
                     $message['invoice_no'] = $row['invoice_no'];
                     $message['cash_bill'] = $row['cash_bill'];
-                    $message['stamping_date'] = $row['stamping_date'];
-                    $message['due_date'] = $row['due_date'];
+                    $message['stamping_date'] = $row['stamping_date'] != null ? convertDatetimeToDate($row['stamping_date']) : '';
+                    $message['due_date'] = $row['due_date'] != null ? convertDatetimeToDate($row['due_date']) : '';
                     $message['customer_pic'] = $row['customer_pic'];
                     $message['quotation_no'] = $row['quotation_no'];
-                    $message['quotation_date'] = $row['quotation_date'];
+                    $message['quotation_date'] = $row['quotation_date'] != null ? convertDatetimeToDate($row['quotation_date']) : '';
                     $message['purchase_no'] = $row['purchase_no'];
-                    $message['purchase_date'] = $row['purchase_date'];
+                    $message['purchase_date'] = $row['purchase_date'] != null ? convertDatetimeToDate($row['purchase_date']) : '';
                     $message['remarks'] = $row['remarks'];
                     $message['log'] = json_decode($row['log'], true);
                     $message['unit_price'] = $row['unit_price'];
