@@ -513,7 +513,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
         $pdf->Output('D', "filled_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATS' && $validator == 'METROLOGY'){
-        $fillFile = 'forms/metrology/ATE_FORM.pdf';
+        $fillFile = 'forms/metrology/ATS_FORM.pdf';
 
         $pdf = new Fpdi();
         $pageCount = $pdf->setSourceFile($fillFile);
