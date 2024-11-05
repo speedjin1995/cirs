@@ -35,8 +35,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
     $tickImage = '../assets/tick.png';
 
-    if($_GET["file"] == 'ATK' && $_GET["validator"] == 'METROLOGY'){
-        $fillFile = 'forms/ATK_FORM.pdf';
+    if($file == 'ATK' && $validator == 'METROLOGY'){
+        $fillFile = 'forms/metrology/ATK_FORM.pdf';
         $pdf = new Fpdi();
         $pageCount = $pdf->setSourceFile($fillFile);
 
@@ -196,8 +196,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
         $pdf->Output('D', 'filled_ATK_form.pdf');
     }
-    else if($_GET["file"] == 'ATK' && $_GET["validator"] == 'DE METROLOGY'){
-        $fillFile = 'forms/DMSB_ATK.pdf';
+    else if($file == 'ATK' && $validator == 'DE METROLOGY'){
+        $fillFile = 'forms/DE_Metrology/DMSB_ATK.pdf';
         $pdf = new Fpdi();
         $pageCount = $pdf->setSourceFile($fillFile);
 
@@ -354,8 +354,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
         $pdf->Output('D', 'filled_ATK_form.pdf');
     }
-    else if($_GET["file"] == 'ATE' && $_GET["validator"] == 'DE METROLOGY'){
-        $fillFile = 'forms/DMSB_ATE.pdf';
+    else if($file == 'ATE' && $validator == 'DE METROLOGY'){
+        $fillFile = 'forms/DE_Metrology/DMSB_ATE.pdf';
         $pdf = new Fpdi();
         $pageCount = $pdf->setSourceFile($fillFile);
 
@@ -513,7 +513,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
         $pdf->Output('D', "filled_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATS' && $validator == 'METROLOGY'){
-        $fillFile = 'forms/ATS_FORM.pdf';
+        $fillFile = 'forms/metrology/ATE_FORM.pdf';
 
         $pdf = new Fpdi();
         $pageCount = $pdf->setSourceFile($fillFile);
@@ -605,7 +605,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
         $pdf->Output('D', "filled_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATS' && $validator == 'DE METROLOGY'){
-        $fillFile = 'forms/DMSB_ATS.pdf';
+        $fillFile = 'forms/DE_Metrology/DMSB_ATS.pdf';
 
         $pdf = new Fpdi();
         $pageCount = $pdf->setSourceFile($fillFile);
@@ -707,7 +707,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
         $pdf->Output('D', "filled_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATN' && $validator == 'METROLOGY'){
-        $fillFile = 'forms/ATS_FORM.pdf';
+        $fillFile = 'forms/metrology/ATN_FORM.pdf';
 
         $pdf = new Fpdi();
         $pageCount = $pdf->setSourceFile($fillFile);
@@ -809,7 +809,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
         $pdf->Output('D', "filled_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATN' && $validator == 'DE METROLOGY'){
-        $fillFile = 'forms/DMSB_ATS.pdf';
+        $fillFile = 'forms/DE_Metrology/DMSB_ATN.pdf';
 
         $pdf = new Fpdi();
         $pageCount = $pdf->setSourceFile($fillFile);
