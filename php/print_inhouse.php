@@ -290,7 +290,7 @@ if(isset($_POST['id'])){
                                 <div class="row">
                                     <div class="col-12" id="calibratedDt"><b>Date Calibrated:</b> '. $validationDate .'</div>
                                     <div class="col-12" id="calibratedBy"><b>Calibrated By:</b> '. $calibrator .'</div>
-                                    <div class="col-12" id="standardUsedInstru"><b>Standard Used Instrument:</b> Standard.Weight</div>
+                                    <div class="col-12" id="standardUsedInstru"><b>Standard Used Instrument:</b> Standard.Test Weight</div>
                                 </div>
                             </td>
                             <td colspan="2" class="align-top" style="border: none;">
