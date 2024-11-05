@@ -94,7 +94,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
 
               <div class="col-3">
                 <div class="form-group">
-                  <label>Customer No</label>
+                  <label>Customer No: </label>
                   <select class="form-control select2" id="customerNoFilter" name="customerNoFilter">
                     <option value="" selected disabled hidden>Please Select</option>
                     <?php while($rowCustomer2=mysqli_fetch_assoc($customers2)){ ?>
@@ -104,16 +104,33 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 </div>
               </div>
 
-              <!--div class="col-3">
+              <div class="col-3">
                 <div class="form-group">
-                  <label>Status</label>
-                  <select class="form-control" id="statusFilter" name="statusFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <option value="Active">Active</option>
-                    <option value="Complete">Complete</option>
-                  </select>
+                  <label>No. Daftar:</label>
+                  <input type="text" class="form-control" id="daftarNoFilter" name="daftarNoFilter">
                 </div>
-              </div-->
+              </div>
+
+              <div class="col-3">
+                <div class="form-group">
+                  <label>No. Borang D:</label>
+                  <input type="text" class="form-control" id="borangNoFilter" name="borangNoFilter">
+                </div>
+              </div>
+
+              <div class="col-3">
+                <div class="form-group">
+                  <label>Machine Serial No:</label>
+                  <input type="text" class="form-control" id="serialNoFilter" name="serialNoFilter">
+                </div>
+              </div>
+              
+              <div class="col-3">
+                <div class="form-group">
+                  <label>Quotation No:</label>
+                  <input type="text" class="form-control" id="quoteNoFilter" name="quoteNoFilter">
+                </div>
+              </div>
             </div>
 
             <div class="row">
@@ -931,6 +948,8 @@ $(function () {
   const yesterday = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
   yesterday.setDate(tomorrow.getDate() - 7);
+  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1); // First day of the current month
+  const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0); // Last day of the current month
 
   $('.select2').each(function() {
     $(this).select2({
@@ -945,13 +964,13 @@ $(function () {
   $('#fromDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
-    defaultDate: ''
+    defaultDate: startOfMonth
   });
 
   $('#toDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
-    defaultDate: ''
+    defaultDate: endOfMonth
   });
 
   $('#datePicker').datetimepicker({
@@ -986,7 +1005,10 @@ $(function () {
   var fromDateValue = $('#fromDate').val();
   var toDateValue = $('#toDate').val();
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-  //var statusFilter = $('#statusFilter').val() ? $('#statusFilter').val() : '';
+  var daftarNoFilter = $('#daftarNoFilter').val() ? $('#daftarNoFilter').val() : '';
+  var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
+  var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
+  var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
 
   var table = $("#weightTable").DataTable({
     "responsive": true,
@@ -1004,6 +1026,10 @@ $(function () {
         fromDate: fromDateValue,
         toDate: toDateValue,
         customer: customerNoFilter,
+        daftar: daftarNoFilter,
+        borang: borangNoFilter,
+        serial: serialNoFilter,
+        quotation: quoteNoFilter,
         status: 'Complete'
       } 
     },
@@ -1212,7 +1238,10 @@ $(function () {
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-    //var statusFilter = $('#statusFilter').val() ? $('#statusFilter').val() : '';
+    var daftarNoFilter = $('#daftarNoFilter').val() ? $('#daftarNoFilter').val() : '';
+    var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
+    var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
+    var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
 
     //Destroy the old Datatable
     $("#weightTable").DataTable().clear().destroy();
@@ -1234,6 +1263,10 @@ $(function () {
           fromDate: fromDateValue,
           toDate: toDateValue,
           customer: customerNoFilter,
+          daftar: daftarNoFilter,
+          borang: borangNoFilter,
+          serial: serialNoFilter,
+          quotation: quoteNoFilter,
           status: 'Complete'
         } 
       },
