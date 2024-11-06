@@ -31,8 +31,20 @@ if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] 
 	$searchQuery .= " and customers = '".$_POST['customer']."'";
 }
 
-if($_POST['status'] != null && $_POST['status'] != '' && $_POST['status'] != '-'){
-	$searchQuery .= " and status = '".$_POST['status']."'";
+if($_POST['daftar'] != null && $_POST['daftar'] != '' && $_POST['daftar'] != '-'){
+	$searchQuery .= " and no_daftar like '%".$_POST['daftar']."%'";
+}
+
+if($_POST['borang'] != null && $_POST['borang'] != '' && $_POST['borang'] != '-'){
+  $searchQuery .= " and borang_d like '%".$_POST['borang']."%'";
+}
+
+if($_POST['serial'] != null && $_POST['serial'] != '' && $_POST['serial'] != '-'){
+  $searchQuery .= " and serial_no like '%".$_POST['serial']."%'";
+}
+
+if($_POST['quotation'] != null && $_POST['quotation'] != '' && $_POST['quotation'] != '-'){
+  $searchQuery .= " and quotation_no like '%".$_POST['quotation']."%'";
 }
 
 if($searchValue != ''){

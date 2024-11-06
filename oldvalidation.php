@@ -867,6 +867,8 @@ $(function () {
   const yesterday = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
   yesterday.setDate(tomorrow.getDate() - 7);
+  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1); // First day of the current month
+  const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0); // Last day of the current month
 
   $('.select2').each(function() {
     $(this).select2({
@@ -881,13 +883,13 @@ $(function () {
   $('#fromDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
-    defaultDate: ''
+    defaultDate: startOfMonth
   });
 
   $('#toDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
-    defaultDate: ''
+    defaultDate: endOfMonth
   });
 
   $('#datePicker').datetimepicker({
