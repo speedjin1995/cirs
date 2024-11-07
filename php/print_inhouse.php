@@ -60,6 +60,7 @@ if(isset($_POST['id'])){
                 $expiredDate = formatDate($row['expired_date']);
                 $machine = searchMachineNameById($row['machines'],$db);
                 $model = searchModelNameById($row['model'],$db);
+                $size = searchSizeNameById($row['size'],$db);
                 $manufacturer = $row['manufacturing'];
                 $serialNo = $row['unit_serial_no'];
                 $autoFormNo = $row['auto_form_no'];
@@ -154,7 +155,7 @@ if(isset($_POST['id'])){
                         <body>
                             <div class="container mt-4 mb-4">
                             <div class="header">
-                                <img src="dist/img/inhouse-header.png" alt="DX Weighing Solution" width="100%">
+                                <img src="dist/img/inhouse-header.png" alt="DX Weighing Solution" width="100%" height="50%">
                             </div>';
 
                 $message .= '<table class="mt-4 mb-4">
@@ -179,12 +180,12 @@ if(isset($_POST['id'])){
                                             <div class="col-12" id="address-line2">'. ($address2 ?? '').'</div>
                                             <div class="col-12" id="address-line3">'. ($address3 ?? '').'</div>
                                             <div class="col-12" id="address-line4">'. ($address4 ?? '').'</div>
-                                            <div class="col-12" id="contact">Tel: '. ($officeNo ?? '').'| Fax: -</div>
-                                            <div class="col-12" id="attending">Attn: '.($pic ?? '').'</div>
+                                            <div class="col-12" id="contact">Tel: '. ($officeNo ?? '').'</div>
                                         </div>
                                     </td>
                                     <td class="align-top align-right">
                                         <div class="row">
+                                            <div class="col-12">&nbsp;</div>
                                             <div class="col-12"><b>Date of Issue:</b></div>
                                             <div class="col-12"><b>Date of Calibration:</b></div>
                                             <div class="col-12"><b>Next Due Date:</b></div>
@@ -192,9 +193,10 @@ if(isset($_POST['id'])){
                                     </td>
                                     <td class="align-top">
                                         <div class="row">
+                                            <div class="col-12">&nbsp;</div>
                                             <div class="col-12" id="doi">'. $validationDate .'</div>
                                             <div class="col-12" id="doc">'. $calibrationDate .'</div>
-                                            <div class="col-12" id="ndd">'. $expiredDate .'</div>
+                                            <div class="col-12" id="ndd" style="color:red">'. $expiredDate .'</div>
                                         </div>
                                     </td>
                                 </tr>
@@ -203,7 +205,7 @@ if(isset($_POST['id'])){
 
             $message .= '<table class="table" style="table-layout: fixed;">
                         <tbody>
-                            <tr>
+                            <tr style="border: 1px solid black;">
                                 <td colspan="2" class="align-top" style="border: none;" width="50%">
                                     <div class="row">
                                         <div class="col-12" id="machines"><b>Instruments:</b> '. $machine .'</div>
@@ -215,17 +217,18 @@ if(isset($_POST['id'])){
                                     <div class="row">
                                         <div class="col-12" id="machines"><b>Model No:</b> '. $model .' </div>
                                         <div class="col-12" id="serialNo"><b>Serial No:</b> '. $serialNo .' </div>
+                                        <div class="col-12" id="size"><b>Structure Size:</b> '. $size .' </div>
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td colspan="2" class="align-top" style="border-right: none;">
+                            <tr style="border: 1px solid black;">
+                                <td colspan="2" class="align-top" style="border: none;">
                                     <div class="row">
                                         <div class="col-12"><b>Instrument Condition When Received:</b> </div>
                                         <div class="col-12"><b>Instrument Condition When Returned:</b> </div>
                                     </div>
                                 </td>
-                                <td colspan="2" class="align-top" style="border-left: none;">
+                                <td colspan="2" class="align-top" style="border: none;">
                                     <div class="row">
                                         <div class="col-12" id="machineCondReceived">Physically in good condition.</div>
                                         <div class="col-12" id="machineCondReturned">
@@ -239,15 +242,15 @@ if(isset($_POST['id'])){
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td colspan="2" class="align-top" style="border-right: none;"><b>Average Temperature:</b> ('. $stdAvgTemp .')</td>
-                                <td colspan="2" class="align-top" style="border-left: none;"><b>Average Relative Humidity:</b> ('. $relHumid .')</td>
+                            <tr style="border: 1px solid black;">
+                                <td colspan="2" class="align-top" style="border: none;"><b>Average Temperature:</b> ('. $stdAvgTemp .')</td>
+                                <td colspan="2" class="align-top" style="border: none;"><b>Average Relative Humidity:</b> ('. $relHumid .')</td>
                             </tr>
-                            <tr>
-                                <th style="padding: .5rem;">Setting Value Of Standard</th>
-                                <th style="padding: .5rem;">As Received Under Calibration</th>
-                                <th style="padding: .5rem;">Variance +/- ('. $variance . " " . $unit .')</th>
-                                <th style="padding: .5rem;">Reading After Adjustment</th>
+                            <tr style="border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;">
+                                <th style="padding: .5rem; border: none; text-align: center;">Setting Value Of Standard</th>
+                                <th style="padding: .5rem; border: none; text-align: center;">As Received Under Calibration</th>
+                                <th style="padding: .5rem; border: none; text-align: center;">Variance +/- ('. $variance . " " . $unit .')</th>
+                                <th style="padding: .5rem; border: none; text-align: center;">Reading After Adjustment</th>
                             </tr>';
 
                 $testCount = count($tests);
@@ -262,36 +265,46 @@ if(isset($_POST['id'])){
                             $calibrationReceived = $item['calibrationReceived'];
                             $variance = $item['variance'];
                             $afterAdjustReading = $item['afterAdjustReading'];
-                            $message .= '<tr>
-                                    <td style="border: none;padding: 0;">'. $standardValue .' - '. $unit .'</td>
-                                    <td style="border: none;padding: 0;">'. $calibrationReceived .' - '. $unit .'</td>
-                                    <td style="border: none;padding: 0;">'. $variance .'</td>
-                                    <td style="border: none;padding: 0;">'. $afterAdjustReading .' - '. $unit .'</td>
-                                </tr>';
+                            if ($j == 9){
+                                $message .= '<tr style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; padding-bottom: 2%">
+                                                <td style="border: none;text-align: center; padding: 0 0 3% 0;">'. $standardValue .' - '. $unit .'</td>
+                                                <td style="border: none;text-align: center; padding: 0 0 3% 0;">'. $calibrationReceived .' - '. $unit .'</td>
+                                                <td style="border: none;text-align: center; padding: 0 0 3% 0;">'. $variance .'</td>
+                                                <td style="border: none;text-align: center; padding: 0 0 3% 0;">'. $afterAdjustReading .' - '. $unit .'</td>
+                                            </tr>';
+                            }else{
+                                $message .= '<tr style="border-left: 1px solid black; border-right: 1px solid black;">
+                                                <td style="border: none;text-align: center; padding:0;">'. $standardValue .' - '. $unit .'</td>
+                                                <td style="border: none;text-align: center; padding:0;">'. $calibrationReceived .' - '. $unit .'</td>
+                                                <td style="border: none;text-align: center; padding:0;">'. $variance .'</td>
+                                                <td style="border: none;text-align: center; padding:0;">'. $afterAdjustReading .' - '. $unit .'</td>
+                                            </tr>';
+                            }
+                            
                         }
                     }    
                 }
                 
-            $message .= '<tr style="padding-top:5%">
+            $message .= '<tr style="border: 1px solid black;padding-top:5%">
                             <td colspan="2" class="align-top" style="border: none;">
                                 <div class="row">
                                     <div class="col-12" id="calibratedDt"><b>Date Calibrated:</b> '. $validationDate .'</div>
                                     <div class="col-12" id="calibratedBy"><b>Calibrated By:</b> '. $calibrator .'</div>
-                                    <div class="col-12" id="standardUsedInstru"><b>Standard Used Instrument:</b> Standard.Weight</div>
+                                    <div class="col-12" id="standardUsedInstru"><b>Standard Used Instrument:</b> Standard.Test Weight</div>
                                 </div>
                             </td>
                             <td colspan="2" class="align-top" style="border: none;">
                                 <div class="row">
-                                    <div class="col-12" id="nextDueDt"><b>Next Due Date:</b> '. $nextDueDate .'</div>
+                                    <div class="col-12" id="nextDueDt" style="color:red"><b style="color:black">Next Due Date:</b> '. $nextDueDate .'</div>
                                     <div class="col-12" id="calibrationStickerNo"><b>Calibration Sticker No:</b> '. $autoFormNo .'</div>
-                                    <div class="col-12" id="sirimTrace"><b>SIRIM Traceability:</b>'. $nmim.'</div>
+                                    <div class="col-12" id="sirimTrace"><b>SIRIM Traceability: '. $nmim.'</b></div>
                                 </div>
                             </td>
                         </tr> 
                         </tbody>
                     </table>';               
 
-            $message .= '<table class="mt-4 mb-4" width="100%">
+            $message .= '<table class="mt-1 mb-4" width="100%">
                             <tbody>
                                 <tr style="visibility: hidden;">
                                     <th width="30%">column 1</th>
@@ -299,16 +312,16 @@ if(isset($_POST['id'])){
                                     <th width="25%">column 3</th>
                                 </tr>
                                 <tr>
-                                    <td class="align-top"><b>Licensing of Membaiki & Menjual:</b></td>
-                                    <td class="align-top">'. $certno_lesen .'</td>
+                                    <td class="align-top"><b>Licensing of Membaiki & Menjual</b></td>
+                                    <td class="align-top">:&nbsp;&nbsp;&nbsp;'. $certno_lesen .'</td>
                                 </tr>
                                 <tr>
-                                    <td class="align-top"><b>Weighing Licensing of KPDN:</b></td>
-                                    <td class="align-top">'. $failno .'</td>
+                                    <td class="align-top"><b>Weighing Licensing of KPDN</b></td>
+                                    <td class="align-top">:&nbsp;&nbsp;&nbsp;'. $failno .'</td>
                                 </tr>
                                 <tr>
-                                    <td class="align-top"><b>Raj.Transaksi:</b></td>
-                                    <td class="align-top">'. $bless_serahanno .'</td>
+                                    <td class="align-top"><b>Raj.Transaksi</b></td>
+                                    <td class="align-top">:&nbsp;&nbsp;&nbsp;'. $bless_serahanno .'</td>
                                     <td>
                                         <div class="text-center" style="width: 100%;">
                                             <hr class="dotted-line">
@@ -328,7 +341,7 @@ if(isset($_POST['id'])){
                                 </tr>
                                 <tr>
                                     <td colspan="4">
-                                        <span class="mt-5">This is to confirm that we have perfomed the Service & Calibration for the above Weighing Equipment with our Standard. Weights that has been certified by METROLOGY CORPORATION MALAYSIAN SDN. BHD. & SIRIM SST Malaysia</span>
+                                        <span class="mt-5">This is to confirm that we have perfomed the Service & Calibration for the above Weighing Equipment with our Standard. Weights that has been certified by <b> METROLOGY CORPORATION MALAYSIAN SDN. BHD. & SIRIM SST Malaysia. </b></span>
                                     </td>
                                 </tr>
                             </tbody>
