@@ -12,6 +12,10 @@ if(isset($_POST['userID'])){
         $format = $_POST['format'];
     }
 
+    $stampExtArray = [
+        1,4
+    ];
+
     if ($update_stmt = $db->prepare("SELECT * FROM stamping WHERE id=?")) {
         $update_stmt->bind_param('s', $id);
         
@@ -144,7 +148,7 @@ if(isset($_POST['userID'])){
                     $message['status'] = $row['status'];
                     $message['existing_id'] = $row['existing_id'];
 
-                    if(($row['validate_by'] == '10' || $row['validate_by'] == '9') && $row['jenis_alat'] == '1'){
+                    if(($row['validate_by'] == '10' || $row['validate_by'] == '9') && in_array($row['jenis_alat'], $stampExtArray)){
                         if ($update_stmt2 = $db->prepare("SELECT * FROM stamping_ext WHERE stamp_id=?")) {
                             $update_stmt2->bind_param('s', $row['id']);
                         
@@ -214,7 +218,7 @@ if(isset($_POST['userID'])){
                     $message['status'] = $row['status'];
                     $message['existing_id'] = $row['existing_id'];
 
-                    if(($row['validate_by'] == '10' || $row['validate_by'] == '9') && $row['jenis_alat'] == '1'){
+                    if(($row['validate_by'] == '10' || $row['validate_by'] == '9') && in_array($row['jenis_alat'], $stampExtArray)){
                         if ($update_stmt2 = $db->prepare("SELECT * FROM stamping_ext WHERE stamp_id=?")) {
                             $update_stmt2->bind_param('s', $row['id']);
                         

@@ -365,6 +365,25 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 						$insert_stmt2->close();
 					}
 				}
+
+				// For ATS Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '4'){
+					$indicator_serial = null;
+					$platform_country = null;
+					if(isset($_POST['noSerialIndicator']) && $_POST['noSerialIndicator']!=null && $_POST['noSerialIndicator']!=""){
+						$indicator_serial = $_POST['noSerialIndicator'];
+					}
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET indicator_serial = ?, platform_country = ? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('sss', $indicator_serial, $platform_country, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
 				
 				$update_stmt->close();
 				$db->close();
@@ -497,6 +516,27 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 						$data = json_encode($load_cells_info);
 						$insert_stmt2->bind_param('ssssssssssssss', $stamp_id, $penentusan_baru, $penentusan_semula, $kelulusan_mspk, $no_kelulusan, $indicator_serial, $platform_country, $platform_type, 
 						$size, $jenis_pelantar, $others, $load_cell_country, $load_cell_no, $data);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For ATS Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '4'){
+					$indicator_serial = null;
+					$platform_country = null;
+
+					if(isset($_POST['noSerialIndicator']) && $_POST['noSerialIndicator']!=null && $_POST['noSerialIndicator']!=""){
+						$indicator_serial = $_POST['noSerialIndicator'];
+					}
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, indicator_serial, platform_country) 
+					VALUES (?, ?, ?)")){
+						$insert_stmt2->bind_param('sss', $stamp_id, $indicator_serial, $platform_country);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
