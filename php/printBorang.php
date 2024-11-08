@@ -560,7 +560,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                 $capacityValue = null;
                 $capacityDivision = null;
 
-                if(!empty($companyRow)){
+                if(!empty($capacityRow)){
                     $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
@@ -698,7 +698,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                 $capacityValue = null;
                 $capacityDivision = null;
 
-                if(!empty($companyRow)){
+                if(!empty($capacityRow)){
                     $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
@@ -716,13 +716,19 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
 
-                        $pdf->Image($tickImage, 65.159, 67.865, 10); // Adjust for Kegunaan Alat
+                        $pdf->Image($tickImage, 65.159, 67.865, 8); // Adjust for Kegunaan Alat
 
-                        $pdf->SetXY(131.704, 84.865-1); // Adjust for Jenama
-                        $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(130.635, 59.669-3, 70, 30, 'F');
 
-                        // $pdf->SetXY(150.704, 76.5); // Adjust for nama pembuat
-                        // $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->SetXY(130.635, 59.669-1); // Adjust for Jenama
+                        $pdf->Write(0, '('.searchBrandNameById($res['brand'], $db).')'); 
+
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(145.803, 93.956-3, 50, 15, 'F');  
+                        
+                        $pdf->SetXY(145.803, 93.956-1); // Adjust for nama pembuat
+                        $pdf->Write(0, '('.searchCountryNameById($res['platform_country'], $db).')'); 
 
                         $pdf->SetXY(22.648, 103.063-2); // Adjust for Customer Name
                         $pdf->Write(0, searchCustNameById($res['customers'], $db));
@@ -747,6 +753,18 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         $pdf->SetXY(126.872, 128.420-2); // Adjust for {No_Siri}
                         $pdf->Write(0, $res['indicator_serial']);
+
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(145.803, 136.545-3, 55, 10, 'F');  
+
+                        $pdf->SetXY(145.803, 136.545-1); // Adjust for {Had_Terima}
+                        $pdf->Write(0, '('.$capacityValue.')');
+
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(145.803, 150.570-3, 55, 10, 'F');  
+
+                        $pdf->SetXY(145.803, 150.570); // Adjust for {Senggatan}
+                        $pdf->Write(0, '('.$capacityDivision.')');
 
                         $pdf->SetXY(22.648 , 168.637-2); // Adjust for {no_daftar}
                         $pdf->Write(0, $noDaftarSyarikat);
