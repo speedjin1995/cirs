@@ -34,8 +34,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     $id = $_GET['userID'];
     $file = $_GET['file'];
     $validator = $_GET['validator'];
-
     $tickImage = '../assets/tick.png';
+    $currentDateTime = date('d/m/Y - h:i:sA');  // Format: DD/MM/YYYY - HH:MM:SS AM/PM
 
     if($file == 'ATK' && $validator == 'METROLOGY'){
         $fillFile = 'forms/metrology/ATK_FORM.pdf';
@@ -585,8 +585,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(150.704, 76.5); // Adjust for nama pembuat
                         $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
 
+                        $pdf->SetFont('Arial', 'B', 10);
                         $pdf->SetXY(18.648, 103.063-1); // Adjust for Customer Name
                         $pdf->Write(0, searchCustNameById($res['customers'], $db));
+                        $pdf->SetFont('Arial', '', 10);
 
                         $pdf->SetXY(18.648, 107.133); // Adjust for {3. Alamat Pemilik Address 1}
                         $pdf->Write(0, $address1);
@@ -597,8 +599,19 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(18.648, 117.258); // Adjust for {3. Alamat Pemilik Address 3 & 4}
                         $pdf->Write(0, $address3 . ' ' . $address4);
 
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(140.942, 90.294, 20, 10, 'F'); 
+                        
+                        $pdf->SetXY(140.942 , 100.294-2.4); // Adjust for {Jenis_alat}
+                        $pdf->Write(0, searchJenisAlatNameByid($res['jenis_alat'], $db).' - '. searchMachineNameById($res['machine_type'], $db));
+
                         $pdf->SetXY(140.942 , 110.294-3); // Adjust for {Model}
                         $pdf->Write(0, searchModelNameById($res['model'], $db));
+
+                        $pdf->SetFont('Arial', '', 8);
+                        $pdf->SetXY(46.648, 127.570); // Adjust for {company name}
+                        $pdf->Write(0, $compname);
+                        $pdf->SetFont('Arial', '', 10);
 
                         $pdf->SetXY(22.648, 145.570-2); // Adjust for {No_Lesen}
                         $pdf->Write(0, $compcert);
@@ -621,7 +634,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
                         $pdf->Rect(190.872, 157.570, 10, 10, 'F'); 
 
-
                         # Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
                             $pdf->Image($tickImage, 125.141, 175.637, 8);
@@ -629,7 +641,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 171.141, 175.637, 8);
                         }
 
-                        $pdf->Image($companySignature, 22.648, 190.637, 50);  // Adjust for company signature
+                        $pdf->Image($companySignature, 37.648, 209.637, 20);  // Adjust for company signature
+
+                        $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
+                        $pdf->Write(0, $currentDateTime);
 
                         $pdf->SetXY(146.141 , 215.637); // Adjust for {Cawangan}
                         $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -710,7 +725,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     $pdf->useTemplate($templateId);
                 
                     // Fill in the fields for the current page
-                    $pdf->SetFont('Arial', '', 8);
+                    $pdf->SetFont('Arial', '', 10);
                     
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
@@ -727,11 +742,13 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
                         $pdf->Rect(145.803, 93.956-3, 50, 15, 'F');  
                         
-                        $pdf->SetXY(145.803, 93.956-1); // Adjust for nama pembuat
+                        $pdf->SetXY(142.803, 93.956-1); // Adjust for nama pembuat
                         $pdf->Write(0, '('.searchCountryNameById($res['platform_country'], $db).')'); 
 
                         $pdf->SetXY(22.648, 103.063-2); // Adjust for Customer Name
+                        $pdf->SetFont('Arial', 'B', 10);
                         $pdf->Write(0, searchCustNameById($res['customers'], $db));
+                        $pdf->SetFont('Arial', '', 10);
 
                         $pdf->SetXY(22.648, 107.133-2); // Adjust for {3. Alamat Pemilik Address 1 & 2}
                         $pdf->Write(0, $address1);
@@ -742,8 +759,14 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(22.648, 115.258-2); // Adjust for {3. Alamat Pemilik Address 4}
                         $pdf->Write(0, $address3 . ' ' . $address4);
 
-                        $pdf->SetXY(22.648, 132.490-2); // Adjust for {Company_Name}
+                        $pdf->SetXY(21.648, 132.490-2); // Adjust for {Company_Name}
                         $pdf->Write(0, $compname);
+
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(132.084, 111.188-3, 40, 10, 'F');
+
+                        $pdf->SetXY(132.084, 111.188-1.5); // Adjust for {jenis_alat}
+                        $pdf->Write(0, searchJenisAlatNameByid($res['jenis_alat'], $db).' - '. searchMachineNameById($res['machine_type'], $db));
 
                         $pdf->SetXY(130.942 , 120.294-2); // Adjust for {Model}
                         $pdf->Write(0, searchModelNameById($res['model'], $db));
@@ -758,13 +781,13 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->Rect(145.803, 136.545-3, 55, 10, 'F');  
 
                         $pdf->SetXY(145.803, 136.545-1); // Adjust for {Had_Terima}
-                        $pdf->Write(0, '('.$capacityValue.')');
+                        $pdf->Write(0, $capacityValue);
 
                         $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
                         $pdf->Rect(145.803, 150.570-3, 55, 10, 'F');  
 
-                        $pdf->SetXY(145.803, 150.570); // Adjust for {Senggatan}
-                        $pdf->Write(0, '('.$capacityDivision.')');
+                        $pdf->SetXY(141.803, 149.570); // Adjust for {Senggatan}
+                        $pdf->Write(0, $capacityDivision);
 
                         $pdf->SetXY(22.648 , 168.637-2); // Adjust for {no_daftar}
                         $pdf->Write(0, $noDaftarSyarikat);
@@ -776,7 +799,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 155.141+10, 168.637-7, 8);
                         }
 
-                        $pdf->Image($companySignature, 20.648, 180.637, 40);  // Adjust for company signature
+                        $pdf->Image($companySignature, 30.648, 192.637, 20);  // Adjust for company signature
+
+                        $pdf->SetXY(126.243 , 184.902-2); // Adjust for {tarikh}
+                        $pdf->Write(0, $currentDateTime);
 
                         $pdf->SetXY(132.582 , 193.027-2); // Adjust for {Cawangan}
                         $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -846,24 +872,29 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     $pdf->useTemplate($templateId);
                 
                     // Fill in the fields for the current page
-                    $pdf->SetFont('Arial', '', 8);
+                    $pdf->SetFont('Arial', '', 10);
                     
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
-                        $pdf->SetXY(131.704, 84.865-1); // Adjust for Jenama
+                        $pdf->SetXY(120.635, 59.669-2); // Adjust for Jenama
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
 
-                        $pdf->SetXY(22.648, 103.063-2); // Adjust for Customer Name
+                        $pdf->SetFont('Arial', 'B', 10);
+                        $pdf->SetXY(8.648, 99.063-2); // Adjust for Customer Name
                         $pdf->Write(0, searchCustNameById($res['customers'], $db));
+                        $pdf->SetFont('Arial', '', 10);
 
-                        $pdf->SetXY(22.648, 107.133-2); // Adjust for {3. Alamat Pemilik Address 1 & 2}
-                        $pdf->Write(0, $address1.' '.$address2);
+                        $pdf->SetXY(8.648, 103.133-2); // Adjust for {3. Alamat Pemilik Address 1}
+                        $pdf->Write(0, $address1);
 
-                        $pdf->SetXY(22.648, 111.188-2); // Adjust for {3. Alamat Pemilik Address 3}
+                        $pdf->SetXY(8.648, 107.588-2); // Adjust for {3. Alamat Pemilik Address 2}
+                        $pdf->Write(0, $address2);
+                        
+                        $pdf->SetXY(8.648, 112.258-2); // Adjust for {3. Alamat Pemilik Address 3}
                         $pdf->Write(0, $address3);
                         
-                        $pdf->SetXY(22.648, 115.258-2); // Adjust for {3. Alamat Pemilik Address 4}
+                        $pdf->SetXY(8.648, 116.258-2); // Adjust for {3. Alamat Pemilik Address 4}
                         $pdf->Write(0, $address4);
 
                         $pdf->SetXY(22.648, 132.490-2); // Adjust for {Company_Name}
@@ -901,7 +932,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
             ); 
         }
 
-        $pdf->Output('D', "filled_".$_GET['file']."_form.pdf");
+        $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATN' && $validator == 'DE METROLOGY'){
         $fillFile = 'forms/DE_Metrology/DMSB_ATN.pdf';
