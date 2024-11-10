@@ -368,18 +368,59 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 
 				// For ATS Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '4'){
-					$indicator_serial = null;
 					$platform_country = null;
-					if(isset($_POST['noSerialIndicator']) && $_POST['noSerialIndicator']!=null && $_POST['noSerialIndicator']!=""){
-						$indicator_serial = $_POST['noSerialIndicator'];
-					}
 
 					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
 						$platform_country = $_POST['platformCountry'];
 					}
 
-					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET indicator_serial = ?, platform_country = ? WHERE stamp_id = ?")){
-						$insert_stmt2->bind_param('sss', $indicator_serial, $platform_country, $_POST['id']);
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('ss', $platform_country, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For ATP Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '2'){
+					$platform_country = null;
+					$jenis_penunjuk = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['jenis_penunjuk']) && $_POST['jenis_penunjuk']!=null && $_POST['jenis_penunjuk']!=""){
+						$jenis_penunjuk = $_POST['jenis_penunjuk'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, jenis_penunjuk=? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('sss', $platform_country, $jenis_penunjuk, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+				
+				// For ATN Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '5'){
+					$platform_country = null;
+					$alat_type = null;
+					$bentuk_dulang = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['alat_type']) && $_POST['alat_type']!=null && $_POST['alat_type']!=""){
+						$alat_type = $_POST['alat_type'];
+					}
+
+					if(isset($_POST['bentuk_dulang']) && $_POST['bentuk_dulang']!=null && $_POST['bentuk_dulang']!=""){
+						$bentuk_dulang = $_POST['bentuk_dulang'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, alat_type=?, bentuk_dulang=? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('ssss', $platform_country, $alat_type, $bentuk_dulang, $_POST['id']);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
@@ -523,20 +564,62 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 
 				// For ATS Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '4'){
-					$indicator_serial = null;
 					$platform_country = null;
-
-					if(isset($_POST['noSerialIndicator']) && $_POST['noSerialIndicator']!=null && $_POST['noSerialIndicator']!=""){
-						$indicator_serial = $_POST['noSerialIndicator'];
-					}
 
 					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
 						$platform_country = $_POST['platformCountry'];
 					}
 
-					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, indicator_serial, platform_country) 
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country) 
+					VALUES (?, ?)")){
+						$insert_stmt2->bind_param('ss', $stamp_id, $platform_country);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For ATP Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '2'){
+					$platform_country = null;
+					$jenis_penunjuk = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['jenis_penunjuk']) && $_POST['jenis_penunjuk']!=null && $_POST['jenis_penunjuk']!=""){
+						$jenis_penunjuk = $_POST['jenis_penunjuk'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, jenis_penunjuk) 
 					VALUES (?, ?, ?)")){
-						$insert_stmt2->bind_param('sss', $stamp_id, $indicator_serial, $platform_country);
+						$insert_stmt2->bind_param('sss', $stamp_id, $platform_country, $jenis_penunjuk);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For ATP Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '5'){
+					$platform_country = null;
+					$alat_type = null;
+					$bentuk_dulang = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['alat_type']) && $_POST['alat_type']!=null && $_POST['alat_type']!=""){
+						$alat_type = $_POST['alat_type'];
+					}
+
+					if(isset($_POST['bentuk_dulang']) && $_POST['bentuk_dulang']!=null && $_POST['bentuk_dulang']!=""){
+						$bentuk_dulang = $_POST['bentuk_dulang'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, alat_type, bentuk_dulang) 
+					VALUES (?, ?, ?, ?)")){
+						$insert_stmt2->bind_param('ssss', $stamp_id, $platform_country, $alat_type, $bentuk_dulang);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
