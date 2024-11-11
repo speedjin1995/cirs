@@ -661,7 +661,7 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 
 					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, class) 
 					VALUES (?, ?, ?)")){
-						$insert_stmt2->bind_param('ssss', $stamp_id, $platform_country, $class);
+						$insert_stmt2->bind_param('sss', $stamp_id, $platform_country, $class);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
