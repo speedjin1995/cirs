@@ -38,7 +38,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     $currentDateTime = date('d/m/Y - h:i:sA');  // Format: DD/MM/YYYY - HH:MM:SS AM/PM
 
     if($file == 'ATK' && $validator == 'METROLOGY'){
-        $fillFile = 'forms/metrology/ATK_FORM.pdf';
+        $fillFile = 'forms/Metrology/ATK_FORM.pdf';
         $pdf = new Fpdi();
         $pageCount = $pdf->setSourceFile($fillFile);
 
@@ -356,6 +356,157 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
         $pdf->Output('D', 'filled_ATK_form.pdf');
     }
+    else if($file == 'ATE' && $validator == 'METROLOGY'){
+        $fillFile = 'forms/Metrology/ATE_FORM.pdf';
+
+        $pdf = new Fpdi();
+        $pageCount = $pdf->setSourceFile($fillFile);
+
+        $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
+        // Check if the statement is prepared successfully
+        if ($select_stmt) {
+            // Bind variables to the prepared statement
+            $select_stmt->bind_param('s', $id); // 'i' indicates the type of $id (integer)
+            $select_stmt->execute();
+            $result = $select_stmt->get_result();
+            $message = '';
+
+            if ($res = $result->fetch_assoc()) {
+                $branch = $res['branch'];
+                $loadcells = json_decode($res['load_cells_info'], true);
+                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                $branchDetail = mysqli_query($db, $branchQuery);
+                $branchRow = mysqli_fetch_assoc($branchDetail);
+
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
+
+                if(!empty($branchRow)){
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
+                }
+
+                $capacity = $res['capacity'];
+                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                $capacityDetail = mysqli_query($db, $capacityQuery);
+                $capacityRow = mysqli_fetch_assoc($capacityDetail);
+
+                $capacityValue = null;
+                $capacityDivision = null;
+
+                if(!empty($capacityRow)){
+                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                    $templateId = $pdf->importPage($pageNo);
+                    $size = $pdf->getTemplateSize($templateId);
+                    $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                    $pdf->useTemplate($templateId);
+                
+                    // Fill in the fields for the current page
+                    $pdf->SetFont('Arial', '', 10);
+                    
+                    // Example field placements for each page (you'll adjust these according to your PDF)
+                    if ($pageNo == 1) {
+                        // Fill in the fields at the appropriate positions
+                        $pdf->Image($tickImage, 60.526, 68.865, 8);  // Adjust for Perdagangan
+
+                        $pdf->SetXY(133.704, 63.5); // Adjust for Jenama
+                        $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
+
+                        $pdf->SetXY(142.704, 72.5); // Adjust for nama pembuat
+                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+
+                        $pdf->SetFont('Arial', 'B', 10);
+                        $pdf->SetXY(18.648, 103.063-1); // Adjust for Customer Name
+                        $pdf->Write(0, searchCustNameById($res['customers'], $db));
+                        $pdf->SetFont('Arial', '', 10);
+
+                        $pdf->SetXY(18.648, 107.133); // Adjust for {3. Alamat Pemilik Address 1}
+                        $pdf->Write(0, $address1);
+
+                        $pdf->SetXY(18.648, 111.188+1); // Adjust for {3. Alamat Pemilik Address 2}
+                        $pdf->Write(0, $address2);
+                        
+                        $pdf->SetXY(18.648, 117.258); // Adjust for {3. Alamat Pemilik Address 3 & 4}
+                        $pdf->Write(0, $address3 . ' ' . $address4);
+
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(132.942, 87.294, 20, 5, 'F'); 
+                        
+                        $pdf->SetXY(134.942, 90.294); // Adjust for {Jenis_alat}
+                        $pdf->Write(0, searchJenisAlatNameByid($res['jenis_alat'], $db).' - '. searchMachineNameById($res['machine_type'], $db));
+
+                        $pdf->SetXY(134.942 , 98.294); // Adjust for {Model}
+                        $pdf->Write(0, searchModelNameById($res['model'], $db));
+
+                        $pdf->SetXY(46.648, 127.570); // Adjust for {company name}
+                        $pdf->Write(0, $compname);
+
+                        $pdf->SetXY(16.648, 145.570-2); // Adjust for {No_Lesen}
+                        $pdf->Write(0, $compcert);
+
+                        $pdf->SetXY(16.648, 165.570-2); // Adjust for {No_Daftar_Syarikat}
+                        $pdf->Write(0, $noDaftarSyarikat);
+
+                        $pdf->SetXY(140.872, 117.258); // Adjust for {No_Siri}
+                        $pdf->Write(0, $res['serial_no']);
+
+                        $pdf->SetXY(148.872, 147.570); // Adjust for {Had_Terima}
+                        $pdf->Write(0, $capacityValue);
+
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(185.872, 147.570, 10, 10, 'F'); 
+
+                        $pdf->SetXY(149.872, 157.258); // Adjust for {Senggatan}
+                        $pdf->Write(0, $capacityDivision);
+
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(190.872, 157.570, 10, 10, 'F'); 
+
+                        # Adjust for {Keadaan Alat}
+                        if ($res['stamping_type'] == 'NEW'){
+                            $pdf->Image($tickImage, 125.141, 175.637, 8);
+                        }elseif ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->Image($tickImage, 171.141, 175.637, 8);
+                        }
+
+                        $pdf->Image($companySignature, 28, 198, 42);  // Adjust for company signature
+
+                        $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
+                        $pdf->Write(0, $currentDateTime);
+
+                        $pdf->SetXY(146.141 , 215.637); // Adjust for {Cawangan}
+                        $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+
+                        $pdf->SetXY(156.141 , 225.637); // Adjust for {no_penentusahan}
+                        $pdf->Write(0, $res['no_daftar']);
+                    }
+                }
+
+            }
+        }
+        else{
+            echo json_encode(
+                array(
+                    "status"=> "failed", 
+                    "message"=> "Failed to get the data"
+                )
+            ); 
+        }
+
+        $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
+    }
     else if($file == 'ATE' && $validator == 'DE METROLOGY'){
         $fillFile = 'forms/DE_Metrology/DMSB_ATE.pdf';
         $pdf = new Fpdi();
@@ -608,15 +759,13 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(140.942 , 110.294-3); // Adjust for {Model}
                         $pdf->Write(0, searchModelNameById($res['model'], $db));
 
-                        $pdf->SetFont('Arial', '', 8);
                         $pdf->SetXY(46.648, 127.570); // Adjust for {company name}
                         $pdf->Write(0, $compname);
-                        $pdf->SetFont('Arial', '', 10);
 
-                        $pdf->SetXY(22.648, 145.570-2); // Adjust for {No_Lesen}
+                        $pdf->SetXY(16.648, 145.570-2); // Adjust for {No_Lesen}
                         $pdf->Write(0, $compcert);
 
-                        $pdf->SetXY(22.648, 165.570-2); // Adjust for {No_Daftar_Syarikat}
+                        $pdf->SetXY(16.648, 165.570-2); // Adjust for {No_Daftar_Syarikat}
                         $pdf->Write(0, $noDaftarSyarikat);
 
                         $pdf->SetXY(140.872, 117.258); // Adjust for {No_Siri}
@@ -641,7 +790,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 171.141, 175.637, 8);
                         }
 
-                        $pdf->Image($companySignature, 37.648, 209.637, 20);  // Adjust for company signature
+                        $pdf->Image($companySignature, 28, 198, 42);  // Adjust for company signature
 
                         $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -737,13 +886,13 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->Rect(130.635, 59.669-3, 70, 30, 'F');
 
                         $pdf->SetXY(130.635, 59.669-1); // Adjust for Jenama
-                        $pdf->Write(0, '('.searchBrandNameById($res['brand'], $db).')'); 
+                        $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
 
                         $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
                         $pdf->Rect(145.803, 93.956-3, 50, 15, 'F');  
                         
                         $pdf->SetXY(142.803, 93.956-1); // Adjust for nama pembuat
-                        $pdf->Write(0, '('.searchCountryNameById($res['platform_country'], $db).')'); 
+                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
 
                         $pdf->SetXY(22.648, 103.063-2); // Adjust for Customer Name
                         $pdf->SetFont('Arial', 'B', 10);
@@ -799,7 +948,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 155.141+10, 168.637-7, 8);
                         }
 
-                        $pdf->Image($companySignature, 30.648, 192.637, 20);  // Adjust for company signature
+                        // $pdf->SetFillColor(0, 0, 0);  // cover up unneccesary text
+                        // $pdf->Rect(16.938, 205.223-3, 50, 2, 'F');  
+
+                        $pdf->Image($companySignature, 24, 184.223, 35);  // Adjust for company signature
 
                         $pdf->SetXY(126.243 , 184.902-2); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -946,7 +1098,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 180.141+10, 208.637-5, 8);
                         }
 
-                        $pdf->Image($companySignature, 26.648, 194.637, 20);  // Adjust for company signature
+                        $pdf->Image($companySignature, 17.648, 182.637, 40.6);  // Adjust for company signature
 
                         $pdf->SetXY(112.243 , 228.902-2); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -1049,7 +1201,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->Rect(121.068, 50.067-3, 200.852-121.068, 81.911-50.067, 'F');  
                         
                         $pdf->SetXY(121.068, 50.067-1); // Adjust for Jenama
-                        $pdf->Write(0, '('.searchBrandNameById($res['brand'], $db).')'); 
+                        $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
 
                         $pdf->Image($tickImage, 49.343+10, 69.911-5, 8); 
                         
@@ -1057,7 +1209,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->Rect(136.829, 87.915-3, 60, 20, 'F');  
 
                         $pdf->SetXY(134.829, 87.915-1); // Adjust for nama pembuat
-                        $pdf->Write(0, '('.searchCountryNameById($res['platform_country'], $db).')'); 
+                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
 
                         $pdf->SetFont('Arial', 'B', 10);
                         $pdf->SetXY(9.147, 107.211-2); // Adjust for Customer Name
@@ -1121,7 +1273,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 162.299+10, 245.724-7, 8);
                         }
 
-                        $pdf->Image($companySignature, 26.648, 194.637, 20);  // Adjust for company signature
+                        $pdf->Image($companySignature, 17.648, 184.637, 40.6);  // Adjust for company signature
 
                         $pdf->SetXY(24.256, 239.641-2); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -1280,7 +1432,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 134.141, 170.637, 8);
                         }
 
-                        $pdf->Image($companySignature, 37.648, 197.637, 20);  // Adjust for company signature
+                        $pdf->Image($companySignature, 29.648, 187.637, 38.5);  // Adjust for company signature
 
                         $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -1436,7 +1588,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 164.035+12, 144.677-7, 8);
                         }
 
-                        $pdf->Image($companySignature, 35.648, 198.637, 20);  // Adjust for company signature
+                        $pdf->Image($companySignature, 29.648, 188.637, 38.5);  // Adjust for company signature
 
                         $pdf->SetXY(131.445, 162.670-2); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);

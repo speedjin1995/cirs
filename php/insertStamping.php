@@ -426,6 +426,27 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 					}
 				}
 				
+				// For ATE Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '6'){
+					$platform_country = null;
+					$class = null;
+					$bentuk_dulang = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['class']) && $_POST['class']!=null && $_POST['class']!=""){
+						$class = $_POST['class'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, class=? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('sss', $platform_country, $class, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+				
 				$update_stmt->close();
 				$db->close();
 				
@@ -620,6 +641,27 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, alat_type, bentuk_dulang) 
 					VALUES (?, ?, ?, ?)")){
 						$insert_stmt2->bind_param('ssss', $stamp_id, $platform_country, $alat_type, $bentuk_dulang);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For ATE Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '6'){
+					$platform_country = null;
+					$class = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['class']) && $_POST['class']!=null && $_POST['class']!=""){
+						$class = $_POST['class'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, class) 
+					VALUES (?, ?, ?)")){
+						$insert_stmt2->bind_param('sss', $stamp_id, $platform_country, $class);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
