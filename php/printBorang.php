@@ -1098,7 +1098,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 180.141+10, 208.637-5, 8);
                         }
 
-                        $pdf->Image($companySignature, 26.648, 194.637, 20);  // Adjust for company signature
+                        $pdf->Image($companySignature, 17.648, 182.637, 40.6);  // Adjust for company signature
 
                         $pdf->SetXY(112.243 , 228.902-2); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -1201,7 +1201,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->Rect(121.068, 50.067-3, 200.852-121.068, 81.911-50.067, 'F');  
                         
                         $pdf->SetXY(121.068, 50.067-1); // Adjust for Jenama
-                        $pdf->Write(0, '('.searchBrandNameById($res['brand'], $db).')'); 
+                        $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
 
                         $pdf->Image($tickImage, 49.343+10, 69.911-5, 8); 
                         
@@ -1209,7 +1209,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->Rect(136.829, 87.915-3, 60, 20, 'F');  
 
                         $pdf->SetXY(134.829, 87.915-1); // Adjust for nama pembuat
-                        $pdf->Write(0, '('.searchCountryNameById($res['platform_country'], $db).')'); 
+                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
 
                         $pdf->SetFont('Arial', 'B', 10);
                         $pdf->SetXY(9.147, 107.211-2); // Adjust for Customer Name
@@ -1273,7 +1273,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 162.299+10, 245.724-7, 8);
                         }
 
-                        $pdf->Image($companySignature, 26.648, 194.637, 20);  // Adjust for company signature
+                        $pdf->Image($companySignature, 17.648, 184.637, 40.6);  // Adjust for company signature
 
                         $pdf->SetXY(24.256, 239.641-2); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
