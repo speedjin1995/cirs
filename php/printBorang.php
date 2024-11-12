@@ -1432,7 +1432,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 134.141, 170.637, 8);
                         }
 
-                        $pdf->Image($companySignature, 37.648, 197.637, 20);  // Adjust for company signature
+                        $pdf->Image($companySignature, 29.648, 187.637, 38.5);  // Adjust for company signature
 
                         $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -1588,7 +1588,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 164.035+12, 144.677-7, 8);
                         }
 
-                        $pdf->Image($companySignature, 35.648, 198.637, 20);  // Adjust for company signature
+                        $pdf->Image($companySignature, 29.648, 188.637, 38.5);  // Adjust for company signature
 
                         $pdf->SetXY(131.445, 162.670-2); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
