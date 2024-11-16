@@ -5,6 +5,42 @@ require_once '../vendor/autoload.php';
 
 use setasign\Fpdi\Fpdi;
 
+class PDFWithEllipse extends \setasign\Fpdi\Fpdi {
+    // Custom Ellipse function using Bézier curves
+    function Ellipse($x, $y, $rx, $ry, $style='D', $fillColor = [255, 255, 255]) {
+        $k = $this->k;
+        $hp = $this->h;
+        $op = ($style == 'F') ? 'f' : (($style == 'FD' || $style == 'DF') ? 'B' : 'S');
+        $lx = 4 / 3 * (M_SQRT2 - 1) * $rx;
+        $ly = 4 / 3 * (M_SQRT2 - 1) * $ry;
+    
+        // Set fill color if provided (assuming it's in RGB format)
+        $this->SetFillColor($fillColor[0], $fillColor[1], $fillColor[2]);
+    
+        // Start the path
+        $this->_out(sprintf('%.2F %.2F m', ($x + $rx) * $k, ($hp - $y) * $k));
+        $this->_out(sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c', 
+            ($x + $rx) * $k, ($hp - ($y - $ly)) * $k,
+            ($x + $lx) * $k, ($hp - ($y - $ry)) * $k,
+            $x * $k, ($hp - ($y - $ry)) * $k));
+        $this->_out(sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c', 
+            ($x - $lx) * $k, ($hp - ($y - $ry)) * $k,
+            ($x - $rx) * $k, ($hp - ($y - $ly)) * $k,
+            ($x - $rx) * $k, ($hp - $y) * $k));
+        $this->_out(sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c', 
+            ($x - $rx) * $k, ($hp - ($y + $ly)) * $k,
+            ($x - $lx) * $k, ($hp - ($y + $ry)) * $k,
+            $x * $k, ($hp - ($y + $ry)) * $k));
+        $this->_out(sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c', 
+            ($x + $lx) * $k, ($hp - ($y + $ry)) * $k,
+            ($x + $rx) * $k, ($hp - ($y + $ly)) * $k,
+            ($x + $rx) * $k, ($hp - $y) * $k));
+    
+        // Output the path with fill or stroke
+        $this->_out($op);
+    }    
+}
+
 $compids = '1';
 $compname = 'SYNCTRONIX TECHNOLOGY (M) SDN BHD';
 $compcert = 'PBJ000167/2019';
@@ -22,7 +58,7 @@ if ($res2 = $result2->fetch_assoc()) {
     $noDaftarSyarikat = $res2['old_roc'];
     $companySignature = $res2['signature'];
 }
- 
+
 // Filter the excel data 
 function filterData(&$str){ 
     $str = preg_replace("/\t/", "\\t", $str); 
@@ -428,17 +464,17 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
 
                         $pdf->SetFont('Arial', 'B', 10);
-                        $pdf->SetXY(18.648, 103.063-1); // Adjust for Customer Name
+                        $pdf->SetXY(16.648, 98.063); // Adjust for Customer Name
                         $pdf->Write(0, searchCustNameById($res['customers'], $db));
                         $pdf->SetFont('Arial', '', 10);
 
-                        $pdf->SetXY(18.648, 107.133); // Adjust for {3. Alamat Pemilik Address 1}
+                        $pdf->SetXY(16.648, 107.133); // Adjust for {3. Alamat Pemilik Address 1}
                         $pdf->Write(0, $address1);
 
-                        $pdf->SetXY(18.648, 111.188+1); // Adjust for {3. Alamat Pemilik Address 2}
+                        $pdf->SetXY(16.648, 115.188); // Adjust for {3. Alamat Pemilik Address 2}
                         $pdf->Write(0, $address2);
                         
-                        $pdf->SetXY(18.648, 117.258); // Adjust for {3. Alamat Pemilik Address 3 & 4}
+                        $pdf->SetXY(16.648, 123.258); // Adjust for {3. Alamat Pemilik Address 3 & 4}
                         $pdf->Write(0, $address3 . ' ' . $address4);
 
                         $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
@@ -450,46 +486,53 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(134.942 , 98.294); // Adjust for {Model}
                         $pdf->Write(0, searchModelNameById($res['model'], $db));
 
-                        $pdf->SetXY(46.648, 127.570); // Adjust for {company name}
+                        $pdf->SetXY(16.648, 140.570); // Adjust for {company name}
                         $pdf->Write(0, $compname);
 
-                        $pdf->SetXY(16.648, 145.570-2); // Adjust for {No_Lesen}
+                        $pdf->SetXY(16.648, 157.570); // Adjust for {No_Lesen}
                         $pdf->Write(0, $compcert);
 
-                        $pdf->SetXY(16.648, 165.570-2); // Adjust for {No_Daftar_Syarikat}
+                        $pdf->SetXY(16.648, 183.570); // Adjust for {No_Daftar_Syarikat}
                         $pdf->Write(0, $noDaftarSyarikat);
 
-                        $pdf->SetXY(140.872, 117.258); // Adjust for {No_Siri}
+                        $pdf->SetXY(129.872, 106.258); // Adjust for {No_Siri}
                         $pdf->Write(0, $res['serial_no']);
 
-                        $pdf->SetXY(148.872, 147.570); // Adjust for {Had_Terima}
+                        # Adjust for {Klass}
+                        if ($res['class'] == 'II'){
+                            $pdf->Image($tickImage, 145.141, 111.637, 8);
+                        }elseif ($res['class'] == 'I'){
+                            $pdf->Image($tickImage, 184.141, 111.637, 8);
+                        }
+
+                        $pdf->SetXY(138.872, 158.570); // Adjust for {Had_Terima}
                         $pdf->Write(0, $capacityValue);
 
                         $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
-                        $pdf->Rect(185.872, 147.570, 10, 10, 'F'); 
+                        $pdf->Rect(190.872, 152.570, 10, 10, 'F'); 
 
-                        $pdf->SetXY(149.872, 157.258); // Adjust for {Senggatan}
+                        $pdf->SetXY(135.872, 167.258); // Adjust for {Senggatan}
                         $pdf->Write(0, $capacityDivision);
 
                         $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
-                        $pdf->Rect(190.872, 157.570, 10, 10, 'F'); 
+                        $pdf->Rect(190.872, 162.570, 10, 10, 'F'); 
 
                         # Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
-                            $pdf->Image($tickImage, 125.141, 175.637, 8);
+                            $pdf->Image($tickImage, 145.141, 175.637, 8);
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 171.141, 175.637, 8);
+                            $pdf->Image($tickImage, 176.141, 175.637, 8);
                         }
 
-                        $pdf->Image($companySignature, 28, 198, 42);  // Adjust for company signature
+                        $pdf->Image($companySignature, 30, 199, 35);  // Adjust for company signature
 
-                        $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
+                        $pdf->SetXY(126.141 , 201.5); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
 
-                        $pdf->SetXY(146.141 , 215.637); // Adjust for {Cawangan}
+                        $pdf->SetXY(136.141 , 210.637); // Adjust for {Cawangan}
                         $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        $pdf->SetXY(156.141 , 225.637); // Adjust for {no_penentusahan}
+                        $pdf->SetXY(146.141 , 218.637); // Adjust for {no_penentusahan}
                         $pdf->Write(0, $res['no_daftar']);
                     }
                 }
@@ -509,18 +552,19 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     }
     else if($file == 'ATE' && $validator == 'DE METROLOGY'){
         $fillFile = 'forms/DE_Metrology/DMSB_ATE.pdf';
-        $pdf = new Fpdi();
+
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
-        $select_stmt = $db->prepare("SELECT * FROM stamping, stamping_ext WHERE stamping.id = stamping_ext.stamp_id AND stamping.id = '".$_GET['userID']."'");
-
+        $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
         // Check if the statement is prepared successfully
         if ($select_stmt) {
             // Bind variables to the prepared statement
+            $select_stmt->bind_param('s', $id); // 'i' indicates the type of $id (integer)
             $select_stmt->execute();
             $result = $select_stmt->get_result();
             $message = '';
-            
+
             if ($res = $result->fetch_assoc()) {
                 $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
@@ -543,115 +587,131 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     $pic = $branchRow['pic'];
                     $pic_phone = $branchRow['pic_contact'];
                 }
-                
+
+                $capacity = $res['capacity'];
+                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                $capacityDetail = mysqli_query($db, $capacityQuery);
+                $capacityRow = mysqli_fetch_assoc($capacityDetail);
+
+                $capacityValue = null;
+                $capacityDivision = null;
+
+                if(!empty($capacityRow)){
+                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
-                    $pdf->AddPage();
+                    $size = $pdf->getTemplateSize($templateId);
+                    $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
                     $pdf->useTemplate($templateId);
                 
                     // Fill in the fields for the current page
-                    $pdf->SetFont('Helvetica', '', 10);
+                    $pdf->SetFont('Arial', '', 10);
                     
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
-                        $pdf->SetXY(25, 70); // Adjust these coordinates for each field
-                        $pdf->Write(0, searchCustNameById($res['customers'], $db)); // {Address1}
 
-                        $pdf->SetXY(25, 75); // Adjust for {Address2}
-                        $pdf->Write(0, $address1.' '.$address2.' '.$address3.' '.$address4);
+                        $pdf->Image($tickImage, 73.355, 75.048, 8); // Adjust for Kegunaan Alat
 
-                        $pdf->SetXY(25, 95); // Adjust for {Stamping_Address1}
-                        $pdf->Write(0, $address1.' '.$address2);
+                        $pdf->SetXY(134.471, 71.272-2); // Adjust for Jenama
+                        $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
+                        
+                        $pdf->SetXY(145.686, 81.048-2); // Adjust for nama pembuat
+                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
 
-                        $pdf->SetXY(25, 100); // Adjust for {Stamping_Address2}
-                        $pdf->Write(0, $address3.' '.$address4);
+                        $pdf->SetXY(19.668, 112.668-2); // Adjust for Customer Name
+                        $pdf->SetFont('Arial', 'B', 10);
+                        $pdf->Write(0, searchCustNameById($res['customers'], $db));
+                        $pdf->SetFont('Arial', '', 10);
 
-                        $pdf->SetXY(75, 125); // Adjust for {Company_Name}
+                        $pdf->SetXY(19.668, 118.725-2); // Adjust for {3. Alamat Pemilik Address 1 & 2}
+                        $pdf->Write(0, $address1. ' ' .$address2);
+
+                        $pdf->SetXY(19.668, 124.738-2); // Adjust for {3. Alamat Pemilik Address 3}
+                        $pdf->Write(0, $address3);
+                        
+                        $pdf->SetXY(19.668 , 130.795-2); // Adjust for {3. Alamat Pemilik Address 4}
+                        $pdf->Write(0, $address4);
+
+                        $pdf->SetXY(14.982, 151.965-2); // Adjust for {Company_Name}
                         $pdf->Write(0, $compname);
 
-                        $pdf->SetXY(75, 130); // Adjust for {No_Lesen}
-                        $pdf->Write(0, $compcert);
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(137.949, 91.843-3, 40, 5, 'F');
 
-                        $pdf->SetXY(75, 135); // Adjust for {Tarikh_Tamat_Lesen}
-                        $pdf->Write(0, $compexp);
+                        $pdf->SetXY(137.949, 91.843-1); // Adjust for {jenis_alat}
+                        $pdf->Write(0, searchJenisAlatNameByid($res['jenis_alat'], $db).' - '. searchMachineNameById($res['machine_type'], $db));
 
-                        $pdf->SetXY(75, 140); // Adjust for {Nama_Wakil_Pembaik}
-                        $pdf->Write(0, searchStaffNameById($res['pic'], $db));
-
-                        $pdf->SetXY(75, 145); // Adjust for {No_KP}
-                        $pdf->Write(0, searchStaffICById($res['pic'], $db));
-
-                        $pdf->SetXY(75, 170); // Adjust for {Penentusahan_Baru}
-                        $pdf->Write(0, $res['penentusan_baru']);
-
-                        $pdf->SetXY(75, 175); // Adjust for {Penentusahan_Semula}
-                        $pdf->Write(0, $res['penentusan_semula']);
-
-                        if($res['kelulusan_mspk'] == 'YES'){
-                            $pdf->SetXY(35, 205); // Adjust for {NoKelulusan_MSPK}
-                            $pdf->Write(0, '/');
-                        }
-                        else{
-                            $pdf->SetXY(35, 210); // Adjust for {NoKelulusan_MSPK}
-                            $pdf->Write(0, '/');
-                        }
-
-                        $pdf->SetXY(75, 230); // Adjust for {Pembuat_Negara_Asal}
-                        $pdf->Write(0, searchCountryById($res['platform_country'], $db));
-
-                        $pdf->SetXY(75, 235); // Adjust for {Jenama}
-                        $pdf->Write(0, searchBrandNameById($res['brand'], $db));
-
-                        $pdf->SetXY(75, 240); // Adjust for {Model#1}
+                        $pdf->SetXY(137.694, 101.843-2); // Adjust for {Model}
                         $pdf->Write(0, searchModelNameById($res['model'], $db));
 
-                        $pdf->SetXY(75, 245); // Adjust for {No_Siri}
-                        $pdf->Write(0, $res['indicator_serial']);
-                    }
-                    else if ($pageNo == 2){
-                        $pdf->SetXY(75, 30); // Adjust for {Pembuat_Negara_Asal_2}
-                        $pdf->Write(0, searchCountryById($res['platform_country'], $db));
+                        $pdf->SetXY(14.982, 170.931-2); // Adjust for {No_Lesen}
+                        $pdf->Write(0, $compcert);
 
-                        $pdf->SetXY(75, 35); // Adjust for {Jenis_Steel_Concrete}
-                        $pdf->Write(0, $res['platform_type']);
+                        $pdf->SetXY(133.541, 112.668-2); // Adjust for {No_Siri}
+                        $pdf->Write(0, $res['serial_no']);
 
-                        $pdf->SetXY(75, 40); // Adjust for {size}
-                        $pdf->Write(0, searchSizeNameById($res['size'], $db));
-
-                        if($res['jenis_pelantar'] == 'Pit'){
-                            $pdf->SetXY(57, 48); // Adjust for {Jenis_Steel_Concrete}
-                            $pdf->Write(0, '----------');
+                        if ($res['class'] == 'II'){
+                            $pdf->Ellipse(145.451, 128.891, 8.5, 5, 'F', [255, 255, 0]);
+                            $pdf->SetFont('Arial', 'B', 12);
+                            $pdf->SetXY(143, 128.891); // Adjust for {No_Siri}
+                            $pdf->Write(0, 'II');
+                        }else{
+                            $pdf->Ellipse(179.3, 128.891, 8.5, 5, 'F', [255, 255, 0]);
+                            $pdf->SetFont('Arial', 'B', 12);
+                            $pdf->SetXY(178, 128.891); // Adjust for {No_Siri}
+                            $pdf->Write(0, 'I');
                         }
-                        else{
-                            $pdf->SetXY(47, 48); // Adjust for {Jenis_Steel_Concrete}
-                            $pdf->Write(0, '----------');
+                        
+                        $pdf->SetFont('Arial', '', 10);
+
+                        $pdf->SetXY(141.878, 146.418-2); // Adjust for {Had_Terima}
+                        $pdf->Write(0, $capacityValue);
+
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(167.830, 146.418-3, 10, 5, 'F');
+
+                        // $pdf->SetXY(143.677+2, 106.795-2); // Adjust for {Senggatan}
+                        // $pdf->Write(0, $capacityDivision);
+
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(173.019, 106.795-2, 40, 10, 'F');
+
+                        $pdf->SetXY(14.982, 187.694-2); // Adjust for {no_daftar}
+                        $pdf->Write(0, $noDaftarSyarikat);
+
+                        # Adjust for {Jenis Penunjuk}
+                        if ($res['jenis_penunjuk'] == 'DIGITAL'){
+                            $pdf->Image($tickImage, 132.422+12, 126.394-7, 8);
+                        }elseif ($res['jenis_penunjuk'] == 'DAIL'){
+                            $pdf->Image($tickImage, 163.876+12, 126.394-7, 8);
                         }
 
-                        $pdf->SetXY(75, 75); // Adjust for {Pembuat_Negara_Asal_3}
-                        $pdf->Write(0, searchCountryById($res['load_cell_country'], $db));
-
-                        $pdf->SetXY(75, 80); // Adjust for {Bilangan_Load_Cell}
-                        $pdf->Write(0, $res['load_cell_no']);
-
-                        $count = 0;
-                        for($i=0; $i<count($loadcells); $i++){
-                            $pdf->SetXY(37, 103 + $count); // Adjust for {Bilangan_Load_Cell}
-                            $pdf->Write(0, $loadcells[$i]['loadCellBrand']);
-
-                            $pdf->SetXY(77, 103 + $count); // Adjust for {Bilangan_Load_Cell}
-                            $pdf->Write(0, $loadcells[$i]['loadCellModel']);
-
-                            $pdf->SetXY(115, 103 + $count); // Adjust for {Bilangan_Load_Cell}
-                            $pdf->Write(0, $loadcells[$i]['loadCellCapacity']);
-
-                            $pdf->SetXY(153, 103 + $count); // Adjust for {Bilangan_Load_Cell}
-                            $pdf->Write(0, $loadcells[$i]['loadCellSerial']);
-
-                            $count += 10;
+                        // Adjust for {Keadaan Alat}
+                        if ($res['stamping_type'] == 'NEW'){
+                            $pdf->Image($tickImage, 130.101+10, 168.677, 8); 
+                        }elseif ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->Image($tickImage, 164.035+10, 168.677, 8);
                         }
+
+                        $pdf->Image($companySignature, 29.648, 199.637, 35.5);  // Adjust for company signature
+
+                        $pdf->SetXY(131.982, 191.832-2); // Adjust for {tarikh}
+                        $pdf->Write(0, $currentDateTime);
+
+                        $pdf->SetXY(138.459, 200.228-2); // Adjust for {Cawangan}
+                        $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+
+                        $pdf->SetXY(150.004, 208.609-2); // Adjust for {no_penentusahan}
+                        $pdf->Write(0, $res['no_daftar']);
+
+                        
                     }
                 }
+
             }
         }
         else{
@@ -663,7 +723,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
             ); 
         }
 
-        $pdf->Output('D', "filled_".$_GET['file']."_form.pdf");
+        $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATS' && $validator == 'METROLOGY'){
         $fillFile = 'forms/Metrology/ATS_FORM.pdf';
@@ -2249,5 +2309,33 @@ else{
     ); 
 }
 
-
+class PDFWithEllipse extends Fpdi {
+    // Custom Ellipse function using Bézier curves
+    function Ellipse($x, $y, $rx, $ry, $style='D') {
+        $k = $this->k;
+        $hp = $this->h;
+        $op = ($style=='F') ? 'f' : (($style=='FD' || $style=='DF') ? 'B' : 'S');
+        $lx = 4/3 * (M_SQRT2 - 1) * $rx;
+        $ly = 4/3 * (M_SQRT2 - 1) * $ry;
+        
+        $this->_out(sprintf('%.2F %.2F m', ($x+$rx)*$k, ($hp-$y)*$k));
+        $this->_out(sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c', 
+            ($x+$rx)*$k, ($hp-($y-$ly))*$k,
+            ($x+$lx)*$k, ($hp-($y-$ry))*$k,
+            $x*$k, ($hp-($y-$ry))*$k));
+        $this->_out(sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c', 
+            ($x-$lx)*$k, ($hp-($y-$ry))*$k,
+            ($x-$rx)*$k, ($hp-($y-$ly))*$k,
+            ($x-$rx)*$k, ($hp-$y)*$k));
+        $this->_out(sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c', 
+            ($x-$rx)*$k, ($hp-($y+$ly))*$k,
+            ($x-$lx)*$k, ($hp-($y+$ry))*$k,
+            $x*$k, ($hp-($y+$ry))*$k));
+        $this->_out(sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c', 
+            ($x+$lx)*$k, ($hp-($y+$ry))*$k,
+            ($x+$rx)*$k, ($hp-($y+$ly))*$k,
+            ($x+$rx)*$k, ($hp-$y)*$k));
+        $this->_out($op);
+    }
+}
 ?>

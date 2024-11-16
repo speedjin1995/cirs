@@ -973,9 +973,9 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
         <div class="form-group col-4">
           <label for="model">Klass *</label>
           <select class="form-control select2" id="class" name="class" required>
-            <option value="" selected disabled hidden>Please Select</option>
+            <option value="" disabled hidden>Please Select</option>
             <option value="I">I</option>
-            <option value="II">II</option>
+            <option value="II" selected>II</option>
           </select>
         </div>
       </div>
