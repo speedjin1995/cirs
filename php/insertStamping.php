@@ -447,6 +447,21 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 					}
 				}
 				
+				// For SLL Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '14'){
+					$alat_type = null;
+
+					if(isset($_POST['alat_type']) && $_POST['alat_type']!=null && $_POST['alat_type']!=""){
+						$alat_type = $_POST['alat_type'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET alat_type=? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('ss', $alat_type, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+				
 				$update_stmt->close();
 				$db->close();
 				
@@ -662,6 +677,22 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, class) 
 					VALUES (?, ?, ?)")){
 						$insert_stmt2->bind_param('sss', $stamp_id, $platform_country, $class);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For ATE Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '14'){
+					$alat_type = null;
+
+					if(isset($_POST['alat_type']) && $_POST['alat_type']!=null && $_POST['alat_type']!=""){
+						$alat_type = $_POST['alat_type'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, alat_type) 
+					VALUES (?, ?)")){
+						$insert_stmt2->bind_param('ss', $stamp_id, $alat_type);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
