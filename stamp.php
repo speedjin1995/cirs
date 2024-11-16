@@ -959,6 +959,35 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
   </div>
 </script>
 
+<script type="text/html" id="ateDetails">
+  <div class="card card-primary">
+    <div class="card-body">
+      <div class="row">
+        <h4>Addtional Information (ATE)</h4>
+      </div>
+      <div class="row">
+        <div class="form-group col-4">
+          <label for="model">Platform Made In *</label>
+          <select class="form-control select2" id="platformCountry" name="platformCountry" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <?php while($rowcountry=mysqli_fetch_assoc($countryAte)){ ?>
+              <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
+            <?php } ?>
+          </select>
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Klass *</label>
+          <select class="form-control select2" id="class" name="class" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <option value="I">I</option>
+            <option value="II">II</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
 <script type="text/html" id="pricingDetails">
   <tr class="details">
     <td>
@@ -1939,6 +1968,10 @@ $(function () {
       $('#addtionalSection').html($('#atnDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
+    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '6'){
+      $('#addtionalSection').html($('#ateDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
     else{
       $('#addtionalSection').html('');
     }
@@ -2026,6 +2059,10 @@ $(function () {
     }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '5'){
       $('#addtionalSection').html($('#atnDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
+    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '6'){
+      $('#addtionalSection').html($('#ateDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
     else{
@@ -2498,6 +2535,10 @@ function edit(id) {
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '6'){
+            $('#addtionalSection').html($('#ateDetails').html());
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#class').val(obj.message.class).trigger('change');
           }
         });
         
@@ -2635,6 +2676,10 @@ function edit(id) {
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '6'){
+            $('#addtionalSection').html($('#ateDetails').html());
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#class').val(obj.message.class).trigger('change');
           }
         });
 
