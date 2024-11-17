@@ -449,14 +449,56 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 				
 				// For SLL Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '14'){
-					$alat_type = null;
+					$platform_country = null;
+					$alat_type = null;		
+					
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
 
 					if(isset($_POST['alat_type']) && $_POST['alat_type']!=null && $_POST['alat_type']!=""){
 						$alat_type = $_POST['alat_type'];
 					}
 
-					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET alat_type=? WHERE stamp_id = ?")){
-						$insert_stmt2->bind_param('ss', $alat_type, $_POST['id']);
+					$questions = [
+						[
+							"no" => 1,
+							"answer" => $_POST['question1'] ?? null,
+						],
+						[
+							"no" => 2,
+							"answer" => $_POST['question2'] ?? null,
+						],
+						[
+							"no" => 3,
+							"answer" => $_POST['question3'] ?? null,
+						],
+						[
+							"no" => 4,
+							"answer" => $_POST['question4'] ?? null,
+						],
+						[
+							"no" => 5.1,
+							"answer" => $_POST['question5_1'] ?? null,
+						],
+						[
+							"no" => 5.2,
+							"answer" => $_POST['question5_2'] ?? null,
+						],
+						[
+							"no" => 6,
+							"answer" => $_POST['question6'] ?? null,
+						],
+						[
+							"no" => 7,
+							"answer" => $_POST['question7'] ?? null,
+						],
+					];
+					
+					$questionString = json_encode($questions, JSON_PRETTY_PRINT);
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country=?, alat_type=?, questions=? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('ssss', $platform_country, $alat_type, $questionString, $_POST['id']);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
@@ -635,7 +677,7 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 					}
 				}
 
-				// For ATP Additional fields
+				// For ATN Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '5'){
 					$platform_country = null;
 					$alat_type = null;
@@ -682,17 +724,59 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 					}
 				}
 
-				// For ATE Additional fields
+				// For SLL Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '14'){
-					$alat_type = null;
+					$platform_country = null;
+					$alat_type = null;		
+					
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
 
 					if(isset($_POST['alat_type']) && $_POST['alat_type']!=null && $_POST['alat_type']!=""){
 						$alat_type = $_POST['alat_type'];
 					}
 
-					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, alat_type) 
-					VALUES (?, ?)")){
-						$insert_stmt2->bind_param('ss', $stamp_id, $alat_type);
+					$questions = [
+						[
+							"no" => 1,
+							"answer" => $_POST['question1'] ?? null,
+						],
+						[
+							"no" => 2,
+							"answer" => $_POST['question2'] ?? null,
+						],
+						[
+							"no" => 3,
+							"answer" => $_POST['question3'] ?? null,
+						],
+						[
+							"no" => 4,
+							"answer" => $_POST['question4'] ?? null,
+						],
+						[
+							"no" => 5.1,
+							"answer" => $_POST['question5_1'] ?? null,
+						],
+						[
+							"no" => 5.2,
+							"answer" => $_POST['question5_2'] ?? null,
+						],
+						[
+							"no" => 6,
+							"answer" => $_POST['question6'] ?? null,
+						],
+						[
+							"no" => 7,
+							"answer" => $_POST['question7'] ?? null,
+						],
+					];
+
+					$questionString = json_encode($questions, JSON_PRETTY_PRINT);
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, alat_type, questions) 
+					VALUES (?, ?, ?, ?)")){
+						$insert_stmt2->bind_param('sdss', $stamp_id, $platform_country, $alat_type, $questionString);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
