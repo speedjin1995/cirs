@@ -494,7 +494,7 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 							"answer" => $_POST['question7'] ?? null,
 						],
 					];
-					
+
 					$questionString = json_encode($questions, JSON_PRETTY_PRINT);
 
 					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country=?, alat_type=?, questions=? WHERE stamp_id = ?")){
@@ -502,6 +502,13 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
+				}
+
+				// For BTU Additional fields	
+				if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, batu_ujian = ?, batu_ujian_lain=? WHERE stamp_id = ?")){
+					$insert_stmt2->bind_param('ssss', $platform_country, $batuUjian, $batuUjianLain, $_POST['id']);
+					$insert_stmt2->execute();
+					$insert_stmt2->close();
 				}
 				
 				$update_stmt->close();
@@ -776,12 +783,39 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 
 					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, alat_type, questions) 
 					VALUES (?, ?, ?, ?)")){
-						$insert_stmt2->bind_param('sdss', $stamp_id, $platform_country, $alat_type, $questionString);
+						$insert_stmt2->bind_param('ssss', $stamp_id, $platform_country, $alat_type, $questionString);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
 				}
 
+				// For BTU Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '7'){
+					$platform_country = null;
+					$batuUjian = null;
+					$batuUjianLain = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['batuUjian']) && $_POST['batuUjian']!=null && $_POST['batuUjian']!=""){
+						$batuUjian = $_POST['batuUjian'];
+					}
+
+					if(isset($_POST['batuUjianLain']) && $_POST['batuUjianLain']!=null && $_POST['batuUjianLain']!=""){
+						$batuUjianLain = $_POST['batuUjianLain'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, batu_ujian, batu_ujian_lain) 
+					VALUES (?, ?, ?, ?)")){
+						$insert_stmt2->bind_param('ssss', $stamp_id, $platform_country, $batuUjian, $batuUjianLain);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+
+				}
+				
 				$insert_stmt->close();
 				$db->close();
 				
