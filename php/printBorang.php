@@ -53,7 +53,7 @@ $result2 = $select_stmt2->get_result();
 
 if ($res2 = $result2->fetch_assoc()) {
     $compname = $res2['name'];
-    $compaddress = $res2['address'];
+    $compaddress = str_replace(["\r", "\n"], '', $res2['address']);
     $compcert = $res2['certno_lesen'];
     $compexp = $res2['tarikh_luput'];
     $noDaftarSyarikat = $res2['old_roc'];
@@ -73,6 +73,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     $validator = $_GET['validator'];
     $tickImage = '../assets/tick.png';
     $currentDateTime = date('d/m/Y - h:i:sA');  // Format: DD/MM/YYYY - HH:MM:SS AM/PM
+    $currentDate = date('d/m/Y');  // Format: DD/MM/YYYY
+    $currentTime = date('h:i:sA');  // Format: HH:MM:SS AM/PM
 
     if($file == 'ATK' && $validator == 'METROLOGY'){
         $fillFile = 'forms/Metrology/ATK_FORM.pdf';
@@ -1728,6 +1730,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     $size = $pdf->getTemplateSize($templateId);
                     $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
                     $pdf->useTemplate($templateId);
+                    $pdf->SetMargins(0, 0, 0); // Remove all margins
                 
                     // Fill in the fields for the current page
                     $pdf->SetFont('Arial', '', 10);
@@ -1745,8 +1748,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetFont('Arial', 'B', 10);
                         $pdf->SetXY(55.374, 68.063); // Adjust for Company Name
                         $pdf->Write(0, $compname);
-                        $pdf->SetFont('Arial', '', 5);
 
+                        $pdf->SetFont('Arial', '', 8);
                         $pdf->SetXY(55.374, 75.063); // Adjust for Company address
                         $pdf->Write(0, $compaddress);
 
@@ -1781,10 +1784,11 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 159.854+22, 93.946-7, 8);
                         }
 
-                        $pdf->SetFont('Arial', '', 8);
                         $pdf->SetXY(24.158, 123.106); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentDateTime);
-                        $pdf->SetFont('Arial', '', 10);
+                        $pdf->Write(0, $currentDate);
+
+                        $pdf->SetXY(24.158, 127.106); // Adjust for {tarikh}
+                        $pdf->Write(0, $currentTime);
 
                         $pdf->SetXY(76.255, 123.106); // Adjust for {Cawangan}
                         $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -1798,51 +1802,51 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetLineWidth(0.5); // Set line width
 
                         if($questions[0]['answer'] == 'YA'){
-                            $pdf->Ellipse(173.736, 147.537, 5, 3, 'D', [200, 255, 200]); // Light green fill
+                            $pdf->Ellipse(173.736, 147.537, 5, 3, 'D', [200, 255, 200]);
                         }elseif ($questions[0]['answer'] == 'TIDAK'){
-                            $pdf->Ellipse(183.736, 147.537, 5, 3, 'D', [200, 255, 200]); // Light green fill
+                            $pdf->Ellipse(183.736, 147.537, 5, 3, 'D', [200, 255, 200]); 
                         }
 
                         if($questions[1]['answer'] == 'YA'){
-                            $pdf->Image($tickImage, 140.736+10, 156.147-7, 8);
+                            $pdf->Ellipse(173.736, 160.537, 5, 3, 'D', [200, 255, 200]);
                         }elseif ($questions[1]['answer'] == 'TIDAK'){
-                            $pdf->Image($tickImage, 170.621+10, 156.147-7, 8);
+                            $pdf->Ellipse(183.736, 160.537, 5, 3, 'D', [200, 255, 200]); 
                         }
 
                         if($questions[2]['answer'] == 'YA'){
-                            $pdf->Image($tickImage, 140.736+10, 164.326-7, 8);
+                            $pdf->Ellipse(173.736, 168.537, 5, 3, 'D', [200, 255, 200]);
                         }elseif ($questions[2]['answer'] == 'TIDAK'){
-                            $pdf->Image($tickImage, 170.621+10, 164.326-7, 8);
+                            $pdf->Ellipse(183.736, 168.537, 5, 3, 'D', [200, 255, 200]); 
                         }
 
                         if($questions[3]['answer'] == 'YA'){
-                            $pdf->Image($tickImage, 140.736+10, 176.684-7, 8);
+                            $pdf->Ellipse(173.736, 180.537, 5, 3, 'D', [200, 255, 200]);
                         }elseif ($questions[3]['answer'] == 'TIDAK'){
-                            $pdf->Image($tickImage, 170.621+10, 176.684-7, 8);
+                            $pdf->Ellipse(183.736, 180.537, 5, 3, 'D', [200, 255, 200]); 
                         }
 
                         if($questions[4]['answer'] == 'YA'){
-                            $pdf->Image($tickImage, 140.736+10, 203.694-7, 8);
+                            $pdf->Ellipse(173.736, 205.537, 5, 3, 'D', [200, 255, 200]);
                         }elseif ($questions[4]['answer'] == 'TIDAK'){
-                            $pdf->Image($tickImage, 170.621+10, 203.694-7, 8);
+                            $pdf->Ellipse(183.736, 205.537, 5, 3, 'D', [200, 255, 200]); 
                         }
 
                         if($questions[5]['answer'] == 'YA'){
-                            $pdf->Image($tickImage, 140.736+10, 228.409-7, 8);
+                            $pdf->Ellipse(173.736, 217.537, 5, 3, 'D', [200, 255, 200]);
                         }elseif ($questions[5]['answer'] == 'TIDAK'){
-                            $pdf->Image($tickImage, 170.621+10, 228.409-7, 8);
+                            $pdf->Ellipse(183.736, 217.537, 5, 3, 'D', [200, 255, 200]); 
                         }
 
                         if($questions[6]['answer'] == 'YA'){
-                            $pdf->Image($tickImage, 140.736+10, 240.692-7, 8);
+                            $pdf->Ellipse(173.736, 229.537, 5, 3, 'D', [200, 255, 200]);
                         }elseif ($questions[6]['answer'] == 'TIDAK'){
-                            $pdf->Image($tickImage, 170.621+10, 240.692-7, 8);
+                            $pdf->Ellipse(183.736, 229.537, 5, 3, 'D', [200, 255, 200]); 
                         }
 
                         if($questions[7]['answer'] == 'YA'){
-                            $pdf->Image($tickImage, 140.736+10, 261.228-7, 8);
+                            $pdf->Ellipse(173.736, 241.537, 5, 3, 'D', [200, 255, 200]);
                         }elseif ($questions[7]['answer'] == 'TIDAK'){
-                            $pdf->Image($tickImage, 170.621+10, 261.228-7, 8);
+                            $pdf->Ellipse(183.736, 241.537, 5, 3, 'D', [200, 255, 200]); 
                         }
                     }
                 }
