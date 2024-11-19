@@ -1222,7 +1222,6 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
             <option value="NIKARAT">NIKARAT</option>
             <option value="OTHER">LAIN-LAIN</option>
           </select>
-          <input type="text" class="form-control" id="batuUjianLain" name="batuUjianLain" style="display:none">
         </div>
         <div class="form-group col-4" id="batuUjianLainDisplay" style="display:none">
           <label for="model">Batu Ujian Lain *</label>
@@ -2327,7 +2326,6 @@ $(function () {
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '7'){
       $('#addtionalSection').html($('#btuDetails').html());
       $('#extendModal').trigger('atkLoaded');
-      
     }
     else{
       $('#addtionalSection').html('');
@@ -2837,25 +2835,18 @@ function edit(id) {
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '7'){
             $('#addtionalSection').html($('#btuDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-            $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
-            $('#extendModal').find('#batuUjianLain').val(obj.message.batu_ujian_lain);
 
             $('#extendModal').find('#batuUjian').on('change', function(){
               var batuUjian = $(this).val();
               if (batuUjian == 'OTHER'){
-                $('#extendModal').find('#batuUjianLainDisplay').show();
+                $('#extendModal').find('#batuUjianLainDisplay').show(); console.log(obj.message.batu_ujian_lain);
+                $('#extendModal').find('#batuUjianLain').val(obj.message.batu_ujian_lain);
               }else{
                 $('#extendModal').find('#batuUjianLainDisplay').hide();
               }
             });
 
-            // if (obj.message.batu_ujian == 'OTHER'){
-            //   $('#extendModal').find('#batuUjianLainDisplay').show();
-            //   // $('#extendModal').find('#batuUjianLain').val(obj.message.batu_ujian_lain);
-            // }else{
-            //   $('#extendModal').find('#batuUjianLainDisplay').hide();
-            //   // $('#extendModal').find('#batuUjianLain').val('');
-            // }
+            $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
           }
         });
         
@@ -3011,6 +3002,17 @@ function edit(id) {
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '7'){
             $('#addtionalSection').html($('#btuDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+
+            $('#extendModal').find('#batuUjian').on('change', function(){
+              var batuUjian = $(this).val();
+              if (batuUjian == 'OTHER'){
+                $('#extendModal').find('#batuUjianLainDisplay').show(); console.log(obj.message.batu_ujian_lain);
+                $('#extendModal').find('#batuUjianLain').val(obj.message.batu_ujian_lain);
+              }else{
+                $('#extendModal').find('#batuUjianLainDisplay').hide();
+              }
+            });
+
             $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
           }
         });
