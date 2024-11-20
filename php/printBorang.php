@@ -811,7 +811,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->Rect(140.942, 90.294, 20, 10, 'F'); 
                         
                         $pdf->SetXY(140.942 , 100.294-2.4); // Adjust for {Jenis_alat}
-                        $pdf->Write(0, searchJenisAlatNameByid($res['jenis_alat'], $db).' - '. searchMachineNameById($res['machine_type'], $db));
+                        $pdf->Write(0, searchJenisAlatNameByid($res['jenis_alat'], $db).' - ');
+                        
+                        $pdf->SetXY(140.942 , 104.294-2.4); // Adjust for {Jenis_alat}
+                        $pdf->Write(0, searchMachineNameById($res['machine_type'], $db));
 
                         $pdf->SetXY(140.942 , 110.294-3); // Adjust for {Model}
                         $pdf->Write(0, searchModelNameById($res['model'], $db));
@@ -2406,7 +2409,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(125.704, 59.5); // Adjust for Jenama
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
 
-                        $pdf->SetXY(127.704, 65); // Adjust for nama pembuat
+                        $pdf->SetXY(135.704, 68); // Adjust for nama pembuat
                         $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
 
                         $pdf->SetFont('Arial', 'B', 10);
@@ -2457,8 +2460,19 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 174.141, 177.637, 8);
                         }
 
-                        // $pdf->SetFillColor(0, 0, 0);  // cover up unneccesary text
-                        // $pdf->Rect(24.648, 219.637, 54, 2, 'F'); 
+                        $nilais = json_decode($res['nilais'], true);
+                        $pdf->SetXY(116.872, 136.458); // Adjust for {nilai1}
+                        $pdf->Write(0, $nilais[0]['nilai']);
+                        $pdf->SetXY(116.872, 141.958); // Adjust for {nilai2}
+                        $pdf->Write(0, $nilais[1]['nilai']);
+                        $pdf->SetXY(116.872, 148.558); // Adjust for {nilai3}
+                        $pdf->Write(0, $nilais[2]['nilai']);
+                        $pdf->SetXY(116.872, 155.258); // Adjust for {nilai4}
+                        $pdf->Write(0, $nilais[3]['nilai']);
+                        $pdf->SetXY(116.872, 162.258); // Adjust for {nilai5}
+                        $pdf->Write(0, $nilais[4]['nilai']);
+                        $pdf->SetXY(116.872, 171.637); // Adjust for {nilai6}
+                        $pdf->Write(0, $nilais[5]['nilai']);
 
                         $pdf->Image($companySignature, 35.648, 202.637, 30);  // Adjust for company signature
 

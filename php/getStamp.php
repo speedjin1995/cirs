@@ -13,7 +13,7 @@ if(isset($_POST['userID'])){
     }
 
     $stampExtArray = [
-        1,4,2,5,6,14,7
+        1,4,2,5,6,14,7,10
     ];
 
     if ($update_stmt = $db->prepare("SELECT * FROM stamping WHERE id=?")) {
@@ -243,6 +243,7 @@ if(isset($_POST['userID'])){
                                     $message['batu_ujian'] = $row2['batu_ujian'] ?? '';
                                     $message['batu_ujian_lain'] = $row2['batu_ujian_lain'] ?? '';
                                     $message['questions'] = json_decode($row2['questions'], true);
+                                    $message['nilais'] = json_decode($row2['nilais'], true);
                                     $message['other_info'] = $row2['other_info'] ?? '';
                                     $message['load_cell_country'] = $row2['load_cell_country'] ?? '';
                                     $message['load_cell_no'] = $row2['load_cell_no'] ?? '';
