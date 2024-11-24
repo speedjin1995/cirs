@@ -2549,6 +2549,80 @@ function format (row) {
     returnString += '</tbody></table>';
   }
 
+  // Additional section for ATS
+  if (row.jenis_alat == 'ATS'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'ATP'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Jenis Penunjuk:</strong> ${row.jenis_penunjuk}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'ATN'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Bentuk Dulang:</strong> ${row.bentuk_dulang}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'ATE'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Klass:</strong> ${row.class}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'SLL'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
+                          </div>
+                        </div>
+                        `;
+
+    if (row.questions.length > 0) {
+      returnString += '<h4>BAHAGIAN II</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="15%">Date Created</th><th>Notes</th><th width="17%">Next Follow Date</th><th width="15%">Follow Up By</th><th width="13%">Status</th></tr></thead><tbody>'
+    
+      for (var i = 0; i < row.log.length; i++) {
+        var item = row.log[i];
+        returnString += '<tr><td>' + item.no + '</td><td>' + item.date + '</td><td>' + item.notes + '</td><td>' + item.followUpDate + '</td><td>' + item.picAttend + '</td><td>' + item.status + '</td></tr>'
+      }
+
+      returnString += '</tbody></table>';
+    }
+  }
+
   return returnString;
 }
 
@@ -2909,7 +2983,7 @@ function edit(id) {
             $('#extendModal').find('#batuUjian').on('change', function(){
               var batuUjian = $(this).val();
               if (batuUjian == 'OTHER'){
-                $('#extendModal').find('#batuUjianLainDisplay').show(); console.log(obj.message.batu_ujian_lain);
+                $('#extendModal').find('#batuUjianLainDisplay').show();
                 $('#extendModal').find('#batuUjianLain').val(obj.message.batu_ujian_lain);
               }else{
                 $('#extendModal').find('#batuUjianLainDisplay').hide();

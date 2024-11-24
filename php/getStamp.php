@@ -161,11 +161,15 @@ if(isset($_POST['userID'])){
                                     $message['kelulusan_mspk'] = $row2['kelulusan_mspk'] ?? '';
                                     $message['no_kelulusan'] = $row2['no_kelulusan'] ?? '';
                                     $message['indicator_serial'] = $row2['indicator_serial'] ?? '';
-                                    $message['platform_country'] = $row2['platform_country'] ?? '';
+                                    $message['platform_country'] = searchCountryById($row2['platform_country'], $db) ?? '';
                                     $message['platform_type'] = $row2['platform_type'];
                                     $message['size'] = $row2['size'] ?? '';
                                     $message['jenis_pelantar'] = $row2['jenis_pelantar'] ?? '';
                                     $message['jenis_penunjuk'] = $row2['jenis_penunjuk'] ?? '';
+                                    $message['alat_type'] = $row2['alat_type'] ?? '';
+                                    $message['bentuk_dulang'] = $row2['bentuk_dulang'] ?? '';
+                                    $message['class'] = $row2['class'] ?? '';
+                                    $message['questions'] = json_decode($row2['questions'], true);
                                     $message['other_info'] = $row2['other_info'] ?? '';
                                     $message['load_cell_country'] = $row2['load_cell_country'] ?? '';
                                     $message['load_cell_no'] = $row2['load_cell_no'] ?? '';
