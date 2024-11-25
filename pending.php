@@ -43,6 +43,9 @@ else{
   $countryAtp = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryAtn = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryAte = $db->query("SELECT * FROM country WHERE deleted = '0'");
+  $countrySll = $db->query("SELECT * FROM country WHERE deleted = '0'");
+  $countryBtu = $db->query("SELECT * FROM country WHERE deleted = '0'");
+  $countryAutoPack = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $country2 = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $loadCells = $db->query("SELECT load_cells.*, machines.machine_type AS machinetype, brand.brand AS brand_name, model.model AS model_name, alat.alat, country.nicename 
 FROM load_cells, machines, brand, model, alat, country WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
@@ -979,6 +982,304 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
           </select>
         </div>
       </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/html" id="sllDetails">
+  <div class="card card-primary">
+    <div class="card-body">
+      <div class="row">
+        <h4>Addtional Information (SLL)</h4>
+      </div>
+      <div class="row">
+        <div class="form-group col-4">
+          <label for="model">Platform Made In *</label>
+          <select class="form-control select2" id="platformCountry" name="platformCountry" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <?php while($rowcountry=mysqli_fetch_assoc($countrySll)){ ?>
+              <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
+            <?php } ?>
+          </select>
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Jenis Alat Type *</label>
+          <select class="form-control select2" id="alat_type" name="alat_type" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <option value="KERAS">KAYU KERAS</option>
+            <option value="LOGAM">LOGAM</option>
+          </select>
+        </div>
+      </div>
+      <div class="card card-primary">
+        <div class="card-header">
+          BAHAGIAN II
+        </div>
+        <div class="card-body">
+          <!-- <div class="row mb-3">
+              <div class="form-group col-12">
+                <label  class="col-9" for="question1">1. Adakah Sukat Linar ini diperbuat dari keluli, tembaga pancalogam, aluminium, ivory, bakelait berlapis, kaca gantian yang dikukuhkan, kayu keras atau apa-apa bahan lain yang diluluskan oleh Penjimpan Timbang dan Sukat.</label>
+                <select class="form-control select2 col-2" id="question1" name="question1" required>
+                    <option value="" selected disabled hidden>Please Select</option>
+                    <option value="YA">YA</option>
+                    <option value="TIDAK">TIDAK</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3">
+              <div class="form-group col-12">
+                  <label for="question2">2. Adakah Sukat Linar ini lurus dan tiada kecacatan.</label>
+                  <select class="form-control select2" id="question2" name="question2" required>
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <option value="YA">YA</option>
+                      <option value="TIDAK">TIDAK</option>
+                  </select>
+              </div>
+          </div>
+          <div class="row mb-3">
+              <div class="form-group col-12">
+                  <label for="question3">3. Adakah Sukat Linar yang diperbuat daripada kayu, dibubuh kedua-dua hujungnya dengan logam dan hujungnya dipaku menembusi kayu itu.</label>
+                  <select class="form-control select2" id="question3" name="question3" required>
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <option value="YA">YA</option>
+                      <option value="TIDAK">TIDAK</option>
+                  </select>
+              </div>
+          </div>
+          <div class="row mb-3">
+              <div class="form-group col-12">
+                  <label for="question4">4. Adakah Sukat Linar bersenggat dengan jelas dan tidak boleh dipadam, dan senggatan yang dinombor ditanda dengan garisan yang lebih panjang daripada senggatan yang tidak dinombor.</label>
+                  <select class="form-control select2" id="question4" name="question4" required>
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <option value="YA">YA</option>
+                      <option value="TIDAK">TIDAK</option>
+                  </select>
+              </div>
+          </div>
+          <div class="row mb-3">
+              <div class="form-group col-12">
+                  <label for="question5">5.1 Adakah Sukat Linar disenggat dengan jelas dan tidak boleh dipadam dalam ukuran sentimeter di atas satu belah dan dalam sukatan meter di sebelah belakang dan senggatan yang dinombor ditanda dengan garis yang lebih panjang daripada senggatan yang tidak dinombor.</label>
+                  <select class="form-control select2" id="question5" name="question5" required>
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <option value="YA">YA</option>
+                      <option value="TIDAK">TIDAK</option>
+                  </select>
+              </div>
+          </div>
+          <div class="row mb-3">
+              <div class="form-group col-12">
+                  <label for="question6">5.2 Adakah Sukat itu panjangnya 1 m (satu meter)</label>
+                  <select class="form-control select2" id="question6" name="question6" required>
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <option value="YA">YA</option>
+                      <option value="TIDAK">TIDAK</option>
+                  </select>
+              </div>
+          </div>
+          <div class="row mb-3">
+              <div class="form-group col-12">
+                  <label for="question7">6. Adakah Sukat Linar mempunyai nilai jangkahan maksimum yang mudah dibihat, diukir dan tidak boleh dipadam ditanda di satu hujung Sukat Linar dengan cara salah satu daripada cara salah satu tanda-pertukaran-ringkas yang berikut masing-masing di bawah satu meter (cm, in, atau mm)</label>
+                  <select class="form-control select2" id="question7" name="question7" required>
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <option value="YA">YA</option>
+                      <option value="TIDAK">TIDAK</option>
+                  </select>
+              </div>
+          </div>
+          <div class="row mb-3">
+              <div class="form-group col-12">
+                  <label for="question8">7. Adakah Sukat Linar ini ditanda dengan cap dekat permukaan Skel pada sebelah tiap-tiap tap yang bersenggat.</label>
+                  <select class="form-control select2" id="question8" name="question8" required>
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <option value="YA">YA</option>
+                      <option value="TIDAK">TIDAK</option>
+                  </select>
+              </div>
+          </div> -->
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>1. Adakah Sukat Linar ini diperbuat dari keluli, tembaga pancalogam, aluminium, ivory, bakelait berlapis, kaca gantian yang dikukuhkan, kayu keras atau apa-apa bahan lain yang diluluskan oleh Penjimpan Timbang dan Sukat.</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question1" name="question1" required>
+                    <option value="" selected disabled hidden>Please Select</option>
+                    <option value="YA">YA</option>
+                    <option value="TIDAK">TIDAK</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+            <div class="col-md-8">
+                <label>2. Adakah Sukat Linar ini lurus dan tiada kecacatan.</label>
+            </div>
+            <div class="col-md-3 ml-4">
+              <select class="form-control select2" id="question2" name="question2" required>
+                  <option value="" selected disabled hidden>Please Select</option>
+                  <option value="YA">YA</option>
+                  <option value="TIDAK">TIDAK</option>
+              </select>
+            </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>3. Adakah Sukat Linar yang diperbuat daripada kayu, dibubuh kedua-dua hujungnya dengan logam dan hujungnya dipaku menembusi kayu itu.</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question3" name="question3" required>
+                    <option value="" selected disabled hidden>Please Select</option>
+                    <option value="YA">YA</option>
+                    <option value="TIDAK">TIDAK</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>4. Adakah Sukat Linar bersenggat dengan jelas dan tidak boleh dipadam, dan senggatan yang dinombor ditanda dengan garisan yang lebih panjang daripada senggatan yang tidak dinombor.</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question4" name="question4" required>
+                  <option value="" selected disabled hidden>Please Select</option>
+                  <option value="YA">YA</option>
+                  <option value="TIDAK">TIDAK</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>5.1 Adakah Sukat Linar disenggat dengan jelas dan tidak boleh dipadam dalam ukuran sentimeter di atas satu belah dan dalam sukatan meter di sebelah belakang dan senggatan yang dinombor ditanda dengan garis yang lebih panjang daripada senggatan yang tidak dinombor.</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question5_1" name="question5_1" required>
+                  <option value="" selected disabled hidden>Please Select</option>
+                  <option value="YA">YA</option>
+                  <option value="TIDAK">TIDAK</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>5.2 Adakah Sukat itu panjangnya 1 m (satu meter)</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question5_2" name="question5_2" required>
+                  <option value="" selected disabled hidden>Please Select</option>
+                  <option value="YA">YA</option>
+                  <option value="TIDAK">TIDAK</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>6. Adakah Sukat Linar mempunyai nilai jangkahan maksimum yang mudah dibihat, diukir dan tidak boleh dipadam ditanda di satu hujung Sukat Linar dengan cara salah satu daripada cara salah satu tanda-pertukaran-ringkas yang berikut masing-masing di bawah satu meter (cm, in, atau mm)</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question6" name="question6" required>
+                  <option value="" selected disabled hidden>Please Select</option>
+                  <option value="YA">YA</option>
+                  <option value="TIDAK">TIDAK</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>7. Adakah Sukat Linar ini ditanda dengan cap dekat permukaan Skel pada sebelah tiap-tiap tap yang bersenggat.</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question7" name="question7" required>
+                  <option value="" selected disabled hidden>Please Select</option>
+                  <option value="YA">YA</option>
+                  <option value="TIDAK">TIDAK</option>
+                </select>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/html" id="btuDetails">
+  <div class="card card-primary">
+    <div class="card-body">
+      <div class="row">
+        <h4>Addtional Information (BATU)</h4>
+      </div>
+      <div class="row">
+        <div class="form-group col-4">
+          <label for="model">Platform Made In *</label>
+          <select class="form-control select2" id="platformCountry" name="platformCountry" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <?php while($rowcountry=mysqli_fetch_assoc($countryBtu)){ ?>
+              <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
+            <?php } ?>
+          </select>
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Batu Ujian *</label>
+          <select class="form-control select2" id="batuUjian" name="batuUjian" required>
+            <option value="" disabled hidden selected>Please Select</option>
+            <option value="BESI_TUANGAN">BESI TUANGAN</option>
+            <option value="TEMBAGA">TEMBAGA</option>
+            <option value="NIKARAT">NIKARAT</option>
+            <option value="OTHER">LAIN-LAIN</option>
+          </select>
+        </div>
+        <div class="form-group col-4" id="batuUjianLainDisplay" style="display:none">
+          <label for="model">Batu Ujian Lain *</label>
+          <input type="text" class="form-control" id="batuUjianLain" name="batuUjianLain">
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/html" id="autoPackDetails">
+  <div class="card card-primary">
+    <div class="card-body">
+      <div class="row">
+        <h4>Addtional Information (Auto Packer)</h4>
+      </div>
+      <div class="row">
+        <div class="form-group col-12">
+          <label for="model">Platform Made In *</label>
+          <select class="form-control select2" id="platformCountry" name="platformCountry" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <?php while($rowcountry=mysqli_fetch_assoc($countryAutoPack)){ ?>
+              <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
+            <?php } ?>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <label for="model" class="form-group">Nilai Berat Kaunterpois (kg) *</label>
+      </div>
+      <div class="row">
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 1 (kg)</label>
+          <input class="form-control" id ="nilai1" name="nilai1">
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 2 (kg)</label>
+          <input class="form-control" id ="nilai2" name="nilai2">
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 3 (kg)</label>
+          <input class="form-control" id ="nilai3" name="nilai3">
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 4 (kg)</label>
+          <input class="form-control" id ="nilai4" name="nilai4">
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 5 (kg)</label>
+          <input class="form-control" id ="nilai5" name="nilai5">
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 6 (kg)</label>
+          <input class="form-control" id ="nilai6" name="nilai6">
+        </div>
+      </div>
+
     </div>
   </div>
 </script>
@@ -1969,6 +2270,18 @@ $(function () {
       $('#addtionalSection').html($('#ateDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
+    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '14'){
+      $('#addtionalSection').html($('#sllDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
+    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '7'){
+      $('#addtionalSection').html($('#btuDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
+    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '10'){
+      $('#addtionalSection').html($('#autoPackDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
     else{
       $('#addtionalSection').html('');
     }
@@ -2060,6 +2373,18 @@ $(function () {
     }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '6'){
       $('#addtionalSection').html($('#ateDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
+    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '14'){
+      $('#addtionalSection').html($('#sllDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
+    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '7'){
+      $('#addtionalSection').html($('#btuDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
+    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '10'){
+      $('#addtionalSection').html($('#autoPackDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
     else{
@@ -2224,6 +2549,80 @@ function format (row) {
     returnString += '</tbody></table>';
   }
 
+  // Additional section for ATS
+  if (row.jenis_alat == 'ATS'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'ATP'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Jenis Penunjuk:</strong> ${row.jenis_penunjuk}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'ATN'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Bentuk Dulang:</strong> ${row.bentuk_dulang}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'ATE'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Klass:</strong> ${row.class}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'SLL'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
+                          </div>
+                        </div>
+                        `;
+
+    if (row.questions.length > 0) {
+      returnString += '<h4>BAHAGIAN II</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="15%">Date Created</th><th>Notes</th><th width="17%">Next Follow Date</th><th width="15%">Follow Up By</th><th width="13%">Status</th></tr></thead><tbody>'
+    
+      for (var i = 0; i < row.log.length; i++) {
+        var item = row.log[i];
+        returnString += '<tr><td>' + item.no + '</td><td>' + item.date + '</td><td>' + item.notes + '</td><td>' + item.followUpDate + '</td><td>' + item.picAttend + '</td><td>' + item.status + '</td></tr>'
+      }
+
+      returnString += '</tbody></table>';
+    }
+  }
+
   return returnString;
 }
 
@@ -2317,7 +2716,7 @@ function newEntry(){
   $('#extendModal').find('#invoice').val('');
 
   //Additonal field reset
-  // $('#extendModal').find('#additionalSection').find('#platformCountry').val('').trigger('change');
+  // var value = $('#extendModal').find('#additionalSection').find('#batuUjian').val();
   // $('#extendModal').find('#additionalSection').find('#jenis_penunjuk').val('').trigger('change');
 
   $('#extendModal').find('#jenisAlat').change(function() {
@@ -2328,6 +2727,16 @@ function newEntry(){
     }
   });
 
+  $('#extendModal').on('atkLoaded', function() {
+    $('#extendModal').find('#batuUjian').on('change', function(){
+      var batuUjian = $(this).val();
+      if (batuUjian == 'OTHER'){
+        $('#extendModal').find('#batuUjianLainDisplay').show();
+      }else{
+        $('#extendModal').find('#batuUjianLainDisplay').hide();
+      }
+    });
+  });
 
   customer = 0;
   branch = 0;
@@ -2341,6 +2750,16 @@ function newEntry(){
   $('#cerId').hide();
   $('#extendModal').modal('show');
   
+  $('#extendModal').find('#platformCountry').val('');
+  $('#extendModal').find('#jenis_penunjuk').val('');
+  $('#extendModal').find('#nilai1').val('');
+  $('#extendModal').find('#nilai2').val('');
+  $('#extendModal').find('#nilai3').val('');
+  $('#extendModal').find('#nilai4').val('');
+  $('#extendModal').find('#nilai5').val('');
+  $('#extendModal').find('#nilai6').val('');
+
+
   $('#extendForm').validate({
     errorElement: 'span',
     errorPlacement: function (error, element) {
@@ -2545,6 +2964,42 @@ function edit(id) {
             $('#addtionalSection').html($('#ateDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#class').val(obj.message.class).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '14'){
+            $('#addtionalSection').html($('#sllDetails').html());
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
+            $('#extendModal').find('#question1').val(obj.message.questions[0].answer).trigger('change');
+            $('#extendModal').find('#question2').val(obj.message.questions[1].answer).trigger('change');
+            $('#extendModal').find('#question3').val(obj.message.questions[2].answer).trigger('change');
+            $('#extendModal').find('#question4').val(obj.message.questions[3].answer).trigger('change');
+            $('#extendModal').find('#question5_1').val(obj.message.questions[4].answer).trigger('change');
+            $('#extendModal').find('#question5_2').val(obj.message.questions[5].answer).trigger('change');
+            $('#extendModal').find('#question6').val(obj.message.questions[6].answer).trigger('change');
+            $('#extendModal').find('#question7').val(obj.message.questions[7].answer).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '7'){
+            $('#addtionalSection').html($('#btuDetails').html());
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+
+            $('#extendModal').find('#batuUjian').on('change', function(){
+              var batuUjian = $(this).val();
+              if (batuUjian == 'OTHER'){
+                $('#extendModal').find('#batuUjianLainDisplay').show();
+                $('#extendModal').find('#batuUjianLain').val(obj.message.batu_ujian_lain);
+              }else{
+                $('#extendModal').find('#batuUjianLainDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '10'){
+            $('#addtionalSection').html($('#autoPackDetails').html());
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
+            $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
+            $('#extendModal').find('#nilai2').val(obj.message.nilais[1].nilai);
+            $('#extendModal').find('#nilai3').val(obj.message.nilais[2].nilai);
+            $('#extendModal').find('#nilai4').val(obj.message.nilais[3].nilai);
+            $('#extendModal').find('#nilai5').val(obj.message.nilais[4].nilai);
+            $('#extendModal').find('#nilai6').val(obj.message.nilais[5].nilai);
           }
         });
         
@@ -2685,6 +3140,42 @@ function edit(id) {
             $('#addtionalSection').html($('#ateDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#class').val(obj.message.class).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '14'){
+            $('#addtionalSection').html($('#sllDetails').html());
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
+            $('#extendModal').find('#question1').val(obj.message.questions[0].answer).trigger('change');
+            $('#extendModal').find('#question2').val(obj.message.questions[1].answer).trigger('change');
+            $('#extendModal').find('#question3').val(obj.message.questions[2].answer).trigger('change');
+            $('#extendModal').find('#question4').val(obj.message.questions[3].answer).trigger('change');
+            $('#extendModal').find('#question5_1').val(obj.message.questions[4].answer).trigger('change');
+            $('#extendModal').find('#question5_2').val(obj.message.questions[5].answer).trigger('change');
+            $('#extendModal').find('#question6').val(obj.message.questions[6].answer).trigger('change');
+            $('#extendModal').find('#question7').val(obj.message.questions[7].answer).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '7'){
+            $('#addtionalSection').html($('#btuDetails').html());
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+
+            $('#extendModal').find('#batuUjian').on('change', function(){
+              var batuUjian = $(this).val();
+              if (batuUjian == 'OTHER'){
+                $('#extendModal').find('#batuUjianLainDisplay').show(); console.log(obj.message.batu_ujian_lain);
+                $('#extendModal').find('#batuUjianLain').val(obj.message.batu_ujian_lain);
+              }else{
+                $('#extendModal').find('#batuUjianLainDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '10'){
+            $('#addtionalSection').html($('#autoPackDetails').html());
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
+            $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
+            $('#extendModal').find('#nilai2').val(obj.message.nilais[1].nilai);
+            $('#extendModal').find('#nilai3').val(obj.message.nilais[2].nilai);
+            $('#extendModal').find('#nilai4').val(obj.message.nilais[3].nilai);
+            $('#extendModal').find('#nilai5').val(obj.message.nilais[4].nilai);
+            $('#extendModal').find('#nilai6').val(obj.message.nilais[5].nilai);
           }
         });
 

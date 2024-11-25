@@ -447,6 +447,132 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 					}
 				}
 				
+				// For SLL Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '14'){
+					$platform_country = null;
+					$alat_type = null;		
+					
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['alat_type']) && $_POST['alat_type']!=null && $_POST['alat_type']!=""){
+						$alat_type = $_POST['alat_type'];
+					}
+
+					$questions = [
+						[
+							"no" => 1,
+							"answer" => $_POST['question1'] ?? null,
+						],
+						[
+							"no" => 2,
+							"answer" => $_POST['question2'] ?? null,
+						],
+						[
+							"no" => 3,
+							"answer" => $_POST['question3'] ?? null,
+						],
+						[
+							"no" => 4,
+							"answer" => $_POST['question4'] ?? null,
+						],
+						[
+							"no" => 5.1,
+							"answer" => $_POST['question5_1'] ?? null,
+						],
+						[
+							"no" => 5.2,
+							"answer" => $_POST['question5_2'] ?? null,
+						],
+						[
+							"no" => 6,
+							"answer" => $_POST['question6'] ?? null,
+						],
+						[
+							"no" => 7,
+							"answer" => $_POST['question7'] ?? null,
+						],
+					];
+
+					$questionString = json_encode($questions, JSON_PRETTY_PRINT);
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country=?, alat_type=?, questions=? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('ssss', $platform_country, $alat_type, $questionString, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For BTU Additional fields	
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '7'){
+					$platform_country = null;
+					$batuUjian = null;
+					$batuUjianLain = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['batuUjian']) && $_POST['batuUjian']!=null && $_POST['batuUjian']!=""){
+						$batuUjian = $_POST['batuUjian'];
+					}
+
+					if(isset($_POST['batuUjianLain']) && $_POST['batuUjianLain']!=null && $_POST['batuUjianLain']!=""){
+						$batuUjianLain = $_POST['batuUjianLain'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, batu_ujian = ?, batu_ujian_lain=? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('ssss', $platform_country, $batuUjian, $batuUjianLain, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+				
+				// For SLL Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '10'){
+					$platform_country = null;
+					
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					$nilais = [
+						[
+							"no" => 1,
+							"nilai" => $_POST['nilai1'] ?? null,
+						],
+						[
+							"no" => 2,
+							"nilai" => $_POST['nilai2'] ?? null,
+						],
+						[
+							"no" => 3,
+							"nilai" => $_POST['nilai3'] ?? null,
+						],
+						[
+							"no" => 4,
+							"nilai" => $_POST['nilai4'] ?? null,
+						],
+						[
+							"no" => 5,
+							"nilai" => $_POST['nilai5'] ?? null,
+						],
+						[
+							"no" => 6,
+							"nilai" => $_POST['nilai6'] ?? null,
+						]
+					];
+
+					$nilaiString = json_encode($nilais, JSON_PRETTY_PRINT);
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country=?, nilais=? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('sss', $platform_country, $nilaiString, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+				
 				$update_stmt->close();
 				$db->close();
 				
@@ -620,7 +746,7 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 					}
 				}
 
-				// For ATP Additional fields
+				// For ATN Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '5'){
 					$platform_country = null;
 					$alat_type = null;
@@ -667,6 +793,136 @@ if(isset($_POST['type'], $_POST['customerType'], $_POST['newRenew'], $_POST['bra
 					}
 				}
 
+				// For SLL Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '14'){
+					$platform_country = null;
+					$alat_type = null;		
+					
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['alat_type']) && $_POST['alat_type']!=null && $_POST['alat_type']!=""){
+						$alat_type = $_POST['alat_type'];
+					}
+
+					$questions = [
+						[
+							"no" => 1,
+							"answer" => $_POST['question1'] ?? null,
+						],
+						[
+							"no" => 2,
+							"answer" => $_POST['question2'] ?? null,
+						],
+						[
+							"no" => 3,
+							"answer" => $_POST['question3'] ?? null,
+						],
+						[
+							"no" => 4,
+							"answer" => $_POST['question4'] ?? null,
+						],
+						[
+							"no" => 5.1,
+							"answer" => $_POST['question5_1'] ?? null,
+						],
+						[
+							"no" => 5.2,
+							"answer" => $_POST['question5_2'] ?? null,
+						],
+						[
+							"no" => 6,
+							"answer" => $_POST['question6'] ?? null,
+						],
+						[
+							"no" => 7,
+							"answer" => $_POST['question7'] ?? null,
+						],
+					];
+
+					$questionString = json_encode($questions, JSON_PRETTY_PRINT);
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, alat_type, questions) 
+					VALUES (?, ?, ?, ?)")){
+						$insert_stmt2->bind_param('ssss', $stamp_id, $platform_country, $alat_type, $questionString);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For BTU Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '7'){
+					$platform_country = null;
+					$batuUjian = null;
+					$batuUjianLain = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['batuUjian']) && $_POST['batuUjian']!=null && $_POST['batuUjian']!=""){
+						$batuUjian = $_POST['batuUjian'];
+					}
+
+					if(isset($_POST['batuUjianLain']) && $_POST['batuUjianLain']!=null && $_POST['batuUjianLain']!=""){
+						$batuUjianLain = $_POST['batuUjianLain'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, batu_ujian, batu_ujian_lain) 
+					VALUES (?, ?, ?, ?)")){
+						$insert_stmt2->bind_param('ssss', $stamp_id, $platform_country, $batuUjian, $batuUjianLain);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+
+				}
+
+				// For SLL Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '10'){
+					$platform_country = null;
+					
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					$nilais = [
+						[
+							"no" => 1,
+							"nilai" => $_POST['nilai1'] ?? null,
+						],
+						[
+							"no" => 2,
+							"nilai" => $_POST['nilai2'] ?? null,
+						],
+						[
+							"no" => 3,
+							"nilai" => $_POST['nilai3'] ?? null,
+						],
+						[
+							"no" => 4,
+							"nilai" => $_POST['nilai4'] ?? null,
+						],
+						[
+							"no" => 5,
+							"nilai" => $_POST['nilai5'] ?? null,
+						],
+						[
+							"no" => 6,
+							"nilai" => $_POST['nilai6'] ?? null,
+						]
+					];
+
+					$nilaistring = json_encode($nilais, JSON_PRETTY_PRINT);
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, nilais) 
+					VALUES (?, ?, ?)")){
+						$insert_stmt2->bind_param('sss', $stamp_id, $platform_country, $nilaistring);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+				
 				$insert_stmt->close();
 				$db->close();
 				
