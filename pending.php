@@ -1482,7 +1482,7 @@ $(function () {
           let buttons = '<div class="row">';
 
           // Edit button
-          buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+          buttons += '<div class="col-6"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
                     ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
 
           // Extra button if validate_by is 3
@@ -1492,18 +1492,23 @@ $(function () {
           }
 
           // Print button
-          buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+          buttons += '<div class="col-6"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
                     ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
+          buttons += '</div>';
+
+          
+
+          buttons += '<div class="row">'
           // Complete button if conditions are met
           if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '') {
-            buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+            buttons += '<div class="col-6"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
                       ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
           }
 
           // Cancelled button
-          buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-                    ')" class="btn btn-danger btn-sm">X</button></div>';
+          buttons += '<div class="col-6"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+                    ')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>';
 
           buttons += '</div>'; // Closing row div
 
@@ -1719,7 +1724,7 @@ $(function () {
             let buttons = '<div class="row">';
 
             // Edit button
-            buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+            buttons += '<div class="col-6"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
                       ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
 
             // Extra button if validate_by is 3
@@ -1729,18 +1734,23 @@ $(function () {
             }
 
             // Print button
-            buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                    ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+            buttons += '<div class="col-6"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+                      ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
+            buttons += '</div>';
+
+            
+
+            buttons += '<div class="row">'
             // Complete button if conditions are met
             if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '') {
-              buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+              buttons += '<div class="col-6"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
                         ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
             }
 
             // Cancelled button
-            buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-                      ')" class="btn btn-danger btn-sm">X</button></div>';
+            buttons += '<div class="col-6"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+                      ')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>';
 
             buttons += '</div>'; // Closing row div
 
@@ -1924,7 +1934,8 @@ $(function () {
       
       // Add 1 year to the date
       date.setFullYear(date.getFullYear() + 1);
-      
+      date.setDate(date.getDate() - 1);
+
       /*/ Format the new date back to 'DD/MM/YYYY'
       var newDay = ("0" + date.getDate()).slice(-2);
       var newMonth = ("0" + (date.getMonth() + 1)).slice(-2); // Months are zero-based

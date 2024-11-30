@@ -1490,7 +1490,7 @@ $(function () {
           let buttons = '<div class="row">';
 
           // Edit button
-          buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+          buttons += '<div class="col-6"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
                     ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
 
           // Extra button if validate_by is 3
@@ -1510,8 +1510,8 @@ $(function () {
           // }
 
           // Cancelled button
-          buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-                    ')" class="btn btn-danger btn-sm">X</button></div>';
+          buttons += '<div class="col-6"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+                    ')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></button></div>';
 
           buttons += '</div>'; // Closing row div
 
@@ -1727,7 +1727,7 @@ $(function () {
             let buttons = '<div class="row">';
 
             // Edit button
-            buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+            buttons += '<div class="col-6"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
                       ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
 
             // Extra button if validate_by is 3
@@ -1747,8 +1747,8 @@ $(function () {
             // }
 
             // Cancelled button
-            buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-                      ')" class="btn btn-danger btn-sm">X</button></div>';
+            buttons += '<div class="col-6"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+                      ')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></button></div>';
 
             buttons += '</div>'; // Closing row div
 
@@ -2549,6 +2549,80 @@ function format (row) {
     }
 
     returnString += '</tbody></table>';
+  }
+
+  // Additional section for ATS
+  if (row.jenis_alat == 'ATS'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'ATP'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Jenis Penunjuk:</strong> ${row.jenis_penunjuk}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'ATN'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Bentuk Dulang:</strong> ${row.bentuk_dulang}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'ATE'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Klass:</strong> ${row.class}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'SLL'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
+                          </div>
+                        </div>
+                        `;
+
+    if (row.questions.length > 0) {
+      returnString += '<h4>BAHAGIAN II</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="15%">Date Created</th><th>Notes</th><th width="17%">Next Follow Date</th><th width="15%">Follow Up By</th><th width="13%">Status</th></tr></thead><tbody>'
+    
+      for (var i = 0; i < row.log.length; i++) {
+        var item = row.log[i];
+        returnString += '<tr><td>' + item.no + '</td><td>' + item.date + '</td><td>' + item.notes + '</td><td>' + item.followUpDate + '</td><td>' + item.picAttend + '</td><td>' + item.status + '</td></tr>'
+      }
+
+      returnString += '</tbody></table>';
+    }
   }
 
   return returnString;
