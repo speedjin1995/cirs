@@ -117,7 +117,7 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 	}
 
 	if($customerType == "NEW"){
-		if ($select_stmt = $db->prepare("SELECT id FROM customers WHERE customer_name=?")) {
+		if ($select_stmt = $db->prepare("SELECT id FROM customers WHERE customer_name=? and deleted = '0'")) {
 			$select_stmt->bind_param('s', $companyText);
 			$select_stmt->execute();
 			$result = $select_stmt->get_result();

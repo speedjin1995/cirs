@@ -180,7 +180,6 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               <thead>
                 <tr>
                   <!-- <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th> -->
-                  <th>Created Date</th>
                   <th>Company Name</th>
                   <th>Brands</th>
                   <th>Description Instruments for Weighing And Measuring</th>
@@ -265,6 +264,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                       <option value="NEW">NEW</option>
                       <option value="EXISTING">EXISTING</option>
                     </select>
+                    <input type="hidden" id="customerTypeEdit" name="customerTypeEdit">
                   </div>
                 </div>
                 <div class="col-4">
@@ -1475,7 +1475,6 @@ $(function () {
       //     }
       //   }
       // },
-      { data: 'created_datetime' },
       { data: 'customers' },
       { data: 'brand' },
       { data: 'machine_type' },
@@ -1559,7 +1558,7 @@ $(function () {
           if(obj.status === 'success'){
             $('#extendModal').modal('hide');
             toastr["success"](obj.message, "Success:");
-            $('#weightTable').DataTable().ajax.reload();
+            $('#weightTable').DataTable().ajax.reload(null, false);
           }
           else if(obj.status === 'failed'){
             toastr["error"](obj.message, "Failed:");
@@ -1602,7 +1601,7 @@ $(function () {
               if (obj.status === 'success') {
                 $('#uploadModal').modal('hide');
                 toastr["success"](obj.message, "Success:");
-                $('#weightTable').DataTable().ajax.reload();
+                $('#weightTable').DataTable().ajax.reload(null, false);
               } 
               else if (obj.status === 'failed') {
                 toastr["error"](obj.message, "Failed:");
@@ -1621,7 +1620,7 @@ $(function () {
       
           if(obj.status === 'success'){
             $('#printDOModal').modal('hide');
-            $('#weightTable').DataTable().ajax.reload();
+            $('#weightTable').DataTable().ajax.reload(null, false);
             var printWindow = window.open('', '', 'height=400,width=800');
             printWindow.document.write(obj.message);
             printWindow.document.close();
@@ -1644,7 +1643,7 @@ $(function () {
           if(obj.status === 'success'){
             $('#cancelModal').modal('hide');
             toastr["success"](obj.message, "Success:");
-            $('#weightTable').DataTable().ajax.reload();
+            $('#weightTable').DataTable().ajax.reload(null, false);
           }
           else if(obj.status === 'failed'){
             toastr["error"](obj.message, "Failed:");
@@ -1712,7 +1711,6 @@ $(function () {
         //     }
         //   }
         // },
-        { data: 'created_datetime' },
         { data: 'customers' },
         { data: 'brand' },
         { data: 'machine_type' },
@@ -2787,7 +2785,8 @@ function edit(id) {
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#dealer').val('');
         $('#extendModal').find('#reseller_branch').val('');
-        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
+        $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
@@ -2997,7 +2996,8 @@ function edit(id) {
       else{
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
-        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
+        $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
         $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
@@ -3190,7 +3190,7 @@ function complete(id) {
 
       if(obj.status === 'success'){
         toastr["success"](obj.message, "Success:");
-        $('#weightTable').DataTable().ajax.reload();
+        $('#weightTable').DataTable().ajax.reload(null, false);
       }
       else if(obj.status === 'failed'){
         toastr["error"](obj.message, "Failed:");
