@@ -165,7 +165,6 @@ else{
               <thead>
                 <tr>
                   <!-- <th></th> -->
-                  <th>Created Date</th>
                   <th>Company Name</th>
                   <th>Brands</th>
                   <th>Description Instruments for Weighing And Measuring</th>
@@ -720,7 +719,6 @@ $(function () {
       //     return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
       //   }
       // },
-      { data: 'created_datetime' },
       { data: 'customers' },
       { data: 'brand' },
       { data: 'machine_type' },
@@ -735,10 +733,10 @@ $(function () {
           let buttons = '<div class="row">';
 
           if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
-            buttons +=  '<div class="col-4"><button title="Revert" type="button" id="pendingBtn'+data+'" onclick="revert('+data+
+            buttons +=  '<div class="col-6"><button title="Revert" type="button" id="pendingBtn'+data+'" onclick="revert('+data+
             ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
 
-            buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm">X</button></div>';
+            buttons += '<div class="col-6"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></button></div>';
 
 
             return buttons;
@@ -789,7 +787,7 @@ $(function () {
           if(obj.status === 'success'){
             $('#extendModal').modal('hide');
             toastr["success"](obj.message, "Success:");
-            $('#weightTable').DataTable().ajax.reload();
+            $('#weightTable').DataTable().ajax.reload(null, false);
           }
           else if(obj.status === 'failed'){
             toastr["error"](obj.message, "Failed:");
@@ -832,7 +830,7 @@ $(function () {
               if (obj.status === 'success') {
                 $('#uploadModal').modal('hide');
                 toastr["success"](obj.message, "Success:");
-                $('#weightTable').DataTable().ajax.reload();
+                $('#weightTable').DataTable().ajax.reload(null, false);
               } 
               else if (obj.status === 'failed') {
                 toastr["error"](obj.message, "Failed:");
@@ -851,7 +849,7 @@ $(function () {
       
           if(obj.status === 'success'){
             $('#printDOModal').modal('hide');
-            $('#weightTable').DataTable().ajax.reload();
+            $('#weightTable').DataTable().ajax.reload(null, false);
             var printWindow = window.open('', '', 'height=400,width=800');
             printWindow.document.write(obj.message);
             printWindow.document.close();
@@ -919,7 +917,6 @@ $(function () {
         //     return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
         //   }
         // },
-        { data: 'created_datetime' },
         { data: 'customers' },
         { data: 'brand' },
         { data: 'machine_type' },
@@ -934,10 +931,10 @@ $(function () {
             let buttons = '<div class="row">';
 
             if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
-              buttons +=  '<div class="col-4"><button title="Revert" type="button" id="pendingBtn'+data+'" onclick="revert('+data+
+              buttons +=  '<div class="col-6"><button title="Revert" type="button" id="pendingBtn'+data+'" onclick="revert('+data+
               ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
 
-              buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm">X</button></div>';
+              buttons += '<div class="col-6"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></button></div>';
 
 
               return buttons;
@@ -1593,7 +1590,7 @@ function revert(id) {
 
       if(obj.status === 'success'){
         toastr["success"](obj.message, "Success:");
-        $('#weightTable').DataTable().ajax.reload();
+        $('#weightTable').DataTable().ajax.reload(null, false);
       }
       else if(obj.status === 'failed'){
         toastr["error"](obj.message, "Failed:");
@@ -1614,7 +1611,7 @@ function complete(id) {
 
       if(obj.status === 'success'){
         toastr["success"](obj.message, "Success:");
-        $('#weightTable').DataTable().ajax.reload();
+        $('#weightTable').DataTable().ajax.reload(null, false);
       }
       else if(obj.status === 'failed'){
         toastr["error"](obj.message, "Failed:");

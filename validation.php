@@ -177,7 +177,6 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               <thead>
                 <tr>
                   <!-- <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th> -->
-                  <th>Created Date</th>
                   <th>Company Name</th>
                   <th>Brand</th>
                   <th>Description Instruments for Weighing and Measuring</th>
@@ -1009,7 +1008,6 @@ $(function () {
       //     }
       //   }
       // },
-      { data: 'validation_date' },
       { data: 'customer' },
       { data: 'brand' },
       { data: 'machines' },
@@ -1121,7 +1119,7 @@ $(function () {
           if(obj.status === 'success'){
             $('#cancelModal').modal('hide');
             toastr["success"](obj.message, "Success:");
-            $('#weightTable').DataTable().ajax.reload();
+            $('#weightTable').DataTable().ajax.reload(null, false);
           }
           else if(obj.status === 'failed'){
             toastr["error"](obj.message, "Failed:");
@@ -1273,7 +1271,6 @@ $(function () {
         //     }
         //   }
         // },
-        { data: 'validation_date' },
         { data: 'customer' },
         { data: 'brand' },
         { data: 'machines' },
@@ -2406,7 +2403,7 @@ function complete(id) {
 
       if(obj.status === 'success'){
         toastr["success"](obj.message, "Success:");
-        $('#weightTable').DataTable().ajax.reload();
+        $('#weightTable').DataTable().ajax.reload(null, false);
       }
       else if(obj.status === 'failed'){
         toastr["error"](obj.message, "Failed:");
@@ -2464,7 +2461,7 @@ function revertToPending(id) {
 
       if(obj.status === 'success'){
         toastr["success"](obj.message, "Success:");
-        $('#weightTable').DataTable().ajax.reload();
+        $('#weightTable').DataTable().ajax.reload(null, false);
       }
       else if(obj.status === 'failed'){
         toastr["error"](obj.message, "Failed:");

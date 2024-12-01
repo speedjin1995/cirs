@@ -180,7 +180,6 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               <thead>
                 <tr>
                   <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
-                  <th>Created Date</th>
                   <th>Company Name</th>
                   <th>Brands</th>
                   <th>Description Instruments for Weighing And Measuring</th>
@@ -258,16 +257,23 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <h4>Customer Information</h4>
               </div>
               <div class="row">
-                <div class="col-4">
+                <div class="col-3">
                   <div class="form-group">
                     <label>Customer Type * </label>
                     <select class="form-control" style="width: 100%;" id="customerType" name="customerType" required>
                       <option value="NEW">NEW</option>
                       <option value="EXISTING">EXISTING</option>
                     </select>
+                    <input type="hidden" id="customerTypeEdit" name="customerTypeEdit">
                   </div>
                 </div>
-                <div class="col-4">
+                <div class="col-3" id="otherCodeView" style="display: none;">
+                  <div class="form-group">
+                    <label>Other Code (AutoCount etc.)</label>
+                    <input class="form-control" type="text" placeholder="Enter Other System Code" id="otherCode" name="otherCode">
+                  </div>
+                </div>
+                <div class="col-3">
                   <div class="form-group">
                     <label>Customer * </label>
                     <select class="form-control select2" style="width: 100%;" id="company" name="company" required></select>
@@ -280,34 +286,56 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     <select class="form-control select2" style="width: 100%;" id="branch" name="branch" required></select>
                   </div>
                 </div>
-                <div class="col-4" id="addr1" style="display: none;">
-                  <div class="form-group">
-                    <label>Address Line 1 * </label>
-                    <input class="form-control" type="text" placeholder="Address Line 1" id="address1" name="address1">
+                <div class="row col-12">
+                  <div class="col-3" id="addr1" style="display: none;">
+                    <div class="form-group">
+                      <label>Address Line 1 * </label>
+                      <input class="form-control" type="text" placeholder="Address Line 1" id="address1" name="address1">
+                    </div>
+                  </div>
+                  <div class="col-3" id="addr2" style="display: none;">
+                    <div class="form-group">
+                      <label>Address Line 2 </label>
+                      <input class="form-control" type="text" placeholder="Address Line 2" id="address2" name="address2">
+                    </div>
+                  </div>
+                  <div class="col-3" id="addr3" style="display: none;">
+                    <div class="form-group">
+                      <label>Address Line 3 </label>
+                      <input class="form-control" type="text" placeholder="Address Line 3" id="address3" name="address3">
+                    </div>
+                  </div>
+                  <div class="col-3" id="addr4" style="display: none;">
+                    <div class="form-group">
+                      <label>Address Line 4 </label>
+                      <input class="form-control" type="text" placeholder="Address Line 4" id="address4" name="address4">
+                    </div>
                   </div>
                 </div>
-                <div class="col-4" id="addr2" style="display: none;">
-                  <div class="form-group">
-                    <label>Address Line 2 </label>
-                    <input class="form-control" type="text" placeholder="Address Line 2" id="address2" name="address2">
+                <div class="row col-12">
+                  <div class="col-3" id="phone" style="display: none;">
+                    <div class="form-group">
+                      <label>Tel</label>
+                      <input class="form-control" type="text" placeholder="Phone" id="phone" name="phone">
+                    </div>
                   </div>
-                </div>
-                <div class="col-4" id="addr3" style="display: none;">
-                  <div class="form-group">
-                    <label>Address Line 3 </label>
-                    <input class="form-control" type="text" placeholder="Address Line 3" id="address3" name="address3">
+                  <div class="col-3" id="email" style="display: none;">
+                    <div class="form-group">
+                      <label>Email</label>
+                      <input class="form-control" type="text" placeholder="Email" id="email" name="email">
+                    </div>
                   </div>
-                </div>
-                <div class="col-4" id="addr4" style="display: none;">
-                  <div class="form-group">
-                    <label>Address Line 4 </label>
-                    <input class="form-control" type="text" placeholder="Address Line 4" id="address4" name="address4">
+                  <div class="col-3" id="pic" style="display: none;">
+                    <div class="form-group">
+                      <label>P.I.C</label>
+                      <input class="form-control" type="text" placeholder="PIC" id="pic" name="pic">
+                    </div>
                   </div>
-                </div>
-                <div class="col-4" id="pic1" style="display: none;">
-                  <div class="form-group">
-                    <label>P.I.C</label>
-                    <input class="form-control" type="text" placeholder="PIC" id="pic" name="pic">
+                  <div class="col-3" id="contact" style="display: none;">
+                    <div class="form-group">
+                      <label>P.I.C Contact No.</label>
+                      <input class="form-control" type="text" placeholder="PIC Contact" id="contact" name="contact">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1436,6 +1464,7 @@ $(function () {
     'serverSide': true,
     'serverMethod': 'post',
     'searching': false,
+    "stateSave": true,
     'order': [[ 1, 'asc' ]],
     'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
@@ -1467,7 +1496,6 @@ $(function () {
           }
         }
       },
-      { data: 'created_datetime' },
       { data: 'customers' },
       { data: 'brand' },
       { data: 'machine_type' },
@@ -1482,7 +1510,7 @@ $(function () {
           let buttons = '<div class="row">';
 
           // Edit button
-          buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+          buttons += '<div class="col-6"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
                     ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
 
           // Extra button if validate_by is 3
@@ -1492,18 +1520,23 @@ $(function () {
           }
 
           // Print button
-          buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+          buttons += '<div class="col-6"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
                     ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
+          buttons += '</div>';
+
+          
+
+          buttons += '<div class="row">'
           // Complete button if conditions are met
           if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '') {
-            buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+            buttons += '<div class="col-6"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
                       ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
           }
 
           // Cancelled button
-          buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-                    ')" class="btn btn-danger btn-sm">X</button></div>';
+          buttons += '<div class="col-6"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+                    ')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>';
 
           buttons += '</div>'; // Closing row div
 
@@ -1551,7 +1584,7 @@ $(function () {
           if(obj.status === 'success'){
             $('#extendModal').modal('hide');
             toastr["success"](obj.message, "Success:");
-            $('#weightTable').DataTable().ajax.reload();
+            $('#weightTable').DataTable().ajax.reload(null, false);
           }
           else if(obj.status === 'failed'){
             toastr["error"](obj.message, "Failed:");
@@ -1594,7 +1627,7 @@ $(function () {
               if (obj.status === 'success') {
                 $('#uploadModal').modal('hide');
                 toastr["success"](obj.message, "Success:");
-                $('#weightTable').DataTable().ajax.reload();
+                $('#weightTable').DataTable().ajax.reload(null, false);
               } 
               else if (obj.status === 'failed') {
                 toastr["error"](obj.message, "Failed:");
@@ -1613,7 +1646,7 @@ $(function () {
       
           if(obj.status === 'success'){
             $('#printDOModal').modal('hide');
-            $('#weightTable').DataTable().ajax.reload();
+            $('#weightTable').DataTable().ajax.reload(null, false);
             var printWindow = window.open('', '', 'height=400,width=800');
             printWindow.document.write(obj.message);
             printWindow.document.close();
@@ -1636,7 +1669,7 @@ $(function () {
           if(obj.status === 'success'){
             $('#cancelModal').modal('hide');
             toastr["success"](obj.message, "Success:");
-            $('#weightTable').DataTable().ajax.reload();
+            $('#weightTable').DataTable().ajax.reload(null, false);
           }
           else if(obj.status === 'failed'){
             toastr["error"](obj.message, "Failed:");
@@ -1704,7 +1737,6 @@ $(function () {
             }
           }
         },
-        { data: 'created_datetime' },
         { data: 'customers' },
         { data: 'brand' },
         { data: 'machine_type' },
@@ -1719,7 +1751,7 @@ $(function () {
             let buttons = '<div class="row">';
 
             // Edit button
-            buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+            buttons += '<div class="col-6"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
                       ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
 
             // Extra button if validate_by is 3
@@ -1729,18 +1761,23 @@ $(function () {
             }
 
             // Print button
-            buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                    ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+            buttons += '<div class="col-6"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+                      ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
+            buttons += '</div>';
+
+            
+
+            buttons += '<div class="row">'
             // Complete button if conditions are met
             if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '') {
-              buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+              buttons += '<div class="col-6"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
                         ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
             }
 
             // Cancelled button
-            buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-                      ')" class="btn btn-danger btn-sm">X</button></div>';
+            buttons += '<div class="col-6"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+                      ')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>';
 
             buttons += '</div>'; // Closing row div
 
@@ -1924,7 +1961,8 @@ $(function () {
       
       // Add 1 year to the date
       date.setFullYear(date.getFullYear() + 1);
-      
+      date.setDate(date.getDate() - 1);
+
       /*/ Format the new date back to 'DD/MM/YYYY'
       var newDay = ("0" + date.getDate()).slice(-2);
       var newMonth = ("0" + (date.getMonth() + 1)).slice(-2); // Months are zero-based
@@ -1940,13 +1978,17 @@ $(function () {
   $('#extendModal').find('#customerType').on('change', function(){
     if($(this).val() == "NEW"){
       $('#extendModal').find('#company').hide();
+      $('#extendModal').find('#otherCodeView').show();
       $('#extendModal').find('#custbranch').hide();
       
       $('#extendModal').find('#addr1').show();
       $('#extendModal').find('#addr2').show();
       $('#extendModal').find('#addr3').show();
       $('#extendModal').find('#addr4').show();
-      $('#extendModal').find('#pic1').show();
+      $('#extendModal').find('#contact').show();
+      $('#extendModal').find('#email').show();
+      $('#extendModal').find('#phone').show();
+      $('#extendModal').find('#pic').show();
 
       $('#extendModal').find('#address1').val('');
       $('#extendModal').find('#address2').val('');
@@ -1962,13 +2004,17 @@ $(function () {
     else{
       $('#extendModal').find('#company').html($('select#customerNoHidden').html());
       $('#extendModal').find('#company').show();
+      $('#extendModal').find('#otherCodeView').hide();
       $('#extendModal').find('#custbranch').show();
 
       $('#extendModal').find('#addr1').hide();
       $('#extendModal').find('#addr2').hide();
       $('#extendModal').find('#addr3').hide();
       $('#extendModal').find('#addr4').hide();
-      $('#extendModal').find('#pic1').hide();
+      $('#extendModal').find('#contact').hide();
+      $('#extendModal').find('#email').hide();
+      $('#extendModal').find('#phone').hide();
+      $('#extendModal').find('#pic').hide();
 
       $('#extendModal').find('#company').parents('.form-group').find('.select2-container').show();
       $('#extendModal').find('#companyText').hide();
@@ -2813,7 +2859,8 @@ function edit(id) {
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#dealer').val('');
         $('#extendModal').find('#reseller_branch').val('');
-        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
+        $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
@@ -3022,7 +3069,8 @@ function edit(id) {
       else{
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
-        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('readonly', true).trigger('change');
+        $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
+        $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
         $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
@@ -3214,7 +3262,7 @@ function complete(id) {
 
       if(obj.status === 'success'){
         toastr["success"](obj.message, "Success:");
-        $('#weightTable').DataTable().ajax.reload();
+        $('#weightTable').DataTable().ajax.reload(null, false);
       }
       else if(obj.status === 'failed'){
         toastr["error"](obj.message, "Failed:");
