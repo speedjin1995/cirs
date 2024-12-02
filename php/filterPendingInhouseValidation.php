@@ -36,7 +36,7 @@ if($_POST['validator'] != null && $_POST['validator'] != '' && $_POST['validator
 }
 
 if($_POST['autoFormNo'] != null && $_POST['autoFormNo'] != '' && $_POST['autoFormNo'] != '-'){
-	$searchQuery .= " and auto_form_no = '".$_POST['autoFormNo']."'";
+	$searchQuery .= " and auto_form_no LIKE '%".$_POST['autoFormNo']."%'";
 }
 
 // if($searchValue != ''){

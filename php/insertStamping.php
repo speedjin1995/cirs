@@ -359,6 +359,21 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				);
 			} 
 			else{
+				$stampingId = $_POST['id'];
+				$stampExtQuery = "SELECT * FROM stamping_ext WHERE stamp_id = $stampingId";
+                $stampExtDetail = mysqli_query($db, $stampExtQuery);
+                $stampExtRow = mysqli_fetch_assoc($stampExtDetail);
+
+				if($stampExtRow == NULL){
+					if ($insert_stmt = $db->prepare("INSERT INTO stamping_ext (stamp_id) 
+					VALUES (?)")){
+						$insert_stmt->bind_param('s', $stampingId);
+						$insert_stmt->execute();
+						$insert_stmt->close();
+					}
+
+				}
+
 				// For ATK Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '1'){
 					$penentusan_baru = null;
