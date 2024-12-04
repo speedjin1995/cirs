@@ -3,25 +3,37 @@
 require_once 'db_connect.php';
 require_once 'requires/lookup.php';
  
-if(isset($_POST['driver'])){
+if(isset($_POST['driver']) && !empty($_POST['ids'])){
     $searchQuery = '';
 
-    if($_POST['fromDate'] != null && $_POST['fromDate'] != ''){
-        $dateTime = DateTime::createFromFormat('d/m/Y', $_POST['fromDate']);
-        $fromDateTime = $dateTime->format('Y-m-d 00:00:00');
-        $searchQuery = " and stamping_date >= '".$fromDateTime."'";
-    }
+    // if($_POST['fromDate'] != null && $_POST['fromDate'] != ''){
+    //     $dateTime = DateTime::createFromFormat('d/m/Y', $_POST['fromDate']);
+    //     $fromDateTime = $dateTime->format('Y-m-d 00:00:00');
+    //     $searchQuery = " and stamping_date >= '".$fromDateTime."'";
+    // }
     
-    if($_POST['toDate'] != null && $_POST['toDate'] != ''){
-        $dateTime = DateTime::createFromFormat('d/m/Y', $_POST['toDate']);
-        $toDateTime = $dateTime->format('Y-m-d 23:59:59');
-        $searchQuery .= " and stamping_date <= '".$toDateTime."'";
-    }
+    // if($_POST['toDate'] != null && $_POST['toDate'] != ''){
+    //     $dateTime = DateTime::createFromFormat('d/m/Y', $_POST['toDate']);
+    //     $toDateTime = $dateTime->format('Y-m-d 23:59:59');
+    //     $searchQuery .= " and stamping_date <= '".$toDateTime."'";
+    // }
     
-    if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] != '-'){
-        $searchQuery .= " and customers = '".$_POST['customer']."'";
-    }
+    // if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] != '-'){
+    //     $searchQuery .= " and customers = '".$_POST['customer']."'";
+    // }
+
     
+    if($_POST['ids'] != null && $_POST['ids'] != ''){
+        // Sanitize the values and prepare them for SQL
+        $sanitized_ids = array_map(function($id) {
+            return "'" . addslashes($id) . "'";
+        }, $_POST['ids']);
+
+        // Convert the sanitized array into a string
+        $id_list = implode(",", $sanitized_ids);
+        
+        $searchQuery .= " and id IN ($id_list)";
+    }
 
     $driver = $_POST['driver'];
     $todayDate = date('d/m/Y');

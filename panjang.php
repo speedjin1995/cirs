@@ -470,11 +470,21 @@ $(function () {
   });
 
   $('#exportBorangs').on('click', function () {
+    var selectedIds = []; // An array to store the selected 'id' values
+
+    $("#weightTable tbody input[type='checkbox']").each(function () {
+      if (this.checked) {
+        selectedIds.push($(this).val());
+      }
+    });
+
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
     
-    $.post('php/export_borang.php', {"driver": "P", "fromDate": fromDateValue, "toDate": toDateValue, "customer": customerNoFilter}, function(data){
+    // $.post('php/export_borang.php', {"driver": "P", "fromDate": fromDateValue, "toDate": toDateValue, "customer": customerNoFilter}, function(data){
+    $.post('php/export_borang.php', {"ids": selectedIds, "driver": "P"}, function(data){
+
       var obj = JSON.parse(data);
   
       if(obj.status === 'success'){
