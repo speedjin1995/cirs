@@ -1286,7 +1286,8 @@ function format (row) {
   <div class="row">
     <!-- Customer Section -->
     <div class="col-md-6">
-      <p><strong>${row.customers}</strong><br>
+      <p><span><strong style="font-size:120%; text-decoration: underline;">Customer</strong></span><br>
+      <strong>${row.customers}</strong><br>
       ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4} `;
 
       if (row.pic) {
@@ -1299,7 +1300,8 @@ function format (row) {
     returnString += `
     <!-- Reseller Section -->
     <div class="col-md-6">
-      <p><strong>${row.dealer}</strong><br>
+      <p><span><strong style="font-size:120%; text-decoration: underline;">Reseller</strong></span><br>
+      <strong>${row.dealer}</strong><br>
       ${row.reseller_address1}<br>${row.reseller_address2}<br>${row.reseller_address3}<br>${row.reseller_address4} `;
       
       if (row.reseller_pic) {
@@ -1324,7 +1326,6 @@ function format (row) {
     <!-- Stamping Section -->
     <div class="col-6">
       <p><strong>No. Daftar:</strong> ${row.no_daftar}</p>
-      <p><strong>PIN Keselamatan:</strong> ${row.pin_keselamatan}</p>
       <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
       <p><strong>Borang D:</strong> ${row.borang_d}</p>
       <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
@@ -1362,6 +1363,80 @@ function format (row) {
     }
 
     returnString += '</tbody></table>';
+  }
+
+  // Additional section for ATS
+  if (row.jenis_alat == 'ATS'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'ATP'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Jenis Penunjuk:</strong> ${row.jenis_penunjuk}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'ATN'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Bentuk Dulang:</strong> ${row.bentuk_dulang}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'ATE'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Klass:</strong> ${row.class}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'SLL'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
+                          </div>
+                        </div>
+                        `;
+
+    if (row.questions.length > 0) {
+      returnString += '<h4>BAHAGIAN II</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="15%">Date Created</th><th>Notes</th><th width="17%">Next Follow Date</th><th width="15%">Follow Up By</th><th width="13%">Status</th></tr></thead><tbody>'
+    
+      for (var i = 0; i < row.log.length; i++) {
+        var item = row.log[i];
+        returnString += '<tr><td>' + item.no + '</td><td>' + item.date + '</td><td>' + item.notes + '</td><td>' + item.followUpDate + '</td><td>' + item.picAttend + '</td><td>' + item.status + '</td></tr>'
+      }
+
+      returnString += '</tbody></table>';
+    }
   }
 
   return returnString;

@@ -97,12 +97,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               <div class="col-4">
                 <div class="form-group">
                   <label>Certificate No.</label>
-                  <select class="form-control select2" id="autoFormNoFilter" name="autoFormNoFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <?php while($autoFormNo=mysqli_fetch_assoc($autoFormNos)){ ?>
-                      <option value="<?=$autoFormNo['auto_form_no'] ?>"><?=$autoFormNo['auto_form_no'] ?></option>
-                    <?php } ?>
-                  </select>
+                  <input class="form-control" type="text" placeholder="Certificate No." id="autoFormNoFilter" name="autoFormNoFilter">
                 </div>
               </div>
             </div>
