@@ -458,29 +458,40 @@ $(function () {
   });
 
   $('#exportBorangs').on('click', function () {
+    var selectedIds = []; // An array to store the selected 'id' values
+
+    $("#weightTable tbody input[type='checkbox']").each(function () {
+      if (this.checked) {
+        selectedIds.push($(this).val());
+      }
+    });
+
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-    
-    $.post('php/export_borang.php', {"driver": "6", "fromDate": fromDateValue, "toDate": toDateValue, "customer": customerNoFilter}, function(data){
-      var obj = JSON.parse(data);
   
-      if(obj.status === 'success'){
-        var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
-        printWindow.document.write(obj.message);
-        printWindow.document.close();
-        setTimeout(function(){
-          printWindow.print();
-          printWindow.close();
-        }, 1000);
-      }
-      else if(obj.status === 'failed'){
-        toastr["error"](obj.message, "Failed:");
-      }
-      else{
-        toastr["error"]("Something wrong when pull data", "Failed:");
-      }
-    });
+    if(selectedIds.length > 0){
+      //$.post('php/export_borang.php', {"ids": selectedIds, "driver": "6", "fromDate": fromDateValue, "toDate": toDateValue, "customer": customerNoFilter}, function(data){
+      $.post('php/export_borang.php', {"ids": selectedIds, "driver": "6"}, function(data){
+        var obj = JSON.parse(data);
+    
+        if(obj.status === 'success'){
+          var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
+          printWindow.document.write(obj.message);
+          printWindow.document.close();
+          setTimeout(function(){
+            printWindow.print();
+            printWindow.close();
+          }, 1000);
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+      });
+    }
   });
 
   $('#exportExcel').on('click', function () {
