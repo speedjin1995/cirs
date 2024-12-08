@@ -39,7 +39,33 @@ if($_POST['autoFormNo'] != null && $_POST['autoFormNo'] != '' && $_POST['autoFor
 	$searchQuery .= " and auto_form_no LIKE '%".$_POST['autoFormNo']."%'";
 }
 
-$searchQuery .= " and deleted = 0";
+if($searchValue != ''){
+  $searchQuery = " and 
+  (c.customer_name like '%".$searchValue."%' OR 
+    b.brand like '%".$searchValue."%' OR
+    m.machine_type like '%".$searchValue."%' OR 
+    cap.name like '%".$searchValue."%' OR
+    v.validator like '%".$searchValue."%' OR
+    o.auto_form_no like '%".$searchValue."%'
+  )";
+}
+
+$searchQuery .= " and o.deleted = 0 and c.deleted = 0 and m.deleted = 0 and cap.deleted = 0 and v.deleted = 0";
+
+# Order by column
+if ($columnName == 'customer'){
+  $columnName = "c.customer_name";
+}else if ($columnName == 'brand'){
+  $columnName = "b.". $columnName;
+}else if ($columnName == 'machines'){
+  $columnName = "m.machine_type";
+}else if ($columnName == 'validate_by'){
+  $columnName = "v.validator";
+}else if ($columnName == 'capacity'){
+  $columnName = "cap.name";
+}else {
+  $columnName = "o.". $columnName;
+} 
 
 // if($searchValue != ''){
 //   $searchQuery = " and (purchase_no like '%".$searchValue."%' OR
@@ -54,12 +80,24 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM other_validations WHERE status = 'Cancelled'".$searchQuery);
+$sel = mysqli_query($db,"select count(*) as allcount FROM other_validations o 
+                          JOIN customers c ON o.customer = c.id 
+                          JOIN brand b ON o.brand = b.id 
+                          JOIN machines m ON o.machines = m.id 
+                          JOIN capacity cap ON o.capacity = cap.id 
+                          JOIN validators v ON o.validate_by = v.id
+                          WHERE o.status = 'Cancelled'".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "SELECT * FROM other_validations WHERE status = 'Cancelled'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
+$empQuery = "SELECT o.* FROM other_validations o 
+                          JOIN customers c ON o.customer = c.id 
+                          JOIN brand b ON o.brand = b.id 
+                          JOIN machines m ON o.machines = m.id 
+                          JOIN capacity cap ON o.capacity = cap.id 
+                          JOIN validators v ON o.validate_by = v.id
+                          WHERE o.status = 'Cancelled'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;
