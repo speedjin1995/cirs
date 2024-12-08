@@ -46,6 +46,7 @@ else{
   $countrySll = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryBtu = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryAutoPack = $db->query("SELECT * FROM country WHERE deleted = '0'");
+  $countryAtsH = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $country2 = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $loadCells = $db->query("SELECT load_cells.*, machines.machine_type AS machinetype, brand.brand AS brand_name, model.model AS model_name, alat.alat, country.nicename 
 FROM load_cells, machines, brand, model, alat, country WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
@@ -1265,6 +1266,35 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
+        <h4>Addtional Information (ATP-Auto Machine)</h4>
+      </div>
+      <div class="row">
+        <div class="form-group col-4">
+          <label for="model">Platform Made In *</label>
+          <select class="form-control select2" id="platformCountry" name="platformCountry" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <?php while($rowcountry=mysqli_fetch_assoc($countryAutoPack)){ ?>
+              <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
+            <?php } ?>
+          </select>
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Jenis Penunjuk *</label>
+          <select class="form-control select2" id="jenis_penunjuk" name="jenis_penunjuk" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <option value="DIGITAL">DIGITAL</option>
+            <option value="DAIL">DAIL</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<!-- <script type="text/html" id="autoPackDetails">
+  <div class="card card-primary">
+    <div class="card-body">
+      <div class="row">
         <h4>Addtional Information (Auto Packer)</h4>
       </div>
       <div class="row">
@@ -1308,6 +1338,27 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
         </div>
       </div>
 
+    </div>
+  </div>
+</script> -->
+
+<script type="text/html" id="atsHDetails">
+  <div class="card card-primary">
+    <div class="card-body">
+      <div class="row">
+        <h4>Addtional Information (ATS - H)</h4>
+      </div>
+      <div class="row">
+        <div class="form-group col-4">
+          <label for="model">Platform Made In *</label>
+          <select class="form-control select2" id="platformCountry" name="platformCountry" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <?php while($rowcountry=mysqli_fetch_assoc($countryAtsH)){ ?>
+              <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
+            <?php } ?>
+          </select>
+        </div>
+      </div>
     </div>
   </div>
 </script>
@@ -1457,13 +1508,15 @@ $(function () {
   var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
   var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
 
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)'];
+
   var table = $("#weightTable").DataTable({
     "responsive": true,
     "autoWidth": false,
     'processing': true,
     'serverSide': true,
     'serverMethod': 'post',
-    'searching': false,
+    'searching': true,
     "stateSave": true,
     'order': [[ 1, 'asc' ]],
     'columnDefs': [ { orderable: false, targets: [0] }],
@@ -1520,12 +1573,12 @@ $(function () {
           }
 
           // Print button
-          buttons += '<div class="col-6"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                    ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+          if (allowedAlats.includes(row.jenis_alat)) {
+            buttons += '<div class="col-6"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+                      ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
-          buttons += '</div>';
-
-          
+            buttons += '</div>';
+          }
 
           buttons += '<div class="row">'
           // Complete button if conditions are met
@@ -1705,7 +1758,8 @@ $(function () {
       'processing': true,
       'serverSide': true,
       'serverMethod': 'post',
-      'searching': false,
+      'searching': true,
+      "stateSave": true,
       'order': [[ 1, 'asc' ]],
       'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
@@ -1761,12 +1815,12 @@ $(function () {
             }
 
             // Print button
-            buttons += '<div class="col-6"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                      ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+            if (allowedAlats.includes(row.jenis_alat)) {
+              buttons += '<div class="col-6"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+                        ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
-            buttons += '</div>';
-
-            
+              buttons += '</div>';
+            }            
 
             buttons += '<div class="row">'
             // Complete button if conditions are met
@@ -2328,6 +2382,10 @@ $(function () {
       $('#addtionalSection').html($('#autoPackDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
+    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '17'){
+      $('#addtionalSection').html($('#atsHDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
     else{
       $('#addtionalSection').html('');
     }
@@ -2431,6 +2489,10 @@ $(function () {
     }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '10'){
       $('#addtionalSection').html($('#autoPackDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
+    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '17'){
+      $('#addtionalSection').html($('#atsHDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
     else{
@@ -3041,14 +3103,20 @@ function edit(id) {
 
             $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '10'){
+            // $('#addtionalSection').html($('#autoPackDetails').html());
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
+            // $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
+            // $('#extendModal').find('#nilai2').val(obj.message.nilais[1].nilai);
+            // $('#extendModal').find('#nilai3').val(obj.message.nilais[2].nilai);
+            // $('#extendModal').find('#nilai4').val(obj.message.nilais[3].nilai);
+            // $('#extendModal').find('#nilai5').val(obj.message.nilais[4].nilai);
+            // $('#extendModal').find('#nilai6').val(obj.message.nilais[5].nilai);
             $('#addtionalSection').html($('#autoPackDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
-            $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
-            $('#extendModal').find('#nilai2').val(obj.message.nilais[1].nilai);
-            $('#extendModal').find('#nilai3').val(obj.message.nilais[2].nilai);
-            $('#extendModal').find('#nilai4').val(obj.message.nilais[3].nilai);
-            $('#extendModal').find('#nilai5').val(obj.message.nilais[4].nilai);
-            $('#extendModal').find('#nilai6').val(obj.message.nilais[5].nilai);
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '17'){
+            $('#addtionalSection').html($('#atsHDetails').html());
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
           }
         });
         
@@ -3218,14 +3286,20 @@ function edit(id) {
 
             $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '10'){
+            // $('#addtionalSection').html($('#autoPackDetails').html());
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
+            // $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
+            // $('#extendModal').find('#nilai2').val(obj.message.nilais[1].nilai);
+            // $('#extendModal').find('#nilai3').val(obj.message.nilais[2].nilai);
+            // $('#extendModal').find('#nilai4').val(obj.message.nilais[3].nilai);
+            // $('#extendModal').find('#nilai5').val(obj.message.nilais[4].nilai);
+            // $('#extendModal').find('#nilai6').val(obj.message.nilais[5].nilai);
             $('#addtionalSection').html($('#autoPackDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
-            $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
-            $('#extendModal').find('#nilai2').val(obj.message.nilais[1].nilai);
-            $('#extendModal').find('#nilai3').val(obj.message.nilais[2].nilai);
-            $('#extendModal').find('#nilai4').val(obj.message.nilais[3].nilai);
-            $('#extendModal').find('#nilai5').val(obj.message.nilais[4].nilai);
-            $('#extendModal').find('#nilai6').val(obj.message.nilais[5].nilai);
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '17'){
+            $('#addtionalSection').html($('#atsHDetails').html());
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
           }
         });
 

@@ -48,11 +48,31 @@ if($_POST['quotation'] != null && $_POST['quotation'] != '' && $_POST['quotation
 }
 
 if($searchValue != ''){
-  $searchQuery = " and (purchase_no like '%".$searchValue."%' OR
-  quotation_no like '%".$searchValue."%' OR
-  invoice_no like '%".$searchValue."%' OR
-  cash_bill like '%".$searchValue."%')";
+  $searchQuery = " and 
+  (c.customer_name like '%".$searchValue."%' OR 
+    b.brand like '%".$searchValue."%' OR
+    m.machine_type like '%".$searchValue."%' OR 
+    cap.name like '%".$searchValue."%' OR
+    v.validator like '%".$searchValue."%'
+  )";
 }
+
+$searchQuery .= " and s.deleted = 0 and c.deleted = 0 and m.deleted = 0 and cap.deleted = 0 and v.deleted = 0";
+
+# Order by column
+if ($columnName == 'customers'){
+  $columnName = "c.customer_name";
+}else if ($columnName == 'brand'){
+  $columnName = "b.". $columnName;
+}else if ($columnName == 'machines'){
+  $columnName = "m.machine_type";
+}else if ($columnName == 'validate_by'){
+  $columnName = "v.validator";
+}else if ($columnName == 'capacity'){
+  $columnName = "cap.name";
+}else {
+  $columnName = "s.". $columnName;
+} 
 
 ## Total number of records without filtering
 $sel = mysqli_query($db,"select count(*) as allcount FROM stamping");
@@ -60,13 +80,24 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM stamping WHERE status = 'Pending'".$searchQuery);
+$sel = mysqli_query($db,"select count(*) as allcount FROM stamping s 
+                          JOIN customers c ON s.customers = c.id 
+                          JOIN brand b ON s.brand = b.id 
+                          JOIN machines m ON s.machine_type = m.id 
+                          JOIN capacity cap ON s.capacity = cap.id 
+                          JOIN validators v ON s.validate_by = v.id
+                          WHERE s.status = 'Pending'".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$searchQuery .= " and deleted = 0";
-$empQuery = "SELECT * FROM stamping WHERE status = 'Pending'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;;
+$empQuery = "SELECT s.* FROM stamping s 
+              JOIN customers c ON s.customers = c.id 
+              JOIN brand b ON s.brand = b.id 
+              JOIN machines m ON s.machine_type = m.id 
+              JOIN capacity cap ON s.capacity = cap.id
+              JOIN validators v ON s.validate_by = v.id
+              WHERE s.status = 'Pending'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;
@@ -92,6 +123,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     $pic = $branchRow['pic'];
     $pic_phone = $branchRow['pic_contact'];
   }
+
 
   $data[] = array( 
     "no"=>$counter,
