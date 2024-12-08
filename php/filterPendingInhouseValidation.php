@@ -39,12 +39,33 @@ if($_POST['autoFormNo'] != null && $_POST['autoFormNo'] != '' && $_POST['autoFor
 	$searchQuery .= " and auto_form_no LIKE '%".$_POST['autoFormNo']."%'";
 }
 
-// if($searchValue != ''){
-//   $searchQuery = " and (purchase_no like '%".$searchValue."%' OR
-//   quotation_no like '%".$searchValue."%' OR
-//   invoice_no like '%".$searchValue."%' OR
-//   cash_bill like '%".$searchValue."%')";
-// }
+if($searchValue != ''){
+  $searchQuery = " and 
+  (c.customer_name like '%".$searchValue."%' OR 
+    brand.brand like '%".$searchValue."%' OR
+    m.machine_type like '%".$searchValue."%' OR 
+    cap.name like '%".$searchValue."%' OR
+    a.auto_cert_no like '%".$searchValue."%' OR
+    u.name like '%".$searchValue."%'
+  )";
+}
+
+$searchQuery .= " and b.deleted = 0 and a.deleted = 0 AND c.deleted = 0 and brand.deleted = 0 and m.deleted = 0 and cap.deleted = 0 and u.deleted = 0";
+
+# Order by column
+if ($columnName == 'customer'){
+  $columnName = "c.customer_name";
+}else if ($columnName == 'brand'){
+  $columnName = "brand.". $columnName;
+}else if ($columnName == 'machines'){
+  $columnName = "m.machine_type";
+}else if ($columnName == 'calibrator'){
+  $columnName = "u.name";
+}else if ($columnName == 'capacity'){
+  $columnName = "cap.name";
+}else {
+  $columnName = "a.". $columnName;
+} 
 
 ## Total number of records without filtering
 $sel = mysqli_query($db,"select count(*) as allcount FROM inhouse_validations");
@@ -52,13 +73,26 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM inhouse_validations WHERE status = 'Pending'".$searchQuery);
+$sel = mysqli_query($db,"select count(*) as allcount FROM inhouse_validations a
+                          LEFT JOIN standard b ON a.capacity = b.capacity
+                          JOIN customers c ON a.customer = c.id 
+                          JOIN brand ON a.brand = brand.id 
+                          JOIN machines m ON a.machines = m.id 
+                          JOIN capacity cap ON a.capacity = cap.id 
+                          JOIN users u ON a.calibrator = u.id
+                          WHERE a.status = 'Pending'".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$searchQuery .= " and b.deleted = 0 and a.deleted = 0";
-$validationQuery = "SELECT a.*, b.standard_avg_temp, b.relative_humidity ,b.unit FROM inhouse_validations a LEFT JOIN standard b ON a.capacity = b.capacity WHERE status = 'Pending'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage; 
+$validationQuery = "SELECT a.*, b.standard_avg_temp, b.relative_humidity ,b.unit FROM inhouse_validations a 
+                    LEFT JOIN standard b ON a.capacity = b.capacity 
+                    JOIN customers c ON a.customer = c.id 
+                    JOIN brand ON a.brand = brand.id 
+                    JOIN machines m ON a.machines = m.id 
+                    JOIN capacity cap ON a.capacity = cap.id 
+                    JOIN users u ON a.calibrator = u.id
+                    WHERE status = 'Pending'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage; 
 $validationRecords = mysqli_query($db, $validationQuery);
 $data = array();
 $counter = 1;
