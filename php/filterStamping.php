@@ -59,6 +59,21 @@ if($searchValue != ''){
 
 $searchQuery .= " and s.deleted = 0 and c.deleted = 0 and m.deleted = 0 and cap.deleted = 0 and v.deleted = 0";
 
+# Order by column
+if ($columnName == 'customers'){
+  $columnName = "c.customer_name";
+}else if ($columnName == 'brand'){
+  $columnName = "b.". $columnName;
+}else if ($columnName == 'machine_type'){
+  $columnName = "m.machine_type";
+}else if ($columnName == 'validate_by'){
+  $columnName = "v.validator";
+}else if ($columnName == 'capacity'){
+  $columnName = "cap.name";
+}else {
+  $columnName = "s.". $columnName;
+} 
+
 ## Total number of records without filtering
 $sel = mysqli_query($db,"select count(*) as allcount FROM stamping WHERE status = 'Complete'");
 $records = mysqli_fetch_assoc($sel);

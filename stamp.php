@@ -1490,8 +1490,8 @@ $(function () {
     'serverMethod': 'post',
     'searching': true,
     "stateSave": true,
-    'order': [[ 1, 'asc' ]],
-    'columnDefs': [ { orderable: false, targets: [0] }],
+    'order': [[ 0, 'asc' ]],
+    // 'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
       'type': 'POST',
       'url':'php/filterStamping.php',
@@ -1727,8 +1727,8 @@ $(function () {
       'serverMethod': 'post',
       'searching': true,
       "stateSave": true,
-      'order': [[ 1, 'asc' ]],
-      'columnDefs': [ { orderable: false, targets: [0] }],
+      'order': [[ 0, 'asc' ]],
+      // 'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
         'type': 'POST',
         'url':'php/filterStamping.php',
