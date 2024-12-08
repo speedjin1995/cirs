@@ -1488,7 +1488,8 @@ $(function () {
     'processing': true,
     'serverSide': true,
     'serverMethod': 'post',
-    'searching': false,
+    'searching': true,
+    "stateSave": true,
     'order': [[ 1, 'asc' ]],
     'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
@@ -1724,7 +1725,8 @@ $(function () {
       'processing': true,
       'serverSide': true,
       'serverMethod': 'post',
-      'searching': false,
+      'searching': true,
+      "stateSave": true,
       'order': [[ 1, 'asc' ]],
       'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
@@ -3033,7 +3035,6 @@ function edit(id) {
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '17'){
             $('#addtionalSection').html($('#atsHDetails').html());
-            console.log(obj.message.platform_country);
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
           }
         });
