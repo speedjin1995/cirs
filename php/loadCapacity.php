@@ -15,7 +15,12 @@ $searchValue = mysqli_real_escape_string($db,$_POST['search']['value']); // Sear
 ## Search 
 $searchQuery = " ";
 if($searchValue != ''){
-   $searchQuery = " AND (capacity like '%".$searchValue."%' OR name like '%".$searchValue."%')";
+  $searchQuery = " AND (
+    name like '%".$searchValue."%' OR
+    range_type like '%".$searchValue."%' OR
+    capacity like '%".$searchValue."%' OR 
+    division like '%".$searchValue."%'
+  )";
 }
 
 ## Total number of records without filtering

@@ -15,8 +15,22 @@ $searchValue = mysqli_real_escape_string($db,$_POST['search']['value']); // Sear
 ## Search 
 $searchQuery = " ";
 if($searchValue != ''){
-   $searchQuery = " AND capacity.name like '%".$searchValue."%'";
+  $searchQuery = " AND (
+    standard.standard_avg_temp like '%".$searchValue."%' OR
+    standard.relative_humidity like '%".$searchValue."%' OR
+    capacity.name like '%".$searchValue."%' OR
+    units.units like '%".$searchValue."%')
+  ";
 }
+
+# Order by column
+if ($columnName == 'unit'){
+  $columnName = "units.units";
+}else if ($columnName == 'capacity'){
+  $columnName = "capacity.name";
+}else {
+  $columnName = "standard.". $columnName;
+} 
 
 ## Total number of records without filtering
 $sel = mysqli_query($db,"select count(*) as allcount from standard, capacity, units WHERE standard.capacity = capacity.id AND standard.unit = units.id AND standard.deleted = '0'");
@@ -29,7 +43,7 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "select standard.*, capacity.name, units.units from standard, capacity, units WHERE standard.capacity = capacity.id AND standard.unit = units.id AND standard.deleted = '0'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+$empQuery = "select standard.*, capacity.name, units.units from standard, capacity, units WHERE standard.capacity = capacity.id AND standard.unit = units.id AND standard.deleted = '0'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage; 
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;

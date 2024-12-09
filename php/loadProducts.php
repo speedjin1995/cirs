@@ -15,8 +15,26 @@ $searchValue = mysqli_real_escape_string($db,$_POST['search']['value']); // Sear
 ## Search 
 $searchQuery = " ";
 if($searchValue != ''){
-   $searchQuery = " AND name like '%".$searchValue."%'";
+  $searchQuery = " and 
+  (a.alat like '%".$searchValue."%' OR
+    c.name like '%".$searchValue."%' OR
+    v.validator like '%".$searchValue."%' OR
+    p.price like '%".$searchValue."%'
+  )";
 }
+
+$searchQuery .= " and a.deleted = 0 and c.deleted = 0 and v.deleted = 0";
+
+# Order by column
+if ($columnName == 'jenis_alat'){
+  $columnName = "a.alat";
+}else if ($columnName == 'capacity'){
+  $columnName = "c.name";
+}else if ($columnName == 'validator'){
+  $columnName = "v.validator";
+}else {
+  $columnName = "p.". $columnName;
+} 
 
 ## Total number of records without filtering
 $sel = mysqli_query($db,"select count(*) as allcount from products WHERE deleted = '0'");
@@ -24,12 +42,20 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM products WHERE deleted = '0'".$searchQuery);
+$sel = mysqli_query($db,"select count(*) as allcount FROM products p
+                    JOIN alat a ON p.jenis_alat = a.id
+                    JOIN capacity c ON p.capacity = c.id 
+                    JOIN validators v ON p.validator = v.id
+                    WHERE p.deleted = '0'".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "select * from products WHERE deleted = '0'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+$empQuery = "select p.* from products p 
+              JOIN alat a ON p.jenis_alat = a.id
+              JOIN capacity c ON p.capacity = c.id 
+              JOIN validators v ON p.validator = v.id
+              WHERE p.deleted = '0'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;

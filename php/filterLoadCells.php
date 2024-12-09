@@ -40,8 +40,12 @@ $searchQuery = " ";
 // }
 
 if($searchValue != ''){
-  $searchQuery .= " AND (load_cells.part_no like '%".$searchValue."%'
-   OR load_cells.load_cell like '%".$searchValue."%')";
+  $searchQuery = " AND (
+    load_cells.load_cell like '%".$searchValue."%' OR
+    brand.brand like '%".$searchValue."%' OR
+    model.model like '%".$searchValue."%' OR
+    load_cells.pattern_no like '%".$searchValue."%'
+  )";
 }
 
 ## Total number of records without filtering

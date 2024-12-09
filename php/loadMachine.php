@@ -14,8 +14,18 @@ $searchValue = mysqli_real_escape_string($db,$_POST['search']['value']); // Sear
 ## Search 
 $searchQuery = " ";
 if($searchValue != ''){
-   $searchQuery = " AND machine_type like '%".$searchValue."%'";
+  $searchQuery = " and 
+  (a.alat like '%".$searchValue."%' OR
+    m.machine_type like '%".$searchValue."%'
+  )";
 }
+
+# Order by column
+if ($columnName == 'jenis_alat'){
+  $columnName = "a.alat";
+}else {
+  $columnName = "m.". $columnName;
+} 
 
 ## Total number of records without filtering
 $sel = mysqli_query($db,"select count(*) as allcount from machines WHERE deleted = '0'");
@@ -23,12 +33,12 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount from machines WHERE deleted = '0'".$searchQuery);
+$sel = mysqli_query($db,"select count(*) as allcount from machines m JOIN alat a ON m.jenis_alat = a.id WHERE m.deleted = '0' and a.deleted = '0'".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "select * from machines WHERE deleted = '0'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+$empQuery = "select m.* from machines m JOIN alat a ON m.jenis_alat = a.id WHERE m.deleted = '0' and a.deleted = '0'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;
