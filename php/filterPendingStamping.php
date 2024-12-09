@@ -18,33 +18,33 @@ $searchQuery = " ";
 if($_POST['fromDate'] != null && $_POST['fromDate'] != ''){
   $dateTime = DateTime::createFromFormat('d/m/Y', $_POST['fromDate']);
   $fromDateTime = $dateTime->format('Y-m-d 00:00:00');
-  $searchQuery = " and stamping_date >= '".$fromDateTime."'";
+  $searchQuery = " and s.stamping_date >= '".$fromDateTime."'";
 }
 
 if($_POST['toDate'] != null && $_POST['toDate'] != ''){
   $dateTime = DateTime::createFromFormat('d/m/Y', $_POST['toDate']);
   $toDateTime = $dateTime->format('Y-m-d 23:59:59');
-	$searchQuery .= " and stamping_date <= '".$toDateTime."'";
+	$searchQuery .= " and s.stamping_date <= '".$toDateTime."'";
 }
 
 if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] != '-'){
-	$searchQuery .= " and customers = '".$_POST['customer']."'";
+	$searchQuery .= " and s.customers = '".$_POST['customer']."'";
 }
 
 if($_POST['daftar'] != null && $_POST['daftar'] != '' && $_POST['daftar'] != '-'){
-	$searchQuery .= " and no_daftar like '%".$_POST['daftar']."%'";
+	$searchQuery .= " and s.no_daftar like '%".$_POST['daftar']."%'";
 }
 
 if($_POST['borang'] != null && $_POST['borang'] != '' && $_POST['borang'] != '-'){
-  $searchQuery .= " and borang_d like '%".$_POST['borang']."%'";
+  $searchQuery .= " and s.borang_d like '%".$_POST['borang']."%'";
 }
 
 if($_POST['serial'] != null && $_POST['serial'] != '' && $_POST['serial'] != '-'){
-  $searchQuery .= " and serial_no like '%".$_POST['serial']."%'";
+  $searchQuery .= " and s.serial_no like '%".$_POST['serial']."%'";
 }
 
 if($_POST['quotation'] != null && $_POST['quotation'] != '' && $_POST['quotation'] != '-'){
-  $searchQuery .= " and quotation_no like '%".$_POST['quotation']."%'";
+  $searchQuery .= " and s.quotation_no like '%".$_POST['quotation']."%'";
 }
 
 if($searchValue != ''){
@@ -57,7 +57,7 @@ if($searchValue != ''){
   )";
 }
 
-$searchQuery .= " and s.deleted = 0 and c.deleted = 0 and m.deleted = 0 and cap.deleted = 0 and v.deleted = 0";
+$searchQuery .= " and s.deleted = 0";
 
 # Order by column
 if ($columnName == 'customers'){
@@ -81,22 +81,22 @@ $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
 $sel = mysqli_query($db,"select count(*) as allcount FROM stamping s 
-                          JOIN customers c ON s.customers = c.id 
-                          JOIN brand b ON s.brand = b.id 
-                          JOIN machines m ON s.machine_type = m.id 
-                          JOIN capacity cap ON s.capacity = cap.id 
-                          JOIN validators v ON s.validate_by = v.id
+                          LEFT JOIN customers c ON s.customers = c.id 
+                          LEFT JOIN brand b ON s.brand = b.id 
+                          LEFT JOIN machines m ON s.machine_type = m.id 
+                          LEFT JOIN capacity cap ON s.capacity = cap.id 
+                          LEFT JOIN validators v ON s.validate_by = v.id
                           WHERE s.status = 'Pending'".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
 $empQuery = "SELECT s.* FROM stamping s 
-              JOIN customers c ON s.customers = c.id 
-              JOIN brand b ON s.brand = b.id 
-              JOIN machines m ON s.machine_type = m.id 
-              JOIN capacity cap ON s.capacity = cap.id
-              JOIN validators v ON s.validate_by = v.id
+              LEFT JOIN customers c ON s.customers = c.id 
+              LEFT JOIN brand b ON s.brand = b.id 
+              LEFT JOIN machines m ON s.machine_type = m.id 
+              LEFT JOIN capacity cap ON s.capacity = cap.id
+              LEFT JOIN validators v ON s.validate_by = v.id
               WHERE s.status = 'Pending'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();

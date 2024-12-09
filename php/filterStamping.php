@@ -81,22 +81,22 @@ $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
 $sel = mysqli_query($db,"select count(*) as allcount FROM stamping s 
-                          JOIN customers c ON s.customers = c.id 
-                          JOIN brand b ON s.brand = b.id 
-                          JOIN machines m ON s.machine_type = m.id 
-                          JOIN capacity cap ON s.capacity = cap.id 
-                          JOIN validators v ON s.validate_by = v.id
+                          LEFT JOIN customers c ON s.customers = c.id 
+                          LEFT JOIN brand b ON s.brand = b.id 
+                          LEFT JOIN machines m ON s.machine_type = m.id 
+                          LEFT JOIN capacity cap ON s.capacity = cap.id 
+                          LEFT JOIN validators v ON s.validate_by = v.id
                           WHERE s.status = 'Complete'".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
 $empQuery = "SELECT s.* FROM stamping s 
-              JOIN customers c ON s.customers = c.id 
-              JOIN brand b ON s.brand = b.id 
-              JOIN machines m ON s.machine_type = m.id 
-              JOIN capacity cap ON s.capacity = cap.id
-              JOIN validators v ON s.validate_by = v.id
+              LEFT JOIN customers c ON s.customers = c.id 
+              LEFT JOIN brand b ON s.brand = b.id 
+              LEFT JOIN machines m ON s.machine_type = m.id 
+              LEFT JOIN capacity cap ON s.capacity = cap.id
+              LEFT JOIN validators v ON s.validate_by = v.id
               WHERE s.status = 'Complete'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();

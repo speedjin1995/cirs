@@ -1014,7 +1014,7 @@ $(function () {
     'serverSide': true,
     'serverMethod': 'post',
     'searching': true,
-    "stateSave": true,
+    // "stateSave": true,
     'order': [[ 0, 'asc' ]],
     // 'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
@@ -1248,7 +1248,7 @@ $(function () {
       'serverSide': true,
       'serverMethod': 'post',
       'searching': true,
-      "stateSave": true,
+      // "stateSave": true,
       'order': [[ 0, 'asc' ]],
       // 'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
