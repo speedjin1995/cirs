@@ -14,7 +14,14 @@ $searchValue = mysqli_real_escape_string($db,$_POST['search']['value']); // Sear
 ## Search 
 $searchQuery = " ";
 if($searchValue != ''){
-  $searchQuery = " and (customer_name like '%".$searchValue."%' or customer_code like '%".$searchValue."%')";
+  $searchQuery = " and (
+    customer_code like '%".$searchValue."%' or 
+    other_code like '%".$searchValue."%' or 
+    customer_name like '%".$searchValue."%' or 
+    customer_phone like '%".$searchValue."%' or
+    customer_email like '%".$searchValue."%' or
+    customer_address like '%".$searchValue."%'
+  )";
 }
 
 ## Total number of records without filtering
@@ -67,7 +74,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "customer_code"=>$row['customer_code'],
     "other_code"=>$row['other_code'],
     "customer_name"=>$row['customer_name'],
-    "customer_address"=>$row['customer_address']." ". $row['address2'] ." ". $row['address3'],
+    // "customer_address"=>$row['customer_address']." ". $row['address2'] ." ". $row['address3'],
     "customer_phone"=>$row['customer_phone'],
     "customer_email"=>$row['customer_email'],
     "customer_address"=>$customerAddress,

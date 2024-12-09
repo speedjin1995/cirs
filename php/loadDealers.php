@@ -14,7 +14,14 @@ $searchValue = mysqli_real_escape_string($db,$_POST['search']['value']); // Sear
 ## Search 
 $searchQuery = " ";
 if($searchValue != ''){
-  $searchQuery = " and (customer_name like '%".$searchValue."%' or customer_code like '%".$searchValue."%')";
+  $searchQuery = " and (
+    customer_code like '%".$searchValue."%' or 
+    other_code like '%".$searchValue."%' or 
+    customer_name like '%".$searchValue."%' or 
+    customer_phone like '%".$searchValue."%' or
+    customer_email like '%".$searchValue."%' or
+    customer_address like '%".$searchValue."%'
+  )";
 }
 
 ## Total number of records without filtering
