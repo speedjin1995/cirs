@@ -32,6 +32,7 @@ else{
   $problems = $db->query("SELECT * FROM problem WHERE deleted = '0'");
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
+  $technicians = $db->query("SELECT * FROM users WHERE role_code = 'TECHNICIAN' AND deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
   $states = $db->query("SELECT * FROM state WHERE deleted = '0'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
@@ -431,6 +432,17 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     <input class="form-control" type="text" id="capacity" name="capacity" style="display: none;">
                   </div>
                 </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Assigned To *</label>
+                    <select class="form-control select2" style="width: 100%;" id="assignTo" name="assignTo" required>
+                      <option selected="selected">-</option>
+                      <?php while($technician=mysqli_fetch_assoc($technicians)){ ?>
+                        <option value="<?=$technician['id'] ?>"><?=$technician['name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -482,6 +494,12 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                   <div class="form-group">
                     <label>No. Borang D</label>
                     <input class="form-control" type="text" placeholder="No. Borang D" id="borangD" name="borangD">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>No. Borang E</label>
+                    <input class="form-control" type="text" placeholder="No. Borang E" id="borangE" name="borangE">
                   </div>
                 </div>
                 <div class="col-4">
@@ -2562,6 +2580,7 @@ function format (row) {
       <p><strong>Capacity:</strong> ${row.capacity}</p>
       <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
       <p><strong>Serial No:</strong> ${row.serial_no}</p>
+      <p><strong>Assigned To:</strong> ${row.assignTo}</p>
     </div>
 
     <!-- Stamping Section -->
@@ -2569,6 +2588,7 @@ function format (row) {
       <p><strong>No. Daftar:</strong> ${row.no_daftar}</p>
       <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
       <p><strong>Borang D:</strong> ${row.borang_d}</p>
+      <p><strong>Borang E:</strong> ${row.borang_e}</p>
       <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
       <p><strong>Due Date:</strong> ${row.due_date}</p>
     </div>
@@ -2745,6 +2765,7 @@ function newEntry(){
   $('#extendModal').find('#companyText').val('').trigger('change');
   $('#extendModal').find('#machineType').val('').trigger('change');
   $('#extendModal').find('#jenisAlat').val('').trigger('change');
+  $('#extendModal').find('#assignTo').val('').trigger('change');
   $('#extendModal').find('#address1').val('');
   $('#extendModal').find('#model').val("").trigger('change');
   $('#extendModal').find('#stampDate').val('');
@@ -2758,6 +2779,7 @@ function newEntry(){
   $('#extendModal').find('#siriKeselamatan').val('');
   $('#extendModal').find('#pic').val("");
   $('#extendModal').find('#borangD').val("");
+  $('#extendModal').find('#borangE').val("");
   $('#extendModal').find('#remark').val("");
   $('#extendModal').find('#dueDate').val('');
   $('#extendModal').find('#quotation').val("");
@@ -2847,6 +2869,7 @@ function edit(id) {
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
+        $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
         $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
         $('#extendModal').find('#newRenew').val(obj.message.stampType);
         $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
@@ -2886,6 +2909,7 @@ function edit(id) {
         $('#extendModal').find('#siriKeselamatan').val(obj.message.siri_keselamatan);
         $('#extendModal').find('#pic').val(obj.message.pic);
         $('#extendModal').find('#borangD').val(obj.message.borang_d);
+        $('#extendModal').find('#borangE').val(obj.message.borang_e);
         $('#extendModal').find('#remark').val(obj.message.remarks);
         $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
         $('#extendModal').find('#quotation').val(obj.message.quotation_no);
@@ -3097,6 +3121,7 @@ function edit(id) {
         $('#extendModal').on('modelsLoaded', function() {
           $('#extendModal').find('#model').val(obj.message.model).trigger('change');
         });
+        $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
         $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
@@ -3107,6 +3132,7 @@ function edit(id) {
         $('#extendModal').find('#siriKeselamatan').val(obj.message.siri_keselamatan);
         $('#extendModal').find('#pic').val(obj.message.pic);
         $('#extendModal').find('#borangD').val(obj.message.borang_d);
+        $('#extendModal').find('#borangE').val(obj.message.borang_e);
         $('#extendModal').find('#remark').val(obj.message.remarks);
         $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
         $('#extendModal').find('#quotation').val(obj.message.quotation_no);

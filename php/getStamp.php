@@ -121,6 +121,7 @@ if(isset($_POST['userID'])){
                     $message['model'] = $row['model'] != null ? searchModelNameById($row['model'], $db) : '';
                     $message['capacity'] = $row['capacity'] != null ? $capacityName : '';
                     $message['capacity_range'] = $capacityType;
+                    $message['assignTo'] = $row['assignTo'] != null ? searchStaffNameById($row['assignTo'], $db) : '';
                     $message['serial_no'] = $row['serial_no'];
                     $message['validate_by'] = $row['validate_by'];
                     $message['jenis_alat'] = $row['jenis_alat'] != null ? searchJenisAlatNameByid($row['jenis_alat'], $db) : '';
@@ -129,6 +130,7 @@ if(isset($_POST['userID'])){
                     $message['siri_keselamatan'] = $row['siri_keselamatan'];
                     $message['include_cert'] = $row['include_cert'];
                     $message['borang_d'] = $row['borang_d'];
+                    $message['borang_e'] = $row['borang_e'];
                     $message['invoice_no'] = $row['invoice_no'];
                     $message['cash_bill'] = $row['cash_bill'];
                     $message['stamping_date'] = $row['stamping_date'] != null ? convertDatetimeToDate($row['stamping_date']) : '';
@@ -193,6 +195,7 @@ if(isset($_POST['userID'])){
                     $message['model'] = $row['model'];
                     $message['capacity'] = $row['capacity'];
                     $message['capacity_range'] = $capacityType;
+                    $message['assignTo'] = $row['assignTo'];
                     $message['serial_no'] = $row['serial_no'];
                     $message['validate_by'] = $row['validate_by'];
                     $message['cawangan'] = $row['cawangan'];
@@ -203,6 +206,7 @@ if(isset($_POST['userID'])){
                     $message['siri_keselamatan'] = $row['siri_keselamatan'];
                     $message['include_cert'] = $row['include_cert'];
                     $message['borang_d'] = $row['borang_d'];
+                    $message['borang_e'] = $row['borang_e'];
                     $message['invoice_no'] = $row['invoice_no'];
                     $message['cash_bill'] = $row['cash_bill'];
                     $message['stamping_date'] = $row['stamping_date'];

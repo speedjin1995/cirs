@@ -1323,6 +1323,7 @@ function format (row) {
       <p><strong>Capacity:</strong> ${row.capacity}</p>
       <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
       <p><strong>Serial No:</strong> ${row.serial_no}</p>
+      <p><strong>Assigned To:</strong> ${row.assignTo}</p>
     </div>
 
     <!-- Stamping Section -->
@@ -1330,6 +1331,7 @@ function format (row) {
       <p><strong>No. Daftar:</strong> ${row.no_daftar}</p>
       <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
       <p><strong>Borang D:</strong> ${row.borang_d}</p>
+      <p><strong>Borang E:</strong> ${row.borang_e}</p>
       <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
       <p><strong>Due Date:</strong> ${row.due_date}</p>
     </div>
