@@ -21,7 +21,7 @@ else{
   }
 
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
-  $validators = $db->query("SELECT * FROM validators WHERE deleted = '0'");
+  $validators = $db->query("SELECT * FROM validators WHERE type = 'STAMPING' AND deleted = '0'");
 }
 ?>
 
@@ -127,7 +127,7 @@ else{
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <th></th>
+                  <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
                   <th>BRG E BIL NO.</th>
                   <th>DATE</th>
                   <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
@@ -215,6 +215,11 @@ $(function () {
     defaultDate: endOfMonth
   });
 
+  $('#selectAllCheckbox').on('change', function() {
+    var checkboxes = $('#weightTable tbody input[type="checkbox"]');
+    checkboxes.prop('checked', $(this).prop('checked')).trigger('change');
+  });
+
   var fromDateValue = $('#fromDate').val();
   var toDateValue = $('#toDate').val();
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
@@ -258,7 +263,7 @@ $(function () {
           // }
         }
       },
-      { data: 'batch_no' },
+      { data: 'borang_e' },
       { data: 'stamping_date' },
       {
         data: null, // We set data to null to allow custom rendering
@@ -442,7 +447,7 @@ $(function () {
             // }
           }
         },
-        { data: 'batch_no' },
+        { data: 'borang_e' },
         { data: 'stamping_date' },
         {
           data: null, // We set data to null to allow custom rendering
@@ -512,11 +517,32 @@ function format (row) {
   <div class="row">
     <!-- Customer Section -->
     <div class="col-md-6">
-      <p><strong>${row.customers}</strong><br>
-      ${row.address1}<br>${row.address2}<br>${row.address3}</p>
-    </div>
-  </div><hr>
+      <p><span><strong style="font-size:120%; text-decoration: underline;">Customer</strong></span><br>
+      <strong>${row.customers}</strong><br>
+      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4} `;
 
+      if (row.pic) {
+          returnString += `
+              <br><b>PIC:</b> ${row.pic} <b>PIC Contact:</b> ${row.pic_phone}`;
+      }     
+      returnString += `</p></div>`;
+
+  if (row.dealer){
+    returnString += `
+    <!-- Reseller Section -->
+    <div class="col-md-6">
+      <p><span><strong style="font-size:120%; text-decoration: underline;">Reseller</strong></span><br>
+      <strong>${row.dealer}</strong><br>
+      ${row.reseller_address1}<br>${row.reseller_address2}<br>${row.reseller_address3}<br>${row.reseller_address4} `;
+      
+      if (row.reseller_pic) {
+          returnString += `
+              <br><b>PIC:</b> ${row.reseller_pic} <b>PIC Contact:</b> ${row.reseller_pic_phone}`;
+      }     
+      returnString += `</p></div>`;
+  }
+
+  returnString += `</div><hr>
   <div class="row">
     <!-- Machine Section -->
     <div class="col-6">
@@ -526,14 +552,15 @@ function format (row) {
       <p><strong>Capacity:</strong> ${row.capacity}</p>
       <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
       <p><strong>Serial No:</strong> ${row.serial_no}</p>
+      <p><strong>Assigned To:</strong> ${row.assignTo}</p>
     </div>
 
     <!-- Stamping Section -->
     <div class="col-6">
       <p><strong>No. Daftar:</strong> ${row.no_daftar}</p>
-      <p><strong>PIN Keselamatan:</strong> ${row.pin_keselamatan}</p>
       <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
       <p><strong>Borang D:</strong> ${row.borang_d}</p>
+      <p><strong>Borang E:</strong> ${row.borang_e}</p>
       <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
       <p><strong>Due Date:</strong> ${row.due_date}</p>
     </div>
@@ -569,6 +596,80 @@ function format (row) {
     }
 
     returnString += '</tbody></table>';
+  }
+
+  // Additional section for ATS
+  if (row.jenis_alat == 'ATS'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'ATP'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Jenis Penunjuk:</strong> ${row.jenis_penunjuk}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'ATN'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Bentuk Dulang:</strong> ${row.bentuk_dulang}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'ATE'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Klass:</strong> ${row.class}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'SLL'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
+                          </div>
+                        </div>
+                        `;
+
+    if (row.questions.length > 0) {
+      returnString += '<h4>BAHAGIAN II</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="15%">Date Created</th><th>Notes</th><th width="17%">Next Follow Date</th><th width="15%">Follow Up By</th><th width="13%">Status</th></tr></thead><tbody>'
+    
+      for (var i = 0; i < row.log.length; i++) {
+        var item = row.log[i];
+        returnString += '<tr><td>' + item.no + '</td><td>' + item.date + '</td><td>' + item.notes + '</td><td>' + item.followUpDate + '</td><td>' + item.picAttend + '</td><td>' + item.status + '</td></tr>'
+      }
+
+      returnString += '</tbody></table>';
+    }
   }
 
   return returnString;

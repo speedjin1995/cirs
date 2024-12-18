@@ -132,6 +132,8 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "pin_keselamatan"=>$row['pin_keselamatan'] ?? '',
     "siri_keselamatan"=>$row['siri_keselamatan'] ?? '',
     "borang_d"=>$row['borang_d'] ?? '',
+    "borang_e"=>$row['borang_e'] ?? '',
+    "assignTo"=>$row['assignTo'] != null ? searchStaffNameById($row['assignTo'], $db) : '',
     "quantity"=>'1',
     "batch_no"=>'',
     "reason"=>'SERVICE / STMP'
