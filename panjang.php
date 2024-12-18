@@ -281,7 +281,16 @@ $(function () {
       { data: 'batch_no' },
       { data: 'no_daftar' },
       { data: 'siri_keselamatan' },
-      { data: 'unit_price' },
+      {
+        data: null, // Custom rendering for unit_price and cert_price
+        render: function (data, type, row) {
+          if (row.cert_price != '0'){
+            return row.unit_price + '<br>' + row.cert_price;
+          }else{
+            return row.unit_price;
+          } 
+        }
+      },
       { 
         className: 'dt-control',
         orderable: false,
@@ -469,7 +478,16 @@ $(function () {
         { data: 'batch_no' },
         { data: 'no_daftar' },
         { data: 'siri_keselamatan' },
-        { data: 'unit_price' },
+        {
+          data: null, // Custom rendering for unit_price and cert_price
+          render: function (data, type, row) {
+            if (row.cert_price != '0'){
+              return row.unit_price + '<br>' + row.cert_price;
+            }else{
+              return row.unit_price;
+            } 
+          }
+        },
         { 
           className: 'dt-control',
           orderable: false,

@@ -284,9 +284,16 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                         <td>SERVICE / STMP</td>
                         <td>'.$row['siri_keselamatan'].'</td>
                         <td>'.searchCustNameById($row['customers'], $db).'</td>
-                        <td>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
-                        <td>'.$row['unit_price'].'</td>
+                        <td>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>';
+
+                if($row['cert_price'] != '0'){
+                    $message .= '<td>'.$row['unit_price'].'<br>'.$row['cert_price'].'</td>
                     </tr>';
+                }else{
+                    $message .= '<td>'.$row['unit_price'].'</td>
+                    </tr>';
+                }
+                        
             }
 
             $message .= '</tbody></table>';
@@ -320,17 +327,24 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                 }
 
                 $rows[] = '<tr style="height: 30px;">
-                        <td>'.$count.'</td>
-                        <td>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
-                        <td>'.searchCapacityNameById($row['capacity'], $db).'</td>
-                        <td>'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
-                        <td>'.$row['serial_no'].'</td>
-                        <td>'.searchCustNameById($row['customers'], $db).'<br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
-                        <td></td>
-                        <td>'.$row['no_daftar'].'</td>
-                        <td>'.$row['siri_keselamatan'].'</td>
-                        <td>'.$row['unit_price'].'</td>
-                    </tr>';
+                            <td>'.$count.'</td>
+                            <td>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
+                            <td>'.searchCapacityNameById($row['capacity'], $db).'</td>
+                            <td>'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
+                            <td>'.$row['serial_no'].'</td>
+                            <td>'.searchCustNameById($row['customers'], $db).'<br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
+                            <td></td>
+                            <td>'.$row['no_daftar'].'</td>
+                            <td>'.$row['siri_keselamatan'].'</td>';
+                            
+                            if ($row['cert_price'] != '0') {
+                                $rows[] .= '<td>'.$row['unit_price'].'<br>'.$row['cert_price'].'</td>';
+                            } else {
+                                $rows[] .= '<td>'.$row['unit_price'].'</td>';
+                            }
+                            
+                $rows[] .= '</tr>';
+            
 
                 $count++;
 
