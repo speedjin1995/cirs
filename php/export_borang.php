@@ -40,6 +40,14 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
     $todayDate2 = date('d M Y');
     $today = date("Y-m-d 00:00:00");
 
+    $companyQuery = "SELECT * FROM companies WHERE id = '1'";
+    $companyDetail = mysqli_query($db, $companyQuery);
+    $companyRow = mysqli_fetch_assoc($companyDetail);
+
+    if(!empty($companyRow)){
+        $companySignature = $companyRow['signature'];
+    }
+
     $select_stmt = $db->prepare("SELECT * FROM stamping WHERE status = 'Complete'".$searchQuery);
 
     // Check if the statement is prepared successfully
@@ -505,10 +513,10 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                     $message .= '</tbody></table>';
                     
                     $message .= '
-    <table width="100%">
+    <table width="100%" style="padding: 10px;">
         <tr>
-            <td width="30%">
-                <img src="https://cirs.syncweigh.com/assets/signature.png" width="100%" height="auto"/>
+            <td width="40%">
+                <img src="'.$companySignature.'"  style="margin-left:20%; padding-top:10%" width="60%" height="auto"/>
             </td>
             <td width="40%"></td>
             <td width="30%"></td>
