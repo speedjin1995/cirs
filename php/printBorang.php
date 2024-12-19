@@ -216,14 +216,49 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->SetXY(111, 226 + $count); // Adjust for {Bilangan_Load_Cell}
                             $pdf->Write(0, $loadcells[$i]['loadCellCapacity']);
 
-                            $pdf->SetXY(140, 226 + $count); // Adjust for {Bilangan_Load_Cell}
+                            $pdf->SetXY(130, 226 + $count); // Adjust for {Bilangan_Load_Cell}
                             $pdf->Write(0, $loadcells[$i]['loadCellSerial']);
 
                             $count += 6;
                         }
                     }else if ($pageNo == 2){
-                    //     $pdf->SetFillColor(0, 0, 0);  // cover up unneccesary text
-                    //     $pdf->Rect(25, 220.570, 68, 5, 'F'); 
+                        $capacity = $res['capacity'];
+                        $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                        $capacityDetail = mysqli_query($db, $capacityQuery);
+                        $capacityRow = mysqli_fetch_assoc($capacityDetail);
+
+                        if ($capacityRow['range_type'] == 'SINGLE'){
+                            if ($capacityRow['capacity'] == "30000" && $capacityRow['units'] == "2" && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 50.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "40000" && $capacityRow['units'] == "2" && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 61.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "60000" && $capacityRow['units'] == "2" && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 76.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "60000" && $capacityRow['units'] == "2" && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 82.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "80000" && $capacityRow['units'] == "2" && $capacityRow['division'] == '50' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 103.865, 6);
+                            }else{
+                                $pdf->SetFont('Helvetica', '', 10);
+                                // Capacity
+                                $pdf->SetXY(28, 159);
+                                $pdf->Write(0, $capacityRow['capacity']. ' ' . searchUnitNameById($capacityRow['units'], $db));
+
+                                // Division
+                                $pdf->SetXY(54, 159);
+                                $pdf->Write(0, $capacityRow['division']. ' ' . searchUnitNameById($capacityRow['division_unit'], $db));
+
+                                $pdf->Image($tickImage, 78, 156, 6);
+
+                            }
+                        }else{
+
+                        }
+
 
                         $pdf->Image($companySignature, 40, 200, 35);  // Adjust for company signature
                     }
@@ -532,7 +567,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 134.141, 170.637, 8);
                         }
 
-                        $pdf->Image($companySignature, 29.648, 187.637, 38.5);  // Adjust for company signature
+                        $pdf->Image($companySignature, 27.648, 187.637, 38.5);  // Adjust for company signature
 
                         $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -621,7 +656,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
-
                         $pdf->Image($tickImage, 72.159, 55.865, 8); // Adjust for Kegunaan Alat
 
                         $pdf->SetXY(135.121, 53.954-2); // Adjust for Jenama
