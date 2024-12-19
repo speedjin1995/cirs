@@ -81,11 +81,12 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
         $pdf = new Fpdi();
         $pageCount = $pdf->setSourceFile($fillFile);
 
-        $select_stmt = $db->prepare("SELECT * FROM stamping, stamping_ext WHERE stamping.id = stamping_ext.stamp_id AND stamping.id = '".$_GET['userID']."'");
+        $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
 
         // Check if the statement is prepared successfully
         if ($select_stmt) {
             // Bind variables to the prepared statement
+            $select_stmt->bind_param('s', $id); // 'i' indicates the type of $id (integer)
             $select_stmt->execute();
             $result = $select_stmt->get_result();
             $message = '';
@@ -124,59 +125,59 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
-                        $pdf->SetXY(25, 60); // Adjust these coordinates for each field
-                        $pdf->Write(0, searchCustNameById($res['customers'], $db)); // {Address1}
+                        $pdf->SetFont('', 'B', 10); // B stands for Bold
+                        $pdf->SetXY(24.599, 61); // Adjust these coordinates for each field
+                        $pdf->Write(0, searchCustNameById($res['customers'], $db));
 
-                        $pdf->SetXY(25, 65); // Adjust for {Address2}
-                        $pdf->Write(0, $address1.' '.$address2);
+                        // Continue writing the rest of the text in normal font
+                        $pdf->SetFont('', '', 10); // Normal
+                        $pdf->SetXY($pdf->GetX(), 61); // Adjust Y coordinate if needed
+                        $pdf->Write(0, ', ' . $address1 . ' ' . $address2);
 
-                        $pdf->SetXY(25, 80); // Adjust for {Stamping_Address1}
-                        $pdf->Write(0, $address1.' '.$address2);
+                        // $pdf->Write(0, searchCustNameById($res['customers'], $db). ', '. $address1.' '.$address2); // {Address1}
 
-                        $pdf->SetXY(25, 85); // Adjust for {Stamping_Address2}
+                        $pdf->SetXY(24.599, 67); // Adjust these coordinates for each field
                         $pdf->Write(0, $address3.' '.$address4);
 
                         $pdf->SetXY(75, 100); // Adjust for {Company_Name}
                         $pdf->Write(0, $compname);
 
-                        $pdf->SetXY(55, 105); // Adjust for {No_Lesen}
+                        $pdf->SetXY(50, 106); // Adjust for {No_Lesen}
                         $pdf->Write(0, $compcert);
 
-                        $pdf->SetXY(160, 105); // Adjust for {Tarikh_Tamat_Lesen}
+                        $pdf->SetXY(155, 106); // Adjust for {Tarikh_Tamat_Lesen}
                         $pdf->Write(0, $compexp);
 
-                        $pdf->SetXY(75, 110); // Adjust for {Nama_Wakil_Pembaik}
+                        $pdf->SetXY(72, 112); // Adjust for {Nama_Wakil_Pembaik}
                         $pdf->Write(0, searchStaffNameById($res['pic'], $db));
 
-                        $pdf->SetXY(150, 110); // Adjust for {No_KP}
+                        $pdf->SetXY(147, 112); // Adjust for {No_KP}
                         $pdf->Write(0, searchStaffICById($res['pic'], $db));
 
-                        $pdf->SetXY(75, 125); // Adjust for {Penentusahan_Baru}
+                        $pdf->SetXY(68, 126.5); // Adjust for {Penentusahan_Baru}
                         $pdf->Write(0, $res['penentusan_baru']);
 
-                        $pdf->SetXY(160, 125); // Adjust for {Penentusahan_Semula}
+                        $pdf->SetXY(158, 126.5); // Adjust for {Penentusahan_Semula}
                         $pdf->Write(0, $res['penentusan_semula']);
 
                         if($res['kelulusan_mspk'] == 'YES'){
-                            $pdf->SetXY(47, 147); // Adjust for {NoKelulusan_MSPK}
-                            $pdf->Write(0, '/');
+                            $pdf->Image($tickImage, 47, 144, 6); // Adjust for {NoKelulusan_MSPK}
                         }
                         else{
-                            $pdf->SetXY(47, 153); // Adjust for {NoKelulusan_MSPK}
-                            $pdf->Write(0, '/');
+                            $pdf->Image($tickImage, 47, 149, 6); // Adjust for {NoKelulusan_MSPK}
                         }
                         
 
-                        $pdf->SetXY(75, 166); // Adjust for {Pembuat_Negara_Asal}
+                        $pdf->SetXY(71, 167.5); // Adjust for {Pembuat_Negara_Asal}
                         $pdf->Write(0, searchCountryById($res['platform_country'], $db));
 
-                        $pdf->SetXY(155, 166); // Adjust for {Jenama}
+                        $pdf->SetXY(133, 167.5); // Adjust for {Jenama}
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db));
 
-                        $pdf->SetXY(50, 173); // Adjust for {Model#1}
+                        $pdf->SetXY(42, 173); // Adjust for {Model#1}
                         $pdf->Write(0, searchModelNameById($res['model'], $db));
 
-                        $pdf->SetXY(155, 173); // Adjust for {No_Siri}
+                        $pdf->SetXY(135, 173); // Adjust for {No_Siri}
                         $pdf->Write(0, $res['indicator_serial']);
 
                         $pdf->SetXY(75, 186); // Adjust for {Pembuat_Negara_Asal_2}
