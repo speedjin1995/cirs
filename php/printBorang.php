@@ -78,7 +78,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
     if($file == 'ATK' && $validator == 'METROLOGY'){
         $fillFile = 'forms/Metrology/ATK_FORM.pdf';
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -151,7 +151,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(72, 112); // Adjust for {Nama_Wakil_Pembaik}
                         $pdf->Write(0, searchStaffNameById($res['pic'], $db));
 
-                        $pdf->SetXY(147, 112); // Adjust for {No_KP}
+                        $pdf->SetXY(135, 112); // Adjust for {No_KP}
                         $pdf->Write(0, searchStaffICById($res['pic'], $db));
 
                         $pdf->SetXY(68, 126.5); // Adjust for {Penentusahan_Baru}
@@ -180,28 +180,26 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(135, 173); // Adjust for {No_Siri}
                         $pdf->Write(0, $res['indicator_serial']);
 
-                        $pdf->SetXY(75, 186); // Adjust for {Pembuat_Negara_Asal_2}
+                        $pdf->SetXY(75, 187); // Adjust for {Pembuat_Negara_Asal_2}
                         $pdf->Write(0, searchCountryById($res['platform_country'], $db));
 
-                        $pdf->SetXY(160, 186); // Adjust for {Jenis_Steel_Concrete}
+                        $pdf->SetXY(160, 187); // Adjust for {Jenis_Steel_Concrete}
                         $pdf->Write(0, $res['platform_type']);
 
-                        $pdf->SetXY(75, 192); // Adjust for {size}
+                        $pdf->SetXY(75, 193); // Adjust for {size}
                         $pdf->Write(0, searchSizeNameById($res['size'], $db));
 
                         if($res['jenis_pelantar'] == 'Pit'){
-                            $pdf->SetXY(150, 193); // Adjust for {Jenis_Steel_Concrete}
-                            $pdf->Write(0, '----------');
+                            $pdf->Ellipse(146, 193, 4, 3, 'D', [200, 255, 200]);
                         }
                         else{
-                            $pdf->SetXY(140, 193); // Adjust for {Jenis_Steel_Concrete}
-                            $pdf->Write(0, '----------');
+                            $pdf->Ellipse(157, 193.5, 7, 3, 'D', [200, 255, 200]);
                         }
 
-                        $pdf->SetXY(70, 212); // Adjust for {Pembuat_Negara_Asal_3}
+                        $pdf->SetXY(72, 213); // Adjust for {Pembuat_Negara_Asal_3}
                         $pdf->Write(0, searchCountryById($res['load_cell_country'], $db));
 
-                        $pdf->SetXY(153, 212); // Adjust for {Bilangan_Load_Cell}
+                        $pdf->SetXY(151, 213); // Adjust for {Bilangan_Load_Cell}
                         $pdf->Write(0, $res['load_cell_no']);
 
                         $count = 0;
@@ -223,6 +221,11 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                             $count += 6;
                         }
+                    }else if ($pageNo == 2){
+                    //     $pdf->SetFillColor(0, 0, 0);  // cover up unneccesary text
+                    //     $pdf->Rect(25, 220.570, 68, 5, 'F'); 
+
+                        $pdf->Image($companySignature, 40, 200, 35);  // Adjust for company signature
                     }
                 }
             }
