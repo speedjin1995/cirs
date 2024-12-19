@@ -3,7 +3,7 @@
 require_once 'db_connect.php';
 require_once 'requires/lookup.php';
  
-if(isset($_POST['driver']) && !empty($_POST['ids'])){
+if(isset($_POST['driver']) && !empty($_POST['ids']) && !empty($_POST['validator']) && !empty($_POST['cawangan'])){
     $searchQuery = '';
 
     // if($_POST['fromDate'] != null && $_POST['fromDate'] != ''){
@@ -36,6 +36,8 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
     }
 
     $driver = $_POST['driver'];
+    $validatorFilter = searchValidatorNameById($_POST['validator'], $db);
+    $cawanganFilter = searchStateNameById($_POST['cawangan'], $db);
     $todayDate = date('d/m/Y');
     $todayDate2 = date('d M Y');
     $today = date("Y-m-d 00:00:00");
@@ -448,12 +450,13 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                     $message .= '<table>
                         <tbody>
                             <tr>
-                                <td style="vertical-align: left;" width="50%">
+                                <td style="vertical-align: left;" width="60%">
                                     <p>NAMA SYARIKAT PEMILIK / PEMBAIK : <br>DX WEIGHING SOLUTION (M) SDN BHD (1284580-M)<br>
                                     ALAMAT : NO. 34, JALAN BAGAN 1,<br>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TAMAN BAGAN, 13400 BUTTERWORTH.<br>
-                                    Tel. : 04-332 5822     Fax. : 04-331 5822</p><br>
-                                    <p>Pengurus Cawangan :<br>';
+                                    Tel. : 04-332 5822     Fax. : 04-331 5822</p><br>';
+
+                                $message .= '<p>Pengurus Cawangan : <span style="font-size: 14px; font-weight: bold;">' . $validatorFilter . ' ' . $cawanganFilter . '</span><br>';
                                     
                                 if($validator == '2'){
                                     $message .= 'Metrology Corporation Malaysia Sdn. Bhd.</p>';
