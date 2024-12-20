@@ -319,7 +319,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
             ); 
         }
 
-        $pdf->Output('D', 'filled_ATK_form.pdf');
+        $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATK' && $validator == 'DE METROLOGY'){
         $fillFile = 'forms/DE_Metrology/DMSB_ATK.pdf';
@@ -369,68 +369,73 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
-                        $pdf->SetXY(25, 70); // Adjust these coordinates for each field
+                        $pdf->SetFont('', 'B', 10); // B stands for Bold
+                        $pdf->SetXY(20, 69); // Adjust these coordinates for each field
                         $pdf->Write(0, searchCustNameById($res['customers'], $db)); // {Address1}
+                        $pdf->SetFont('', '', 10); // B stands for Bold
 
-                        $pdf->SetXY(25, 75); // Adjust for {Address2}
-                        $pdf->Write(0, $address1.' '.$address2.' '.$address3.' '.$address4);
-
-                        $pdf->SetXY(25, 95); // Adjust for {Stamping_Address1}
+                        $pdf->SetXY(20, 74); // Adjust for {Address2}
                         $pdf->Write(0, $address1.' '.$address2);
 
-                        $pdf->SetXY(25, 100); // Adjust for {Stamping_Address2}
+                        $pdf->SetXY(20, 79); // Adjust for {Address2}
                         $pdf->Write(0, $address3.' '.$address4);
 
-                        $pdf->SetXY(75, 125); // Adjust for {Company_Name}
+                        $pdf->SetXY(20, 95); // Adjust for {Stamping_Address1}
+                        $pdf->Write(0, $address1.' '.$address2);
+
+                        $pdf->SetXY(20, 100); // Adjust for {Stamping_Address2}
+                        $pdf->Write(0, $address3.' '.$address4);
+
+                        $pdf->SetXY(68, 126); // Adjust for {Company_Name}
                         $pdf->Write(0, $compname);
 
-                        $pdf->SetXY(75, 130); // Adjust for {No_Lesen}
+                        $pdf->SetXY(45, 131); // Adjust for {No_Lesen}
                         $pdf->Write(0, $compcert);
 
-                        $pdf->SetXY(75, 135); // Adjust for {Tarikh_Tamat_Lesen}
+                        $pdf->SetXY(60, 136); // Adjust for {Tarikh_Tamat_Lesen}
                         $pdf->Write(0, $compexp);
 
-                        $pdf->SetXY(75, 140); // Adjust for {Nama_Wakil_Pembaik}
-                        $pdf->Write(0, searchStaffNameById($res['pic'], $db));
+                        $pdf->SetXY(58, 142); // Adjust for {Nama_Wakil_Pembaik}
+                        $pdf->Write(0, searchStaffNameById($res['assignTo'], $db));
 
-                        $pdf->SetXY(75, 145); // Adjust for {No_KP}
-                        $pdf->Write(0, searchStaffICById($res['pic'], $db));
+                        $pdf->SetXY(38, 147); // Adjust for {No_KP}
+                        $pdf->Write(0, searchStaffICById($res['assignTo'], $db));
 
-                        $pdf->SetXY(75, 170); // Adjust for {Penentusahan_Baru}
+                        $pdf->SetXY(60, 168); // Adjust for {Penentusahan_Baru}
                         $pdf->Write(0, $res['penentusan_baru']);
 
-                        $pdf->SetXY(75, 175); // Adjust for {Penentusahan_Semula}
+                        $pdf->SetXY(64, 173.5); // Adjust for {Penentusahan_Semula}
                         $pdf->Write(0, $res['penentusan_semula']);
 
                         if($res['kelulusan_mspk'] == 'YES'){
                             $pdf->SetXY(35, 205); // Adjust for {NoKelulusan_MSPK}
-                            $pdf->Write(0, '/');
+                            $pdf->Image($tickImage, 35, 202, 6);
                         }
                         else{
                             $pdf->SetXY(35, 210); // Adjust for {NoKelulusan_MSPK}
-                            $pdf->Write(0, '/');
+                            $pdf->Image($tickImage, 35, 208, 6);
                         }
 
-                        $pdf->SetXY(75, 230); // Adjust for {Pembuat_Negara_Asal}
+                        $pdf->SetXY(66, 231); // Adjust for {Pembuat_Negara_Asal}
                         $pdf->Write(0, searchCountryById($res['platform_country'], $db));
 
-                        $pdf->SetXY(75, 235); // Adjust for {Jenama}
+                        $pdf->SetXY(40, 236.5); // Adjust for {Jenama}
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db));
 
-                        $pdf->SetXY(75, 240); // Adjust for {Model#1}
+                        $pdf->SetXY(36, 242); // Adjust for {Model#1}
                         $pdf->Write(0, searchModelNameById($res['model'], $db));
 
-                        $pdf->SetXY(75, 245); // Adjust for {No_Siri}
+                        $pdf->SetXY(40, 247); // Adjust for {No_Siri}
                         $pdf->Write(0, $res['indicator_serial']);
                     }
                     else if ($pageNo == 2){
-                        $pdf->SetXY(75, 30); // Adjust for {Pembuat_Negara_Asal_2}
+                        $pdf->SetXY(66, 32); // Adjust for {Pembuat_Negara_Asal_2}
                         $pdf->Write(0, searchCountryById($res['platform_country'], $db));
 
-                        $pdf->SetXY(75, 35); // Adjust for {Jenis_Steel_Concrete}
+                        $pdf->SetXY(66, 37); // Adjust for {Jenis_Steel_Concrete}
                         $pdf->Write(0, $res['platform_type']);
 
-                        $pdf->SetXY(75, 40); // Adjust for {size}
+                        $pdf->SetXY(78, 42); // Adjust for {size}
                         $pdf->Write(0, searchSizeNameById($res['size'], $db));
 
                         if($res['jenis_pelantar'] == 'Pit'){
@@ -477,7 +482,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
             ); 
         }
 
-        $pdf->Output('D', 'filled_ATK_form.pdf');
+        $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATP' && $validator == 'METROLOGY'){
         $fillFile = 'forms/Metrology/ATP_FORM.pdf';
