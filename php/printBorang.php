@@ -78,7 +78,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
     if($file == 'ATK' && $validator == 'METROLOGY'){
         $fillFile = 'forms/Metrology/ATK_FORM.pdf';
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -149,10 +149,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->Write(0, $compexp);
 
                         $pdf->SetXY(72, 112); // Adjust for {Nama_Wakil_Pembaik}
-                        $pdf->Write(0, searchStaffNameById($res['pic'], $db));
+                        $pdf->Write(0, searchStaffNameById($res['assignTo'], $db));
 
-                        $pdf->SetXY(147, 112); // Adjust for {No_KP}
-                        $pdf->Write(0, searchStaffICById($res['pic'], $db));
+                        $pdf->SetXY(135, 112); // Adjust for {No_KP}
+                        $pdf->Write(0, searchStaffICById($res['assignTo'], $db));
 
                         $pdf->SetXY(68, 126.5); // Adjust for {Penentusahan_Baru}
                         $pdf->Write(0, $res['penentusan_baru']);
@@ -180,28 +180,26 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(135, 173); // Adjust for {No_Siri}
                         $pdf->Write(0, $res['indicator_serial']);
 
-                        $pdf->SetXY(75, 186); // Adjust for {Pembuat_Negara_Asal_2}
+                        $pdf->SetXY(75, 187); // Adjust for {Pembuat_Negara_Asal_2}
                         $pdf->Write(0, searchCountryById($res['platform_country'], $db));
 
-                        $pdf->SetXY(160, 186); // Adjust for {Jenis_Steel_Concrete}
+                        $pdf->SetXY(160, 187); // Adjust for {Jenis_Steel_Concrete}
                         $pdf->Write(0, $res['platform_type']);
 
-                        $pdf->SetXY(75, 192); // Adjust for {size}
+                        $pdf->SetXY(75, 193); // Adjust for {size}
                         $pdf->Write(0, searchSizeNameById($res['size'], $db));
 
                         if($res['jenis_pelantar'] == 'Pit'){
-                            $pdf->SetXY(150, 193); // Adjust for {Jenis_Steel_Concrete}
-                            $pdf->Write(0, '----------');
+                            $pdf->Ellipse(146, 193, 4, 3, 'D', [200, 255, 200]);
                         }
                         else{
-                            $pdf->SetXY(140, 193); // Adjust for {Jenis_Steel_Concrete}
-                            $pdf->Write(0, '----------');
+                            $pdf->Ellipse(157, 193.5, 7, 3, 'D', [200, 255, 200]);
                         }
 
-                        $pdf->SetXY(70, 212); // Adjust for {Pembuat_Negara_Asal_3}
+                        $pdf->SetXY(72, 213); // Adjust for {Pembuat_Negara_Asal_3}
                         $pdf->Write(0, searchCountryById($res['load_cell_country'], $db));
 
-                        $pdf->SetXY(153, 212); // Adjust for {Bilangan_Load_Cell}
+                        $pdf->SetXY(151, 213); // Adjust for {Bilangan_Load_Cell}
                         $pdf->Write(0, $res['load_cell_no']);
 
                         $count = 0;
@@ -218,11 +216,123 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->SetXY(111, 226 + $count); // Adjust for {Bilangan_Load_Cell}
                             $pdf->Write(0, $loadcells[$i]['loadCellCapacity']);
 
-                            $pdf->SetXY(140, 226 + $count); // Adjust for {Bilangan_Load_Cell}
+                            $pdf->SetXY(130, 226 + $count); // Adjust for {Bilangan_Load_Cell}
                             $pdf->Write(0, $loadcells[$i]['loadCellSerial']);
 
                             $count += 6;
                         }
+                    }else if ($pageNo == 2){
+                        $capacity = $res['capacity'];
+                        $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                        $capacityDetail = mysqli_query($db, $capacityQuery);
+                        $capacityRow = mysqli_fetch_assoc($capacityDetail);
+
+                        if ($capacityRow['range_type'] == 'SINGLE'){
+                            if (($capacityRow['capacity'] == "10000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "10" && $capacityRow['units'] == "1") && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 40.865, 6);
+                            }
+                            elseif (($capacityRow['capacity'] == "20000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "20" && $capacityRow['units'] == "1") && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 45.865, 6);
+                            }
+                            elseif (($capacityRow['capacity'] == "30000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "30" && $capacityRow['units'] == "1") && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 50.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "40000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "40" && $capacityRow['units'] == "1") && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 56.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "40000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "40" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 61.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "50000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "50" && $capacityRow['units'] == "1") && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 66.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "50000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "50" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 71.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "60000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "60" && $capacityRow['units'] == "1") && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 77.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "60000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "60" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 82.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "70000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "70" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 87.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "70000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "70" && $capacityRow['units'] == "1") && $capacityRow['division'] == '50' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 93.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "80000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "80" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 98.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "80000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "80" && $capacityRow['units'] == "1") && $capacityRow['division'] == '50' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 103.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "90000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "90" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 108.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "90000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "90" && $capacityRow['units'] == "1") && $capacityRow['division'] == '50' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 113.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "100000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "100" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 118.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "100000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "100" && $capacityRow['units'] == "1") && $capacityRow['division'] == '50' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 124.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "110000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "110" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 129.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "110000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "110" && $capacityRow['units'] == "1") && $capacityRow['division'] == '50' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 134.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "120000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "120" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 139.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "120000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "120" && $capacityRow['units'] == "1") && $capacityRow['division'] == '50' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 78.159, 144.865, 6);
+                            }
+                            else{
+                                $pdf->SetFont('Helvetica', '', 10);
+                                // Capacity
+                                $pdf->SetXY(28, 159);
+                                $pdf->Write(0, $capacityRow['capacity']. ' ' . searchUnitNameById($capacityRow['units'], $db));
+
+                                // Division
+                                $pdf->SetXY(54, 159);
+                                $pdf->Write(0, $capacityRow['division']. ' ' . searchUnitNameById($capacityRow['division_unit'], $db));
+
+                                $pdf->Image($tickImage, 78, 156, 6);
+
+                            }
+                        }else{
+                            if ($capacityRow['capacity'] == "20" && $capacityRow['units'] == "1" && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2' && $capacityRow['capacity2'] == "40" && $capacityRow['units2'] == "1" && $capacityRow['division2'] == '20' && $capacityRow['division_unit2'] == '2'){
+                                $pdf->Image($tickImage, 178.159, 40.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "30" && $capacityRow['units'] == "1" && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2' && $capacityRow['capacity2'] == "60" && $capacityRow['units2'] == "1" && $capacityRow['division2'] == '20' && $capacityRow['division_unit2'] == '2'){
+                                $pdf->Image($tickImage, 178.159, 45.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "40" && $capacityRow['units'] == "1" && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2' && $capacityRow['capacity2'] == "80" && $capacityRow['units2'] == "1" && $capacityRow['division2'] == '20' && $capacityRow['division_unit2'] == '2'){
+                                $pdf->Image($tickImage, 178.159, 50.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "40" && $capacityRow['units'] == "1" && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2' && $capacityRow['capacity2'] == "80" && $capacityRow['units2'] == "1" && $capacityRow['division2'] == '50' && $capacityRow['division_unit2'] == '2'){
+                                $pdf->Image($tickImage, 178.159, 56.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "50" && $capacityRow['units'] == "1" && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2' && $capacityRow['capacity2'] == "100" && $capacityRow['units2'] == "1" && $capacityRow['division2'] == '20' && $capacityRow['division_unit2'] == '2'){
+                                $pdf->Image($tickImage, 178.159, 61.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "50" && $capacityRow['units'] == "1" && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2' && $capacityRow['capacity2'] == "100" && $capacityRow['units2'] == "1" && $capacityRow['division2'] == '50' && $capacityRow['division_unit2'] == '2'){
+                                $pdf->Image($tickImage, 178.159, 66.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "60" && $capacityRow['units'] == "1" && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2' && $capacityRow['capacity2'] == "120" && $capacityRow['units2'] == "1" && $capacityRow['division2'] == '20' && $capacityRow['division_unit2'] == '2'){
+                                $pdf->Image($tickImage, 178.159, 71.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "60" && $capacityRow['units'] == "1" && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2' && $capacityRow['capacity2'] == "120" && $capacityRow['units2'] == "1" && $capacityRow['division2'] == '50' && $capacityRow['division_unit2'] == '2'){
+                                $pdf->Image($tickImage, 178.159, 77.865, 6);
+                            }
+                        }
+
+
+                        $pdf->Image($companySignature, 38, 200, 35);  // Adjust for company signature
                     }
                 }
             }
@@ -236,11 +346,11 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
             ); 
         }
 
-        $pdf->Output('D', 'filled_ATK_form.pdf');
+        $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATK' && $validator == 'DE METROLOGY'){
         $fillFile = 'forms/DE_Metrology/DMSB_ATK.pdf';
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping, stamping_ext WHERE stamping.id = stamping_ext.stamp_id AND stamping.id = '".$_GET['userID']."'");
@@ -286,83 +396,86 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
-                        $pdf->SetXY(25, 70); // Adjust these coordinates for each field
+                        $pdf->SetFont('', 'B', 10); // B stands for Bold
+                        $pdf->SetXY(20, 69); // Adjust these coordinates for each field
                         $pdf->Write(0, searchCustNameById($res['customers'], $db)); // {Address1}
+                        $pdf->SetFont('', '', 10); // B stands for Bold
 
-                        $pdf->SetXY(25, 75); // Adjust for {Address2}
-                        $pdf->Write(0, $address1.' '.$address2.' '.$address3.' '.$address4);
-
-                        $pdf->SetXY(25, 95); // Adjust for {Stamping_Address1}
+                        $pdf->SetXY(20, 74); // Adjust for {Address2}
                         $pdf->Write(0, $address1.' '.$address2);
 
-                        $pdf->SetXY(25, 100); // Adjust for {Stamping_Address2}
+                        $pdf->SetXY(20, 79); // Adjust for {Address2}
                         $pdf->Write(0, $address3.' '.$address4);
 
-                        $pdf->SetXY(75, 125); // Adjust for {Company_Name}
+                        $pdf->SetXY(20, 95); // Adjust for {Stamping_Address1}
+                        $pdf->Write(0, $address1.' '.$address2);
+
+                        $pdf->SetXY(20, 100); // Adjust for {Stamping_Address2}
+                        $pdf->Write(0, $address3.' '.$address4);
+
+                        $pdf->SetXY(68, 126); // Adjust for {Company_Name}
                         $pdf->Write(0, $compname);
 
-                        $pdf->SetXY(75, 130); // Adjust for {No_Lesen}
+                        $pdf->SetXY(45, 132); // Adjust for {No_Lesen}
                         $pdf->Write(0, $compcert);
 
-                        $pdf->SetXY(75, 135); // Adjust for {Tarikh_Tamat_Lesen}
+                        $pdf->SetXY(60, 137); // Adjust for {Tarikh_Tamat_Lesen}
                         $pdf->Write(0, $compexp);
 
-                        $pdf->SetXY(75, 140); // Adjust for {Nama_Wakil_Pembaik}
-                        $pdf->Write(0, searchStaffNameById($res['pic'], $db));
+                        $pdf->SetXY(58, 142); // Adjust for {Nama_Wakil_Pembaik}
+                        $pdf->Write(0, searchStaffNameById($res['assignTo'], $db));
 
-                        $pdf->SetXY(75, 145); // Adjust for {No_KP}
-                        $pdf->Write(0, searchStaffICById($res['pic'], $db));
+                        $pdf->SetXY(38, 147); // Adjust for {No_KP}
+                        $pdf->Write(0, searchStaffICById($res['assignTo'], $db));
 
-                        $pdf->SetXY(75, 170); // Adjust for {Penentusahan_Baru}
+                        $pdf->SetXY(60, 168); // Adjust for {Penentusahan_Baru}
                         $pdf->Write(0, $res['penentusan_baru']);
 
-                        $pdf->SetXY(75, 175); // Adjust for {Penentusahan_Semula}
+                        $pdf->SetXY(64, 173.5); // Adjust for {Penentusahan_Semula}
                         $pdf->Write(0, $res['penentusan_semula']);
 
                         if($res['kelulusan_mspk'] == 'YES'){
                             $pdf->SetXY(35, 205); // Adjust for {NoKelulusan_MSPK}
-                            $pdf->Write(0, '/');
+                            $pdf->Image($tickImage, 35, 202, 6);
                         }
                         else{
                             $pdf->SetXY(35, 210); // Adjust for {NoKelulusan_MSPK}
-                            $pdf->Write(0, '/');
+                            $pdf->Image($tickImage, 35, 208, 6);
                         }
 
-                        $pdf->SetXY(75, 230); // Adjust for {Pembuat_Negara_Asal}
+                        $pdf->SetXY(66, 231); // Adjust for {Pembuat_Negara_Asal}
                         $pdf->Write(0, searchCountryById($res['platform_country'], $db));
 
-                        $pdf->SetXY(75, 235); // Adjust for {Jenama}
+                        $pdf->SetXY(40, 236.5); // Adjust for {Jenama}
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db));
 
-                        $pdf->SetXY(75, 240); // Adjust for {Model#1}
+                        $pdf->SetXY(36, 242); // Adjust for {Model#1}
                         $pdf->Write(0, searchModelNameById($res['model'], $db));
 
-                        $pdf->SetXY(75, 245); // Adjust for {No_Siri}
+                        $pdf->SetXY(40, 247); // Adjust for {No_Siri}
                         $pdf->Write(0, $res['indicator_serial']);
                     }
                     else if ($pageNo == 2){
-                        $pdf->SetXY(75, 30); // Adjust for {Pembuat_Negara_Asal_2}
+                        $pdf->SetXY(66, 32); // Adjust for {Pembuat_Negara_Asal_2}
                         $pdf->Write(0, searchCountryById($res['platform_country'], $db));
 
-                        $pdf->SetXY(75, 35); // Adjust for {Jenis_Steel_Concrete}
+                        $pdf->SetXY(66, 37); // Adjust for {Jenis_Steel_Concrete}
                         $pdf->Write(0, $res['platform_type']);
 
-                        $pdf->SetXY(75, 40); // Adjust for {size}
+                        $pdf->SetXY(72, 42.5); // Adjust for {size}
                         $pdf->Write(0, searchSizeNameById($res['size'], $db));
 
                         if($res['jenis_pelantar'] == 'Pit'){
-                            $pdf->SetXY(57, 48); // Adjust for {Jenis_Steel_Concrete}
-                            $pdf->Write(0, '----------');
+                            $pdf->Ellipse(53, 48, 4, 3, 'D', [200, 255, 200]);
                         }
                         else{
-                            $pdf->SetXY(47, 48); // Adjust for {Jenis_Steel_Concrete}
-                            $pdf->Write(0, '----------');
+                            $pdf->Ellipse(64, 48, 7, 3, 'D', [200, 255, 200]);
                         }
 
-                        $pdf->SetXY(75, 75); // Adjust for {Pembuat_Negara_Asal_3}
+                        $pdf->SetXY(68, 74); // Adjust for {Pembuat_Negara_Asal_3}
                         $pdf->Write(0, searchCountryById($res['load_cell_country'], $db));
 
-                        $pdf->SetXY(75, 80); // Adjust for {Bilangan_Load_Cell}
+                        $pdf->SetXY(60, 79); // Adjust for {Bilangan_Load_Cell}
                         $pdf->Write(0, $res['load_cell_no']);
 
                         $count = 0;
@@ -382,6 +495,118 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $count += 10;
                         }
                     }
+                    else if ($pageNo == 3){
+                        $capacity = $res['capacity'];
+                        $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                        $capacityDetail = mysqli_query($db, $capacityQuery);
+                        $capacityRow = mysqli_fetch_assoc($capacityDetail);
+
+                        if ($capacityRow['range_type'] == 'SINGLE'){
+                            if (($capacityRow['capacity'] == "10000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "10" && $capacityRow['units'] == "1") && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 44.865, 6);
+                            }
+                            elseif (($capacityRow['capacity'] == "20000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "20" && $capacityRow['units'] == "1") && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 49.865, 6);
+                            }
+                            elseif (($capacityRow['capacity'] == "30000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "30" && $capacityRow['units'] == "1") && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 55.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "40000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "40" && $capacityRow['units'] == "1") && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 61.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "40000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "40" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 67.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "50000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "50" && $capacityRow['units'] == "1") && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 72.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "50000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "50" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 78.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "60000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "60" && $capacityRow['units'] == "1") && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 84.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "60000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "60" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 90.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "70000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "70" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 96.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "70000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "70" && $capacityRow['units'] == "1") && $capacityRow['division'] == '50' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 102.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "80000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "80" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 107.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "80000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "80" && $capacityRow['units'] == "1") && $capacityRow['division'] == '50' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 113.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "90000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "90" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 119.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "90000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "90" && $capacityRow['units'] == "1") && $capacityRow['division'] == '50' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 125.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "100000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "100" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 130.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "100000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "100" && $capacityRow['units'] == "1") && $capacityRow['division'] == '50' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 136.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "110000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "110" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 142.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "110000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "110" && $capacityRow['units'] == "1") && $capacityRow['division'] == '50' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 148.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "120000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "120" && $capacityRow['units'] == "1") && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 153.865, 6);
+                            }
+                            elseif(($capacityRow['capacity'] == "120000" && $capacityRow['units'] == "2" || $capacityRow['capacity'] == "120" && $capacityRow['units'] == "1") && $capacityRow['division'] == '50' && $capacityRow['division_unit'] == '2'){
+                                $pdf->Image($tickImage, 82.159, 159.865, 6);
+                            }
+                            else{
+                                $pdf->SetFont('Helvetica', '', 10);
+                                // Capacity
+                                $pdf->SetXY(28, 175);
+                                $pdf->Write(0, $capacityRow['capacity']. ' ' . searchUnitNameById($capacityRow['units'], $db));
+
+                                // Division
+                                $pdf->SetXY(60, 175);
+                                $pdf->Write(0, $capacityRow['division']. ' ' . searchUnitNameById($capacityRow['division_unit'], $db));
+
+                                $pdf->Image($tickImage, 82, 171, 6);
+
+                            }
+                        }else{
+                            if ($capacityRow['capacity'] == "20" && $capacityRow['units'] == "1" && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2' && $capacityRow['capacity2'] == "40" && $capacityRow['units2'] == "1" && $capacityRow['division2'] == '20' && $capacityRow['division_unit2'] == '2'){
+                                $pdf->Image($tickImage, 178.159, 44.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "30" && $capacityRow['units'] == "1" && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2' && $capacityRow['capacity2'] == "60" && $capacityRow['units2'] == "1" && $capacityRow['division2'] == '20' && $capacityRow['division_unit2'] == '2'){
+                                $pdf->Image($tickImage, 178.159, 50.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "40" && $capacityRow['units'] == "1" && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2' && $capacityRow['capacity2'] == "80" && $capacityRow['units2'] == "1" && $capacityRow['division2'] == '20' && $capacityRow['division_unit2'] == '2'){
+                                $pdf->Image($tickImage, 178.159, 55.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "40" && $capacityRow['units'] == "1" && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2' && $capacityRow['capacity2'] == "80" && $capacityRow['units2'] == "1" && $capacityRow['division2'] == '50' && $capacityRow['division_unit2'] == '2'){
+                                $pdf->Image($tickImage, 178.159, 61.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "50" && $capacityRow['units'] == "1" && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2' && $capacityRow['capacity2'] == "100" && $capacityRow['units2'] == "1" && $capacityRow['division2'] == '20' && $capacityRow['division_unit2'] == '2'){
+                                $pdf->Image($tickImage, 178.159, 67.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "50" && $capacityRow['units'] == "1" && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2' && $capacityRow['capacity2'] == "100" && $capacityRow['units2'] == "1" && $capacityRow['division2'] == '50' && $capacityRow['division_unit2'] == '2'){
+                                $pdf->Image($tickImage, 178.159, 72.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "60" && $capacityRow['units'] == "1" && $capacityRow['division'] == '10' && $capacityRow['division_unit'] == '2' && $capacityRow['capacity2'] == "120" && $capacityRow['units2'] == "1" && $capacityRow['division2'] == '20' && $capacityRow['division_unit2'] == '2'){
+                                $pdf->Image($tickImage, 178.159, 78.865, 6);
+                            }
+                            elseif($capacityRow['capacity'] == "60" && $capacityRow['units'] == "1" && $capacityRow['division'] == '20' && $capacityRow['division_unit'] == '2' && $capacityRow['capacity2'] == "120" && $capacityRow['units2'] == "1" && $capacityRow['division2'] == '50' && $capacityRow['division_unit2'] == '2'){
+                                $pdf->Image($tickImage, 178.159, 84.865, 6);
+                            }
+                        }
+
+                        $pdf->Image($companySignature, 27, 215, 40);  // Adjust for company signature
+                    }
                 }
             }
         }
@@ -394,7 +619,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
             ); 
         }
 
-        $pdf->Output('D', 'filled_ATK_form.pdf');
+        $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATP' && $validator == 'METROLOGY'){
         $fillFile = 'forms/Metrology/ATP_FORM.pdf';
@@ -529,7 +754,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 134.141, 170.637, 8);
                         }
 
-                        $pdf->Image($companySignature, 29.648, 187.637, 38.5);  // Adjust for company signature
+                        $pdf->Image($companySignature, 27.648, 187.637, 38.5);  // Adjust for company signature
 
                         $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -618,7 +843,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
-
                         $pdf->Image($tickImage, 72.159, 55.865, 8); // Adjust for Kegunaan Alat
 
                         $pdf->SetXY(135.121, 53.954-2); // Adjust for Jenama

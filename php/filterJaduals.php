@@ -35,6 +35,10 @@ if($_POST['validator'] != null && $_POST['validator'] != '' && $_POST['validator
 	$searchQuery .= " and validate_by = '".$_POST['validator']."'";
 }
 
+if($_POST['cawangan'] != null && $_POST['cawangan'] != '' && $_POST['cawangan'] != '-'){
+	$searchQuery .= " and cawangan = '".$_POST['cawangan']."'";
+}
+
 if($_POST['status'] != null && $_POST['status'] != '' && $_POST['status'] != '-'){
   if($_POST['status'] == '6'){
     $searchQuery .= " and stamping_type = 'NEW'";

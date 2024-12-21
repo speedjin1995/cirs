@@ -22,6 +22,7 @@ else{
 
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE type = 'STAMPING' AND deleted = '0'");
+  $cawangans = $db->query("SELECT * FROM state WHERE deleted = '0'");
 }
 ?>
 
@@ -82,6 +83,18 @@ else{
                     <option value="" selected disabled hidden>Please Select</option>
                     <?php while($rowValidators=mysqli_fetch_assoc($validators)){ ?>
                       <option value="<?=$rowValidators['id'] ?>"><?=$rowValidators['validator'] ?></option>
+                    <?php } ?>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-3">
+                <div class="form-group">
+                  <label>Cawangan</label>
+                  <select class="form-control select2" id="cawanganFilter" name="cawanganFilter">
+                    <option value="" selected disabled hidden>Please Select</option>
+                    <?php while($rowCawangan=mysqli_fetch_assoc($cawangans)){ ?>
+                      <option value="<?=$rowCawangan['id'] ?>"><?=$rowCawangan['state'] ?></option>
                     <?php } ?>
                   </select>
                 </div>
@@ -223,6 +236,7 @@ $(function () {
   var toDateValue = $('#toDate').val();
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
   var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
+  var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
   var statusFilter = 'P';
 
   var table = $("#weightTable").DataTable({
@@ -242,6 +256,7 @@ $(function () {
         toDate: toDateValue,
         customer: customerNoFilter,
         validator: validatorFilter,
+        cawangan: cawanganFilter,
         status: statusFilter
       } 
     },
@@ -416,6 +431,8 @@ $(function () {
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
     var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
+    var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
+
     var statusFilter = 'P';
 
     //Destroy the old Datatable
@@ -439,6 +456,7 @@ $(function () {
           toDate: toDateValue,
           customer: customerNoFilter,
           validator: validatorFilter,
+          cawangan: cawanganFilter,
           status: statusFilter
         } 
       },
@@ -512,9 +530,11 @@ $(function () {
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-    
+    var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
+    var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
+
     // $.post('php/export_borang.php', {"driver": "P", "fromDate": fromDateValue, "toDate": toDateValue, "customer": customerNoFilter}, function(data){
-    $.post('php/export_borang.php', {"ids": selectedIds, "driver": "P"}, function(data){
+    $.post('php/export_borang.php', {"ids": selectedIds, "driver": "P", "validator": validatorFilter, "cawangan": cawanganFilter}, function(data){
 
       var obj = JSON.parse(data);
   
