@@ -165,6 +165,7 @@ else{
               <thead>
                 <tr>
                   <!-- <th></th> -->
+                  <th>No</th>
                   <th>Company Name</th>
                   <th>Brands</th>
                   <th>Description Instruments for Weighing And Measuring</th>
@@ -694,7 +695,7 @@ $(function () {
     'serverMethod': 'post',
     'searching': true,
     // "stateSave": true,
-    'order': [[ 0, 'asc' ]],
+    'order': [[ 1, 'asc' ]],
     // 'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
       'type': 'POST',
@@ -720,6 +721,15 @@ $(function () {
       //     return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
       //   }
       // },
+      {
+        data: null, // The data property is null since this column is client-side only
+        className: 'auto-increment',
+        orderable: false,
+        render: function (data, type, row, meta) {
+          // meta.row provides the row index in the current page
+          return meta.row + meta.settings._iDisplayStart + 1;
+        }
+      },
       { data: 'customers' },
       { data: 'brand' },
       { data: 'machine_type' },
@@ -893,7 +903,7 @@ $(function () {
       'serverMethod': 'post',
       'searching': true,
       // "stateSave": true,
-      'order': [[ 0, 'asc' ]],
+      'order': [[ 1, 'asc' ]],
       // 'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
         'type': 'POST',
@@ -919,6 +929,15 @@ $(function () {
         //     return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
         //   }
         // },
+        {
+          data: null, // The data property is null since this column is client-side only
+          className: 'auto-increment',
+          orderable: false,
+          render: function (data, type, row, meta) {
+            // meta.row provides the row index in the current page
+            return meta.row + meta.settings._iDisplayStart + 1;
+          }
+        },
         { data: 'customers' },
         { data: 'brand' },
         { data: 'machine_type' },

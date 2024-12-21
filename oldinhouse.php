@@ -172,6 +172,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               <thead>
                 <tr>
                   <!-- <th width='1%'><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th> -->
+                  <th>No</th>
                   <th>Company Name</th>
                   <th>Brand</th>
                   <th>Description Instruments for Weighing and Measuring</th>
@@ -1010,7 +1011,7 @@ $(function () {
     'serverMethod': 'post',
     'searching': true,
     // "stateSave": true,
-    'order': [[ 0, 'asc' ]],
+    'order': [[ 1, 'asc' ]],
     // 'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
       'type': 'POST',
@@ -1039,6 +1040,15 @@ $(function () {
       //     }
       //   }
       // },
+      {
+        data: null, // The data property is null since this column is client-side only
+        className: 'auto-increment',
+        orderable: false,
+        render: function (data, type, row, meta) {
+          // meta.row provides the row index in the current page
+          return meta.row + meta.settings._iDisplayStart + 1;
+        }
+      },
       { data: 'customer' },
       { data: 'brand' },
       { data: 'machines' },
@@ -1263,7 +1273,7 @@ $(function () {
       'serverMethod': 'post',
       'searching': true,
       // "stateSave": true,
-      'order': [[ 0, 'asc' ]],
+      'order': [[ 1, 'asc' ]],
       // 'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
         'type': 'POST',
@@ -1292,6 +1302,15 @@ $(function () {
         //     }
         //   }
         // },
+        {
+          data: null, // The data property is null since this column is client-side only
+          className: 'auto-increment',
+          orderable: false,
+          render: function (data, type, row, meta) {
+            // meta.row provides the row index in the current page
+            return meta.row + meta.settings._iDisplayStart + 1;
+          }
+        },
         { data: 'customer' },
         { data: 'brand' },
         { data: 'machines' },
