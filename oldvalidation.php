@@ -33,8 +33,8 @@ else{
   $problems = $db->query("SELECT * FROM problem WHERE deleted = '0'");
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
-  $validators = $db->query("SELECT * FROM validators WHERE deleted = '0'");
-  $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0'");
+  $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' and type = 'OTHER'");
+  $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' and type = 'OTHER'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
   $cancelledReasons = $db->query("SELECT * FROM reasons WHERE deleted = '0'");
@@ -172,6 +172,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               <thead>
                 <tr>
                   <!-- <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th> -->
+                  <th>No</th>
                   <th>Company Name</th>
                   <th>Brand</th>
                   <th>Description Instruments for Weighing and Measuring</th>
@@ -930,7 +931,7 @@ $(function () {
     'serverMethod': 'post',
     'searching': true,
     // "stateSave": true,
-    'order': [[ 0, 'asc' ]],
+    'order': [[ 1, 'asc' ]],
     // 'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
       'type': 'POST',
@@ -959,6 +960,15 @@ $(function () {
       //     }
       //   }
       // },
+      {
+        data: null, // The data property is null since this column is client-side only
+        className: 'auto-increment',
+        orderable: false,
+        render: function (data, type, row, meta) {
+          // meta.row provides the row index in the current page
+          return meta.row + meta.settings._iDisplayStart + 1;
+        }
+      },
       { data: 'customer' },
       { data: 'brand' },
       { data: 'machines' },
@@ -1181,7 +1191,7 @@ $(function () {
       'serverMethod': 'post',
       'searching': true,
       // "stateSave": true,
-      'order': [[ 0, 'asc' ]],
+      'order': [[ 1, 'asc' ]],
       // 'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
         'type': 'POST',
@@ -1210,6 +1220,15 @@ $(function () {
         //     }
         //   }
         // },
+        {
+          data: null, // The data property is null since this column is client-side only
+          className: 'auto-increment',
+          orderable: false,
+          render: function (data, type, row, meta) {
+            // meta.row provides the row index in the current page
+            return meta.row + meta.settings._iDisplayStart + 1;
+          }
+        },
         { data: 'customer' },
         { data: 'brand' },
         { data: 'machines' },

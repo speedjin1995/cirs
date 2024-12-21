@@ -182,6 +182,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               <thead>
                 <tr>
                   <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
+                  <th>No</th>
                   <th>Company Name</th>
                   <th>Brands</th>
                   <th>Description Instruments for Weighing And Measuring</th>
@@ -1536,7 +1537,7 @@ $(function () {
     'serverMethod': 'post',
     'searching': true,
     // "stateSave": true,
-    'order': [[ 1, 'asc' ]],
+    'order': [[ 2, 'asc' ]],
     'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
       'type': 'POST',
@@ -1565,6 +1566,15 @@ $(function () {
           else {
             return ''; // Return an empty string or any other placeholder if the item is invoiced
           }
+        }
+      },
+      {
+        data: null, // The data property is null since this column is client-side only
+        className: 'auto-increment',
+        orderable: false,
+        render: function (data, type, row, meta) {
+          // meta.row provides the row index in the current page
+          return meta.row + meta.settings._iDisplayStart + 1;
         }
       },
       { data: 'customers' },
@@ -1778,7 +1788,7 @@ $(function () {
       'serverMethod': 'post',
       'searching': true,
       // "stateSave": true,
-      'order': [[ 1, 'asc' ]],
+      'order': [[ 2, 'asc' ]],
       'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
         'type': 'POST',
@@ -1807,6 +1817,15 @@ $(function () {
             else {
               return ''; // Return an empty string or any other placeholder if the item is invoiced
             }
+          }
+        },
+        {
+          data: null, // The data property is null since this column is client-side only
+          className: 'auto-increment',
+          orderable: false,
+          render: function (data, type, row, meta) {
+            // meta.row provides the row index in the current page
+            return meta.row + meta.settings._iDisplayStart + 1;
           }
         },
         { data: 'customers' },

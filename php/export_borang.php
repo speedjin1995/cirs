@@ -3,7 +3,7 @@
 require_once 'db_connect.php';
 require_once 'requires/lookup.php';
  
-if(isset($_POST['driver']) && !empty($_POST['ids']) && !empty($_POST['validator']) && !empty($_POST['cawangan'])){
+if(isset($_POST['driver']) && !empty($_POST['ids'])){
     $searchQuery = '';
 
     // if($_POST['fromDate'] != null && $_POST['fromDate'] != ''){
@@ -36,8 +36,6 @@ if(isset($_POST['driver']) && !empty($_POST['ids']) && !empty($_POST['validator'
     }
 
     $driver = $_POST['driver'];
-    $validatorFilter = searchValidatorNameById($_POST['validator'], $db);
-    $cawanganFilter = searchStateNameById($_POST['cawangan'], $db);
     $todayDate = date('d/m/Y');
     $todayDate2 = date('d M Y');
     $today = date("Y-m-d 00:00:00");
@@ -64,6 +62,11 @@ if(isset($_POST['driver']) && !empty($_POST['ids']) && !empty($_POST['validator'
         $startIndex = 0;
         $pages = 0;
         $message = '';
+
+        // $alatQuery = "SELECT * FROM branches WHERE id = $branch";
+        // $alatDetail = mysqli_query($db, $alatQuery);
+        // $alatRow = mysqli_fetch_assoc($alatDetail);
+        
 
         if($driver == '6'){
             $message = '<html>
@@ -135,47 +138,45 @@ if(isset($_POST['driver']) && !empty($_POST['ids']) && !empty($_POST['validator'
                     </tr>
                     <tr>
                         <th>DATE</th>
+                        <th>NAME OF PURCHASE</th>
                         <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
                         <th>CAPACITY</th>
                         <th>QUANTITY</th>
                         <th>REGISTER NO.</th>
                         <th>CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
-                        <th>NAME OF PURCHASE</th>
-                        <th>ADDRESS</th>
                     </tr>';
 
             while ($row = $result->fetch_assoc()) {
-                $branch = $row['branch'];
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
+                // $branch = $row['branch'];
+                // $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                // $branchDetail = mysqli_query($db, $branchQuery);
+                // $branchRow = mysqli_fetch_assoc($branchDetail);
 
-                $address1 = null;
-                $address2 = null;
-                $address3 = null;
-                $address4 = null;
-                $pic = null;
-                $pic_phone = null;
+                // $address1 = null;
+                // $address2 = null;
+                // $address3 = null;
+                // $address4 = null;
+                // $pic = null;
+                // $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
-                }
+                // if(!empty($branchRow)){
+                //     $address1 = $branchRow['address'];
+                //     $address2 = $branchRow['address2'];
+                //     $address3 = $branchRow['address3'];
+                //     $address4 = $branchRow['address4'];
+                //     $pic = $branchRow['pic'];
+                //     $pic_phone = $branchRow['pic_contact'];
+                // }
 
                 $message .= '<tr>
-                        <td>'.$todayDate2.'</td>
-                        <td>'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
-                        <td>'.searchCapacityNameById($row['capacity'], $db).'</td>
-                        <td>1</td>
-                        <td>'.$row['no_daftar'].'</td>
-                        <td>'.$row['siri_keselamatan'].'</td>
-                        <td>'.searchCustNameById($row['customers'], $db).'</td>
-                        <td>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
-                    </tr>';
+                                <td style="padding-left: 1%;">'.$todayDate2.'</td>
+                                <td style="padding-left: 1%;">'.searchCustNameById($row['customers'], $db).'</td>
+                                <td style="padding-left: 1%;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
+                                <td style="padding-left: 1%;">'.searchCapacityNameById($row['capacity'], $db).'</td>
+                                <td style="padding-left: 1%;">1</td>
+                                <td style="padding-left: 1%;">'.$row['no_daftar'].'</td>
+                                <td style="padding-left: 1%;">'.$row['siri_keselamatan'].'</td>
+                            </tr>';
             }
 
             $message .= '</tbody></table>';
@@ -251,14 +252,13 @@ if(isset($_POST['driver']) && !empty($_POST['ids']) && !empty($_POST['validator'
                     <tr>
                         <th>BRG E BIL NO.</th>
                         <th>DATE</th>
+                        <th>NAME OF PURCHASE</th>
                         <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
                         <th>CAPACITY</th>
                         <th>LIST NO. (STMP. NO.)</th>
                         <th>REGISTER NO. (BARU / LAMA)</th>
                         <th>DETAILS OF REPAIR</th>
                         <th>CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
-                        <th>NAME OF PURCHASE</th>
-                        <th>ADDRESS</th>
                         <th>FEE</th>
                     </tr>';
 
@@ -268,39 +268,38 @@ if(isset($_POST['driver']) && !empty($_POST['ids']) && !empty($_POST['validator'
                 $branchDetail = mysqli_query($db, $branchQuery);
                 $branchRow = mysqli_fetch_assoc($branchDetail);
 
-                $address1 = null;
-                $address2 = null;
-                $address3 = null;
-                $address4 = null;
-                $pic = null;
-                $pic_phone = null;
+                // $address1 = null;
+                // $address2 = null;
+                // $address3 = null;
+                // $address4 = null;
+                // $pic = null;
+                // $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
-                }
+                // if(!empty($branchRow)){
+                //     $address1 = $branchRow['address'];
+                //     $address2 = $branchRow['address2'];
+                //     $address3 = $branchRow['address3'];
+                //     $address4 = $branchRow['address4'];
+                //     $pic = $branchRow['pic'];
+                //     $pic_phone = $branchRow['pic_contact'];
+                // }
 
                 $message .= '<tr>
-                        <td></td>
-                        <td>'.$todayDate2.'</td>
-                        <td>'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
-                        <td>'.searchCapacityNameById($row['capacity'], $db).'</td>
-                        <td>'.$row['pin_keselamatan'].'</td>
-                        <td>'.$row['no_daftar'].'</td>
-                        <td>SERVICE / STMP</td>
-                        <td>'.$row['siri_keselamatan'].'</td>
-                        <td>'.searchCustNameById($row['customers'], $db).'</td>
-                        <td>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>';
+                        <td style="padding-left: 0.5%">'.$row['borang_e'].'</td>
+                        <td style="padding-left: 0.5%">'.$todayDate2.'</td>
+                        <td style="padding-left: 0.5%">'.searchCustNameById($row['customers'], $db).'</td>
+                        <td style="padding-left: 0.5%">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
+                        <td style="padding-left: 0.5%">'.searchCapacityNameById($row['capacity'], $db).'</td>
+                        <td style="padding-left: 0.5%">'.$row['pin_keselamatan'].'</td>
+                        <td style="padding-left: 0.5%">'.$row['no_daftar'].'</td>
+                        <td style="padding-left: 0.5%">SERVICE / STMP</td>
+                        <td style="padding-left: 0.5%">'.$row['siri_keselamatan'].'</td>';
 
-                if($row['cert_price'] != '0'){
-                    $message .= '<td>'.$row['unit_price'].'<br>'.$row['cert_price'].'</td>
+                if($row['cert_price'] != 0){
+                    $message .= '<td style="padding-left: 0.5%" width="7%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').'</td>
                     </tr>';
                 }else{
-                    $message .= '<td>'.$row['unit_price'].'</td>
+                    $message .= '<td style="padding-left: 0.5%" width="7%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'</td>
                     </tr>';
                 }
                         
@@ -309,241 +308,293 @@ if(isset($_POST['driver']) && !empty($_POST['ids']) && !empty($_POST['validator'
             $message .= '</tbody></table>';
         }
         else{
-            $rows = array();
-            $count = 1;
-            $validator = '2';
-
-            while ($row = $result->fetch_assoc()) {
-                $validator = $row['validate_by'];
-                $branch = $row['branch'];
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
-                $address1 = null;
-                $address2 = null;
-                $address3 = null;
-                $address4 = null;
-                $pic = null;
-                $pic_phone = null;
-
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
-                }
-
-                $rows[] = '<tr style="height: 30px;">
-                            <td>'.$count.'</td>
-                            <td>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
-                            <td>'.searchCapacityNameById($row['capacity'], $db).'</td>
-                            <td>'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
-                            <td>'.$row['serial_no'].'</td>
-                            <td>'.searchCustNameById($row['customers'], $db).'<br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
-                            <td></td>
-                            <td>'.$row['no_daftar'].'</td>
-                            <td>'.$row['siri_keselamatan'].'</td>';
-                            
-                            if ($row['cert_price'] != '0') {
-                                $rows[] .= '<td>'.$row['unit_price'].'<br>'.$row['cert_price'].'</td>';
-                            } else {
-                                $rows[] .= '<td>'.$row['unit_price'].'</td>';
-                            }
-                            
-                $rows[] .= '</tr>';
+            if(empty($_POST['validator']) && empty($_POST['cawangan'])){
+                echo json_encode(
+                    array(
+                        "status"=> "failed", 
+                        "message"=> "Please select a validator & cawangan."
+                    )
+                ); 
+                exit;
+            }elseif(empty($_POST['validator'])){
+                echo json_encode(
+                    array(
+                        "status"=> "failed", 
+                        "message"=> "Please select a validator."
+                    )
+                );
+                exit;
+            }elseif(empty($_POST['cawangan'])){
+                echo json_encode(
+                    array(
+                        "status"=> "failed", 
+                        "message"=> "Please select a cawangan."
+                    )
+                );
+                exit;
+            }else{
+                $validatorFilter = searchValidatorNameById($_POST['validator'], $db);
+                $cawanganFilter = searchStateNameById($_POST['cawangan'], $db);
             
-
-                $count++;
-
-                if($count > 10){
-                    $count = 1;
-                }
-            }
-            
-            if ($count <= 10 && count($rows) % 10 != 0) {
-                $remainingRows = 10 - (count($rows) % 10);
-                for ($i = 0; $i < $remainingRows; $i++) {
-                    $rows[] = '<tr style="height: 30px;">
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>';
-                }
-            }
-
-            $message = '<html>
-                <head>
-                    <style>
-                        @media print {
-                            @page {
-                                margin-left: 0.5in;
-                                margin-right: 0.5in;
-                                margin-top: 0.1in;
-                                margin-bottom: 0.1in;
-                            }
-                            
-                        } 
-                                
-                        table {
-                            width: 100%;
-                            border-collapse: collapse;
-                            
-                        } 
-                        
-                        .table th, .table td {
-                            padding: 0.70rem;
-                            vertical-align: top;
-                            border-top: 1px solid #dee2e6;
-                            
-                        } 
-                        
-                        .table-bordered {
-                            border: 1px solid #000000;
-                            
-                        } 
-                        
-                        .table-bordered th, .table-bordered td {
-                            border: 1px solid #000000;
-                            font-family: sans-serif;
-                            font-size: 12px;
-                            
-                        } 
-                        
-                        .row {
-                            display: flex;
-                            flex-wrap: wrap;
-                            margin-top: 20px;
-                            margin-right: -15px;
-                            margin-left: -15px;
-                            
-                        } 
-                        
-                        .col-md-4{
-                            position: relative;
-                            width: 33.333333%;
-                        }
-
-                        .bottom-table {
-                            position: fixed;
-                            bottom: 0;
-                            width: 100%;
-                        }
-
-                        .page-break {
-                            page-break-before: always;
-                        }
-                    </style>
-                </head>
-                <body>';
-
-                while ($startIndex < $num_records) {
-                    $message .= '<table>
-                        <tbody>
-                            <tr>
-                                <td style="vertical-align: left;" width="60%">
-                                    <p>NAMA SYARIKAT PEMILIK / PEMBAIK : <br>DX WEIGHING SOLUTION (M) SDN BHD (1284580-M)<br>
-                                    ALAMAT : NO. 34, JALAN BAGAN 1,<br>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TAMAN BAGAN, 13400 BUTTERWORTH.<br>
-                                    Tel. : 04-332 5822     Fax. : 04-331 5822</p><br>';
-
-                                $message .= '<p>Pengurus Cawangan : <span style="font-size: 14px; font-weight: bold;">' . $validatorFilter . ' ' . $cawanganFilter . '</span><br>';
-                                    
-                                if($validator == '2'){
-                                    $message .= 'Metrology Corporation Malaysia Sdn. Bhd.</p>';
-                                }
-                                elseif($validator == '3'){
-                                    $message .= 'De Metrology Corporation Malaysia Sdn. Bhd.</p>';
-                                }
-                                    
-                                $message .= '</td>
-                                <td valign="top" align="center" width="20%">';
-                                if($validator == '2'){
-                                    $message .= '<img src="https://cirs.syncweigh.com/assets/metrology.jpeg" width="50%" height="auto" />';
-                                }
-                                elseif($validator == '3'){
-                                    $message .= '<img src="https://cirs.syncweigh.com/assets/DMCM.jpeg" width="50%" height="auto" />';
-                                }
-                                    
-                                $message .= '</td>
-                                <td style="vertical-align: right;" width="30%">
-                                    <p>Penentusahan Dalam / Luar Pejabat</p>
-                                    <p>Tarikh : 23.06.2024</p>
-                                    <table class="table-bordered">
-                                        <tbody>
-                                            <tr><th>Alat</th><th>Jum. Alat</th><th>Bayaran</th></tr>
-                                            <tr><td> .</td><td></td><td></td></tr>
-                                            <tr><td> .</td><td></td><td></td></tr>
-                                            <tr><td> .</td><td></td><td></td></tr>
-                                            <tr><td>Jumlah</td><td></td><td></td></tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <p style="text-align: center;">BUTIRAN SENARAI ALAT-ALAT TIMBANG DAN SUKAT UNTUK PENGUJIAN DAN PENENTUSAHAN</p>
-                    <table class="table-bordered">
-                        <tbody>
-                            <tr>
-                                <th>Bil.</th>
-                                <th>Jenis Alat</th>
-                                <th>Had Terima</th>
-                                <th>Jenama</th>
-                                <th>No. Siri Alat</th>
-                                <th>Nama Dan Alamat Pemilik</th>
-                                <th>Kod</th>
-                                <th>No. Daftar</th>
-                                <th>No. Siri Pelekat Keselamatan</th>
-                                <th>Fi / Bayaran</th>
-                            </tr>';
-
-                        for ($i = $startIndex; $i < $startIndex + $recordsPerPage; $i++) {
-                            $message .= $rows[$i];
-                        }
-                        
-
-                    $message .= '</tbody></table>';
-                    
-                    $message .= '
-    <table width="100%" style="padding: 10px;">
-        <tr>
-            <td width="40%">
-                <img src="'.$companySignature.'"  style="margin-left:20%; padding-top:10%" width="60%" height="auto"/>
-            </td>
-            <td width="40%"></td>
-            <td width="30%"></td>
-        </tr>
-        <tr>
-            <td width="30%" style="border-top: 1px solid black; text-align: center; padding-top: 5px;">
-                Tandatangan Pemilik / Pembaik
-            </td>
-            <td width="40%"></td>
-            <td width="30%" style="border-top: 1px solid black; text-align: center; padding-top: 5px;">
-                Pengesahan Pegawai Penentusan
-            </td>
-        </tr>
-    </table>';
-
-
-                    // Move to the next page
-                    $startIndex += $recordsPerPage;
-                    $pages++;
-
-                    // Add a page break if more records are available
-                    if ($startIndex < $totalRecords) {
-                        $message .= '<div class="page-break"></div>';
+                $rows = array();
+                $count = 1;
+                $validator = '2';                
+                $jenisAlatData = [];
+    
+                while ($row = $result->fetch_assoc()) {
+                    $validator = $row['validate_by'];
+                    $branch = $row['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+    
+                    $address1 = null;
+                    $address2 = null;
+                    $address3 = null;
+                    $address4 = null;
+                    $pic = null;
+                    $pic_phone = null;
+    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
                     }
+    
+                    $jenisAlat = searchAlatNameById($row['jenis_alat'], $db);
+                    $totalPrice = $row['total_amount'];
+    
+                    // Initialize the data for this jenis_alat if it doesn't exist yet
+                    if (!isset($jenisAlatData[$jenisAlat])) {
+                        $jenisAlatData[$jenisAlat] = [
+                            'total_price' => 0,
+                            'count' => 0
+                        ];
+                    }
+    
+                    // Increment the count for the current jenis_alat
+                    $jenisAlatData[$jenisAlat]['total_price'] += $totalPrice;
+                    $jenisAlatData[$jenisAlat]['count']++;
+    
+                    $rows[] = '<tr style="height: 30px;">
+                                <td style="padding-left: 0.5%">'.$count.'</td>
+                                <td style="padding-left: 0.5%">'.$jenisAlat.'</td>
+                                <td style="padding-left: 0.5%">'.searchCapacityNameById($row['capacity'], $db).'</td>
+                                <td style="padding-left: 0.5%">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
+                                <td style="padding-left: 0.5%">'.$row['serial_no'].'</td>
+                                <td style="padding-left: 0.5%">'.searchCustNameById($row['customers'], $db).'<br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
+                                <td style="padding-left: 0.5%"></td>
+                                <td style="padding-left: 0.5%">'.$row['no_daftar'].'</td>
+                                <td style="padding-left: 0.5%">'.$row['siri_keselamatan'].'</td>';
+                                
+                                if ($row['cert_price'] != '0') {
+                                    $rows[] .= '<td style="padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').'</td>';
+                                } else {
+                                    $rows[] .= '<td style="padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'</td>';
+                                }
+                                
+                    $rows[] .= '</tr>';
+                
+    
+                    $count++;
+    
+                    if($count > 10){
+                        $count = 1;
+                    }
+                }
+                                
+                if ($count <= 10 && count($rows) % 10 != 0) {
+                    $remainingRows = 10 - (count($rows) % 10);
+                    for ($i = 0; $i < $remainingRows; $i++) {
+                        $rows[] = '<tr style="height: 30px;">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>';
+                    }
+                }
+    
+                $message = '<html>
+                    <head>
+                        <style>
+                            @media print {
+                                @page {
+                                    margin-left: 0.5in;
+                                    margin-right: 0.5in;
+                                    margin-top: 0.1in;
+                                    margin-bottom: 0.1in;
+                                }
+                                
+                            } 
+                                    
+                            table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                
+                            } 
+                            
+                            .table th, .table td {
+                                padding: 0.70rem;
+                                vertical-align: top;
+                                border-top: 1px solid #dee2e6;
+                                
+                            } 
+                            
+                            .table-bordered {
+                                border: 1px solid #000000;
+                                
+                            } 
+                            
+                            .table-bordered th, .table-bordered td {
+                                border: 1px solid #000000;
+                                font-family: sans-serif;
+                                font-size: 12px;
+                                
+                            } 
+                            
+                            .row {
+                                display: flex;
+                                flex-wrap: wrap;
+                                margin-top: 20px;
+                                margin-right: -15px;
+                                margin-left: -15px;
+                                
+                            } 
+                            
+                            .col-md-4{
+                                position: relative;
+                                width: 33.333333%;
+                            }
+    
+                            .bottom-table {
+                                position: fixed;
+                                bottom: 0;
+                                width: 100%;
+                            }
+    
+                            .page-break {
+                                page-break-before: always;
+                            }
+                        </style>
+                    </head>
+                    <body>';
+    
+                    while ($startIndex < $num_records) {
+                        $message .= '<table>
+                            <tbody>
+                                <tr>
+                                    <td style="vertical-align: left;" width="50%">
+                                        <p>NAMA SYARIKAT PEMILIK / PEMBAIK : <br>DX WEIGHING SOLUTION (M) SDN BHD (1284580-M)<br>
+                                        ALAMAT : NO. 34, JALAN BAGAN 1,<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TAMAN BAGAN, 13400 BUTTERWORTH.<br>
+                                        Tel. : 04-332 5822     Fax. : 04-331 5822</p><br>';
+    
+                                    $message .= '<p>Pengurus Cawangan : <span style="font-size: 14px; font-weight: bold;">' . $validatorFilter . ' ' . $cawanganFilter . '</span><br>';
+                                        
+                                    if($validator == '2'){
+                                        $message .= 'Metrology Corporation Malaysia Sdn. Bhd.</p>';
+                                    }
+                                    elseif($validator == '3'){
+                                        $message .= 'De Metrology Corporation Malaysia Sdn. Bhd.</p>';
+                                    }
+                                        
+                                    $message .= '</td>
+                                    <td valign="top" align="center" width="20%">';
+                                    if($validator == '2'){
+                                        $message .= '<img src="https://cirs.syncweigh.com/assets/metrology.jpeg" width="50%" height="auto" />';
+                                    }
+                                    elseif($validator == '3'){
+                                        $message .= '<img src="https://cirs.syncweigh.com/assets/DMCM.jpeg" width="50%" height="auto" />';
+                                    }
+                                        
+                                    $message .= '</td>
+                                    <td style="vertical-align: right;" width="40%">
+                                        <p>Penentusahan Dalam / Luar Pejabat</p>
+                                        <p>Tarikh : 23.06.2024</p>
+                                        <table class="table-bordered">
+                                            <tbody>
+                                                <tr><th width="25%">Alat</th><th width="30%">Jum. Alat</th><th width="45%">Bayaran</th></tr>';
+                                            
+                                            $count = 0;
+                                            $totalPrice = 0;
+                                            foreach ($jenisAlatData as $key => $value) {
+                                                $alatCount = floatval($value['count']);
+                                                $alatTotalPrice = floatval($value['total_price']);
+    
+                                                $message .= '<tr><td style="padding-left: 1%">'.$key.'</td><td style="padding-left: 1%">'.$alatCount.'</td><td style="padding-left: 1%">RM '.number_format($alatTotalPrice, 2, '.', '').'</td>';
+                                                $count += $alatCount;
+                                                $totalPrice += $alatTotalPrice;
+                                            }
+                                    $message .= '<tr><td style="padding-left: 1%">Jumlah</td><td style="padding-left: 1%">'.$count.'</td><td style="padding-left: 1%">RM '. number_format(floatval($totalPrice), 2, '.', '') .'</td></tr></tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+    
+                        <p style="text-align: center;">BUTIRAN SENARAI ALAT-ALAT TIMBANG DAN SUKAT UNTUK PENGUJIAN DAN PENENTUSAHAN</p>
+                        <table class="table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>Bil.</th>
+                                    <th>Jenis Alat</th>
+                                    <th>Had Terima</th>
+                                    <th>Jenama</th>
+                                    <th width="10%">No. Siri Alat</th>
+                                    <th>Nama Dan Alamat Pemilik</th>
+                                    <th>Kod</th>
+                                    <th>No. Daftar</th>
+                                    <th>No. Siri Pelekat Keselamatan</th>
+                                    <th>Fi / Bayaran</th>
+                                </tr>';
+    
+                            for ($i = $startIndex; $i < $startIndex + $recordsPerPage; $i++) {
+                                $message .= $rows[$i];
+                            }
+                            
+    
+                        $message .= '</tbody></table>';
+                        
+                        $message .= '
+                            <table width="100%" style="padding: 10px;">
+                                <tr>
+                                    <td width="40%">
+                                        <img src="'.$companySignature.'"  style="margin-left:20%; padding-top:10%" width="60%" height="auto"/>
+                                    </td>
+                                    <td width="40%"></td>
+                                    <td width="30%"></td>
+                                </tr>
+                                <tr>
+                                    <td width="30%" style="border-top: 1px solid black; text-align: center; padding-top: 5px;">
+                                        Tandatangan Pemilik / Pembaik
+                                    </td>
+                                    <td width="40%"></td>
+                                    <td width="30%" style="border-top: 1px solid black; text-align: center; padding-top: 5px;">
+                                        Pengesahan Pegawai Penentusan
+                                    </td>
+                                </tr>
+                            </table>';
+    
+    
+                        // Move to the next page
+                        $startIndex += $recordsPerPage;
+                        $pages++;
+    
+                        // Add a page break if more records are available
+                        if ($startIndex < $totalRecords) {
+                            $message .= '<div class="page-break"></div>';
+                        }
+                }
             }
         }    
     

@@ -128,14 +128,15 @@ else{
               <thead>
                 <tr>
                   <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
+                  <th>NO</th>
                   <th>DATE</th>
+                  <th>NAME OF PURCHASE</th>
                   <th>ABOUT WEIGHING,MEASURING AND <br>WEIGHING INSTRUMENTS</th>
                   <th>CAPACITY</th>
                   <th>QUANTITY</th>
                   <th>REGISTER NO.</th>
                   <th>CERTIFICATE NO./ <br>NO.SIRI PELEKAT <br>KESELAMATAN</th>
-                  <th>NAME OF PURCHASE</th>
-                  <th>ADDRESS</th>
+                  <!-- <th>ADDRESS</th> -->
                   <th></th>
                 </tr>
               </thead>
@@ -221,6 +222,7 @@ $(function () {
   var toDateValue = $('#toDate').val();
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
   var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
+  var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
   var statusFilter = '6';
 
   var table = $("#weightTable").DataTable({
@@ -230,7 +232,7 @@ $(function () {
     'serverSide': true,
     'serverMethod': 'post',
     'searching': false,
-    'order': [[ 1, 'asc' ]],
+    'order': [[ 2, 'asc' ]],
     'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
       'type': 'POST',
@@ -240,6 +242,7 @@ $(function () {
         toDate: toDateValue,
         customer: customerNoFilter,
         validator: validatorFilter,
+        cawangan: cawanganFilter,
         status: statusFilter
       } 
     },
@@ -258,7 +261,17 @@ $(function () {
           // }
         }
       },
+      {
+        data: null, // The data property is null since this column is client-side only
+        className: 'auto-increment',
+        orderable: false,
+        render: function (data, type, row, meta) {
+          // meta.row provides the row index in the current page
+          return meta.row + meta.settings._iDisplayStart + 1;
+        }
+      },
       { data: 'stamping_date' },
+      { data: 'customers' },
       {
         data: null, // We set data to null to allow custom rendering
         render: function (data, type, row) {
@@ -269,8 +282,7 @@ $(function () {
       { data: 'quantity' },
       { data: 'no_daftar' },
       { data: 'siri_keselamatan' },
-      { data: 'customers' },
-      { data: 'full_address' },
+      // { data: 'full_address' },
       { 
         className: 'dt-control',
         orderable: false,
@@ -396,6 +408,7 @@ $(function () {
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
     var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
+    var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
     var statusFilter = '6';
 
     //Destroy the old Datatable
@@ -409,7 +422,7 @@ $(function () {
       'serverSide': true,
       'serverMethod': 'post',
       'searching': false,
-      'order': [[ 1, 'asc' ]],
+      'order': [[ 2, 'asc' ]],
       'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
         'type': 'POST',
@@ -419,6 +432,7 @@ $(function () {
           toDate: toDateValue,
           customer: customerNoFilter,
           validator: validatorFilter,
+          cawangan: cawanganFilter,
           status: statusFilter
         } 
       },
@@ -437,7 +451,17 @@ $(function () {
             // }
           }
         },
+        {
+          data: null, // The data property is null since this column is client-side only
+          className: 'auto-increment',
+          orderable: false,
+          render: function (data, type, row, meta) {
+            // meta.row provides the row index in the current page
+            return meta.row + meta.settings._iDisplayStart + 1;
+          }
+        },
         { data: 'stamping_date' },
+        { data: 'customers' },
         {
           data: null, // We set data to null to allow custom rendering
           render: function (data, type, row) {
@@ -448,8 +472,7 @@ $(function () {
         { data: 'quantity' },
         { data: 'no_daftar' },
         { data: 'siri_keselamatan' },
-        { data: 'customers' },
-        { data: 'full_address' },
+        // { data: 'full_address' },
         { 
           className: 'dt-control',
           orderable: false,
@@ -474,10 +497,12 @@ $(function () {
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-  
+    var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
+    var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
+
     if(selectedIds.length > 0){
       //$.post('php/export_borang.php', {"ids": selectedIds, "driver": "6", "fromDate": fromDateValue, "toDate": toDateValue, "customer": customerNoFilter}, function(data){
-      $.post('php/export_borang.php', {"ids": selectedIds, "driver": "6"}, function(data){
+      $.post('php/export_borang.php', {"ids": selectedIds, "driver": "6", "validator": validatorFilter, "cawangan": cawanganFilter}, function(data){
         var obj = JSON.parse(data);
     
         if(obj.status === 'success'){

@@ -130,15 +130,14 @@ else{
                   <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
                   <th>BRG E BIL NO.</th>
                   <th>DATE</th>
+                  <th>NAME OF PURCHASE</th>
                   <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
                   <th>CAPACITY</th>
                   <th>LIST NO. (STMP. NO.)</th>
                   <th>REGISTER NO. (BARU / LAMA)</th>
                   <th>DETAILS OF REPAIR</th>
                   <th>CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
-                  <th>NAME OF PURCHASE</th>
-                  <th>ADDRESS</th>
-                  <th>FEE</th>
+                  <th width='7%'>FEE</th>
                   <th></th>
                 </tr>
               </thead>
@@ -223,7 +222,8 @@ $(function () {
   var fromDateValue = $('#fromDate').val();
   var toDateValue = $('#toDate').val();
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-  var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
+  var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
+  var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';    
   var statusFilter = '7';
 
   var table = $("#weightTable").DataTable({
@@ -243,6 +243,7 @@ $(function () {
         toDate: toDateValue,
         customer: customerNoFilter,
         validator: validatorFilter,
+        cawangan: cawanganFilter,
         status: statusFilter
       } 
     },
@@ -265,6 +266,7 @@ $(function () {
       },
       { data: 'borang_e' },
       { data: 'stamping_date' },
+      { data: 'customers' },
       {
         data: null, // We set data to null to allow custom rendering
         render: function (data, type, row) {
@@ -276,16 +278,14 @@ $(function () {
       { data: 'no_daftar' },
       { data: 'reason' },
       { data: 'siri_keselamatan' },
-      { data: 'customers' },
-      { data: 'full_address' },
       {
         data: null, // Custom rendering for unit_price and cert_price
         render: function (data, type, row) {
-          if (row.cert_price != '0'){
-            return row.unit_price + '<br>' + row.cert_price;
+          if (row.cert_price != 0){
+            return 'RM ' + parseFloat(row.unit_price).toFixed(2) + '<br>' + 'RM ' + parseFloat(row.cert_price).toFixed(2);
           }else{
-            return row.unit_price;
-          } 
+            return 'RM ' + parseFloat(row.unit_price).toFixed(2);
+          }  
         }
       },
       { 
@@ -413,6 +413,7 @@ $(function () {
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
     var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
+    var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
     var statusFilter = '7';
 
     //Destroy the old Datatable
@@ -436,6 +437,7 @@ $(function () {
           toDate: toDateValue,
           customer: customerNoFilter,
           validator: validatorFilter,
+          cawangan: cawanganFilter,
           status: statusFilter
         } 
       },
@@ -458,6 +460,7 @@ $(function () {
         },
         { data: 'borang_e' },
         { data: 'stamping_date' },
+        { data: 'customers' },
         {
           data: null, // We set data to null to allow custom rendering
           render: function (data, type, row) {
@@ -469,15 +472,13 @@ $(function () {
         { data: 'no_daftar' },
         { data: 'reason' },
         { data: 'siri_keselamatan' },
-        { data: 'customers' },
-        { data: 'full_address' },
         {
           data: null, // Custom rendering for unit_price and cert_price
           render: function (data, type, row) {
-            if (row.cert_price != '0'){
-              return row.unit_price + '<br>' + row.cert_price;
+            if (row.cert_price != 0){
+              return 'RM ' + parseFloat(row.unit_price).toFixed(2) + '<br>' + 'RM ' + parseFloat(row.cert_price).toFixed(2);
             }else{
-              return row.unit_price;
+              return 'RM ' + parseFloat(row.unit_price).toFixed(2);
             } 
           }
         },
