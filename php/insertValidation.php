@@ -28,7 +28,7 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 	$validationDate = null;
 	if(isset($_POST['validationDate']) && $_POST['validationDate']!=null && $_POST['validationDate']!=""){
 		$validationDate = $_POST['validationDate'];
-		$validationDate = DateTime::createFromFormat('d/m/Y', $validationDate)->format('Y-m-d H:i:s');
+		$validationDate = \DateTime::createFromFormat('d/m/Y', $validationDate)->format('Y-m-d H:i:s');
 	}
 	
 	$dealer = null;
@@ -315,6 +315,15 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 				// 	$stmt2->close();
 				// } 
 				
+				// UPDATE Other Validation System Log
+				if ($insert_stmt3 = $db->prepare("INSERT INTO other_validation_log (action, user_id, item_id) 
+				VALUES (?, ?, ?)")){
+					$action = "UPDATE";
+					$insert_stmt3->bind_param('sss', $action, $uid, $_POST['id']);
+					$insert_stmt3->execute();
+					$insert_stmt3->close();
+				}
+
 				$update_stmt->close();
 				$db->close();
 				
@@ -416,6 +425,15 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 				// 	$stmt2->execute();
 				// 	$stmt2->close();
 				// } 
+
+				// Insert Other Validation System Log
+				if ($insert_stmt3 = $db->prepare("INSERT INTO other_validation_log (action, user_id, item_id) 
+				VALUES (?, ?, ?)")){
+					$action = "INSERT";
+					$insert_stmt3->bind_param('sss', $action, $uid, $validation_id);
+					$insert_stmt3->execute();
+					$insert_stmt3->close();
+				}
 
 				$insert_stmt->close();
 				$db->close();
