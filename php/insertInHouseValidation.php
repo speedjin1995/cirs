@@ -215,6 +215,15 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 					$stmt2->execute();
 					$stmt2->close();
 				} 
+
+				// UPDATE Inhouse Validation System Log
+				if ($insert_stmt3 = $db->prepare("INSERT INTO inhouse_log (action, user_id, item_id) 
+				VALUES (?, ?, ?)")){
+					$action = "UPDATE";
+					$insert_stmt3->bind_param('sss', $action, $uid, $_POST['id']);
+					$insert_stmt3->execute();
+					$insert_stmt3->close();
+				}
 				
 				$update_stmt->close();
 				$db->close();
@@ -291,6 +300,14 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 								$updmisc_stmt->close();
 							}
 
+							// Insert Inhouse Validation System Log
+							if ($insert_stmt3 = $db->prepare("INSERT INTO inhouse_log (action, user_id, item_id) 
+							VALUES (?, ?, ?)")){
+								$action = "INSERT";
+								$insert_stmt3->bind_param('sss', $action, $uid, $validation_id);
+								$insert_stmt3->execute();
+								$insert_stmt3->close();
+							}
 							$insert_stmt->close();
 							$db->close();
 							
