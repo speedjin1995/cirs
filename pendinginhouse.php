@@ -267,7 +267,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                   <div class="form-group">
                     <label>Validator * </label>
                     <select class="form-control select2" style="width: 100%;" id="validator" name="validator" required>
-                      <option selected="selected">-</option>
+                      <option value="" selected disabled hidden>-</option>
                       <?php while($validator2=mysqli_fetch_assoc($validators2)){ ?>
                         <option value="<?=$validator2['id'] ?>"><?=$validator2['validator'] ?></option>
                       <?php } ?>
@@ -1037,7 +1037,7 @@ $(function () {
           let buttons = '<div class="row">';
 
           // Edit button
-          buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+          buttons += '<div class="col-6"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
                     ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
 
           // // Extra button if validate_by is 3
@@ -1047,18 +1047,18 @@ $(function () {
           // }
 
           // Print button
-          buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+          buttons += '<div class="col-6"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
                     ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
 
           // Complete button if conditions are met
           if (row.tests != '') {
-            buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+            buttons += '<div class="col-6"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
                       ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
           }
 
           // Cancelled button
-          buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-                    ')" class="btn btn-danger btn-sm">X</button></div>';
+          buttons += '<div class="col-6"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+                    ')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>';
 
           buttons += '</div>'; // Closing row div
 
@@ -1303,7 +1303,7 @@ $(function () {
 
             // Cancelled button
             buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-                      ')" class="btn btn-danger btn-sm">X</button></div>';
+                      ')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>';
 
             buttons += '</div>'; // Closing row div
 

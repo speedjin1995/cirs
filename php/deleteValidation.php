@@ -3,6 +3,7 @@ require_once 'db_connect.php';
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 session_start();
+$uid = $_SESSION['userID'];
 
 $status = '';
 if(isset($_POST['status']) && $_POST['status']!=null && $_POST['status']!=""){
@@ -27,6 +28,14 @@ if(isset($_POST['id']) && $_POST['id']!=null && $_POST['id']!=""){
 			$stmt2->bind_param('sss', $del, $updateDt, $id);
 			
 			if($stmt2->execute()){
+				if ($insert_stmt3 = $db->prepare("INSERT INTO other_validation_log (action, user_id, item_id) 
+				VALUES (?, ?, ?)")){
+					$action = "DELETE";
+					$insert_stmt3->bind_param('sss', $action, $uid, $id);
+					$insert_stmt3->execute();
+					$insert_stmt3->close();
+				}
+
 				$stmt2->close();
 				$db->close();
 				
@@ -60,6 +69,15 @@ if(isset($_POST['id']) && $_POST['id']!=null && $_POST['id']!=""){
 			$stmt2->bind_param('sssss', $del, $cancelReason, $otherReason, $updateDt, $id);
 			
 			if($stmt2->execute()){
+				// Cancel Other Validation System Log
+				if ($insert_stmt3 = $db->prepare("INSERT INTO other_validation_log (action, user_id, item_id, cancel_id, remark) 
+				VALUES (?, ?, ?, ?, ?)")){
+					$action = "CANCELLED";
+					$insert_stmt3->bind_param('sssss', $action, $uid, $_POST['id'], $cancelReason, $otherReason);
+					$insert_stmt3->execute();
+					$insert_stmt3->close();
+				}
+
 				$stmt2->close();
 				$db->close();
 				

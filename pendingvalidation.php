@@ -1656,7 +1656,7 @@ $(function () {
 
   $('#extendModal').find('#company').on('change', function(){
     //$('#spinnerLoading').show();
-    var id = $(this).find(":selected").val(); console.log(id);
+    var id = $(this).find(":selected").val();
 
     $.post('php/getCustomer.php', {userID: id}, function(data){
       var obj = JSON.parse(data);

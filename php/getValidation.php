@@ -75,7 +75,7 @@ if(isset($_POST['validationId'])){
                 $validationDate = '';
                 if(isset($row['validation_date']) && $row['validation_date'] != ''){
                     $validationDate = $row['validation_date'];
-                    $validationDate = DateTime::createFromFormat('Y-m-d', $validationDate)->format('d/m/Y');
+                    $validationDate = DateTime::createFromFormat('Y-m-d', $validationDate)->format('Y-m-d H:i:s');
                 }
 
                 if($format == 'EXPANDABLE'){
