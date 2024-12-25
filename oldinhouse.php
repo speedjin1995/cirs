@@ -704,166 +704,40 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
   </div>
 </div>
 
-<script type="text/html" id="atkDetails">
-  <div class="card card-primary">
-    <div class="card-body">
-      <div class="row">
-        <h4>Addtional Information (ATK)</h4>
+<div class="modal fade" id="logModal"> 
+  <div class="modal-dialog modal-xl" style="max-width: 80%;">
+    <div class="modal-content">
+
+      <div class="modal-header bg-gray-dark color-palette">
+        <h4 class="modal-title">System Log</h4>
+        <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div class="row">
-        <div class="col-4">
-          <div class="form-group">
-            <label>Penentusan Baru *</label>
-            <input type="text" class="form-control" id="penentusanBaru" name="penentusanBaru" required>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="form-group">
-            <label>Penetusan Semula</label>
-            <input type="text" class="form-control" id="penentusanSemula" name="penentusanSemula" >
-          </div>
-        </div>
-        <div class="form-group col-4">
-          <label>Kelulusan MSPK * </label>
-          <select class="form-control" style="width: 100%;" id="kelulusanMSPK" name="kelulusanMSPK" required>
-            <option value="YES">YES</option>
-            <option value="NO">NO</option>
-          </select>
-        </div>
-        <div class="col-4">
-          <div class="form-group">
-            <label>No. Kelulusan MSPK</label>
-            <input type="text" class="form-control" id="noMSPK" name="noMSPK">
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="form-group">
-            <label>No. Serial Indicator *</label>
-            <input type="text" class="form-control" id="noSerialIndicator" name="noSerialIndicator">
-          </div>
-        </div>
-        <div class="form-group col-4">
-          <label for="model">Platform Made In *</label>
-          <select class="form-control select2" id="platformCountry" name="platformCountry" required>
-            <option value="" selected disabled hidden>Please Select</option>
-            <?php while($rowcountry=mysqli_fetch_assoc($country)){ ?>
-              <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
-            <?php } ?>
-          </select>
-        </div>
-        <div class="form-group col-4">
-          <label for="model">Platform Type *</label>
-          <select class="form-control select2" id="platformType" name="platformType" required>
-            <option value="" selected disabled hidden>Please Select</option>
-            <option value="MS Steel Deck">MS Steel Deck</option>
-            <option value="Concrete Deck">Concrete Deck</option>
-            <option value="Portable MS Steel Deck">Portable MS Steel Deck</option>
-            <option value="Portable Concrete Deck">Portable Concrete Deck</option>
-          </select>
-        </div>
-        <div class="col-4">
-          <div class="form-group">
-            <label>Structure Size * </label>
-            <select class="form-control" style="width: 100%;" id="size" name="size" required>
-              <option selected="selected">-</option>
-              <?php while($rowSI=mysqli_fetch_assoc($sizes)){ ?>
-                <option value="<?=$rowSI['id'] ?>"><?=$rowSI['size'] ?></option>
-              <?php } ?>
-            </select>
-          </div>
-        </div>
-        <div class="form-group col-4">
-          <label for="model">Jenis Pelantar *</label>
-          <select class="form-control select2" id="jenisPelantar" name="jenisPelantar" required>
-            <option value="" selected disabled hidden>Please Select</option>
-            <option value="Pit">Pit</option>
-            <option value="Pitless">Pitless</option>
-          </select>
-        </div>
-        <div class="col-12">
-          <div class="form-group">
-            <label>Others</label>
-            <textarea class="form-control" type="text" placeholder="Remark" id="others" name="others"></textarea>
-          </div>
-        </div>
-      </div><hr>
-      <div class="row">
-        <h4>Load Cells</h4>
+
+      <div class="modal-body">
+        <table class="table table-striped table-bordered" id="logTable">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>User</th>
+              <th>Action</th>
+              <th>Date</th>
+              <th>Cancellation Reason</th>
+              <th>Remark</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
-      <div class="row">
-        <div class="form-group col-4">
-          <label for="model">Load Cells Made In *</label>
-          <select class="form-control select2" id="loadCellCountry" name="loadCellCountry" required>
-            <option value="" selected disabled hidden>Please Select</option>
-            <?php while($rowcountry2=mysqli_fetch_assoc($country2)){ ?>
-              <option value="<?=$rowcountry2['id'] ?>"><?=$rowcountry2['name'] ?></option>
-            <?php } ?>
-          </select>
-        </div>
-        <div class="col-4">
-          <div class="form-group">
-            <label>No. of Load Cells *</label>
-            <input type="number" class="form-control" id="noOfLoadCell" name="noOfLoadCell" required>
-          </div>
-        </div>
-        <div class="col-4">
-          <button style="margin-left:auto;margin-right: 25px;" type="button" class="btn btn-primary add-load-cell">Add Load Cells</button>
-        </div>
+
+      <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
-      <table style="width: 100%;">
-        <thead>
-          <tr>
-            <th width="5%">No.</th>
-            <th width="20%">Load Cells Type</th>
-            <th width="20%">Brand</th>
-            <th width="20%">Model</th>
-            <th width="20%">Load Cell Capacity</th>
-            <th width="10%">Serial No.</th>
-            <th width="5%">Delete</th>
-          </tr>
-        </thead>
-        <tbody id="loadCellTable"></tbody>
-      </table>
     </div>
   </div>
-</script>
-
-<script type="text/html" id="pricingDetails">
-  <tr class="details">
-    <td>
-      <input type="text" class="form-control" id="no" name="no" readonly>
-    </td>
-    <td>
-      <input type="text" class="form-control" id="date" name="date" readonly>
-    </td>
-    <td>
-      <input type="text" class="form-control" id="notes" name="notes">
-    </td>
-    <td>
-      <div class='input-group date' id="datePicker5" data-target-input="nearest">
-        <input type='text' class="form-control datetimepicker-input" data-target="#datePicker5" id="followUpDate" name="followUpDate"/>
-        <div class="input-group-append" data-target="#datePicker5" data-toggle="datetimepicker">
-          <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-        </div>
-      </div>
-    </td>
-    <td>
-      <select class="form-control" style="width: 100%;" id="picAttend" name="picAttend" readonly>
-        <option selected="selected">-</option>
-        <?php while($rowU=mysqli_fetch_assoc($users)){ ?>
-          <option value="<?=$rowU['id'] ?>"><?=$rowU['name'] ?></option>
-        <?php } ?>
-      </select>
-    </td>
-    <td>
-      <select class="form-control" style="width: 100%;" id="status" name="status">
-        <option value="Pending">Pending</option>
-        <option value="Complete">Complete</option>
-      </select>
-    </td>
-    <!--td><button class="btn btn-danger btn-sm" id="remove"><i class="fa fa-times"></i></button></td-->
-  </tr>
-</script>
+</div>
 
 <script type="text/html" id="loadTestingDetails">
   <tr class="details">
@@ -1067,50 +941,20 @@ $(function () {
               buttons +=  '<div class="col-4"><button title="Revert" type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
               ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
 
-              buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm">X</button></div>';
+              // System Log
+              buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
 
+              buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm">X</button></div>';
 
               return buttons;
             } 
             else {
-              return ''; // Return an empty string or any other placeholder if the item is invoiced
+              // System Log
+              buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+              return buttons; // Return an empty string or any other placeholder if the item is invoiced
             }
         }
       },
-      // { 
-      //   data: 'id',
-      //   render: function (data, type, row) {
-      //     let buttons = '<div class="row">';
-
-      //     // Edit button
-      //     buttons += '<div class="col-3"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
-      //               ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
-
-      //     // // Extra button if validate_by is 3
-      //     // if (row.validate_by == 3) {
-      //     //   buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
-      //     //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
-      //     // }
-
-      //     // Print button
-      //     buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-      //               ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
-
-      //     // Complete button if conditions are met
-      //     if (row.calibrations != '') {
-      //       buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
-      //                 ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
-      //     }
-
-      //     // Cancelled button
-      //     buttons += '<div class="col-3"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-      //               ')" class="btn btn-danger btn-sm">X</button></div>';
-
-      //     buttons += '</div>'; // Closing row div
-
-      //     return buttons;
-      //   }
-      // },
       { 
         className: 'dt-control',
         orderable: false,
@@ -1329,13 +1173,17 @@ $(function () {
               buttons +=  '<div class="col-4"><button title="Revert" type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
               ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
 
-              buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm">X</button></div>';
+              // System Log
+              buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
 
+              buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm">X</button></div>';
 
               return buttons;
             } 
             else {
-              return ''; // Return an empty string or any other placeholder if the item is invoiced
+              // System Log
+              buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+              return buttons; // Return an empty string or any other placeholder if the item is invoiced
             }
           }
         },
@@ -2429,5 +2277,41 @@ function displayPreview(data) {
 
   var previewTable = document.getElementById('previewTable');
   previewTable.innerHTML = htmlTable;
+}
+
+function log(id) {
+  $('#spinnerLoading').show();
+  $.post('php/getLog.php', {id: id, type: 'Inhouse'}, function(data){
+    var obj = JSON.parse(data);
+    
+    if(obj.status === 'success'){ 
+      $('#logTable tbody').empty();
+
+      if (obj.message.length > 0){
+        obj.message.forEach(row => {
+          let newRow = '<tr>';
+          newRow += '<td>' + row.no + '</td>';
+          newRow += '<td>' + row.user_id + '</td>';
+          newRow += '<td>' + row.action + '</td>';
+          newRow += '<td>' + row.date + '</td>';
+          newRow += '<td>' + row.cancel_id + '</td>';
+          newRow += '<td>' + row.remark + '</td>';
+          newRow += '</tr>';
+
+          $('#logTable tbody').append(newRow);
+        })
+      } else {
+        $('#logTable tbody').append('<tr><td colspan="6" class="text-center">No data available</td></tr>');
+      }
+      $('#logModal').modal('show');
+    }
+    else if(obj.status === 'failed'){
+      toastr["error"](obj.message, "Failed:");
+    }
+    else{
+      toastr["error"]("Something wrong when pull data", "Failed:");
+    }
+    $('#spinnerLoading').hide();
+  });
 }
 </script>

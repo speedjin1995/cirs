@@ -767,6 +767,41 @@ else{
   </div>
 </div>
 
+<div class="modal fade" id="logModal"> 
+  <div class="modal-dialog modal-xl" style="max-width: 80%;">
+    <div class="modal-content">
+
+      <div class="modal-header bg-gray-dark color-palette">
+        <h4 class="modal-title">System Log</h4>
+        <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <table class="table table-striped table-bordered" id="logTable">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>User</th>
+              <th>Action</th>
+              <th>Date</th>
+              <th>Cancellation Reason</th>
+              <th>Remark</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script type="text/html" id="atkDetails">
   <div class="card card-primary">
     <div class="card-body">
@@ -1564,7 +1599,7 @@ $(function () {
           let buttons = '<div class="row">';
 
           // Edit button
-          buttons += '<div class="col-6"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+          buttons += '<div class="col-4"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
                     ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
 
           // Extra button if validate_by is 3
@@ -1583,8 +1618,11 @@ $(function () {
           //             ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
           // }
 
+          // Log Button
+          buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+
           // Cancelled button
-          buttons += '<div class="col-6"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+          buttons += '<div class="col-4"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
                     ')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></button></div>';
 
           buttons += '</div>'; // Closing row div
@@ -1810,7 +1848,7 @@ $(function () {
             let buttons = '<div class="row">';
 
             // Edit button
-            buttons += '<div class="col-6"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+            buttons += '<div class="col-4"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
                       ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
 
             // Extra button if validate_by is 3
@@ -1829,8 +1867,11 @@ $(function () {
             //             ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
             // }
 
+            // Log Button
+            buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+
             // Cancelled button
-            buttons += '<div class="col-6"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+            buttons += '<div class="col-4"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
                       ')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></button></div>';
 
             buttons += '</div>'; // Closing row div
@@ -3472,5 +3513,41 @@ function displayPreview(data) {
 
   var previewTable = document.getElementById('previewTable');
   previewTable.innerHTML = htmlTable;
+}
+
+function log(id) {
+  $('#spinnerLoading').show();
+  $.post('php/getLog.php', {id: id, type: 'Stamping'}, function(data){
+    var obj = JSON.parse(data);
+    
+    if(obj.status === 'success'){ 
+      $('#logTable tbody').empty();
+
+      if (obj.message.length > 0){
+        obj.message.forEach(row => {
+          let newRow = '<tr>';
+          newRow += '<td>' + row.no + '</td>';
+          newRow += '<td>' + row.user_id + '</td>';
+          newRow += '<td>' + row.action + '</td>';
+          newRow += '<td>' + row.date + '</td>';
+          newRow += '<td>' + row.cancel_id + '</td>';
+          newRow += '<td>' + row.remark + '</td>';
+          newRow += '</tr>';
+
+          $('#logTable tbody').append(newRow);
+        })
+      } else {
+        $('#logTable tbody').append('<tr><td colspan="6" class="text-center">No data available</td></tr>');
+      }
+      $('#logModal').modal('show');
+    }
+    else if(obj.status === 'failed'){
+      toastr["error"](obj.message, "Failed:");
+    }
+    else{
+      toastr["error"]("Something wrong when pull data", "Failed:");
+    }
+    $('#spinnerLoading').hide();
+  });
 }
 </script>
