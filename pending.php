@@ -819,7 +819,6 @@ else{
             </tr>
           </thead>
           <tbody>
-            <!-- Table data will be appended here dynamically by AJAX -->
           </tbody>
         </table>
       </div>
@@ -3597,26 +3596,29 @@ function displayPreview(data) {
 
 function log(id) {
   $('#spinnerLoading').show();
-  $.post('php/getLog.php', {stampId: id, type: 'Stamping'}, function(data){
+  $.post('php/getLog.php', {id: id, type: 'Stamping'}, function(data){
     var obj = JSON.parse(data);
     
-    if(obj.status === 'success'){ console.log(obj);
+    if(obj.status === 'success'){ 
       $('#logTable tbody').empty();
 
-      // Check if the data is not empty
-      if (data && data.length > 0) {
-        // $.each(data, function(index, reason) {
-        //   var row = '<tr>' +
-        //             '<td>' + (index + 1) + '</td>' +
-        //             '<td>' + reason.reason + '</td>' +
-        //             '<td>' + (reason.other_reason || 'N/A') + '</td>' +
-        //             '</tr>';
-        //   $('#logTable tbody').append(row);
-        // });
+      if (obj.message.length > 0){
+        obj.message.forEach(row => {
+          let newRow = '<tr>';
+          newRow += '<td>' + row.no + '</td>';
+          newRow += '<td>' + row.user_id + '</td>';
+          newRow += '<td>' + row.action + '</td>';
+          newRow += '<td>' + row.date + '</td>';
+          newRow += '<td>' + row.cancel_id + '</td>';
+          newRow += '<td>' + row.remark + '</td>';
+          newRow += '</tr>';
+
+          $('#logTable tbody').append(newRow);
+        })
       } else {
-        // If no data, display a message in the table
-        $('#logTable tbody').append('<tr><td colspan="3" class="text-center">No data available</td></tr>');
+        $('#logTable tbody').append('<tr><td colspan="6" class="text-center">No data available</td></tr>');
       }
+      $('#logModal').modal('show');
     }
     else if(obj.status === 'failed'){
       toastr["error"](obj.message, "Failed:");
