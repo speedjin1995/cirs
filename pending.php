@@ -49,9 +49,10 @@ else{
   $countryAutoPack = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryAtsH = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $country2 = $db->query("SELECT * FROM country WHERE deleted = '0'");
-  $loadCells = $db->query("SELECT load_cells.*, machines.machine_type AS machinetype, brand.brand AS brand_name, model.model AS model_name, alat.alat, country.nicename 
-FROM load_cells, machines, brand, model, alat, country WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
-AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load_cells.deleted = '0'");
+  $loadCells = $db->query("SELECT load_cells.*, brand.brand AS brand_name, model.model AS model_name FROM load_cells join brand on load_cells.brand = brand.id join model on load_cells.model = model.id where load_cells.deleted = 0 and brand.deleted = 0 and model.deleted = 0");
+//   $loadCells = $db->query("SELECT load_cells.*, machines.machine_type AS machinetype, brand.brand AS brand_name, model.model AS model_name, alat.alat, country.nicename 
+// FROM load_cells, machines, brand, model, alat, country WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
+// AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load_cells.deleted = '0'");
 }
 ?>
 
@@ -191,7 +192,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                   <th>Previous Stamp Date</th>
                   <th>Expired Date</th>
                   <th>Status</th>
-                  <th>Action</th>
+                  <th width="10%">Action</th>
                   <th></th>
                 </tr>
               </thead>
@@ -790,6 +791,42 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
           <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="logModal"> 
+  <div class="modal-dialog modal-xl" style="max-width: 80%;">
+    <div class="modal-content">
+
+      <div class="modal-header bg-gray-dark color-palette">
+        <h4 class="modal-title">System Log</h4>
+        <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <table class="table table-striped table-bordered" id="logTable">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>User</th>
+              <th>Action</th>
+              <th>Date</th>
+              <th>Cancellation Reason</th>
+              <th>Remark</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Table data will be appended here dynamically by AJAX -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1591,7 +1628,7 @@ $(function () {
           let buttons = '<div class="row">';
 
           // Edit button
-          buttons += '<div class="col-6"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+          buttons += '<div class="col-4"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
                     ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
 
           // Extra button if validate_by is 3
@@ -1602,21 +1639,23 @@ $(function () {
 
           // Print button
           if (allowedAlats.includes(row.jenis_alat)) {
-            buttons += '<div class="col-6"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+            buttons += '<div class="col-4"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
                       ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
-
-            buttons += '</div>';
           }
+
+          buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+
+          buttons += '</div>';
 
           buttons += '<div class="row">'
           // Complete button if conditions are met
           if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '' && row.borang_e != '') {
-            buttons += '<div class="col-6"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+            buttons += '<div class="col-4"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
                       ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
           }
 
           // Cancelled button
-          buttons += '<div class="col-6"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+          buttons += '<div class="col-4"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
                     ')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>';
 
           buttons += '</div>'; // Closing row div
@@ -1842,7 +1881,7 @@ $(function () {
             let buttons = '<div class="row">';
 
             // Edit button
-            buttons += '<div class="col-6"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+            buttons += '<div class="col-4"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
                       ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
 
             // Extra button if validate_by is 3
@@ -1853,11 +1892,13 @@ $(function () {
 
             // Print button
             if (allowedAlats.includes(row.jenis_alat)) {
-              buttons += '<div class="col-6"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+              buttons += '<div class="col-4"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
                         ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
-
-              buttons += '</div>';
             }            
+
+            buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+
+            buttons += '</div>';
 
             buttons += '<div class="row">'
             // Complete button if conditions are met
@@ -3552,5 +3593,38 @@ function displayPreview(data) {
 
   var previewTable = document.getElementById('previewTable');
   previewTable.innerHTML = htmlTable;
+}
+
+function log(id) {
+  $('#spinnerLoading').show();
+  $.post('php/getLog.php', {stampId: id, type: 'Stamping'}, function(data){
+    var obj = JSON.parse(data);
+    
+    if(obj.status === 'success'){ console.log(obj);
+      $('#logTable tbody').empty();
+
+      // Check if the data is not empty
+      if (data && data.length > 0) {
+        // $.each(data, function(index, reason) {
+        //   var row = '<tr>' +
+        //             '<td>' + (index + 1) + '</td>' +
+        //             '<td>' + reason.reason + '</td>' +
+        //             '<td>' + (reason.other_reason || 'N/A') + '</td>' +
+        //             '</tr>';
+        //   $('#logTable tbody').append(row);
+        // });
+      } else {
+        // If no data, display a message in the table
+        $('#logTable tbody').append('<tr><td colspan="3" class="text-center">No data available</td></tr>');
+      }
+    }
+    else if(obj.status === 'failed'){
+      toastr["error"](obj.message, "Failed:");
+    }
+    else{
+      toastr["error"]("Something wrong when pull data", "Failed:");
+    }
+    $('#spinnerLoading').hide();
+  });
 }
 </script>

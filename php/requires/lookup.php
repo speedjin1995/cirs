@@ -411,7 +411,6 @@ function convertDatetimeToDate($datetime){
     return $date->format('d/m/Y'); 
 }
 
-
 function searchStateNameById($value, $db) {
     $id = null;
 
@@ -421,6 +420,22 @@ function searchStateNameById($value, $db) {
         $result = $select_stmt->get_result();
         if ($row = $result->fetch_assoc()) {
             $id = $row['state'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+function searchReasonById($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM reasons WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['reason'];
         }
         $select_stmt->close();
     }

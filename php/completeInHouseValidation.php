@@ -3,6 +3,8 @@ require_once 'db_connect.php';
 
 session_start();
 
+$uid = $_SESSION['userID'];
+
 if(!isset($_SESSION['userID'])){
 	echo '<script type="text/javascript">location.href = "../login.php";</script>'; 
 }
@@ -15,6 +17,14 @@ if(isset($_POST['userID'])){
 		$stmt2->bind_param('ss', $del , $id);
 		
 		if($stmt2->execute()){
+			// Insert Other Validation System Log
+			if ($insert_stmt3 = $db->prepare("INSERT INTO inhouse_log (action, user_id, item_id) 
+			VALUES (?, ?, ?)")){
+				$action = "COMPLETE";
+				$insert_stmt3->bind_param('sss', $action, $uid, $id);
+				$insert_stmt3->execute();
+				$insert_stmt3->close();
+			}
 			$stmt2->close();
 			$db->close();
 			

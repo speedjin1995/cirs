@@ -713,6 +713,15 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					}
 				}
 				
+				// UPDATE Stamping System Log
+				if ($insert_stmt3 = $db->prepare("INSERT INTO stamping_log (action, user_id, item_id) 
+				VALUES (?, ?, ?)")){
+					$action = "UPDATE";
+					$insert_stmt3->bind_param('sss', $action, $uid, $_POST['id']);
+					$insert_stmt3->execute();
+					$insert_stmt3->close();
+				}
+
 				$update_stmt->close();
 				$db->close();
 				
@@ -1096,6 +1105,16 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					}
 				}
 				
+				// Insert Stamping System Log
+				if ($insert_stmt3 = $db->prepare("INSERT INTO stamping_log (action, user_id, item_id) 
+				VALUES (?, ?, ?)")){
+					$action = "INSERT";
+					$insert_stmt3->bind_param('sss', $action, $uid, $stamp_id);
+					$insert_stmt3->execute();
+					$insert_stmt3->close();
+				}
+
+
 				$insert_stmt->close();
 				$db->close();
 				
