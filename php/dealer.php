@@ -142,105 +142,78 @@ if(isset($_POST['name'], $_POST['address'], $_POST['address2'], $_POST['phone'],
         # to generate reseller code
         $custNameFirstLetter = substr($name, 0, 1);
         $firstChar = $custNameFirstLetter;
+        $code = 'R-'.strtoupper($custNameFirstLetter);
 
-        if($misc_stmt = $db->prepare("SELECT * FROM miscellaneous WHERE code='reseller' AND description=?")){
-            $misc_stmt->bind_param('s', $custNameFirstLetter);
+        $resellerQuery = "SELECT * FROM dealer WHERE customer_code LIKE '%$code%' ORDER BY customer_code DESC";
+        $resellerDetail = mysqli_query($db, $resellerQuery);
+        $reseller = mysqli_fetch_assoc($resellerDetail);
 
-            if(!$misc_stmt->execute()){
-                echo json_encode(
-                    array(
-                        "status" => "failed",
-                        "message" => "Something went wrong querying miscellaneous"
-                    )); 
-            }else{
-                $result = $misc_stmt->get_result();
-                while ($row = $result->fetch_assoc()){
-                    $charSize = strlen($row['value']);
-                    $misValue = $row['value'];
-                    
-                    $code = 'R-'.strtoupper($custNameFirstLetter);
-                    for($i=0; $i<(4-(int)$charSize); $i++){
-                        $code.='0';  // S0000
-                    }
+        $customerCode = null;
+        $codeSeq = null;
 
-                    $code.=$misValue;
-
-                    if ($insert_stmt = $db->prepare("INSERT INTO dealer (customer_code, other_code, customer_name, customer_address, address2, address3, address4, map_url, customer_phone, customer_email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-                        $insert_stmt->bind_param('ssssssssssss', $code, $otherCode, $name, $address, $address2, $address3, $address4, $resellerMapUrl, $phone, $email, $pic, $picContact);
-                        
-                        // Execute the prepared query.
-                        if (! $insert_stmt->execute()) {
-                            echo json_encode(
-                                array(
-                                    "status"=> "failed", 
-                                    "message"=> $insert_stmt->error
-                                )
-                            );
-                        }
-                        else{
-                            $invid = $insert_stmt->insert_id; // Get the inserted reseller ID
-                            $insert_stmt->close();
-
-                            // Loop through the addresses and insert into reseller_branches
-                            for ($i = 0; $i < count($branchAddress1); $i++) {
-                                // Only insert if the index is not in the deletedShip array
-                                if (!in_array($i, $deletedShip)) {
-                                    // Assign array elements to variables to pass as references
-                                    $addr1 = $branchAddress1[$i] ?? '';
-                                    $addr2 = $branchAddress2[$i] ?? '';
-                                    $addr3 = $branchAddress3[$i] ?? '';
-                                    $addr4 = $branchAddress4[$i] ?? '';
-                                    $branchNameValue = isset($branchName[$i]) ? $branchName[$i] : '';
-                                    $branchCodeValue = isset($branchCode[$i]) ? $branchCode[$i] : '';
-                                    $mapUrlValue = isset($mapUrl[$i]) ? $mapUrl[$i] : '';
-                                    $branchPhoneValue = isset($branchPhone[$i]) ? $branchPhone[$i] : '';
-                                    $branchEmailValue = isset($branchEmail[$i]) ? $branchEmail[$i] : '';
-                                    $branchPicValue = isset($branchPic[$i]) ? $branchPic[$i] : '';
-                                    $branchPicContactVAlue = isset($branchPicContact[$i]) ? $branchPicContact[$i] : '';
-
-                                    if ($insert_stmt2 = $db->prepare("INSERT INTO reseller_branches (reseller_id, address, address2, address3, address4, branch_code, branch_name, map_url, office_no, email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-                                        $insert_stmt2->bind_param('ssssssssssss', $invid, $addr1, $addr2, $addr3, $addr4, $branchCodeValue, $branchNameValue, $mapUrlValue, $branchPhoneValue, $branchEmailValue, $branchPicValue, $branchPicContactVAlue);
-                                        $insert_stmt2->execute();
-                                        $insert_stmt2->close();
-                                    }
-                                }
-                            }
-
-                            #Update miscellaneous value
-                            $misValue++;
-
-                            if($updmisc_stmt = $db->prepare("UPDATE miscellaneous SET value=? WHERE code='customer' AND description=?")){
-                                $updmisc_stmt->bind_param('ss', $misValue, $firstChar);
-										
-                                // Execute the prepared query.
-                                if (! $updmisc_stmt->execute()){
-                    
-                                    echo json_encode(
-                                        array(
-                                            "status"=> "failed", 
-                                            "message"=> $updmisc_stmt->error
-                                        )
-                                    );
-                                } 
-                                else{
-                                    $updmisc_stmt->close();
-                                    $db->close();
-                                    
-                                    echo json_encode(
-                                        array(
-                                            "status"=> "success", 
-                                            "message"=> "Added Successfully!!" 
-                                        )
-                                    );
-                    
-                                }
-                            }
-                        }
-                    }
-                    
-                }
+        if(!empty($reseller)){
+            $customerCode = $reseller['customer_code'];
+            preg_match('/\d+/', $customerCode, $matches);
+            $codeSeq = (int)$matches[0];
+            $nextSeq = $codeSeq+1;
+            $charSize = strlen($codeSeq);
+            for($i=0; $i<(4-(int)$charSize); $i++){
+                $code.='0';  // S0000
             }
         }
+
+        $code.=$nextSeq;
+
+        if ($insert_stmt = $db->prepare("INSERT INTO dealer (customer_code, other_code, customer_name, customer_address, address2, address3, address4, map_url, customer_phone, customer_email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+            $insert_stmt->bind_param('ssssssssssss', $code, $otherCode, $name, $address, $address2, $address3, $address4, $resellerMapUrl, $phone, $email, $pic, $picContact);
+            
+            // Execute the prepared query.
+            if (! $insert_stmt->execute()) {
+                echo json_encode(
+                    array(
+                        "status"=> "failed", 
+                        "message"=> $insert_stmt->error
+                    )
+                );
+            }
+            else{
+                $invid = $insert_stmt->insert_id; // Get the inserted reseller ID
+                $insert_stmt->close();
+
+                // Loop through the addresses and insert into reseller_branches
+                for ($i = 0; $i < count($branchAddress1); $i++) {
+                    // Only insert if the index is not in the deletedShip array
+                    if (!in_array($i, $deletedShip)) {
+                        // Assign array elements to variables to pass as references
+                        $addr1 = $branchAddress1[$i] ?? '';
+                        $addr2 = $branchAddress2[$i] ?? '';
+                        $addr3 = $branchAddress3[$i] ?? '';
+                        $addr4 = $branchAddress4[$i] ?? '';
+                        $branchNameValue = isset($branchName[$i]) ? $branchName[$i] : '';
+                        $branchCodeValue = isset($branchCode[$i]) ? $branchCode[$i] : '';
+                        $mapUrlValue = isset($mapUrl[$i]) ? $mapUrl[$i] : '';
+                        $branchPhoneValue = isset($branchPhone[$i]) ? $branchPhone[$i] : '';
+                        $branchEmailValue = isset($branchEmail[$i]) ? $branchEmail[$i] : '';
+                        $branchPicValue = isset($branchPic[$i]) ? $branchPic[$i] : '';
+                        $branchPicContactVAlue = isset($branchPicContact[$i]) ? $branchPicContact[$i] : '';
+
+                        if ($insert_stmt2 = $db->prepare("INSERT INTO reseller_branches (reseller_id, address, address2, address3, address4, branch_code, branch_name, map_url, office_no, email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                            $insert_stmt2->bind_param('ssssssssssss', $invid, $addr1, $addr2, $addr3, $addr4, $branchCodeValue, $branchNameValue, $mapUrlValue, $branchPhoneValue, $branchEmailValue, $branchPicValue, $branchPicContactVAlue);
+                            $insert_stmt2->execute();
+                            $insert_stmt2->close();
+                        }
+                    }
+                }
+
+                echo json_encode(
+                    array(
+                        "status"=> "success", 
+                        "message"=> "Added Successfully!!" 
+                    )
+                );
+            }
+        }
+         
     }
 }
 else{
