@@ -56,7 +56,7 @@ if(isset($_POST['id'])){
                 $dueDate->modify('+1 year');
                 $dueDate->modify('-1 day');
                 $nextDueDate = $dueDate->format('d M Y');
-                $calibrationDate = formatDate($row['last_calibration_date']);
+                $calibrationDate = formatDate($row['validation_date']);
                 $expiredDate = formatDate($row['expired_date']);
                 $machine = searchMachineNameById($row['machines'],$db);
                 $model = searchModelNameById($row['model'],$db);
@@ -109,6 +109,7 @@ if(isset($_POST['id'])){
                     $count = 1;
                 }
             }
+            
             $message = '<!DOCTYPE html>
                         <html lang="en">
                         <head>
@@ -144,6 +145,9 @@ if(isset($_POST['id'])){
                             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
                             
                             <style>
+                                body {
+                                    font-size: 20px;
+                                }
                                 .dotted-line {
                                     border: none;        /* Remove default border */
                                     border-top: 1px dotted #000; /* Dotted line */
@@ -153,24 +157,18 @@ if(isset($_POST['id'])){
                             </style>
                         </head>
                         <body>
-                            <div class="container mt-4 mb-4">
-                            <div class="header">
-                                <img src="dist/img/inhouse-header.png" alt="DX Weighing Solution" width="100%" height="50%">
+                            <div class="container-full">
+                            <div class="header mb-3">
+                                <img src="dist/img/inhouse-header.png" alt="DX Weighing Solution" width="100%">
                             </div>';
 
-                $message .= '<table class="mt-4 mb-4">
+                $message .= '<table class="mb-3">
                             <tbody>
-                                <tr style="visibility: hidden;">
-                                    <th width="10%">column 1</th>
-                                    <th width="25%">column 2</th>
-                                    <th width="10%">column 3</th>
-                                    <th width="10%">column 4</th>
-                                </tr>
                                 <tr>
-                                    <td class="align-top"><b>To Company:</b></td>
-                                    <td class="align-top"><b>' . $company . '</b></td>
-                                    <td class="align-top"><b>Certificate No:</b></td>
-                                    <td class="align-top">'. $autoFormNo .'</td>
+                                    <td width="5%" class="align-top"><b>To Company:</b></td>
+                                    <td width="28%" class="align-top"><b>' . $company . '</b></td>
+                                    <td width="12%" class="align-top"><b>Certificate No:</b></td>
+                                    <td width="10%" class="align-top">'. $autoFormNo .'</td>
                                 </tr>
                                 <tr>
                                     <td class="align-top"><b>Address:</b></td>
@@ -178,8 +176,7 @@ if(isset($_POST['id'])){
                                         <div class="row">
                                             <div class="col-12" id="address-line1">'. ($address1 ?? '').'</div>
                                             <div class="col-12" id="address-line2">'. ($address2 ?? '').'</div>
-                                            <div class="col-12" id="address-line3">'. ($address3 ?? '').'</div>
-                                            <div class="col-12" id="address-line4">'. ($address4 ?? '').'</div>
+                                            <div class="col-12" id="address-line3">'. ($address3 ?? '')." ". ($address4 ?? '').'</div>
                                             <div class="col-12" id="contact">Tel: '. ($officeNo ?? '').'</div>
                                         </div>
                                     </td>
@@ -203,41 +200,38 @@ if(isset($_POST['id'])){
                             </tbody>
                         </table>';
 
-            $message .= '<table class="table" style="table-layout: fixed;">
+            $message .= '<table class="table table-sm">
                         <tbody>
+                            <tr class="d-none">
+                                <th width="25%">column 1</th>
+                                <th width="25%">column 2</th>
+                                <th width="25%">column 3</th>
+                                <th width="25%">column 4</th>
+                            </tr>
                             <tr style="border: 1px solid black;">
-                                <td colspan="2" class="align-top" style="border: none;" width="50%">
+                                <td colspan="4" class="align-top" style="border: none;">
                                     <div class="row">
-                                        <div class="col-12" id="machines"><b>Instruments:</b> '. $machine .'</div>
-                                        <div class="col-12" id="manufacturer"><b>Manufacturer:</b> '. $manufacturer.' </div>
-                                        <div class="col-12" id="capacity"><b>Capacity:</b> '. $capacity .'</div>
-                                    </div>
-                                </td>
-                                <td colspan="2" class="align-top" style="border: none;" width="50%">
-                                    <div class="row">
-                                        <div class="col-12" id="machines"><b>Model No:</b> '. $model .' </div>
-                                        <div class="col-12" id="serialNo"><b>Serial No:</b> '. $serialNo .' </div>
-                                        <div class="col-12" id="size"><b>Structure Size:</b> '. $size .' </div>
+                                        <div class="col-6" id="machines"><b>Instruments:</b> '. $machine .'</div>
+                                        <div class="col-6" id="machines"><b>Model No:</b> '. $model .' </div>
+                                        <div class="col-6" id="manufacturer"><b>Manufacturer:</b> '. $manufacturer.' </div>
+                                        <div class="col-6" id="serialNo"><b>Serial No:</b> '. $serialNo .' </div>
+                                        <div class="col-6" id="capacity"><b>Capacity:</b> '. $capacity .'</div>
+                                        <div class="col-6" id="size"><b>Structure Size:</b> '. $size .' </div>
                                     </div>
                                 </td>
                             </tr>
                             <tr style="border: 1px solid black;">
-                                <td colspan="2" class="align-top" style="border: none;">
+                                <td colspan="4" class="align-top" style="border: none;">
                                     <div class="row">
-                                        <div class="col-12"><b>Instrument Condition When Received:</b> </div>
-                                        <div class="col-12"><b>Instrument Condition When Returned:</b> </div>
-                                    </div>
-                                </td>
-                                <td colspan="2" class="align-top" style="border: none;">
-                                    <div class="row">
-                                        <div class="col-12" id="machineCondReceived">Physically in good condition.</div>
-                                        <div class="col-12" id="machineCondReturned">
+                                        <div class="col-4"><b>Instrument Condition When Received:</b></div>
+                                        <div class="col-8"><b>Physically in good condition.</b></div>
+                                        <div class="col-4"><b>Instrument Condition When Returned:</b></div>
+                                        <div class="col-8">
                                             <ol class="pl-3">
-                                                <li>Calibrated and test servicable.</li>
+                                                <li>Calibrated and test serviceable.</li>
                                                 <li>Calibration due date requested by customer.</li>
-                                                <li>The user should be awae that there are a number of factors that may cause this instrument to drift out of calibration before the specified calibration interval has expired.</li>
+                                                <li>The user should be aware that there are a number of factors that may cause this instrument to drift out of calibration before the specified calibration interval has expired.</li>
                                             </ol>
-                                            
                                         </div>
                                     </div>
                                 </td>
@@ -247,10 +241,10 @@ if(isset($_POST['id'])){
                                 <td colspan="2" class="align-top" style="border: none;"><b>Average Relative Humidity:</b> ('. $relHumid .')</td>
                             </tr>
                             <tr style="border-top: 1px solid black; border-left: 1px solid black; border-right: 1px solid black;">
-                                <th style="padding: .5rem; border: none; text-align: center;">Setting Value Of Standard</th>
-                                <th style="padding: .5rem; border: none; text-align: center;">As Received Under Calibration</th>
-                                <th style="padding: .5rem; border: none; text-align: center;">Variance +/- ('. $variance . " " . $unit .')</th>
-                                <th style="padding: .5rem; border: none; text-align: center;">Reading After Adjustment</th>
+                                <th style="border: none; text-align: center;">Setting Value Of Standard</th>
+                                <th style="border: none; text-align: center;">As Received Under Calibration</th>
+                                <th style="border: none; text-align: center;">Variance +/- ('. $variance . " " . $unit .')</th>
+                                <th style="border: none; text-align: center;">Reading After Adjustment</th>
                             </tr>';
 
                 $testCount = count($tests);
@@ -267,10 +261,10 @@ if(isset($_POST['id'])){
                             $afterAdjustReading = $item['afterAdjustReading'];
                             if ($j == 9){
                                 $message .= '<tr style="border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black; padding-bottom: 2%">
-                                                <td style="border: none;text-align: center; padding: 0 0 3% 0;">'. $standardValue .' - '. $unit .'</td>
-                                                <td style="border: none;text-align: center; padding: 0 0 3% 0;">'. $calibrationReceived .' - '. $unit .'</td>
-                                                <td style="border: none;text-align: center; padding: 0 0 3% 0;">'. $variance .'</td>
-                                                <td style="border: none;text-align: center; padding: 0 0 3% 0;">'. $afterAdjustReading .' - '. $unit .'</td>
+                                                <td style="border: none;text-align: center; padding: 0;">'. $standardValue .' - '. $unit .'</td>
+                                                <td style="border: none;text-align: center; padding: 0;">'. $calibrationReceived .' - '. $unit .'</td>
+                                                <td style="border: none;text-align: center; padding: 0;">'. $variance .'</td>
+                                                <td style="border: none;text-align: center; padding: 0;">'. $afterAdjustReading .' - '. $unit .'</td>
                                             </tr>';
                             }else{
                                 $message .= '<tr style="border-left: 1px solid black; border-right: 1px solid black;">
@@ -285,62 +279,52 @@ if(isset($_POST['id'])){
                     }    
                 }
                 
-            $message .= '<tr style="border: 1px solid black;padding-top:5%">
-                            <td colspan="2" class="align-top" style="border: none;">
+            $message .= '<tr style="border: 1px solid black;">
+                            <td colspan="4" class="align-top" style="border: none;">
                                 <div class="row">
-                                    <div class="col-12" id="calibratedDt"><b>Date Calibrated:</b> '. $validationDate .'</div>
-                                    <div class="col-12" id="calibratedBy"><b>Calibrated By:</b> '. $calibrator .'</div>
-                                    <div class="col-12" id="standardUsedInstru"><b>Standard Used Instrument:</b> Standard.Test Weight</div>
-                                </div>
-                            </td>
-                            <td colspan="2" class="align-top" style="border: none;">
-                                <div class="row">
-                                    <div class="col-12" id="nextDueDt" style="color:red"><b style="color:black">Next Due Date:</b> '. $nextDueDate .'</div>
-                                    <div class="col-12" id="calibrationStickerNo"><b>Calibration Sticker No:</b> '. $autoFormNo .'</div>
-                                    <div class="col-12" id="sirimTrace"><b>SIRIM Traceability: '. $nmim.'</b></div>
+                                    <div class="col-6" id="calibratedDt"><b>Date Calibrated:</b> '. $validationDate .'</div>
+                                    <div class="col-6" id="nextDueDt" style="color:red"><b style="color:black">Next Due Date:</b> '. $nextDueDate .'</div>
+                                    <div class="col-6" id="calibratedBy"><b>Calibrated By:</b> '. $calibrator .'</div>
+                                    <div class="col-6" id="calibrationStickerNo"><b>Calibration Sticker No:</b> '. $autoFormNo .'</div>
+                                    <div class="col-6" id="standardUsedInstru"><b>Standard Used Instrument:</b> Standard.Test Weight</div>
+                                    <div class="col-6" id="sirimTrace"><b>SIRIM Traceability: '. $nmim.'</b></div>
                                 </div>
                             </td>
                         </tr> 
                         </tbody>
                     </table>';               
 
-            $message .= '<table class="mt-1 mb-4" width="100%">
+            $message .= '<table width="100%">
                             <tbody>
-                                <tr style="visibility: hidden;">
-                                    <th width="30%">column 1</th>
-                                    <th width="45%">column 2</th>
-                                    <th width="25%">column 3</th>
+                                <tr>
+                                    <td class="align-top">
+                                        <b>Licensing of Membaiki & Menjual</b> <b style="margin-left:20px">: </b>'. $certno_lesen . '<br>
+                                        <b>Weighing Licensing of KPDN</b> <b style="margin-left:62px">: </b>'. $failno . '<br>
+                                        <b>Raj.Transaksi</b> <b style="margin-left:190px">: </b>'. $bless_serahanno . '
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td class="align-top"><b>Licensing of Membaiki & Menjual</b></td>
-                                    <td class="align-top">:&nbsp;&nbsp;&nbsp;'. $certno_lesen .'</td>
-                                </tr>
-                                <tr>
-                                    <td class="align-top"><b>Weighing Licensing of KPDN</b></td>
-                                    <td class="align-top">:&nbsp;&nbsp;&nbsp;'. $failno .'</td>
-                                </tr>
-                                <tr>
-                                    <td class="align-top"><b>Raj.Transaksi</b></td>
-                                    <td class="align-top">:&nbsp;&nbsp;&nbsp;'. $bless_serahanno .'</td>
                                     <td>
-                                        <div class="text-center" style="width: 100%;">
-                                            <hr class="dotted-line">
-                                        </div>
-                                        <div class="text-center" style="width: 100%;">
-                                            <span><b>Approved Signature</b></span>
-                                        </div>
-                                        <div class="text-center"style="width: 100%;">
-                                            <span>'. $person_incharge .'</span>
+                                        <div class="row mb-3">
+                                            <div class="col-8" style="margin-top: 70px">
+                                                <span class="font-weight-bold" style="color: red;">The Uncertainties are for a confidence probability of approximately 95%</span>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="text-center" style="width: 100%;">
+                                                    <hr class="dotted-line">
+                                                </div>
+                                                <div class="text-center" style="width: 100%;">
+                                                    <span><b>Approved Signature</b></span>
+                                                </div>
+                                                <div class="text-center"style="width: 100%;">
+                                                    <span>'. $person_incharge .'</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4">
-                                        <span class="font-weight-bold" style="color: red;">The Uncertainties are for a confidence probability of approximately 95%</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4">
+                                    <td>
                                         <span class="mt-5">This is to confirm that we have perfomed the Service & Calibration for the above Weighing Equipment with our Standard. Weights that has been certified by <b> METROLOGY CORPORATION MALAYSIAN SDN. BHD. & SIRIM SST Malaysia. </b></span>
                                     </td>
                                 </tr>
