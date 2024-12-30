@@ -857,7 +857,7 @@ $(function () {
         render: function ( data, type, row ) {
           let buttons = '<div class="row">';
 
-          if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
+          if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
             buttons +=  '<div class="col-4"><button title="Revert" type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
             ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
 
@@ -1121,7 +1121,7 @@ $(function () {
           render: function ( data, type, row ) {
             let buttons = '<div class="row">';
 
-            if ('<?=$role ?>' == 'ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
+            if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
               buttons +=  '<div class="col-4"><button title="Revert" type="button" id="pendingBtn'+data+'" onclick="revertToPending('+data+
               ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
 

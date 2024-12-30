@@ -313,9 +313,11 @@ to get the desired effect
   <aside class="main-sidebar sidebar-light-primary elevation-4">
     <!-- Brand Logo -->
     <a href="#" class="brand-link logo-switch">
-      <img src="assets/logo.png" alt="Sneakercube Logo" class="brand-image-xl logo-xs">
-      <img src="assets/logo.png" alt="Sneakercube Logo" class="brand-image-xl logo-xl">
-      <div class="text-center mt-4">
+      <!-- <img src="assets/logo.png" alt="Sneakercube Logo" class="brand-image-xl logo-xs"> -->
+      <div class="brand-image-xl logo-xl">
+        <img src="assets/logo.png" alt="Sneakercube Logo" width="85%">
+      </div>
+      <div class="text-center" style="margin-top: 40%">
         <h6 style="font-size:60%"><b><?php echo $company_name ?></b></h6>
       </div>
     </a>
@@ -356,7 +358,7 @@ to get the desired effect
                   <p>Monitoring</p>
                 </a>
               </li>
-              <?php if($role == "ADMIN"){
+              <?php if($role == "ADMIN" || $role == "SUPER_ADMIN"){
                 echo '<li class="nav-item">
                 <a href="#inquiry" data-file="inquiry.php" class="nav-link link">
                   <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -473,7 +475,7 @@ to get the desired effect
             </ul>
           </li>
           <?php 
-              if($role == "ADMIN"){
+              if($role == "ADMIN" || $role == "SUPER_ADMIN"){
                 echo '<li class="nav-item has-treeview">
                 <a href="#" class="nav-link">
                   <i class="nav-icon fas fa-users"></i>
@@ -621,7 +623,7 @@ to get the desired effect
         
             <ul class="nav nav-treeview" style="display: none;">
               <?php 
-                if($role == "ADMIN"){
+                if($role == "ADMIN" || $role == "SUPER_ADMIN"){
                   echo '<li class="nav-item">
                       <a href="#company" data-file="company.php" class="nav-link link">
                         <i class="nav-icon fas fa-building"></i>

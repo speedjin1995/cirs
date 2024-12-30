@@ -19,6 +19,8 @@ if($searchValue != ''){
         roles.role_name like'%".$searchValue."%' ) ";
 }
 
+$searchQuery .= " and users.role_code != 'SUPER_ADMIN'";
+
 ## Total number of records without filtering
 $sel = mysqli_query($db,"select count(*) as allcount from users");
 $records = mysqli_fetch_assoc($sel);
