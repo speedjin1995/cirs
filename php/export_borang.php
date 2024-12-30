@@ -342,6 +342,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                 $subTotalAmt = 0;
                 $rowCount = count($rows);
                 $count = 1;
+                $indexCount = 1;
                 $validator = '2';                
                 $jenisAlatData = [];
     
@@ -384,7 +385,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                     $jenisAlatData[$jenisAlat]['count']++;
     
                     $rows[] = '<tr style="height: 30px;">
-                                <td style="padding-left: 0.5%">'.$count.'</td>
+                                <td style="padding-left: 0.5%">'.$indexCount.'</td>
                                 <td style="padding-left: 0.5%">'.$jenisAlat.'</td>
                                 <td style="padding-left: 0.5%">'.searchCapacityNameById($row['capacity'], $db).'</td>
                                 <td style="padding-left: 0.5%">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
@@ -406,6 +407,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                     
                     $count++;
                     $rowCount++;
+                    $indexCount++;
     
                     if($count > 7){
                         $count = 1;
@@ -552,7 +554,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                         </table>
     
                         <p style="text-align: center;">BUTIRAN SENARAI ALAT-ALAT TIMBANG DAN SUKAT UNTUK PENGUJIAN DAN PENENTUSAHAN</p>
-                        <table class="table-bordered">
+                        <table class="table-bordered" style="border-left: none; border-bottom: none;">
                             <tbody>
                                 <tr>
                                     <th>Bil.</th>
@@ -572,16 +574,29 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                             }
                             
                             if ($startIndex + $recordsPerPage >= $num_records) {
-                                $message .= '<tr><td colspan="7" style="border:0px solid black"></td><td colspan="2">Total Amount</td><td>RM '.number_format(floatval($totalAmt), 2, '.', '').'</td></tr>';
-                                $message .= '<tr><td colspan="7" style="border:0px solid black"></td><td colspan="2">SST10%</td><td>RM '.number_format(floatval($sst), 2, '.', '').'</td></tr>';
-                                $message .= '<tr><td colspan="7" style="border:0px solid black"></td><td colspan="2">Sub Total Amount</td><td>RM '.number_format(floatval($subTotalAmt), 2, '.', '').'</td></tr>';
+                                $message .= '<tr>
+                                                <td colspan="7" style="border-left: none; border: none;"></td>
+                                                <td colspan="2">Total Amount</td>
+                                                <td>RM ' . number_format(floatval($totalAmt), 2, '.', '') . '</td>
+                                            </tr>';
+                                $message .= '<tr>
+                                                <td colspan="7" style="border-left: none; border: none;"></td>
+                                                <td colspan="2">SST10%</td>
+                                                <td> RM ' . number_format(floatval($sst), 2, '.', '') . '</td>
+                                            </tr>';
+                                $message .= '<tr>
+                                                <td colspan="7" style="border-left: none; border: none;"></td>
+                                                <td colspan="2">Sub Total Amount</td>
+                                                <td>RM ' . number_format(floatval($subTotalAmt), 2, '.', '') . '</td>
+                                            </tr>';
+
                             }
                         
                         $message .= '
                             <table width="100%" style="padding: 10px;">
                                 <tr>
                                     <td width="40%">
-                                        <img src="'.$companySignature.'" style="margin-left:40%; padding-top:10%" width="20%" height="auto"/>
+                                        <img src="'.$companySignature.'" style="margin-left:30%; padding-top:10%" width="30%" height="auto"/>
                                     </td>
                                     <td width="40%"></td>
                                     <td width="30%"></td>
