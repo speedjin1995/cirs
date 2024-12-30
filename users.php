@@ -9,13 +9,17 @@ if(!isset($_SESSION['userID'])){
 }
 else{
     $_SESSION['page']='users';
-    /*$stmt = $db->prepare("SELECT users.id, users.name, users.email, users.joined_date, users.expired_date, users.status, roles.role_name from users, roles WHERE users.role_code = roles.role_code");
-    $stmt->execute();
-    $result = $stmt->get_result();*/
-    
-    $stmt2 = $db->prepare("SELECT * FROM roles where deleted = '0'");
-    $stmt2->execute();
-    $result2 = $stmt2->get_result();
+    $user = $_SESSION['userID'];
+    $stmt = $db->prepare("SELECT * from users where id = ?");
+	$stmt->bind_param('s', $user);
+	$stmt->execute();
+	$result = $stmt->get_result();
+    if(($row = $result->fetch_assoc()) !== null){
+        $role = $row['role_code'];
+    }
+
+    $superAdminRoles = $db->query("SELECT * FROM roles WHERE role_code != 'SUPER_ADMIN' AND deleted = '0'");
+    $adminRoles = $db->query("SELECT * FROM roles WHERE role_code NOT IN ('SUPER_ADMIN', 'ADMIN') AND deleted = '0'");
 }
 ?>
 
@@ -105,9 +109,15 @@ else{
 						<label>System Role *</label>
 						<select class="form-control" id="userRole" name="userRole" required>
 						    <option select="selected" value="">Please Select</option>
-						    <?php while($row2 = $result2->fetch_assoc()){ ?>
-    							<option value="<?= $row2['role_code'] ?>"><?= $row2['role_name'] ?></option>
-							<?php } ?>
+						    <?php if ($role == 'SUPER_ADMIN') { ?>
+                                <?php while ($row2 = mysqli_fetch_assoc($superAdminRoles)) { ?>
+                                    <option value="<?= $row2['role_code'] ?>"><?= $row2['role_name'] ?></option>
+                                <?php } ?>
+                            <?php } else { ?>
+                                <?php while ($row2 = mysqli_fetch_assoc($adminRoles)) { ?>
+                                    <option value="<?= $row2['role_code'] ?>"><?= $row2['role_name'] ?></option>
+                                <?php } ?>
+                            <?php } ?>
 						</select>
 					</div>
     			</div>

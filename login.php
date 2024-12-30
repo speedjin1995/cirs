@@ -39,6 +39,7 @@
   <div class="text-center font-weight-bold">
     <p>Licensed By :</p>
     <p><?php echo $company_name; ?></p>
+    <p style="margin-top:-5%">Valid: 30/12/2024 - 29/12/2029</p>
   </div>
   <!-- /.login-logo -->
   <div class="card">
@@ -98,6 +99,11 @@
       </p> -->
     </div>
     <!-- /.login-card-body -->
+  </div>
+
+  <div class="text-center font-weight-bold" style="margin-top:40%">
+    <p>***** Ideal of Synctronix *****</p>
+    <p>Ver: 1.0.0</p>
   </div>
 </div>
 <!-- /.login-box -->

@@ -57,8 +57,8 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
         $result = $select_stmt->get_result();
         $num_records = $result->num_rows;
         $totalRecords = $num_records;
-        $total_pages = ceil($num_records / 10);
-        $recordsPerPage = 10;
+        $total_pages = ceil($num_records / 7);
+        $recordsPerPage = 7;
         $startIndex = 0;
         $pages = 0;
         $message = '';
@@ -337,7 +337,12 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                 $cawanganFilter = searchStateNameById($_POST['cawangan'], $db);
             
                 $rows = array();
+                $totalAmt = 0;
+                $sst = 0;
+                $subTotalAmt = 0;
+                $rowCount = count($rows);
                 $count = 1;
+                $indexCount = 1;
                 $validator = '2';                
                 $jenisAlatData = [];
     
@@ -380,7 +385,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                     $jenisAlatData[$jenisAlat]['count']++;
     
                     $rows[] = '<tr style="height: 30px;">
-                                <td style="padding-left: 0.5%">'.$count.'</td>
+                                <td style="padding-left: 0.5%">'.$indexCount.'</td>
                                 <td style="padding-left: 0.5%">'.$jenisAlat.'</td>
                                 <td style="padding-left: 0.5%">'.searchCapacityNameById($row['capacity'], $db).'</td>
                                 <td style="padding-left: 0.5%">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
@@ -390,24 +395,30 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                 <td style="padding-left: 0.5%">'.$row['no_daftar'].'</td>
                                 <td style="padding-left: 0.5%">'.$row['siri_keselamatan'].'</td>';
                                 
-                                if ($row['cert_price'] != '0') {
-                                    $rows[] .= '<td style="padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').'</td>';
+                                if ($row['cert_price'] != 0) {
+                                    $rows[$rowCount] .= '<td style="padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').'</td>';
                                 } else {
-                                    $rows[] .= '<td style="padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'</td>';
+                                    $rows[$rowCount] .= '<td style="padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'</td>';
                                 }
                                 
-                    $rows[] .= '</tr>';
-                
-    
+                    $rows[$rowCount] .= '</tr>';
+
+                    $totalAmt += floatval($row['unit_price']) + floatval($row['cert_price']);
+                    
                     $count++;
+                    $rowCount++;
+                    $indexCount++;
     
-                    if($count > 10){
+                    if($count > 7){
                         $count = 1;
                     }
                 }
-                                
-                if ($count <= 10 && count($rows) % 10 != 0) {
-                    $remainingRows = 10 - (count($rows) % 10);
+                
+                $sst = $totalAmt * (1/10);
+                $subTotalAmt = $totalAmt + $sst;
+                
+                if ($count <= 7 && count($rows) % 7 != 0) {
+                    $remainingRows = 7 - (count($rows) % 7);
                     for ($i = 0; $i < $remainingRows; $i++) {
                         $rows[] = '<tr style="height: 30px;">
                             <td></td>
@@ -518,12 +529,12 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                     }
                                         
                                     $message .= '</td>
-                                    <td style="vertical-align: right;" width="40%">
+                                    <td style="vertical-align: right;">
                                         <p>Penentusahan Dalam / Luar Pejabat</p>
                                         <p>Tarikh : 23.06.2024</p>
                                         <table class="table-bordered">
                                             <tbody>
-                                                <tr><th width="25%">Alat</th><th width="30%">Jum. Alat</th><th width="45%">Bayaran</th></tr>';
+                                                <tr><th width="20%">Alat</th><th width="20%">Jum. Alat</th><th width="20%">Bayaran</th></tr>';
                                             
                                             $count = 0;
                                             $totalPrice = 0;
@@ -531,11 +542,11 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                                 $alatCount = floatval($value['count']);
                                                 $alatTotalPrice = floatval($value['total_price']);
     
-                                                $message .= '<tr><td style="padding-left: 1%">'.$key.'</td><td style="padding-left: 1%">'.$alatCount.'</td><td style="padding-left: 1%">RM '.number_format($alatTotalPrice, 2, '.', '').'</td>';
+                                                $message .= '<tr><td style="padding-left: 1%; text-align: center;">'.$key.'</td><td style="padding-left: 1%; text-align: center;">'.$alatCount.'</td><td style="padding-left: 1%; text-align: center;">RM '.number_format($alatTotalPrice, 2, '.', '').'</td>';
                                                 $count += $alatCount;
                                                 $totalPrice += $alatTotalPrice;
                                             }
-                                    $message .= '<tr><td style="padding-left: 1%">Jumlah</td><td style="padding-left: 1%">'.$count.'</td><td style="padding-left: 1%">RM '. number_format(floatval($totalPrice), 2, '.', '') .'</td></tr></tbody>
+                                    $message .= '<tr><td style="padding-left: 1%; text-align: center;">Jumlah</td><td style="padding-left: 1%; text-align: center;">'.$count.'</td><td style="padding-left: 1%; text-align: center;">RM '. number_format(floatval($totalPrice), 2, '.', '') .'</td></tr></tbody>
                                         </table>
                                     </td>
                                 </tr>
@@ -543,7 +554,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                         </table>
     
                         <p style="text-align: center;">BUTIRAN SENARAI ALAT-ALAT TIMBANG DAN SUKAT UNTUK PENGUJIAN DAN PENENTUSAHAN</p>
-                        <table class="table-bordered">
+                        <table class="table-bordered" style="border-left: none; border-bottom: none;">
                             <tbody>
                                 <tr>
                                     <th>Bil.</th>
@@ -555,21 +566,37 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                     <th>Kod</th>
                                     <th>No. Daftar</th>
                                     <th>No. Siri Pelekat Keselamatan</th>
-                                    <th>Fi / Bayaran</th>
+                                    <th width="8%">Fi / Bayaran</th>
                                 </tr>';
-    
+                        
                             for ($i = $startIndex; $i < $startIndex + $recordsPerPage; $i++) {
                                 $message .= $rows[$i];
                             }
                             
-    
-                        $message .= '</tbody></table>';
+                            if ($startIndex + $recordsPerPage >= $num_records) {
+                                $message .= '<tr>
+                                                <td colspan="7" style="border-left: none; border: none;"></td>
+                                                <td colspan="2">Total Amount</td>
+                                                <td>RM ' . number_format(floatval($totalAmt), 2, '.', '') . '</td>
+                                            </tr>';
+                                $message .= '<tr>
+                                                <td colspan="7" style="border-left: none; border: none;"></td>
+                                                <td colspan="2">SST10%</td>
+                                                <td> RM ' . number_format(floatval($sst), 2, '.', '') . '</td>
+                                            </tr>';
+                                $message .= '<tr>
+                                                <td colspan="7" style="border-left: none; border: none;"></td>
+                                                <td colspan="2">Sub Total Amount</td>
+                                                <td>RM ' . number_format(floatval($subTotalAmt), 2, '.', '') . '</td>
+                                            </tr>';
+
+                            }
                         
                         $message .= '
                             <table width="100%" style="padding: 10px;">
                                 <tr>
                                     <td width="40%">
-                                        <img src="'.$companySignature.'"  style="margin-left:20%; padding-top:10%" width="60%" height="auto"/>
+                                        <img src="'.$companySignature.'" style="margin-left:30%; padding-top:10%" width="30%" height="auto"/>
                                     </td>
                                     <td width="40%"></td>
                                     <td width="30%"></td>
@@ -584,7 +611,6 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                     </td>
                                 </tr>
                             </table>';
-    
     
                         // Move to the next page
                         $startIndex += $recordsPerPage;
