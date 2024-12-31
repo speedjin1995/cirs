@@ -280,6 +280,10 @@ else{
       -o-animation: uil-ring-anim 1s linear infinite;
       animation: uil-ring-anim 1s linear infinite;
     }
+
+    .dataTables_filter{
+      float: right;
+    }
   </style>
 </head>
 <!--
