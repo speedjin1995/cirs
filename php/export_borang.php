@@ -431,7 +431,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                     }
                 }
                 
-                $sst = $totalAmt * (1/10);
+                $sst = $totalAmt * (8/100);
                 $subTotalAmt = $totalAmt + $sst;
                 
                 if ($count <= 7 && count($rows) % 7 != 0) {
@@ -598,7 +598,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                             </tr>';
                                 $message .= '<tr>
                                                 <td colspan="7" style="border-left: none; border: none;"></td>
-                                                <td colspan="2">SST10%</td>
+                                                <td colspan="2">SST8%</td>
                                                 <td> RM ' . number_format(floatval($sst), 2, '.', '') . '</td>
                                             </tr>';
                                 $message .= '<tr>
