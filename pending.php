@@ -779,8 +779,8 @@ else{
           <div class="row" id='otherRow'>
             <div class="col-6">
               <div class="form-group">
-                <label>Remarks / Other Reasons</label>
-                <textarea class="form-control" id ="otherReason" name="otherReason"></textarea>
+                <label>Remarks / Other Reasons *</label>
+                <textarea class="form-control" id ="otherReason" name="otherReason" required></textarea>
               </div>
             </div>
           </div>  
