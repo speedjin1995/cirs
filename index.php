@@ -475,33 +475,34 @@ to get the desired effect
             </ul>
           </li>
           <?php 
-              if($role == "ADMIN" || $role == "SUPER_ADMIN"){
-                echo '<li class="nav-item has-treeview">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-users"></i>
-                  <p>User Managements<i class="fas fa-angle-left right"></i></p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="#roles" data-file="roles.php" class="nav-link link">
-                      <i class="nav-icon fas fa-user-tag"></i>
-                      <p>Roles</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#modules" data-file="modules.php" class="nav-link link">
-                      <i class="nav-icon fas fa-list-alt"></i>
-                      <p>Modules</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#users" data-file="users.php" class="nav-link link">
-                      <i class="nav-icon fas fa-user"></i>
-                      <p>Staffs</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>';}
+              // if($role == "ADMIN" || $role == "SUPER_ADMIN"){
+              //   echo '<li class="nav-item has-treeview">
+              //     <a href="#" class="nav-link">
+              //       <i class="nav-icon fas fa-users"></i>
+              //       <p>User Managements<i class="fas fa-angle-left right"></i></p>
+              //     </a>
+              //     <ul class="nav nav-treeview">
+              //       <li class="nav-item">
+              //         <a href="#roles" data-file="roles.php" class="nav-link link">
+              //           <i class="nav-icon fas fa-user-tag"></i>
+              //           <p>Roles</p>
+              //         </a>
+              //       </li>
+              //       <li class="nav-item">
+              //         <a href="#modules" data-file="modules.php" class="nav-link link">
+              //           <i class="nav-icon fas fa-list-alt"></i>
+              //           <p>Modules</p>
+              //         </a>
+              //       </li>
+              //       <li class="nav-item">
+              //         <a href="#users" data-file="users.php" class="nav-link link">
+              //           <i class="nav-icon fas fa-user"></i>
+              //           <p>Staffs</p>
+              //         </a>
+              //       </li>
+              //     </ul>
+              //   </li>';
+              // }
 
               echo '<li class="nav-item has-treeview">
                 <a href="#" class="nav-link">
@@ -625,11 +626,17 @@ to get the desired effect
               <?php 
                 if($role == "ADMIN" || $role == "SUPER_ADMIN"){
                   echo '<li class="nav-item">
-                      <a href="#company" data-file="company.php" class="nav-link link">
-                        <i class="nav-icon fas fa-building"></i>
-                        <p>Company Profile</p>
-                      </a>
-                    </li>';
+                          <a href="#company" data-file="company.php" class="nav-link link">
+                            <i class="nav-icon fas fa-building"></i>
+                            <p>Company Profile</p>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="#users" data-file="users.php" class="nav-link link">
+                            <i class="nav-icon fas fa-user"></i>
+                            <p>Staffs</p>
+                          </a>
+                        </li>';
                 }
               ?>
 

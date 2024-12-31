@@ -95,6 +95,9 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     $pic_phone = $branchRow['pic_contact'];
   }
 
+  $stampingDate = new DateTime($row['stamping_date']);
+  $formattedStampingDate = $stampingDate->format('d-m-Y');
+
   $data[] = array( 
     "no"=>$counter,
     "id"=>$row['id'],
@@ -116,7 +119,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "jenis_alat"=>$row['jenis_alat'] != null ? searchAlatNameById($row['jenis_alat'], $db) : '', 
     "cash_bill"=>$row['cash_bill'] ?? '',
     "invoice_no"=>$row['invoice_no'] ?? '',
-    "stamping_date"=>$row['stamping_date'] ?? '',
+    "stamping_date"=>$formattedStampingDate ?? '',
     "due_date"=>$row['due_date'] ?? '',
     "pic"=>$row['pic'] != null ? searchStaffNameById($row['pic'], $db) : '',
     "customer_pic"=>$row['customer_pic'] ?? '',

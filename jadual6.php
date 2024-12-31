@@ -129,7 +129,7 @@ else{
                 <tr>
                   <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
                   <th>NO</th>
-                  <th>DATE</th>
+                  <th>STAMPING DATE</th>
                   <th>NAME OF PURCHASE</th>
                   <th>ABOUT WEIGHING,MEASURING AND <br>WEIGHING INSTRUMENTS</th>
                   <th>CAPACITY</th>
