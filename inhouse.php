@@ -176,7 +176,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                   <th>Company Name</th>
                   <th>Brand</th>
                   <th>Description Instruments for Weighing and Measuring</th>
-                  <th>Capacity</th>
+                  <th width="10%">Capacity</th>
                   <th>Previous Cert. No</th>
                   <th>Current Validation Date</th>
                   <th>Expired Date</th>
@@ -937,43 +937,60 @@ $(function () {
       { data: 'expired_date' },
       { data: 'calibrator' },
       { data: 'status' },
-      { 
+      {
         data: 'id',
         render: function (data, type, row) {
-          let buttons = '<div class="row">';
+          let dropdownMenu = '<div class="dropdown">' +
+            '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+            '<i class="fa-solid fa-ellipsis"></i>' +
+            '</button>' +
+            '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">' +
+            '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>' +
+            '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ')"><i class="fas fa-print"></i> Print</a>'+
+            '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>' +
+            '<a class="dropdown-item" id="deactivate' + data + '" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>';
+          dropdownMenu += '</div></div>';
 
-          // Edit button
-          buttons += '<div class="col-4"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
-                    ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
-
-          // // Extra button if validate_by is 3
-          // if (row.validate_by == 3) {
-          //   buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
-          //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
-          // }
-
-          // Print button
-          buttons += '<div class="col-4"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                    ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
-
-          // System Log
-          buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
-
-          // Complete button if conditions are met
-          // if (row.calibrations != '') {
-          //   buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
-          //             ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
-          // }
-
-          // Cancelled button
-          buttons += '<div class="col-4"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-                    ')" class="btn btn-danger btn-sm">X</button></div>';
-
-          buttons += '</div>'; // Closing row div
-
-          return buttons;
+          return dropdownMenu;
         }
       },
+      // { 
+      //   data: 'id',
+      //   render: function (data, type, row) {
+      //     let buttons = '<div class="row">';
+
+      //     // Edit button
+      //     buttons += '<div class="col-4"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+      //               ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
+
+      //     // // Extra button if validate_by is 3
+      //     // if (row.validate_by == 3) {
+      //     //   buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
+      //     //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
+      //     // }
+
+      //     // Print button
+      //     buttons += '<div class="col-4"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+      //               ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+
+      //     // System Log
+      //     buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+
+      //     // Complete button if conditions are met
+      //     // if (row.calibrations != '') {
+      //     //   buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+      //     //             ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
+      //     // }
+
+      //     // Cancelled button
+      //     buttons += '<div class="col-4"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+      //               ')" class="btn btn-danger btn-sm">X</button></div>';
+
+      //     buttons += '</div>'; // Closing row div
+
+      //     return buttons;
+      //   }
+      // },
       { 
         className: 'dt-control',
         orderable: false,
@@ -1183,43 +1200,60 @@ $(function () {
         { data: 'expired_date' },
         { data: 'calibrator' },
         { data: 'status' },
-        { 
+        {
           data: 'id',
           render: function (data, type, row) {
-            let buttons = '<div class="row">';
+            let dropdownMenu = '<div class="dropdown">' +
+              '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+              '<i class="fa-solid fa-ellipsis"></i>' +
+              '</button>' +
+              '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">' +
+              '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>' +
+              '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ')"><i class="fas fa-print"></i> Print</a>'+
+              '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>' +
+              '<a class="dropdown-item" id="deactivate' + data + '" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>';
+            dropdownMenu += '</div></div>';
 
-            // Edit button
-            buttons += '<div class="col-4"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
-                      ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
-
-            // Extra button if validate_by is 3
-            // if (row.validate_by == 3) {
-            //   buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
-            //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
-            // }
-
-            // Print button
-            buttons += '<div class="col-4"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-                      ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
-
-            // Complete button if conditions are met
-            // if (row.calibrations != '') {
-            //   buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
-            //             ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
-            // }
-
-            // System Log
-            buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
-
-            // Cancelled button
-            buttons += '<div class="col-4"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-                      ')" class="btn btn-danger btn-sm">X</button></div>';
-
-            buttons += '</div>'; // Closing row div
-
-            return buttons;
+            return dropdownMenu;
           }
         },
+        // { 
+        //   data: 'id',
+        //   render: function (data, type, row) {
+        //     let buttons = '<div class="row">';
+
+        //     // Edit button
+        //     buttons += '<div class="col-4"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
+        //               ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
+
+        //     // Extra button if validate_by is 3
+        //     // if (row.validate_by == 3) {
+        //     //   buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
+        //     //             ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
+        //     // }
+
+        //     // Print button
+        //     buttons += '<div class="col-4"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
+        //               ')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+
+        //     // Complete button if conditions are met
+        //     // if (row.calibrations != '') {
+        //     //   buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
+        //     //             ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
+        //     // }
+
+        //     // System Log
+        //     buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+
+        //     // Cancelled button
+        //     buttons += '<div class="col-4"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
+        //               ')" class="btn btn-danger btn-sm">X</button></div>';
+
+        //     buttons += '</div>'; // Closing row div
+
+        //     return buttons;
+        //   }
+        // },
         { 
           className: 'dt-control',
           orderable: false,

@@ -66,6 +66,7 @@ else{
   <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
   <link rel="stylesheet" href="dist/css/adminlte.min.css?v=3.2.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 
   
   <style>
@@ -279,6 +280,10 @@ else{
       -webkit-animation: uil-ring-anim 1s linear infinite;
       -o-animation: uil-ring-anim 1s linear infinite;
       animation: uil-ring-anim 1s linear infinite;
+    }
+
+    .dataTables_filter{
+      float: right;
     }
   </style>
 </head>

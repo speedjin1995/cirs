@@ -49,7 +49,7 @@ if($searchValue != ''){
   )";
 }
 
-$searchQuery .= " and b.deleted = 0 and a.deleted = 0 AND c.deleted = 0 and brand.deleted = 0 and m.deleted = 0 and cap.deleted = 0 and u.deleted = 0";
+// $searchQuery .= " and b.deleted = 0 and a.deleted = 0 AND c.deleted = 0 and brand.deleted = 0 and m.deleted = 0 and cap.deleted = 0 and u.deleted = 0";
 
 # Order by column
 if ($columnName == 'customer'){
@@ -72,24 +72,24 @@ $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
 $sel = mysqli_query($db,"select count(*) as allcount FROM inhouse_validations a
-                          LEFT JOIN standard b ON a.capacity = b.capacity
-                          JOIN customers c ON a.customer = c.id 
-                          JOIN brand ON a.brand = brand.id 
-                          JOIN machines m ON a.machines = m.id 
-                          JOIN capacity cap ON a.capacity = cap.id 
-                          JOIN users u ON a.calibrator = u.id
+                          LEFT JOIN standard b ON a.capacity = b.capacity AND b.deleted = 0
+                          LEFT JOIN customers c ON a.customer = c.id AND c.deleted = 0
+                          LEFT JOIN brand ON a.brand = brand.id AND brand.deleted = 0
+                          LEFT JOIN machines m ON a.machines = m.id AND m.deleted = 0
+                          LEFT JOIN capacity cap ON a.capacity = cap.id AND cap.deleted = 0
+                          LEFT JOIN users u ON a.calibrator = u.id AND u.deleted = 0
                           WHERE a.status = 'Cancelled'".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
 $empQuery = "SELECT a.*, b.standard_avg_temp, b.relative_humidity ,b.unit FROM inhouse_validations a 
-                    LEFT JOIN standard b ON a.capacity = b.capacity 
-                    JOIN customers c ON a.customer = c.id 
-                    JOIN brand ON a.brand = brand.id 
-                    JOIN machines m ON a.machines = m.id 
-                    JOIN capacity cap ON a.capacity = cap.id 
-                    JOIN users u ON a.calibrator = u.id
+                    LEFT JOIN standard b ON a.capacity = b.capacity AND b.deleted = 0
+                    LEFT JOIN customers c ON a.customer = c.id AND c.deleted = 0
+                    LEFT JOIN brand ON a.brand = brand.id AND brand.deleted = 0
+                    LEFT JOIN machines m ON a.machines = m.id AND m.deleted = 0
+                    LEFT JOIN capacity cap ON a.capacity = cap.id AND cap.deleted = 0
+                    LEFT JOIN users u ON a.calibrator = u.id AND u.deleted = 0
                     WHERE status = 'Cancelled'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();

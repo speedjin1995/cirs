@@ -53,7 +53,11 @@ if($searchValue != ''){
     b.brand like '%".$searchValue."%' OR
     m.machine_type like '%".$searchValue."%' OR 
     cap.name like '%".$searchValue."%' OR
-    v.validator like '%".$searchValue."%'
+    v.validator like '%".$searchValue."%' OR
+    s.serial_no like '%".$searchValue."%' OR
+    s.borang_d like '%".$searchValue."%' OR
+    s.no_daftar like '%".$searchValue."%' OR
+    s.borang_e like '%".$searchValue."%'
   )";
 }
 
@@ -145,6 +149,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "jenis_alat"=>$row['jenis_alat'] != null ? searchAlatNameById($row['jenis_alat'], $db) : '', 
     "cash_bill"=>$row['cash_bill'] ?? '',
     "invoice_no"=>$row['invoice_no'] ?? '',
+    "stamping_type"=>$row['stamping_type'] ?? '',
     "stamping_date"=>$row['stamping_date'] != null ? convertDatetimeToDate($row['stamping_date']) : '',
     "due_date"=>$row['due_date'] != null ? convertDatetimeToDate($row['due_date']) : '',
     "pic"=>$row['pic'] != null ? searchStaffNameById($row['pic'], $db) : '',
