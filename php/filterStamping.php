@@ -53,7 +53,11 @@ if($searchValue != ''){
     b.brand like '%".$searchValue."%' OR
     m.machine_type like '%".$searchValue."%' OR 
     cap.name like '%".$searchValue."%' OR
-    v.validator like '%".$searchValue."%'
+    v.validator like '%".$searchValue."%' OR
+    s.serial_no like '%".$searchValue."%' OR
+    s.borang_d like '%".$searchValue."%' OR
+    s.no_daftar like '%".$searchValue."%' OR
+    s.borang_e like '%".$searchValue."%'
   )";
 }
 
