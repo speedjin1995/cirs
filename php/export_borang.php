@@ -104,7 +104,11 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                         border: 1px solid #000000;
                         font-family: sans-serif;
                         font-size: 12px;
-                        
+                        padding-left: 0.50rem;
+                        padding-right: 0.50rem;
+                        padding-left: 0.4rem;
+                        padding-right: 0.4rem;
+                        text-align: center;
                     } 
                     
                     .row {
@@ -113,7 +117,6 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                         margin-top: 20px;
                         margin-right: -15px;
                         margin-left: -15px;
-                        
                     } 
                     
                     .col-md-4{
@@ -139,46 +142,48 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                     <tr>
                         <th>STAMPING DATE</th>
                         <th>NAME OF PURCHASE</th>
+                        <th>ADDRESS</th>
                         <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
-                        <th>CAPACITY</th>
+                        <th width="12%">CAPACITY</th>
                         <th>QUANTITY</th>
                         <th>REGISTER NO.</th>
                         <th>CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
                     </tr>';
 
             while ($row = $result->fetch_assoc()) {
-                // $branch = $row['branch'];
-                // $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                // $branchDetail = mysqli_query($db, $branchQuery);
-                // $branchRow = mysqli_fetch_assoc($branchDetail);
+                $branch = $row['branch'];
+                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                $branchDetail = mysqli_query($db, $branchQuery);
+                $branchRow = mysqli_fetch_assoc($branchDetail);
 
-                // $address1 = null;
-                // $address2 = null;
-                // $address3 = null;
-                // $address4 = null;
-                // $pic = null;
-                // $pic_phone = null;
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
 
-                // if(!empty($branchRow)){
-                //     $address1 = $branchRow['address'];
-                //     $address2 = $branchRow['address2'];
-                //     $address3 = $branchRow['address3'];
-                //     $address4 = $branchRow['address4'];
-                //     $pic = $branchRow['pic'];
-                //     $pic_phone = $branchRow['pic_contact'];
-                // }
+                if(!empty($branchRow)){
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
+                }
 
                 $stampingDate = new DateTime($row['stamping_date']);
                 $formattedStampingDate = $stampingDate->format('d-m-Y');
               
                 $message .= '<tr>
-                                <td style="padding-left: 1%;">'.$formattedStampingDate.'</td>
-                                <td style="padding-left: 1%;">'.searchCustNameById($row['customers'], $db).'</td>
-                                <td style="padding-left: 1%;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
-                                <td style="padding-left: 1%;">'.searchCapacityNameById($row['capacity'], $db).'</td>
-                                <td style="padding-left: 1%;">1</td>
-                                <td style="padding-left: 1%;">'.$row['no_daftar'].'</td>
-                                <td style="padding-left: 1%;">'.$row['siri_keselamatan'].'</td>
+                                <td>'.$formattedStampingDate.'</td>
+                                <td>'.searchCustNameById($row['customers'], $db).'</td>
+                                <td>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
+                                <td>'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
+                                <td>'.searchCapacityNameById($row['capacity'], $db).'</td>
+                                <td>1</td>
+                                <td>'.$row['no_daftar'].'</td>
+                                <td>'.$row['siri_keselamatan'].'</td>
                             </tr>';
             }
 
@@ -220,7 +225,11 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                         border: 1px solid #000000;
                         font-family: sans-serif;
                         font-size: 12px;
-                        
+                        padding-left: 0.50rem;
+                        padding-right: 0.50rem;
+                        padding-left: 0.4rem;
+                        padding-right: 0.4rem;
+                        text-align: center;
                     } 
                     
                     .row {
@@ -256,6 +265,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                         <th>BRG E BIL NO.</th>
                         <th>STAMPING DATE</th>
                         <th>NAME OF PURCHASE</th>
+                        <th>ADDRESS</th>
                         <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
                         <th>CAPACITY</th>
                         <th>LIST NO. (STMP. NO.)</th>
@@ -271,35 +281,36 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                 $branchDetail = mysqli_query($db, $branchQuery);
                 $branchRow = mysqli_fetch_assoc($branchDetail);
 
-                // $address1 = null;
-                // $address2 = null;
-                // $address3 = null;
-                // $address4 = null;
-                // $pic = null;
-                // $pic_phone = null;
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
 
-                // if(!empty($branchRow)){
-                //     $address1 = $branchRow['address'];
-                //     $address2 = $branchRow['address2'];
-                //     $address3 = $branchRow['address3'];
-                //     $address4 = $branchRow['address4'];
-                //     $pic = $branchRow['pic'];
-                //     $pic_phone = $branchRow['pic_contact'];
-                // }
+                if(!empty($branchRow)){
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
+                }
 
                 $stampingDate = new DateTime($row['stamping_date']);
                 $formattedStampingDate = $stampingDate->format('d-m-Y');
 
                 $message .= '<tr>
-                        <td style="padding-left: 0.5%">'.$row['borang_e'].'</td>
-                        <td style="padding-left: 0.5%">'.$formattedStampingDate.'</td>
-                        <td style="padding-left: 0.5%">'.searchCustNameById($row['customers'], $db).'</td>
-                        <td style="padding-left: 0.5%">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
-                        <td style="padding-left: 0.5%">'.searchCapacityNameById($row['capacity'], $db).'</td>
-                        <td style="padding-left: 0.5%">'.$row['pin_keselamatan'].'</td>
-                        <td style="padding-left: 0.5%">'.$row['no_daftar'].'</td>
-                        <td style="padding-left: 0.5%">SERVICE / STMP</td>
-                        <td style="padding-left: 0.5%">'.$row['siri_keselamatan'].'</td>';
+                        <td>'.$row['borang_e'].'</td>
+                        <td>'.$formattedStampingDate.'</td>
+                        <td>'.searchCustNameById($row['customers'], $db).'</td>
+                        <td>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
+                        <td>'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
+                        <td>'.searchCapacityNameById($row['capacity'], $db).'</td>
+                        <td>'.$row['pin_keselamatan'].'</td>
+                        <td>'.$row['no_daftar'].'</td>
+                        <td>SERVICE / STMP</td>
+                        <td>'.$row['siri_keselamatan'].'</td>';
 
                 if($row['cert_price'] != 0){
                     $message .= '<td style="padding-left: 0.5%" width="7%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').'</td>
