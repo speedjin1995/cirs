@@ -107,7 +107,8 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-8"><p>New Stamping</p></div>
+              <!-- <div class="col-8"><p>New Stamping</p></div> -->
+              <div class="col-8"></div>
               <div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borang</button>
               </div>
@@ -124,7 +125,7 @@ else{
           </div>
 
           <div class="card-body">
-            <table id="weightTable" class="table table-bordered table-striped display">
+            <table id="weightTable" class="table table-bordered table-striped display" style="text-align: center;">
               <thead>
                 <tr>
                   <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
@@ -132,7 +133,7 @@ else{
                   <th>STAMPING DATE</th>
                   <th>NAME OF PURCHASE</th>
                   <th>ABOUT WEIGHING,MEASURING AND <br>WEIGHING INSTRUMENTS</th>
-                  <th>CAPACITY</th>
+                  <th width="15%">CAPACITY</th>
                   <th>QUANTITY</th>
                   <th>REGISTER NO.</th>
                   <th>CERTIFICATE NO./ <br>NO.SIRI PELEKAT <br>KESELAMATAN</th>
