@@ -307,6 +307,9 @@ to get the desired effect
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars bg-primary"></i></a>
       </li>
+      <li class="nav-item">
+        <h6 class="nav-link bg-primary mb-0 pl-0"><b>Licensed By : <?php echo $company_name ?></b></h6>
+      </li>
     </ul>
   </nav>
   <!-- Main Sidebar Container -->
@@ -318,7 +321,7 @@ to get the desired effect
         <img src="assets/logo.png" alt="Sneakercube Logo" width="85%">
       </div>
       <div class="text-center" style="margin-top: 40%">
-        <h6 style="font-size:60%"><b><?php echo $company_name ?></b></h6>
+        <h6 style="font-size:60%"><b></b></h6>
       </div>
     </a>
     
