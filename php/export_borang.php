@@ -137,7 +137,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                         </th>
                     </tr>
                     <tr>
-                        <th>DATE</th>
+                        <th>STAMPING DATE</th>
                         <th>NAME OF PURCHASE</th>
                         <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
                         <th>CAPACITY</th>
@@ -168,8 +168,11 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                 //     $pic_phone = $branchRow['pic_contact'];
                 // }
 
+                $stampingDate = new DateTime($row['stamping_date']);
+                $formattedStampingDate = $stampingDate->format('d-m-Y');
+              
                 $message .= '<tr>
-                                <td style="padding-left: 1%;">'.$todayDate2.'</td>
+                                <td style="padding-left: 1%;">'.$formattedStampingDate.'</td>
                                 <td style="padding-left: 1%;">'.searchCustNameById($row['customers'], $db).'</td>
                                 <td style="padding-left: 1%;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
                                 <td style="padding-left: 1%;">'.searchCapacityNameById($row['capacity'], $db).'</td>
@@ -251,7 +254,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                     </tr>
                     <tr>
                         <th>BRG E BIL NO.</th>
-                        <th>DATE</th>
+                        <th>STAMPING DATE</th>
                         <th>NAME OF PURCHASE</th>
                         <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
                         <th>CAPACITY</th>
@@ -284,9 +287,12 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                 //     $pic_phone = $branchRow['pic_contact'];
                 // }
 
+                $stampingDate = new DateTime($row['stamping_date']);
+                $formattedStampingDate = $stampingDate->format('d-m-Y');
+
                 $message .= '<tr>
                         <td style="padding-left: 0.5%">'.$row['borang_e'].'</td>
-                        <td style="padding-left: 0.5%">'.$todayDate2.'</td>
+                        <td style="padding-left: 0.5%">'.$formattedStampingDate.'</td>
                         <td style="padding-left: 0.5%">'.searchCustNameById($row['customers'], $db).'</td>
                         <td style="padding-left: 0.5%">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
                         <td style="padding-left: 0.5%">'.searchCapacityNameById($row['capacity'], $db).'</td>
