@@ -12,7 +12,7 @@ if(isset($_POST['validationId'])){
         $format = $_POST['format'];
     }
 
-    if ($update_stmt = $db->prepare("SELECT a.*, b.standard_avg_temp, b.relative_humidity ,b.unit, b.variance, b.test_1, b.test_2, b.test_3, b.test_4, b.test_5, b.test_6, b.test_7, b.test_8, b.test_9, b.test_10 FROM inhouse_validations a LEFT JOIN standard b ON a.capacity = b.capacity WHERE a.id=? and b.deleted='0'")) {
+    if ($update_stmt = $db->prepare("SELECT a.*, b.standard_avg_temp, b.relative_humidity ,b.unit, b.variance, b.test_1, b.test_2, b.test_3, b.test_4, b.test_5, b.test_6, b.test_7, b.test_8, b.test_9, b.test_10 FROM inhouse_validations a LEFT JOIN standard b ON a.capacity = b.capacity and b.deleted='0' WHERE a.id=?")) {
         $update_stmt->bind_param('s', $id);
         
         // Execute the prepared query.

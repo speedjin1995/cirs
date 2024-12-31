@@ -8,7 +8,7 @@ if(!isset($_SESSION['userID'])){
   echo 'window.location.href = "login.php";</script>';
 }
 else{
-  $user = $_SESSION['userID'];
+  $user = $_SESSION['userID']; 
   $stmt = $db->prepare("SELECT * from users where id = ?");
 	$stmt->bind_param('s', $user);
 	$stmt->execute();
@@ -169,7 +169,7 @@ else{
                   <th>Company Name</th>
                   <th>Brands</th>
                   <th>Description Instruments for Weighing And Measuring</th>
-                  <th>Capacity</th>
+                  <th width="10%">Capacity</th>
                   <th>Validator By</th>
                   <th>Previous Stamp Date</th>
                   <th>Expired Date</th>
@@ -773,30 +773,54 @@ $(function () {
       { data: 'stamping_date' },
       { data: 'due_date' },
       { data: 'status' },
-      { 
+      {
         data: 'id',
-        render: function ( data, type, row ) {
-          let buttons = '<div class="row">';
+        render: function (data, type, row) {
+          let dropdownMenu = '<div class="dropdown" style="width=20%">' +
+            '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+            '<i class="fa-solid fa-ellipsis"></i>' +
+            '</button>' +
+            '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">';
 
-          if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
-            buttons +=  '<div class="col-4"><button title="Revert" type="button" id="pendingBtn'+data+'" onclick="revert('+data+
-            ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
+            if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
+              dropdownMenu += 
+                '<a class="dropdown-item" id="revertBtn' + data + '" onclick="revert(' + data + ')"><i class="fa fa-arrow-circle-left"></i> Revert</a>'+
+                '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>'+
+                '<a class="dropdown-item" id="delete'+data+'" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Delete</a>';
+            }else{
+              dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
+            }
+            
+          
+          dropdownMenu += '</div></div>';
 
-            // Log Button
-            buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
-
-            buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></button></div>';
-
-
-            return buttons;
-          } 
-          else {
-            // Log Button
-            buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
-            return ''; // Return an empty string or any other placeholder if the item is invoiced
-          }
+          return dropdownMenu;
         }
       },
+      // { 
+      //   data: 'id',
+      //   render: function ( data, type, row ) {
+      //     let buttons = '<div class="row">';
+
+      //     if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
+      //       buttons +=  '<div class="col-4"><button title="Revert" type="button" id="revertBtn'+data+'" onclick="revert('+data+
+      //       ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
+
+      //       // Log Button
+      //       buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+
+      //       buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></button></div>';
+
+
+      //       return buttons;
+      //     } 
+      //     else {
+      //       // Log Button
+      //       buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+      //       return ''; // Return an empty string or any other placeholder if the item is invoiced
+      //     }
+      //   }
+      // },
       { 
         className: 'dt-control',
         orderable: false,
