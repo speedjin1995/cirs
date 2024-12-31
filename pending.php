@@ -2327,8 +2327,8 @@ $(function () {
     }
 
     $('#totalAmount').val(totalAmt);
-    $('#sst').val((totalAmt * 0.06).toFixed(2));
-    $('#subAmount').val((totalAmt + (totalAmt * 0.06)).toFixed(2));
+    $('#sst').val((totalAmt * 0.08).toFixed(2));
+    $('#subAmount').val((totalAmt + (totalAmt * 0.08)).toFixed(2));
   });
 
   $('#extendModal').find('#unitPrice').on('change', function(){
@@ -2349,8 +2349,8 @@ $(function () {
     }
 
     $('#totalAmount').val(totalAmt);
-    $('#sst').val((totalAmt * 0.06).toFixed(2));
-    $('#subAmount').val((totalAmt + (totalAmt * 0.06)).toFixed(2));
+    $('#sst').val((totalAmt * 0.08).toFixed(2));
+    $('#subAmount').val((totalAmt + (totalAmt * 0.08)).toFixed(2));
   });
 
   $('#extendModal').find('#includeCert').on('change', function(){
@@ -2373,8 +2373,8 @@ $(function () {
     }
 
     $('#totalAmount').val(totalAmt);
-    $('#sst').val((totalAmt * 0.06).toFixed(2));
-    $('#subAmount').val((totalAmt + (totalAmt * 0.06)).toFixed(2));
+    $('#sst').val((totalAmt * 0.08).toFixed(2));
+    $('#subAmount').val((totalAmt + (totalAmt * 0.08)).toFixed(2));
   });
 
   $('#extendModal').find('#machineType').on('change', function(){
