@@ -120,7 +120,8 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-8"><p>Completed Stamping</p></div>
+              <!-- <div class="col-8"><p>Completed Stamping</p></div> -->
+              <div class="col-8"></div>
               <div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
               </div>
@@ -137,7 +138,7 @@ else{
           </div>
 
           <div class="card-body">
-            <table id="weightTable" class="table table-bordered table-striped display">
+            <table id="weightTable" class="table table-bordered table-striped display" style="text-align:center;">
               <thead>
                 <tr>
                   <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>

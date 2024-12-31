@@ -661,8 +661,8 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
           <div class="row" id='otherRow'>
             <div class="col-6">
               <div class="form-group">
-                <label>Remarks / Other Reasons</label>
-                <textarea class="form-control" id ="otherReason" name="otherReason"></textarea>
+                <label>Remarks / Other Reasons *</label>
+                <textarea class="form-control" id ="otherReason" name="otherReason" required></textarea>
               </div>
             </div>
           </div>  
