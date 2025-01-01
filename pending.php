@@ -34,7 +34,9 @@ else{
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $technicians = $db->query("SELECT * FROM users WHERE role_code = 'TECHNICIAN' AND deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
+  $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
   $states = $db->query("SELECT * FROM state WHERE deleted = '0'");
+  $cawangans = $db->query("SELECT * FROM state WHERE deleted = '0'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
   $cancelledReasons = $db->query("SELECT * FROM reasons WHERE deleted = '0'");
@@ -109,6 +111,18 @@ else{
                     <option value="" selected disabled hidden>Please Select</option>
                     <?php while($rowCustomer2=mysqli_fetch_assoc($customers2)){ ?>
                       <option value="<?=$rowCustomer2['id'] ?>"><?=$rowCustomer2['customer_name'] ?></option>
+                    <?php } ?>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-3">
+                <div class="form-group">
+                  <label>Select Validators</label>
+                  <select class="form-control select2" id="validatorFilter" name="validatorFilter">
+                    <option value="" selected disabled hidden>Please Select</option>
+                    <?php while($validator2=mysqli_fetch_assoc($validators2)){ ?>
+                      <option value="<?=$validator2['id'] ?>"><?=$validator2['validator'] ?></option>
                     <?php } ?>
                   </select>
                 </div>
@@ -738,6 +752,21 @@ else{
               </div>
             </div>
           </div>  
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>Cawangan *</label>
+                <select class="form-control select2" style="width: 100%;" id="cawanganBorang" name="cawanganBorang" required>
+                  <option selected="selected"></option>
+                  <?php while($cawangan=mysqli_fetch_assoc($cawangans)){ ?>
+                    <option value="<?=$cawangan['id'] ?>"><?=$cawangan['state'] ?></option>
+                  <?php } ?>
+                </select>
+              </div>
+            </div>
+          </div>  
+          <input type="hidden" class="form-control" id="validatorBorang" name="validatorBorang">
+
         </div>
 
         <div class="modal-footer justify-content-between bg-gray-dark color-palette">
@@ -1558,6 +1587,7 @@ $(function () {
   var fromDateValue = $('#fromDate').val();
   var toDateValue = $('#toDate').val();
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
+  var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
   var daftarNoFilter = $('#daftarNoFilter').val() ? $('#daftarNoFilter').val() : '';
   var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
   var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
@@ -1581,7 +1611,8 @@ $(function () {
       'data': {
         fromDate: fromDateValue,
         toDate: toDateValue,
-        customer: customerNoFilter,
+        customer: validatorFilter,
+        validator: customerNoFilter,
         daftar: daftarNoFilter,
         borang: borangNoFilter,
         serial: serialNoFilter,
@@ -1841,6 +1872,7 @@ $(function () {
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
+    var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
     var daftarNoFilter = $('#daftarNoFilter').val() ? $('#daftarNoFilter').val() : '';
     var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
     var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
@@ -1867,6 +1899,7 @@ $(function () {
           fromDate: fromDateValue,
           toDate: toDateValue,
           customer: customerNoFilter,
+          validator: validatorFilter,
           daftar: daftarNoFilter,
           borang: borangNoFilter,
           serial: serialNoFilter,
@@ -2000,8 +2033,10 @@ $(function () {
     });
 
     if (selectedIds.length > 0) {
+      var validator = $('#validatorFilter').val();
       $("#printDOModal").find('#id').val(selectedIds);
       $("#printDOModal").find('#driver').val('P');
+      $("#printDOModal").find('#validatorBorang').val(validator);
       $("#printDOModal").modal("show");
 
       $('#printDOForm').validate({

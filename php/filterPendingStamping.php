@@ -31,6 +31,10 @@ if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] 
 	$searchQuery .= " and s.customers = '".$_POST['customer']."'";
 }
 
+if($_POST['validator'] != null && $_POST['validator'] != '' && $_POST['validator'] != '-'){
+	$searchQuery .= " and s.validate_by = '".$_POST['validator']."'";
+}
+
 if($_POST['daftar'] != null && $_POST['daftar'] != '' && $_POST['daftar'] != '-'){
 	$searchQuery .= " and s.no_daftar like '%".$_POST['daftar']."%'";
 }
