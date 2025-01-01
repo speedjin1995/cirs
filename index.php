@@ -38,7 +38,7 @@ else{
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-  <title>DX Weighing | CIRS</title>
+  <title><?php echo $company_name; ?> | SCM</title>
 
   <link rel="icon" href="assets/logoSmall.png" type="image">
   <!-- Font Awesome Icons -->
@@ -85,8 +85,7 @@ else{
     }
   
     thead {
-      /* background: #dddcdc */
-      background-color: #007bff; 
+      background-color: rgb(7 73 121); 
       color:white;
     }
   
@@ -285,6 +284,27 @@ else{
     .dataTables_filter{
       float: right;
     }
+
+    [class*=sidebar-light-] .nav-sidebar>.nav-item.menu-open>.nav-link, [class*=sidebar-light-] .nav-sidebar>.nav-item:hover>.nav-link {
+      background-color: rgb(7 73 121);
+      color: #ffffff;
+    }
+
+    [class*=sidebar-light-] .nav-treeview>.nav-item>.nav-link.active, 
+    [class*=sidebar-light-] .nav-treeview>.nav-item>.nav-link.active:hover, 
+    [class*=sidebar-light-] .nav-treeview>.nav-item>.nav-link:hover {
+      background-color: rgb(1 162 226);
+      color: #ffffff;
+    }
+
+    [class*=sidebar-light-] .nav-treeview>.nav-item>.nav-link {
+      color: #212529;
+    }
+
+    .card-primary:not(.card-outline)>.card-header {
+      background-color:rgb(7 73 121);
+      color: #ffffff;
+    }
   </style>
 </head>
 <!--
@@ -306,14 +326,14 @@ to get the desired effect
 
 <div class="wrapper">
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-primary navbar-light">
+  <nav class="main-header navbar navbar-expand navbar-light" style="background-color: #074979;color: white;">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars bg-primary"></i></a>
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars" style="background-color: #074979;color: white;"></i></a>
       </li>
       <li class="nav-item">
-        <h6 class="nav-link bg-primary mb-0 pl-0"><b>Licensed By : <?php echo $company_name ?></b></h6>
+        <h6 class="nav-link mb-0 pl-0" style="background-color: #074979;color: white;"><b>Licensed By : <?php echo $company_name ?></b></h6>
       </li>
     </ul>
   </nav>
@@ -696,7 +716,7 @@ to get the desired effect
 
   <!-- Main Footer -->
   <footer class="main-footer">
-    <strong>Copyright &copy; 2022 <a href="#">SyncWeight</a>.</strong>All rights reserved.<div class="float-right d-none d-sm-inline-block"><b>Version</b> 1.0.0 </div>
+    <strong>Copyright &copy; 2025 <a href="#">SyncWeight</a>.</strong>All rights reserved.<div class="float-right d-none d-sm-inline-block"><b>Version</b> 1.0.0 </div>
   </footer>
 </div>
 <!-- ./wrapper -->

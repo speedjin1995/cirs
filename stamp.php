@@ -1597,7 +1597,7 @@ $(function () {
         data: 'id',
         render: function (data, type, row) {
           let dropdownMenu = '<div class="dropdown" style="width=20%">' +
-            '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+            '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #074979;">' +
             '<i class="fa-solid fa-ellipsis"></i>' +
             '</button>' +
             '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">';
@@ -1867,7 +1867,7 @@ $(function () {
           data: 'id',
           render: function (data, type, row) {
             let dropdownMenu = '<div class="dropdown" style="width=20%">' +
-              '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+              '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #074979;">' +
               '<i class="fa-solid fa-ellipsis"></i>' +
               '</button>' +
               '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">';
