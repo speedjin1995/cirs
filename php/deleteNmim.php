@@ -35,6 +35,7 @@ if(isset($_POST['companyId']) && isset($_POST['nmimId'])){
                             }
                         } else {
                             $response['file_status'] = "File does not exist.";
+							unset($nmims[$key]);	
 						}
 					}
 				}
@@ -76,11 +77,13 @@ if(isset($_POST['companyId']) && isset($_POST['nmimId'])){
 				if (file_exists($updatedFilePath)) {
 					if (unlink($updatedFilePath)) {
 						$response['file_status'] = "File deleted successfully.";
+						unset($nmims[$key]);	
 					}else {
 						$response['file_status'] = "Error deleting file.";
 					}
 				} else {
 					$response['file_status'] = "File does not exist.";
+					unset($nmims[$key]);	
 				}
 
 

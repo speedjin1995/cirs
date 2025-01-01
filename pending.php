@@ -32,7 +32,7 @@ else{
   $problems = $db->query("SELECT * FROM problem WHERE deleted = '0'");
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
-  $technicians = $db->query("SELECT * FROM users WHERE role_code = 'TECHNICIAN' AND deleted = '0'");
+  $technicians = $db->query("SELECT * FROM users WHERE role_code != 'SUPER_ADMIN' AND deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
   $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
   $states = $db->query("SELECT * FROM state WHERE deleted = '0'");
@@ -480,7 +480,6 @@ else{
                   <div class="form-group">
                     <label>Assigned To *</label>
                     <select class="form-control select2" style="width: 100%;" id="assignTo" name="assignTo" required>
-                      <option selected="selected">-</option>
                       <?php while($technician=mysqli_fetch_assoc($technicians)){ ?>
                         <option value="<?=$technician['id'] ?>"><?=$technician['name'] ?></option>
                       <?php } ?>
