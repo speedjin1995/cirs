@@ -45,6 +45,11 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
     $companyRow = mysqli_fetch_assoc($companyDetail);
 
     if(!empty($companyRow)){
+        $companyName = $companyRow['name'];
+        $companyOldRoc = $companyRow['old_roc'];
+        $companyAddress = $companyRow['address'];
+        $companyTel = $companyRow['phone'];
+        $companyFax = $companyRow['fax'];
         $companySignature = $companyRow['signature'];
     }
 
@@ -522,10 +527,9 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                             <tbody>
                                 <tr>
                                     <td style="vertical-align: left;" width="50%">
-                                        <p>NAMA SYARIKAT PEMILIK / PEMBAIK : <br>DX WEIGHING SOLUTION (M) SDN BHD (1284580-M)<br>
-                                        ALAMAT : NO. 34, JALAN BAGAN 1,<br>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TAMAN BAGAN, 13400 BUTTERWORTH.<br>
-                                        Tel. : 04-332 5822     Fax. : 04-331 5822</p><br>';
+                                        <p>NAMA SYARIKAT PEMILIK / PEMBAIK : <br>'.$companyName.' ('.$companyOldRoc.')<br>
+                                        ALAMAT : '.$companyAddress.'<br>
+                                        Tel. : '.$companyTel.'     Fax. : '.$companyFax.'</p><br>';
     
                                     $message .= '<p>Pengurus Cawangan : <span style="font-size: 14px; font-weight: bold;">' . $validatorFilter . ' ' . $cawanganFilter . '</span><br>';
                                         
