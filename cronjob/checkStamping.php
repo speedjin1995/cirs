@@ -1,7 +1,6 @@
 <?php
 // Database connection
-$host = 'srv605.hstgr.io';
-//$host = 'localhost';
+$host = 'localhost';
 $dbname = 'u664110560_cirs';
 $username = 'u664110560_cirs';
 $password = 'Aa@111222333';
@@ -15,7 +14,7 @@ try {
     $lastDayNextMonth = date('Y-m-t 23:59:59', strtotime('last day of next month'));
 
     // Query to select records where due_date is in the next month
-    $query = "SELECT * FROM stamping WHERE status IN ('Complete', 'Cancelled') AND due_date BETWEEN :firstDay AND :lastDay";
+    $query = "SELECT * FROM stamping WHERE status = 'Complete' AND due_date BETWEEN :firstDay AND :lastDay AND renewed='N' AND deleted='0'";
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':firstDay', $firstDayNextMonth);
     $stmt->bindParam(':lastDay', $lastDayNextMonth);
@@ -23,32 +22,100 @@ try {
 
     $records = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Prepare insert statement
-    $insertQuery = "INSERT INTO stamping (customer_type, customers, address1, address2, address3, brand, machine_type, model, capacity, serial_no, 
-                    validate_by, jenis_alat, no_daftar, pin_keselamatan, siri_keselamatan, include_cert, borang_d, invoice_no, cash_bill, 
-                    stamping_date, due_date, pic, customer_pic, quotation_no, quotation_date, purchase_no, purchase_date, remarks, 
-                    unit_price, cert_price, total_amount, sst, subtotal_amount, products, existing_id, status, stamping_type) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $insertStmt = $pdo->prepare($insertQuery);
-
-    // Loop through the records and insert them as new records
-    foreach ($records as $record) {
-        $insertStmt->execute([
-            $record['customer_type'], $record['customers'], $record['address1'], $record['address2'], $record['address3'],
-            $record['brand'], $record['machine_type'], $record['model'], $record['capacity'], $record['serial_no'],
-            $record['validate_by'], $record['jenis_alat'], $record['no_daftar'], $record['pin_keselamatan'], $record['siri_keselamatan'],
-            $record['include_cert'], $record['borang_d'], $record['invoice_no'], $record['cash_bill'], $record['stamping_date'],
-            $record['due_date'], $record['pic'], $record['customer_pic'], $record['quotation_no'], $record['quotation_date'],
-            $record['purchase_no'], $record['purchase_date'], $record['remarks'], $record['unit_price'], $record['cert_price'],
-            $record['total_amount'], $record['sst'], $record['subtotal_amount'], $record['products'], $record['id'], 'Pending', 'RENEWAL'
-        ]);
+    if (empty($records)) {
+        echo "No records found for processing.";
+        exit;
     }
 
-    echo "Records copied successfully.";
+    // Prepare insert statement for stamping
+    $insertQuery = "INSERT INTO stamping (
+        type, dealer, dealer_branch, customer_type, customers, branch, products, brand, machine_type, model, 
+        capacity, capacity_high, assignTo, serial_no, validate_by, jenis_alat, trade, no_daftar, pin_keselamatan, 
+        siri_keselamatan, include_cert, borang_d, borang_e, cawangan, invoice_no, cash_bill, stamping_type, stamping_date, 
+        due_date, pic, customer_pic, quotation_no, quotation_date, purchase_no, purchase_date, remarks, log, 
+        unit_price, cert_price, total_amount, sst, subtotal_amount, reason_id, other_reason, existing_id, status, 
+        renewed
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-} catch (PDOException $e) {
+    $insertStmt = $pdo->prepare($insertQuery);
+
+    // Prepare insert statement for stamping_ext
+    $insertExtQuery = "INSERT INTO stamping_ext (
+        stamp_id, penentusan_baru, penentusan_semula, kelulusan_mspk, no_kelulusan, indicator_serial, 
+        platform_country, platform_type, size, jenis_pelantar, jenis_penunjuk, alat_type, questions, 
+        nilais, bentuk_dulang, class, batu_ujian, batu_ujian_lain, other_info, load_cell_country, 
+        load_cell_no, load_cells_info
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    $insertExtStmt = $pdo->prepare($insertExtQuery);
+
+    // Begin transaction
+    $pdo->beginTransaction();
+
+    try {
+        $processedIds = [];
+        foreach ($records as $record) {
+            // Insert into stamping
+            $insertStmt->execute([
+                $record['type'], $record['dealer'], $record['dealer_branch'], $record['customer_type'], $record['customers'],
+                $record['branch'], $record['products'], $record['brand'], $record['machine_type'], $record['model'],
+                $record['capacity'], $record['capacity_high'], $record['assignTo'], $record['serial_no'], $record['validate_by'],
+                $record['jenis_alat'], $record['trade'], null, null, null,
+                $record['include_cert'], null, null, $record['cawangan'], null,
+                null, 'RENEWAL', $record['due_date'], null, $record['pic'],
+                $record['customer_pic'], null, null, null, null,
+                $record['remarks'], $record['log'], $record['unit_price'], $record['cert_price'], $record['total_amount'],
+                $record['sst'], $record['subtotal_amount'], $record['reason_id'], $record['other_reason'], $record['id'], 'Pending', 'N'
+            ]);
+
+            // Get the last inserted ID
+            $newStampId = $pdo->lastInsertId();
+
+            // Fetch related records from stamping_ext
+            $extQuery = "SELECT * FROM stamping_ext WHERE stamp_id = :oldStampId";
+            $extStmt = $pdo->prepare($extQuery);
+            $extStmt->bindParam(':oldStampId', $record['id']);
+            $extStmt->execute();
+
+            $extRecords = $extStmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if (!empty($extRecords)) {
+                foreach ($extRecords as $extRecord) {
+                    $insertExtStmt->execute([
+                        $newStampId, $extRecord['penentusan_baru'], $extRecord['penentusan_semula'], $extRecord['kelulusan_mspk'],
+                        $extRecord['no_kelulusan'], $extRecord['indicator_serial'], $extRecord['platform_country'], $extRecord['platform_type'],
+                        $extRecord['size'], $extRecord['jenis_pelantar'], $extRecord['jenis_penunjuk'], $extRecord['alat_type'],
+                        $extRecord['questions'], $extRecord['nilais'], $extRecord['bentuk_dulang'], $extRecord['class'],
+                        $extRecord['batu_ujian'], $extRecord['batu_ujian_lain'], $extRecord['other_info'], $extRecord['load_cell_country'],
+                        $extRecord['load_cell_no'], $extRecord['load_cells_info']
+                    ]);
+                }
+            }
+
+            // Add to processed IDs
+            $processedIds[] = $record['id'];
+        }
+
+        // Update the old stamping records to set renewed = 'Y'
+        if (!empty($processedIds)) {
+            $updateQuery = "UPDATE stamping SET renewed = 'Y' WHERE id IN (" . implode(',', $processedIds) . ")";
+            $pdo->exec($updateQuery);
+        }
+
+        // Commit transaction
+        $pdo->commit();
+        echo count($processedIds)." Records processed successfully.";
+    } 
+    catch (Exception $e) {
+        // Rollback transaction in case of error
+        $pdo->rollBack();
+        throw $e;
+    }
+} 
+catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
 }
 
 // Close connection
 $pdo = null;
+?>
