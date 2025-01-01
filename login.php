@@ -16,7 +16,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Synctronix | Log in</title>
+  <title><?php echo $company_name; ?> | Log in</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -101,9 +101,8 @@
     <!-- /.login-card-body -->
   </div>
 
-  <div class="text-center font-weight-bold" style="margin-top:40%">
-    <p>***** Ideal of Synctronix *****</p>
-    <p>Ver: 1.0.0</p>
+  <div class="text-center font-weight-bold" style="margin-top:20%">
+    <p>***** Ideal of Synctronix *****<br>Ver: 1.0.0</p>
   </div>
 </div>
 <!-- /.login-box -->

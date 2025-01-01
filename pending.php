@@ -1494,6 +1494,7 @@ var pricingCount = $("#pricingTable").find(".details").length;
 var loadCellCount = $("#loadCellTable").find(".details").length;
 var customer = 0;
 var branch = 0;
+var jalat = '';
 
 $(function () {
   $('#customerNoHidden').hide();
@@ -1625,7 +1626,7 @@ $(function () {
         data: 'id',
         render: function (data, type, row) {
           let dropdownMenu = '<div class="dropdown" style="width=20%">' +
-            '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+            '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #074979;">' +
             '<i class="fa-solid fa-ellipsis"></i>' +
             '</button>' +
             '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">';
@@ -1910,7 +1911,7 @@ $(function () {
           data: 'id',
           render: function (data, type, row) {
             let dropdownMenu = '<div class="dropdown" style="width=20%">' +
-              '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+              '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #074979;">' +
               '<i class="fa-solid fa-ellipsis"></i>' +
               '</button>' +
               '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">';
@@ -2462,7 +2463,10 @@ $(function () {
   });
 
   $('#extendModal').find('#jenisAlat').on('change', function(){
-      alat = $(this).val();
+    alat = $(this).val();
+    jalat = $(this).val();
+    $('#addtionalSection').html('');
+    debugger;
 
     if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
       $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
@@ -3166,8 +3170,10 @@ function edit(id) {
           }
         }
 
+        jalat = obj.message.jenis_alat;
+
         $('#extendModal').on('atkLoaded', function() {
-          if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '1'){
+          if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '1'){
             $('#addtionalSection').html($('#atkDetails').html());
             $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
             $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
@@ -3205,23 +3211,23 @@ function edit(id) {
                 loadCellCount++;
               }
             }
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '4'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '4'){
             $('#addtionalSection').html($('#atsDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '2'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '2'){
             $('#addtionalSection').html($('#atpDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '5'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '5'){
             $('#addtionalSection').html($('#atnDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '6'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '6'){
             $('#addtionalSection').html($('#ateDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#class').val(obj.message.class).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '14'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '14'){
             $('#addtionalSection').html($('#sllDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
@@ -3233,7 +3239,7 @@ function edit(id) {
             $('#extendModal').find('#question5_2').val(obj.message.questions[5].answer).trigger('change');
             $('#extendModal').find('#question6').val(obj.message.questions[6].answer).trigger('change');
             $('#extendModal').find('#question7').val(obj.message.questions[7].answer).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '7'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '7'){
             $('#addtionalSection').html($('#btuDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
 
@@ -3248,7 +3254,7 @@ function edit(id) {
             });
 
             $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '10'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '10'){
             // $('#addtionalSection').html($('#autoPackDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
             // $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
@@ -3260,7 +3266,7 @@ function edit(id) {
             $('#addtionalSection').html($('#autoPackDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '17'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '17'){
             $('#addtionalSection').html($('#atsHDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
           }
@@ -3350,9 +3356,10 @@ function edit(id) {
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
         $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
+        jalat = obj.message.jenis_alat;
 
         $('#extendModal').on('atkLoaded', function() {
-          if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '1'){
+          if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '1'){
             $('#addtionalSection').html($('#atkDetails').html());
             $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
             $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
@@ -3390,23 +3397,23 @@ function edit(id) {
                 loadCellCount++;
               }
             }
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '4'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '4'){
             $('#addtionalSection').html($('#atsDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '2'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '2'){
             $('#addtionalSection').html($('#atpDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '5'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '5'){
             $('#addtionalSection').html($('#atnDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '6'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '6'){
             $('#addtionalSection').html($('#ateDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#class').val(obj.message.class).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '14'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '14'){
             $('#addtionalSection').html($('#sllDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
@@ -3418,7 +3425,7 @@ function edit(id) {
             $('#extendModal').find('#question5_2').val(obj.message.questions[5].answer).trigger('change');
             $('#extendModal').find('#question6').val(obj.message.questions[6].answer).trigger('change');
             $('#extendModal').find('#question7').val(obj.message.questions[7].answer).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '7'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '7'){
             $('#addtionalSection').html($('#btuDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
 
@@ -3433,7 +3440,7 @@ function edit(id) {
             });
 
             $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '10'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '10'){
             // $('#addtionalSection').html($('#autoPackDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
             // $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
@@ -3445,7 +3452,7 @@ function edit(id) {
             $('#addtionalSection').html($('#autoPackDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '17'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '17'){
             $('#addtionalSection').html($('#atsHDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
           }
