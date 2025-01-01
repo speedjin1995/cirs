@@ -26,6 +26,7 @@ else{
         // $phone = $row['phone'];
         // $email = $row['email'];
 		$filepath = $row['signature'];
+		$inhouseFilePath = $row['inhouse'];
     }
 }
 ?>
@@ -145,7 +146,7 @@ else{
 						<label for="signature">Signature </label>
 						<div class="d-flex">
 							<div class="col-11">
-								<input type="file" class="form-control" id="uploadAttachment" name="uploadAttachment" accept="image/*" required>
+								<input type="file" class="form-control" id="uploadAttachment" name="uploadAttachment" accept="image/*">
 							</div>
 							<div class="col-1 mt-1">
 								<?php 
@@ -159,6 +160,26 @@ else{
 							</div>
 						</div>
 						<input type="text" id="signFilePath" name="signFilePath" value="<?php echo htmlspecialchars($filepath, ENT_QUOTES, 'UTF-8'); ?>" style="display:none;">
+					</div>
+
+					<div class="form-group col-6">
+						<label for="inhouseHead">Inhouse Letter Head </label>
+						<div class="d-flex">
+							<div class="col-11">
+								<input type="file" class="form-control" id="uploadInhouseAttachment" name="uploadInhouseAttachment" accept="image/*">
+							</div>
+							<div class="col-1 mt-1">
+								<?php 
+									if (isset($data['inhouse']) && !empty($data['inhouse'])) {
+										echo '<a href="' . htmlspecialchars($data['inhouse'], ENT_QUOTES, 'UTF-8') . '" id="viewInhousePdf" name="viewInhousePdf" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>';
+									}else{
+										echo '<a href="" id="viewInhousePdf" name="viewInhousePdf" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>';
+									}
+								?>
+								
+							</div>
+						</div>
+						<input type="text" id="inhouseFilePath" name="inhouseFilePath" value="<?php echo htmlspecialchars($inhouseFilePath, ENT_QUOTES, 'UTF-8'); ?>" style="display:none;">
 					</div>
 				</div>
 			</div>
