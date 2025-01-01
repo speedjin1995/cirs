@@ -38,6 +38,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
     $driver = $_POST['driver'];
     $todayDate = date('d/m/Y');
     $todayDate2 = date('d M Y');
+    $todayDate3 = date('d.m.Y');
     $today = date("Y-m-d 00:00:00");
 
     $companyQuery = "SELECT * FROM companies WHERE id = '1'";
@@ -552,7 +553,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                     $message .= '</td>
                                     <td style="vertical-align: right;">
                                         <p>Penentusahan Dalam / Luar Pejabat</p>
-                                        <p>Tarikh : 23.06.2024</p>
+                                        <p>Tarikh : '.$todayDate3.'</p>
                                         <table class="table-bordered">
                                             <tbody>
                                                 <tr><th width="20%">Alat</th><th width="20%">Jum. Alat</th><th width="20%">Bayaran</th></tr>';
