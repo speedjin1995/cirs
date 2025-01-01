@@ -2077,15 +2077,16 @@ function extraAction(id){
 
 function edit(id) {
   $('#spinnerLoading').show();
-  debugger;
   $.post('php/getInHouseValidation.php', {validationId: id}, function(data){
     var obj = JSON.parse(data);
     if(obj.status === 'success'){
-      let variance = obj.message.variance;
+      let variance = parseFloat(0).toFixed(1); 
+      if (obj.message.variance) {
+          variance = parseFloat(obj.message.variance);
+      }
       let varianceDecimalPart = variance.toString().split('.')[1];
       let varianceDecimalPoint = varianceDecimalPart.length;
       var unit = obj.message.capacityUnit;
-      console.log(obj.message.tests);
       if(obj.message.type == 'DIRECT'){
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
