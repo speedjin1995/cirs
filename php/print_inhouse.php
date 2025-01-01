@@ -14,8 +14,10 @@ if(isset($_POST['id'])){
         $company_stmt->execute();
         $result2 = $company_stmt->get_result();
         while ($row2 = $result2->fetch_assoc()) {
+            $companyName = $row2['name'];
             $certno_lesen = $row2['certno_lesen'];
             $bless_serahanno = $row2['bless_serahanno'];
+            $inhouseFilePath = $row2['inhouse'];
             $failno = $row2['failno'];
             $person_incharge = $row2['person_incharge'];
             $nmims = json_decode($row2['nmim'], true);
@@ -48,7 +50,7 @@ if(isset($_POST['id'])){
             // $validator = '2';
 
             while ($row = $result->fetch_assoc()) {
-                $company = searchCustNameById($row['customer'],$db);
+                $customer = searchCustNameById($row['customer'],$db);
                 $branch = $row['branch'];
                 $autoFormNo = $row['auto_form_no'];
                 $validationDate = formatDate($row['validation_date']);
@@ -159,14 +161,14 @@ if(isset($_POST['id'])){
                         <body>
                             <div class="container-full">
                             <div class="header mb-3">
-                                <img src="dist/img/inhouse-header.png" alt="DX Weighing Solution" width="100%">
+                                <img src="'. $inhouseFilePath .'" alt="'. $companyName .'" width="100%" height="261px">
                             </div>';
 
                 $message .= '<table class="mb-3">
                             <tbody>
                                 <tr>
                                     <td width="5%" class="align-top"><b>To Company:</b></td>
-                                    <td width="28%" class="align-top"><b>' . $company . '</b></td>
+                                    <td width="28%" class="align-top"><b>' . $customer . '</b></td>
                                     <td width="12%" class="align-top"><b>Certificate No:</b></td>
                                     <td width="10%" class="align-top">'. $autoFormNo .'</td>
                                 </tr>

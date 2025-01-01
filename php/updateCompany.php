@@ -109,6 +109,7 @@ if(isset($_POST['new_roc'], $_POST['name'], $_POST['address'])){
 		
 		if($stmt2->execute()){
 			$uploadAttachment = null;
+			$uploadInhouseAttachment = null;
 			if(isset($_FILES['uploadAttachment']) && $_FILES['uploadAttachment']!=null && $_FILES['uploadAttachment']!=""){
 				$uploadAttachment = $_FILES['uploadAttachment'];
 
@@ -137,6 +138,38 @@ if(isset($_POST['new_roc'], $_POST['name'], $_POST['address'])){
 							$stmt3->bind_param('ss', $signatureFilePath, $id);
 							$stmt3->execute();
 							$stmt3->close();
+						} 
+					} 
+				}
+			}
+
+			if(isset($_FILES['uploadInhouseAttachment']) && $_FILES['uploadInhouseAttachment']!=null && $_FILES['uploadInhouseAttachment']!=""){
+				$uploadInhouseAttachment = $_FILES['uploadInhouseAttachment'];
+				$ds = DIRECTORY_SEPARATOR;
+				$storeFolder = '../uploads/inhouseLetterHead';
+				$dataJson = '';
+				if($uploadInhouseAttachment['error'] === 0){
+					# Delete Existing File
+					if(isset($_POST['inhouseFilePath']) && $_POST['inhouseFilePath']!=null && $_POST['inhouseFilePath']!=""){
+						$inhouseFilePath = $_POST['inhouseFilePath'];
+						if (file_exists($inhouseFilePath)) {
+							unlink($inhouseFilePath);
+						}
+					}
+
+					$timestamp = time();
+					$uploadDir = '../uploads/inhouseLetterHead/'; // Directory to store uploaded files
+					$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadInhouseAttachment']['name']);
+					$tempFile = $_FILES['uploadInhouseAttachment']['tmp_name'];
+
+					// Move the uploaded file to the target directory
+					if (move_uploaded_file($tempFile, $uploadFile)) { 
+						$inhouseFilePath = $uploadFile;
+						// Update certificate data in the database
+						if ($stmt4 = $db->prepare("UPDATE companies SET inhouse=? WHERE id=?")) {
+							$stmt4->bind_param('ss', $inhouseFilePath, $id);
+							$stmt4->execute();
+							$stmt4->close();
 						} 
 					} 
 				}
