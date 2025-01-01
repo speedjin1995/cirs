@@ -157,12 +157,23 @@ if(isset($_POST['name'], $_POST['address'], $_POST['address2'], $_POST['phone'],
             $codeSeq = (int)$matches[0];
             $nextSeq = $codeSeq+1;
             $charSize = strlen($codeSeq);
+		
             for($i=0; $i<(4-(int)$charSize); $i++){
                 $code.='0';  // S0000
             }
-        }
 
-        $code.=$nextSeq;
+	    $code.=$nextSeq;
+        }
+    	else{
+            $nextSeq = 1;
+            $charSize = strlen($nextSeq);
+            
+            for($i=0; $i<(4-(int)$charSize); $i++){
+                $code.='0';  // S0000
+            }
+            
+            $code.=$nextSeq;
+        }
 
         if ($insert_stmt = $db->prepare("INSERT INTO dealer (customer_code, other_code, customer_name, customer_address, address2, address3, address4, map_url, customer_phone, customer_email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
             $insert_stmt->bind_param('ssssssssssss', $code, $otherCode, $name, $address, $address2, $address3, $address4, $resellerMapUrl, $phone, $email, $pic, $picContact);
