@@ -613,12 +613,18 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                             </tr>';
 
                             }
-                        
                         $message .= '
                             <table width="100%" style="padding: 10px;">
                                 <tr>
-                                    <td width="40%">
-                                        <img src="'.$companySignature.'" style="margin-left:30%; padding-top:10%" width="30%" height="auto"/>
+                                    <td width="40%">';
+                        
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!="") {
+                            $message .= '<img src="' . $companySignature . '" style="margin-left:30%; padding-top:10%" width="30%" height="auto"/>';
+                        }else{
+                            $message .= '<div style="margin-left:30%; padding-top:10%; width:30%; height:auto; background-color:transparent;"></div>';
+                        }
+                        
+                        $message .= '
                                     </td>
                                     <td width="40%"></td>
                                     <td width="30%"></td>
