@@ -331,8 +331,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             }
                         }
 
-
-                        $pdf->Image($companySignature, 38, 200, 35);  // Adjust for company signature
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 38, 200, 35);  // Adjust for company signature
+                        }
                     }
                 }
             }
@@ -605,7 +606,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             }
                         }
 
-                        $pdf->Image($companySignature, 27, 215, 40);  // Adjust for company signature
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 27, 215, 40);  // Adjust for company signature
+                        }
                     }
                 }
             }
@@ -754,7 +757,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 134.141, 170.637, 8);
                         }
 
-                        $pdf->Image($companySignature, 27.648, 187.637, 38.5);  // Adjust for company signature
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 27.648, 187.637, 38.5);  // Adjust for company signature
+                        }
 
                         $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -909,7 +914,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 164.035+12, 144.677-7, 8);
                         }
 
-                        $pdf->Image($companySignature, 29.648, 188.637, 38.5);  // Adjust for company signature
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 29.648, 188.637, 38.5);  // Adjust for company signature
+                        }
 
                         $pdf->SetXY(131.445, 162.670-2); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -1064,8 +1071,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->Image($tickImage, 171.141, 175.637, 8);
                         }
-
-                        $pdf->Image($companySignature, 28, 198, 42);  // Adjust for company signature
+                        
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 28, 198, 42);  // Adjust for company signature
+                        }
 
                         $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -1225,8 +1234,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         // $pdf->SetFillColor(0, 0, 0);  // cover up unneccesary text
                         // $pdf->Rect(16.938, 205.223-3, 50, 2, 'F');  
-
-                        $pdf->Image($companySignature, 24, 184.223, 35);  // Adjust for company signature
+                        
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 24, 184.223, 35);  // Adjust for company signature
+                        }
 
                         $pdf->SetXY(126.243 , 184.902-2); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -1386,7 +1397,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 176.141, 175.637, 8);
                         }
 
-                        $pdf->Image($companySignature, 30, 199, 35);  // Adjust for company signature
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 30, 199, 35);  // Adjust for company signature
+                        }
 
                         $pdf->SetXY(126.141 , 201.5); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -1553,7 +1566,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 164.035+10, 168.677, 8);
                         }
 
-                        $pdf->Image($companySignature, 29.648, 199.637, 35.5);  // Adjust for company signature
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 29.648, 199.637, 35.5);  // Adjust for company signature
+                        }
 
                         $pdf->SetXY(131.982, 191.832-2); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -1703,7 +1718,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 158.178+12, 187.292-7, 8);
                         }
 
-                        $pdf->Image($companySignature, 24.644, 215.922-4, 40.6);  // Adjust for company signature
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 24.644, 215.922-4, 40.6);  // Adjust for company signature
+                        }
 
                         $pdf->SetXY(138.188, 215.438-2); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -1849,7 +1866,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 164.178+12, 165.292-7, 8);
                         }
 
-                        $pdf->Image($companySignature, 21.644, 196.922-4, 40.6);  // Adjust for company signature
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 21.644, 196.922-4, 40.6);  // Adjust for company signature
+                        }
 
                         $pdf->SetXY(148.188, 184.438-2); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -1994,7 +2013,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 180.141+10, 208.637-5, 8);
                         }
 
-                        $pdf->Image($companySignature, 17.648, 182.637, 40.6);  // Adjust for company signature
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 17.648, 182.637, 40.6);  // Adjust for company signature
+                        }
 
                         $pdf->SetXY(112.243 , 228.902-2); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -2169,7 +2190,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 162.299+10, 245.724-7, 8);
                         }
 
-                        $pdf->Image($companySignature, 17.648, 184.637, 40.6);  // Adjust for company signature
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 17.648, 184.637, 40.6);  // Adjust for company signature
+                        }
 
                         $pdf->SetXY(24.256, 239.641-2); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -3016,7 +3039,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 134.141, 170.637, 8);
                         }
 
-                        $pdf->Image($companySignature, 29.648, 187.637, 38.5);  // Adjust for company signature
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 29.648, 187.637, 38.5);  // Adjust for company signature
+                        }
 
                         $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -3172,7 +3197,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 164.035+12, 144.677-7, 8);
                         }
 
-                        $pdf->Image($companySignature, 29.648, 188.637, 38.5);  // Adjust for company signature
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 29.648, 188.637, 38.5);  // Adjust for company signature
+                        }
 
                         $pdf->SetXY(131.445, 162.670-2); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -3699,7 +3726,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 171.141, 175.637, 8);
                         }
 
-                        $pdf->Image($companySignature, 28, 198, 42);  // Adjust for company signature
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 28, 198, 42);  // Adjust for company signature
+                        }
 
                         $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
@@ -3860,7 +3889,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         // $pdf->SetFillColor(0, 0, 0);  // cover up unneccesary text
                         // $pdf->Rect(16.938, 205.223-3, 50, 2, 'F');  
 
-                        $pdf->Image($companySignature, 24, 184.223, 35);  // Adjust for company signature
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 24, 184.223, 35);  // Adjust for company signature
+                        }
 
                         $pdf->SetXY(126.243 , 184.902-2); // Adjust for {tarikh}
                         $pdf->Write(0, $currentDateTime);
