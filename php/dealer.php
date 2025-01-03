@@ -66,7 +66,7 @@ if(isset($_POST['name'], $_POST['address'], $_POST['address2'], $_POST['phone'],
     }
 
     // Check the branch
-    if(count($branchAddress1) <= 0){
+    /*if(count($branchAddress1) <= 0){
         $branchAddress1[] = $address ?? '';
         $branchAddress2[] = $address2 ?? '';
         $branchAddress3[] = $address3 ?? '';
@@ -78,7 +78,7 @@ if(isset($_POST['name'], $_POST['address'], $_POST['address2'], $_POST['phone'],
         $branchEmail[] = $email ?? '';
         $branchPic[] = $pic ?? '';
         $branchPicContact[] = $picContact ?? '';
-    }
+    }*/
 
     if(isset($_POST['id']) && $_POST['id'] != null && $_POST['id'] != ''){
         if ($update_stmt = $db->prepare("UPDATE dealer SET customer_code=?, other_code=?, customer_name=?, customer_address=?, address2=?, address3=?, address4=?, map_url=?, customer_phone=?, customer_email=?, pic=?, pic_contact=? WHERE id=?")) {
@@ -191,35 +191,57 @@ if(isset($_POST['name'], $_POST['address'], $_POST['address2'], $_POST['phone'],
                 $invid = $insert_stmt->insert_id; // Get the inserted reseller ID
                 $insert_stmt->close();
 
-                // Loop through the addresses and insert into reseller_branches
-                for ($i = 0; $i < count($branchAddress1); $i++) {
-                    // Only insert if the index is not in the deletedShip array
-                    if (!in_array($i, $deletedShip)) {
-                        // Assign array elements to variables to pass as references
-                        $addr1 = $branchAddress1[$i] ?? '';
-                        $addr2 = $branchAddress2[$i] ?? '';
-                        $addr3 = $branchAddress3[$i] ?? '';
-                        $addr4 = $branchAddress4[$i] ?? '';
-                        $branchNameValue = isset($branchName[$i]) ? $branchName[$i] : '';
-                        $branchCodeValue = isset($branchCode[$i]) ? $branchCode[$i] : '';
-                        $mapUrlValue = isset($mapUrl[$i]) ? $mapUrl[$i] : '';
-                        $branchPhoneValue = isset($branchPhone[$i]) ? $branchPhone[$i] : '';
-                        $branchEmailValue = isset($branchEmail[$i]) ? $branchEmail[$i] : '';
-                        $branchPicValue = isset($branchPic[$i]) ? $branchPic[$i] : '';
-                        $branchPicContactVAlue = isset($branchPicContact[$i]) ? $branchPicContact[$i] : '';
+                if(count($branchAddress1) > 0){
+                    // Loop through the addresses and insert into reseller_branches
+                    for ($i = 0; $i < count($branchAddress1); $i++) {
+                        // Only insert if the index is not in the deletedShip array
+                        if (!in_array($i, $deletedShip)) {
+                            // Assign array elements to variables to pass as references
+                            $addr1 = $branchAddress1[$i] ?? '';
+                            $addr2 = $branchAddress2[$i] ?? '';
+                            $addr3 = $branchAddress3[$i] ?? '';
+                            $addr4 = $branchAddress4[$i] ?? '';
+                            $branchNameValue = isset($branchName[$i]) ? $branchName[$i] : '';
+                            $branchCodeValue = isset($branchCode[$i]) ? $branchCode[$i] : '';
+                            $mapUrlValue = isset($mapUrl[$i]) ? $mapUrl[$i] : '';
+                            $branchPhoneValue = isset($branchPhone[$i]) ? $branchPhone[$i] : '';
+                            $branchEmailValue = isset($branchEmail[$i]) ? $branchEmail[$i] : '';
+                            $branchPicValue = isset($branchPic[$i]) ? $branchPic[$i] : '';
+                            $branchPicContactVAlue = isset($branchPicContact[$i]) ? $branchPicContact[$i] : '';
 
-                        if ($insert_stmt2 = $db->prepare("INSERT INTO reseller_branches (reseller_id, address, address2, address3, address4, branch_code, branch_name, map_url, office_no, email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-                            $insert_stmt2->bind_param('ssssssssssss', $invid, $addr1, $addr2, $addr3, $addr4, $branchCodeValue, $branchNameValue, $mapUrlValue, $branchPhoneValue, $branchEmailValue, $branchPicValue, $branchPicContactVAlue);
-                            $insert_stmt2->execute();
-                            $insert_stmt2->close();
+                            if ($insert_stmt2 = $db->prepare("INSERT INTO reseller_branches (reseller_id, address, address2, address3, address4, branch_code, branch_name, map_url, office_no, email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                                $insert_stmt2->bind_param('ssssssssssss', $invid, $addr1, $addr2, $addr3, $addr4, $branchCodeValue, $branchNameValue, $mapUrlValue, $branchPhoneValue, $branchEmailValue, $branchPicValue, $branchPicContactVAlue);
+                                $insert_stmt2->execute();
+                                $insert_stmt2->close();
+                            }
                         }
+                    }
+                }
+                else{
+                    $addr1 = $address ?? '';
+                    $addr2 = $address2 ?? '';
+                    $addr3 = $address3 ?? '';
+                    $addr4 = $address4 ?? '';
+                    $branchNameValue = 'HQ';
+                    $branchCodeValue = 'HQ';
+                    $mapUrlValue = isset($resellerMapUrl) ? $resellerMapUrl : '';
+                    $branchPhoneValue = isset($phone) ? $phone : '';
+                    $branchEmailValue = isset($email) ? $email : '';
+                    $branchPicValue = isset($pic) ? $pic : '';
+                    $branchPicContactVAlue = isset($picContact) ? $picContact : '';
+
+                    if ($insert_stmt2 = $db->prepare("INSERT INTO reseller_branches (reseller_id, address, address2, address3, address4, branch_code, branch_name, map_url, office_no, email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                        $insert_stmt2->bind_param('ssssssssssss', $invid, $addr1, $addr2, $addr3, $addr4, $branchCodeValue, $branchNameValue, $mapUrlValue, $branchPhoneValue, $branchEmailValue, $branchPicValue, $branchPicContactVAlue);
+                        $insert_stmt2->execute();
+                        $insert_stmt2->close();
                     }
                 }
 
                 echo json_encode(
                     array(
                         "status"=> "success", 
-                        "message"=> "Added Successfully!!" 
+                        "message"=> "Added Successfully!!" ,
+                        "yyy"=>count($branchAddress1)
                     )
                 );
             }
