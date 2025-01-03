@@ -276,6 +276,15 @@ $(function () {
     tomorrow.setDate(tomorrow.getDate() + 1);
     yesterday.setDate(tomorrow.getDate() - 7);
 
+    $('.select2').each(function() {
+    $(this).select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        // Conditionally set dropdownParent based on the element’s location
+        dropdownParent: $(this).closest('.modal').length ? $(this).closest('.modal-body') : undefined
+    });
+  });
+
     var machineTypeFilter = $('#machineTypeFilter').val() ? $('#machineTypeFilter').val() : '';
     var brandFilter = $('#brandFilter').val() ? $('#brandFilter').val() : '';
     var modelFilter = $('#modelFilter').val() ? $('#modelFilter').val() : '';
@@ -510,7 +519,7 @@ function edit(id){
             $('#brandModal').find('#madeIn').val(obj.message.made_in).trigger('change');
             $('#brandModal').find('#brand').val(obj.message.brand).trigger('change');
             $('#brandModal').find('#class').val(obj.message.class);
-            $('#brandModal').find('#oimlApproval').val(obj.message.oiml_approval);
+            $('#brandModal').find('#oimlApproval').val(obj.message.oiml_approval).trigger('change');
             $('#brandModal').find('#patternNo').val(obj.message.pattern_no);
             $('#brandModal').find('#approval_date').val(formatDate3(obj.message.pattern_datetime));
             $('#brandModal').find('#expiry_date').val(formatDate3(obj.message.pattern_expiry));
