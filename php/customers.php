@@ -150,7 +150,7 @@ if(isset($_POST['name'])){
 
 
                     if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, branch_code, branch_name, map_url, office_no, email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-                        $insert_stmt2->bind_param('ssssssssssss', $invid, $addr1, $addr2, $addr3, $addr4, $branchCodeValue, $branchNameValue, $mapUrlValue, $branchPhoneValue, $branchEmailValue, $branchPicValue, $branchPicContactVAlue);
+                        $insert_stmt2->bind_param('ssssssssssss', $_POST['id'], $addr1, $addr2, $addr3, $addr4, $branchCodeValue, $branchNameValue, $mapUrlValue, $branchPhoneValue, $branchEmailValue, $branchPicValue, $branchPicContactVAlue);
                         $insert_stmt2->execute();
                         $insert_stmt2->close();
                     }

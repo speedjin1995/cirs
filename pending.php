@@ -2119,7 +2119,6 @@ $(function () {
         
         if(obj.status === 'success'){
           $('#reseller_branch').html('');
-          $('#reseller_branch').append('<option selected="selected">-</option>');
 
           for(var i=0; i<obj.message.branches.length; i++){
             var branchInfo = obj.message.branches[i];
@@ -2304,7 +2303,6 @@ $(function () {
         $('#extendModal').find('#email').val(obj.message.customer_email);
 
         $('#branch').html('');
-        $('#branch').append('<option selected="selected">-</option>');
 
         for(var i=0; i<obj.message.pricing.length; i++){
           var branchInfo = obj.message.pricing[i];
