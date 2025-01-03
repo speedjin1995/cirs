@@ -152,17 +152,42 @@ $(function () {
             { data: 'contact_number' },
             { data: 'role_name' },
             { data: 'status' },
-            { 
+            {
                 data: 'deleted',
                 render: function (data, type, row) {
+                let dropdownMenu = '<div class="dropdown">' +
+                    '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+                    '<i class="fa-solid fa-ellipsis"></i>' +
+                    '</button>' +
+                    '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">';
+
                     if (data == 0) {
-                        return '<div class="row"><div class="col-3"><button type="button" id="edit' + row.id + '" onclick="edit(' + row.id + ')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button type="button" id="delete' + row.id + '" onclick="deactivate(' + row.id + ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
+                        dropdownMenu += 
+                        '<a class="dropdown-item" id="edit' + row.id + '" onclick="edit(' + row.id + ')"><i class="fas fa-pen"></i> Edit</a>' +
+                        '<a class="dropdown-item" id="delete' + row.id + '" onclick="deactivate(' + row.id + ')"><i class="fa fa-times" aria-hidden="true"></i> Delete</a>';
+                        // return '<div class="row"><div class="col-3"><button type="button" id="edit' + row.id + '" onclick="edit(' + row.id + ')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button type="button" id="delete' + row.id + '" onclick="deactivate(' + row.id + ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
                     } 
                     else{
-                        return '<button type="button" id="reactivate' + row.id + '" onclick="reactivate(' + row.id + ')" class="btn btn-warning btn-sm">Reactivate</button>';
+                        dropdownMenu += 
+                        '<a class="dropdown-item" id="reactivate' + row.id + '" onclick="reactivate(' + row.id + ')"><i class="fa fa-refresh" aria-hidden="true"></i>Reactivate</a>';
                     }
+                    
+                dropdownMenu += '</div></div>';
+
+                return dropdownMenu;
                 }
             }
+            // { 
+            //     data: 'deleted',
+            //     render: function (data, type, row) {
+            //         if (data == 0) {
+            //             return '<div class="row"><div class="col-3"><button type="button" id="edit' + row.id + '" onclick="edit(' + row.id + ')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button type="button" id="delete' + row.id + '" onclick="deactivate(' + row.id + ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
+            //         } 
+            //         else{
+            //             return '<button type="button" id="reactivate' + row.id + '" onclick="reactivate(' + row.id + ')" class="btn btn-warning btn-sm">Reactivate</button>';
+            //         }
+            //     }
+            // }
         ],
         "rowCallback": function( row, data, index ) {
 
