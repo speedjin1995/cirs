@@ -209,12 +209,27 @@ $(function () {
             { data: 'test_8' },
             { data: 'test_9' },
             { data: 'test_10' },
-            { 
+            {
                 data: 'id',
-                render: function ( data, type, row ) {
-                    return '<div class="row"><div class="col-4"><button type="button" id="edit'+data+'" onclick="edit('+data+')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button type="button" id="deactivate'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
+                render: function (data, type, row) {
+                    let dropdownMenu = '<div class="dropdown">' +
+                    '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+                    '<i class="fa-solid fa-ellipsis"></i>' +
+                    '</button>' +
+                    '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">' +
+                    '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>' +
+                    '<a class="dropdown-item" id="deactivate' + data + '" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Delete</a>';
+                    dropdownMenu += '</div></div>';
+
+                    return dropdownMenu;
                 }
-            }
+            },
+            // { 
+            //     data: 'id',
+            //     render: function ( data, type, row ) {
+            //         return '<div class="row"><div class="col-4"><button type="button" id="edit'+data+'" onclick="edit('+data+')" class="btn btn-success btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-3"><button type="button" id="deactivate'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button></div></div>';
+            //     }
+            // }
         ],
         "rowCallback": function( row, data, index ) {
             $('td', row).css('background-color', '#E6E6FA');
