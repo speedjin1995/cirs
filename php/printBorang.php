@@ -687,6 +687,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
+                        $pdf->SetXY(27, 24); 
+                        $pdf->Write(0, $currentDate);
+
                         $pdf->Image($tickImage, 72.526, 60.865, 8);  // Adjust for Perdagangan
 
                         $pdf->SetXY(115.704, 57.5); // Adjust for Jenama
@@ -761,14 +764,14 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 27.648, 187.637, 38.5);  // Adjust for company signature
                         }
 
-                        $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentDateTime);
+                        // $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDateTime);
 
-                        $pdf->SetXY(125.141 , 204.637); // Adjust for {Cawangan}
-                        $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                        // $pdf->SetXY(125.141 , 204.637); // Adjust for {Cawangan}
+                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        $pdf->SetXY(134.141 , 212.637); // Adjust for {no_penentusahan}
-                        $pdf->Write(0, $res['no_daftar']);
+                        // $pdf->SetXY(134.141 , 212.637); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
                     }
                 }
 
@@ -918,14 +921,14 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 29.648, 188.637, 38.5);  // Adjust for company signature
                         }
 
-                        $pdf->SetXY(131.445, 162.670-2); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentDateTime);
+                        // $pdf->SetXY(131.445, 162.670-2); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDateTime);
 
-                        $pdf->SetXY(138.428, 172.029-2); // Adjust for {Cawangan}
-                        $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                        // $pdf->SetXY(138.428, 172.029-2); // Adjust for {Cawangan}
+                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        $pdf->SetXY(150.788, 181.001-2); // Adjust for {no_penentusahan}
-                        $pdf->Write(0, $res['no_daftar']);
+                        // $pdf->SetXY(150.788, 181.001-2); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
 
                         
                     }
@@ -1007,6 +1010,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
+                        $pdf->SetXY(29, 15); 
+                        $pdf->Write(0, $currentDate); 
+
                         $pdf->Image($tickImage, 58.526, 74.865-2, 8);  // Adjust for Perdagangan
 
                         $pdf->SetXY(140.704, 67.5-1); // Adjust for Jenama
@@ -1076,14 +1082,14 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 28, 198, 42);  // Adjust for company signature
                         }
 
-                        $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentDateTime);
+                        // $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDateTime);
 
-                        $pdf->SetXY(146.141 , 215.637); // Adjust for {Cawangan}
-                        $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                        // $pdf->SetXY(146.141 , 215.637); // Adjust for {Cawangan}
+                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        $pdf->SetXY(156.141 , 225.637); // Adjust for {no_penentusahan}
-                        $pdf->Write(0, $res['no_daftar']);
+                        // $pdf->SetXY(156.141 , 225.637); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
                     }
                 }
 
@@ -1239,14 +1245,14 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 24, 184.223, 35);  // Adjust for company signature
                         }
 
-                        $pdf->SetXY(126.243 , 184.902-2); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentDateTime);
+                        // $pdf->SetXY(126.243 , 184.902-2); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDateTime);
 
-                        $pdf->SetXY(132.582 , 193.027-2); // Adjust for {Cawangan}
-                        $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                        // $pdf->SetXY(132.582 , 193.027-2); // Adjust for {Cawangan}
+                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        $pdf->SetXY(143.884 , 201.153-2); // Adjust for {no_penentusahan}
-                        $pdf->Write(0, $res['no_daftar']);
+                        // $pdf->SetXY(143.884 , 201.153-2); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
 
                         
                     }
@@ -1328,6 +1334,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
+                        $pdf->SetXY(29, 20); 
+                        $pdf->Write(0, $currentDate);
+
                         $pdf->Image($tickImage, 60.526, 68.865, 8);  // Adjust for Perdagangan
 
                         $pdf->SetXY(133.704, 63.5); // Adjust for Jenama
@@ -1401,14 +1410,14 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 30, 199, 35);  // Adjust for company signature
                         }
 
-                        $pdf->SetXY(126.141 , 201.5); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentDateTime);
+                        // $pdf->SetXY(126.141 , 201.5); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDateTime);
 
-                        $pdf->SetXY(136.141 , 210.637); // Adjust for {Cawangan}
-                        $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                        // $pdf->SetXY(136.141 , 210.637); // Adjust for {Cawangan}
+                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        $pdf->SetXY(146.141 , 218.637); // Adjust for {no_penentusahan}
-                        $pdf->Write(0, $res['no_daftar']);
+                        // $pdf->SetXY(146.141 , 218.637); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
                     }
                 }
 
@@ -1570,14 +1579,14 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 29.648, 199.637, 35.5);  // Adjust for company signature
                         }
 
-                        $pdf->SetXY(131.982, 191.832-2); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentDateTime);
+                        // $pdf->SetXY(131.982, 191.832-2); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDateTime);
 
-                        $pdf->SetXY(138.459, 200.228-2); // Adjust for {Cawangan}
-                        $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                        // $pdf->SetXY(138.459, 200.228-2); // Adjust for {Cawangan}
+                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        $pdf->SetXY(150.004, 208.609-2); // Adjust for {no_penentusahan}
-                        $pdf->Write(0, $res['no_daftar']);
+                        // $pdf->SetXY(150.004, 208.609-2); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
 
                         
                     }
@@ -1661,6 +1670,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
+                        $pdf->SetXY(27, 27); 
+                        $pdf->Write(0, $currentDate);
+
                         $pdf->Image($tickImage, 88, 87, 8); 
 
                         $pdf->SetXY(135.902, 81.823-2); // Adjust for nama pembuat
@@ -1722,14 +1734,14 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 24.644, 215.922-4, 40.6);  // Adjust for company signature
                         }
 
-                        $pdf->SetXY(138.188, 215.438-2); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentDateTime);
+                        // $pdf->SetXY(138.188, 215.438-2); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDateTime);
 
-                        $pdf->SetXY(138.188, 224.002-2); // Adjust for {Cawangan}
-                        $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                        // $pdf->SetXY(138.188, 224.002-2); // Adjust for {Cawangan}
+                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        $pdf->SetXY(118.188, 236.567-2); // Adjust for {no_penentusahan}
-                        $pdf->Write(0, $res['no_daftar']);
+                        // $pdf->SetXY(118.188, 236.567-2); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
                     }
                 }
 
@@ -1870,14 +1882,14 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 21.644, 196.922-4, 40.6);  // Adjust for company signature
                         }
 
-                        $pdf->SetXY(148.188, 184.438-2); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentDateTime);
+                        // $pdf->SetXY(148.188, 184.438-2); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDateTime);
 
-                        $pdf->SetXY(155.596, 194.002-2); // Adjust for {Cawangan}
-                        $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                        // $pdf->SetXY(155.596, 194.002-2); // Adjust for {Cawangan}
+                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        $pdf->SetXY(168.805, 203.567-2); // Adjust for {no_penentusahan}
-                        $pdf->Write(0, $res['no_daftar']);
+                        // $pdf->SetXY(168.805, 203.567-2); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
                     }
                 }
 
@@ -1957,6 +1969,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
+                        $pdf->SetXY(29, 10); 
+                        $pdf->Write(0, $currentDate);
+
                         $pdf->SetXY(120.635, 59.669-2); // Adjust for Jenama
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
 
@@ -2017,24 +2032,24 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 17.648, 182.637, 40.6);  // Adjust for company signature
                         }
 
-                        $pdf->SetXY(112.243 , 228.902-2); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentDateTime);
+                        // $pdf->SetXY(112.243 , 228.902-2); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDateTime);
 
-                        $state = explode(" ", searchStateNameById($res['cawangan'], $db));
-                        if (count($state) > 1){
-                            $pdf->SetXY(182.582 , 225.027-2); // Adjust for {Cawangan}
-                            $pdf->Write(0, $state[0]);
+                        // $state = explode(" ", searchStateNameById($res['cawangan'], $db));
+                        // if (count($state) > 1){
+                        //     $pdf->SetXY(182.582 , 225.027-2); // Adjust for {Cawangan}
+                        //     $pdf->Write(0, $state[0]);
 
-                            $pdf->SetXY(182.582 , 229.027-2); // Adjust for {Cawangan}
-                            $pdf->Write(0, $state[1]);
-                        }else{
-                            $pdf->SetXY(182.582 , 229.027-2); // Adjust for {Cawangan}
-                            $pdf->Write(0, $state[0]);
-                        }
+                        //     $pdf->SetXY(182.582 , 229.027-2); // Adjust for {Cawangan}
+                        //     $pdf->Write(0, $state[1]);
+                        // }else{
+                        //     $pdf->SetXY(182.582 , 229.027-2); // Adjust for {Cawangan}
+                        //     $pdf->Write(0, $state[0]);
+                        // }
 
-                        $pdf->SetFont('Arial', '', 10);
-                        $pdf->SetXY(134.884 , 233.153-2); // Adjust for {no_penentusahan}
-                        $pdf->Write(0, $res['no_daftar']);
+                        // $pdf->SetFont('Arial', '', 10);
+                        // $pdf->SetXY(134.884 , 233.153-2); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
                     }
                 }
 
@@ -2194,14 +2209,14 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 17.648, 184.637, 40.6);  // Adjust for company signature
                         }
 
-                        $pdf->SetXY(24.256, 239.641-2); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentDateTime);
+                        // $pdf->SetXY(24.256, 239.641-2); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDateTime);
 
-                        $pdf->SetXY(31.583, 245.724-2); // Adjust for {Cawangan}
-                        $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                        // $pdf->SetXY(31.583, 245.724-2); // Adjust for {Cawangan}
+                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        $pdf->SetXY(43.051, 251.822-2); // Adjust for {no_penentusahan}
-                        $pdf->Write(0, $res['no_daftar']);
+                        // $pdf->SetXY(43.051, 251.822-2); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
                     }
                 }
 
@@ -2969,6 +2984,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
+                        $pdf->SetXY(27, 24); 
+                        $pdf->Write(0, $currentDate); 
+
                         $pdf->Image($tickImage, 72.526, 60.865, 8);  // Adjust for Perdagangan
 
                         $pdf->SetXY(115.704, 57.5); // Adjust for Jenama
@@ -3043,14 +3061,14 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 29.648, 187.637, 38.5);  // Adjust for company signature
                         }
 
-                        $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentDateTime);
+                        // $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDateTime);
 
-                        $pdf->SetXY(125.141 , 204.637); // Adjust for {Cawangan}
-                        $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                        // $pdf->SetXY(125.141 , 204.637); // Adjust for {Cawangan}
+                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        $pdf->SetXY(134.141 , 212.637); // Adjust for {no_penentusahan}
-                        $pdf->Write(0, $res['no_daftar']);
+                        // $pdf->SetXY(134.141 , 212.637); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
                     }
                 }
 
@@ -3201,14 +3219,14 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 29.648, 188.637, 38.5);  // Adjust for company signature
                         }
 
-                        $pdf->SetXY(131.445, 162.670-2); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentDateTime);
+                        // $pdf->SetXY(131.445, 162.670-2); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDateTime);
 
-                        $pdf->SetXY(138.428, 172.029-2); // Adjust for {Cawangan}
-                        $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                        // $pdf->SetXY(138.428, 172.029-2); // Adjust for {Cawangan}
+                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        $pdf->SetXY(150.788, 181.001-2); // Adjust for {no_penentusahan}
-                        $pdf->Write(0, $res['no_daftar']);
+                        // $pdf->SetXY(150.788, 181.001-2); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
 
                         
                     }
@@ -3292,6 +3310,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         $pdf->SetFont('Arial', 'B', 10);
+
+                        $pdf->SetXY(23, 20); 
+                        $pdf->Write(0, $currentDate);
+
                         $pdf->SetXY(55.374, 53.063); // Adjust for Customer Name
                         $pdf->Write(0, searchCustNameById($res['customers'], $db));
                         $pdf->SetFont('Arial', '', 8);
@@ -3338,17 +3360,17 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 159.854+22, 93.946-7, 8);
                         }
 
-                        $pdf->SetXY(24.158, 123.106); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentDate);
+                        // $pdf->SetXY(24.158, 123.106); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDate);
 
-                        $pdf->SetXY(24.158, 127.106); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentTime);
+                        // $pdf->SetXY(24.158, 127.106); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentTime);
 
-                        $pdf->SetXY(76.255, 123.106); // Adjust for {Cawangan}
-                        $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                        // $pdf->SetXY(76.255, 123.106); // Adjust for {Cawangan}
+                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        $pdf->SetXY(154.095, 123.106); // Adjust for {no_penentusahan}
-                        $pdf->Write(0, $res['no_daftar']);
+                        // $pdf->SetXY(154.095, 123.106); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
                         
                         $questions = json_decode($res['questions'], true);
 
@@ -3521,16 +3543,16 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($tickImage, 192.251, 79.352-7, 8);
                         }
 
-                        $pdf->SetFont('Arial', '', 9);
-                        $pdf->SetXY(24.158, 119.106-2); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentDateTime);
-                        $pdf->SetFont('Arial', '', 10);
+                        // $pdf->SetFont('Arial', '', 9);
+                        // $pdf->SetXY(24.158, 119.106-2); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDateTime);
+                        // $pdf->SetFont('Arial', '', 10);
 
-                        $pdf->SetXY(86.255, 119.106-2); // Adjust for {Cawangan}
-                        $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                        // $pdf->SetXY(86.255, 119.106-2); // Adjust for {Cawangan}
+                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        $pdf->SetXY(171.095, 119.106-2); // Adjust for {no_penentusahan}
-                        $pdf->Write(0, $res['no_daftar']);
+                        // $pdf->SetXY(171.095, 119.106-2); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
 
                         $questions = json_decode($res['questions'], true);
 
@@ -3661,6 +3683,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
+                        $pdf->SetXY(29, 15); 
+                        $pdf->Write(0, $currentDate);
+
                         $pdf->Image($tickImage, 58.526, 74.865-2, 8);  // Adjust for Perdagangan
 
                         $pdf->SetXY(140.704, 67.5-1); // Adjust for Jenama
@@ -3730,14 +3755,14 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 28, 198, 42);  // Adjust for company signature
                         }
 
-                        $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentDateTime);
+                        // $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDateTime);
 
-                        $pdf->SetXY(146.141 , 215.637); // Adjust for {Cawangan}
-                        $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                        // $pdf->SetXY(146.141 , 215.637); // Adjust for {Cawangan}
+                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        $pdf->SetXY(156.141 , 225.637); // Adjust for {no_penentusahan}
-                        $pdf->Write(0, $res['no_daftar']);
+                        // $pdf->SetXY(156.141 , 225.637); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
                     }
                 }
 
@@ -3893,14 +3918,14 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 24, 184.223, 35);  // Adjust for company signature
                         }
 
-                        $pdf->SetXY(126.243 , 184.902-2); // Adjust for {tarikh}
-                        $pdf->Write(0, $currentDateTime);
+                        // $pdf->SetXY(126.243 , 184.902-2); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDateTime);
 
-                        $pdf->SetXY(132.582 , 193.027-2); // Adjust for {Cawangan}
-                        $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                        // $pdf->SetXY(132.582 , 193.027-2); // Adjust for {Cawangan}
+                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        $pdf->SetXY(143.884 , 201.153-2); // Adjust for {no_penentusahan}
-                        $pdf->Write(0, $res['no_daftar']);
+                        // $pdf->SetXY(143.884 , 201.153-2); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
 
                         
                     }
