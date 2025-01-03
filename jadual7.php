@@ -275,7 +275,7 @@ $(function () {
         }
       },
       { data: 'capacity' },
-      { data: 'siri_keselamatan' },
+      { data: 'pin_keselamatan' },
       { data: 'no_daftar' },
       { data: 'reason' },
       { data: 'siri_keselamatan' },
@@ -469,7 +469,7 @@ $(function () {
           }
         },
         { data: 'capacity' },
-        { data: 'siri_keselamatan' },
+        { data: 'pin_keselamatan' },
         { data: 'no_daftar' },
         { data: 'reason' },
         { data: 'siri_keselamatan' },
