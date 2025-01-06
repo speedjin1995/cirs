@@ -2542,6 +2542,10 @@ $(function () {
       $('#addtionalSection').html($('#atnDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
+    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '18'){
+      $('#addtionalSection').html($('#atnDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '6'){
       $('#addtionalSection').html($('#ateDetails').html());
       $('#extendModal').trigger('atkLoaded');
@@ -2648,6 +2652,10 @@ $(function () {
       $('#extendModal').trigger('atkLoaded');
     }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '5'){
+      $('#addtionalSection').html($('#atnDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
+    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '18'){
       $('#addtionalSection').html($('#atnDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
@@ -3255,6 +3263,11 @@ function edit(id) {
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '18'){
+            $('#addtionalSection').html($('#atnDetails').html());
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
+            $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '6'){
             $('#addtionalSection').html($('#ateDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
@@ -3437,6 +3450,11 @@ function edit(id) {
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '5'){
+            $('#addtionalSection').html($('#atnDetails').html());
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
+            $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '18'){
             $('#addtionalSection').html($('#atnDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
