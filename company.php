@@ -151,7 +151,7 @@ else{
 							<div class="col-1 mt-1">
 								<?php 
 									if (isset($data['signature']) && !empty($data['signature'])) {
-										echo '<a href="' . htmlspecialchars($data['signature'], ENT_QUOTES, 'UTF-8') . '" id="viewSignPdf" name="viewSignPdf" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>';
+										echo '<a href="scm/' . htmlspecialchars($data['signature'], ENT_QUOTES, 'UTF-8') . '" id="viewSignPdf" name="viewSignPdf" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>';
 									}else{
 										echo '<a href="" id="viewSignPdf" name="viewSignPdf" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>';
 									}
@@ -171,7 +171,7 @@ else{
 							<div class="col-1 mt-1">
 								<?php 
 									if (isset($data['inhouse']) && !empty($data['inhouse'])) {
-										echo '<a href="' . htmlspecialchars($data['inhouse'], ENT_QUOTES, 'UTF-8') . '" id="viewInhousePdf" name="viewInhousePdf" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>';
+										echo '<a href="scm/' . htmlspecialchars($data['inhouse'], ENT_QUOTES, 'UTF-8') . '" id="viewInhousePdf" name="viewInhousePdf" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>';
 									}else{
 										echo '<a href="" id="viewInhousePdf" name="viewInhousePdf" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>';
 									}

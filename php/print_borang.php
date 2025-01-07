@@ -505,7 +505,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['valid
                                     <td width="40%">';
                         
                         if (isset($companySignature) && $companySignature!=null && $companySignature!="") {
-                            $message .= '<img src="' . $companySignature . '" style="margin-left:30%; padding-top:10%" width="30%" height="auto"/>';
+                            $message .= '<img src="scm/' . $companySignature . '" style="margin-left:30%; padding-top:10%" width="30%" height="auto"/>';
                         }else{
                             $message .= '<div style="margin-left:30%; padding-top:10%; width:30%; height:auto; background-color:transparent;"></div>';
                         }

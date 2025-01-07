@@ -186,9 +186,11 @@ else{
                   <th>No</th>
                   <th>Company Name</th>
                   <th>Brands</th>
-                  <th>Description Instruments for Weighing And Measuring</th>
+                  <th>Description<br> Instruments</th>
+                  <th>Serial No.</th>
+                  <th>Validators</th>
                   <th width="10%">Capacity</th>
-                  <th>Validator By</th>
+                  <th>No. Daftar</th>
                   <th>Previous Stamp Date</th>
                   <th>Expired Date</th>
                   <th>Status</th>
@@ -1593,8 +1595,10 @@ $(function () {
       { data: 'customers' },
       { data: 'brand' },
       { data: 'machine_type' },
-      { data: 'capacity' },
+      { data: 'serial_no' },
       { data: 'validate_by' },
+      { data: 'capacity' },
+      { data: 'no_daftar' },
       { data: 'stamping_date' },
       { data: 'due_date' },
       { data: 'status' },
@@ -1863,8 +1867,10 @@ $(function () {
         { data: 'customers' },
         { data: 'brand' },
         { data: 'machine_type' },
-        { data: 'capacity' },
+        { data: 'serial_no' },
         { data: 'validate_by' },
+        { data: 'capacity' },
+        { data: 'no_daftar' },
         { data: 'stamping_date' },
         { data: 'due_date' },
         { data: 'status' },
