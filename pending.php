@@ -529,8 +529,14 @@ else{
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>No Daftar </label>
-                    <input class="form-control" type="text" placeholder="No Daftar" id="noDaftar" name="noDaftar">
+                    <label>No Daftar (Lama)</label>
+                    <input class="form-control" type="text" placeholder="No Daftar Lama" id="noDaftarLama" name="noDaftarLama">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>No Daftar (Baru)</label>
+                    <input class="form-control" type="text" placeholder="No Daftar Baru" id="noDaftarBaru" name="noDaftarBaru">
                   </div>
                 </div>
                 <div class="col-4">
@@ -2994,7 +3000,8 @@ function newEntry(){
   $('#extendModal').find('#assignTo').val('').trigger('change');
   $('#extendModal').find('#trade').val('').trigger('change');
   $('#extendModal').find('#branch').val('').trigger('change');
-  $('#extendModal').find('#noDaftar').val('');
+  $('#extendModal').find('#noDaftarLama').val('');
+  $('#extendModal').find('#noDaftarBaru').val('');
   $('#extendModal').find('#address3').val('');
   $('#extendModal').find('#serial').val('');
   $('#extendModal').find('#pinKeselamatan').val('');
@@ -3148,7 +3155,7 @@ function edit(id) {
         });
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
-        $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
+        $('#extendModal').find('#noDaftarLama').val(obj.message.no_daftar);
         $('#extendModal').find('#address3').val(obj.message.address3);
         $('#extendModal').find('#serial').val(obj.message.serial_no);
         $('#extendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);
