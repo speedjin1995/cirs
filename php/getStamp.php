@@ -13,7 +13,7 @@ if(isset($_POST['userID'])){
     }
 
     $stampExtArray = [
-        1,4,2,5,6,14,7,10,17
+        1,4,2,5,6,14,7,10,17,23
     ];
 
     if ($update_stmt = $db->prepare("SELECT * FROM stamping WHERE id=?")) {
@@ -125,7 +125,8 @@ if(isset($_POST['userID'])){
                     $message['serial_no'] = $row['serial_no'];
                     $message['validate_by'] = $row['validate_by'];
                     $message['jenis_alat'] = $row['jenis_alat'] != null ? searchJenisAlatNameByid($row['jenis_alat'], $db) : '';
-                    $message['no_daftar'] = $row['no_daftar'];
+                    $message['no_daftar_lama'] = $row['no_daftar_lama'] ?? '';
+                    $message['no_daftar_baru'] = $row['no_daftar_baru'] ?? '';
                     $message['pin_keselamatan'] = $row['pin_keselamatan'];
                     $message['siri_keselamatan'] = $row['siri_keselamatan'];
                     $message['include_cert'] = $row['include_cert'];
@@ -201,7 +202,8 @@ if(isset($_POST['userID'])){
                     $message['cawangan'] = $row['cawangan'];
                     $message['jenis_alat'] = $row['jenis_alat'];
                     $message['trade'] = $row['trade'];
-                    $message['no_daftar'] = $row['no_daftar'];
+                    $message['no_daftar_lama'] = $row['no_daftar_lama'] ?? '';
+                    $message['no_daftar_baru'] = $row['no_daftar_baru'] ?? '';
                     $message['pin_keselamatan'] = $row['pin_keselamatan'];
                     $message['siri_keselamatan'] = $row['siri_keselamatan'];
                     $message['include_cert'] = $row['include_cert'];
@@ -251,6 +253,8 @@ if(isset($_POST['userID'])){
                                     $message['batu_ujian'] = $row2['batu_ujian'] ?? '';
                                     $message['batu_ujian_lain'] = $row2['batu_ujian_lain'] ?? '';
                                     $message['questions'] = json_decode($row2['questions'], true);
+                                    $message['steelyard'] = $row2['steelyard'] ?? '';
+                                    $message['bilangan_kaunterpois'] = $row2['bilangan_kaunterpois'] ?? '';
                                     $message['nilais'] = json_decode($row2['nilais'], true);
                                     $message['other_info'] = $row2['other_info'] ?? '';
                                     $message['load_cell_country'] = $row2['load_cell_country'] ?? '';

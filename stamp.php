@@ -487,8 +487,14 @@ else{
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>No Daftar </label>
-                    <input class="form-control" type="text" placeholder="No Daftar" id="noDaftar" name="noDaftar">
+                    <label>No Daftar (Lama)</label>
+                    <input class="form-control" type="text" placeholder="No Daftar Lama" id="noDaftarLama" name="noDaftarLama">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>No Daftar (Baru)</label>
+                    <input class="form-control" type="text" placeholder="No Daftar Baru" id="noDaftarBaru" name="noDaftarBaru">
                   </div>
                 </div>
                 <div class="col-4">
@@ -2694,7 +2700,8 @@ function format (row) {
 
     <!-- Stamping Section -->
     <div class="col-6">
-      <p><strong>No. Daftar:</strong> ${row.no_daftar}</p>
+      <p><strong>Lama No. Daftar:</strong> ${row.no_daftar_lama}</p>
+      <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
       <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
       <p><strong>Borang D:</strong> ${row.borang_d}</p>
       <p><strong>Borang E:</strong> ${row.borang_e}</p>
@@ -2880,7 +2887,8 @@ function newEntry(){
   $('#extendModal').find('#stampDate').val('');
   $('#extendModal').find('#address2').val('');
   $('#extendModal').find('#capacity').val('').trigger('change');
-  $('#extendModal').find('#noDaftar').val('');
+  $('#extendModal').find('#noDaftarLama').val('');
+  $('#extendModal').find('#noDaftarBaru').val('');
   $('#extendModal').find('#address3').val('');
   $('#extendModal').find('#serial').val('');
   $('#extendModal').find('#pinKeselamatan').val('');
@@ -3010,7 +3018,8 @@ function edit(id) {
         });
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
-        $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
+        $('#extendModal').find('#noDaftarLama').val(obj.message.no_daftar_lama);
+        $('#extendModal').find('#noDaftarBaru').val(obj.message.no_daftar_baru);
         $('#extendModal').find('#address3').val(obj.message.address3);
         $('#extendModal').find('#serial').val(obj.message.serial_no);
         $('#extendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);
@@ -3238,7 +3247,8 @@ function edit(id) {
         $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
-        $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
+        $('#extendModal').find('#noDaftarLama').val(obj.message.no_daftar_lama);
+        $('#extendModal').find('#noDaftarBaru').val(obj.message.no_daftar_baru);
         $('#extendModal').find('#address3').val(obj.message.address3);
         $('#extendModal').find('#serial').val(obj.message.serial_no);
         $('#extendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);

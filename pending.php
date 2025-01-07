@@ -44,6 +44,7 @@ else{
   $country = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryAts = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryAtp = $db->query("SELECT * FROM country WHERE deleted = '0'");
+  $countryAtpMotor = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryAtn = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryAte = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countrySll = $db->query("SELECT * FROM country WHERE deleted = '0'");
@@ -529,8 +530,14 @@ else{
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>No Daftar </label>
-                    <input class="form-control" type="text" placeholder="No Daftar" id="noDaftar" name="noDaftar">
+                    <label>No Daftar (Lama)</label>
+                    <input class="form-control" type="text" placeholder="No Daftar Lama" id="noDaftarLama" name="noDaftarLama">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>No Daftar (Baru)</label>
+                    <input class="form-control" type="text" placeholder="No Daftar Baru" id="noDaftarBaru" name="noDaftarBaru">
                   </div>
                 </div>
                 <div class="col-4">
@@ -1026,6 +1033,64 @@ else{
             <option value="DIGITAL">DIGITAL</option>
             <option value="DAIL">DAIL</option>
           </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/html" id="atpMotorDetails">
+  <div class="card card-primary">
+    <div class="card-body">
+      <div class="row">
+        <h4>Addtional Information (ATP - MOTORCAR)</h4>
+      </div>
+      <div class="row">
+        <div class="form-group col-4">
+          <label for="model">Platform Made In *</label>
+          <select class="form-control select2" id="platformCountry" name="platformCountry" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <?php while($rowcountry=mysqli_fetch_assoc($countryAtpMotor)){ ?>
+              <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
+            <?php } ?>
+          </select>
+        </div>
+        <div class="form-group col-4">
+          <label>Had Terima Steelyard (kg)*</label>
+          <input type="text" class="form-control" id="steelyard" name="steelyard">
+        </div>
+        <div class="form-group col-4">
+          <label>Bilangan Kaunterpois (biji)*</label>
+          <input type="text" class="form-control" id="bilanganKaunterpois" name="bilanganKaunterpois">
+        </div>
+      </div>
+      <div class="row">
+        <label for="model" class="form-group">Nilai Berat Kaunterpois (kg) *</label>
+      </div>
+      <div class="row">
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 1 (kg)</label>
+          <input class="form-control" id ="nilai1" name="nilai1">
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 2 (kg)</label>
+          <input class="form-control" id ="nilai2" name="nilai2">
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 3 (kg)</label>
+          <input class="form-control" id ="nilai3" name="nilai3">
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 4 (kg)</label>
+          <input class="form-control" id ="nilai4" name="nilai4">
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 5 (kg)</label>
+          <input class="form-control" id ="nilai5" name="nilai5">
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 6 (kg)</label>
+          <input class="form-control" id ="nilai6" name="nilai6">
         </div>
       </div>
     </div>
@@ -1593,7 +1658,7 @@ $(function () {
   var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
   var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
 
-  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)'];
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)'];
 
   var table = $("#weightTable").DataTable({
     "responsive": true,
@@ -2538,6 +2603,10 @@ $(function () {
       $('#addtionalSection').html($('#atpDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
+    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '23'){
+      $('#addtionalSection').html($('#atpMotorDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '5'){
       $('#addtionalSection').html($('#atnDetails').html());
       $('#extendModal').trigger('atkLoaded');
@@ -2649,6 +2718,10 @@ $(function () {
     }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '2'){
       $('#addtionalSection').html($('#atpDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
+    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '23'){
+      $('#addtionalSection').html($('#atpMotorDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '5'){
@@ -2804,7 +2877,8 @@ function format (row) {
 
     <!-- Stamping Section -->
     <div class="col-6">
-      <p><strong>No. Daftar:</strong> ${row.no_daftar}</p>
+      <p><strong>Lama No. Daftar:</strong> ${row.no_daftar_lama}</p>
+      <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
       <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
       <p><strong>Borang D:</strong> ${row.borang_d}</p>
       <p><strong>Borang E:</strong> ${row.borang_e}</p>
@@ -2994,7 +3068,8 @@ function newEntry(){
   $('#extendModal').find('#assignTo').val('').trigger('change');
   $('#extendModal').find('#trade').val('').trigger('change');
   $('#extendModal').find('#branch').val('').trigger('change');
-  $('#extendModal').find('#noDaftar').val('');
+  $('#extendModal').find('#noDaftarLama').val('');
+  $('#extendModal').find('#noDaftarBaru').val('');
   $('#extendModal').find('#address3').val('');
   $('#extendModal').find('#serial').val('');
   $('#extendModal').find('#pinKeselamatan').val('');
@@ -3148,7 +3223,8 @@ function edit(id) {
         });
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
-        $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
+        $('#extendModal').find('#noDaftarLama').val(obj.message.no_daftar_lama);
+        $('#extendModal').find('#noDaftarBaru').val(obj.message.no_daftar_baru);
         $('#extendModal').find('#address3').val(obj.message.address3);
         $('#extendModal').find('#serial').val(obj.message.serial_no);
         $('#extendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);
@@ -3258,6 +3334,17 @@ function edit(id) {
             $('#addtionalSection').html($('#atpDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '23'){
+            $('#addtionalSection').html($('#atpMotorDetails').html());
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#steelyard').val(obj.message.steelyard).trigger('change');
+            $('#extendModal').find('#bilanganKaunterpois').val(obj.message.bilangan_kaunterpois).trigger('change');
+            $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
+            $('#extendModal').find('#nilai2').val(obj.message.nilais[1].nilai);
+            $('#extendModal').find('#nilai3').val(obj.message.nilais[2].nilai);
+            $('#extendModal').find('#nilai4').val(obj.message.nilais[3].nilai);
+            $('#extendModal').find('#nilai5').val(obj.message.nilais[4].nilai);
+            $('#extendModal').find('#nilai6').val(obj.message.nilais[5].nilai);
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '5'){
             $('#addtionalSection').html($('#atnDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
@@ -3378,7 +3465,8 @@ function edit(id) {
         });
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
-        $('#extendModal').find('#noDaftar').val(obj.message.no_daftar);
+        $('#extendModal').find('#noDaftarLama').val(obj.message.no_daftar_lama);
+        $('#extendModal').find('#noDaftarBaru').val(obj.message.no_daftar_baru);
         $('#extendModal').find('#address3').val(obj.message.address3);
         $('#extendModal').find('#serial').val(obj.message.serial_no);
         $('#extendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);
@@ -3449,6 +3537,17 @@ function edit(id) {
             $('#addtionalSection').html($('#atpDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '23'){
+            $('#addtionalSection').html($('#atpMotorDetails').html());
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#steelyard').val(obj.message.steelyard).trigger('change');
+            $('#extendModal').find('#bilanganKaunterpois').val(obj.message.bilangan_kaunterpois).trigger('change');
+            $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
+            $('#extendModal').find('#nilai2').val(obj.message.nilais[1].nilai);
+            $('#extendModal').find('#nilai3').val(obj.message.nilais[2].nilai);
+            $('#extendModal').find('#nilai4').val(obj.message.nilais[3].nilai);
+            $('#extendModal').find('#nilai5').val(obj.message.nilais[4].nilai);
+            $('#extendModal').find('#nilai6').val(obj.message.nilais[5].nilai);
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '5'){
             $('#addtionalSection').html($('#atnDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');

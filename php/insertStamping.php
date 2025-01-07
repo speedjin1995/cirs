@@ -255,8 +255,12 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 		$stampDate = DateTime::createFromFormat('d/m/Y', $stampDate)->format('Y-m-d H:i:s');
 	}
 	
-	if(isset($_POST['noDaftar']) && $_POST['noDaftar']!=null && $_POST['noDaftar']!=""){
-		$noDaftar = $_POST['noDaftar'];
+	if(isset($_POST['noDaftarLama']) && $_POST['noDaftarLama']!=null && $_POST['noDaftarLama']!=""){
+		$noDaftarLama = $_POST['noDaftarLama'];
+	}
+	
+	if(isset($_POST['noDaftarBaru']) && $_POST['noDaftarBaru']!=null && $_POST['noDaftarBaru']!=""){
+		$noDaftarBaru = $_POST['noDaftarBaru'];
 	}
 
 	if(isset($_POST['pinKeselamatan']) && $_POST['pinKeselamatan']!=null && $_POST['pinKeselamatan']!=""){
@@ -347,12 +351,12 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 		$currentDateTime = date('Y-m-d H:i:s');
 
 		if ($update_stmt = $db->prepare("UPDATE stamping SET type=?, dealer=?, dealer_branch=?, customers=?, brand=?, machine_type=?, model=?
-		, capacity=?, serial_no=?, assignTo=?, validate_by=?, cawangan=?, jenis_alat=?, trade=?, no_daftar=?, pin_keselamatan=?, siri_keselamatan=?, include_cert=?, borang_d=?
+		, capacity=?, serial_no=?, assignTo=?, validate_by=?, cawangan=?, jenis_alat=?, trade=?, no_daftar_lama=?, no_daftar_baru=?, pin_keselamatan=?, siri_keselamatan=?, include_cert=?, borang_d=?
 		, borang_e=?, invoice_no=?, cash_bill=?, stamping_date=?, due_date=?, pic=?, customer_pic=?, quotation_no=?, quotation_date=?, purchase_no=?, purchase_date=?
 		, remarks=?, unit_price=?, cert_price=?, total_amount=?, sst=?, subtotal_amount=?, log=?, products=?, stamping_type=?, updated_datetime=?, branch=? WHERE id=?")){
 			$data = json_encode($logs);
-			$update_stmt->bind_param('ssssssssssssssssssssssssssssssssssssssssss', $type, $dealer, $reseller_branch, $customer, $brand, $machineType, $model, $capacity, $serial, $assignTo, 
-			$validator, $cawangan, $jenisAlat, $trade, $noDaftar, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $invoice, $cashBill, $stampDate, $dueDate, $uid, $pic, 
+			$update_stmt->bind_param('sssssssssssssssssssssssssssssssssssssssssss', $type, $dealer, $reseller_branch, $customer, $brand, $machineType, $model, $capacity, $serial, $assignTo, 
+			$validator, $cawangan, $jenisAlat, $trade, $noDaftarLama,$noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $invoice, $cashBill, $stampDate, $dueDate, $uid, $pic, 
 			$quotation, $quotationDate, $poNo, $poDate, $remark, $unitPrice, $certPrice, $totalPrice, $sst, $subtotalPrice, $data, $product, $newRenew, $currentDateTime, $branch, $_POST['id']);
 		
 			// Execute the prepared query.
@@ -505,6 +509,59 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, jenis_penunjuk=? WHERE stamp_id = ?")){
 						$insert_stmt2->bind_param('sss', $platform_country, $jenis_penunjuk, $_POST['id']);
 						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For ATP (MOTORCAR) Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '23'){
+					$platform_country = null;
+					$jenis_penunjuk = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['steelyard']) && $_POST['steelyard']!=null && $_POST['steelyard']!=""){
+						$steelyard = $_POST['steelyard'];
+					}
+
+					if(isset($_POST['bilanganKaunterpois']) && $_POST['bilanganKaunterpois']!=null && $_POST['bilanganKaunterpois']!=""){
+						$bilanganKaunterpois = $_POST['bilanganKaunterpois'];
+					}
+
+					$nilais = [
+						[
+							"no" => 1,
+							"nilai" => $_POST['nilai1'] ?? null,
+						],
+						[
+							"no" => 2,
+							"nilai" => $_POST['nilai2'] ?? null,
+						],
+						[
+							"no" => 3,
+							"nilai" => $_POST['nilai3'] ?? null,
+						],
+						[
+							"no" => 4,
+							"nilai" => $_POST['nilai4'] ?? null,
+						],
+						[
+							"no" => 5,
+							"nilai" => $_POST['nilai5'] ?? null,
+						],
+						[
+							"no" => 6,
+							"nilai" => $_POST['nilai6'] ?? null,
+						]
+					];
+
+					$nilaiString = json_encode($nilais, JSON_PRETTY_PRINT);
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, steelyard = ?, bilangan_kaunterpois = ?, nilais = ? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('sssss', $platform_country, $steelyard, $bilanganKaunterpois, $nilaiString, $_POST['id']);
+						$insert_stmt2->execute(); 
 						$insert_stmt2->close();
 					}
 				}
@@ -744,12 +801,12 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 	}
 	else{
 		if ($insert_stmt = $db->prepare("INSERT INTO stamping (type, dealer, dealer_branch, customer_type, customers, brand, machine_type, model, capacity, serial_no, assignTo,
-		validate_by, cawangan, jenis_alat, trade, no_daftar, pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, invoice_no, cash_bill, stamping_date, due_date, pic, customer_pic, 
+		validate_by, cawangan, jenis_alat, trade, no_daftar_lama, no_daftar_baru, pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, invoice_no, cash_bill, stamping_date, due_date, pic, customer_pic, 
 		quotation_no, quotation_date, purchase_no, purchase_date, remarks, unit_price, cert_price, total_amount, sst, subtotal_amount, log, products, stamping_type, branch) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
 			$data = json_encode($logs);
-			$insert_stmt->bind_param('sssssssssssssssssssssssssssssssssssssssss', $type, $dealer, $reseller_branch, $customerType, $customer, $brand, $machineType, $model, $capacity, $serial, $assignTo,
-			$validator, $cawangan, $jenisAlat, $trade, $noDaftar, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $invoice, $cashBill, $stampDate, $dueDate, $uid, $pic, 
+			$insert_stmt->bind_param('ssssssssssssssssssssssssssssssssssssssssss', $type, $dealer, $reseller_branch, $customerType, $customer, $brand, $machineType, $model, $capacity, $serial, $assignTo,
+			$validator, $cawangan, $jenisAlat, $trade, $noDaftarLama, $noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $invoice, $cashBill, $stampDate, $dueDate, $uid, $pic, 
 			$quotation, $quotationDate, $poNo, $poDate, $remark, $unitPrice, $certPrice, $totalPrice, $sst, $subtotalPrice, $data, $product, $newRenew, $branch);
 			
 			// Execute the prepared query.
@@ -890,6 +947,60 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, jenis_penunjuk) 
 					VALUES (?, ?, ?)")){
 						$insert_stmt2->bind_param('sss', $stamp_id, $platform_country, $jenis_penunjuk);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For ATP (MOTORCAR) Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '23'){
+					$platform_country = null;
+					$jenis_penunjuk = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['steelyard']) && $_POST['steelyard']!=null && $_POST['steelyard']!=""){
+						$steelyard = $_POST['steelyard'];
+					}
+				
+					if(isset($_POST['bilanganKaunterpois']) && $_POST['bilanganKaunterpois']!=null && $_POST['bilanganKaunterpois']!=""){
+						$bilanganKaunterpois = $_POST['bilanganKaunterpois'];
+					}
+
+					$nilais = [
+						[
+							"no" => 1,
+							"nilai" => $_POST['nilai1'] ?? null,
+						],
+						[
+							"no" => 2,
+							"nilai" => $_POST['nilai2'] ?? null,
+						],
+						[
+							"no" => 3,
+							"nilai" => $_POST['nilai3'] ?? null,
+						],
+						[
+							"no" => 4,
+							"nilai" => $_POST['nilai4'] ?? null,
+						],
+						[
+							"no" => 5,
+							"nilai" => $_POST['nilai5'] ?? null,
+						],
+						[
+							"no" => 6,
+							"nilai" => $_POST['nilai6'] ?? null,
+						]
+					];
+
+					$nilaiString = json_encode($nilais, JSON_PRETTY_PRINT);
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, steelyard, bilangan_kaunterpois, nilais) 
+					VALUES (?, ?, ?, ?, ?)")){
+						$insert_stmt2->bind_param('sssss', $stamp_id, $platform_country, $steelyard, $bilanganKaunterpois, $nilaiString);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}

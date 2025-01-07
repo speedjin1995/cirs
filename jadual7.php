@@ -125,7 +125,7 @@ else{
           </div>
 
           <div class="card-body">
-            <table id="weightTable" class="table table-bordered table-striped display" style="text-align: center;">
+            <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
                   <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
@@ -135,7 +135,8 @@ else{
                   <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
                   <th>CAPACITY</th>
                   <th>LIST NO. (STMP. NO.)</th>
-                  <th>REGISTER NO. (BARU / LAMA)</th>
+                  <th>NO. DAFTAR LAMA</th>
+                  <th>NO. DAFTAR BARU</th>
                   <th>DETAILS OF REPAIR</th>
                   <th>CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
                   <th width='9%'>FEE</th>
@@ -276,7 +277,8 @@ $(function () {
       },
       { data: 'capacity' },
       { data: 'pin_keselamatan' },
-      { data: 'no_daftar' },
+      { data: 'no_daftar_lama' },
+      { data: 'no_daftar_baru' },
       { data: 'reason' },
       { data: 'siri_keselamatan' },
       {
@@ -470,7 +472,8 @@ $(function () {
         },
         { data: 'capacity' },
         { data: 'pin_keselamatan' },
-        { data: 'no_daftar' },
+        { data: 'no_daftar_lama' },
+        { data: 'no_daftar_baru' },
         { data: 'reason' },
         { data: 'siri_keselamatan' },
         {
@@ -585,7 +588,8 @@ function format (row) {
 
     <!-- Stamping Section -->
     <div class="col-6">
-      <p><strong>No. Daftar:</strong> ${row.no_daftar}</p>
+      <p><strong>Lama No. Daftar:</strong> ${row.no_daftar_lama}</p>
+      <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
       <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
       <p><strong>Borang D:</strong> ${row.borang_d}</p>
       <p><strong>Borang E:</strong> ${row.borang_e}</p>
