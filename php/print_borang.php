@@ -250,6 +250,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['valid
             $indexCount = 1;
             $validator = '2';                
             $jenisAlatData = [];
+            $updateIds = [];
 
             while ($row = $result->fetch_assoc()) {
                 $validator = $row['validate_by'];
@@ -257,6 +258,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['valid
                 $branchQuery = "SELECT * FROM branches WHERE id = $branch";
                 $branchDetail = mysqli_query($db, $branchQuery);
                 $branchRow = mysqli_fetch_assoc($branchDetail);
+                array_push($updateIds, $row['id']);
 
                 $address1 = null;
                 $address2 = null;
@@ -318,6 +320,8 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['valid
                 if($count > 7){
                     $count = 1;
                 }
+
+
             }
             
             $sst = $totalAmt * (8/100);
@@ -535,6 +539,10 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['valid
                             $message .= '<div class="page-break"></div>';
                         }
                 }
+
+                /*$update_stmt = $db->prepare("UPDATE stamping SET stamping_date = '$today' WHERE id IN ($placeholders)");
+                $update_stmt->bind_param($types, ...$arrayOfId);
+                $update_stmt->execute();*/
             }    
     
         $message .= '</body></html>';
