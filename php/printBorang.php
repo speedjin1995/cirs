@@ -70,7 +70,7 @@ function filterData(&$str){
 if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     $id = $_GET['userID'];
     $file = $_GET['file'];
-    $validator = $_GET['validator'];
+    $validator = strtoupper($_GET['validator']);
     $tickImage = '../assets/tick.png';
     $currentDateTime = date('d/m/Y - h:i:sA');  // Format: DD/MM/YYYY - HH:MM:SS AM/PM
     $currentDate = date('d/m/Y');  // Format: DD/MM/YYYY
@@ -1906,7 +1906,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
         $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
-    else if($file == 'ATN' && $validator == 'METROLOGY'){
+    else if(str_contains($file, 'ATN') && $validator == 'METROLOGY'){
         $fillFile = 'forms/Metrology/ATN_FORM.pdf';
 
         $pdf = new Fpdi();
@@ -2066,7 +2066,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
         $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
-    else if($file == 'ATN' && $validator == 'DE METROLOGY'){
+    else if(str_contains($file, 'ATN') && $validator == 'DE METROLOGY'){
         $fillFile = 'forms/DE_Metrology/DMSB_ATN.pdf';
 
         $pdf = new Fpdi();
