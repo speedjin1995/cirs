@@ -512,6 +512,59 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						$insert_stmt2->close();
 					}
 				}
+
+				// For ATP (MOTORCAR) Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '23'){
+					$platform_country = null;
+					$jenis_penunjuk = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['steelyard']) && $_POST['steelyard']!=null && $_POST['steelyard']!=""){
+						$steelyard = $_POST['steelyard'];
+					}
+
+					if(isset($_POST['bilanganKaunterpois']) && $_POST['bilanganKaunterpois']!=null && $_POST['bilanganKaunterpois']!=""){
+						$bilanganKaunterpois = $_POST['bilanganKaunterpois'];
+					}
+
+					$nilais = [
+						[
+							"no" => 1,
+							"nilai" => $_POST['nilai1'] ?? null,
+						],
+						[
+							"no" => 2,
+							"nilai" => $_POST['nilai2'] ?? null,
+						],
+						[
+							"no" => 3,
+							"nilai" => $_POST['nilai3'] ?? null,
+						],
+						[
+							"no" => 4,
+							"nilai" => $_POST['nilai4'] ?? null,
+						],
+						[
+							"no" => 5,
+							"nilai" => $_POST['nilai5'] ?? null,
+						],
+						[
+							"no" => 6,
+							"nilai" => $_POST['nilai6'] ?? null,
+						]
+					];
+
+					$nilaiString = json_encode($nilais, JSON_PRETTY_PRINT);
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, steelyard = ?, bilangan_kaunterpois = ?, nilais = ? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('sssss', $platform_country, $steelyard, $bilanganKaunterpois, $nilaiString, $_POST['id']);
+						$insert_stmt2->execute(); 
+						$insert_stmt2->close();
+					}
+				}
 				
 				// For ATN Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '5'){
@@ -894,6 +947,60 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, jenis_penunjuk) 
 					VALUES (?, ?, ?)")){
 						$insert_stmt2->bind_param('sss', $stamp_id, $platform_country, $jenis_penunjuk);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For ATP (MOTORCAR) Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '23'){
+					$platform_country = null;
+					$jenis_penunjuk = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['steelyard']) && $_POST['steelyard']!=null && $_POST['steelyard']!=""){
+						$steelyard = $_POST['steelyard'];
+					}
+				
+					if(isset($_POST['bilanganKaunterpois']) && $_POST['bilanganKaunterpois']!=null && $_POST['bilanganKaunterpois']!=""){
+						$bilanganKaunterpois = $_POST['bilanganKaunterpois'];
+					}
+
+					$nilais = [
+						[
+							"no" => 1,
+							"nilai" => $_POST['nilai1'] ?? null,
+						],
+						[
+							"no" => 2,
+							"nilai" => $_POST['nilai2'] ?? null,
+						],
+						[
+							"no" => 3,
+							"nilai" => $_POST['nilai3'] ?? null,
+						],
+						[
+							"no" => 4,
+							"nilai" => $_POST['nilai4'] ?? null,
+						],
+						[
+							"no" => 5,
+							"nilai" => $_POST['nilai5'] ?? null,
+						],
+						[
+							"no" => 6,
+							"nilai" => $_POST['nilai6'] ?? null,
+						]
+					];
+
+					$nilaiString = json_encode($nilais, JSON_PRETTY_PRINT);
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, steelyard, bilangan_kaunterpois, nilais) 
+					VALUES (?, ?, ?, ?, ?)")){
+						$insert_stmt2->bind_param('sssss', $stamp_id, $platform_country, $steelyard, $bilanganKaunterpois, $nilaiString);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
