@@ -125,7 +125,7 @@ else{
           </div>
 
           <div class="card-body">
-            <table id="weightTable" class="table table-bordered table-striped display" style="text-align: center;">
+            <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
                   <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
