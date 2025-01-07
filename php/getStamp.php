@@ -125,7 +125,8 @@ if(isset($_POST['userID'])){
                     $message['serial_no'] = $row['serial_no'];
                     $message['validate_by'] = $row['validate_by'];
                     $message['jenis_alat'] = $row['jenis_alat'] != null ? searchJenisAlatNameByid($row['jenis_alat'], $db) : '';
-                    $message['no_daftar'] = $row['no_daftar'];
+                    $message['no_daftar_lama'] = $row['no_daftar_lama'] ?? '';
+                    $message['no_daftar_baru'] = $row['no_daftar_baru'] ?? '';
                     $message['pin_keselamatan'] = $row['pin_keselamatan'];
                     $message['siri_keselamatan'] = $row['siri_keselamatan'];
                     $message['include_cert'] = $row['include_cert'];
@@ -201,7 +202,8 @@ if(isset($_POST['userID'])){
                     $message['cawangan'] = $row['cawangan'];
                     $message['jenis_alat'] = $row['jenis_alat'];
                     $message['trade'] = $row['trade'];
-                    $message['no_daftar'] = $row['no_daftar'];
+                    $message['no_daftar_lama'] = $row['no_daftar_lama'] ?? '';
+                    $message['no_daftar_baru'] = $row['no_daftar_baru'] ?? '';
                     $message['pin_keselamatan'] = $row['pin_keselamatan'];
                     $message['siri_keselamatan'] = $row['siri_keselamatan'];
                     $message['include_cert'] = $row['include_cert'];

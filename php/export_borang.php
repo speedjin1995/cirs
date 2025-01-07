@@ -141,7 +141,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
             <table class="table-bordered">
                 <tbody>
                     <tr>
-                        <th colspan="8" style="vertical-align: middle;">
+                        <th colspan="9" style="vertical-align: middle;">
                             JADUAL 6<br>AKTA TIMBANG DAN SUKAT 1972<br>PERATURAN-PERATURAN TIMBANG DAN SUKAT 1981<br>(PERATURAN 35)<br>DAFTAR TIMBANG , SUKAT DAN ALAT TIMBANG SUKAT YANG DIJUAL/DIBUAT
                         </th>
                     </tr>
@@ -152,7 +152,8 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                         <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
                         <th width="12%">CAPACITY</th>
                         <th>QUANTITY</th>
-                        <th>REGISTER NO.</th>
+                        <th>NO. DAFTAR LAMA</th>
+                        <th>NO. DAFTAR BARU</th>
                         <th>CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
                     </tr>';
 
@@ -188,7 +189,8 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                 <td>'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
                                 <td>'.searchCapacityNameById($row['capacity'], $db).'</td>
                                 <td>1</td>
-                                <td>'.$row['no_daftar'].'</td>
+                                <td>'.$row['no_daftar_lama'].'</td>
+                                <td>'.$row['no_daftar_baru'].'</td>
                                 <td>'.$row['siri_keselamatan'].'</td>
                             </tr>';
             }
@@ -263,7 +265,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
             <table class="table-bordered">
                 <tbody>
                     <tr>
-                        <th colspan="11" style="vertical-align: middle;">
+                        <th colspan="12" style="vertical-align: middle;">
                             JADUAL 7<br>AKTA TIMBANG DAN SUKAT 1972<br>PERATURAN-PERATURAN TIMBANG DAN SUKAT 1981<br>(PERATURAN 35)<br>DAFTAR TIMBANG , SUKAT DAN ALAT TIMBANG SUKAT YANG DIJUAL/DIBUAT
                         </th>
                     </tr>
@@ -275,7 +277,8 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                         <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
                         <th>CAPACITY</th>
                         <th>LIST NO. (STMP. NO.)</th>
-                        <th>REGISTER NO. (BARU / LAMA)</th>
+                        <th>NO. DAFTAR LAMA</th>
+                        <th>NO. DAFTAR BARU</th>
                         <th>DETAILS OF REPAIR</th>
                         <th>CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
                         <th>FEE</th>
@@ -314,7 +317,8 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                         <td>'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
                         <td>'.searchCapacityNameById($row['capacity'], $db).'</td>
                         <td>'.$row['pin_keselamatan'].'</td>
-                        <td>'.$row['no_daftar'].'</td>
+                        <td>'.$row['no_daftar_lama'].'</td>
+                        <td>'.$row['no_daftar_baru'].'</td>
                         <td>SERVICE / STMP</td>
                         <td>'.$row['siri_keselamatan'].'</td>';
 
@@ -415,7 +419,8 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                 <td style="padding-left: 0.5%">'.$row['serial_no'].'</td>
                                 <td style="padding-left: 0.5%">'.searchCustNameById($row['customers'], $db).'<br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
                                 <td style="padding-left: 0.5%"></td>
-                                <td style="padding-left: 0.5%">'.$row['no_daftar'].'</td>
+                                <td style="padding-left: 0.5%">'.$row['no_daftar_lama'].'</td>
+                                <td style="padding-left: 0.5%">'.$row['no_daftar_baru'].'</td>
                                 <td style="padding-left: 0.5%">'.$row['siri_keselamatan'].'</td>';
                                 
                                 if ($row['cert_price'] != 0) {
@@ -444,6 +449,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                     $remainingRows = 7 - (count($rows) % 7);
                     for ($i = 0; $i < $remainingRows; $i++) {
                         $rows[] = '<tr style="height: 30px;">
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -586,7 +592,8 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                     <th width="10%">No. Siri Alat</th>
                                     <th>Nama Dan Alamat Pemilik</th>
                                     <th>Kod</th>
-                                    <th>No. Daftar</th>
+                                    <th>No. Daftar Lama</th>
+                                    <th>No. Daftar Baru</th>
                                     <th>No. Siri Pelekat Keselamatan</th>
                                     <th width="8%">Fi / Bayaran</th>
                                 </tr>';
@@ -597,17 +604,17 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                             
                             if ($startIndex + $recordsPerPage >= $num_records) {
                                 $message .= '<tr>
-                                                <td colspan="7" style="border-left: none; border: none;"></td>
+                                                <td colspan="8" style="border-left: none; border: none;"></td>
                                                 <td colspan="2">Total Amount</td>
                                                 <td>RM ' . number_format(floatval($totalAmt), 2, '.', '') . '</td>
                                             </tr>';
                                 $message .= '<tr>
-                                                <td colspan="7" style="border-left: none; border: none;"></td>
+                                                <td colspan="8" style="border-left: none; border: none;"></td>
                                                 <td colspan="2">SST8%</td>
                                                 <td> RM ' . number_format(floatval($sst), 2, '.', '') . '</td>
                                             </tr>';
                                 $message .= '<tr>
-                                                <td colspan="7" style="border-left: none; border: none;"></td>
+                                                <td colspan="8" style="border-left: none; border: none;"></td>
                                                 <td colspan="2">Sub Total Amount</td>
                                                 <td>RM ' . number_format(floatval($subTotalAmt), 2, '.', '') . '</td>
                                             </tr>';

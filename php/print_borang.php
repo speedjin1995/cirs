@@ -297,7 +297,8 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['valid
                             <td style="padding-left: 0.5%">'.$row['serial_no'].'</td>
                             <td style="padding-left: 0.5%">'.searchCustNameById($row['customers'], $db).'<br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
                             <td style="padding-left: 0.5%"></td>
-                            <td style="padding-left: 0.5%">'.$row['no_daftar'].'</td>
+                            <td style="padding-left: 0.5%">'.$row['no_daftar_lama'].'</td>
+                            <td style="padding-left: 0.5%">'.$row['no_daftar_baru'].'</td>
                             <td style="padding-left: 0.5%">'.$row['siri_keselamatan'].'</td>';
                             
                             if ($row['cert_price'] != 0) {
@@ -326,6 +327,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['valid
                 $remainingRows = 7 - (count($rows) % 7);
                 for ($i = 0; $i < $remainingRows; $i++) {
                     $rows[] = '<tr style="height: 30px;">
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -468,7 +470,8 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['valid
                                     <th width="10%">No. Siri Alat</th>
                                     <th>Nama Dan Alamat Pemilik</th>
                                     <th>Kod</th>
-                                    <th>No. Daftar</th>
+                                    <th>No. Daftar Lama</th>
+                                    <th>No. Daftar Baru</th>
                                     <th>No. Siri Pelekat Keselamatan</th>
                                     <th width="8%">Fi / Bayaran</th>
                                 </tr>';
@@ -479,17 +482,17 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['valid
                             
                             if ($startIndex + $recordsPerPage >= $num_records) {
                                 $message .= '<tr>
-                                                <td colspan="7" style="border-left: none; border: none;"></td>
+                                                <td colspan="8" style="border-left: none; border: none;"></td>
                                                 <td colspan="2">Total Amount</td>
                                                 <td>RM ' . number_format(floatval($totalAmt), 2, '.', '') . '</td>
                                             </tr>';
                                 $message .= '<tr>
-                                                <td colspan="7" style="border-left: none; border: none;"></td>
+                                                <td colspan="8" style="border-left: none; border: none;"></td>
                                                 <td colspan="2">SST8%</td>
                                                 <td> RM ' . number_format(floatval($sst), 2, '.', '') . '</td>
                                             </tr>';
                                 $message .= '<tr>
-                                                <td colspan="7" style="border-left: none; border: none;"></td>
+                                                <td colspan="8" style="border-left: none; border: none;"></td>
                                                 <td colspan="2">Sub Total Amount</td>
                                                 <td>RM ' . number_format(floatval($subTotalAmt), 2, '.', '') . '</td>
                                             </tr>';

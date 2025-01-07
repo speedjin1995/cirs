@@ -149,7 +149,8 @@ else{
                   <th>No. Siri Alat</th>
                   <th>Nama Dan Alamat Pemilik</th>
                   <th>Kod</th>
-                  <th>No. Daftar</th>
+                  <th>No. Daftar Lama</th>
+                  <th>No. Daftar Baru</th>
                   <th>No. Siri Pelekat Keselamatan</th>
                   <th>Fi / Bayaran</th>
                   <th></th>
@@ -295,7 +296,8 @@ $(function () {
         }
       },
       { data: 'batch_no' },
-      { data: 'no_daftar' },
+      { data: 'no_daftar_lama' },
+      { data: 'no_daftar_baru' },
       { data: 'siri_keselamatan' },
       {
         data: null, // Custom rendering for unit_price and cert_price
@@ -495,7 +497,8 @@ $(function () {
           }
         },
         { data: 'batch_no' },
-        { data: 'no_daftar' },
+        { data: 'no_daftar_lama' },
+        { data: 'no_daftar_baru' },
         { data: 'siri_keselamatan' },
         {
           data: null, // Custom rendering for unit_price and cert_price
@@ -612,7 +615,8 @@ function format (row) {
 
     <!-- Stamping Section -->
     <div class="col-6">
-      <p><strong>No. Daftar:</strong> ${row.no_daftar}</p>
+      <p><strong>Lama No. Daftar:</strong> ${row.no_daftar_lama}</p>
+      <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
       <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
       <p><strong>Borang D:</strong> ${row.borang_d}</p>
       <p><strong>Borang E:</strong> ${row.borang_e}</p>
