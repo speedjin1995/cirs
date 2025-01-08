@@ -3531,16 +3531,16 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         # Adjust for {Alat Type}
                         if ($res['alat_type'] == 'KERAS'){
-                            $pdf->Image($tickImage, 127.253+22, 87.946-7, 8);
+                            $pdf->Image($tickImage, 127.253+23, 87.946-5, 6);
                         }elseif ($res['alat_type'] == 'LOGAM'){
-                            $pdf->Image($tickImage, 136.854+22, 87.946-7, 8);
+                            $pdf->Image($tickImage, 156.854+22, 87.946-5, 6);
                         }
 
                         // Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
-                            $pdf->Image($tickImage, 148.749, 79.352-7, 8); 
+                            $pdf->Image($tickImage, 127.253+23, 81.352-7, 6); 
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 192.251, 79.352-7, 8);
+                            $pdf->Image($tickImage, 156.854+22, 81.352-7, 6);
                         }
 
                         // $pdf->SetFont('Arial', '', 9);
@@ -3557,51 +3557,51 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $questions = json_decode($res['questions'], true);
 
                         if($questions[0]['answer'] == 'YA'){
-                            $pdf->Image($tickImage, 140.736+10, 135.537-7, 8);
+                            $pdf->Image($tickImage, 140.736+10, 135.537-5, 6);
                         }elseif ($questions[0]['answer'] == 'TIDAK'){
-                            $pdf->Image($tickImage, 170.621+10, 135.537-7, 8);
+                            $pdf->Image($tickImage, 170.621+10, 135.537-5, 6);
                         }
 
                         if($questions[1]['answer'] == 'YA'){
-                            $pdf->Image($tickImage, 140.736+10, 156.147-7, 8);
+                            $pdf->Image($tickImage, 140.736+10, 156.147-5, 6);
                         }elseif ($questions[1]['answer'] == 'TIDAK'){
-                            $pdf->Image($tickImage, 170.621+10, 156.147-7, 8);
+                            $pdf->Image($tickImage, 170.621+10, 156.147-5, 6);
                         }
 
                         if($questions[2]['answer'] == 'YA'){
-                            $pdf->Image($tickImage, 140.736+10, 164.326-7, 8);
+                            $pdf->Image($tickImage, 140.736+10, 164.326-5, 6);
                         }elseif ($questions[2]['answer'] == 'TIDAK'){
-                            $pdf->Image($tickImage, 170.621+10, 164.326-7, 8);
+                            $pdf->Image($tickImage, 170.621+10, 164.326-5, 6);
                         }
 
                         if($questions[3]['answer'] == 'YA'){
-                            $pdf->Image($tickImage, 140.736+10, 176.684-7, 8);
+                            $pdf->Image($tickImage, 140.736+10, 176.684-5, 6);
                         }elseif ($questions[3]['answer'] == 'TIDAK'){
-                            $pdf->Image($tickImage, 170.621+10, 176.684-7, 8);
+                            $pdf->Image($tickImage, 170.621+10, 176.684-5, 6);
                         }
 
                         if($questions[4]['answer'] == 'YA'){
-                            $pdf->Image($tickImage, 140.736+10, 203.694-7, 8);
+                            $pdf->Image($tickImage, 140.736+10, 203.694-5, 6);
                         }elseif ($questions[4]['answer'] == 'TIDAK'){
-                            $pdf->Image($tickImage, 170.621+10, 203.694-7, 8);
+                            $pdf->Image($tickImage, 170.621+10, 203.694-5, 6);
                         }
 
                         if($questions[5]['answer'] == 'YA'){
-                            $pdf->Image($tickImage, 140.736+10, 228.409-7, 8);
+                            $pdf->Image($tickImage, 140.736+10, 228.409-5, 6);
                         }elseif ($questions[5]['answer'] == 'TIDAK'){
-                            $pdf->Image($tickImage, 170.621+10, 228.409-7, 8);
+                            $pdf->Image($tickImage, 170.621+10, 228.409-5, 6);
                         }
 
                         if($questions[6]['answer'] == 'YA'){
-                            $pdf->Image($tickImage, 140.736+10, 240.692-7, 8);
+                            $pdf->Image($tickImage, 140.736+10, 240.692-5, 6);
                         }elseif ($questions[6]['answer'] == 'TIDAK'){
-                            $pdf->Image($tickImage, 170.621+10, 240.692-7, 8);
+                            $pdf->Image($tickImage, 170.621+10, 240.692-5, 6);
                         }
 
                         if($questions[7]['answer'] == 'YA'){
-                            $pdf->Image($tickImage, 140.736+10, 261.228-7, 8);
+                            $pdf->Image($tickImage, 140.736+10, 261.228-5, 6);
                         }elseif ($questions[7]['answer'] == 'TIDAK'){
-                            $pdf->Image($tickImage, 170.621+10, 261.228-7, 8);
+                            $pdf->Image($tickImage, 170.621+10, 261.228-5, 6);
                         }
 
                     }
