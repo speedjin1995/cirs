@@ -687,7 +687,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
-                        $pdf->SetXY(27, 24); 
+                        $pdf->SetXY(55, 49); 
                         $pdf->Write(0, $currentDate);
 
                         $pdf->Image($tickImage, 72.526, 60.865, 8);  // Adjust for Perdagangan
@@ -1010,7 +1010,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
-                        $pdf->SetXY(29, 15); 
+                        $pdf->SetXY(58, 56); 
                         $pdf->Write(0, $currentDate); 
 
                         $pdf->Image($tickImage, 58.526, 74.865-2, 8);  // Adjust for Perdagangan
@@ -1334,7 +1334,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
-                        $pdf->SetXY(29, 20); 
+                        $pdf->SetXY(58, 55); 
                         $pdf->Write(0, $currentDate);
 
                         $pdf->Image($tickImage, 60.526, 68.865, 8);  // Adjust for Perdagangan
@@ -1670,7 +1670,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
-                        $pdf->SetXY(27, 27); 
+                        $pdf->SetXY(18, 68); 
                         $pdf->Write(0, $currentDate);
 
                         $pdf->Image($tickImage, 88, 87, 8); 
@@ -1969,7 +1969,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
-                        $pdf->SetXY(29, 10); 
+                        $pdf->SetXY(60, 49); 
                         $pdf->Write(0, $currentDate);
 
                         $pdf->SetXY(120.635, 59.669-2); // Adjust for Jenama
@@ -2984,7 +2984,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
-                        $pdf->SetXY(27, 24); 
+                        $pdf->SetXY(55, 49); 
                         $pdf->Write(0, $currentDate); 
 
                         $pdf->Image($tickImage, 72.526, 60.865, 8);  // Adjust for Perdagangan
@@ -3310,9 +3310,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         $pdf->SetFont('Arial', 'B', 10);
-
-                        $pdf->SetXY(23, 20); 
-                        $pdf->Write(0, $currentDate);
 
                         $pdf->SetXY(55.374, 53.063); // Adjust for Customer Name
                         $pdf->Write(0, searchCustNameById($res['customers'], $db));
@@ -3683,8 +3680,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
-                        $pdf->SetXY(29, 15); 
-                        $pdf->Write(0, $currentDate);
+                        $pdf->SetXY(58, 56); 
+                        $pdf->Write(0, $currentDate); 
 
                         $pdf->Image($tickImage, 58.526, 74.865-2, 8);  // Adjust for Perdagangan
 
