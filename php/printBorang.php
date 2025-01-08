@@ -3941,6 +3941,346 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
         $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
+    else if($file == 'ATP (MOTORCAR)' && $validator == 'METROLOGY'){
+        $fillFile = 'forms/Metrology/ATP_MOTOCAR_FORM.pdf';
+
+        $pdf = new Fpdi();
+        $pageCount = $pdf->setSourceFile($fillFile);
+
+        $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
+        // Check if the statement is prepared successfully
+        if ($select_stmt) {
+            // Bind variables to the prepared statement
+            $select_stmt->bind_param('s', $id); // 'i' indicates the type of $id (integer)
+            $select_stmt->execute();
+            $result = $select_stmt->get_result();
+            $message = '';
+
+            if ($res = $result->fetch_assoc()) {
+                $nilais = json_decode($res['nilais'], true);
+                $branch = $res['branch'];
+                $loadcells = json_decode($res['load_cells_info'], true);
+                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                $branchDetail = mysqli_query($db, $branchQuery);
+                $branchRow = mysqli_fetch_assoc($branchDetail);
+
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
+
+                if(!empty($branchRow)){
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
+                }
+
+                $capacity = $res['capacity'];
+                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                $capacityDetail = mysqli_query($db, $capacityQuery);
+                $capacityRow = mysqli_fetch_assoc($capacityDetail);
+
+                $capacityValue = null;
+                $capacityDivision = null;
+
+                if(!empty($capacityRow)){
+                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                    $templateId = $pdf->importPage($pageNo);
+                    $size = $pdf->getTemplateSize($templateId);
+                    $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                    $pdf->useTemplate($templateId);
+                
+                    // Fill in the fields for the current page
+                    $pdf->SetFont('Arial', '', 10);
+                    
+                    // Example field placements for each page (you'll adjust these according to your PDF)
+                    if ($pageNo == 1) {
+                        // Fill in the fields at the appropriate positions
+                        $pdf->SetXY(60, 50); 
+                        $pdf->Write(0, $currentDate); 
+
+                        $pdf->Image($tickImage, 58.526, 67.865, 6);  // Adjust for Perdagangan
+
+                        $pdf->SetXY(125.704, 60.5-1); // Adjust for Jenama
+                        $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
+
+                        $pdf->SetXY(140.704, 67.5); // Adjust for nama pembuat
+                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+
+                        $pdf->SetXY(129.942 , 76.5); // Adjust for {Model}
+                        $pdf->Write(0, searchModelNameById($res['model'], $db));
+
+                        $pdf->SetXY(123, 85.5); // Adjust for {No_Siri}
+                        $pdf->Write(0, $res['serial_no']);
+
+                        $pdf->SetXY(130.5, 93.5); // Adjust for {Had_Terima}
+                        $pdf->Write(0, $capacityValue);
+
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(183.872, 93.5, 5, 5, 'F'); 
+
+                        $pdf->SetXY(147.5, 102.5); // Adjust for {Had_Terima_Steelyard}
+                        $pdf->Write(0, $res['steelyard']);
+
+                        $pdf->SetXY(133.5, 111); // Adjust for {Senggatan}
+                        $pdf->Write(0, $capacityDivision);
+
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(182.872, 110.570, 5, 5, 'F'); 
+
+                        $pdf->SetXY(147.5, 120); // Adjust for {Had_Terima_Steelyard}
+                        $pdf->Write(0, $res['bilangan_kaunterpois']);
+
+                        $pdf->SetXY(120.5, 137); // Adjust for {nilai_1}
+                        $pdf->Write(0, $nilais[0]['nilai']);
+
+                        $pdf->SetXY(120.5, 142); // Adjust for {nilai_2}
+                        $pdf->Write(0, $nilais[1]['nilai']);
+
+                        $pdf->SetXY(120.5, 147.5); // Adjust for {nilai_3}
+                        $pdf->Write(0, $nilais[2]['nilai']);
+
+                        $pdf->SetXY(120.5, 155); // Adjust for {nilai_4}
+                        $pdf->Write(0, $nilais[3]['nilai']);
+
+                        $pdf->SetXY(120.5, 162.5); // Adjust for {nilai_5}
+                        $pdf->Write(0, $nilais[4]['nilai']);
+
+                        $pdf->SetXY(120.5, 171); // Adjust for {nilai_6}
+                        $pdf->Write(0, $nilais[5]['nilai']);
+
+                        $pdf->SetFont('Arial', 'B', 10);
+                        $pdf->SetXY(20.648, 98); // Adjust for Customer Name
+                        $pdf->Write(0, searchCustNameById($res['customers'], $db));
+                        $pdf->SetFont('Arial', '', 10);
+
+                        $pdf->SetXY(20.648, 107.133); // Adjust for {3. Alamat Pemilik Address 1}
+                        $pdf->Write(0, $address1);
+
+                        $pdf->SetXY(20.648, 114.188+1); // Adjust for {3. Alamat Pemilik Address 2}
+                        $pdf->Write(0, $address2);
+                        
+                        $pdf->SetXY(20.648, 124); // Adjust for {3. Alamat Pemilik Address 3 & 4}
+                        $pdf->Write(0, $address3 . ' ' . $address4);
+                        
+                        $pdf->SetXY(20.648, 146); // Adjust for {company name}
+                        $pdf->Write(0, $compname);
+
+                        $pdf->SetXY(20.648, 163); // Adjust for {No_Lesen}
+                        $pdf->Write(0, $compcert);
+
+                        $pdf->SetXY(20.648, 188.570); // Adjust for {No_Daftar_Syarikat}
+                        $pdf->Write(0, $noDaftarSyarikat);
+
+                        # Adjust for {Keadaan Alat}
+                        if ($res['stamping_type'] == 'NEW'){
+                            $pdf->Image($tickImage, 148.141, 178.637, 6);
+                        }elseif ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->Image($tickImage, 175.141, 178.637, 6);
+                        }
+
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 33, 200, 35);  // Adjust for company signature
+                        }
+
+                        // $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDateTime);
+
+                        // $pdf->SetXY(146.141 , 215.637); // Adjust for {Cawangan}
+                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+
+                        // $pdf->SetXY(156.141 , 225.637); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
+                    }
+                }
+
+            }
+        }
+        else{
+            echo json_encode(
+                array(
+                    "status"=> "failed", 
+                    "message"=> "Failed to get the data"
+                )
+            ); 
+        }
+
+        $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
+    }
+    else if($file == 'ATP (MOTORCAR)' && $validator == 'DE METROLOGY'){
+        $fillFile = 'forms/DE_Metrology/DMSB_ATP_MOTOCAR.pdf';
+
+        $pdf = new Fpdi();
+        $pageCount = $pdf->setSourceFile($fillFile);
+
+        $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
+        // Check if the statement is prepared successfully
+        if ($select_stmt) {
+            // Bind variables to the prepared statement
+            $select_stmt->bind_param('s', $id); // 'i' indicates the type of $id (integer)
+            $select_stmt->execute();
+            $result = $select_stmt->get_result();
+            $message = '';
+
+            if ($res = $result->fetch_assoc()) {
+                $branch = $res['branch'];
+                $loadcells = json_decode($res['load_cells_info'], true);
+                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                $branchDetail = mysqli_query($db, $branchQuery);
+                $branchRow = mysqli_fetch_assoc($branchDetail);
+
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
+
+                if(!empty($branchRow)){
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
+                }
+
+                $capacity = $res['capacity'];
+                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                $capacityDetail = mysqli_query($db, $capacityQuery);
+                $capacityRow = mysqli_fetch_assoc($capacityDetail);
+
+                $capacityValue = null;
+                $capacityDivision = null;
+
+                if(!empty($capacityRow)){
+                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                    $templateId = $pdf->importPage($pageNo);
+                    $size = $pdf->getTemplateSize($templateId);
+                    $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                    $pdf->useTemplate($templateId);
+                
+                    // Fill in the fields for the current page
+                    $pdf->SetFont('Arial', '', 10);
+                    
+                    // Example field placements for each page (you'll adjust these according to your PDF)
+                    if ($pageNo == 1) {
+                        // Fill in the fields at the appropriate positions
+
+                        $pdf->Image($tickImage, 65.159, 67.865, 8); // Adjust for Kegunaan Alat
+
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(130.635, 59.669-3, 70, 30, 'F');
+
+                        $pdf->SetXY(130.635, 59.669-1); // Adjust for Jenama
+                        $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
+
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(145.803, 93.956-3, 50, 15, 'F');  
+                        
+                        $pdf->SetXY(142.803, 93.956-1); // Adjust for nama pembuat
+                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+
+                        $pdf->SetXY(22.648, 103.063-2); // Adjust for Customer Name
+                        $pdf->SetFont('Arial', 'B', 10);
+                        $pdf->Write(0, searchCustNameById($res['customers'], $db));
+                        $pdf->SetFont('Arial', '', 10);
+
+                        $pdf->SetXY(22.648, 107.133-2); // Adjust for {3. Alamat Pemilik Address 1 & 2}
+                        $pdf->Write(0, $address1);
+
+                        $pdf->SetXY(22.648, 111.188-2); // Adjust for {3. Alamat Pemilik Address 3}
+                        $pdf->Write(0, $address2);
+                        
+                        $pdf->SetXY(22.648, 115.258-2); // Adjust for {3. Alamat Pemilik Address 4}
+                        $pdf->Write(0, $address3 . ' ' . $address4);
+
+                        $pdf->SetXY(21.648, 132.490-2); // Adjust for {Company_Name}
+                        $pdf->Write(0, $compname);
+
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(132.084, 111.188-3, 40, 10, 'F');
+
+                        $pdf->SetXY(132.084, 111.188-1.5); // Adjust for {jenis_alat}
+                        $pdf->Write(0, searchJenisAlatNameByid($res['jenis_alat'], $db).' - '. searchMachineNameById($res['machine_type'], $db));
+
+                        $pdf->SetXY(130.942 , 120.294-2); // Adjust for {Model}
+                        $pdf->Write(0, searchModelNameById($res['model'], $db));
+
+                        $pdf->SetXY(22.648, 150.570-2); // Adjust for {No_Lesen}
+                        $pdf->Write(0, $compcert);
+
+                        $pdf->SetXY(126.872, 128.420-2); // Adjust for {No_Siri}
+                        $pdf->Write(0, $res['serial_no']);
+
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(145.803, 136.545-3, 55, 10, 'F');  
+
+                        $pdf->SetXY(145.803, 136.545-1); // Adjust for {Had_Terima}
+                        $pdf->Write(0, $capacityValue);
+
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(145.803, 150.570-3, 55, 10, 'F');  
+
+                        $pdf->SetXY(141.803, 149.570); // Adjust for {Senggatan}
+                        $pdf->Write(0, $capacityDivision);
+
+                        $pdf->SetXY(22.648 , 168.637-2); // Adjust for {no_daftar_syarikat}
+                        $pdf->Write(0, $noDaftarSyarikat);
+
+                        // Adjust for {Keadaan Alat}
+                        if ($res['stamping_type'] == 'NEW'){
+                            $pdf->Image($tickImage, 124.118+10, 168.637-7, 8); 
+                        }elseif ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->Image($tickImage, 155.141+10, 168.637-7, 8);
+                        }
+
+                        // $pdf->SetFillColor(0, 0, 0);  // cover up unneccesary text
+                        // $pdf->Rect(16.938, 205.223-3, 50, 2, 'F');  
+
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 24, 184.223, 35);  // Adjust for company signature
+                        }
+
+                        // $pdf->SetXY(126.243 , 184.902-2); // Adjust for {tarikh}
+                        // $pdf->Write(0, $currentDateTime);
+
+                        // $pdf->SetXY(132.582 , 193.027-2); // Adjust for {Cawangan}
+                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+
+                        // $pdf->SetXY(143.884 , 201.153-2); // Adjust for {no_penentusahan}
+                        // $pdf->Write(0, $res['no_daftar']);
+
+                        
+                    }
+                }
+
+            }
+        }
+        else{
+            echo json_encode(
+                array(
+                    "status"=> "failed", 
+                    "message"=> "Failed to get the data"
+                )
+            ); 
+        }
+
+        $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
+    }
     
 }
 else{
