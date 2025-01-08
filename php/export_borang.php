@@ -141,20 +141,19 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
             <table class="table-bordered">
                 <tbody>
                     <tr>
-                        <th colspan="9" style="vertical-align: middle;">
+                        <th colspan="8" style="vertical-align: middle;">
                             JADUAL 6<br>AKTA TIMBANG DAN SUKAT 1972<br>PERATURAN-PERATURAN TIMBANG DAN SUKAT 1981<br>(PERATURAN 35)<br>DAFTAR TIMBANG , SUKAT DAN ALAT TIMBANG SUKAT YANG DIJUAL/DIBUAT
                         </th>
                     </tr>
                     <tr>
-                        <th>STAMPING DATE</th>
-                        <th>NAME OF PURCHASE</th>
-                        <th>ADDRESS</th>
-                        <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
-                        <th width="12%">CAPACITY</th>
-                        <th>QUANTITY</th>
-                        <th>NO. DAFTAR LAMA</th>
-                        <th>NO. DAFTAR BARU</th>
-                        <th>CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
+                        <th style="font-size:12px;">STAMPING DATE</th>
+                        <th style="font-size:12px;">NAME OF PURCHASE WITH ADDRESS</th>
+                        <th style="font-size:12px;">ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
+                        <th style="font-size:12px;" width="12%">CAPACITY</th>
+                        <th style="font-size:12px;">QTY</th>
+                        <th style="font-size:12px;">NO. DAFTAR LAMA</th>
+                        <th style="font-size:12px;">NO. DAFTAR BARU</th>
+                        <th style="font-size:12px;">CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
                     </tr>';
 
             while ($row = $result->fetch_assoc()) {
@@ -183,15 +182,14 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                 $formattedStampingDate = $stampingDate->format('d-m-Y');
               
                 $message .= '<tr>
-                                <td>'.$formattedStampingDate.'</td>
-                                <td>'.searchCustNameById($row['customers'], $db).'</td>
-                                <td>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
-                                <td>'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
-                                <td>'.searchCapacityNameById($row['capacity'], $db).'</td>
-                                <td>1</td>
-                                <td>'.$row['no_daftar_lama'].'</td>
-                                <td>'.$row['no_daftar_baru'].'</td>
-                                <td>'.$row['siri_keselamatan'].'</td>
+                                <td style="font-size:12px;">'.$formattedStampingDate.'</td>
+                                <td style="font-size:12px;"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
+                                <td style="font-size:12px;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
+                                <td style="font-size:12px;">'.searchCapacityNameById($row['capacity'], $db).'</td>
+                                <td style="font-size:12px;">1</td>
+                                <td style="font-size:12px;">'.$row['no_daftar_lama'].'</td>
+                                <td style="font-size:12px;">'.$row['no_daftar_baru'].'</td>
+                                <td style="font-size:12px;">'.$row['siri_keselamatan'].'</td>
                             </tr>';
             }
 
@@ -265,23 +263,22 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
             <table class="table-bordered">
                 <tbody>
                     <tr>
-                        <th colspan="12" style="vertical-align: middle;">
+                        <th colspan="11" style="vertical-align: middle;">
                             JADUAL 7<br>AKTA TIMBANG DAN SUKAT 1972<br>PERATURAN-PERATURAN TIMBANG DAN SUKAT 1981<br>(PERATURAN 35)<br>DAFTAR TIMBANG , SUKAT DAN ALAT TIMBANG SUKAT YANG DIJUAL/DIBUAT
                         </th>
                     </tr>
                     <tr>
-                        <th>BRG E BIL NO.</th>
-                        <th>STAMPING DATE</th>
-                        <th>NAME OF PURCHASE</th>
-                        <th>ADDRESS</th>
-                        <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
-                        <th>CAPACITY</th>
-                        <th>LIST NO. (STMP. NO.)</th>
-                        <th>NO. DAFTAR LAMA</th>
-                        <th>NO. DAFTAR BARU</th>
-                        <th>DETAILS OF REPAIR</th>
-                        <th>CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
-                        <th>FEE</th>
+                        <th style="font-size:12px;">BRG E BIL NO.</th>
+                        <th style="font-size:12px;">STAMPING DATE</th>
+                        <th style="font-size:12px;">NAME OF PURCHASE WITH ADDRESS</th>
+                        <th style="font-size:12px;">ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
+                        <th style="font-size:12px;">CAPACITY</th>
+                        <th style="font-size:12px;">LIST NO. (STMP. NO.)</th>
+                        <th style="font-size:12px;">NO. DAFTAR LAMA</th>
+                        <th style="font-size:12px;">NO. DAFTAR BARU</th>
+                        <th style="font-size:12px;">DETAILS OF REPAIR</th>
+                        <th style="font-size:12px;">CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
+                        <th style="font-size:12px;">FEE</th>
                     </tr>';
 
             while ($row = $result->fetch_assoc()) {
@@ -310,17 +307,16 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                 $formattedStampingDate = $stampingDate->format('d-m-Y');
 
                 $message .= '<tr>
-                        <td>'.$row['borang_e'].'</td>
-                        <td>'.$formattedStampingDate.'</td>
-                        <td>'.searchCustNameById($row['customers'], $db).'</td>
-                        <td>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
-                        <td>'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
-                        <td>'.searchCapacityNameById($row['capacity'], $db).'</td>
-                        <td>'.$row['pin_keselamatan'].'</td>
-                        <td>'.$row['no_daftar_lama'].'</td>
-                        <td>'.$row['no_daftar_baru'].'</td>
-                        <td>SERVICE / STMP</td>
-                        <td>'.$row['siri_keselamatan'].'</td>';
+                        <td style="font-size:12px;">'.$row['borang_e'].'</td>
+                        <td style="font-size:12px;">'.$formattedStampingDate.'</td>
+                        <td style="font-size:12px;"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
+                        <td style="font-size:12px;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
+                        <td style="font-size:12px;">'.searchCapacityNameById($row['capacity'], $db).'</td>
+                        <td style="font-size:12px;">'.$row['pin_keselamatan'].'</td>
+                        <td style="font-size:12px;">'.$row['no_daftar_lama'].'</td>
+                        <td style="font-size:12px;">'.$row['no_daftar_baru'].'</td>
+                        <td style="font-size:12px;">SERVICE / STMP</td>
+                        <td style="font-size:12px;">'.$row['siri_keselamatan'].'</td>';
 
                 if($row['cert_price'] != 0){
                     $message .= '<td style="padding-left: 0.5%" width="7%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').'</td>
