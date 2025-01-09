@@ -374,7 +374,7 @@ $(function () {
 				if (obj.status === 'success') {
 					$('#brandModal').modal('hide');
 					toastr["success"](obj.message, "Success:");
-					location.reload(); // Reload the page
+                    $('#weightTable').DataTable().ajax.reload(null, false);
 				} else {
 					toastr["error"](obj.message, "Failed:");
 				}
