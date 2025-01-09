@@ -205,7 +205,8 @@ else{
                   <th>Serial No.</th>
                   <th>Validators</th>
                   <th width="10%">Capacity</th>
-                  <th>No. Daftar</th>
+                  <th>No. Daftar Lama</th>
+                  <th>No. Daftar Baru</th>
                   <th>Previous Stamp Date</th>
                   <th>Expired Date</th>
                   <th>Status</th>
@@ -1717,7 +1718,8 @@ $(function () {
       { data: 'serial_no' },
       { data: 'validate_by' },
       { data: 'capacity' },
-      { data: 'no_daftar' },
+      { data: 'no_daftar_lama' },
+      { data: 'no_daftar_baru' },
       { data: 'stamping_date' },
       { data: 'due_date' },
       { data: 'status' },
@@ -2006,7 +2008,8 @@ $(function () {
         { data: 'serial_no' },
         { data: 'validate_by' },
         { data: 'capacity' },
-        { data: 'no_daftar' },
+        { data: 'no_daftar_lama' },
+        { data: 'no_daftar_baru' },
         { data: 'stamping_date' },
         { data: 'due_date' },
         { data: 'status' },
