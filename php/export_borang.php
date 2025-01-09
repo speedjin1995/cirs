@@ -39,7 +39,13 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
     $todayDate = date('d/m/Y');
     $todayDate2 = date('d M Y');
     $todayDate3 = date('d.m.Y');
+    $todayDate4 = date('d/m/Y - h:i:s A');
     $today = date("Y-m-d 00:00:00");
+    $userId = '';
+
+    if(isset($_POST['userid']) && $_POST['userid']!=null && $_POST['userid']!=""){
+		$userId = searchStaffNameById($_POST['userid'], $db);
+	}
 
     $companyQuery = "SELECT * FROM companies WHERE id = '1'";
     $companyDetail = mysqli_query($db, $companyQuery);
@@ -141,20 +147,19 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
             <table class="table-bordered">
                 <tbody>
                     <tr>
-                        <th colspan="9" style="vertical-align: middle;">
+                        <th colspan="8" style="vertical-align: middle;">
                             JADUAL 6<br>AKTA TIMBANG DAN SUKAT 1972<br>PERATURAN-PERATURAN TIMBANG DAN SUKAT 1981<br>(PERATURAN 35)<br>DAFTAR TIMBANG , SUKAT DAN ALAT TIMBANG SUKAT YANG DIJUAL/DIBUAT
                         </th>
                     </tr>
                     <tr>
-                        <th>STAMPING DATE</th>
-                        <th>NAME OF PURCHASE</th>
-                        <th>ADDRESS</th>
-                        <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
-                        <th width="12%">CAPACITY</th>
-                        <th>QUANTITY</th>
-                        <th>NO. DAFTAR LAMA</th>
-                        <th>NO. DAFTAR BARU</th>
-                        <th>CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
+                        <th style="font-size:12px;">STAMPING DATE</th>
+                        <th style="font-size:12px;">NAME OF PURCHASE WITH ADDRESS</th>
+                        <th style="font-size:12px;">ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
+                        <th style="font-size:12px;" width="12%">CAPACITY</th>
+                        <th style="font-size:12px;">QTY</th>
+                        <th style="font-size:12px;">NO. DAFTAR LAMA</th>
+                        <th style="font-size:12px;">NO. DAFTAR BARU</th>
+                        <th style="font-size:12px;">CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
                     </tr>';
 
             while ($row = $result->fetch_assoc()) {
@@ -183,15 +188,14 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                 $formattedStampingDate = $stampingDate->format('d-m-Y');
               
                 $message .= '<tr>
-                                <td>'.$formattedStampingDate.'</td>
-                                <td>'.searchCustNameById($row['customers'], $db).'</td>
-                                <td>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
-                                <td>'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
-                                <td>'.searchCapacityNameById($row['capacity'], $db).'</td>
-                                <td>1</td>
-                                <td>'.$row['no_daftar_lama'].'</td>
-                                <td>'.$row['no_daftar_baru'].'</td>
-                                <td>'.$row['siri_keselamatan'].'</td>
+                                <td style="font-size:12px;">'.$formattedStampingDate.'</td>
+                                <td style="font-size:12px;"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
+                                <td style="font-size:12px;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
+                                <td style="font-size:12px;">'.searchCapacityNameById($row['capacity'], $db).'</td>
+                                <td style="font-size:12px;">1</td>
+                                <td style="font-size:12px;">'.$row['no_daftar_lama'].'</td>
+                                <td style="font-size:12px;">'.$row['no_daftar_baru'].'</td>
+                                <td style="font-size:12px;">'.$row['siri_keselamatan'].'</td>
                             </tr>';
             }
 
@@ -265,23 +269,22 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
             <table class="table-bordered">
                 <tbody>
                     <tr>
-                        <th colspan="12" style="vertical-align: middle;">
+                        <th colspan="11" style="vertical-align: middle;">
                             JADUAL 7<br>AKTA TIMBANG DAN SUKAT 1972<br>PERATURAN-PERATURAN TIMBANG DAN SUKAT 1981<br>(PERATURAN 35)<br>DAFTAR TIMBANG , SUKAT DAN ALAT TIMBANG SUKAT YANG DIJUAL/DIBUAT
                         </th>
                     </tr>
                     <tr>
-                        <th>BRG E BIL NO.</th>
-                        <th>STAMPING DATE</th>
-                        <th>NAME OF PURCHASE</th>
-                        <th>ADDRESS</th>
-                        <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
-                        <th>CAPACITY</th>
-                        <th>LIST NO. (STMP. NO.)</th>
-                        <th>NO. DAFTAR LAMA</th>
-                        <th>NO. DAFTAR BARU</th>
-                        <th>DETAILS OF REPAIR</th>
-                        <th>CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
-                        <th>FEE</th>
+                        <th style="font-size:12px;">BRG E BIL NO.</th>
+                        <th style="font-size:12px;">STAMPING DATE</th>
+                        <th style="font-size:12px;">NAME OF PURCHASE WITH ADDRESS</th>
+                        <th style="font-size:12px;">ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
+                        <th style="font-size:12px;">CAPACITY</th>
+                        <th style="font-size:12px;">LIST NO. (STMP. NO.)</th>
+                        <th style="font-size:12px;">NO. DAFTAR LAMA</th>
+                        <th style="font-size:12px;">NO. DAFTAR BARU</th>
+                        <th style="font-size:12px;">DETAILS OF REPAIR</th>
+                        <th style="font-size:12px;">CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
+                        <th style="font-size:12px;">FEE</th>
                     </tr>';
 
             while ($row = $result->fetch_assoc()) {
@@ -310,17 +313,16 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                 $formattedStampingDate = $stampingDate->format('d-m-Y');
 
                 $message .= '<tr>
-                        <td>'.$row['borang_e'].'</td>
-                        <td>'.$formattedStampingDate.'</td>
-                        <td>'.searchCustNameById($row['customers'], $db).'</td>
-                        <td>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
-                        <td>'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
-                        <td>'.searchCapacityNameById($row['capacity'], $db).'</td>
-                        <td>'.$row['pin_keselamatan'].'</td>
-                        <td>'.$row['no_daftar_lama'].'</td>
-                        <td>'.$row['no_daftar_baru'].'</td>
-                        <td>SERVICE / STMP</td>
-                        <td>'.$row['siri_keselamatan'].'</td>';
+                        <td style="font-size:12px;">'.$row['borang_e'].'</td>
+                        <td style="font-size:12px;">'.$formattedStampingDate.'</td>
+                        <td style="font-size:12px;"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
+                        <td style="font-size:12px;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
+                        <td style="font-size:12px;">'.searchCapacityNameById($row['capacity'], $db).'</td>
+                        <td style="font-size:12px;">'.$row['pin_keselamatan'].'</td>
+                        <td style="font-size:12px;">'.$row['no_daftar_lama'].'</td>
+                        <td style="font-size:12px;">'.$row['no_daftar_baru'].'</td>
+                        <td style="font-size:12px;">SERVICE / STMP</td>
+                        <td style="font-size:12px;">'.$row['siri_keselamatan'].'</td>';
 
                 if($row['cert_price'] != 0){
                     $message .= '<td style="padding-left: 0.5%" width="7%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').'</td>
@@ -412,21 +414,21 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                     $jenisAlatData[$jenisAlat]['count']++;
     
                     $rows[] = '<tr style="height: 30px;">
-                                <td style="padding-left: 0.5%">'.$indexCount.'</td>
-                                <td style="padding-left: 0.5%">'.$jenisAlat.'</td>
-                                <td style="padding-left: 0.5%">'.searchCapacityNameById($row['capacity'], $db).'</td>
-                                <td style="padding-left: 0.5%">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
-                                <td style="padding-left: 0.5%">'.$row['serial_no'].'</td>
-                                <td style="padding-left: 0.5%">'.searchCustNameById($row['customers'], $db).'<br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
-                                <td style="padding-left: 0.5%"></td>
-                                <td style="padding-left: 0.5%">'.$row['no_daftar_lama'].'</td>
-                                <td style="padding-left: 0.5%">'.$row['no_daftar_baru'].'</td>
-                                <td style="padding-left: 0.5%">'.$row['siri_keselamatan'].'</td>';
+                                <td style="font-size:12px;padding-left: 0.5%">'.$indexCount.'</td>
+                                <td style="font-size:12px;padding-left: 0.5%">'.$jenisAlat.'</td>
+                                <td style="font-size:12px;padding-left: 0.5%">'.searchCapacityNameById($row['capacity'], $db).'</td>
+                                <td style="font-size:12px;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
+                                <td style="font-size:12px;padding-left: 0.5%">'.$row['serial_no'].'</td>
+                                <td style="font-size:12px;padding-left: 0.5%"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
+                                <td style="font-size:12px;padding-left: 0.5%"></td>
+                                <td style="font-size:12px;padding-left: 0.5%">'.$row['no_daftar_lama'].'</td>
+                                <td style="font-size:12px;padding-left: 0.5%">'.$row['no_daftar_baru'].'</td>
+                                <td style="font-size:12px;padding-left: 0.5%">'.$row['siri_keselamatan'].'</td>';
                                 
                                 if ($row['cert_price'] != 0) {
-                                    $rows[$rowCount] .= '<td style="padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').'</td>';
+                                    $rows[$rowCount] .= '<td style="font-size:12px;padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').'</td>';
                                 } else {
-                                    $rows[$rowCount] .= '<td style="padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'</td>';
+                                    $rows[$rowCount] .= '<td style="font-size:12px;padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'</td>';
                                 }
                                 
                     $rows[$rowCount] .= '</tr>';
@@ -534,25 +536,25 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                             <tbody>
                                 <tr>
                                     <td style="vertical-align: left;" width="50%">
-                                        <p>NAMA SYARIKAT PEMILIK / PEMBAIK : <br>'.$companyName.' ('.$companyOldRoc.')<br>
+                                        <p>NAMA SYARIKAT PEMILIK / PEMBAIK : <br><br><b>'.$companyName.' ('.$companyOldRoc.')</b><br>
                                         ALAMAT : '.$companyAddress.'<br>
                                         Tel. : '.$companyTel.'     Fax. : '.$companyFax.'</p><br>';
     
-                                    $message .= '<p>Pengurus Cawangan : <span style="font-size: 14px; font-weight: bold;">' . $validatorFilter . ' ' . $cawanganFilter . '</span><br>';
+                                    $message .= '<p><b>Pengurus Cawangan : <span style="font-size: 14px">' . $validatorFilter . ' ' . $cawanganFilter . '</span></b><br>';
                                         
-                                    if($validator == '2'){
-                                        $message .= 'Metrology Corporation Malaysia Sdn. Bhd.</p>';
-                                    }
-                                    elseif($validator == '3'){
-                                        $message .= 'De Metrology Corporation Malaysia Sdn. Bhd.</p>';
-                                    }
-                                        
+                                    // if($validatorFilter == 'METROLOGY'){
+                                    //     $message .= 'Metrology Corporation Malaysia Sdn. Bhd.</p>';
+                                    // }
+                                    // elseif($validatorFilter == 'DE METROLOGY'){
+                                    //     $message .= 'De Metrology Corporation Malaysia Sdn. Bhd.</p>';
+                                    // }
+
                                     $message .= '</td>
                                     <td valign="top" align="center" width="20%">';
-                                    if($validator == '2'){
-                                        $message .= '<img src="https://cirs.syncweigh.com/assets/metrology.jpeg" width="50%" height="auto" />';
+                                    if($validatorFilter == 'METROLOGY'){
+                                        $message .= '<img src="https://cirs.syncweigh.com/assets/metrology.jpeg" width="80%" height="auto" style="margin-left: -20%; margin-top: 15%;"/>';
                                     }
-                                    elseif($validator == '3'){
+                                    elseif($validatorFilter == 'DE METROLOGY'){
                                         $message .= '<img src="https://cirs.syncweigh.com/assets/DMCM.jpeg" width="50%" height="auto" />';
                                     }
                                         
@@ -581,21 +583,21 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                             </tbody>
                         </table>
     
-                        <p style="text-align: center;">BUTIRAN SENARAI ALAT-ALAT TIMBANG DAN SUKAT UNTUK PENGUJIAN DAN PENENTUSAHAN</p>
+                        <p style="text-align: center; font-weight:bold;">BUTIRAN SENARAI ALAT-ALAT TIMBANG DAN SUKAT UNTUK PENGUJIAN DAN PENENTUSAHAN</p>
                         <table class="table-bordered" style="border-left: none; border-bottom: none;">
                             <tbody>
                                 <tr>
-                                    <th>Bil.</th>
-                                    <th>Jenis Alat</th>
-                                    <th>Had Terima</th>
-                                    <th>Jenama</th>
-                                    <th width="10%">No. Siri Alat</th>
-                                    <th>Nama Dan Alamat Pemilik</th>
-                                    <th>Kod</th>
-                                    <th>No. Daftar Lama</th>
-                                    <th>No. Daftar Baru</th>
-                                    <th>No. Siri Pelekat Keselamatan</th>
-                                    <th width="8%">Fi / Bayaran</th>
+                                    <th style="font-size:12px;">Bil.</th>
+                                    <th style="font-size:12px;">Jenis Alat</th>
+                                    <th style="font-size:12px;">Had Terima</th>
+                                    <th style="font-size:12px;">Jenama</th>
+                                    <th style="font-size:12px;" width="10%">No. Siri Alat</th>
+                                    <th style="font-size:12px;">Nama Dan Alamat Pemilik</th>
+                                    <th style="font-size:12px;" width="10%">Kod</th>
+                                    <th style="font-size:12px;">No. Daftar Lama</th>
+                                    <th style="font-size:12px;">No. Daftar Baru</th>
+                                    <th style="font-size:12px;">No. Siri Pelekat Keselamatan</th>
+                                    <th style="font-size:12px;" width="8%">Fi / Bayaran</th>
                                 </tr>';
                         
                             for ($i = $startIndex; $i < $startIndex + $recordsPerPage; $i++) {
@@ -626,9 +628,9 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                     <td width="40%">';
                         
                         if (isset($companySignature) && $companySignature!=null && $companySignature!="") {
-                            $message .= '<img src="' . $companySignature . '" style="margin-left:30%; padding-top:10%" width="30%" height="auto"/>';
+                            $message .= '<img src="' . $companySignature . '" style="margin-left:30%; padding-top:6%" width="30%" height="auto"/>';
                         }else{
-                            $message .= '<div style="margin-left:30%; padding-top:10%; width:30%; height:auto; background-color:transparent;"></div>';
+                            $message .= '<div style="margin-left:30%; padding-top:6%; width:30%; height:auto; background-color:transparent;"></div>';
                         }
                         
                         $message .= '
@@ -638,12 +640,16 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                 </tr>
                                 <tr>
                                     <td width="30%" style="border-top: 1px solid black; text-align: center; padding-top: 5px;">
-                                        Tandatangan Pemilik / Pembaik
+                                        <div>'.$userId.'</div>
+                                        <div>Tandatangan Pemilik / Pembaik</div>
                                     </td>
                                     <td width="40%"></td>
                                     <td width="30%" style="border-top: 1px solid black; text-align: center; padding-top: 5px;">
                                         Pengesahan Pegawai Penentusan
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" style="text-align: center;"><span style="margin-left: 100px;">Printed: '.$todayDate4.'</span></td>
                                 </tr>
                             </table>';
     

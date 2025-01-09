@@ -134,7 +134,7 @@ else{
                   <th>NAME OF PURCHASE</th>
                   <th>ABOUT WEIGHING,MEASURING AND <br>WEIGHING INSTRUMENTS</th>
                   <th width="15%">CAPACITY</th>
-                  <th>QUANTITY</th>
+                  <th>QTY</th>
                   <th>NO. DAFTAR LAMA</th>
                   <th>NO. DAFTAR BARU</th>
                   <th>CERTIFICATE NO./ <br>NO.SIRI PELEKAT <br>KESELAMATAN</th>

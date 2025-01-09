@@ -203,6 +203,7 @@ else{
 $(function () {
   $('#customerNoHidden').hide();
 
+  const userId = <?php echo json_encode($user); ?>;
   const today = new Date();
   const tomorrow = new Date(today);
   const yesterday = new Date(today);
@@ -538,7 +539,7 @@ $(function () {
     var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
 
     // $.post('php/export_borang.php', {"driver": "P", "fromDate": fromDateValue, "toDate": toDateValue, "customer": customerNoFilter}, function(data){
-    $.post('php/export_borang.php', {"ids": selectedIds, "driver": "P", "validator": validatorFilter, "cawangan": cawanganFilter}, function(data){
+    $.post('php/export_borang.php', {"ids": selectedIds, "driver": "P", "validator": validatorFilter, "cawangan": cawanganFilter, "userid": userId}, function(data){
 
       var obj = JSON.parse(data);
   
