@@ -495,7 +495,7 @@ else{
                     </select>
                   </div>
                 </div>
-                <div class="col-4">
+                <div class="col-4" id="daftarLamaView" style="display:none;">
                   <div class="form-group">
                     <label>No Daftar (Lama)</label>
                     <input class="form-control" type="text" placeholder="No Daftar Lama" id="noDaftarLama" name="noDaftarLama">
@@ -513,7 +513,7 @@ else{
                     <input class="form-control" type="text" placeholder="No. Borang D" id="borangD" name="borangD">
                   </div>
                 </div>
-                <div class="col-4">
+                <div class="col-4" id="borangEView" style="display:none;">
                   <div class="form-group">
                     <label>No. Borang E</label>
                     <input class="form-control" type="text" placeholder="No. Borang E" id="borangE" name="borangE">
@@ -2026,6 +2026,17 @@ $(function () {
     reader.readAsBinaryString(file);
   });
 
+  $('#extendModal').find('#newRenew').on('change', function(){
+    if($(this).val() == "NEW"){
+      $('#daftarLamaView').hide();
+      $('#borangEView').hide();
+    }
+    else{
+      $('#daftarLamaView').show();
+      $('#borangEView').show();
+    }
+  });
+  
   $('#extendModal').find('#type').on('change', function(){
     if($(this).val() == "DIRECT"){
       $('#isResseller').hide();
@@ -3008,7 +3019,7 @@ function edit(id) {
         $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
         $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
         $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
-        $('#extendModal').find('#newRenew').val(obj.message.stampType);
+        $('#extendModal').find('#newRenew').val(obj.message.stampType).trigger('change');
         $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
         $('#extendModal').find('#companyText').val('');
         $('#extendModal').find('#product').val(obj.message.products);
@@ -3232,7 +3243,7 @@ function edit(id) {
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
         $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
-        $('#extendModal').find('#newRenew').val(obj.message.stampType);
+        $('#extendModal').find('#newRenew').val(obj.message.stampType).trigger('change');
         customer = obj.message.customers;
         branch = obj.message.branch;
         setTimeout(function(){
