@@ -863,7 +863,7 @@ $(function () {
 
             if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
               dropdownMenu += 
-                '<a class="dropdown-item" id="revertBtn' + data + '" onclick="revert(' + data + ')"><i class="fa fa-arrow-circle-left"></i> Revert</a>'+
+                '<a class="dropdown-item" id="revertBtn' + data + '" onclick="revertToPending(' + data + ')"><i class="fa fa-arrow-circle-left"></i> Revert</a>'+
                 '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>'+
                 '<a class="dropdown-item" id="delete'+data+'" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Delete</a>';
             }else{
@@ -1151,7 +1151,7 @@ $(function () {
 
               if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
                 dropdownMenu += 
-                  '<a class="dropdown-item" id="revertBtn' + data + '" onclick="revert(' + data + ')"><i class="fa fa-arrow-circle-left"></i> Revert</a>'+
+                  '<a class="dropdown-item" id="revertBtn' + data + '" onclick="revertToPending(' + data + ')"><i class="fa fa-arrow-circle-left"></i> Revert</a>'+
                   '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>'+
                   '<a class="dropdown-item" id="delete'+data+'" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Delete</a>';
               }else{
@@ -1823,7 +1823,7 @@ function format (row) {
         let filePath = row[`certFilePath${i}`];
         if (filePath) {
             returnString += `
-                <a href="${filePath}" target="_blank" class="btn btn-success btn-sm" role="button" title="View Certificate Attachment ${i}">
+                <a href="scm/${filePath}" target="_blank" class="btn btn-success btn-sm" role="button" title="View Certificate Attachment ${i}">
                     <i class="fa fa-file-pdf-o"></i>
                 </a> `;
         }

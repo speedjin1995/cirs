@@ -943,7 +943,7 @@ $(function () {
 
             if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
               dropdownMenu += 
-                '<a class="dropdown-item" id="revertBtn' + data + '" onclick="revert(' + data + ')"><i class="fa fa-arrow-circle-left"></i> Revert</a>'+
+                '<a class="dropdown-item" id="revertBtn' + data + '" onclick="revertToPending(' + data + ')"><i class="fa fa-arrow-circle-left"></i> Revert</a>'+
                 '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>'+
                 '<a class="dropdown-item" id="delete'+data+'" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Delete</a>';
             }else{
@@ -1199,7 +1199,7 @@ $(function () {
 
               if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
                 dropdownMenu += 
-                  '<a class="dropdown-item" id="revertBtn' + data + '" onclick="revert(' + data + ')"><i class="fa fa-arrow-circle-left"></i> Revert</a>'+
+                  '<a class="dropdown-item" id="revertBtn' + data + '" onclick="revertToPending(' + data + ')"><i class="fa fa-arrow-circle-left"></i> Revert</a>'+
                   '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>'+
                   '<a class="dropdown-item" id="delete'+data+'" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Delete</a>';
               }else{
