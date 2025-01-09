@@ -31,8 +31,12 @@ if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] 
 	$searchQuery .= " and customers = '".$_POST['customer']."'";
 }
 
-if($_POST['daftar'] != null && $_POST['daftar'] != '' && $_POST['daftar'] != '-'){
-	$searchQuery .= " and no_daftar like '%".$_POST['daftar']."%'";
+if($_POST['daftarLama'] != null && $_POST['daftarLama'] != '' && $_POST['daftarLama'] != '-'){
+	$searchQuery .= " and s.no_daftar_lama like '%".$_POST['daftarLama']."%'";
+}
+
+if($_POST['daftarBaru'] != null && $_POST['daftarBaru'] != '' && $_POST['daftarBaru'] != '-'){
+	$searchQuery .= " and s.no_daftar_baru like '%".$_POST['daftarBaru']."%'";
 }
 
 if($_POST['borang'] != null && $_POST['borang'] != '' && $_POST['borang'] != '-'){
@@ -56,12 +60,13 @@ if($searchValue != ''){
     v.validator like '%".$searchValue."%' OR
     s.serial_no like '%".$searchValue."%' OR
     s.borang_d like '%".$searchValue."%' OR
-    s.no_daftar like '%".$searchValue."%' OR
+    s.no_daftar_lama like '%".$searchValue."%' OR
+    s.no_daftar_baru like '%".$searchValue."%' OR
     s.borang_e like '%".$searchValue."%'
   )";
 }
 
-$searchQuery .= " and s.deleted = 0 and c.deleted = 0 and m.deleted = 0 and cap.deleted = 0 and v.deleted = 0";
+$searchQuery .= " and s.deleted = 0";
 
 # Order by column
 if ($columnName == 'customers'){
@@ -166,7 +171,8 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "log"=> json_decode($row['log'], true),
     "status"=>$row['status'],
     "remarks"=>$row['remarks'] ?? '',
-    "no_daftar"=>$row['no_daftar'] ?? '',
+    "no_daftar_lama"=>$row['no_daftar_lama'] ?? '',
+    "no_daftar_baru"=>$row['no_daftar_baru'] ?? '',
     "pin_keselamatan"=>$row['pin_keselamatan'] ?? '',
     "siri_keselamatan"=>$row['siri_keselamatan'] ?? '',
     "borang_d"=>$row['borang_d'] ?? '',

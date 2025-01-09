@@ -95,8 +95,15 @@ else{
 
               <div class="col-3">
                 <div class="form-group">
-                  <label>No. Daftar:</label>
-                  <input type="text" class="form-control" id="daftarNoFilter" name="daftarNoFilter">
+                  <label>No. Daftar Lama:</label>
+                  <input type="text" class="form-control" id="daftarLamaNoFilter" name="daftarLamaNoFilter">
+                </div>
+              </div>
+
+              <div class="col-3">
+                <div class="form-group">
+                  <label>No. Daftar Baru:</label>
+                  <input type="text" class="form-control" id="daftarBaruNoFilter" name="daftarBaruNoFilter">
                 </div>
               </div>
 
@@ -172,7 +179,8 @@ else{
                   <th>Serial No.</th>
                   <th>Validators</th>
                   <th width="10%">Capacity</th>
-                  <th>No. Daftar</th>
+                  <th>No. Daftar Lama</th>
+                  <th>No. Daftar Baru</th>
                   <th>Previous Stamp Date</th>
                   <th>Expired Date</th>
                   <th>Status</th>
@@ -719,7 +727,8 @@ $(function () {
   var fromDateValue = $('#fromDate').val();
   var toDateValue = $('#toDate').val();
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-  var daftarNoFilter = $('#daftarNoFilter').val() ? $('#daftarNoFilter').val() : '';
+  var daftarLamaNoFilter = $('#daftarLamaNoFilter').val() ? $('#daftarLamaNoFilter').val() : '';
+  var daftarBaruNoFilter = $('#daftarBaruNoFilter').val() ? $('#daftarBaruNoFilter').val() : '';
   var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
   var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
   var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
@@ -741,7 +750,8 @@ $(function () {
         fromDate: fromDateValue,
         toDate: toDateValue,
         customer: customerNoFilter,
-        daftar: daftarNoFilter,
+        daftarLama: daftarLamaNoFilter,
+        daftarBaru: daftarBaruNoFilter,
         borang: borangNoFilter,
         serial: serialNoFilter,
         quotation: quoteNoFilter,
@@ -773,7 +783,8 @@ $(function () {
       { data: 'serial_no' },
       { data: 'validate_by' },
       { data: 'capacity' },
-      { data: 'no_daftar' },
+      { data: 'no_daftar_lama' },
+      { data: 'no_daftar_baru' },
       { data: 'stamping_date' },
       { data: 'due_date' },
       { data: 'status' },
@@ -954,7 +965,8 @@ $(function () {
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-    var daftarNoFilter = $('#daftarNoFilter').val() ? $('#daftarNoFilter').val() : '';
+    var daftarLamaNoFilter = $('#daftarLamaNoFilter').val() ? $('#daftarLamaNoFilter').val() : '';
+    var daftarBaruNoFilter = $('#daftarBaruNoFilter').val() ? $('#daftarBaruNoFilter').val() : '';
     var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
     var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
     var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
@@ -980,7 +992,8 @@ $(function () {
           fromDate: fromDateValue,
           toDate: toDateValue,
           customer: customerNoFilter,
-          daftar: daftarNoFilter,
+          daftarLama: daftarLamaNoFilter,
+          daftarBaru: daftarBaruNoFilter,
           borang: borangNoFilter,
           serial: serialNoFilter,
           quotation: quoteNoFilter,
@@ -1012,7 +1025,8 @@ $(function () {
         { data: 'serial_no' },
         { data: 'validate_by' },
         { data: 'capacity' },
-        { data: 'no_daftar' },
+        { data: 'no_daftar_lama' },
+        { data: 'no_daftar_baru' },
         { data: 'stamping_date' },
         { data: 'due_date' },
         { data: 'status' },

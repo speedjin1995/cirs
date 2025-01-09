@@ -35,8 +35,12 @@ if($_POST['validator'] != null && $_POST['validator'] != '' && $_POST['validator
 	$searchQuery .= " and s.validate_by = '".$_POST['validator']."'";
 }
 
-if($_POST['daftar'] != null && $_POST['daftar'] != '' && $_POST['daftar'] != '-'){
-	$searchQuery .= " and s.no_daftar like '%".$_POST['daftar']."%'";
+if($_POST['daftarLama'] != null && $_POST['daftarLama'] != '' && $_POST['daftarLama'] != '-'){
+	$searchQuery .= " and s.no_daftar_lama like '%".$_POST['daftarLama']."%'";
+}
+
+if($_POST['daftarBaru'] != null && $_POST['daftarBaru'] != '' && $_POST['daftarBaru'] != '-'){
+	$searchQuery .= " and s.no_daftar_baru like '%".$_POST['daftarBaru']."%'";
 }
 
 if($_POST['borang'] != null && $_POST['borang'] != '' && $_POST['borang'] != '-'){
@@ -60,7 +64,8 @@ if($searchValue != ''){
     v.validator like '%".$searchValue."%' OR
     s.serial_no like '%".$searchValue."%' OR
     s.borang_d like '%".$searchValue."%' OR
-    s.no_daftar like '%".$searchValue."%' OR
+    s.no_daftar_lama like '%".$searchValue."%' OR
+    s.no_daftar_baru like '%".$searchValue."%' OR
     s.borang_e like '%".$searchValue."%'
   )";
 }
