@@ -46,6 +46,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 	$dueDate = null;
 	$stamping = null;
 	$stampDate = null;
+	$lastYearStampDate = null;
 	$noDaftar = null;
 	$pinKeselamatan = null;
 	$attnTo = null;
@@ -254,6 +255,11 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 		$stampDate = $_POST['stampDate'];
 		$stampDate = DateTime::createFromFormat('d/m/Y', $stampDate)->format('Y-m-d H:i:s');
 	}
+
+	if(isset($_POST['lastYearStampDate']) && $_POST['lastYearStampDate']!=null && $_POST['lastYearStampDate']!=""){
+		$lastYearStampDate = $_POST['lastYearStampDate'];
+		$lastYearStampDate = DateTime::createFromFormat('d/m/Y', $lastYearStampDate)->format('Y-m-d H:i:s');
+	}
 	
 	if(isset($_POST['noDaftarLama']) && $_POST['noDaftarLama']!=null && $_POST['noDaftarLama']!=""){
 		$noDaftarLama = $_POST['noDaftarLama'];
@@ -352,11 +358,11 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 
 		if ($update_stmt = $db->prepare("UPDATE stamping SET type=?, dealer=?, dealer_branch=?, customers=?, brand=?, machine_type=?, model=?
 		, capacity=?, serial_no=?, assignTo=?, validate_by=?, cawangan=?, jenis_alat=?, trade=?, no_daftar_lama=?, no_daftar_baru=?, pin_keselamatan=?, siri_keselamatan=?, include_cert=?, borang_d=?
-		, borang_e=?, invoice_no=?, cash_bill=?, stamping_date=?, due_date=?, pic=?, customer_pic=?, quotation_no=?, quotation_date=?, purchase_no=?, purchase_date=?
+		, borang_e=?, invoice_no=?, cash_bill=?, stamping_date=?, last_year_stamping_date=?, due_date=?, pic=?, customer_pic=?, quotation_no=?, quotation_date=?, purchase_no=?, purchase_date=?
 		, remarks=?, unit_price=?, cert_price=?, total_amount=?, sst=?, subtotal_amount=?, log=?, products=?, stamping_type=?, updated_datetime=?, branch=? WHERE id=?")){
 			$data = json_encode($logs);
-			$update_stmt->bind_param('sssssssssssssssssssssssssssssssssssssssssss', $type, $dealer, $reseller_branch, $customer, $brand, $machineType, $model, $capacity, $serial, $assignTo, 
-			$validator, $cawangan, $jenisAlat, $trade, $noDaftarLama,$noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $invoice, $cashBill, $stampDate, $dueDate, $uid, $pic, 
+			$update_stmt->bind_param('ssssssssssssssssssssssssssssssssssssssssssss', $type, $dealer, $reseller_branch, $customer, $brand, $machineType, $model, $capacity, $serial, $assignTo, 
+			$validator, $cawangan, $jenisAlat, $trade, $noDaftarLama,$noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $invoice, $cashBill, $stampDate, $lastYearStampDate, $dueDate, $uid, $pic, 
 			$quotation, $quotationDate, $poNo, $poDate, $remark, $unitPrice, $certPrice, $totalPrice, $sst, $subtotalPrice, $data, $product, $newRenew, $currentDateTime, $branch, $_POST['id']);
 		
 			// Execute the prepared query.
@@ -801,12 +807,12 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 	}
 	else{
 		if ($insert_stmt = $db->prepare("INSERT INTO stamping (type, dealer, dealer_branch, customer_type, customers, brand, machine_type, model, capacity, serial_no, assignTo,
-		validate_by, cawangan, jenis_alat, trade, no_daftar_lama, no_daftar_baru, pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, invoice_no, cash_bill, stamping_date, due_date, pic, customer_pic, 
+		validate_by, cawangan, jenis_alat, trade, no_daftar_lama, no_daftar_baru, pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, invoice_no, cash_bill, stamping_date, last_year_stamping_date, due_date, pic, customer_pic, 
 		quotation_no, quotation_date, purchase_no, purchase_date, remarks, unit_price, cert_price, total_amount, sst, subtotal_amount, log, products, stamping_type, branch) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
 			$data = json_encode($logs);
-			$insert_stmt->bind_param('ssssssssssssssssssssssssssssssssssssssssss', $type, $dealer, $reseller_branch, $customerType, $customer, $brand, $machineType, $model, $capacity, $serial, $assignTo,
-			$validator, $cawangan, $jenisAlat, $trade, $noDaftarLama, $noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $invoice, $cashBill, $stampDate, $dueDate, $uid, $pic, 
+			$insert_stmt->bind_param('sssssssssssssssssssssssssssssssssssssssssss', $type, $dealer, $reseller_branch, $customerType, $customer, $brand, $machineType, $model, $capacity, $serial, $assignTo,
+			$validator, $cawangan, $jenisAlat, $trade, $noDaftarLama, $noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $invoice, $cashBill, $stampDate, $lastYearStampDate, $dueDate, $uid, $pic, 
 			$quotation, $quotationDate, $poNo, $poDate, $remark, $unitPrice, $certPrice, $totalPrice, $sst, $subtotalPrice, $data, $product, $newRenew, $branch);
 			
 			// Execute the prepared query.

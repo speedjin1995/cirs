@@ -95,8 +95,15 @@ else{
 
               <div class="col-3">
                 <div class="form-group">
-                  <label>No. Daftar:</label>
-                  <input type="text" class="form-control" id="daftarNoFilter" name="daftarNoFilter">
+                  <label>No. Daftar Lama:</label>
+                  <input type="text" class="form-control" id="daftarLamaNoFilter" name="daftarLamaNoFilter">
+                </div>
+              </div>
+
+              <div class="col-3">
+                <div class="form-group">
+                  <label>No. Daftar Baru:</label>
+                  <input type="text" class="form-control" id="daftarBaruNoFilter" name="daftarBaruNoFilter">
                 </div>
               </div>
 
@@ -172,7 +179,8 @@ else{
                   <th>Serial No.</th>
                   <th>Validators</th>
                   <th width="10%">Capacity</th>
-                  <th>No. Daftar</th>
+                  <th>No. Daftar Lama</th>
+                  <th>No. Daftar Baru</th>
                   <th>Previous Stamp Date</th>
                   <th>Expired Date</th>
                   <th>Status</th>
@@ -719,7 +727,8 @@ $(function () {
   var fromDateValue = $('#fromDate').val();
   var toDateValue = $('#toDate').val();
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-  var daftarNoFilter = $('#daftarNoFilter').val() ? $('#daftarNoFilter').val() : '';
+  var daftarLamaNoFilter = $('#daftarLamaNoFilter').val() ? $('#daftarLamaNoFilter').val() : '';
+  var daftarBaruNoFilter = $('#daftarBaruNoFilter').val() ? $('#daftarBaruNoFilter').val() : '';
   var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
   var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
   var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
@@ -741,7 +750,8 @@ $(function () {
         fromDate: fromDateValue,
         toDate: toDateValue,
         customer: customerNoFilter,
-        daftar: daftarNoFilter,
+        daftarLama: daftarLamaNoFilter,
+        daftarBaru: daftarBaruNoFilter,
         borang: borangNoFilter,
         serial: serialNoFilter,
         quotation: quoteNoFilter,
@@ -773,7 +783,8 @@ $(function () {
       { data: 'serial_no' },
       { data: 'validate_by' },
       { data: 'capacity' },
-      { data: 'no_daftar' },
+      { data: 'no_daftar_lama' },
+      { data: 'no_daftar_baru' },
       { data: 'stamping_date' },
       { data: 'due_date' },
       { data: 'status' },
@@ -954,7 +965,8 @@ $(function () {
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-    var daftarNoFilter = $('#daftarNoFilter').val() ? $('#daftarNoFilter').val() : '';
+    var daftarLamaNoFilter = $('#daftarLamaNoFilter').val() ? $('#daftarLamaNoFilter').val() : '';
+    var daftarBaruNoFilter = $('#daftarBaruNoFilter').val() ? $('#daftarBaruNoFilter').val() : '';
     var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
     var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
     var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
@@ -980,7 +992,8 @@ $(function () {
           fromDate: fromDateValue,
           toDate: toDateValue,
           customer: customerNoFilter,
-          daftar: daftarNoFilter,
+          daftarLama: daftarLamaNoFilter,
+          daftarBaru: daftarBaruNoFilter,
           borang: borangNoFilter,
           serial: serialNoFilter,
           quotation: quoteNoFilter,
@@ -1012,7 +1025,8 @@ $(function () {
         { data: 'serial_no' },
         { data: 'validate_by' },
         { data: 'capacity' },
-        { data: 'no_daftar' },
+        { data: 'no_daftar_lama' },
+        { data: 'no_daftar_baru' },
         { data: 'stamping_date' },
         { data: 'due_date' },
         { data: 'status' },
@@ -1442,20 +1456,38 @@ function format (row) {
       <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
       <p><strong>Serial No:</strong> ${row.serial_no}</p>
       <p><strong>Assigned To:</strong> ${row.assignTo}</p>
-    </div>
+    </div>`;
 
-    <!-- Stamping Section -->
-    <div class="col-6">
-      <p><strong>Lama No. Daftar:</strong> ${row.no_daftar_lama}</p>
-      <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
-      <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
-      <p><strong>Borang D:</strong> ${row.borang_d}</p>
-      <p><strong>Borang E:</strong> ${row.borang_e}</p>
-      <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
-      <p><strong>Due Date:</strong> ${row.due_date}</p>
-    </div>
-  </div><hr>
-
+  if(row.stampType == 'RENEWAL'){
+    returnString += `
+      <!-- Stamping Section -->
+        <div class="col-6">
+          <p><strong>Lama No. Daftar:</strong> ${row.no_daftar_lama}</p>
+          <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
+          <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
+          <p><strong>Borang D:</strong> ${row.borang_d}</p>
+          <p><strong>Borang E:</strong> ${row.borang_e}</p>
+          <p><strong>Last Year Stamping Date:</strong> ${row.last_year_stamping_date}</p>
+          <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
+          <p><strong>Due Date:</strong> ${row.due_date}</p>
+        </div>
+      </div><hr>
+    `;
+  }else{
+    returnString += `
+      <!-- Stamping Section -->
+        <div class="col-6">
+          <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
+          <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
+          <p><strong>Borang D:</strong> ${row.borang_d}</p>
+          <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
+          <p><strong>Due Date:</strong> ${row.due_date}</p>
+        </div>
+      </div><hr>
+    `;
+  }
+    
+  returnString += `
   <div class="row">
     <!-- Billing Section -->
     <div class="col-6">

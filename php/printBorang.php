@@ -764,14 +764,16 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 27.648, 187.637, 38.5);  // Adjust for company signature
                         }
 
-                        // $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDateTime);
-
-                        // $pdf->SetXY(125.141 , 204.637); // Adjust for {Cawangan}
-                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
-
-                        // $pdf->SetXY(134.141 , 212.637); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            // $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
+                            // $pdf->Write(0, $currentDateTime); //TBC
+    
+                            $pdf->SetXY(125.141 , 204.637); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+    
+                            $pdf->SetXY(134.141 , 212.637); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
                     }
                 }
 

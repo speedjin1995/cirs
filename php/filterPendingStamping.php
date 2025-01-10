@@ -35,8 +35,12 @@ if($_POST['validator'] != null && $_POST['validator'] != '' && $_POST['validator
 	$searchQuery .= " and s.validate_by = '".$_POST['validator']."'";
 }
 
-if($_POST['daftar'] != null && $_POST['daftar'] != '' && $_POST['daftar'] != '-'){
-	$searchQuery .= " and s.no_daftar like '%".$_POST['daftar']."%'";
+if($_POST['daftarLama'] != null && $_POST['daftarLama'] != '' && $_POST['daftarLama'] != '-'){
+	$searchQuery .= " and s.no_daftar_lama like '%".$_POST['daftarLama']."%'";
+}
+
+if($_POST['daftarBaru'] != null && $_POST['daftarBaru'] != '' && $_POST['daftarBaru'] != '-'){
+	$searchQuery .= " and s.no_daftar_baru like '%".$_POST['daftarBaru']."%'";
 }
 
 if($_POST['borang'] != null && $_POST['borang'] != '' && $_POST['borang'] != '-'){
@@ -60,7 +64,8 @@ if($searchValue != ''){
     v.validator like '%".$searchValue."%' OR
     s.serial_no like '%".$searchValue."%' OR
     s.borang_d like '%".$searchValue."%' OR
-    s.no_daftar like '%".$searchValue."%' OR
+    s.no_daftar_lama like '%".$searchValue."%' OR
+    s.no_daftar_baru like '%".$searchValue."%' OR
     s.borang_e like '%".$searchValue."%'
   )";
 }
@@ -156,6 +161,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "invoice_no"=>$row['invoice_no'] ?? '',
     "stamping_type"=>$row['stamping_type'] ?? '',
     "stamping_date"=>$row['stamping_date'] != null ? convertDatetimeToDate($row['stamping_date']) : '',
+    "last_year_stamping_date"=>$row['last_year_stamping_date'] != null ? convertDatetimeToDate($row['last_year_stamping_date']) : '',
     "due_date"=>$row['due_date'] != null ? convertDatetimeToDate($row['due_date']) : '',
     "pic"=>$row['pic'] != null ? searchStaffNameById($row['pic'], $db) : '',
     "customer_pic"=>$row['customer_pic'] ?? '',
@@ -171,7 +177,8 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "log"=> json_decode($row['log'], true),
     "status"=>$row['status'],
     "remarks"=>$row['remarks'] ?? '',
-    "no_daftar"=>$row['no_daftar'] ?? '',
+    "no_daftar_lama"=>$row['no_daftar_lama'] ?? '',
+    "no_daftar_baru"=>$row['no_daftar_baru'] ?? '',
     "pin_keselamatan"=>$row['pin_keselamatan'] ?? '',
     "siri_keselamatan"=>$row['siri_keselamatan'] ?? '',
     "borang_d"=>$row['borang_d'] ?? '',
