@@ -568,6 +568,17 @@ else{
                     <input class="form-control" type="text" placeholder="No Siri Pelekat Keselamatan" id="siriKeselamatan" name="siriKeselamatan">
                   </div>
                 </div>
+                <div class="col-4" id="lastYearStampDateView" style="display:none;">
+                  <div class="form-group">
+                    <label>Last Year Stamping Date</label>
+                    <div class='input-group date' id="lastYearDatePicker" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#lastYearDatePicker" id="lastYearStampDate" name="lastYearStampDate"/>
+                      <div class="input-group-append" data-target="#lastYearDatePicker" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div class="col-4">
                   <div class="form-group">
                     <label>Stamping Date</label>
@@ -1630,6 +1641,12 @@ $(function () {
     defaultDate: ''
   });
 
+  $('#lastYearDatePicker').datetimepicker({
+    icons: { time: 'far fa-calendar' },
+    format: 'DD/MM/YYYY',
+    defaultDate: ''
+  });
+  
   $('#datePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
@@ -2182,10 +2199,12 @@ $(function () {
     if($(this).val() == "NEW"){
       $('#daftarLamaView').hide();
       $('#borangEView').hide();
+      $('#lastYearStampDateView').hide();
     }
     else{
       $('#daftarLamaView').show();
       $('#borangEView').show();
+      $('#lastYearStampDateView').show();
     }
   });
 
@@ -2904,20 +2923,38 @@ function format (row) {
       <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
       <p><strong>Serial No:</strong> ${row.serial_no}</p>
       <p><strong>Assigned To:</strong> ${row.assignTo}</p>
-    </div>
+    </div>`;
 
-    <!-- Stamping Section -->
-    <div class="col-6">
-      <p><strong>Lama No. Daftar:</strong> ${row.no_daftar_lama}</p>
-      <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
-      <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
-      <p><strong>Borang D:</strong> ${row.borang_d}</p>
-      <p><strong>Borang E:</strong> ${row.borang_e}</p>
-      <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
-      <p><strong>Due Date:</strong> ${row.due_date}</p>
-    </div>
-  </div><hr>
-
+  if(row.stampType == 'RENEWAL'){
+    returnString += `
+      <!-- Stamping Section -->
+        <div class="col-6">
+          <p><strong>Lama No. Daftar:</strong> ${row.no_daftar_lama}</p>
+          <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
+          <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
+          <p><strong>Borang D:</strong> ${row.borang_d}</p>
+          <p><strong>Borang E:</strong> ${row.borang_e}</p>
+          <p><strong>Last Year Stamping Date:</strong> ${row.last_year_stamping_date}</p>
+          <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
+          <p><strong>Due Date:</strong> ${row.due_date}</p>
+        </div>
+      </div><hr>
+    `;
+  }else{
+    returnString += `
+      <!-- Stamping Section -->
+        <div class="col-6">
+          <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
+          <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
+          <p><strong>Borang D:</strong> ${row.borang_d}</p>
+          <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
+          <p><strong>Due Date:</strong> ${row.due_date}</p>
+        </div>
+      </div><hr>
+    `;
+  }
+    
+  returnString += `
   <div class="row">
     <!-- Billing Section -->
     <div class="col-6">
@@ -3093,6 +3130,7 @@ function newEntry(){
   $('#extendModal').find('#model').val("").trigger('change');
   $('#extendModal').find('#cawangan').val("").trigger('change');
   $('#extendModal').find('#stampDate').val('');
+  $('#extendModal').find('#lastYearStampDate').val('');
   $('#extendModal').find('#address2').val('');
   $('#extendModal').find('#capacity_single').val('').trigger('change');
   $('#extendModal').find('#capacity_multi').val('').trigger('change');
@@ -3253,6 +3291,7 @@ function edit(id) {
           $('#extendModal').find('#model').val(obj.message.model).trigger('change');
         });
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
+        $('#extendModal').find('#lastYearStampDate').val(formatDate3(obj.message.last_year_stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
         $('#extendModal').find('#noDaftarLama').val(obj.message.no_daftar_lama);
         $('#extendModal').find('#noDaftarBaru').val(obj.message.no_daftar_baru);
@@ -3495,6 +3534,7 @@ function edit(id) {
           $('#extendModal').find('#model').val(obj.message.model).trigger('change');
         });
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
+        $('#extendModal').find('#lastYearStampDate').val(formatDate3(obj.message.last_year_stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
         $('#extendModal').find('#noDaftarLama').val(obj.message.no_daftar_lama);
         $('#extendModal').find('#noDaftarBaru').val(obj.message.no_daftar_baru);

@@ -128,13 +128,14 @@ if(isset($_POST['userID'])){
                     $message['no_daftar_lama'] = $row['no_daftar_lama'] ?? '';
                     $message['no_daftar_baru'] = $row['no_daftar_baru'] ?? '';
                     $message['pin_keselamatan'] = $row['pin_keselamatan'];
-                    $message['siri_keselamatan'] = $row['siri_keselamatan'];
+                    $message['siri_keselamatan'] = $row['siri_keselamatan'] ?? '';
                     $message['include_cert'] = $row['include_cert'];
-                    $message['borang_d'] = $row['borang_d'];
-                    $message['borang_e'] = $row['borang_e'];
+                    $message['borang_d'] = $row['borang_d'] ?? '';
+                    $message['borang_e'] = $row['borang_e'] ?? '';
                     $message['invoice_no'] = $row['invoice_no'];
                     $message['cash_bill'] = $row['cash_bill'];
                     $message['stamping_date'] = $row['stamping_date'] != null ? convertDatetimeToDate($row['stamping_date']) : '';
+                    $message['last_year_stamping_date'] = $row['last_year_stamping_date'] != null ? convertDatetimeToDate($row['last_year_stamping_date']) : '';
                     $message['due_date'] = $row['due_date'] != null ? convertDatetimeToDate($row['due_date']) : '';
                     $message['customer_pic'] = $row['customer_pic'];
                     $message['quotation_no'] = $row['quotation_no'];
@@ -212,6 +213,7 @@ if(isset($_POST['userID'])){
                     $message['invoice_no'] = $row['invoice_no'];
                     $message['cash_bill'] = $row['cash_bill'];
                     $message['stamping_date'] = $row['stamping_date'];
+                    $message['last_year_stamping_date'] = $row['last_year_stamping_date'];
                     $message['due_date'] = $row['due_date'];
                     $message['pic'] = $row['pic'];
                     $message['customer_pic'] = $row['customer_pic'];
