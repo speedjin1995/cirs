@@ -573,7 +573,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 				
 				// For ATN Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '5'){
+				if(($validator == '10' || $validator == '9') && ($jenisAlat == '5' || $jenisAlat == '18')){
 					$platform_country = null;
 					$alat_type = null;
 					$bentuk_dulang = null;
@@ -761,7 +761,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					// }
 				}
 
-				// For ATS Additional fields
+				// For ATS (H)  Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '17'){
 					$platform_country = null;
 
@@ -775,7 +775,42 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						$insert_stmt2->close();
 					}
 				}
-				
+
+				// For SIA Additional fields	
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '12'){
+					$platform_country = null;
+					$nilaiJangka = null;
+					$nilaiJangkaOther = null;
+					$diperbuatDaripada = null;
+					$diperbuatDaripadaOther = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['nilaiJangka']) && $_POST['nilaiJangka']!=null && $_POST['nilaiJangka']!=""){
+						$nilaiJangka = $_POST['nilaiJangka'];
+					}
+
+					if(isset($_POST['nilaiJangkaOther']) && $_POST['nilaiJangkaOther']!=null && $_POST['nilaiJangkaOther']!=""){
+						$nilaiJangkaOther = $_POST['nilaiJangkaOther'];
+					}
+
+					if(isset($_POST['diperbuatDaripada']) && $_POST['diperbuatDaripada']!=null && $_POST['diperbuatDaripada']!=""){
+						$diperbuatDaripada = $_POST['diperbuatDaripada'];
+					}
+
+					if(isset($_POST['diperbuatDaripadaOther']) && $_POST['diperbuatDaripadaOther']!=null && $_POST['diperbuatDaripadaOther']!=""){
+						$diperbuatDaripadaOther = $_POST['diperbuatDaripadaOther'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, nilai_jangka = ?, nilai_jangka_other=?, diperbuat_daripada=?, diperbuat_daripada_other=? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('ssssss', $platform_country, $nilaiJangka, $nilaiJangkaOther, $diperbuatDaripada, $diperbuatDaripadaOther, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
 				// UPDATE Stamping System Log
 				if ($insert_stmt3 = $db->prepare("INSERT INTO stamping_log (action, user_id, item_id) 
 				VALUES (?, ?, ?)")){
@@ -1013,7 +1048,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// For ATN Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '5'){
+				if(($validator == '10' || $validator == '9') && ($jenisAlat == '5' || $jenisAlat == '18')){
 					$platform_country = null;
 					$alat_type = null;
 					$bentuk_dulang = null;
@@ -1220,6 +1255,43 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
+				}
+
+				// For SIA Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '12'){
+					$platform_country = null;
+					$nilaiJangka = null;
+					$nilaiJangkaOther = null;
+					$diperbuatDaripada = null;
+					$diperbuatDaripadaOther = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['nilaiJangka']) && $_POST['nilaiJangka']!=null && $_POST['nilaiJangka']!=""){
+						$nilaiJangka = $_POST['nilaiJangka'];
+					}
+
+					if(isset($_POST['nilaiJangkaOther']) && $_POST['nilaiJangkaOther']!=null && $_POST['nilaiJangkaOther']!=""){
+						$nilaiJangkaOther = $_POST['nilaiJangkaOther'];
+					}
+
+					if(isset($_POST['diperbuatDaripada']) && $_POST['diperbuatDaripada']!=null && $_POST['diperbuatDaripada']!=""){
+						$diperbuatDaripada = $_POST['diperbuatDaripada'];
+					}
+
+					if(isset($_POST['diperbuatDaripadaOther']) && $_POST['diperbuatDaripadaOther']!=null && $_POST['diperbuatDaripadaOther']!=""){
+						$diperbuatDaripadaOther = $_POST['diperbuatDaripadaOther'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, nilai_jangka, nilai_jangka_other, diperbuat_daripada,diperbuat_daripada_other ) 
+					VALUES (?, ?, ?, ?, ?, ?)")){
+						$insert_stmt2->bind_param('ssssss', $stamp_id, $platform_country, $nilaiJangka, $nilaiJangkaOther, $diperbuatDaripada, $diperbuatDaripadaOther);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+
 				}
 				
 				// Insert Stamping System Log
