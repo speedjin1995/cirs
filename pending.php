@@ -520,7 +520,6 @@ else{
                   <div class="form-group">
                     <label>Validator * </label>
                     <select class="form-control select2" style="width: 100%;" id="validator" name="validator" required>
-                      <option selected="selected">-</option>
                       <?php while($rowVA=mysqli_fetch_assoc($validators)){ ?>
                         <option value="<?=$rowVA['id'] ?>"><?=$rowVA['validator'] ?></option>
                       <?php } ?>
