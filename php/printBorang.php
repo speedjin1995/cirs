@@ -690,7 +690,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(55, 49); 
                         $pdf->Write(0, $currentDate);
 
-                        $pdf->Image($tickImage, 72.526, 60.865, 8);  // Adjust for Perdagangan
+                        $pdf->Image($tickImage, 72.526, 62.865, 6);  // Adjust for Perdagangan
 
                         $pdf->SetXY(115.704, 57.5); // Adjust for Jenama
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
@@ -748,16 +748,16 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         # Adjust for {Jenis Penunjuk}
                         if ($res['jenis_penunjuk'] == 'DIGITAL'){
-                            $pdf->Image($tickImage, 109.141, 127.637, 8);
+                            $pdf->Image($tickImage, 109.141, 129.637, 6);
                         }elseif ($res['jenis_penunjuk'] == 'DAIL'){
-                            $pdf->Image($tickImage, 134.141, 127.637, 8);
+                            $pdf->Image($tickImage, 134.141, 129.637, 6);
                         }
 
                         # Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
-                            $pdf->Image($tickImage, 109.141, 170.637, 8);
+                            $pdf->Image($tickImage, 109.141, 172.637, 6);
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 134.141, 170.637, 8);
+                            $pdf->Image($tickImage, 134.141, 172.637, 6);
                         }
 
                         if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
@@ -765,8 +765,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         }
 
                         if ($res['stamping_type'] == 'RENEWAL'){
-                            // $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
-                            // $pdf->Write(0, $currentDateTime); //TBC
+                            $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
     
                             $pdf->SetXY(125.141 , 204.637); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -853,7 +853,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
-                        $pdf->Image($tickImage, 72.159, 55.865, 8); // Adjust for Kegunaan Alat
+                        $pdf->SetXY(60, 43); 
+                        $pdf->Write(0, $currentDate);
+
+                        $pdf->Image($tickImage, 74.159, 57.865, 6); // Adjust for Kegunaan Alat
 
                         $pdf->SetXY(135.121, 53.954-2); // Adjust for Jenama
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
@@ -907,30 +910,32 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         # Adjust for {Jenis Penunjuk}
                         if ($res['jenis_penunjuk'] == 'DIGITAL'){
-                            $pdf->Image($tickImage, 132.422+12, 126.394-7, 8);
+                            $pdf->Image($tickImage, 130.422+12, 126.394-5, 6);
                         }elseif ($res['jenis_penunjuk'] == 'DAIL'){
-                            $pdf->Image($tickImage, 163.876+12, 126.394-7, 8);
+                            $pdf->Image($tickImage, 163.876+12, 126.394-5, 6);
                         }
 
                         // Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
-                            $pdf->Image($tickImage, 130.101+12, 144.677-7, 8); 
+                            $pdf->Image($tickImage, 130.101+12, 144.677-5, 6); 
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 164.035+12, 144.677-7, 8);
+                            $pdf->Image($tickImage, 164.035+12, 144.677-5, 6);
                         }
 
                         if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
                             $pdf->Image($companySignature, 29.648, 188.637, 38.5);  // Adjust for company signature
                         }
 
-                        // $pdf->SetXY(131.445, 162.670-2); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDateTime);
+                        if ($res['stamping_type'] == 'RENEWAL') {
+                            $pdf->SetXY(131.445, 162.670-2); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
 
-                        // $pdf->SetXY(138.428, 172.029-2); // Adjust for {Cawangan}
-                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                            $pdf->SetXY(138.428, 172.029-2); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        // $pdf->SetXY(150.788, 181.001-2); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
+                            $pdf->SetXY(150.788, 181.001-2); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
 
                         
                     }
@@ -1015,7 +1020,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(58, 56); 
                         $pdf->Write(0, $currentDate); 
 
-                        $pdf->Image($tickImage, 58.526, 74.865-2, 8);  // Adjust for Perdagangan
+                        $pdf->Image($tickImage, 59.526, 74.865-1, 6);  // Adjust for Perdagangan
 
                         $pdf->SetXY(140.704, 67.5-1); // Adjust for Jenama
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
@@ -1075,23 +1080,25 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         # Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
-                            $pdf->Image($tickImage, 125.141, 175.637, 8);
+                            $pdf->Image($tickImage, 126.141, 177.637, 6);
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 171.141, 175.637, 8);
+                            $pdf->Image($tickImage, 172.141, 177.637, 6);
                         }
                         
                         if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
                             $pdf->Image($companySignature, 28, 198, 42);  // Adjust for company signature
                         }
 
-                        // $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDateTime);
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
 
-                        // $pdf->SetXY(146.141 , 215.637); // Adjust for {Cawangan}
-                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                            $pdf->SetXY(146.141 , 215.637); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        // $pdf->SetXY(156.141 , 225.637); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
+                            $pdf->SetXY(156.141 , 225.637); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
                     }
                 }
 
@@ -1171,8 +1178,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
+                        $pdf->SetXY(58, 53); 
+                        $pdf->Write(0, $currentDate);
 
-                        $pdf->Image($tickImage, 65.159, 67.865, 8); // Adjust for Kegunaan Alat
+                        $pdf->Image($tickImage, 65.159, 69.865, 6); // Adjust for Kegunaan Alat
 
                         $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
                         $pdf->Rect(130.635, 59.669-3, 70, 30, 'F');
@@ -1235,9 +1244,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         // Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
-                            $pdf->Image($tickImage, 124.118+10, 168.637-7, 8); 
+                            $pdf->Image($tickImage, 124.118+10, 168.637-5, 6); 
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 155.141+10, 168.637-7, 8);
+                            $pdf->Image($tickImage, 155.141+10, 168.637-5, 6);
                         }
 
                         // $pdf->SetFillColor(0, 0, 0);  // cover up unneccesary text
@@ -1247,15 +1256,16 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 24, 184.223, 35);  // Adjust for company signature
                         }
 
-                        // $pdf->SetXY(126.243 , 184.902-2); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDateTime);
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(126.243 , 184.902-2); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
 
-                        // $pdf->SetXY(132.582 , 193.027-2); // Adjust for {Cawangan}
-                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                            $pdf->SetXY(132.582 , 193.027-2); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        // $pdf->SetXY(143.884 , 201.153-2); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
-
+                            $pdf->SetXY(143.884 , 201.153-2); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
                         
                     }
                 }
@@ -1339,7 +1349,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(58, 55); 
                         $pdf->Write(0, $currentDate);
 
-                        $pdf->Image($tickImage, 60.526, 68.865, 8);  // Adjust for Perdagangan
+                        $pdf->Image($tickImage, 62.526, 69.865, 6);  // Adjust for Perdagangan
 
                         $pdf->SetXY(133.704, 63.5); // Adjust for Jenama
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
@@ -1384,9 +1394,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         # Adjust for {Klass}
                         if ($res['class'] == 'II'){
-                            $pdf->Image($tickImage, 145.141, 111.637, 8);
+                            $pdf->Image($tickImage, 145.141, 112.637, 6);
                         }elseif ($res['class'] == 'I'){
-                            $pdf->Image($tickImage, 184.141, 111.637, 8);
+                            $pdf->Image($tickImage, 186.141, 112.637, 6);
                         }
 
                         $pdf->SetXY(138.872, 158.570); // Adjust for {Had_Terima}
@@ -1403,23 +1413,25 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         # Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
-                            $pdf->Image($tickImage, 145.141, 175.637, 8);
+                            $pdf->Image($tickImage, 146.141, 176.637, 6);
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 176.141, 175.637, 8);
+                            $pdf->Image($tickImage, 177.141, 176.637, 6);
                         }
 
                         if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
                             $pdf->Image($companySignature, 30, 199, 35);  // Adjust for company signature
                         }
 
-                        // $pdf->SetXY(126.141 , 201.5); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDateTime);
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(126.141 , 201.5); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
 
-                        // $pdf->SetXY(136.141 , 210.637); // Adjust for {Cawangan}
-                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                            $pdf->SetXY(136.141 , 210.637); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        // $pdf->SetXY(146.141 , 218.637); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
+                            $pdf->SetXY(146.141 , 218.637); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
                     }
                 }
 
@@ -1499,8 +1511,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
+                        $pdf->SetXY(58, 61); 
+                        $pdf->Write(0, $currentDate);
 
-                        $pdf->Image($tickImage, 73.355, 75.048, 8); // Adjust for Kegunaan Alat
+                        $pdf->Image($tickImage, 75.355, 76.048, 6); // Adjust for Kegunaan Alat
 
                         $pdf->SetXY(134.471, 71.272-2); // Adjust for Jenama
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
@@ -1563,33 +1577,27 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(14.982, 187.694-2); // Adjust for {no_daftar}
                         $pdf->Write(0, $noDaftarSyarikat);
 
-                        # Adjust for {Jenis Penunjuk}
-                        if ($res['jenis_penunjuk'] == 'DIGITAL'){
-                            $pdf->Image($tickImage, 132.422+12, 126.394-7, 8);
-                        }elseif ($res['jenis_penunjuk'] == 'DAIL'){
-                            $pdf->Image($tickImage, 163.876+12, 126.394-7, 8);
-                        }
-
                         // Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
-                            $pdf->Image($tickImage, 130.101+10, 168.677, 8); 
+                            $pdf->Image($tickImage, 132.101+10, 169.677, 6); 
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 164.035+10, 168.677, 8);
+                            $pdf->Image($tickImage, 166.035+10, 169.677, 6);
                         }
 
                         if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
                             $pdf->Image($companySignature, 29.648, 199.637, 35.5);  // Adjust for company signature
                         }
 
-                        // $pdf->SetXY(131.982, 191.832-2); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDateTime);
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(131.982, 191.832-2); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
 
-                        // $pdf->SetXY(138.459, 200.228-2); // Adjust for {Cawangan}
-                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                            $pdf->SetXY(138.459, 200.228-2); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        // $pdf->SetXY(150.004, 208.609-2); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
-
+                            $pdf->SetXY(150.004, 208.609-2); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
                         
                     }
                 }
@@ -1675,7 +1683,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(18, 68); 
                         $pdf->Write(0, $currentDate);
 
-                        $pdf->Image($tickImage, 88, 87, 8); 
+                        $pdf->Image($tickImage, 88, 89, 6); 
 
                         $pdf->SetXY(135.902, 81.823-2); // Adjust for nama pembuat
                         $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
@@ -1714,36 +1722,38 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         # Adjust for {Alat Type}
                         if ($res['batu_ujian'] == 'BESI_TUANGAN'){
-                            $pdf->Image($tickImage, 148.238+22, 108.866-7, 8);
+                            $pdf->Image($tickImage, 148.238+22, 108.866-6, 6);
                         }elseif ($res['batu_ujian'] == 'TEMBAGA'){
-                            $pdf->Image($tickImage, 148.238+22, 121.516-7, 8);
+                            $pdf->Image($tickImage, 148.238+22, 121.516-6, 6);
                         }elseif ($res['batu_ujian'] == 'NIKARAT'){
-                            $pdf->Image($tickImage, 148.238+22, 133.995-7, 8);
+                            $pdf->Image($tickImage, 148.238+22, 133.995-6, 6);
                         }elseif ($res['batu_ujian'] == 'OTHER'){
                             $pdf->SetXY(128.526, 146.034-2); // Adjust for {Nilai Jangkaan}
                             $pdf->Write(0, $res['batu_ujian_lain']);                                 
-                            $pdf->Image($tickImage, 148.238+22, 146.034-7, 8);
+                            $pdf->Image($tickImage, 148.238+22, 146.034-6, 6);
                         }
 
                         // Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
-                            $pdf->Image($tickImage, 119.989+12, 187.292-7, 8); 
+                            $pdf->Image($tickImage, 119.989+12, 187.292-5, 6); 
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 158.178+12, 187.292-7, 8);
+                            $pdf->Image($tickImage, 158.178+12, 187.292-5, 6);
                         }
 
                         if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
                             $pdf->Image($companySignature, 24.644, 215.922-4, 40.6);  // Adjust for company signature
                         }
 
-                        // $pdf->SetXY(138.188, 215.438-2); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDateTime);
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(138.188, 215.438-2); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
 
-                        // $pdf->SetXY(138.188, 224.002-2); // Adjust for {Cawangan}
-                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                            $pdf->SetXY(138.188, 224.002-2); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        // $pdf->SetXY(118.188, 236.567-2); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
+                            $pdf->SetXY(118.188, 236.567-2); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
                     }
                 }
 
@@ -1823,7 +1833,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
-                        $pdf->Image($tickImage, 57.395+12, 73.823-7, 8); 
+                        $pdf->SetXY(60, 53); 
+                        $pdf->Write(0, $currentDate);
+
+                        $pdf->Image($tickImage, 57.395+12, 73.823-5, 6); 
 
                         $pdf->SetXY(153.902, 73.823-2); // Adjust for nama pembuat
                         $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
@@ -1859,15 +1872,15 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         # Adjust for {Alat Type}
                         if ($res['batu_ujian'] == 'BESI_TUANGAN'){
-                            $pdf->Image($tickImage, 154.238+22, 92.866-7, 8);
+                            $pdf->Image($tickImage, 154.238+22, 92.866-5, 6);
                         }elseif ($res['batu_ujian'] == 'TEMBAGA'){
-                            $pdf->Image($tickImage, 154.238+22, 102.516-7, 8);
+                            $pdf->Image($tickImage, 154.238+22, 102.516-5, 6);
                         }elseif ($res['batu_ujian'] == 'NIKARAT'){
-                            $pdf->Image($tickImage, 154.238+22, 111.995-7, 8);
+                            $pdf->Image($tickImage, 154.238+22, 111.995-5, 6);
                         }elseif ($res['batu_ujian'] == 'OTHER'){
                             $pdf->SetXY(135.526, 127.034-2); // Adjust for {Nilai Jangkaan}
                             $pdf->Write(0, $res['batu_ujian_lain']);                                 
-                            $pdf->Image($tickImage, 154.238+22, 127.034-7, 8);
+                            $pdf->Image($tickImage, 154.238+22, 127.034-5, 6);
                         }
                          
                         $pdf->SetXY(19.282, 174.873-2); // Adjust for {no_daftar}
@@ -1875,23 +1888,25 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         // Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
-                            $pdf->Image($tickImage, 127.989+12, 165.292-7, 8); 
+                            $pdf->Image($tickImage, 127.989+12, 165.292-5, 6); 
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 164.178+12, 165.292-7, 8);
+                            $pdf->Image($tickImage, 164.178+12, 165.292-5, 6);
                         }
 
                         if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
                             $pdf->Image($companySignature, 21.644, 196.922-4, 40.6);  // Adjust for company signature
                         }
 
-                        // $pdf->SetXY(148.188, 184.438-2); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDateTime);
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(148.188, 184.438-2); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
 
-                        // $pdf->SetXY(155.596, 194.002-2); // Adjust for {Cawangan}
-                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                            $pdf->SetXY(155.596, 194.002-2); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        // $pdf->SetXY(168.805, 203.567-2); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
+                            $pdf->SetXY(168.805, 203.567-2); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
                     }
                 }
 
@@ -2005,16 +2020,16 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         // Adjust for {Jenis_Alat}
                         if ($res['alat_type'] == 'PEDESTAL'){
-                            $pdf->Image($tickImage, 127.118+10, 121.637-5, 8); 
+                            $pdf->Image($tickImage, 128.118+10, 121.637-3, 6); 
                         }elseif ($res['alat_type'] == 'SUSPENDED'){
-                            $pdf->Image($tickImage, 180.141+10, 121.637-5, 8);
+                            $pdf->Image($tickImage, 182.141+10, 121.637-3, 6);
                         }
 
                         // Adjust for {Bentuk_Dulang}
                         if ($res['bentuk_dulang'] == 'MANGKUK'){
-                            $pdf->Image($tickImage, 127.118+10, 183.637-5, 8); 
+                            $pdf->Image($tickImage, 128.118+10, 183.637-4, 6); 
                         }elseif ($res['bentuk_dulang'] == 'NON-MANGKUK'){
-                            $pdf->Image($tickImage, 180.141+10, 183.637-5, 8);
+                            $pdf->Image($tickImage, 182.141+10, 183.637-4, 6);
                         }
 
                         $pdf->SetXY(120.118, 192.637); // Adjust for {Had_Terima}
@@ -2025,33 +2040,35 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         // Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
-                            $pdf->Image($tickImage, 127.118+10, 208.637-5, 8); 
+                            $pdf->Image($tickImage, 128.118+10, 208.637-4, 6); 
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 180.141+10, 208.637-5, 8);
+                            $pdf->Image($tickImage, 182.141+10, 208.637-4, 6);
                         }
 
                         if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
                             $pdf->Image($companySignature, 17.648, 182.637, 40.6);  // Adjust for company signature
                         }
 
-                        // $pdf->SetXY(112.243 , 228.902-2); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDateTime);
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(112.243 , 228.902-2); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
 
-                        // $state = explode(" ", searchStateNameById($res['cawangan'], $db));
-                        // if (count($state) > 1){
-                        //     $pdf->SetXY(182.582 , 225.027-2); // Adjust for {Cawangan}
-                        //     $pdf->Write(0, $state[0]);
+                            $state = explode(" ", searchStateNameById($res['cawangan'], $db));
+                            if (count($state) > 1){
+                                $pdf->SetXY(182.582 , 225.027-2); // Adjust for {Cawangan}
+                                $pdf->Write(0, $state[0]);
 
-                        //     $pdf->SetXY(182.582 , 229.027-2); // Adjust for {Cawangan}
-                        //     $pdf->Write(0, $state[1]);
-                        // }else{
-                        //     $pdf->SetXY(182.582 , 229.027-2); // Adjust for {Cawangan}
-                        //     $pdf->Write(0, $state[0]);
-                        // }
+                                $pdf->SetXY(182.582 , 229.027-2); // Adjust for {Cawangan}
+                                $pdf->Write(0, $state[1]);
+                            }else{
+                                $pdf->SetXY(182.582 , 229.027-2); // Adjust for {Cawangan}
+                                $pdf->Write(0, $state[0]);
+                            }
 
-                        // $pdf->SetFont('Arial', '', 10);
-                        // $pdf->SetXY(134.884 , 233.153-2); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
+                            $pdf->SetFont('Arial', '', 10);
+                            $pdf->SetXY(134.884 , 233.153-2); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
                     }
                 }
 
@@ -2131,13 +2148,16 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
+                        $pdf->SetXY(53, 43); 
+                        $pdf->Write(0, $currentDate);
+
                         $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
                         $pdf->Rect(121.068, 50.067-3, 200.852-121.068, 81.911-50.067, 'F');  
                         
                         $pdf->SetXY(121.068, 50.067-1); // Adjust for Jenama
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
 
-                        $pdf->Image($tickImage, 49.343+10, 69.911-5, 8); 
+                        $pdf->Image($tickImage, 49.343+10, 69.911-3, 6); 
                         
                         $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
                         $pdf->Rect(136.829, 87.915-3, 60, 20, 'F');  
@@ -2170,16 +2190,16 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         // Adjust for {Jenis_Alat}
                         if ($res['alat_type'] == 'PEDESTAL'){
-                            $pdf->Image($tickImage, 127.118+10, 126.637-5, 8); 
+                            $pdf->Image($tickImage, 130.118+10, 126.637-4, 6); 
                         }elseif ($res['alat_type'] == 'SUSPENDED'){
-                            $pdf->Image($tickImage, 180.141+10, 126.637-5, 8);
+                            $pdf->Image($tickImage, 180.141+10, 126.637-5, 6);
                         }
 
                         // Adjust for {Bentuk_Dulang}
                         if ($res['bentuk_dulang'] == 'MANGKUK'){
-                            $pdf->Image($tickImage, 127.118+10, 173.637-5, 8); 
+                            $pdf->Image($tickImage, 127.118+14, 173.637-3, 6); 
                         }elseif ($res['bentuk_dulang'] == 'NON-MANGKUK'){
-                            $pdf->Image($tickImage, 180.141+10, 173.637-5, 8);
+                            $pdf->Image($tickImage, 180.141+10, 173.637-3, 6);
                         }
 
                         $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
@@ -2202,23 +2222,25 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         // Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
-                            $pdf->Image($tickImage, 130.155+10, 245.724-7, 8); 
+                            $pdf->Image($tickImage, 130.155+11, 245.724-5, 6); 
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 162.299+10, 245.724-7, 8);
+                            $pdf->Image($tickImage, 162.299+11, 245.724-5, 6);
                         }
 
                         if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
                             $pdf->Image($companySignature, 17.648, 184.637, 40.6);  // Adjust for company signature
                         }
 
-                        // $pdf->SetXY(24.256, 239.641-2); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDateTime);
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(24.256, 239.641-2); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
 
-                        // $pdf->SetXY(31.583, 245.724-2); // Adjust for {Cawangan}
-                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                            $pdf->SetXY(31.583, 245.724-2); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        // $pdf->SetXY(43.051, 251.822-2); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
+                            $pdf->SetXY(43.051, 251.822-2); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
                     }
                 }
 
@@ -2989,7 +3011,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(55, 49); 
                         $pdf->Write(0, $currentDate); 
 
-                        $pdf->Image($tickImage, 72.526, 60.865, 8);  // Adjust for Perdagangan
+                        $pdf->Image($tickImage, 73.526, 62.865, 6);  // Adjust for Perdagangan
 
                         $pdf->SetXY(115.704, 57.5); // Adjust for Jenama
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
@@ -3047,30 +3069,32 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         # Adjust for {Jenis Penunjuk}
                         if ($res['jenis_penunjuk'] == 'DIGITAL'){
-                            $pdf->Image($tickImage, 109.141, 127.637, 8);
+                            $pdf->Image($tickImage, 110.141, 129.637, 6);
                         }elseif ($res['jenis_penunjuk'] == 'DAIL'){
-                            $pdf->Image($tickImage, 134.141, 127.637, 8);
+                            $pdf->Image($tickImage, 135.141, 129.637, 6);
                         }
 
                         # Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
-                            $pdf->Image($tickImage, 109.141, 170.637, 8);
+                            $pdf->Image($tickImage, 110.141, 172.637, 6);
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 134.141, 170.637, 8);
+                            $pdf->Image($tickImage, 135.141, 172.637, 6);
                         }
 
                         if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
                             $pdf->Image($companySignature, 29.648, 187.637, 38.5);  // Adjust for company signature
                         }
 
-                        // $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDateTime);
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
 
-                        // $pdf->SetXY(125.141 , 204.637); // Adjust for {Cawangan}
-                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                            $pdf->SetXY(125.141 , 204.637); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        // $pdf->SetXY(134.141 , 212.637); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
+                            $pdf->SetXY(134.141 , 212.637); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
                     }
                 }
 
@@ -3150,8 +3174,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
+                        $pdf->SetXY(60, 43); 
+                        $pdf->Write(0, $currentDate); 
 
-                        $pdf->Image($tickImage, 72.159, 55.865, 8); // Adjust for Kegunaan Alat
+                        $pdf->Image($tickImage, 74.159, 57.865, 6); // Adjust for Kegunaan Alat
 
                         $pdf->SetXY(135.121, 53.954-2); // Adjust for Jenama
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
@@ -3205,32 +3231,32 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         # Adjust for {Jenis Penunjuk}
                         if ($res['jenis_penunjuk'] == 'DIGITAL'){
-                            $pdf->Image($tickImage, 132.422+12, 126.394-7, 8);
+                            $pdf->Image($tickImage, 130.101+12, 126.394-5, 6);
                         }elseif ($res['jenis_penunjuk'] == 'DAIL'){
-                            $pdf->Image($tickImage, 163.876+12, 126.394-7, 8);
+                            $pdf->Image($tickImage, 163.876+12, 126.394-5, 6);
                         }
 
                         // Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
-                            $pdf->Image($tickImage, 130.101+12, 144.677-7, 8); 
+                            $pdf->Image($tickImage, 130.101+12, 144.677-5, 6); 
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 164.035+12, 144.677-7, 8);
+                            $pdf->Image($tickImage, 164.035+12, 144.677-5, 6);
                         }
 
                         if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
                             $pdf->Image($companySignature, 29.648, 188.637, 38.5);  // Adjust for company signature
                         }
 
-                        // $pdf->SetXY(131.445, 162.670-2); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDateTime);
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(131.445, 162.670-2); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
 
-                        // $pdf->SetXY(138.428, 172.029-2); // Adjust for {Cawangan}
-                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                            $pdf->SetXY(138.428, 172.029-2); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        // $pdf->SetXY(150.788, 181.001-2); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
-
-                        
+                            $pdf->SetXY(150.788, 181.001-2); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
                     }
                 }
 
@@ -3347,30 +3373,29 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         # Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
-                            $pdf->Image($tickImage, 116.253+22, 85.946-7, 8);
+                            $pdf->Image($tickImage, 116.253+23, 85.946-5, 6);
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 159.854+22, 85.946-7, 8);
+                            $pdf->Image($tickImage, 159.854+23, 85.946-5, 6);
                         }
 
                         # Adjust for {Alat Type}
                         if ($res['alat_type'] == 'KERAS'){
-                            $pdf->Image($tickImage, 116.253+22, 93.946-7, 8);
+                            $pdf->Image($tickImage, 116.253+23, 93.946-6, 6);
                         }elseif ($res['alat_type'] == 'LOGAM'){
-                            $pdf->Image($tickImage, 159.854+22, 93.946-7, 8);
+                            $pdf->Image($tickImage, 159.854+23, 93.946-6, 6);
                         }
 
-                        // $pdf->SetXY(24.158, 123.106); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDate);
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(24.158, 123.106); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
 
-                        // $pdf->SetXY(24.158, 127.106); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentTime);
+                            $pdf->SetXY(76.255, 123.106); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        // $pdf->SetXY(76.255, 123.106); // Adjust for {Cawangan}
-                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                            $pdf->SetXY(154.095, 123.106); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
 
-                        // $pdf->SetXY(154.095, 123.106); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
-                        
                         $questions = json_decode($res['questions'], true);
 
                         $pdf->SetDrawColor(0, 0, 0); // Black outline
@@ -3532,26 +3557,26 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         if ($res['alat_type'] == 'KERAS'){
                             $pdf->Image($tickImage, 127.253+23, 87.946-5, 6);
                         }elseif ($res['alat_type'] == 'LOGAM'){
-                            $pdf->Image($tickImage, 156.854+22, 87.946-5, 6);
+                            $pdf->Image($tickImage, 156.854+23, 87.946-5, 6);
                         }
 
                         // Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
                             $pdf->Image($tickImage, 127.253+23, 81.352-7, 6); 
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 156.854+22, 81.352-7, 6);
+                            $pdf->Image($tickImage, 156.854+23, 81.352-7, 6);
                         }
 
-                        // $pdf->SetFont('Arial', '', 9);
-                        // $pdf->SetXY(24.158, 119.106-2); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDateTime);
-                        // $pdf->SetFont('Arial', '', 10);
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(24.158, 119.106-2); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
 
-                        // $pdf->SetXY(86.255, 119.106-2); // Adjust for {Cawangan}
-                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                            $pdf->SetXY(86.255, 119.106-2); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        // $pdf->SetXY(171.095, 119.106-2); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
+                            $pdf->SetXY(171.095, 119.106-2); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
 
                         $questions = json_decode($res['questions'], true);
 
@@ -3685,7 +3710,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(58, 56); 
                         $pdf->Write(0, $currentDate); 
 
-                        $pdf->Image($tickImage, 58.526, 74.865-2, 8);  // Adjust for Perdagangan
+                        $pdf->Image($tickImage, 59.526, 73.865, 6);  // Adjust for Perdagangan
 
                         $pdf->SetXY(140.704, 67.5-1); // Adjust for Jenama
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
@@ -3745,23 +3770,25 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         # Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
-                            $pdf->Image($tickImage, 125.141, 175.637, 8);
+                            $pdf->Image($tickImage, 126.141, 176.637, 6);
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 171.141, 175.637, 8);
+                            $pdf->Image($tickImage, 173.141, 176.637, 6);
                         }
 
                         if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
                             $pdf->Image($companySignature, 28, 198, 42);  // Adjust for company signature
                         }
 
-                        // $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDateTime);
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
 
-                        // $pdf->SetXY(146.141 , 215.637); // Adjust for {Cawangan}
-                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                            $pdf->SetXY(146.141 , 215.637); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        // $pdf->SetXY(156.141 , 225.637); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
+                            $pdf->SetXY(156.141 , 225.637); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
                     }
                 }
 
@@ -3841,8 +3868,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
+                        $pdf->SetXY(58, 53); 
+                        $pdf->Write(0, $currentDate); 
 
-                        $pdf->Image($tickImage, 65.159, 67.865, 8); // Adjust for Kegunaan Alat
+                        $pdf->Image($tickImage, 65.159, 69.865, 6); // Adjust for Kegunaan Alat
 
                         $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
                         $pdf->Rect(130.635, 59.669-3, 70, 30, 'F');
@@ -3905,27 +3934,25 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         // Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
-                            $pdf->Image($tickImage, 124.118+10, 168.637-7, 8); 
+                            $pdf->Image($tickImage, 124.118+10, 163.637, 6); 
                         }elseif ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->Image($tickImage, 155.141+10, 168.637-7, 8);
+                            $pdf->Image($tickImage, 155.141+10, 163.637, 6);
                         }
-
-                        // $pdf->SetFillColor(0, 0, 0);  // cover up unneccesary text
-                        // $pdf->Rect(16.938, 205.223-3, 50, 2, 'F');  
 
                         if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
                             $pdf->Image($companySignature, 24, 184.223, 35);  // Adjust for company signature
                         }
 
-                        // $pdf->SetXY(126.243 , 184.902-2); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDateTime);
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(126.243 , 184.902-2); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
 
-                        // $pdf->SetXY(132.582 , 193.027-2); // Adjust for {Cawangan}
-                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                            $pdf->SetXY(132.582 , 193.027-2); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        // $pdf->SetXY(143.884 , 201.153-2); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
-
+                            $pdf->SetXY(143.884 , 201.153-2); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
                         
                     }
                 }
@@ -4094,14 +4121,16 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 33, 200, 35);  // Adjust for company signature
                         }
 
-                        // $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDateTime);
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(124.141 , 205.637); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
 
-                        // $pdf->SetXY(146.141 , 215.637); // Adjust for {Cawangan}
-                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                            $pdf->SetXY(130.141 , 214.637); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        // $pdf->SetXY(156.141 , 225.637); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
+                            $pdf->SetXY(143.141 , 222.637); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
                     }
                 }
 
@@ -4269,16 +4298,328 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Image($companySignature, 26, 200, 36);  // Adjust for company signature
                         }
 
-                        // $pdf->SetXY(126.243 , 184.902-2); // Adjust for {tarikh}
-                        // $pdf->Write(0, $currentDateTime);
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(132.541, 216.431-2); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
 
-                        // $pdf->SetXY(132.582 , 193.027-2); // Adjust for {Cawangan}
-                        // $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+                            $pdf->SetXY(139.399, 225.241-2); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
-                        // $pdf->SetXY(143.884 , 201.153-2); // Adjust for {no_penentusahan}
-                        // $pdf->Write(0, $res['no_daftar']);
+                            $pdf->SetXY(151.639, 234.052-2); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
+                    }
+                }
 
-                        
+            }
+        }
+        else{
+            echo json_encode(
+                array(
+                    "status"=> "failed", 
+                    "message"=> "Failed to get the data"
+                )
+            ); 
+        }
+
+        $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
+    }
+    else if($file == 'SIA' && $validator == 'METROLOGY'){
+        $fillFile = 'forms/Metrology/SIA_FORM.pdf';
+
+        $pdf = new Fpdi();
+        $pageCount = $pdf->setSourceFile($fillFile);
+
+        $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
+        // Check if the statement is prepared successfully
+        if ($select_stmt) {
+            // Bind variables to the prepared statement
+            $select_stmt->bind_param('s', $id); // 'i' indicates the type of $id (integer)
+            $select_stmt->execute();
+            $result = $select_stmt->get_result();
+            $message = '';
+
+            if ($res = $result->fetch_assoc()) {
+                $nilais = json_decode($res['nilais'], true);
+                $branch = $res['branch'];
+                $loadcells = json_decode($res['load_cells_info'], true);
+                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                $branchDetail = mysqli_query($db, $branchQuery);
+                $branchRow = mysqli_fetch_assoc($branchDetail);
+
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
+
+                if(!empty($branchRow)){
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
+                }
+
+                $capacity = $res['capacity'];
+                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                $capacityDetail = mysqli_query($db, $capacityQuery);
+                $capacityRow = mysqli_fetch_assoc($capacityDetail);
+
+                $capacityValue = null;
+                $capacityDivision = null;
+
+                if(!empty($capacityRow)){
+                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                    $templateId = $pdf->importPage($pageNo);
+                    $size = $pdf->getTemplateSize($templateId);
+                    $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                    $pdf->useTemplate($templateId);
+                
+                    // Fill in the fields for the current page
+                    $pdf->SetFont('Arial', '', 8);
+                    
+                    // Example field placements for each page (you'll adjust these according to your PDF)
+                    if ($pageNo == 1) {
+                        // Fill in the fields at the appropriate positions
+                        $pdf->SetFont('Arial', 'B', 8);
+                        $pdf->SetXY(25.648, 48); // Adjust for Customer Name
+                        $pdf->Write(0, searchCustNameById($res['customers'], $db));
+                        $pdf->SetFont('Arial', '', 8);
+                        $pdf->Write(0, ', '.$address1);
+
+                        $pdf->SetXY(25.648, 52.5); // Adjust for {3. Alamat Pemilik Address 2}
+                        $pdf->Write(0, $address2 . ' ' . $address3 . ' ' .$address4);
+
+                        $pdf->SetFont('Arial', '', 10);
+
+                        $pdf->SetXY(78, 61); // Adjust for {No_Daftar_Syarikat}
+                        $pdf->Write(0, $noDaftarSyarikat);
+
+                        $pdf->SetXY(63, 69); // Adjust for {No_Lesen}
+                        $pdf->Write(0, $compcert);
+
+                        $pdf->SetXY(68, 78); 
+                        $pdf->Write(0, $currentDate); 
+
+                        $pdf->Image($tickImage, 77, 91.5, 6);  // Adjust for Perdagangan
+
+                        $pdf->SetXY(157.704, 102.5); // Adjust for nama pembuat
+                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+
+                        $pdf->SetFont('Arial', '', 8);
+                        # Adjust for {Nilai Jangka Maksima}
+                        if ($res['nilai_jangka'] == '30'){
+                            $pdf->Image($tickImage, 135, 53, 6);  // Adjust for Perdagangan
+                        }else{
+                            $pdf->Image($tickImage, 135, 57, 6);
+                            $pdf->SetXY(144, 61);
+                            $pdf->Write(0, $res['nilai_jangka_other']); 
+                        }
+
+                        # Adjust for {Diperbuat Daripada}
+                        if ($res['diperbuat_daripada'] == 'KACA'){
+                            $pdf->Image($tickImage, 135, 70, 6);
+                        }else{
+                            $pdf->Image($tickImage, 135, 75, 6);
+                            $pdf->SetXY(144, 78);
+                            $pdf->Write(0, $res['diperbuat_daripada_other']); 
+                        }
+
+                        # Adjust for {Jenama}
+                        if ($res['diperbuat_daripada'] == 'BONZER'){
+                            $pdf->Image($tickImage, 135, 69, 6);
+                        }else{
+                            $pdf->Image($tickImage, 135, 91.5, 6);
+                            $pdf->SetXY(143, 95); 
+                            $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
+                        }
+
+                        $pdf->SetFont('Arial', '', 10);
+
+                        # Adjust for {Keadaan Alat}
+                        if ($res['stamping_type'] == 'NEW'){
+                            $pdf->Image($tickImage, 146.141, 115.637, 6);
+                        }elseif ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->Image($tickImage, 177.141, 115.637, 6);
+                        }
+
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 100, 238, 44);  // Adjust for company signature
+                        }
+
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(53, 118.637); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+
+                            $pdf->SetXY(58, 127); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+
+                            $pdf->SetXY(71, 134.637); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
+                    }
+                }
+
+            }
+        }
+        else{
+            echo json_encode(
+                array(
+                    "status"=> "failed", 
+                    "message"=> "Failed to get the data"
+                )
+            ); 
+        }
+
+        $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
+    }
+    else if($file == 'SIA' && $validator == 'DE METROLOGY'){
+        $fillFile = 'forms/DE_Metrology/DMSB_SIA.pdf';
+
+        $pdf = new Fpdi();
+        $pageCount = $pdf->setSourceFile($fillFile);
+
+        $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
+        // Check if the statement is prepared successfully
+        if ($select_stmt) {
+            // Bind variables to the prepared statement
+            $select_stmt->bind_param('s', $id); // 'i' indicates the type of $id (integer)
+            $select_stmt->execute();
+            $result = $select_stmt->get_result();
+            $message = '';
+
+            if ($res = $result->fetch_assoc()) {
+                $nilais = json_decode($res['nilais'], true);
+                $branch = $res['branch'];
+                $loadcells = json_decode($res['load_cells_info'], true);
+                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                $branchDetail = mysqli_query($db, $branchQuery);
+                $branchRow = mysqli_fetch_assoc($branchDetail);
+
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
+
+                if(!empty($branchRow)){
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
+                }
+
+                $capacity = $res['capacity'];
+                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                $capacityDetail = mysqli_query($db, $capacityQuery);
+                $capacityRow = mysqli_fetch_assoc($capacityDetail);
+
+                $capacityValue = null;
+                $capacityDivision = null;
+
+                if(!empty($capacityRow)){
+                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                    $templateId = $pdf->importPage($pageNo);
+                    $size = $pdf->getTemplateSize($templateId);
+                    $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                    $pdf->useTemplate($templateId);
+                
+                    // Fill in the fields for the current page
+                    $pdf->SetFont('Arial', '', 10);
+                    
+                    // Example field placements for each page (you'll adjust these according to your PDF)
+                    if ($pageNo == 1) {
+                        // Fill in the fields at the appropriate positions
+                        $pdf->SetFont('Arial', 'B', 8);
+                        $pdf->SetXY(25.648, 48); // Adjust for Customer Name
+                        $pdf->Write(0, searchCustNameById($res['customers'], $db));
+                        $pdf->SetFont('Arial', '', 8);
+                        $pdf->Write(0, ', '.$address1);
+
+                        $pdf->SetXY(25.648, 52.5); // Adjust for {3. Alamat Pemilik Address 2}
+                        $pdf->Write(0, $address2 . ' ' . $address3 . ' ' .$address4);
+
+                        $pdf->SetFont('Arial', '', 10);
+
+                        $pdf->SetXY(78, 61); // Adjust for {No_Daftar_Syarikat}
+                        $pdf->Write(0, $noDaftarSyarikat);
+
+                        $pdf->SetXY(63, 69); // Adjust for {No_Lesen}
+                        $pdf->Write(0, $compcert);
+
+                        $pdf->SetXY(68, 78); 
+                        $pdf->Write(0, $currentDate); 
+
+                        $pdf->Image($tickImage, 77, 91.5, 6);  // Adjust for Perdagangan
+
+                        $pdf->SetXY(157.704, 102.5); // Adjust for nama pembuat
+                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+
+                        $pdf->SetFont('Arial', '', 8);
+                        # Adjust for {Nilai Jangka Maksima}
+                        if ($res['nilai_jangka'] == '30'){
+                            $pdf->Image($tickImage, 135, 53, 6);  // Adjust for Perdagangan
+                        }else{
+                            $pdf->Image($tickImage, 135, 57, 6);
+                            $pdf->SetXY(144, 61);
+                            $pdf->Write(0, $res['nilai_jangka_other']); 
+                        }
+
+                        # Adjust for {Diperbuat Daripada}
+                        if ($res['diperbuat_daripada'] == 'KACA'){
+                            $pdf->Image($tickImage, 135, 70, 6);
+                        }else{
+                            $pdf->Image($tickImage, 135, 75, 6);
+                            $pdf->SetXY(144, 78);
+                            $pdf->Write(0, $res['diperbuat_daripada_other']); 
+                        }
+
+                        # Adjust for {Jenama}
+                        if ($res['diperbuat_daripada'] == 'BONZER'){
+                            $pdf->Image($tickImage, 135, 69, 6);
+                        }else{
+                            $pdf->Image($tickImage, 135, 91.5, 6);
+                            $pdf->SetXY(143, 95); 
+                            $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
+                        }
+
+                        $pdf->SetFont('Arial', '', 10);
+
+                        # Adjust for {Keadaan Alat}
+                        if ($res['stamping_type'] == 'NEW'){
+                            $pdf->Image($tickImage, 146.141, 115.637, 6);
+                        }elseif ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->Image($tickImage, 177.141, 115.637, 6);
+                        }
+
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 100, 238, 44);  // Adjust for company signature
+                        }
+
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(53, 118.637); // Adjust for {tarikh}
+                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+
+                            $pdf->SetXY(58, 127); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+
+                            $pdf->SetXY(71, 134.637); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
                     }
                 }
 

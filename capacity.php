@@ -93,8 +93,7 @@ else{
                                 </div>
                                 <div class="form-group">
                                     <label>Units *</label>
-                                    <select class="form-control" style="width: 100%;" id="unit" name="unit" required>
-                                        <option selected="selected">-</option>
+                                    <select class="form-control select2" style="width: 100%;" id="unit" name="unit" required>
                                         <?php while($rowVA=mysqli_fetch_assoc($units)){ ?>
                                             <option value="<?=$rowVA['id'] ?>"><?=$rowVA['units'] ?></option>
                                         <?php } ?>
@@ -106,8 +105,7 @@ else{
                                 </div>
                                 <div class="form-group">
                                     <label>Units *</label>
-                                    <select class="form-control" style="width: 100%;" id="unitD" name="unitD" required>
-                                        <option selected="selected">-</option>
+                                    <select class="form-control select2" style="width: 100%;" id="unitD" name="unitD" required>
                                         <?php while($rowVA2=mysqli_fetch_assoc($units2)){ ?>
                                             <option value="<?=$rowVA2['id'] ?>"><?=$rowVA2['units'] ?></option>
                                         <?php } ?>
@@ -125,8 +123,7 @@ else{
                                 </div>
                                 <div class="form-group">
                                     <label>Units 2 *</label>
-                                    <select class="form-control" style="width: 100%;" id="unit2" name="unit2" >
-                                        <option selected="selected">-</option>
+                                    <select class="form-control select2" style="width: 100%;" id="unit2" name="unit2" >
                                         <?php while($rowVA3=mysqli_fetch_assoc($units3)){ ?>
                                             <option value="<?=$rowVA3['id'] ?>"><?=$rowVA3['units'] ?></option>
                                         <?php } ?>
@@ -138,8 +135,7 @@ else{
                                 </div>
                                 <div class="form-group">
                                     <label>Units 2 *</label>
-                                    <select class="form-control" style="width: 100%;" id="unitD2" name="unitD2" >
-                                        <option selected="selected">-</option>
+                                    <select class="form-control select2" style="width: 100%;" id="unitD2" name="unitD2" >
                                         <?php while($rowVA4=mysqli_fetch_assoc($units4)){ ?>
                                             <option value="<?=$rowVA4['id'] ?>"><?=$rowVA4['units'] ?></option>
                                         <?php } ?>
@@ -164,6 +160,15 @@ else{
 
 <script>
 $(function () {
+    $('.select2').each(function() {
+        $(this).select2({
+            allowClear: true,
+            placeholder: "Please Select",
+            // Conditionally set dropdownParent based on the element’s location
+            dropdownParent: $(this).closest('.modal').length ? $(this).closest('.modal-body') : undefined
+        });
+    });
+
     $('#rangeDiv').hide();
 
     $("#capacityTable").DataTable({
@@ -280,13 +285,13 @@ $(function () {
         $('#capacityModal').find('#id').val("");
         $('#capacityModal').find('#range_type').val("SINGLE").trigger('change');
         $('#capacityModal').find('#capacity').val("");
-        $('#capacityModal').find('#unit').val("");
+        $('#capacityModal').find('#unit').val("").trigger('change');
         $('#capacityModal').find('#division').val("");
-        $('#capacityModal').find('#unitD').val("");
+        $('#capacityModal').find('#unitD').val("").trigger('change');
         $('#capacityModal').find('#capacity2').val("");
-        $('#capacityModal').find('#unit2').val("");
+        $('#capacityModal').find('#unit2').val("").trigger('change');
         $('#capacityModal').find('#division2').val("");
-        $('#capacityModal').find('#unitD2').val("");
+        $('#capacityModal').find('#unitD2').val("").trigger('change');
         $('#capacityModal').modal('show');
         
         $('#capacityForm').validate({
@@ -323,13 +328,13 @@ function edit(id){
             $('#capacityModal').find('#id').val(obj.message.id);
             $('#capacityModal').find('#range_type').val(obj.message.range_type).trigger('change');
             $('#capacityModal').find('#capacity').val(obj.message.capacity);
-            $('#capacityModal').find('#unit').val(obj.message.units);
+            $('#capacityModal').find('#unit').val(obj.message.units).trigger('change');
             $('#capacityModal').find('#division').val(obj.message.division);
-            $('#capacityModal').find('#unitD').val(obj.message.division_unit);
+            $('#capacityModal').find('#unitD').val(obj.message.division_unit).trigger('change');
             $('#capacityModal').find('#capacity2').val(obj.message.capacity2);
-            $('#capacityModal').find('#unit2').val(obj.message.units2);
+            $('#capacityModal').find('#unit2').val(obj.message.units2).trigger('change');
             $('#capacityModal').find('#division2').val(obj.message.division2);
-            $('#capacityModal').find('#unitD2').val(obj.message.division_unit2);
+            $('#capacityModal').find('#unitD2').val(obj.message.division_unit2).trigger('change');
             $('#capacityModal').modal('show');
             
             $('#capacityForm').validate({

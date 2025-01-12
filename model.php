@@ -111,6 +111,15 @@ else{
 
 <script>
 $(function () {
+    $('.select2').each(function() {
+        $(this).select2({
+            allowClear: true,
+            placeholder: "Please Select",
+            // Conditionally set dropdownParent based on the element’s location
+            dropdownParent: $(this).closest('.modal').length ? $(this).closest('.modal-body') : undefined
+        });
+    });
+
     $("#modelTable").DataTable({
         "responsive": true,
         "autoWidth": false,
@@ -181,9 +190,9 @@ $(function () {
 
     $('#addModel').on('click', function(){
         $('#modelModal').find('#id').val("");
-        $('#modelModal').find('#brand').val("");
+        $('#modelModal').find('#brand').val("").trigger('change');
         $('#modelModal').find('#model').val("");
-        $('#modelModal').find('#country').val("");
+        $('#modelModal').find('#country').val("").trigger('change');
         $('#modelModal').modal('show');
         
         $('#modelForm').validate({
@@ -209,9 +218,9 @@ function edit(id){
         
         if(obj.status === 'success'){
             $('#modelModal').find('#id').val(obj.message.id);
-            $('#modelModal').find('#brand').val(obj.message.brand);
+            $('#modelModal').find('#brand').val(obj.message.brand).trigger('change');
             $('#modelModal').find('#model').val(obj.message.model);
-            $('#modelModal').find('#country').val(obj.message.make);
+            $('#modelModal').find('#country').val(obj.message.make).trigger('change');
             $('#modelModal').modal('show');
             
             $('#modelForm').validate({

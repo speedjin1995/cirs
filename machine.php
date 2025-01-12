@@ -100,6 +100,15 @@ else{
 
 <script>
 $(function () {
+    $('.select2').each(function() {
+        $(this).select2({
+            allowClear: true,
+            placeholder: "Please Select",
+            // Conditionally set dropdownParent based on the element’s location
+            dropdownParent: $(this).closest('.modal').length ? $(this).closest('.modal-body') : undefined
+        });
+    });
+
     $("#machineTable").DataTable({
         "responsive": true,
         "autoWidth": false,
@@ -169,8 +178,8 @@ $(function () {
 
     $('#addMachine').on('click', function(){
         $('#machineModal').find('#id').val("");
-        $('#machineModal').find('#machineTypes').val("");
-        $('#machineModal').find('#alat').val("");
+        $('#machineModal').find('#machineTypes').val("").trigger('change');
+        $('#machineModal').find('#alat').val("").trigger('change');
         $('#machineModal').modal('show');
         
         $('#machineForm').validate({
@@ -197,7 +206,7 @@ function edit(id){
         if(obj.status === 'success'){
             $('#machineModal').find('#id').val(obj.message.id);
             $('#machineModal').find('#machineTypes').val(obj.message.machine_type);
-            $('#machineModal').find('#alat').val(obj.message.jenis_alat);
+            $('#machineModal').find('#alat').val(obj.message.jenis_alat).trigger('change');
             $('#machineModal').modal('show');
             
             $('#machineForm').validate({

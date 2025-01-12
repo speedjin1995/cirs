@@ -98,8 +98,7 @@ else{
                         </div>
                         <div class="form-group col-4">
                             <label>Capacity *</label>
-                            <select class="form-control" style="width: 100%;" id="capacity" name="capacity" required>
-                                <option selected="selected">-</option>
+                            <select class="form-control select2" style="width: 100%;" id="capacity" name="capacity" required>
                                 <?php while($rowCA=mysqli_fetch_assoc($capacities)){ ?>
                                     <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
                                 <?php } ?>
@@ -107,8 +106,7 @@ else{
                         </div>
                         <div class="form-group col-4">
                             <label>Units *</label>
-                            <select class="form-control" style="width: 100%;" id="units" name="units" required disabled>
-                                <option selected="selected">-</option>
+                            <select class="form-control select2" style="width: 100%;" id="units" name="units" required disabled>
                                 <?php while($rowVA2=mysqli_fetch_assoc($units)){ ?>
                                     <option value="<?=$rowVA2['id'] ?>"><?=$rowVA2['units'] ?></option>
                                 <?php } ?>
@@ -183,6 +181,15 @@ else{
 
 <script>
 $(function () {
+    $('.select2').each(function() {
+        $(this).select2({
+            allowClear: true,
+            placeholder: "Please Select",
+            // Conditionally set dropdownParent based on the element’s location
+            dropdownParent: $(this).closest('.modal').length ? $(this).closest('.modal-body') : undefined
+        });
+    });
+
     $("#capacityTable").DataTable({
         "responsive": true,
         "autoWidth": false,
@@ -264,7 +271,7 @@ $(function () {
         var id = $(this).val();
         $.post('php/getCapacity.php', {userID: id}, function(data){
             var obj = JSON.parse(data);
-            $('#capacityModal').find('#units').val(obj.message.units);
+            $('#capacityModal').find('#units').val(obj.message.units).trigger('change');
             $('#capacityModal').find('#unitsHidden').val(obj.message.units);
         });
     });
@@ -300,8 +307,8 @@ $(function () {
         $('#capacityModal').find('#id').val("");
         $('#capacityModal').find('#satemperature').val("");
         $('#capacityModal').find('#relHumidity').val("");
-        $('#capacityModal').find('#capacity').val("");
-        $('#capacityModal').find('#units').val("");
+        $('#capacityModal').find('#capacity').val("").trigger('change');
+        $('#capacityModal').find('#units').val("").trigger('change');
         $('#capacityModal').find('#variance').val("");
         $('#capacityModal').find('#tester1').val("");
         $('#capacityModal').find('#tester2').val("");
@@ -340,8 +347,8 @@ function edit(id){
             $('#capacityModal').find('#id').val(obj.message.id);
             $('#capacityModal').find('#satemperature').val(obj.message.standard_avg_temp);
             $('#capacityModal').find('#relHumidity').val(obj.message.relative_humidity);
-            $('#capacityModal').find('#capacity').val(obj.message.capacity);
-            $('#capacityModal').find('#units').val(obj.message.unit);
+            $('#capacityModal').find('#capacity').val(obj.message.capacity).trigger('change');
+            $('#capacityModal').find('#units').val(obj.message.unit).trigger('change');
             $('#capacityModal').find('#variance').val(obj.message.variance);
             $('#capacityModal').find('#tester1').val(obj.message.test_1);
             $('#capacityModal').find('#tester2').val(obj.message.test_2);

@@ -94,8 +94,7 @@ else{
                     </div-->
                     <div class="form-group">
                         <label>Jenis Alat </label>
-                        <select class="form-control" style="width: 100%;" id="jenisAlat" name="jenisAlat">
-                            <option selected="selected">-</option>
+                        <select class="form-control select2" style="width: 100%;" id="jenisAlat" name="jenisAlat">
                             <?php while($rowA=mysqli_fetch_assoc($alats)){ ?>
                                 <option value="<?=$rowA['id'] ?>"><?=$rowA['alat'] ?></option>
                             <?php } ?>
@@ -103,8 +102,7 @@ else{
                     </div>
                     <div class="form-group">
                         <label>Capacity </label>
-                        <select class="form-control" style="width: 100%;" id="capacity" name="capacity">
-                            <option selected="selected">-</option>
+                        <select class="form-control select2" style="width: 100%;" id="capacity" name="capacity">
                             <?php while($rowCA=mysqli_fetch_assoc($capacities)){ ?>
                                 <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
                             <?php } ?>
@@ -112,8 +110,7 @@ else{
                     </div>
                     <div class="form-group">
                         <label>Validator </label>
-                        <select class="form-control" style="width: 100%;" id="validator" name="validator">
-                            <option selected="selected">-</option>
+                        <select class="form-control select2" style="width: 100%;" id="validator" name="validator">
                             <?php while($rowVA=mysqli_fetch_assoc($validators)){ ?>
                                 <option value="<?=$rowVA['id'] ?>"><?=$rowVA['validator'] ?></option>
                             <?php } ?>
@@ -121,8 +118,7 @@ else{
                     </div>
                     <div class="form-group">
                         <label for="capacity">Type *</label>
-                        <select class="form-control" style="width: 100%;" id="type" name="type">
-                            <option selected="selected">-</option>
+                        <select class="form-control select2" style="width: 100%;" id="type" name="type">
                             <option value="FIXED">FIXED</option>
                             <option value="PERCENTAGE">PERCENTAGE</option>
                         </select>
@@ -146,6 +142,14 @@ else{
 
 <script>
 $(function () {
+    $('.select2').each(function() {
+        $(this).select2({
+            allowClear: true,
+            placeholder: "Please Select",
+            // Conditionally set dropdownParent based on the element’s location
+            dropdownParent: $(this).closest('.modal').length ? $(this).closest('.modal-body') : undefined
+        });
+    });
 
     $("#capacityModal").find("#price").change(function() {
         var price = $(this).val();
@@ -221,10 +225,10 @@ $(function () {
         $('#capacityModal').find('#id').val("");
         //$('#capacityModal').find('#capacityName').val("");
         //$('#capacityModal').find('#machineType').val("");
-        $('#capacityModal').find('#jenisAlat').val("");
-        $('#capacityModal').find('#capacity').val("");
-        $('#capacityModal').find('#validator').val("");
-        $('#capacityModal').find('#type').val("FIXED");
+        $('#capacityModal').find('#jenisAlat').val("").trigger('change');
+        $('#capacityModal').find('#capacity').val("").trigger('change');
+        $('#capacityModal').find('#validator').val("").trigger('change');
+        $('#capacityModal').find('#type').val("FIXED").trigger('change');
         $('#capacityModal').find('#price').val("");
         $('#capacityModal').modal('show');
         
@@ -250,13 +254,13 @@ function edit(id){
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){
-            $('#capacityModal').find('#id').val(obj.message.id);
+            $('#capacityModal').find('#id').val(obj.message.id).trigger('change');
             //$('#capacityModal').find('#capacityName').val(obj.message.name);
             //$('#capacityModal').find('#machineType').val(obj.message.machine_type);
-            $('#capacityModal').find('#jenisAlat').val(obj.message.jenis_alat);
-            $('#capacityModal').find('#capacity').val(obj.message.capacity);
-            $('#capacityModal').find('#validator').val(obj.message.validator);
-            $('#capacityModal').find('#type').val(obj.message.type);
+            $('#capacityModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
+            $('#capacityModal').find('#capacity').val(obj.message.capacity).trigger('change');
+            $('#capacityModal').find('#validator').val(obj.message.validator).trigger('change');
+            $('#capacityModal').find('#type').val(obj.message.type).trigger('change');
             $('#capacityModal').find('#price').val(obj.message.price);
             $('#capacityModal').modal('show');
             

@@ -13,7 +13,7 @@ if(isset($_POST['userID'])){
     }
 
     $stampExtArray = [
-        1,4,2,5,6,14,7,10,17,23
+        1,4,2,5,6,14,7,10,17,23,12,18
     ];
 
     if ($update_stmt = $db->prepare("SELECT * FROM stamping WHERE id=?")) {
@@ -132,15 +132,15 @@ if(isset($_POST['userID'])){
                     $message['include_cert'] = $row['include_cert'];
                     $message['borang_d'] = $row['borang_d'] ?? '';
                     $message['borang_e'] = $row['borang_e'] ?? '';
-                    $message['invoice_no'] = $row['invoice_no'];
-                    $message['cash_bill'] = $row['cash_bill'];
+                    $message['invoice_no'] = $row['invoice_no'] ?? '';
+                    $message['cash_bill'] = $row['cash_bill'] ?? '';
                     $message['stamping_date'] = $row['stamping_date'] != null ? convertDatetimeToDate($row['stamping_date']) : '';
                     $message['last_year_stamping_date'] = $row['last_year_stamping_date'] != null ? convertDatetimeToDate($row['last_year_stamping_date']) : '';
                     $message['due_date'] = $row['due_date'] != null ? convertDatetimeToDate($row['due_date']) : '';
                     $message['customer_pic'] = $row['customer_pic'];
-                    $message['quotation_no'] = $row['quotation_no'];
+                    $message['quotation_no'] = $row['quotation_no'] ?? '';
                     $message['quotation_date'] = $row['quotation_date'] != null ? convertDatetimeToDate($row['quotation_date']) : '';
-                    $message['purchase_no'] = $row['purchase_no'];
+                    $message['purchase_no'] = $row['purchase_no'] ?? '';
                     $message['purchase_date'] = $row['purchase_date'] != null ? convertDatetimeToDate($row['purchase_date']) : '';
                     $message['remarks'] = $row['remarks'];
                     $message['log'] = json_decode($row['log'], true);
@@ -172,12 +172,22 @@ if(isset($_POST['userID'])){
                                     $message['jenis_penunjuk'] = $row2['jenis_penunjuk'] ?? '';
                                     $message['alat_type'] = $row2['alat_type'] ?? '';
                                     $message['bentuk_dulang'] = $row2['bentuk_dulang'] ?? '';
+                                    $message['batu_ujian'] = $row2['batu_ujian'] ?? '';
+                                    $message['batu_ujian_lain'] = $row2['batu_ujian_lain'] ?? '';
                                     $message['class'] = $row2['class'] ?? '';
                                     $message['questions'] = json_decode($row2['questions'], true);
+                                    $message['nilais'] = json_decode($row2['nilais'], true);
+                                    $message['steelyard'] = $row2['steelyard'] ?? '';
+                                    $message['bilangan_kaunterpois'] = $row2['bilangan_kaunterpois'] ?? '';
                                     $message['other_info'] = $row2['other_info'] ?? '';
                                     $message['load_cell_country'] = $row2['load_cell_country'] ?? '';
                                     $message['load_cell_no'] = $row2['load_cell_no'] ?? '';
                                     $message['load_cells_info'] = json_decode($row2['load_cells_info'], true);
+                                    $message['nilai_jangka'] = $row2['nilai_jangka'] ?? '';
+                                    $message['nilai_jangka_other'] = $row2['nilai_jangka_other'] ?? '';
+                                    $message['diperbuat_daripada'] = $row2['diperbuat_daripada'] ?? '';
+                                    $message['diperbuat_daripada_other'] = $row2['diperbuat_daripada_other'] ?? '';
+
                                 }
                             }
                         }
@@ -262,6 +272,10 @@ if(isset($_POST['userID'])){
                                     $message['load_cell_country'] = $row2['load_cell_country'] ?? '';
                                     $message['load_cell_no'] = $row2['load_cell_no'] ?? '';
                                     $message['load_cells_info'] = json_decode($row2['load_cells_info'], true);
+                                    $message['nilai_jangka'] = $row2['nilai_jangka'] ?? '';
+                                    $message['nilai_jangka_other'] = $row2['nilai_jangka_other'] ?? '';
+                                    $message['diperbuat_daripada'] = $row2['diperbuat_daripada'] ?? '';
+                                    $message['diperbuat_daripada_other'] = $row2['diperbuat_daripada_other'] ?? '';
                                 }
                             }
                         }

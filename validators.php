@@ -77,7 +77,7 @@ else{
     				</div>
     				<div class="form-group">
     					<label for="validatorType">Validators Type *</label>
-                        <select class="form-control" style="width: 100%;" id="validatorType" name="validatorType" required>
+                        <select class="form-control select2" style="width: 100%;" id="validatorType" name="validatorType" required>
                             <option value="STAMPING">STAMPING</option>
                             <option value="OTHER">OTHER</option>
                             <option value="INHOUSE">INHOUSE</option>
@@ -98,6 +98,15 @@ else{
 
 <script>
 $(function () {
+    $('.select2').each(function() {
+        $(this).select2({
+            allowClear: true,
+            placeholder: "Please Select",
+            // Conditionally set dropdownParent based on the element’s location
+            dropdownParent: $(this).closest('.modal').length ? $(this).closest('.modal-body') : undefined
+        });
+    });
+
     $("#machineTable").DataTable({
         "responsive": true,
         "autoWidth": false,
@@ -168,7 +177,7 @@ $(function () {
     $('#addMachine').on('click', function(){
         $('#machineModal').find('#id').val("");
         $('#machineModal').find('#machineTypes').val("");
-        $('#machineModal').find('#validatorType').val("");
+        $('#machineModal').find('#validatorType').val("").trigger('change');
         $('#machineModal').modal('show');
         
         $('#machineForm').validate({
@@ -195,7 +204,7 @@ function edit(id){
         if(obj.status === 'success'){
             $('#machineModal').find('#id').val(obj.message.id);
             $('#machineModal').find('#machineTypes').val(obj.message.validator);
-            $('#machineModal').find('#validatorType').val(obj.message.type);
+            $('#machineModal').find('#validatorType').val(obj.message.type).trigger('change');
             $('#machineModal').modal('show');
             
             $('#machineForm').validate({

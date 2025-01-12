@@ -51,6 +51,7 @@ else{
   $countryBtu = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryAutoPack = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryAtsH = $db->query("SELECT * FROM country WHERE deleted = '0'");
+  $countrySia = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $country2 = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $loadCells = $db->query("SELECT load_cells.*, brand.brand AS brand_name, model.model AS model_name FROM load_cells join brand on load_cells.brand = brand.id join model on load_cells.model = model.id where load_cells.deleted = 0 and brand.deleted = 0 and model.deleted = 0");
 //   $loadCells = $db->query("SELECT load_cells.*, machines.machine_type AS machinetype, brand.brand AS brand_name, model.model AS model_name, alat.alat, country.nicename 
@@ -520,7 +521,6 @@ else{
                   <div class="form-group">
                     <label>Validator * </label>
                     <select class="form-control select2" style="width: 100%;" id="validator" name="validator" required>
-                      <option selected="selected">-</option>
                       <?php while($rowVA=mysqli_fetch_assoc($validators)){ ?>
                         <option value="<?=$rowVA['id'] ?>"><?=$rowVA['validator'] ?></option>
                       <?php } ?>
@@ -840,6 +840,39 @@ else{
               </div>
             </div>
           </div>  
+        </div>
+
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="duplicateModal"> 
+  <div class="modal-dialog modal-xl" style="max-width: 50%;">
+    <div class="modal-content">
+
+      <form role="form" id="cancelForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Duplicate Stamping</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" class="form-control" id="id" name="id">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>No of records to duplicate *</label>
+                <input type="number" class="form-control" id="duplicateNo" name="duplicateNo" required>
+              </div>
+            </div>
+          </div>    
         </div>
 
         <div class="modal-footer justify-content-between bg-gray-dark color-palette">
@@ -1214,86 +1247,6 @@ else{
           BAHAGIAN II
         </div>
         <div class="card-body">
-          <!-- <div class="row mb-3">
-              <div class="form-group col-12">
-                <label  class="col-9" for="question1">1. Adakah Sukat Linar ini diperbuat dari keluli, tembaga pancalogam, aluminium, ivory, bakelait berlapis, kaca gantian yang dikukuhkan, kayu keras atau apa-apa bahan lain yang diluluskan oleh Penjimpan Timbang dan Sukat.</label>
-                <select class="form-control select2 col-2" id="question1" name="question1" required>
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <option value="YA">YA</option>
-                    <option value="TIDAK">TIDAK</option>
-                </select>
-              </div>
-          </div>
-          <div class="row mb-3">
-              <div class="form-group col-12">
-                  <label for="question2">2. Adakah Sukat Linar ini lurus dan tiada kecacatan.</label>
-                  <select class="form-control select2" id="question2" name="question2" required>
-                      <option value="" selected disabled hidden>Please Select</option>
-                      <option value="YA">YA</option>
-                      <option value="TIDAK">TIDAK</option>
-                  </select>
-              </div>
-          </div>
-          <div class="row mb-3">
-              <div class="form-group col-12">
-                  <label for="question3">3. Adakah Sukat Linar yang diperbuat daripada kayu, dibubuh kedua-dua hujungnya dengan logam dan hujungnya dipaku menembusi kayu itu.</label>
-                  <select class="form-control select2" id="question3" name="question3" required>
-                      <option value="" selected disabled hidden>Please Select</option>
-                      <option value="YA">YA</option>
-                      <option value="TIDAK">TIDAK</option>
-                  </select>
-              </div>
-          </div>
-          <div class="row mb-3">
-              <div class="form-group col-12">
-                  <label for="question4">4. Adakah Sukat Linar bersenggat dengan jelas dan tidak boleh dipadam, dan senggatan yang dinombor ditanda dengan garisan yang lebih panjang daripada senggatan yang tidak dinombor.</label>
-                  <select class="form-control select2" id="question4" name="question4" required>
-                      <option value="" selected disabled hidden>Please Select</option>
-                      <option value="YA">YA</option>
-                      <option value="TIDAK">TIDAK</option>
-                  </select>
-              </div>
-          </div>
-          <div class="row mb-3">
-              <div class="form-group col-12">
-                  <label for="question5">5.1 Adakah Sukat Linar disenggat dengan jelas dan tidak boleh dipadam dalam ukuran sentimeter di atas satu belah dan dalam sukatan meter di sebelah belakang dan senggatan yang dinombor ditanda dengan garis yang lebih panjang daripada senggatan yang tidak dinombor.</label>
-                  <select class="form-control select2" id="question5" name="question5" required>
-                      <option value="" selected disabled hidden>Please Select</option>
-                      <option value="YA">YA</option>
-                      <option value="TIDAK">TIDAK</option>
-                  </select>
-              </div>
-          </div>
-          <div class="row mb-3">
-              <div class="form-group col-12">
-                  <label for="question6">5.2 Adakah Sukat itu panjangnya 1 m (satu meter)</label>
-                  <select class="form-control select2" id="question6" name="question6" required>
-                      <option value="" selected disabled hidden>Please Select</option>
-                      <option value="YA">YA</option>
-                      <option value="TIDAK">TIDAK</option>
-                  </select>
-              </div>
-          </div>
-          <div class="row mb-3">
-              <div class="form-group col-12">
-                  <label for="question7">6. Adakah Sukat Linar mempunyai nilai jangkahan maksimum yang mudah dibihat, diukir dan tidak boleh dipadam ditanda di satu hujung Sukat Linar dengan cara salah satu daripada cara salah satu tanda-pertukaran-ringkas yang berikut masing-masing di bawah satu meter (cm, in, atau mm)</label>
-                  <select class="form-control select2" id="question7" name="question7" required>
-                      <option value="" selected disabled hidden>Please Select</option>
-                      <option value="YA">YA</option>
-                      <option value="TIDAK">TIDAK</option>
-                  </select>
-              </div>
-          </div>
-          <div class="row mb-3">
-              <div class="form-group col-12">
-                  <label for="question8">7. Adakah Sukat Linar ini ditanda dengan cap dekat permukaan Skel pada sebelah tiap-tiap tap yang bersenggat.</label>
-                  <select class="form-control select2" id="question8" name="question8" required>
-                      <option value="" selected disabled hidden>Please Select</option>
-                      <option value="YA">YA</option>
-                      <option value="TIDAK">TIDAK</option>
-                  </select>
-              </div>
-          </div> -->
           <div class="row mb-3 ml-4">
               <div class="col-md-8">
                   <label>1. Adakah Sukat Linar ini diperbuat dari keluli, tembaga pancalogam, aluminium, ivory, bakelait berlapis, kaca gantian yang dikukuhkan, kayu keras atau apa-apa bahan lain yang diluluskan oleh Penjimpan Timbang dan Sukat.</label>
@@ -1532,6 +1485,51 @@ else{
   </div>
 </script>
 
+<script type="text/html" id="siaDetails">
+  <div class="card card-primary">
+    <div class="card-body">
+      <div class="row">
+        <h4>Addtional Information (SIA)</h4>
+      </div>
+      <div class="row">
+        <div class="form-group col-4">
+          <label for="model">Platform Made In *</label>
+          <select class="form-control select2" id="platformCountry" name="platformCountry" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <?php while($rowcountry=mysqli_fetch_assoc($countrySia)){ ?>
+              <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
+            <?php } ?>
+          </select>
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Nilai Jangka Maksima *</label>
+          <select class="form-control select2" id="nilaiJangka" name="nilaiJangka" required>
+            <option value="" disabled hidden selected>Please Select</option>
+            <option value="30">30 ML</option>
+            <option value="OTHER">OTHER</option>
+          </select>
+        </div>
+        <div class="form-group col-4" id="nilaiJangkaOtherDisplay" style="display:none">
+          <label for="model">Nilai Jangka Maksima Other *</label>
+          <input type="text" class="form-control" id="nilaiJangkaOther" name="nilaiJangkaOther">
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Diperbuat Daripada *</label>
+          <select class="form-control select2" id="diperbuatDaripada" name="diperbuatDaripada" required>
+            <option value="" disabled hidden selected>Please Select</option>
+            <option value="KACA">KACA</option>
+            <option value="OTHER">OTHER</option>
+          </select>
+        </div>
+        <div class="form-group col-4" id="diperbuatDaripadaOtherDisplay" style="display:none">
+          <label for="model">Diperbuat Daripada Other *</label>
+          <input type="text" class="form-control" id="diperbuatDaripadaOther" name="diperbuatDaripadaOther">
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
 <script type="text/html" id="pricingDetails">
   <tr class="details">
     <td>
@@ -1686,7 +1684,7 @@ $(function () {
   var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
   var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
 
-  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)'];
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA'];
 
   var table = $("#weightTable").DataTable({
     "responsive": true,
@@ -1763,6 +1761,8 @@ $(function () {
           }else{
             dropdownMenu += '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Renew</a>';
           }
+          
+          dropdownMenu += '<a class="dropdown-item" id="duplicate'+ data + '" onclick="duplicate(' + data + ')"><i class="fa-solid fa-clone"></i> Duplicate</a>';
 
           if (allowedAlats.includes(row.jenis_alat)) {
             dropdownMenu += '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ', \'' + row.jenis_alat + '\', \'' + row.validate_by + '\')"><i class="fas fa-print"></i> Print</a>';
@@ -2055,6 +2055,8 @@ $(function () {
             }else{
               dropdownMenu += '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Renew</a>';
             }
+
+            dropdownMenu += '<a class="dropdown-item" id="duplicate'+ data + '" onclick="duplicate(' + data + ')"><i class="fa-solid fa-clone"></i> Duplicate</a>';
 
             if (allowedAlats.includes(row.jenis_alat)) {
               dropdownMenu += '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ', \'' + row.jenis_alat + '\', \'' + row.validate_by + '\')"><i class="fas fa-print"></i> Print</a>';
@@ -2613,7 +2615,6 @@ $(function () {
     alat = $(this).val();
     jalat = $(this).val();
     $('#addtionalSection').html('');
-    debugger;
 
     if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
       $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
@@ -2683,6 +2684,10 @@ $(function () {
     }
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '17'){
       $('#addtionalSection').html($('#atsHDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
+    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '12'){
+      $('#addtionalSection').html($('#siaDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
     else{
@@ -2800,6 +2805,10 @@ $(function () {
     }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '17'){
       $('#addtionalSection').html($('#atsHDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
+    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '12'){
+      $('#addtionalSection').html($('#siaDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
     else{
@@ -2988,7 +2997,7 @@ function format (row) {
   }
 
   // Additional section for ATS
-  if (row.jenis_alat == 'ATS'){
+  if (row.jenis_alat == 'ATS' || row.jenis_alat == 'ATS (H)'){
     returnString += `</div><hr>
                         <div class="row">
                           <!-- ATS Section -->
@@ -3000,7 +3009,7 @@ function format (row) {
   }else if(row.jenis_alat == 'ATP'){
     returnString += `</div><hr>
                         <div class="row">
-                          <!-- ATS Section -->
+                          <!-- ATP Section -->
                           <div class="col-6">
                             <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
                           </div>
@@ -3009,10 +3018,10 @@ function format (row) {
                           </div>
                         </div>
                         `;
-  }else if(row.jenis_alat == 'ATN'){
+  }else if(row.jenis_alat == 'ATN' || row.jenis_alat == 'ATN (G)'){
     returnString += `</div><hr>
                         <div class="row">
-                          <!-- ATS Section -->
+                          <!-- ATN Section -->
                           <div class="col-6">
                             <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
                           </div>
@@ -3027,7 +3036,7 @@ function format (row) {
   }else if(row.jenis_alat == 'ATE'){
     returnString += `</div><hr>
                         <div class="row">
-                          <!-- ATS Section -->
+                          <!-- ATE Section -->
                           <div class="col-6">
                             <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
                           </div>
@@ -3036,10 +3045,109 @@ function format (row) {
                           </div>
                         </div>
                         `;
-  }else if(row.jenis_alat == 'SLL'){
+  }else if(row.jenis_alat == 'BTU'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- BTU Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>`;
+    if (row.batu_ujian == 'OTHER'){
+      returnString += `
+                      <div class="col-6">
+                        <p><strong>Batu Ujian:</strong> ${row.batu_ujian_lain}</p>
+                      </div>
+                    </div>
+                    `;
+    }else{
+      returnString += `
+                      <div class="col-6">
+                        <p><strong>Batu Ujian:</strong> ${row.batu_ujian}</p>
+                      </div>
+                    </div>
+                    `;
+    }
+    
+  }else if(row.jenis_alat == 'ATP-AUTO MACHINE'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- ATP-AUTO MACHINE Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Jenis Penunjuk:</strong> ${row.jenis_penunjuk}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'ATP (MOTORCAR)'){
     returnString += `</div><hr>
                         <div class="row">
                           <!-- ATS Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Had Terima Steelyard:</strong> ${row.steelyard} kg</p>
+                          </div>
+                          <div class="col-6">
+                            <p><strong>Bilangan Kaunterpois:</strong> ${row.bilangan_kaunterpois} biji</p>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <p><strong>Nilai Berat Kaunterpois (kg)</strong></p>
+                            <p><strong>(1):</strong> ${row.nilais[0]?.nilai+' kg' || ''}</p>
+                            <p><strong>(2):</strong> ${row.nilais[1]?.nilai+' kg' || ''}</p>
+                            <p><strong>(3):</strong> ${row.nilais[2]?.nilai+' kg' || ''}</p>
+                            <p><strong>(4):</strong> ${row.nilais[3]?.nilai+' kg' || ''}</p>
+                            <p><strong>(5):</strong> ${row.nilais[4]?.nilai+' kg' || ''}</p>
+                            <p><strong>(6):</strong> ${row.nilais[5]?.nilai+' kg' || ''}</p>
+                          </div>
+                        </div>
+                        
+                        `;
+  }else if(row.jenis_alat == 'SIA'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- SIA Section -->
+                          <div class="col-6">
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                          </div>`;
+
+    if (row.nilai_jangka == 'OTHER'){
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Nilai Jangka Maksima:</strong> ${row.nilai_jangka_other} ml</p>
+                          </div>`;
+    }else{
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Nilai Jangka Maksima:</strong> ${row.nilai_jangka} ml</p>
+                          </div>`;
+    }
+
+    if (row.nilai_jangka == 'OTHER'){
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Diperbuat Daripada:</strong> ${row.diperbuat_daripada_other}</p>
+                          </div>
+                        </div>
+                        `;
+    }else{
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Diperbuat Daripada:</strong> ${row.diperbuat_daripada}</p>
+                          </div>
+                        </div>
+                        `;
+    }
+    
+                          
+  }else if(row.jenis_alat == 'SLL'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- SLL Section -->
                           <div class="col-6">
                             <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
                           </div>
@@ -3050,14 +3158,94 @@ function format (row) {
                         `;
 
     if (row.questions.length > 0) {
-      returnString += '<h4>BAHAGIAN II</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="15%">Date Created</th><th>Notes</th><th width="17%">Next Follow Date</th><th width="15%">Follow Up By</th><th width="13%">Status</th></tr></thead><tbody>'
-    
-      for (var i = 0; i < row.log.length; i++) {
-        var item = row.log[i];
-        returnString += '<tr><td>' + item.no + '</td><td>' + item.date + '</td><td>' + item.notes + '</td><td>' + item.followUpDate + '</td><td>' + item.picAttend + '</td><td>' + item.status + '</td></tr>'
-      }
-
-      returnString += '</tbody></table>';
+      returnString +=`
+      <div class="card card-primary">
+        <div class="card-header">
+          BAHAGIAN II
+        </div>
+        <div class="card-body">
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>1. Adakah Sukat Linar ini diperbuat dari keluli, tembaga pancalogam, aluminium, ivory, bakelait berlapis, kaca gantian yang dikukuhkan, kayu keras atau apa-apa bahan lain yang diluluskan oleh Penjimpan Timbang dan Sukat.</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question1" name="question1" disabled>
+                    <option value="" selected>${row.questions[0]['answer']}</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+            <div class="col-md-8">
+                <label>2. Adakah Sukat Linar ini lurus dan tiada kecacatan.</label>
+            </div>
+            <div class="col-md-3 ml-4">
+              <select class="form-control select2" id="question2" name="question2" disabled>
+                    <option value="" selected>${row.questions[1]['answer']}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>3. Adakah Sukat Linar yang diperbuat daripada kayu, dibubuh kedua-dua hujungnya dengan logam dan hujungnya dipaku menembusi kayu itu.</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question3" name="question3" disabled>
+                    <option value="" selected>${row.questions[2]['answer']}</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>4. Adakah Sukat Linar bersenggat dengan jelas dan tidak boleh dipadam, dan senggatan yang dinombor ditanda dengan garisan yang lebih panjang daripada senggatan yang tidak dinombor.</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question4" name="question4" disabled>
+                    <option value="" selected>${row.questions[3]['answer']}</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>5.1 Adakah Sukat Linar disenggat dengan jelas dan tidak boleh dipadam dalam ukuran sentimeter di atas satu belah dan dalam sukatan meter di sebelah belakang dan senggatan yang dinombor ditanda dengan garis yang lebih panjang daripada senggatan yang tidak dinombor.</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question5_1" name="question5_1" disabled>
+                    <option value="" selected>${row.questions[4]['answer']}</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>5.2 Adakah Sukat itu panjangnya 1 m (satu meter)</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question5_2" name="question5_2" disabled>
+                    <option value="" selected>${row.questions[5]['answer']}</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>6. Adakah Sukat Linar mempunyai nilai jangkahan maksimum yang mudah dibihat, diukir dan tidak boleh dipadam ditanda di satu hujung Sukat Linar dengan cara salah satu daripada cara salah satu tanda-pertukaran-ringkas yang berikut masing-masing di bawah satu meter (cm, in, atau mm)</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question6" name="question6" disabled>
+                    <option value="" selected>${row.questions[6]['answer']}</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>7. Adakah Sukat Linar ini ditanda dengan cap dekat permukaan Skel pada sebelah tiap-tiap tap yang bersenggat.</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question7" name="question7" disabled>
+                    <option value="" selected>${row.questions[7]['answer']}</option>
+                </select>
+              </div>
+          </div>
+        </div>
+      </div>`;
     }
   }
 
@@ -3471,6 +3659,32 @@ function edit(id) {
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '17'){
             $('#addtionalSection').html($('#atsHDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '12'){
+            $('#addtionalSection').html($('#siaDetails').html());
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+
+            $('#extendModal').find('#nilaiJangka').on('change', function(){
+              var nilaiJangka = $(this).val();
+              if (nilaiJangka == 'OTHER'){
+                $('#extendModal').find('#nilaiJangkaOtherDisplay').show();
+                $('#extendModal').find('#nilaiJangkaOther').val(obj.message.nilai_jangka_other);
+              }else{
+                $('#extendModal').find('#nilaiJangkaOtherDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#diperbuatDaripada').on('change', function(){
+              var diperbuatDaripada = $(this).val();
+              if (diperbuatDaripada == 'OTHER'){
+                $('#extendModal').find('#diperbuatDaripadaOtherDisplay').show();
+                $('#extendModal').find('#diperbuatDaripadaOther').val(obj.message.diperbuat_daripada_other);
+              }else{
+                $('#extendModal').find('#diperbuatDaripadaOtherDisplay').hide();
+              }
+            }); console.log(obj.message.nilai_jangka);
+
+            $('#extendModal').find('#nilaiJangka').val(obj.message.nilai_jangka).trigger('change');
+            $('#extendModal').find('#diperbuatDaripada').val(obj.message.diperbuat_daripada).trigger('change');
           }
         });
         
@@ -3675,6 +3889,32 @@ function edit(id) {
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '17'){
             $('#addtionalSection').html($('#atsHDetails').html());
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '12'){
+            $('#addtionalSection').html($('#siaDetails').html());
+            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+
+            $('#extendModal').find('#nilaiJangka').on('change', function(){
+              var nilaiJangka = $(this).val();
+              if (nilaiJangka == 'OTHER'){
+                $('#extendModal').find('#nilaiJangkaOtherDisplay').show();
+                $('#extendModal').find('#nilaiJangkaOther').val(obj.message.nilai_jangka_other);
+              }else{
+                $('#extendModal').find('#nilaiJangkaOtherDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#diperbuatDaripada').on('change', function(){
+              var diperbuatDaripada = $(this).val();
+              if (diperbuatDaripada == 'OTHER'){
+                $('#extendModal').find('#diperbuatDaripadaOtherDisplay').show();
+                $('#extendModal').find('#diperbuatDaripadaOther').val(obj.message.diperbuat_daripada_other);
+              }else{
+                $('#extendModal').find('#diperbuatDaripadaOtherDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#nilaiJangka').val(obj.message.nilai_jangka).trigger('change');
+            $('#extendModal').find('#diperbuatDaripada').val(obj.message.diperbuat_daripada).trigger('change');
           }
         });
 
@@ -3918,5 +4158,10 @@ function log(id) {
     }
     $('#spinnerLoading').hide();
   });
+}
+
+function duplicate(id) {
+  $('#spinnerLoading').show();
+  $('#duplicateModal').modal('show');
 }
 </script>
