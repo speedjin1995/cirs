@@ -185,7 +185,10 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-8"><h4>Company Weight And Measure Details</h4></div>
+              <div class="col-6"><h4>Company Weight And Measure Details</h4></div>
+              <div class="col-2">
+                <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="multiDeactivate">Cancel Stampings</button>
+              </div>
               <div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
               </div>
@@ -2112,6 +2115,27 @@ $(function () {
     else {
       // Optionally, you can display a message or take another action if no IDs are selected
       alert("Please select at least one DO to Deliver.");
+    }
+  });
+
+  $('#multiDeactivate').on('click', function () {
+    if (confirm('Are you sure you want to cancel this item?')) {
+
+      var selectedIds = []; // An array to store the selected 'id' values
+
+      $("#weightTable tbody input[type='checkbox']").each(function () {
+        if (this.checked) {
+          selectedIds.push($(this).val());
+        }
+      });
+
+      if (selectedIds.length > 0) {
+        
+      } 
+      else {
+        // Optionally, you can display a message or take another action if no IDs are selected
+        alert("Please select at least one stamping to cancel.");
+      }
     }
   });
 
