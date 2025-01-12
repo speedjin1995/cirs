@@ -855,7 +855,7 @@ else{
   <div class="modal-dialog modal-xl" style="max-width: 50%;">
     <div class="modal-content">
 
-      <form role="form" id="cancelForm">
+      <form role="form" id="duplicateForm">
         <div class="modal-header bg-gray-dark color-palette">
           <h4 class="modal-title">Duplicate Stamping</h4>
           <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
@@ -1780,48 +1780,6 @@ $(function () {
           return dropdownMenu;
         }
       },
-
-      // { 
-      //   data: 'id',
-      //   render: function (data, type, row) {
-      //     let buttons = '<div class="row">';
-      //     <i class="ri-more-fill align-middle"></i>
-      //     // Edit button
-      //     buttons += '<div class="col-4"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
-      //               ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
-
-      //     // Extra button if validate_by is 3
-      //     if (row.validate_by == 3) {
-      //       buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
-      //                 ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
-      //     }
-
-      //     // Print button
-      //     if (allowedAlats.includes(row.jenis_alat)) {
-      //       buttons += '<div class="col-4"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-      //                 ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
-      //     }
-
-      //     buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
-
-      //     buttons += '</div>';
-
-      //     buttons += '<div class="row">'
-      //     // Complete button if conditions are met
-      //     if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '' && row.borang_e != '') {
-      //       buttons += '<div class="col-4"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
-      //                 ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
-      //     }
-
-      //     // Cancelled button
-      //     buttons += '<div class="col-4"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-      //               ')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>';
-
-      //     buttons += '</div>'; // Closing row div
-
-      //     return buttons;
-      //   }
-      // },
       { 
         className: 'dt-control',
         orderable: false,
@@ -1831,6 +1789,13 @@ $(function () {
         }
       }
     ],
+    'createdRow': function (row, data, dataIndex) {
+      if (data.duplicate === 'Y') {
+          $(row).css('color', 'red');
+      } else if (data.renewed === 'Y') {
+          $(row).css('color', 'blue');
+      }
+    }
   });
   
   // Add event listener for opening and closing details
@@ -1960,6 +1925,24 @@ $(function () {
           $('#spinnerLoading').hide();
         });
       }
+      else if($('#duplicateModal').hasClass('show')){
+        $.post('php/duplicateStamp.php', $('#duplicateForm').serialize(), function(data){
+          var obj = JSON.parse(data); 
+          if(obj.status === 'success'){
+            $('#duplicateModal').modal('hide');
+            toastr["success"](obj.message, "Success:");
+            $('#weightTable').DataTable().ajax.reload(null, false);
+          }
+          else if(obj.status === 'failed'){
+            toastr["error"](obj.message, "Failed:");
+          }
+          else{
+            toastr["error"]("Something wrong when edit", "Failed:");
+          }
+
+          $('#spinnerLoading').hide();
+        });
+      }
     }
   });
 
@@ -2074,47 +2057,6 @@ $(function () {
             return dropdownMenu;
           }
         },
-        // { 
-        //   data: 'id',
-        //   render: function (data, type, row) {
-        //     let buttons = '<div class="row">';
-
-        //     // Edit button
-        //     buttons += '<div class="col-4"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
-        //               ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
-
-        //     // Extra button if validate_by is 3
-        //     if (row.validate_by == 3) {
-        //       buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
-        //                 ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
-        //     }
-
-        //     // Print button
-        //     if (allowedAlats.includes(row.jenis_alat)) {
-        //       buttons += '<div class="col-4"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-        //                 ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
-        //     }            
-
-        //     buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
-
-        //     buttons += '</div>';
-
-        //     buttons += '<div class="row">'
-        //     // Complete button if conditions are met
-        //     if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '' && row.borang_e != '') {
-        //       buttons += '<div class="col-6"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
-        //                 ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
-        //     }
-
-        //     // Cancelled button
-        //     buttons += '<div class="col-6"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-        //               ')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>';
-
-        //     buttons += '</div>'; // Closing row div
-
-        //     return buttons;
-        //   }
-        // },
         { 
           className: 'dt-control',
           orderable: false,
@@ -2124,6 +2066,14 @@ $(function () {
           }
         }
       ],
+      'createdRow': function (row, data, dataIndex) {
+        if (data.duplicate === 'Y') {
+          $(row).css('color', 'red');
+        } 
+        else if (data.renewed === 'Y') {
+          $(row).css('color', 'blue');
+        }
+      }
     });
   });
 
@@ -4161,7 +4111,21 @@ function log(id) {
 }
 
 function duplicate(id) {
-  $('#spinnerLoading').show();
+  $('#duplicateModal').find('#id').val(id);
   $('#duplicateModal').modal('show');
+
+  $('#duplicateForm').validate({
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+      error.addClass('invalid-feedback');
+      element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass('is-invalid');
+    }
+  });
 }
 </script>

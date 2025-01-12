@@ -182,6 +182,8 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "pin_keselamatan"=>$row['pin_keselamatan'] ?? '',
     "siri_keselamatan"=>$row['siri_keselamatan'] ?? '',
     "borang_d"=>$row['borang_d'] ?? '',
+    "renewed"=>$row['renewed'] ?? 'N',
+    "duplicate"=>$row['duplicate'] ?? 'N',
     "created_datetime"=>$row['created_datetime'] != null ? convertDatetimeToDate($row['created_datetime']) : '',
     "updated_datetime"=>$row['updated_datetime'] != null ? convertDatetimeToDate($row['updated_datetime']) : ''
   );
