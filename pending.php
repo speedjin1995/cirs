@@ -851,6 +851,39 @@ else{
   </div>
 </div>
 
+<div class="modal fade" id="duplicateModal"> 
+  <div class="modal-dialog modal-xl" style="max-width: 50%;">
+    <div class="modal-content">
+
+      <form role="form" id="cancelForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Duplicate Stamping</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" class="form-control" id="id" name="id">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>No of records to duplicate *</label>
+                <input type="number" class="form-control" id="duplicateNo" name="duplicateNo" required>
+              </div>
+            </div>
+          </div>    
+        </div>
+
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="logModal"> 
   <div class="modal-dialog modal-xl" style="max-width: 80%;">
     <div class="modal-content">
@@ -1728,6 +1761,8 @@ $(function () {
           }else{
             dropdownMenu += '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Renew</a>';
           }
+          
+          dropdownMenu += '<a class="dropdown-item" id="duplicate'+ data + '" onclick="duplicate(' + data + ')"><i class="fa-solid fa-clone"></i> Duplicate</a>';
 
           if (allowedAlats.includes(row.jenis_alat)) {
             dropdownMenu += '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ', \'' + row.jenis_alat + '\', \'' + row.validate_by + '\')"><i class="fas fa-print"></i> Print</a>';
@@ -2020,6 +2055,8 @@ $(function () {
             }else{
               dropdownMenu += '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Renew</a>';
             }
+
+            dropdownMenu += '<a class="dropdown-item" id="duplicate'+ data + '" onclick="duplicate(' + data + ')"><i class="fa-solid fa-clone"></i> Duplicate</a>';
 
             if (allowedAlats.includes(row.jenis_alat)) {
               dropdownMenu += '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ', \'' + row.jenis_alat + '\', \'' + row.validate_by + '\')"><i class="fas fa-print"></i> Print</a>';
@@ -4121,5 +4158,10 @@ function log(id) {
     }
     $('#spinnerLoading').hide();
   });
+}
+
+function duplicate(id) {
+  $('#spinnerLoading').show();
+  $('#duplicateModal').modal('show');
 }
 </script>
