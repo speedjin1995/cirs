@@ -187,7 +187,7 @@ else{
             <div class="row">
               <div class="col-6"><h4>Company Weight And Measure Details</h4></div>
               <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="multiDeactivate">Cancel Stampings</button>
+                <button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="multiDeactivate">Cancel Stampings</button>
               </div>
               <div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
@@ -822,6 +822,7 @@ else{
 
         <div class="modal-body">
           <input type="hidden" class="form-control" id="id" name="id">
+          <input type="hidden" class="form-control" id="type" name="type">
           <div class="row">
             <div class="col-6">
               <div class="form-group">
@@ -2120,7 +2121,7 @@ $(function () {
 
   $('#multiDeactivate').on('click', function () {
     if (confirm('Are you sure you want to cancel this item?')) {
-
+      $('#spinnerLoading').show();
       var selectedIds = []; // An array to store the selected 'id' values
 
       $("#weightTable tbody input[type='checkbox']").each(function () {
@@ -2130,12 +2131,30 @@ $(function () {
       });
 
       if (selectedIds.length > 0) {
-        
+        $('#cancelModal').find('#id').val(selectedIds);
+        $('#cancelModal').find('#type').val('MULTI');
+        $('#cancelModal').modal('show');
+
+        $('#cancelForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
+
+        $('#spinnerLoading').hide();
       } 
       else {
         // Optionally, you can display a message or take another action if no IDs are selected
         alert("Please select at least one stamping to cancel.");
-      }
+      }      
     }
   });
 

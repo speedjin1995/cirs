@@ -148,7 +148,10 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-10"><h4>Cancelled Stamping</h4></div>
+              <div class="col-8"><h4>Cancelled Stamping</h4></div>
+              <div class="col-2">
+                <button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="multiDeactivate">Delete Stamping</button>
+              </div>
               <div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="exportExcel">Export Excel</button>
               </div>
@@ -171,7 +174,7 @@ else{
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <!-- <th></th> -->
+                  <th></th>
                   <th>No</th>
                   <th>Company Name</th>
                   <th>Brands</th>
