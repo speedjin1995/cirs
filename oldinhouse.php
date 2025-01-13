@@ -1714,7 +1714,7 @@ $(function () {
           $('#spinnerLoading').hide();
         });
       }else{
-        alert("Please select at least one other validation to delete.");
+        alert("Please select at least one other inhouse to delete.");
       }
     }
   });
