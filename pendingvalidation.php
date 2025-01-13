@@ -1799,7 +1799,7 @@ $(function () {
       } 
       else {
         // Optionally, you can display a message or take another action if no IDs are selected
-        alert("Please select at least one stamping to cancel.");
+        alert("Please select at least one other validation to cancel.");
       }      
     }
   });

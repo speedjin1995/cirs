@@ -1711,6 +1711,8 @@ $(function () {
           }
           $('#spinnerLoading').hide();
         });
+      }else{
+        alert("Please select at least one other validation to delete.");
       }
     }
   });

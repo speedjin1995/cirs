@@ -1171,6 +1171,8 @@ $(function () {
           }
           $('#spinnerLoading').hide();
         });
+      }else{
+        alert("Please select at least one stamping to delete.");
       }
     }
   });

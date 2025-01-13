@@ -151,19 +151,22 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-8"><h4>InHouse Validation Record Pending / Expired Status :</h4></div>
+              <div class="col-10"><h4>InHouse Validation Record Pending / Expired Status :</h4></div>
               <div class="col-2">
-                <!-- <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button> -->
+                <button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="multiDeactivate">Cancel Inhouse Validations</button>
               </div>
+              <!-- <div class="col-2">
+                <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
+              </div> -->
               <!--div class="col-2">
                 <a href="/template/Stamping Record Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
               </div-->
               <!--div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">Upload Excel</button>
               </div-->
-              <div class="col-2">
-                <!-- <button type="button" class="btn btn-block bg-gradient-warning btn-sm" onclick="newEntry()">Add New</button> -->
-              </div>
+              <!-- <div class="col-2">
+                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" onclick="newEntry()">Add New</button>
+              </div> -->
             </div>
           </div>
 
@@ -171,7 +174,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <!-- <th width='1%'><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th> -->
+                  <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
                   <th>No</th>
                   <th>Company Name</th>
                   <th>Brand</th>
@@ -677,6 +680,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
 
         <div class="modal-body">
           <input type="hidden" class="form-control" id="id" name="id">
+          <input type="hidden" class="form-control" id="type" name="type">
           <div class="row">
             <div class="col-6">
               <div class="form-group">
@@ -890,7 +894,7 @@ $(function () {
     'serverMethod': 'post',
     'searching': true,
     // "stateSave": true,
-    'order': [[ 1, 'asc' ]],
+    'order': [[ 2, 'asc' ]],
     // 'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
       'type': 'POST',
@@ -905,20 +909,15 @@ $(function () {
       } 
     },
     'columns': [
-      // {
-      //   // Add a checkbox with a unique ID for each row
-      //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-      //   className: 'select-checkbox',
-      //   orderable: false,
-      //   render: function (data, type, row) {
-      //     if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-      //       return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-      //     } 
-      //     else {
-      //       return ''; // Return an empty string or any other placeholder if the item is invoiced
-      //     }
-      //   }
-      // },
+      {
+        // Add a checkbox with a unique ID for each row
+        data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+        className: 'select-checkbox',
+        orderable: false,
+        render: function (data, type, row) {
+          return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+        }
+      },
       {
         data: null, // The data property is null since this column is client-side only
         className: 'auto-increment',
@@ -1153,7 +1152,7 @@ $(function () {
       'serverMethod': 'post',
       'searching': true,
       // "stateSave": true,
-      'order': [[ 1, 'asc' ]],
+      'order': [[ 2, 'asc' ]],
       // 'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
         'type': 'POST',
@@ -1168,20 +1167,15 @@ $(function () {
         } 
       },
       'columns': [
-        // {
-        //   // Add a checkbox with a unique ID for each row
-        //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-        //   className: 'select-checkbox',
-        //   orderable: false,
-        //   render: function (data, type, row) {
-        //     if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-        //       return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-        //     } 
-        //     else {
-        //       return ''; // Return an empty string or any other placeholder if the item is invoiced
-        //     }
-        //   }
-        // },
+        {
+          // Add a checkbox with a unique ID for each row
+          data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+          className: 'select-checkbox',
+          orderable: false,
+          render: function (data, type, row) {
+            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+          }
+        },
         {
           data: null, // The data property is null since this column is client-side only
           className: 'auto-increment',
@@ -1735,6 +1729,45 @@ $(function () {
   $('#cancelModal').find('#cancellationReason').on('change', function(){
     if($(this).val() == '0'){
       $('#otherReason').attr("required", true);
+    }
+  });
+
+  $('#multiDeactivate').on('click', function () {
+    if (confirm('Are you sure you want to cancel these items?')) {
+      $('#spinnerLoading').show();
+      var selectedIds = []; // An array to store the selected 'id' values
+
+      $("#weightTable tbody input[type='checkbox']").each(function () {
+        if (this.checked) {
+          selectedIds.push($(this).val());
+        }
+      });
+
+      if (selectedIds.length > 0) {
+        $('#cancelModal').find('#id').val(selectedIds);
+        $('#cancelModal').find('#type').val('MULTI');
+        $('#cancelModal').modal('show');
+
+        $('#cancelForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
+
+        $('#spinnerLoading').hide();
+      } 
+      else {
+        // Optionally, you can display a message or take another action if no IDs are selected
+        alert("Please select at least one inhouse validation to cancel.");
+      }      
     }
   });
 

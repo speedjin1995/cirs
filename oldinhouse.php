@@ -151,10 +151,13 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-8"><h4>InHouse Validation Record Pending / Expired Status :</h4></div>
+              <div class="col-10"><h4>InHouse Validation Record Pending / Expired Status :</h4></div>
               <div class="col-2">
-                <!-- <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button> -->
+                <button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="multiDeactivate">Delete Inhouse Validations</button>
               </div>
+              <!-- <div class="col-2">
+                <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
+              </div> -->
               <!--div class="col-2">
                 <a href="/template/Stamping Record Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
               </div-->
@@ -171,7 +174,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <!-- <th width='1%'><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th> -->
+                  <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
                   <th>No</th>
                   <th>Company Name</th>
                   <th>Brand</th>
@@ -885,7 +888,7 @@ $(function () {
     'serverMethod': 'post',
     'searching': true,
     // "stateSave": true,
-    'order': [[ 1, 'asc' ]],
+    'order': [[ 2, 'asc' ]],
     // 'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
       'type': 'POST',
@@ -900,20 +903,15 @@ $(function () {
       } 
     },
     'columns': [
-      // {
-      //   // Add a checkbox with a unique ID for each row
-      //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-      //   className: 'select-checkbox',
-      //   orderable: false,
-      //   render: function (data, type, row) {
-      //     if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-      //       return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-      //     } 
-      //     else {
-      //       return ''; // Return an empty string or any other placeholder if the item is invoiced
-      //     }
-      //   }
-      // },
+      {
+        // Add a checkbox with a unique ID for each row
+        data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+        className: 'select-checkbox',
+        orderable: false,
+        render: function (data, type, row) {
+          return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+        }
+      },
       {
         data: null, // The data property is null since this column is client-side only
         className: 'auto-increment',
@@ -1141,7 +1139,7 @@ $(function () {
       'serverMethod': 'post',
       'searching': true,
       // "stateSave": true,
-      'order': [[ 1, 'asc' ]],
+      'order': [[ 2, 'asc' ]],
       // 'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
         'type': 'POST',
@@ -1156,20 +1154,15 @@ $(function () {
         } 
       },
       'columns': [
-        // {
-        //   // Add a checkbox with a unique ID for each row
-        //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-        //   className: 'select-checkbox',
-        //   orderable: false,
-        //   render: function (data, type, row) {
-        //     if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
-        //       return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-        //     } 
-        //     else {
-        //       return ''; // Return an empty string or any other placeholder if the item is invoiced
-        //     }
-        //   }
-        // },
+        {
+          // Add a checkbox with a unique ID for each row
+          data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+          className: 'select-checkbox',
+          orderable: false,
+          render: function (data, type, row) {
+            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+          }
+        },
         {
           data: null, // The data property is null since this column is client-side only
           className: 'auto-increment',
@@ -1692,6 +1685,39 @@ $(function () {
   //     $('#addtionalSection').html('');
   //   }
   // });
+
+  $('#multiDeactivate').on('click', function () {
+    if (confirm('DO YOU CONFIRMED TO DELETE THE FOLLOWING INHOUSE VALIDATIONS?')) {
+      $('#spinnerLoading').show();
+      var selectedIds = []; // An array to store the selected 'id' values
+
+      $("#weightTable tbody input[type='checkbox']").each(function () {
+        if (this.checked) {
+          selectedIds.push($(this).val());
+        }
+      });
+
+      if (selectedIds.length > 0) {
+        $.post('php/deleteInHouseValidation.php', {id: selectedIds, status: 'DELETE', type: 'MULTI'}, function(data){
+          var obj = JSON.parse(data);
+
+          if(obj.status === 'success'){
+            toastr["success"](obj.message, "Success:");
+            $('#weightTable').DataTable().ajax.reload();
+          }
+          else if(obj.status === 'failed'){
+            toastr["error"](obj.message, "Failed:");
+          }
+          else{
+            toastr["error"]("Something wrong when activate", "Failed:");
+          }
+          $('#spinnerLoading').hide();
+        });
+      }else{
+        alert("Please select at least one other validation to delete.");
+      }
+    }
+  });
 
   $('#cancelModal').find('#cancellationReason').on('change', function(){
     if($(this).val() == '0'){
