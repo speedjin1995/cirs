@@ -69,8 +69,8 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
         $result = $select_stmt->get_result();
         $num_records = $result->num_rows;
         $totalRecords = $num_records;
-        $total_pages = ceil($num_records / 7);
-        $recordsPerPage = 7;
+        $total_pages = ceil($num_records / 6);
+        $recordsPerPage = 6;
         $startIndex = 0;
         $pages = 0;
         $message = '';
@@ -447,8 +447,8 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                 $sst = $totalAmt * (8/100);
                 $subTotalAmt = $totalAmt + $sst;
                 
-                if ($count <= 7 && count($rows) % 7 != 0) {
-                    $remainingRows = 7 - (count($rows) % 7);
+                if ($count <= 6 && count($rows) % 6 != 0) {
+                    $remainingRows = 6 - (count($rows) % 6);
                     for ($i = 0; $i < $remainingRows; $i++) {
                         $rows[] = '<tr style="height: 30px;">
                             <td></td>
