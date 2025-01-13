@@ -170,29 +170,20 @@ if(isset($_POST['name'], $_POST['address'], $_POST['address2'], $_POST['phone'],
 
         $customerCode = null;
         $codeSeq = null;
+        $count = '';
 
         if(!empty($reseller)){
             $customerCode = $reseller['customer_code'];
             preg_match('/\d+/', $customerCode, $matches);
-            $codeSeq = (int)$matches[0];
+            $codeSeq = (int)$matches[0]; 
             $nextSeq = $codeSeq+1;
-            $charSize = strlen($codeSeq);
-		
-            for($i=0; $i<(4-(int)$charSize); $i++){
-                $code.='0';  // S0000
-            }
-
-	    $code.=$nextSeq;
+            $count = str_pad($nextSeq, 4, '0', STR_PAD_LEFT); 
+            $code.=$count;
         }
     	else{
             $nextSeq = 1;
-            $charSize = strlen($nextSeq);
-            
-            for($i=0; $i<(4-(int)$charSize); $i++){
-                $code.='0';  // S0000
-            }
-            
-            $code.=$nextSeq;
+            $count = str_pad($nextSeq, 4, '0', STR_PAD_LEFT); 
+            $code.=$count;
         }
 
         if ($insert_stmt = $db->prepare("INSERT INTO dealer (customer_code, other_code, customer_name, customer_address, address2, address3, address4, map_url, customer_phone, customer_email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
