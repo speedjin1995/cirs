@@ -1584,7 +1584,7 @@ $(function () {
         $('#extendModal').find('#email').val(obj.message.customer_email);
 
         $('#branch').html('');
-        $('#branch').append('<option selected="selected">-</option>');
+        // $('#branch').append('<option selected="selected">-</option>');
 
         for(var i=0; i<obj.message.pricing.length; i++){
           var branchInfo = obj.message.pricing[i];
