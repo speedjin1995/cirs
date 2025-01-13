@@ -2120,7 +2120,7 @@ $(function () {
   });
 
   $('#multiDeactivate').on('click', function () {
-    if (confirm('Are you sure you want to cancel this item?')) {
+    if (confirm('Are you sure you want to cancel these items?')) {
       $('#spinnerLoading').show();
       var selectedIds = []; // An array to store the selected 'id' values
 

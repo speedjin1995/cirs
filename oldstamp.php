@@ -174,7 +174,7 @@ else{
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
                 <tr>
-                  <th></th>
+                  <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
                   <th>No</th>
                   <th>Company Name</th>
                   <th>Brands</th>
@@ -744,7 +744,7 @@ $(function () {
     'serverMethod': 'post',
     'searching': true,
     // "stateSave": true,
-    'order': [[ 1, 'asc' ]],
+    'order': [[ 2, 'asc' ]],
     // 'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
       'type': 'POST',
@@ -762,15 +762,15 @@ $(function () {
       } 
     },
     'columns': [
-      // {
-      //   // Add a checkbox with a unique ID for each row
-      //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-      //   className: 'select-checkbox',
-      //   orderable: false,
-      //   render: function (data, type, row) {
-      //     return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-      //   }
-      // },
+      {
+        // Add a checkbox with a unique ID for each row
+        data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+        className: 'select-checkbox',
+        orderable: false,
+        render: function (data, type, row) {
+          return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+        }
+      },
       {
         data: null, // The data property is null since this column is client-side only
         className: 'auto-increment',
@@ -986,7 +986,7 @@ $(function () {
       'serverMethod': 'post',
       'searching': true,
       // "stateSave": true,
-      'order': [[ 1, 'asc' ]],
+      'order': [[ 2, 'asc' ]],
       // 'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
         'type': 'POST',
@@ -1004,15 +1004,15 @@ $(function () {
         } 
       },
       'columns': [
-        // {
-        //   // Add a checkbox with a unique ID for each row
-        //   data: 'id', // Assuming 'serialNo' is a unique identifier for each row
-        //   className: 'select-checkbox',
-        //   orderable: false,
-        //   render: function (data, type, row) {
-        //     return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-        //   }
-        // },
+        {
+          // Add a checkbox with a unique ID for each row
+          data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+          className: 'select-checkbox',
+          orderable: false,
+          render: function (data, type, row) {
+            return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+          }
+        },
         {
           data: null, // The data property is null since this column is client-side only
           className: 'auto-increment',
@@ -1142,6 +1142,37 @@ $(function () {
 
     window.open("php/export.php?fromDate="+fromDateValue+"&toDate="+toDateValue+
     "&stamps="+selectedIds+"&type=cancelledStamp");    
+  });
+
+  $('#multiDeactivate').on('click', function () {
+    if (confirm('DO YOU CONFIRMED TO DELETE THE FOLLOWING STAMPINGS?')) {
+      $('#spinnerLoading').show();
+      var selectedIds = []; // An array to store the selected 'id' values
+
+      $("#weightTable tbody input[type='checkbox']").each(function () {
+        if (this.checked) {
+          selectedIds.push($(this).val());
+        }
+      });
+
+      if (selectedIds.length > 0) {
+        $.post('php/deleteStamp.php', {id: selectedIds, status: 'DELETE', type: 'MULTI'}, function(data){
+          var obj = JSON.parse(data);
+
+          if(obj.status === 'success'){
+            toastr["success"](obj.message, "Success:");
+            $('#weightTable').DataTable().ajax.reload();
+          }
+          else if(obj.status === 'failed'){
+            toastr["error"](obj.message, "Failed:");
+          }
+          else{
+            toastr["error"]("Something wrong when activate", "Failed:");
+          }
+          $('#spinnerLoading').hide();
+        });
+      }
+    }
   });
 
   /*$('#refreshBtn').on('click', function(){

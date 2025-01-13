@@ -27,7 +27,11 @@ if(isset($_POST['otherReason']) && $_POST['otherReason']!=null && $_POST['otherR
 
 if ($type == 'MULTI'){
 	if(isset($_POST['id']) && $_POST['id']!=null && $_POST['id']!=""){
-		$ids = $_POST['id'];
+		if(is_array($_POST['id'])){
+			$ids = implode(",", $_POST['id']);
+		}else{
+			$ids = $_POST['id'];
+		}
 		$id_list = explode(",", $ids); 
 		$updateDt = date('Y-m-d H:i:s');
 	
