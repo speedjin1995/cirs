@@ -185,12 +185,15 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-6"><h4>Company Weight And Measure Details</h4></div>
+              <div class="col-4"><h4>Company Weight And Measure Details</h4></div>
               <div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="multiDeactivate">Cancel Stampings</button>
               </div>
               <div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
+              </div>
+              <div class="col-2">
+                <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="mergeBorang">Merge Borangs</button>
               </div>
               <!--div class="col-2">
                 <a href="/template/Stamping Record Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
@@ -2156,6 +2159,24 @@ $(function () {
         alert("Please select at least one stamping to cancel.");
       }      
     }
+  });
+
+  $('#mergeBorang').on('click', function () {
+      var selectedIds = []; // An array to store the selected 'id' values
+
+      $("#weightTable tbody input[type='checkbox']").each(function () {
+        if (this.checked) {
+          selectedIds.push($(this).val());
+        }
+      });
+
+      if (selectedIds.length > 0) {
+        window.open('php/printMergedBorang.php?userID='+selectedIds, '_blank');
+      } 
+      else {
+        // Optionally, you can display a message or take another action if no IDs are selected
+        alert("Please select at least one borang to merge.");
+      }
   });
 
   $('#uploadExccl').on('click', function(){
