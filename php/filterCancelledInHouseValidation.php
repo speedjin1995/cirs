@@ -49,7 +49,7 @@ if($searchValue != ''){
   )";
 }
 
-// $searchQuery .= " and b.deleted = 0 and a.deleted = 0 AND c.deleted = 0 and brand.deleted = 0 and m.deleted = 0 and cap.deleted = 0 and u.deleted = 0";
+$searchQuery .= " and a.deleted = 0";
 
 # Order by column
 if ($columnName == 'customer'){

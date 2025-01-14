@@ -115,66 +115,53 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 				# to generate customer code
 				$custNameFirstLetter = substr($companyText, 0, 1);
 				$firstChar = $custNameFirstLetter;
+				$code = 'C-'.strtoupper($custNameFirstLetter);
+
+				$customerQuery = "SELECT * FROM customers WHERE customer_code LIKE '%$code%' ORDER BY customer_code DESC";
+				$customerDetail = mysqli_query($db, $customerQuery);
+				$customerRow = mysqli_fetch_assoc($customerDetail);
 		
-				if($misc_stmt = $db->prepare("SELECT * FROM miscellaneous WHERE code='customer' AND description=?")){
-					$misc_stmt->bind_param('s', $custNameFirstLetter);
+				$customerCode = null;
+				$codeSeq = null;
+				$count = '';
 		
-					if(!$misc_stmt->execute()){
-						echo json_encode(
-							array(
-								"status" => "failed",
-								"message" => "Something went wrong querying miscellaneous"
-							)); 
-					}else{
-						$result = $misc_stmt->get_result();
-						while ($row = $result->fetch_assoc()){
-							$charSize = strlen($row['value']);
-							$misValue = $row['value'];
-							
-							$code = 'C-'.strtoupper($custNameFirstLetter);
-							for($i=0; $i<(4-(int)$charSize); $i++){
-								$code.='0';  // S0000
-							}
+				if(!empty($customerRow)){
+					$customerCode = $customerRow['customer_code'];
+					preg_match('/\d+/', $customerCode, $matches);
+					$codeSeq = (int)$matches[0]; 
+					$nextSeq = $codeSeq+1;
+					$count = str_pad($nextSeq, 4, '0', STR_PAD_LEFT); 
+					$code.=$count;
+				}
+				else{
+					$nextSeq = 1;
+					$count = str_pad($nextSeq, 4, '0', STR_PAD_LEFT); 
+					$code.=$count;
+				}
 
-							$code.=$misValue;
+				// Customer does not exist, create a new customer
+				if ($insert_stmt = $db->prepare("INSERT INTO customers (customer_name, customer_code, customer_address, address2, address3, address4, customer_phone, customer_email, customer_status, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+					$customer_status = 'CUSTOMERS';
+					$insert_stmt->bind_param('sssssssssss', $_POST['companyText'], $code, $address1, $address2, $address3, $address4, $phone, $email, $customer_status, $pic, $contact);
+					
+					if ($insert_stmt->execute()) {
+						$customer = $insert_stmt->insert_id;
+						$customerType = 'EXISTING';
 
-							// Customer does not exist, create a new customer
-							if ($insert_stmt = $db->prepare("INSERT INTO customers (customer_name, customer_code, customer_address, address2, address3, address4, customer_phone, customer_email, customer_status, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-								$customer_status = 'CUSTOMERS';
-								$insert_stmt->bind_param('sssssssssss', $_POST['companyText'], $code, $address1, $address2, $address3, $address4, $phone, $email, $customer_status, $pic, $contact);
-								
-								if ($insert_stmt->execute()) {
-									$customer = $insert_stmt->insert_id;
-									$customerType = 'EXISTING';
-
-									if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, branch_name, map_url, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-										$insert_stmt2->bind_param('sssssssss', $customer, $address1, $address2, $address3, $address4, $branchName, $mapUrl, $pic, $contact);
-										$insert_stmt2->execute();
-										$branch = $insert_stmt2->insert_id;
-										$insert_stmt2->close();
-									} 
-								} 
-							}
-
-							#Update miscellaneous value
-                            $misValue++;
-
-                            if($updmisc_stmt = $db->prepare("UPDATE miscellaneous SET value=? WHERE code='customer' AND description=?")){
-                                $updmisc_stmt->bind_param('ss', $misValue, $firstChar);
-										
-                                // Execute the prepared query.
-                                if (! $updmisc_stmt->execute()){
-                    
-                                    echo json_encode(
-                                        array(
-                                            "status"=> "failed", 
-                                            "message"=> $updmisc_stmt->error
-                                        )
-                                    );
-                                }
-                            }
-						}
-					}
+						if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, branch_name, map_url, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+							$insert_stmt2->bind_param('sssssssss', $customer, $address1, $address2, $address3, $address4, $branchName, $mapUrl, $pic, $contact);
+							$insert_stmt2->execute();
+							$branch = $insert_stmt2->insert_id;
+							$insert_stmt2->close();
+						} 
+					} 
+				} else {
+					echo json_encode(
+						array(
+							"status"=> "failed", 
+							"message"=> $insert_stmt->error
+						)
+					);
 				}
 			}
 		}
