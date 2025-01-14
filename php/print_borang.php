@@ -3,16 +3,35 @@
 require_once 'db_connect.php';
 require_once 'requires/lookup.php';
  
-if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['validatorBorang'])){
+if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actualPrintDate'])){
     $selectedIds = $_POST['id'];
     $arrayOfId = explode(",", $selectedIds);
     $driver = filter_input(INPUT_POST, 'driver', FILTER_SANITIZE_STRING);
     $cawangan = searchStateNameById(filter_input(INPUT_POST, 'cawanganBorang', FILTER_SANITIZE_STRING), $db);
-    $validatorFilter = searchValidatorNameById(filter_input(INPUT_POST, 'validatorBorang', FILTER_SANITIZE_STRING), $db);
+
+    if(isset($_POST['validatorBorang']) && $_POST['validatorBorang']!=null && $_POST['validatorBorang']!=""){
+        $validatorFilter = searchValidatorNameById($_POST['validatorBorang'], $db);
+	}else{
+        echo json_encode(
+            array(
+                "status"=> "failed", 
+                "message"=> "Please select a validator in searching."
+            )
+        );
+        exit;
+    }
+    
+    $actualPrintDate = filter_input(INPUT_POST, 'actualPrintDate', FILTER_SANITIZE_STRING);
     $todayDate = date('d/m/Y');
     $todayDate2 = date('d M Y');
     $todayDate3 = date('d.m.Y');
+    $todayDate4 = date('d/m/Y - h:i:s A');
     $today = date("Y-m-d 00:00:00");
+    $userId = '';
+
+    if(isset($_POST['userid']) && $_POST['userid']!=null && $_POST['userid']!=""){
+		$userId = searchStaffNameById($_POST['userid'], $db);
+	}
 
     $placeholders = implode(',', array_fill(0, count($arrayOfId), '?'));
 
@@ -40,8 +59,8 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['valid
         $result = $select_stmt->get_result();
         $num_records = $result->num_rows;
         $totalRecords = $num_records;
-        $total_pages = ceil($num_records / 7);
-        $recordsPerPage = 7;
+        $total_pages = ceil($num_records / 6);
+        $recordsPerPage = 6;
         $startIndex = 0;
         $pages = 0;
         $message = '';
@@ -292,22 +311,23 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['valid
                 $jenisAlatData[$jenisAlat]['count']++;
 
                 $rows[] = '<tr style="height: 30px;">
-                            <td style="padding-left: 0.5%">'.$indexCount.'</td>
-                            <td style="padding-left: 0.5%">'.$jenisAlat.'</td>
-                            <td style="padding-left: 0.5%">'.searchCapacityNameById($row['capacity'], $db).'</td>
-                            <td style="padding-left: 0.5%">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
-                            <td style="padding-left: 0.5%">'.$row['serial_no'].'</td>
-                            <td style="padding-left: 0.5%">'.searchCustNameById($row['customers'], $db).'<br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
-                            <td style="padding-left: 0.5%"></td>
-                            <td style="padding-left: 0.5%">'.$row['no_daftar_lama'].'</td>
-                            <td style="padding-left: 0.5%">'.$row['no_daftar_baru'].'</td>
-                            <td style="padding-left: 0.5%">'.$row['siri_keselamatan'].'</td>';
+                            <td style="font-size:12px;padding-left: 0.5%">'.$indexCount.'</td>
+                            <td style="font-size:12px;padding-left: 0.5%">'.$jenisAlat.'</td>
+                            <td style="font-size:12px;padding-left: 0.5%">'.searchCapacityNameById($row['capacity'], $db).'</td>
+                            <td style="font-size:12px;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
+                            <td style="font-size:12px;padding-left: 0.5%">'.$row['serial_no'].'</td>
+                            <td style="font-size:12px;padding-left: 0.5%"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
+                            <td style="font-size:12px;padding-left: 0.5%"></td>
+                            <td style="font-size:12px;padding-left: 0.5%">'.$row['no_daftar_lama'].'</td>
+                            <td style="font-size:12px;padding-left: 0.5%">'.$row['no_daftar_baru'].'</td>
+                            <td style="font-size:12px;padding-left: 0.5%">'.$row['siri_keselamatan'].'</td>';
                             
                             if ($row['cert_price'] != 0) {
-                                $rows[$rowCount] .= '<td style="padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').'</td>';
+                                $rows[$rowCount] .= '<td style="font-size:12px;padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').'</td>';
                             } else {
-                                $rows[$rowCount] .= '<td style="padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'</td>';
+                                $rows[$rowCount] .= '<td style="font-size:12px;padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'</td>';
                             }
+
                             
                 $rows[$rowCount] .= '</tr>';
 
@@ -317,7 +337,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['valid
                 $rowCount++;
                 $indexCount++;
 
-                if($count > 7){
+                if($count > 6){
                     $count = 1;
                 }
 
@@ -327,8 +347,8 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['valid
             $sst = $totalAmt * (8/100);
             $subTotalAmt = $totalAmt + $sst;
             
-            if ($count <= 7 && count($rows) % 7 != 0) {
-                $remainingRows = 7 - (count($rows) % 7);
+            if ($count <= 6 && count($rows) % 6 != 0) {
+                $remainingRows = 6 - (count($rows) % 6);
                 for ($i = 0; $i < $remainingRows; $i++) {
                     $rows[] = '<tr style="height: 30px;">
                         <td></td>
@@ -416,32 +436,32 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['valid
                             <tbody>
                                 <tr>
                                     <td style="vertical-align: left;" width="50%">
-                                        <p>NAMA SYARIKAT PEMILIK / PEMBAIK : <br>'.$companyName.' ('.$companyOldRoc.')<br>
+                                        <p>NAMA SYARIKAT PEMILIK / PEMBAIK : <br><br><b>'.$companyName.' ('.$companyOldRoc.')</b><br>
                                         ALAMAT : '.$companyAddress.'<br>
                                         Tel. : '.$companyTel.'     Fax. : '.$companyFax.'</p><br>';
     
-                                    $message .= '<p>Pengurus Cawangan : <span style="font-size: 14px; font-weight: bold;">' . $validatorFilter . ' ' . $cawangan . '</span><br>';
+                                    $message .= '<p><b>Pengurus Cawangan : <span style="font-size: 14px">' . $validatorFilter . ' ' . $cawangan . '</span></b><br>';
                                         
-                                    if($validator == '2'){
-                                        $message .= 'Metrology Corporation Malaysia Sdn. Bhd.</p>';
-                                    }
-                                    elseif($validator == '3'){
-                                        $message .= 'De Metrology Corporation Malaysia Sdn. Bhd.</p>';
-                                    }
+                                    // if($validator == '2'){
+                                    //     $message .= 'Metrology Corporation Malaysia Sdn. Bhd.</p>';
+                                    // }
+                                    // elseif($validator == '3'){
+                                    //     $message .= 'De Metrology Corporation Malaysia Sdn. Bhd.</p>';
+                                    // }
                                         
                                     $message .= '</td>
                                     <td valign="top" align="center" width="20%">';
-                                    if($validator == '2'){
-                                        $message .= '<img src="https://cirs.syncweigh.com/assets/metrology.jpeg" width="50%" height="auto" />';
+                                    if($validatorFilter == 'METROLOGY'){
+                                        $message .= '<img src="https://cirs.syncweigh.com/assets/metrology.jpeg" width="80%" height="auto" style="margin-left: -20%; margin-top: 15%;"/>';
                                     }
-                                    elseif($validator == '3'){
+                                    elseif($validatorFilter == 'DE METROLOGY'){
                                         $message .= '<img src="https://cirs.syncweigh.com/assets/DMCM.jpeg" width="50%" height="auto" />';
                                     }
                                         
                                     $message .= '</td>
                                     <td style="vertical-align: right;">
                                         <p>Penentusahan Dalam / Luar Pejabat</p>
-                                        <p>Tarikh : '.$todayDate3.'</p>
+                                        <p>Tarikh : '.$actualPrintDate.'</p>
                                         <table class="table-bordered">
                                             <tbody>
                                                 <tr><th width="20%">Alat</th><th width="20%">Jum. Alat</th><th width="20%">Bayaran</th></tr>';
@@ -467,17 +487,17 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['valid
                         <table class="table-bordered" style="border-left: none; border-bottom: none;">
                             <tbody>
                                 <tr>
-                                    <th>Bil.</th>
-                                    <th>Jenis Alat</th>
-                                    <th>Had Terima</th>
-                                    <th>Jenama</th>
-                                    <th width="10%">No. Siri Alat</th>
-                                    <th>Nama Dan Alamat Pemilik</th>
-                                    <th>Kod</th>
-                                    <th>No. Daftar Lama</th>
-                                    <th>No. Daftar Baru</th>
-                                    <th>No. Siri Pelekat Keselamatan</th>
-                                    <th width="8%">Fi / Bayaran</th>
+                                    <th style="font-size:12px;">Bil.</th>
+                                    <th style="font-size:12px;">Jenis Alat</th>
+                                    <th style="font-size:12px;">Had Terima</th>
+                                    <th style="font-size:12px;">Jenama</th>
+                                    <th style="font-size:12px;" width="10%">No. Siri Alat</th>
+                                    <th style="font-size:12px;">Nama Dan Alamat Pemilik</th>
+                                    <th style="font-size:12px;" width="10%">Kod</th>
+                                    <th style="font-size:12px;">No. Daftar Lama</th>
+                                    <th style="font-size:12px;">No. Daftar Baru</th>
+                                    <th style="font-size:12px;">No. Siri Pelekat Keselamatan</th>
+                                    <th style="font-size:12px;" width="8%">Fi / Bayaran</th>
                                 </tr>';
                         
                             for ($i = $startIndex; $i < $startIndex + $recordsPerPage; $i++) {
@@ -509,9 +529,9 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['valid
                                     <td width="40%">';
                         
                         if (isset($companySignature) && $companySignature!=null && $companySignature!="") {
-                            $message .= '<img src="scm/' . $companySignature . '" style="margin-left:30%; padding-top:10%" width="30%" height="auto"/>';
+                            $message .= '<img src="' . $companySignature . '" style="margin-left:30%; padding-top:6%" width="30%" height="auto"/>';
                         }else{
-                            $message .= '<div style="margin-left:30%; padding-top:10%; width:30%; height:auto; background-color:transparent;"></div>';
+                            $message .= '<div style="margin-left:30%; padding-top:6%; width:30%; height:auto; background-color:transparent;"></div>';
                         }
                         
                         $message .= '
@@ -521,12 +541,16 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['valid
                                 </tr>
                                 <tr>
                                     <td width="30%" style="border-top: 1px solid black; text-align: center; padding-top: 5px;">
-                                        Tandatangan Pemilik / Pembaik
+                                        <div>'.$userId.'</div>
+                                        <div>Tandatangan Pemilik / Pembaik</div>
                                     </td>
                                     <td width="40%"></td>
                                     <td width="30%" style="border-top: 1px solid black; text-align: center; padding-top: 5px;">
                                         Pengesahan Pegawai Penentusan
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" style="text-align: center;"><span style="margin-left: 100px;">Printed: '.$todayDate4.'</span></td>
                                 </tr>
                             </table>';
     

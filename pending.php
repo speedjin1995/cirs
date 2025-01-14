@@ -798,7 +798,21 @@ else{
               </div>
             </div>
           </div>  
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>Actual Print Date *</label>
+                <div class='input-group date' id="actualPrintDatePicker" data-target-input="nearest">
+                  <input type='text' class="form-control datetimepicker-input" data-target="#actualPrintDatePicker" id="actualPrintDate" name="actualPrintDate" required/>
+                  <div class="input-group-append" data-target="#actualPrintDatePicker" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <input type="hidden" class="form-control" id="validatorBorang" name="validatorBorang">
+          <input type="hidden" class="form-control" id="userId" name="userId">
 
         </div>
 
@@ -1617,7 +1631,8 @@ var jalat = '';
 
 $(function () {
   $('#customerNoHidden').hide();
-
+  
+  const userId = <?php echo json_encode($user); ?>;
   const today = new Date();
   const tomorrow = new Date(today);
   const yesterday = new Date(today);
@@ -1647,6 +1662,12 @@ $(function () {
   });
 
   $('#lastYearDatePicker').datetimepicker({
+    icons: { time: 'far fa-calendar' },
+    format: 'DD/MM/YYYY',
+    defaultDate: ''
+  });
+  
+  $('#actualPrintDatePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
     defaultDate: ''
@@ -2098,6 +2119,7 @@ $(function () {
       $("#printDOModal").find('#id').val(selectedIds);
       $("#printDOModal").find('#driver').val('P');
       $("#printDOModal").find('#validatorBorang').val(validator);
+      $("#printDOModal").find('#userId').val(userId);
       $("#printDOModal").modal("show");
 
       $('#printDOForm').validate({
