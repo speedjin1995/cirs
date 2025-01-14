@@ -104,7 +104,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
 
             <div class="row">
               <div class="form-group col-4">
-                <label>From Date:</label>
+                <label>From Inhouse Date:</label>
                 <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
                   <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
                   <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
@@ -114,7 +114,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               </div>
 
               <div class="form-group col-4">
-                <label>To Date:</label>
+                <label>To Expired Date:</label>
                 <div class="input-group date" id="toDatePicker" data-target-input="nearest">
                   <input type="text" class="form-control datetimepicker-input" data-target="#toDatePicker" id="toDate"/>
                   <div class="input-group-append" data-target="#toDatePicker" data-toggle="datetimepicker">
@@ -170,7 +170,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                   <th>Description Instruments for Weighing and Measuring</th>
                   <th width="10%">Capacity</th>
                   <th>Previous Cert. No</th>
-                  <th>Current Validation Date</th>
+                  <th>Inhouse Date</th>
                   <th>Expired Date</th>
                   <th>Calibrator By</th>
                   <th>Status</th>
@@ -1779,7 +1779,7 @@ function format (row) {
   <div class="row">
     <!-- Customer Section -->
     <div class="col-md-6">
-      <p><span><strong style="font-size:120%; text-decoration: underline;">Customer</strong></span><br>
+      <p><span><strong style="font-size:120%; text-decoration: underline;">Inhouse To : Customer</strong></span><br>
       <strong>${row.customer}</strong><br>
       ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4} `;
 
@@ -1793,7 +1793,7 @@ function format (row) {
     returnString += `
     <!-- Reseller Section -->
     <div class="col-md-6">
-      <p><span><strong style="font-size:120%; text-decoration: underline;">Reseller</strong></span><br>
+      <p><span><strong style="font-size:120%; text-decoration: underline;">Billing or Supply by Reseller</strong></span><br>
       <strong>${row.dealer}</strong><br>
       ${row.reseller_address1}<br>${row.reseller_address2}<br>${row.reseller_address3}<br>${row.reseller_address4} `;
       
@@ -1812,7 +1812,7 @@ function format (row) {
     <!-- Machine Section -->
     <div class="col-6">
       <p><strong>Machines / Instruments:</strong> ${row.machines}</p>
-      <p><strong>Current Validation Date:</strong> ${row.validation_date}</p>
+      <p><strong>Inhouse Date:</strong> ${row.validation_date}</p>
       <p><strong>Manufacturing:</strong> ${row.manufacturing}</p>
       <p><strong>Brand:</strong> ${row.brand}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>

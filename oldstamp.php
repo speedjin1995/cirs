@@ -63,7 +63,7 @@ else{
           <div class="card-body">
             <div class="row">
               <div class="form-group col-3">
-                <label>From Date:</label>
+                <label>From Stamp Date:</label>
                 <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
                   <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
                   <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
@@ -72,7 +72,7 @@ else{
               </div>
 
               <div class="form-group col-3">
-                <label>To Date:</label>
+                <label>To Expired Date:</label>
                 <div class="input-group date" id="toDatePicker" data-target-input="nearest">
                   <input type="text" class="form-control datetimepicker-input" data-target="#toDatePicker" id="toDate"/>
                   <div class="input-group-append" data-target="#toDatePicker" data-toggle="datetimepicker">
@@ -184,8 +184,8 @@ else{
                   <th width="10%">Capacity</th>
                   <th>No. Daftar Lama</th>
                   <th>No. Daftar Baru</th>
-                  <th>Previous Stamp Date</th>
-                  <th>Expired Date</th>
+                  <th>Stamp Date</th>
+                  <th>Next Due Date</th>
                   <th>Status</th>
                   <th>Action</th>
                   <th></th>
@@ -1458,7 +1458,7 @@ function format (row) {
   <div class="row">
     <!-- Customer Section -->
     <div class="col-md-6">
-      <p><span><strong style="font-size:120%; text-decoration: underline;">Customer</strong></span><br>
+      <p><span><strong style="font-size:120%; text-decoration: underline;">Stamping To : Customer</strong></span><br>
       <strong>${row.customers}</strong><br>
       ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4} `;
 
@@ -1472,7 +1472,7 @@ function format (row) {
     returnString += `
     <!-- Reseller Section -->
     <div class="col-md-6">
-      <p><span><strong style="font-size:120%; text-decoration: underline;">Reseller</strong></span><br>
+      <p><span><strong style="font-size:120%; text-decoration: underline;">Billing or Supply by Reseller</strong></span><br>
       <strong>${row.dealer}</strong><br>
       ${row.reseller_address1}<br>${row.reseller_address2}<br>${row.reseller_address3}<br>${row.reseller_address4} `;
       
@@ -1507,7 +1507,7 @@ function format (row) {
           <p><strong>Borang E:</strong> ${row.borang_e}</p>
           <p><strong>Last Year Stamping Date:</strong> ${row.last_year_stamping_date}</p>
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
-          <p><strong>Due Date:</strong> ${row.due_date}</p>
+          <p><strong>Next Due Date:</strong> ${row.due_date}</p>
         </div>
       </div><hr>
     `;
@@ -1519,7 +1519,7 @@ function format (row) {
           <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
           <p><strong>Borang D:</strong> ${row.borang_d}</p>
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
-          <p><strong>Due Date:</strong> ${row.due_date}</p>
+          <p><strong>Next Due Date:</strong> ${row.due_date}</p>
         </div>
       </div><hr>
     `;
