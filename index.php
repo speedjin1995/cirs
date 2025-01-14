@@ -285,6 +285,11 @@ else{
       float: right;
     }
 
+    .dataTables_filter input {
+      width: 400px;
+      max-width: 100%;
+    }
+
     [class*=sidebar-light-] .nav-sidebar>.nav-item.menu-open>.nav-link, [class*=sidebar-light-] .nav-sidebar>.nav-item:hover>.nav-link {
       background-color: rgb(7 73 121);
       color: #ffffff;
