@@ -1685,7 +1685,6 @@ $(function () {
   });
 
   $('#multiDeactivate').on('click', function () {
-    if (confirm('DO YOU CONFIRMED TO DELETE THE FOLLOWING OTHER VALIDATIONS?')) {
       $('#spinnerLoading').show();
       var selectedIds = []; // An array to store the selected 'id' values
 
@@ -1696,25 +1695,28 @@ $(function () {
       });
 
       if (selectedIds.length > 0) {
-        $.post('php/deleteValidation.php', {id: selectedIds, status: 'DELETE', type: 'MULTI'}, function(data){
-          var obj = JSON.parse(data);
+        if (confirm('DO YOU CONFIRMED TO DELETE THE FOLLOWING OTHER VALIDATIONS?')) {
+          $.post('php/deleteValidation.php', {id: selectedIds, status: 'DELETE', type: 'MULTI'}, function(data){
+            var obj = JSON.parse(data);
 
-          if(obj.status === 'success'){
-            toastr["success"](obj.message, "Success:");
-            $('#weightTable').DataTable().ajax.reload();
-          }
-          else if(obj.status === 'failed'){
-            toastr["error"](obj.message, "Failed:");
-          }
-          else{
-            toastr["error"]("Something wrong when activate", "Failed:");
-          }
-          $('#spinnerLoading').hide();
-        });
+            if(obj.status === 'success'){
+              toastr["success"](obj.message, "Success:");
+              $('#weightTable').DataTable().ajax.reload();
+            }
+            else if(obj.status === 'failed'){
+              toastr["error"](obj.message, "Failed:");
+            }
+            else{
+              toastr["error"]("Something wrong when activate", "Failed:");
+            }
+          });
+        }
+
+        $('#spinnerLoading').hide();
       }else{
         alert("Please select at least one other validation to delete.");
+        $('#spinnerLoading').hide();
       }
-    }
   });
 
   // $(".add-price").click(function(){

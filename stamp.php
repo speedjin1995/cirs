@@ -2051,7 +2051,6 @@ $(function () {
   });
 
   $('#multiDeactivate').on('click', function () {
-    if (confirm('Are you sure you want to cancel these items?')) {
       $('#spinnerLoading').show();
       var selectedIds = []; // An array to store the selected 'id' values
 
@@ -2062,31 +2061,33 @@ $(function () {
       });
 
       if (selectedIds.length > 0) {
-        $('#cancelModal').find('#id').val(selectedIds);
-        $('#cancelModal').find('#type').val('MULTI');
-        $('#cancelModal').modal('show');
+        if (confirm('Are you sure you want to cancel these items?')) {
+          $('#cancelModal').find('#id').val(selectedIds);
+          $('#cancelModal').find('#type').val('MULTI');
+          $('#cancelModal').modal('show');
 
-        $('#cancelForm').validate({
-          errorElement: 'span',
-          errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-          },
-          highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-          },
-          unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-          }
-        });
+          $('#cancelForm').validate({
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+              error.addClass('invalid-feedback');
+              element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+              $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+              $(element).removeClass('is-invalid');
+            }
+          });
+        }
 
         $('#spinnerLoading').hide();
       } 
       else {
         // Optionally, you can display a message or take another action if no IDs are selected
         alert("Please select at least one stamping to cancel.");
+        $('#spinnerLoading').hide();
       }      
-    }
   });
 
   $('#uploadExccl').on('click', function(){
