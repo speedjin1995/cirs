@@ -171,24 +171,10 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-10"><h4>Company Weight And Measure Details</h4></div>
-              <div class="col-2 d-flex justify-content-end">
-                <div class="col-3">
-                  <button type="button" class="btn btn-block bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Cancel Stampings"><i class="fa-solid fa-ban"></i></button>
-                </div>
+              <div class="col-10"><p>Company Weight And Measure Details</p></div>
+              <div class="col-2">
+                <button type="button" class="btn btn-block btn-sm bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Cancel Stampings"><i class="fa-solid fa-ban"></i> Cancel Stampings</button>
               </div>
-              <!-- <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
-              </div> -->
-              <!--div class="col-2">
-                <a href="/template/Stamping Record Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
-              </div-->
-              <!--div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">Upload Excel</button>
-              </div-->
-              <!-- <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" onclick="newEntry()">Add New Stamping</button>
-              </div> -->
             </div>
           </div>
 

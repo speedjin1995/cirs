@@ -97,7 +97,7 @@ $data = array();
 $counter = 1;
 
 while($row = mysqli_fetch_assoc($validationRecords)) {
-  $branch = $row['branch'];
+  $branch = $row['branch'] ?? '';
   // $branchQuery = "SELECT * FROM branches WHERE id = $branch";
   // $branchDetail = mysqli_query($db, $branchQuery);
   // $branchRow = mysqli_fetch_assoc($branchDetail);
