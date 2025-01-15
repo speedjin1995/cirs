@@ -45,6 +45,12 @@ FROM load_cells, machines, brand, model, alat, country WHERE load_cells.machine_
 AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load_cells.deleted = '0'");
 }
 ?>
+<style>
+  #weightTable tbody tr:hover {
+      background-color: #d4edda; 
+      cursor: pointer;       
+  }
+</style>
 
 <select class="form-control" style="width: 100%;" id="customerNoHidden" style="display: none;">
   <option value="" selected disabled hidden>Please Select</option>
@@ -186,7 +192,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                   <th>Calibrator By</th>
                   <th>Status</th>
                   <th>Action</th>
-                  <th></th>
+                  <!-- <th></th> -->
                 </tr>
               </thead>
             </table>
@@ -977,35 +983,54 @@ $(function () {
       //       }
       //   }
       // },
-      { 
-        className: 'dt-control',
-        orderable: false,
-        data: null,
-        render: function ( data, type, row ) {
-          return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.auto_form_no+'"><i class="fas fa-angle-down"></i></td>';
-        }
-      }
+      // { 
+      //   className: 'dt-control',
+      //   orderable: false,
+      //   data: null,
+      //   render: function ( data, type, row ) {
+      //     return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.auto_form_no+'"><i class="fas fa-angle-down"></i></td>';
+      //   }
+      // }
     ],
   });
   
-  $('#weightTable tbody').on('click', 'td.dt-control', function () {
-    var tr = $(this).closest('tr');
-    var row = table.row(tr);
+  $('#weightTable tbody').on('click', 'tr', function () {
+      var tr = $(this); // The row that was clicked
+      var row = table.row(tr);
 
-    if ( row.child.isShown() ) {
-      // This row is already open - close it
-      row.child.hide();
-      tr.removeClass('shown');
-    }
-    else {
-      $.post('php/getInHouseValidation.php', {validationId: row.data().id, format: 'EXPANDABLE'}, function (data){
-        var obj = JSON.parse(data); 
-        if(obj.status === 'success'){
-          row.child( format(obj.message) ).show();tr.addClass("shown");
-        }
-      });
-    }
+      if (row.child.isShown()) {
+          // This row is already open - close it
+          row.child.hide();
+          tr.removeClass('shown');
+      } else {
+          $.post('php/getInHouseValidation.php', { validationId: row.data().id, format: 'EXPANDABLE' }, function (data) {
+              var obj = JSON.parse(data);
+              if (obj.status === 'success') {
+                  row.child(format(obj.message)).show();
+                  tr.addClass("shown");
+              }
+          });
+      }
   });
+
+  // $('#weightTable tbody').on('click', 'td.dt-control', function () {
+  //   var tr = $(this).closest('tr');
+  //   var row = table.row(tr);
+
+  //   if ( row.child.isShown() ) {
+  //     // This row is already open - close it
+  //     row.child.hide();
+  //     tr.removeClass('shown');
+  //   }
+  //   else {
+  //     $.post('php/getInHouseValidation.php', {validationId: row.data().id, format: 'EXPANDABLE'}, function (data){
+  //       var obj = JSON.parse(data); 
+  //       if(obj.status === 'success'){
+  //         row.child( format(obj.message) ).show();tr.addClass("shown");
+  //       }
+  //     });
+  //   }
+  // });
 
   $.validator.setDefaults({
     submitHandler: function () {

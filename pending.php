@@ -60,6 +60,12 @@ else{
 // AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load_cells.deleted = '0'");
 }
 ?>
+<style>
+  #weightTable tbody tr:hover {
+      background-color: #d4edda; /* Light gray color on hover */
+      cursor: pointer;          /* Pointer cursor to indicate clickability */
+  }
+</style>
 
 <select class="form-control" style="width: 100%;" id="customerNoHidden" style="display: none;">
   <option value="" selected disabled hidden>Please Select</option>
@@ -227,7 +233,7 @@ else{
                   <th>Next Due Date</th>
                   <th>Status</th>
                   <th>Action</th>
-                  <th></th>
+                  <!-- <th></th> -->
                 </tr>
               </thead>
             </table>
@@ -1821,14 +1827,14 @@ $(function () {
           return dropdownMenu;
         }
       },
-      { 
-        className: 'dt-control',
-        orderable: false,
-        data: null,
-        render: function ( data, type, row ) {
-          return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
-        }
-      }
+      // { 
+      //   className: 'dt-control',
+      //   orderable: false,
+      //   data: null,
+      //   render: function ( data, type, row ) {
+      //     return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
+      //   }
+      // }
     ],
     'createdRow': function (row, data, dataIndex) {
       if (data.duplicate === 'Y') {
@@ -1838,26 +1844,46 @@ $(function () {
       }
     }
   });
-  
-  // Add event listener for opening and closing details
-  $('#weightTable tbody').on('click', 'td.dt-control', function () {
-    var tr = $(this).closest('tr');
-    var row = table.row(tr);
 
-    if ( row.child.isShown() ) {
-      // This row is already open - close it
-      row.child.hide();
-      tr.removeClass('shown');
-    }
-    else {
-      $.post('php/getStamp.php', {userID: row.data().id, format: 'EXPANDABLE'}, function (data){
-        var obj = JSON.parse(data); 
-        if(obj.status === 'success'){
-          row.child( format(obj.message) ).show();tr.addClass("shown");
-        }
-      });
-    }
+  // Add event listener for opening and closing details on row click
+  $('#weightTable tbody').on('click', 'tr', function () {
+      var tr = $(this); // The row that was clicked
+      var row = table.row(tr);
+
+      if (row.child.isShown()) {
+          // This row is already open - close it
+          row.child.hide();
+          tr.removeClass('shown');
+      } else {
+          $.post('php/getStamp.php', { userID: row.data().id, format: 'EXPANDABLE' }, function (data) {
+              var obj = JSON.parse(data);
+              if (obj.status === 'success') {
+                  row.child(format(obj.message)).show();
+                  tr.addClass("shown");
+              }
+          });
+      }
   });
+  
+  // // Add event listener for opening and closing details
+  // $('#weightTable tbody').on('click', 'td.dt-control', function () {
+  //   var tr = $(this).closest('tr');
+  //   var row = table.row(tr);
+
+  //   if ( row.child.isShown() ) {
+  //     // This row is already open - close it
+  //     row.child.hide();
+  //     tr.removeClass('shown');
+  //   }
+  //   else {
+  //     $.post('php/getStamp.php', {userID: row.data().id, format: 'EXPANDABLE'}, function (data){
+  //       var obj = JSON.parse(data); 
+  //       if(obj.status === 'success'){
+  //         row.child( format(obj.message) ).show();tr.addClass("shown");
+  //       }
+  //     });
+  //   }
+  // });
 
   $.validator.setDefaults({
     submitHandler: function () {
@@ -2098,14 +2124,14 @@ $(function () {
             return dropdownMenu;
           }
         },
-        { 
-          className: 'dt-control',
-          orderable: false,
-          data: null,
-          render: function ( data, type, row ) {
-            return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
-          }
-        }
+        // { 
+        //   className: 'dt-control',
+        //   orderable: false,
+        //   data: null,
+        //   render: function ( data, type, row ) {
+        //     return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
+        //   }
+        // }
       ],
       'createdRow': function (row, data, dataIndex) {
         if (data.duplicate === 'Y') {
