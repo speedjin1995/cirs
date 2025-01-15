@@ -186,20 +186,19 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-10"><h4>Company Weight And Measure Details</h4></div>
-              <div class="col-2 d-flex">
-                <div class="col-3">
-                  <button type="button" class="btn btn-block bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Cancel Stampings"><i class="fa-solid fa-ban"></i></button>
-                </div>
-                <div class="col-3">
-                  <button type="button" class="btn btn-block bg-gradient-info" id="exportBorangs" data-bs-toggle="tooltip" title="Export Borangs"><i class="fa-solid fa-file-export"></i></button>
-                </div>
-                <div class="col-3">
-                  <button type="button" class="btn btn-block bg-gradient-success" id="mergeBorang" data-bs-toggle="tooltip" title="Merge Borangs"><i class="fa-brands fa-stack-exchange"></i></button>
-                </div>
-                <div class="col-3">
-                  <button type="button" class="btn btn-block bg-gradient-warning" onclick="newEntry()" data-bs-toggle="tooltip" title="Add New Stamping"><i class="fa-solid fa-circle-plus"></i></button>
-                </div>
+              <div class="col-4"><p>Company Weight And Measure Details</p></div>
+              <div class="col-2">
+                <button type="button" class="btn btn-block btn-sm bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Cancel Stampings"><i class="fa-solid fa-ban"></i> Cancel Stamping</button>
+              </div>
+              <div class="col-2">
+                <button type="button" class="btn btn-block btn-sm bg-gradient-info" id="exportBorangs" data-bs-toggle="tooltip" title="Export Borangs"><i class="fa-solid fa-file-export"></i> Export Borang</button>
+              </div>
+              <div class="col-2">
+                <button type="button" class="btn btn-block btn-sm bg-gradient-success" id="mergeBorang" data-bs-toggle="tooltip" title="Merge Borangs"><i class="fa-brands fa-stack-exchange"></i> Merge Borangs</button>
+              </div>
+              <div class="col-2">
+                <button type="button" class="btn btn-block btn-sm bg-gradient-warning" onclick="newEntry()" data-bs-toggle="tooltip" title="Add New Stamping"><i class="fa-solid fa-circle-plus"></i> Add New Stamping</button>
+              </div>
               </div>
               
               <!--div class="col-2">
@@ -208,8 +207,6 @@ else{
               <!--div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">Upload Excel</button>
               </div-->
-              
-            </div>
           </div>
 
           <div class="card-body">
