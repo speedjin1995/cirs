@@ -119,6 +119,7 @@ if(isset($_POST['userID'])){
                     $message['brand'] = $row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '';
                     $message['machine_type'] = $row['machine_type'] != null ? searchMachineNameById($row['machine_type'], $db) : '';
                     $message['model'] = $row['model'] != null ? searchModelNameById($row['model'], $db) : '';
+                    $message['make_in'] = searchCountryById($row['make_in'], $db) ?? '';
                     $message['capacity'] = $row['capacity'] != null ? $capacityName : '';
                     $message['capacity_range'] = $capacityType;
                     $message['assignTo'] = $row['assignTo'] != null ? searchStaffNameById($row['assignTo'], $db) : '';
@@ -205,6 +206,7 @@ if(isset($_POST['userID'])){
                     $message['brand'] = $row['brand'];
                     $message['machine_type'] = $row['machine_type'];
                     $message['model'] = $row['model'];
+                    $message['make_in'] = $row['make_in'];
                     $message['capacity'] = $row['capacity'];
                     $message['capacity_range'] = $capacityType;
                     $message['assignTo'] = $row['assignTo'];

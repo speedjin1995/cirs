@@ -1497,6 +1497,7 @@ function format (row) {
       <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
       <p><strong>Serial No:</strong> ${row.serial_no}</p>
       <p><strong>Assigned To:</strong> ${row.assignTo}</p>
+      <p><strong>Make In:</strong> ${row.make_in}</p>
     </div>`;
 
   if(row.stampType == 'RENEWAL'){
@@ -1562,22 +1563,21 @@ function format (row) {
   }
 
   // Additional section for ATS
-  if (row.jenis_alat == 'ATS' || row.jenis_alat == 'ATS (H)'){
-    returnString += `</div><hr>
-                        <div class="row">
-                          <!-- ATS Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
-                        </div>
-                        `;
-  }else if(row.jenis_alat == 'ATP'){
+  // if (row.jenis_alat == 'ATS' || row.jenis_alat == 'ATS (H)'){
+  //   returnString += `</div><hr>
+  //                       <div class="row">
+  //                         <!-- ATS Section -->
+  //                         <div class="col-6">
+  //                           <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+  //                         </div>
+  //                       </div>
+  //                       `;
+  // }else 
+  
+  if(row.jenis_alat == 'ATP'){
     returnString += `</div><hr>
                         <div class="row">
                           <!-- ATP Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
                           <div class="col-6">
                             <p><strong>Jenis Penunjuk:</strong> ${row.jenis_penunjuk}</p>
                           </div>
@@ -1587,9 +1587,6 @@ function format (row) {
     returnString += `</div><hr>
                         <div class="row">
                           <!-- ATN Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
                           <div class="col-6">
                             <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
                           </div>
@@ -1603,9 +1600,6 @@ function format (row) {
                         <div class="row">
                           <!-- ATE Section -->
                           <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
-                          <div class="col-6">
                             <p><strong>Klass:</strong> ${row.class}</p>
                           </div>
                         </div>
@@ -1613,10 +1607,7 @@ function format (row) {
   }else if(row.jenis_alat == 'BTU'){
     returnString += `</div><hr>
                         <div class="row">
-                          <!-- BTU Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>`;
+                          <!-- BTU Section -->`;
     if (row.batu_ujian == 'OTHER'){
       returnString += `
                       <div class="col-6">
@@ -1638,9 +1629,6 @@ function format (row) {
                         <div class="row">
                           <!-- ATP-AUTO MACHINE Section -->
                           <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
-                          <div class="col-6">
                             <p><strong>Jenis Penunjuk:</strong> ${row.jenis_penunjuk}</p>
                           </div>
                         </div>
@@ -1649,9 +1637,6 @@ function format (row) {
     returnString += `</div><hr>
                         <div class="row">
                           <!-- ATS Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
                           <div class="col-6">
                             <p><strong>Had Terima Steelyard:</strong> ${row.steelyard} kg</p>
                           </div>
@@ -1675,10 +1660,7 @@ function format (row) {
   }else if(row.jenis_alat == 'SIA'){
     returnString += `</div><hr>
                         <div class="row">
-                          <!-- SIA Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>`;
+                          <!-- SIA Section -->`;
 
     if (row.nilai_jangka == 'OTHER'){
       returnString += `
@@ -1713,9 +1695,6 @@ function format (row) {
     returnString += `</div><hr>
                         <div class="row">
                           <!-- SLL Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
                           <div class="col-6">
                             <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
                           </div>
