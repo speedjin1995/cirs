@@ -1253,14 +1253,14 @@ $(function () {
         //     }
         //   }
         // },
-        { 
-          className: 'dt-control',
-          orderable: false,
-          data: null,
-          render: function ( data, type, row ) {
-            return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.auto_form_no+'"><i class="fas fa-angle-down"></i></td>';
-          }
-        }
+        // { 
+        //   className: 'dt-control',
+        //   orderable: false,
+        //   data: null,
+        //   render: function ( data, type, row ) {
+        //     return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.auto_form_no+'"><i class="fas fa-angle-down"></i></td>';
+        //   }
+        // }
       ],
     });
   });
