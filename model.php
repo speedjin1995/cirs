@@ -191,7 +191,7 @@ $(function () {
                 if(obj.status === 'success'){
                     $('#modelModal').modal('hide');
                     toastr["success"](obj.message, "Success:");
-                    $('#modelTable').DataTable().ajax.reload();
+                    $('#modelTable').DataTable().ajax.reload(null, false);
                     $('#spinnerLoading').hide();
                 }
                 else if(obj.status === 'failed'){
@@ -245,7 +245,7 @@ $(function () {
                     
                     if(obj.status === 'success'){
                         toastr["success"](obj.message, "Success:");
-                        $('#modelTable').DataTable().ajax.reload();
+                        $('#modelTable').DataTable().ajax.reload(null, false);
                         $('#spinnerLoading').hide();
                     }
                     else if(obj.status === 'failed'){
@@ -313,7 +313,7 @@ function deactivate(id){
             
             if(obj.status === 'success'){
                 toastr["success"](obj.message, "Success:");
-                $('#modelTable').DataTable().ajax.reload();
+                $('#modelTable').DataTable().ajax.reload(null, false);
                 $('#spinnerLoading').hide();
             }
             else if(obj.status === 'failed'){

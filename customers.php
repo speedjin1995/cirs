@@ -337,7 +337,7 @@ $(function () {
           if(obj.status === 'success'){
             $('#addModal').modal('hide');
             toastr["success"](obj.message, "Success:");
-            $('#customerTable').DataTable().ajax.reload();
+            $('#customerTable').DataTable().ajax.reload(null, false);
             $('#spinnerLoading').hide();
           }
           else if(obj.status === 'failed'){
@@ -381,7 +381,7 @@ $(function () {
             if (obj.status === 'success') {
               $('#uploadModal').modal('hide');
               toastr["success"](obj.message, "Success:");
-              $('#customerTable').DataTable().ajax.reload();
+              $('#customerTable').DataTable().ajax.reload(null, false);
             } 
             else if (obj.status === 'failed') {
               toastr["error"](obj.message, "Failed:");
@@ -512,7 +512,7 @@ $(function () {
                     
                     if(obj.status === 'success'){
                         toastr["success"](obj.message, "Success:");
-                        $('#customerTable').DataTable().ajax.reload();
+                        $('#customerTable').DataTable().ajax.reload(null, false);
                         $('#spinnerLoading').hide();
                     }
                     else if(obj.status === 'failed'){
@@ -642,7 +642,7 @@ function deactivate(id){
       
       if(obj.status === 'success'){
         toastr["success"](obj.message, "Success:");
-        $('#customerTable').DataTable().ajax.reload();
+        $('#customerTable').DataTable().ajax.reload(null, false);
         $('#spinnerLoading').hide();
       }
       else if(obj.status === 'failed'){

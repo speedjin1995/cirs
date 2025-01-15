@@ -157,7 +157,7 @@ $(function () {
                 if(obj.status === 'success'){
                     $('#capacityModal').modal('hide');
                     toastr["success"](obj.message, "Success:");
-                    $('#capacityTable').DataTable().ajax.reload();
+                    $('#capacityTable').DataTable().ajax.reload(null, false);
                     $('#spinnerLoading').hide();
                 }
                 else if(obj.status === 'failed'){
@@ -209,7 +209,7 @@ $(function () {
                     
                     if(obj.status === 'success'){
                         toastr["success"](obj.message, "Success:");
-                        $('#capacityTable').DataTable().ajax.reload();
+                        $('#capacityTable').DataTable().ajax.reload(null, false);
                         $('#spinnerLoading').hide();
                     }
                     else if(obj.status === 'failed'){
@@ -275,7 +275,7 @@ function deactivate(id){
             
             if(obj.status === 'success'){
                 toastr["success"](obj.message, "Success:");
-                $('#capacityTable').DataTable().ajax.reload();
+                $('#capacityTable').DataTable().ajax.reload(null, false);
                 $('#spinnerLoading').hide();
             }
             else if(obj.status === 'failed'){

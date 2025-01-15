@@ -552,7 +552,7 @@ $(function () {
                     
                     if(obj.status === 'success'){
                         toastr["success"](obj.message, "Success:");
-                        $('#brandTable').DataTable().ajax.reload();
+                        $('#brandTable').DataTable().ajax.reload(null, false);
                         $('#spinnerLoading').hide();
                     }
                     else if(obj.status === 'failed'){
@@ -630,7 +630,7 @@ function deactivate(id){
             
             if(obj.status === 'success'){
                 toastr["success"](obj.message, "Success:");
-                $('#brandTable').DataTable().ajax.reload();
+                $('#brandTable').DataTable().ajax.reload(null, false);
                 $('#spinnerLoading').hide();
             }
             else if(obj.status === 'failed'){

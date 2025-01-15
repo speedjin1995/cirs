@@ -1187,7 +1187,7 @@ $(function () {
 
             if(obj.status === 'success'){
               toastr["success"](obj.message, "Success:");
-              $('#weightTable').DataTable().ajax.reload();
+              $('#weightTable').DataTable().ajax.reload(null, false);
             }
             else if(obj.status === 'failed'){
               toastr["error"](obj.message, "Failed:");
@@ -2084,7 +2084,7 @@ function deactivate(id) {
 
       if(obj.status === 'success'){
         toastr["success"](obj.message, "Success:");
-        $('#weightTable').DataTable().ajax.reload();
+        $('#weightTable').DataTable().ajax.reload(null, false);
       }
       else if(obj.status === 'failed'){
         toastr["error"](obj.message, "Failed:");

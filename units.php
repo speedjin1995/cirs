@@ -158,7 +158,7 @@ $(function () {
                 if(obj.status === 'success'){
                     $('#unitModal').modal('hide');
                     toastr["success"](obj.message, "Success:");
-                    $('#unitTable').DataTable().ajax.reload();
+                    $('#unitTable').DataTable().ajax.reload(null, false);
                     $('#spinnerLoading').hide();
                 }
                 else if(obj.status === 'failed'){
@@ -210,7 +210,7 @@ $(function () {
                     
                     if(obj.status === 'success'){
                         toastr["success"](obj.message, "Success:");
-                        $('#unitTable').DataTable().ajax.reload();
+                        $('#unitTable').DataTable().ajax.reload(null, false);
                         $('#spinnerLoading').hide();
                     }
                     else if(obj.status === 'failed'){
@@ -276,7 +276,7 @@ function deactivate(id){
             
             if(obj.status === 'success'){
                 toastr["success"](obj.message, "Success:");
-                $('#unitTable').DataTable().ajax.reload();
+                $('#unitTable').DataTable().ajax.reload(null, false);
                 $('#spinnerLoading').hide();
             }
             else if(obj.status === 'failed'){

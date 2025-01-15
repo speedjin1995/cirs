@@ -172,6 +172,8 @@ $(function () {
         'processing': true,
         'serverSide': true,
         'serverMethod': 'post',
+        'searching': true,
+        "stateSave": true,
         'order': [[ 2, 'asc' ]],
         'ajax': {
             'url':'php/loadProducts.php'
@@ -223,7 +225,7 @@ $(function () {
                 if(obj.status === 'success'){
                     $('#capacityModal').modal('hide');
                     toastr["success"](obj.message, "Success:");
-                    $('#capacityTable').DataTable().ajax.reload();
+                    $('#capacityTable').DataTable().ajax.reload(null, false);
                     $('#spinnerLoading').hide();
                 }
                 else if(obj.status === 'failed'){
@@ -281,7 +283,7 @@ $(function () {
                     
                     if(obj.status === 'success'){
                         toastr["success"](obj.message, "Success:");
-                        $('#capacityTable').DataTable().ajax.reload();
+                        $('#capacityTable').DataTable().ajax.reload(null, false);
                         $('#spinnerLoading').hide();
                     }
                     else if(obj.status === 'failed'){
@@ -353,7 +355,7 @@ function deactivate(id){
             
             if(obj.status === 'success'){
                 toastr["success"](obj.message, "Success:");
-                $('#capacityTable').DataTable().ajax.reload();
+                $('#capacityTable').DataTable().ajax.reload(null, false);
                 $('#spinnerLoading').hide();
             }
             else if(obj.status === 'failed'){

@@ -177,7 +177,7 @@ $(function () {
                 if(obj.status === 'success'){
                     $('#machineModal').modal('hide');
                     toastr["success"](obj.message, "Success:");
-                    $('#machineTable').DataTable().ajax.reload();
+                    $('#machineTable').DataTable().ajax.reload(null, false);
                     $('#spinnerLoading').hide();
                 }
                 else if(obj.status === 'failed'){
@@ -230,7 +230,7 @@ $(function () {
                     
                     if(obj.status === 'success'){
                         toastr["success"](obj.message, "Success:");
-                        $('#machineTable').DataTable().ajax.reload();
+                        $('#machineTable').DataTable().ajax.reload(null, false);
                         $('#spinnerLoading').hide();
                     }
                     else if(obj.status === 'failed'){
@@ -297,7 +297,7 @@ function deactivate(id){
             
             if(obj.status === 'success'){
                 toastr["success"](obj.message, "Success:");
-                $('#machineTable').DataTable().ajax.reload();
+                $('#machineTable').DataTable().ajax.reload(null, false);
                 $('#spinnerLoading').hide();
             }
             else if(obj.status === 'failed'){
