@@ -72,6 +72,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     $file = $_GET['file'];
     $validator = strtoupper($_GET['validator']);
     $tickImage = '../assets/tick.png';
+    $dmsbLogo = 'https://cirs.syncweigh.com/assets/DMCM.jpeg';
     $currentDateTime = date('d/m/Y - h:i:sA');  // Format: DD/MM/YYYY - HH:MM:SS AM/PM
     $currentDate = date('d/m/Y');  // Format: DD/MM/YYYY
     $currentTime = date('h:i:sA');  // Format: HH:MM:SS AM/PM
@@ -92,8 +93,27 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
             $message = '';
             
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
+                # HQ Address
+                $customer = $res['customers'];
+                $customerQuery = "SELECT * FROM customers WHERE id = $customer";
+                $customerDetail = mysqli_query($db, $customerQuery);
+                $customerRow = mysqli_fetch_assoc($customerDetail);
+
+                $hqAddress1 = null;
+                $hqAddress2 = null;
+                $hqAddress3 = null;
+                $hqAddress4 = null;
+
+                if(!empty($customerRow)){
+                    $hqAddress1 = $customerRow['customer_address'];
+                    $hqAddress2 = $customerRow['address2'];
+                    $hqAddress3 = $customerRow['address3'];
+                    $hqAddress4 = $customerRow['address4'];
+                }
+
+                # Branch Address
+                $branch = $res['branch'];
                 $branchQuery = "SELECT * FROM branches WHERE id = $branch";
                 $branchDetail = mysqli_query($db, $branchQuery);
                 $branchRow = mysqli_fetch_assoc($branchDetail);
@@ -132,11 +152,17 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         // Continue writing the rest of the text in normal font
                         $pdf->SetFont('', '', 10); // Normal
                         $pdf->SetXY($pdf->GetX(), 61); // Adjust Y coordinate if needed
-                        $pdf->Write(0, ', ' . $address1 . ' ' . $address2);
+                        $pdf->Write(0, ', ' . $hqAddress1 . ' ' . $hqAddress2);
+
+                        $pdf->SetXY(24.599, 67); // Adjust these coordinates for each field
+                        $pdf->Write(0, $hqAddress3.' '.$hqAddress4);
 
                         // $pdf->Write(0, searchCustNameById($res['customers'], $db). ', '. $address1.' '.$address2); // {Address1}
 
-                        $pdf->SetXY(24.599, 67); // Adjust these coordinates for each field
+                        $pdf->SetXY(24.599, 81); // Adjust these coordinates for each field
+                        $pdf->Write(0, $address1.' '.$address2);
+
+                        $pdf->SetXY(24.599, 87); // Adjust these coordinates for each field
                         $pdf->Write(0, $address3.' '.$address4);
 
                         $pdf->SetXY(75, 100); // Adjust for {Company_Name}
@@ -367,8 +393,27 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
             $message = '';
             
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
+
+                # HQ Address
+                $customer = $res['customers'];
+                $customerQuery = "SELECT * FROM customers WHERE id = $customer";
+                $customerDetail = mysqli_query($db, $customerQuery);
+                $customerRow = mysqli_fetch_assoc($customerDetail);
+
+                $hqAddress1 = null;
+                $hqAddress2 = null;
+                $hqAddress3 = null;
+                $hqAddress4 = null;
+
+                if(!empty($customerRow)){
+                    $hqAddress1 = $customerRow['customer_address'];
+                    $hqAddress2 = $customerRow['address2'];
+                    $hqAddress3 = $customerRow['address3'];
+                    $hqAddress4 = $customerRow['address4'];
+                }
+
+                $branch = $res['branch'];
                 $branchQuery = "SELECT * FROM branches WHERE id = $branch";
                 $branchDetail = mysqli_query($db, $branchQuery);
                 $branchRow = mysqli_fetch_assoc($branchDetail);
@@ -400,22 +445,24 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                     // Example field placements for each page (you'll adjust these according to your PDF)
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
+                        $pdf->Image($dmsbLogo, 95, 3, 20);
+
                         $pdf->SetFont('', 'B', 10); // B stands for Bold
                         $pdf->SetXY(20, 69); // Adjust these coordinates for each field
                         $pdf->Write(0, searchCustNameById($res['customers'], $db)); // {Address1}
                         $pdf->SetFont('', '', 10); // B stands for Bold
 
                         $pdf->SetXY(20, 74); // Adjust for {Address2}
-                        $pdf->Write(0, $address1.' '.$address2);
+                        $pdf->Write(0, $hqAddress1.' '.$hqAddress2);
 
                         $pdf->SetXY(20, 79); // Adjust for {Address2}
+                        $pdf->Write(0, $hqAddress3.' '.$hqAddress4);
+
+                        $pdf->SetXY(20, 95); // Adjust for {Stamping_Address1}
+                        $pdf->Write(0, $address1.' '.$address2);
+
+                        $pdf->SetXY(20, 100); // Adjust for {Stamping_Address2}
                         $pdf->Write(0, $address3.' '.$address4);
-
-                        // $pdf->SetXY(20, 95); // Adjust for {Stamping_Address1}
-                        // $pdf->Write(0, $address1.' '.$address2);
-
-                        // $pdf->SetXY(20, 100); // Adjust for {Stamping_Address2}
-                        // $pdf->Write(0, $address3.' '.$address4);
 
                         $pdf->SetXY(68, 126); // Adjust for {Company_Name}
                         $pdf->Write(0, $compname);
