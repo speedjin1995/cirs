@@ -26,7 +26,13 @@ if(isset($_POST['companyId'])){
                 $lesenCerts = json_decode($row['lesen_cert'], true); 
                 if (is_array($lesenCerts)) {
                     foreach ($lesenCerts as $lesenCert) {
-                        $file_name = basename($lesenCert['file_path']);
+                        // $file_name = basename($lesenCert['file_path']);
+                        $file_path = '';
+
+                        if (!empty($lesenCert['file_path'])){
+                            $file_path = $lesenCert['file_path'];
+                        }
+
                         $data[] = array(
                             $lesenCert['lesenCertDetail'],
                             $lesenCert['lesenCertSerialNo'],
@@ -36,7 +42,7 @@ if(isset($_POST['companyId'])){
                             .
                             //Download Button
                             '<div class="col-2">
-                                <a href="' . $lesenCert['file_path'] . '" target="_blank" class="btn btn-success btn-sm" role="button">
+                                <a href="' . $file_path . '" target="_blank" class="btn btn-success btn-sm" role="button">
                                     <i class="fa fa-file-pdf-o"></i>
                                 </a>
                             </div>'

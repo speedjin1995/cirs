@@ -152,8 +152,10 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
           <div class="card-header">
             <div class="row">
               <div class="col-10"><h4>InHouse Validation Record Pending / Expired Status :</h4></div>
-              <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="multiDeactivate">Cancel Inhouse Validations</button>
+              <div class="col-2 d-flex justify-content-end">
+                <div class="col-3">
+                  <button type="button" class="btn btn-block bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Cancel Inhouse Validations"><i class="fa-solid fa-ban"></i></button>
+                </div>
               </div>
               <!-- <div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>

@@ -185,25 +185,29 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-4"><h4>Company Weight And Measure Details</h4></div>
-              <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="multiDeactivate">Cancel Stampings</button>
+              <div class="col-10"><h4>Company Weight And Measure Details</h4></div>
+              <div class="col-2 d-flex">
+                <div class="col-3">
+                  <button type="button" class="btn btn-block bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Cancel Stampings"><i class="fa-solid fa-ban"></i></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-block bg-gradient-info" id="exportBorangs" data-bs-toggle="tooltip" title="Export Borangs"><i class="fa-solid fa-file-export"></i></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-block bg-gradient-success" id="mergeBorang" data-bs-toggle="tooltip" title="Merge Borangs"><i class="fa-brands fa-stack-exchange"></i></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-block bg-gradient-warning" onclick="newEntry()" data-bs-toggle="tooltip" title="Add New Stamping"><i class="fa-solid fa-circle-plus"></i></button>
+                </div>
               </div>
-              <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
-              </div>
-              <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="mergeBorang">Merge Borangs</button>
-              </div>
+              
               <!--div class="col-2">
                 <a href="/template/Stamping Record Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
               </div-->
               <!--div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">Upload Excel</button>
               </div-->
-              <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" onclick="newEntry()">Add New Stamping</button>
-              </div>
+              
             </div>
           </div>
 
