@@ -10,35 +10,80 @@ if(!isset($_SESSION['userID'])){
 if(isset($_POST['userID'])){
 	$id = filter_input(INPUT_POST, 'userID', FILTER_SANITIZE_STRING);
 	$del = "1";
-	if ($update_stmt = $db->prepare("UPDATE brand SET deleted=? WHERE id=?")) {
-		$update_stmt->bind_param('ss', $del , $id);
-		
-		if($update_stmt->execute()){
-			$update_stmt->close();
-			$db->close();
-			
-			echo json_encode(
-    	        array(
-    	            "status"=> "success", 
-    	            "message"=> "Deleted"
-    	        )
-    	    );
-		} else{
-		    echo json_encode(
-    	        array(
-    	            "status"=> "failed", 
-    	            "message"=> $update_stmt->error
-    	        )
-    	    );
+	$type = '';
+
+	if(isset($_POST['type']) && $_POST['type']!=null && $_POST['type']!=""){
+		$type = $_POST['type'];
+	}
+
+	if ($type == 'MULTI'){
+		if(is_array($_POST['userID'])){
+			$ids = implode(",", $_POST['userID']);
+		}else{
+			$ids = $_POST['userID'];
 		}
-	} 
-	else{
-	    echo json_encode(
-	        array(
-	            "status"=> "failed", 
-	            "message"=> "Somthings wrong"
-	        )
-	    );
+
+		if ($update_stmt = $db->prepare("UPDATE brand SET deleted=? WHERE id IN ($ids)")) {
+			$update_stmt->bind_param('s', $del);
+			
+			if($update_stmt->execute()){
+				$update_stmt->close();
+				$db->close();
+				
+				echo json_encode(
+					array(
+						"status"=> "success", 
+						"message"=> "Deleted"
+					)
+				);
+			} else{
+				echo json_encode(
+					array(
+						"status"=> "failed", 
+						"message"=> $update_stmt->error
+					)
+				);
+			}
+		} 
+		else{
+			echo json_encode(
+				array(
+					"status"=> "failed", 
+					"message"=> "Somthings wrong"
+				)
+			);
+		}
+	}else{
+		if ($update_stmt = $db->prepare("UPDATE brand SET deleted=? WHERE id=?")) {
+			$update_stmt->bind_param('ss', $del , $id);
+			
+			if($update_stmt->execute()){
+				$update_stmt->close();
+				$db->close();
+				
+				echo json_encode(
+					array(
+						"status"=> "success", 
+						"message"=> "Deleted"
+					)
+				);
+			} else{
+				echo json_encode(
+					array(
+						"status"=> "failed", 
+						"message"=> $update_stmt->error
+					)
+				);
+			}
+		} 
+		else{
+			echo json_encode(
+				array(
+					"status"=> "failed", 
+					"message"=> "Somthings wrong"
+				)
+			);
+		}
 	}
 } 
 else{

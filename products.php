@@ -49,7 +49,7 @@ else{
 						<table id="capacityTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
-                                    <th></th>
+                                    <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
                                     <th>No.</th>
 									<!--th>Name</th-->
                                     <!--th>Machine Type</th-->
@@ -161,6 +161,10 @@ $(function () {
         $(this).val(formattedPrice);
     });
 
+    $('#selectAllCheckbox').on('change', function() {
+        var checkboxes = $('#capacityTable tbody input[type="checkbox"]');
+        checkboxes.prop('checked', $(this).prop('checked')).trigger('change');
+    });
 
     $("#capacityTable").DataTable({
         "responsive": true,

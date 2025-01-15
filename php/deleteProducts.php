@@ -10,13 +10,12 @@ if(!isset($_SESSION['userID'])){
 
 if(isset($_POST['userID'])){
 	$id = filter_input(INPUT_POST, 'userID', FILTER_SANITIZE_STRING);
+	$del = "1";
 	$type = '';
 
 	if(isset($_POST['type']) && $_POST['type']!=null && $_POST['type']!=""){
 		$type = $_POST['type'];
 	}
-
-	$del = "1";
 	
 	if ($type == 'MULTI'){
 		if(is_array($_POST['userID'])){
