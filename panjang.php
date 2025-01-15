@@ -121,12 +121,14 @@ else{
           <div class="card-header">
             <div class="row">
               <!-- <div class="col-8"><p>Completed Stamping</p></div> -->
-              <div class="col-8"></div>
-              <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
-              </div>
-              <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="exportExcel">Export Excel</button>
+              <div class="col-10"></div>
+              <div class="col-2 d-flex justify-content-end">
+                <div class="col-3">
+                  <button type="button" class="btn btn-block bg-gradient-info" id="exportBorangs" data-bs-toggle="tooltip" title="Export Borang"><i class="fa-solid fa-file-export"></i></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-block bg-gradient-success" id="exportExcel" data-bs-toggle="tooltip" title="Export Excel"><i class="fa-regular fa-file-excel"></i></button>
+                </div>
               </div>
               <!--div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">Upload Excel</button>

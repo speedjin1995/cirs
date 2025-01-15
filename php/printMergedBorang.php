@@ -178,7 +178,7 @@ if(isset($_GET['userID'])){
                         
 
                         $pdf->SetXY(71, 167.5); // Adjust for {Pembuat_Negara_Asal}
-                        $pdf->Write(0, searchCountryById($res['platform_country'], $db));
+                        $pdf->Write(0, searchCountryById($res['make_in'], $db));
 
                         $pdf->SetXY(133, 167.5); // Adjust for {Jenama}
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db));
@@ -187,7 +187,7 @@ if(isset($_GET['userID'])){
                         $pdf->Write(0, searchModelNameById($res['model'], $db));
 
                         $pdf->SetXY(135, 173); // Adjust for {No_Siri}
-                        $pdf->Write(0, $res['indicator_serial']);
+                        $pdf->Write(0, $res['serial_no']);
 
                         $pdf->SetXY(75, 187); // Adjust for {Pembuat_Negara_Asal_2}
                         $pdf->Write(0, searchCountryById($res['platform_country'], $db));
@@ -195,8 +195,11 @@ if(isset($_GET['userID'])){
                         $pdf->SetXY(160, 187); // Adjust for {Jenis_Steel_Concrete}
                         $pdf->Write(0, $res['platform_type']);
 
-                        $pdf->SetXY(75, 193); // Adjust for {size}
+                        $pdf->SetXY(73, 193); // Adjust for {size}
                         $pdf->Write(0, searchSizeNameById($res['size'], $db));
+
+                        $pdf->SetXY(59, 198); // Adjust for {size}
+                        $pdf->Write(0, $res['other_info']);
 
                         if($res['jenis_pelantar'] == 'Pit'){
                             $pdf->Ellipse(146, 193, 4, 3, 'D', [200, 255, 200]);
@@ -373,11 +376,11 @@ if(isset($_GET['userID'])){
                         $pdf->SetXY(20, 79); // Adjust for {Address2}
                         $pdf->Write(0, $address3.' '.$address4);
 
-                        $pdf->SetXY(20, 95); // Adjust for {Stamping_Address1}
-                        $pdf->Write(0, $address1.' '.$address2);
+                        // $pdf->SetXY(20, 95); // Adjust for {Stamping_Address1}
+                        // $pdf->Write(0, $address1.' '.$address2);
 
-                        $pdf->SetXY(20, 100); // Adjust for {Stamping_Address2}
-                        $pdf->Write(0, $address3.' '.$address4);
+                        // $pdf->SetXY(20, 100); // Adjust for {Stamping_Address2}
+                        // $pdf->Write(0, $address3.' '.$address4);
 
                         $pdf->SetXY(68, 126); // Adjust for {Company_Name}
                         $pdf->Write(0, $compname);
@@ -410,7 +413,7 @@ if(isset($_GET['userID'])){
                         }
 
                         $pdf->SetXY(66, 231); // Adjust for {Pembuat_Negara_Asal}
-                        $pdf->Write(0, searchCountryById($res['platform_country'], $db));
+                        $pdf->Write(0, searchCountryById($res['make_in'], $db));
 
                         $pdf->SetXY(40, 236.5); // Adjust for {Jenama}
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db));
@@ -419,7 +422,7 @@ if(isset($_GET['userID'])){
                         $pdf->Write(0, searchModelNameById($res['model'], $db));
 
                         $pdf->SetXY(40, 247); // Adjust for {No_Siri}
-                        $pdf->Write(0, $res['indicator_serial']);
+                        $pdf->Write(0, $res['serial_no']);
                     }
                     else if ($pageNo == 2){
                         $pdf->SetXY(66, 32); // Adjust for {Pembuat_Negara_Asal_2}
@@ -437,6 +440,9 @@ if(isset($_GET['userID'])){
                         else{
                             $pdf->Ellipse(64, 48, 7, 3, 'D', [200, 255, 200]);
                         }
+
+                        $pdf->SetXY(53, 52.5); // Adjust for {lain-lain}
+                        $pdf->Write(0, $res['other_info']);
 
                         $pdf->SetXY(68, 74); // Adjust for {Pembuat_Negara_Asal_3}
                         $pdf->Write(0, searchCountryById($res['load_cell_country'], $db));
@@ -615,7 +621,7 @@ if(isset($_GET['userID'])){
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
 
                         $pdf->SetXY(127.704, 65); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetFont('Arial', 'B', 8);
                         $pdf->SetXY(14.648, 90.063); // Adjust for Customer Name
@@ -734,7 +740,7 @@ if(isset($_GET['userID'])){
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
                         
                         $pdf->SetXY(147.112, 63.103-2); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetXY(15.666, 88.465-2); // Adjust for Customer Name
                         $pdf->SetFont('Arial', 'B', 10);
@@ -849,7 +855,7 @@ if(isset($_GET['userID'])){
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
 
                         $pdf->SetXY(150.704, 76.5); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetFont('Arial', 'B', 10);
                         $pdf->SetXY(18.648, 103.063-1); // Adjust for Customer Name
@@ -969,7 +975,7 @@ if(isset($_GET['userID'])){
                         $pdf->Rect(145.803, 93.956-3, 50, 15, 'F');  
                         
                         $pdf->SetXY(142.803, 93.956-1); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetXY(22.648, 103.063-2); // Adjust for Customer Name
                         $pdf->SetFont('Arial', 'B', 10);
@@ -1083,7 +1089,7 @@ if(isset($_GET['userID'])){
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
 
                         $pdf->SetXY(142.704, 72.5); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetFont('Arial', 'B', 10);
                         $pdf->SetXY(16.648, 98.063); // Adjust for Customer Name
@@ -1201,7 +1207,7 @@ if(isset($_GET['userID'])){
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
                         
                         $pdf->SetXY(145.686, 81.048-2); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetXY(19.668, 112.668-2); // Adjust for Customer Name
                         $pdf->SetFont('Arial', 'B', 10);
@@ -1319,7 +1325,7 @@ if(isset($_GET['userID'])){
                         $pdf->Image($tickImage, 88, 89, 6); 
 
                         $pdf->SetXY(135.902, 81.823-2); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetXY(124.182, 70.241-2); // Adjust for Jenama
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
@@ -1425,7 +1431,7 @@ if(isset($_GET['userID'])){
                         $pdf->Image($tickImage, 57.395+12, 73.823-5, 6); 
 
                         $pdf->SetXY(153.902, 73.823-2); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetXY(142.182, 64.241-2); // Adjust for Jenama
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
@@ -1532,7 +1538,7 @@ if(isset($_GET['userID'])){
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
 
                         $pdf->SetXY(125.635, 68.669-2); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetFont('Arial', 'B', 10);
                         $pdf->SetXY(8.648, 99.063-2); // Adjust for Customer Name
@@ -1655,7 +1661,7 @@ if(isset($_GET['userID'])){
                         $pdf->Rect(136.829, 87.915-3, 60, 20, 'F');  
 
                         $pdf->SetXY(134.829, 87.915-1); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetFont('Arial', 'B', 10);
                         $pdf->SetXY(9.147, 107.211-2); // Adjust for Customer Name
@@ -1775,7 +1781,7 @@ if(isset($_GET['userID'])){
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
 
                         $pdf->SetXY(127.704, 65); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetFont('Arial', 'B', 8);
                         $pdf->SetXY(14.648, 90.063); // Adjust for Customer Name
@@ -1894,7 +1900,7 @@ if(isset($_GET['userID'])){
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
                         
                         $pdf->SetXY(147.112, 63.103-2); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetXY(15.666, 88.465-2); // Adjust for Customer Name
                         $pdf->SetFont('Arial', 'B', 10);
@@ -2032,7 +2038,7 @@ if(isset($_GET['userID'])){
                         $pdf->Rect(160.609, 105.080-2, 10, 7, 'F');
 
                         $pdf->SetXY(32.158, 107.106); // Adjust for {nama pembuat}
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         # Adjust for {Keadaan Alat}
                         if ($res['stamping_type'] == 'NEW'){
@@ -2144,7 +2150,7 @@ if(isset($_GET['userID'])){
                     if ($pageNo == 1) {
                         // Fill in the fields at the appropriate positions
                         $pdf->SetXY(38.411, 104.333-2); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetXY(65.378, 59.201-2); // Adjust for Customer Name
                         $pdf->SetFont('Arial', 'B', 10);
@@ -2285,7 +2291,7 @@ if(isset($_GET['userID'])){
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
 
                         $pdf->SetXY(150.704, 76.5); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetFont('Arial', 'B', 10);
                         $pdf->SetXY(18.648, 103.063-1); // Adjust for Customer Name
@@ -2405,7 +2411,7 @@ if(isset($_GET['userID'])){
                         $pdf->Rect(145.803, 93.956-3, 50, 15, 'F');  
                         
                         $pdf->SetXY(142.803, 93.956-1); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetXY(22.648, 103.063-2); // Adjust for Customer Name
                         $pdf->SetFont('Arial', 'B', 10);
@@ -2518,7 +2524,7 @@ if(isset($_GET['userID'])){
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
 
                         $pdf->SetXY(140.704, 67.5); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetXY(129.942 , 76.5); // Adjust for {Model}
                         $pdf->Write(0, searchModelNameById($res['model'], $db));
@@ -2648,7 +2654,7 @@ if(isset($_GET['userID'])){
                         $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
 
                         $pdf->SetXY(148.035, 61.236-2); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetXY(139.574, 70.046-2); // Adjust for {Model}
                         $pdf->Write(0, searchModelNameById($res['model'], $db));
@@ -2791,7 +2797,7 @@ if(isset($_GET['userID'])){
                         $pdf->Image($tickImage, 77, 91.5, 6);  // Adjust for Perdagangan
 
                         $pdf->SetXY(157.704, 102.5); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetFont('Arial', '', 8);
                         # Adjust for {Nilai Jangka Maksima}
@@ -2899,7 +2905,7 @@ if(isset($_GET['userID'])){
                         $pdf->Image($tickImage, 77, 91.5, 6);  // Adjust for Perdagangan
 
                         $pdf->SetXY(157.704, 102.5); // Adjust for nama pembuat
-                        $pdf->Write(0, searchCountryNameById($res['platform_country'], $db)); 
+                        $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
                         $pdf->SetFont('Arial', '', 8);
                         # Adjust for {Nilai Jangka Maksima}

@@ -439,7 +439,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                     $rowCount++;
                     $indexCount++;
     
-                    if($count > 7){
+                    if($count > 6){
                         $count = 1;
                     }
                 }

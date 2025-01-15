@@ -40,6 +40,7 @@ else{
   $cancelledReasons = $db->query("SELECT * FROM reasons WHERE deleted = '0'");
   $sizes = $db->query("SELECT * FROM size WHERE deleted = '0'");
   $country = $db->query("SELECT * FROM country WHERE deleted = '0'");
+  $country3 = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryAts = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryAtp = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryAtn = $db->query("SELECT * FROM country WHERE deleted = '0'");
@@ -84,7 +85,7 @@ else{
           <div class="card-body">
             <div class="row">
               <div class="form-group col-3">
-                <label>From Date:</label>
+                <label>From Stamp Date:</label>
                 <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
                   <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
                   <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
@@ -94,7 +95,7 @@ else{
               </div>
 
               <div class="form-group col-3">
-                <label>To Date:</label>
+                <label>To Expired Date:</label>
                 <div class="input-group date" id="toDatePicker" data-target-input="nearest">
                   <input type="text" class="form-control datetimepicker-input" data-target="#toDatePicker" id="toDate"/>
                   <div class="input-group-append" data-target="#toDatePicker" data-toggle="datetimepicker">
@@ -171,8 +172,10 @@ else{
           <div class="card-header">
             <div class="row">
               <div class="col-10"><h4>Company Weight And Measure Details</h4></div>
-              <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="multiDeactivate">Cancel Stampings</button>
+              <div class="col-2 d-flex justify-content-end">
+                <div class="col-3">
+                  <button type="button" class="btn btn-block bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Cancel Stampings"><i class="fa-solid fa-ban"></i></button>
+                </div>
               </div>
               <!-- <div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
@@ -203,8 +206,8 @@ else{
                   <th width="10%">Capacity</th>
                   <th>No. Daftar Lama</th>
                   <th>No. Daftar Baru</th>
-                  <th>Previous Stamp Date</th>
-                  <th>Expired Date</th>
+                  <th>Stamp Date</th>
+                  <th>Next Due Date</th>
                   <th>Status</th>
                   <th>Action</th>
                   <th></th>
@@ -335,12 +338,12 @@ else{
           <div class="card card-primary">
             <div class="card-body">
               <div class="row">
-                <h4>Machine Information</h4>
+                <h4>Machine / Indicator Information</h4>
               </div>
               <div class="row">
                 <div class="col-4">
                   <div class="form-group">
-                    <label>Brand *</label>
+                    <label>Machine / Indicator Brand *</label>
                     <select class="form-control select2" style="width: 100%;" id="brand" name="brand" required>
                       <option selected="selected">-</option>
                       <?php while($rowB=mysqli_fetch_assoc($brands)){ ?>
@@ -362,8 +365,19 @@ else{
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>Serial No * </label>
+                    <label>Machine / Indicator Serial No * </label>
                     <input class="form-control" type="text" placeholder="Serial No." id="serial" name="serial" required>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Make In * </label>
+                    <select class="form-control select2" style="width: 100%;" id="makeIn" name="makeIn" required>
+                      <option selected="selected">-</option>
+                      <?php while($rowcountry=mysqli_fetch_assoc($country3)){ ?>
+                        <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
+                      <?php } ?>
+                    </select>
                   </div>
                 </div>
                 <div class="col-4" style="display:none;">
@@ -870,7 +884,7 @@ else{
             <input type="text" class="form-control" id="noSerialIndicator" name="noSerialIndicator">
           </div>
         </div>
-        <div class="form-group col-4">
+        <!-- <div class="form-group col-4">
           <label for="model">Platform Made In *</label>
           <select class="form-control select2" id="platformCountry" name="platformCountry" required>
             <option value="" selected disabled hidden>Please Select</option>
@@ -878,7 +892,7 @@ else{
               <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
             <?php } ?>
           </select>
-        </div>
+        </div> -->
         <div class="form-group col-4">
           <label for="model">Platform Type *</label>
           <select class="form-control select2" id="platformType" name="platformType" required>
@@ -984,7 +998,7 @@ else{
         <h4>Addtional Information (ATP)</h4>
       </div>
       <div class="row">
-        <div class="form-group col-4">
+        <!-- <div class="form-group col-4">
           <label for="model">Platform Made In *</label>
           <select class="form-control select2" id="platformCountry" name="platformCountry" required>
             <option value="" selected disabled hidden>Please Select</option>
@@ -992,7 +1006,7 @@ else{
               <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
             <?php } ?>
           </select>
-        </div>
+        </div> -->
         <div class="form-group col-4">
           <label for="model">Jenis Penunjuk *</label>
           <select class="form-control select2" id="jenis_penunjuk" name="jenis_penunjuk" required>
@@ -1013,7 +1027,7 @@ else{
         <h4>Addtional Information (ATN)</h4>
       </div>
       <div class="row">
-        <div class="form-group col-4">
+        <!-- <div class="form-group col-4">
           <label for="model">Platform Made In *</label>
           <select class="form-control select2" id="platformCountry" name="platformCountry" required>
             <option value="" selected disabled hidden>Please Select</option>
@@ -1021,7 +1035,7 @@ else{
               <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
             <?php } ?>
           </select>
-        </div>
+        </div> -->
         <div class="form-group col-4">
           <label for="model">Jenis Alat Type *</label>
           <select class="form-control select2" id="alat_type" name="alat_type" required>
@@ -1050,7 +1064,7 @@ else{
         <h4>Addtional Information (ATE)</h4>
       </div>
       <div class="row">
-        <div class="form-group col-4">
+        <!-- <div class="form-group col-4">
           <label for="model">Platform Made In *</label>
           <select class="form-control select2" id="platformCountry" name="platformCountry" required>
             <option value="" selected disabled hidden>Please Select</option>
@@ -1058,7 +1072,7 @@ else{
               <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
             <?php } ?>
           </select>
-        </div>
+        </div> -->
         <div class="form-group col-4">
           <label for="model">Klass *</label>
           <select class="form-control select2" id="class" name="class" required>
@@ -1079,7 +1093,7 @@ else{
         <h4>Addtional Information (SLL)</h4>
       </div>
       <div class="row">
-        <div class="form-group col-4">
+        <!-- <div class="form-group col-4">
           <label for="model">Platform Made In *</label>
           <select class="form-control select2" id="platformCountry" name="platformCountry" required>
             <option value="" selected disabled hidden>Please Select</option>
@@ -1087,7 +1101,7 @@ else{
               <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
             <?php } ?>
           </select>
-        </div>
+        </div> -->
         <div class="form-group col-4">
           <label for="model">Jenis Alat Type *</label>
           <select class="form-control select2" id="alat_type" name="alat_type" required>
@@ -1291,7 +1305,7 @@ else{
         <h4>Addtional Information (BATU)</h4>
       </div>
       <div class="row">
-        <div class="form-group col-4">
+        <!-- <div class="form-group col-4">
           <label for="model">Platform Made In *</label>
           <select class="form-control select2" id="platformCountry" name="platformCountry" required>
             <option value="" selected disabled hidden>Please Select</option>
@@ -1299,7 +1313,7 @@ else{
               <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
             <?php } ?>
           </select>
-        </div>
+        </div> -->
         <div class="form-group col-4">
           <label for="model">Batu Ujian *</label>
           <select class="form-control select2" id="batuUjian" name="batuUjian" required>
@@ -1326,7 +1340,7 @@ else{
         <h4>Addtional Information (ATP-Auto Machine)</h4>
       </div>
       <div class="row">
-        <div class="form-group col-4">
+        <!-- <div class="form-group col-4">
           <label for="model">Platform Made In *</label>
           <select class="form-control select2" id="platformCountry" name="platformCountry" required>
             <option value="" selected disabled hidden>Please Select</option>
@@ -1334,7 +1348,7 @@ else{
               <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
             <?php } ?>
           </select>
-        </div>
+        </div> -->
         <div class="form-group col-4">
           <label for="model">Jenis Penunjuk *</label>
           <select class="form-control select2" id="jenis_penunjuk" name="jenis_penunjuk" required>
@@ -1427,7 +1441,7 @@ else{
         <h4>Addtional Information (SIA)</h4>
       </div>
       <div class="row">
-        <div class="form-group col-4">
+        <!-- <div class="form-group col-4">
           <label for="model">Platform Made In *</label>
           <select class="form-control select2" id="platformCountry" name="platformCountry" required>
             <option value="" selected disabled hidden>Please Select</option>
@@ -1435,7 +1449,7 @@ else{
               <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
             <?php } ?>
           </select>
-        </div>
+        </div> -->
         <div class="form-group col-4">
           <label for="model">Nilai Jangka Maksima *</label>
           <select class="form-control select2" id="nilaiJangka" name="nilaiJangka" required>
@@ -2051,7 +2065,6 @@ $(function () {
   });
 
   $('#multiDeactivate').on('click', function () {
-    if (confirm('Are you sure you want to cancel these items?')) {
       $('#spinnerLoading').show();
       var selectedIds = []; // An array to store the selected 'id' values
 
@@ -2062,31 +2075,33 @@ $(function () {
       });
 
       if (selectedIds.length > 0) {
-        $('#cancelModal').find('#id').val(selectedIds);
-        $('#cancelModal').find('#type').val('MULTI');
-        $('#cancelModal').modal('show');
+        if (confirm('Are you sure you want to cancel these items?')) {
+          $('#cancelModal').find('#id').val(selectedIds);
+          $('#cancelModal').find('#type').val('MULTI');
+          $('#cancelModal').modal('show');
 
-        $('#cancelForm').validate({
-          errorElement: 'span',
-          errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.form-group').append(error);
-          },
-          highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-          },
-          unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-          }
-        });
+          $('#cancelForm').validate({
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+              error.addClass('invalid-feedback');
+              element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+              $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+              $(element).removeClass('is-invalid');
+            }
+          });
+        }
 
         $('#spinnerLoading').hide();
       } 
       else {
         // Optionally, you can display a message or take another action if no IDs are selected
         alert("Please select at least one stamping to cancel.");
+        $('#spinnerLoading').hide();
       }      
-    }
   });
 
   $('#uploadExccl').on('click', function(){
@@ -2557,10 +2572,10 @@ $(function () {
         $('#extendModal').find('#penentusanSemula').attr('required', true);
       }
     }
-    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '4'){
-      $('#addtionalSection').html($('#atsDetails').html());
-      $('#extendModal').trigger('atkLoaded');
-    }
+    // else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '4'){
+    //   $('#addtionalSection').html($('#atsDetails').html());
+    //   $('#extendModal').trigger('atkLoaded');
+    // }
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '2'){
       $('#addtionalSection').html($('#atpDetails').html());
       $('#extendModal').trigger('atkLoaded');
@@ -2588,10 +2603,10 @@ $(function () {
       $('#addtionalSection').html($('#autoPackDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
-    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '17'){
-      $('#addtionalSection').html($('#atsHDetails').html());
-      $('#extendModal').trigger('atkLoaded');
-    }
+    // else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '17'){
+    //   $('#addtionalSection').html($('#atsHDetails').html());
+    //   $('#extendModal').trigger('atkLoaded');
+    // }
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '12'){
       $('#addtionalSection').html($('#siaDetails').html());
       $('#extendModal').trigger('atkLoaded');
@@ -2673,10 +2688,10 @@ $(function () {
         $('#extendModal').find('#penentusanSemula').attr('required', true);
       }
     }
-    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '4'){
-      $('#addtionalSection').html($('#atsDetails').html());
-      $('#extendModal').trigger('atkLoaded');
-    }
+    // else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '4'){
+    //   $('#addtionalSection').html($('#atsDetails').html());
+    //   $('#extendModal').trigger('atkLoaded');
+    // }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '2'){
       $('#addtionalSection').html($('#atpDetails').html());
       $('#extendModal').trigger('atkLoaded');
@@ -2705,10 +2720,10 @@ $(function () {
       $('#addtionalSection').html($('#autoPackDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
-    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '17'){
-      $('#addtionalSection').html($('#atsHDetails').html());
-      $('#extendModal').trigger('atkLoaded');
-    }
+    // else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '17'){
+    //   $('#addtionalSection').html($('#atsHDetails').html());
+    //   $('#extendModal').trigger('atkLoaded');
+    // }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '12'){
       $('#addtionalSection').html($('#siaDetails').html());
       $('#extendModal').trigger('atkLoaded');
@@ -2796,7 +2811,7 @@ function format (row) {
   <div class="row">
     <!-- Customer Section -->
     <div class="col-md-6">
-      <p><span><strong style="font-size:120%; text-decoration: underline;">Customer</strong></span><br>
+      <p><span><strong style="font-size:120%; text-decoration: underline;">Stamping To : Customer</strong></span><br>
       <strong>${row.customers}</strong><br>
       ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4} `;
 
@@ -2810,7 +2825,7 @@ function format (row) {
     returnString += `
     <!-- Reseller Section -->
     <div class="col-md-6">
-      <p><span><strong style="font-size:120%; text-decoration: underline;">Reseller</strong></span><br>
+      <p><span><strong style="font-size:120%; text-decoration: underline;">Billing or Supply by Reseller</strong></span><br>
       <strong>${row.dealer}</strong><br>
       ${row.reseller_address1}<br>${row.reseller_address2}<br>${row.reseller_address3}<br>${row.reseller_address4} `;
       
@@ -2832,6 +2847,7 @@ function format (row) {
       <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
       <p><strong>Serial No:</strong> ${row.serial_no}</p>
       <p><strong>Assigned To:</strong> ${row.assignTo}</p>
+      <p><strong>Make In:</strong> ${row.make_in}</p>
     </div>`;
 
   if(row.stampType == 'RENEWAL'){
@@ -2845,7 +2861,7 @@ function format (row) {
           <p><strong>Borang E:</strong> ${row.borang_e}</p>
           <p><strong>Last Year Stamping Date:</strong> ${row.last_year_stamping_date}</p>
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
-          <p><strong>Due Date:</strong> ${row.due_date}</p>
+          <p><strong>Next Due Date:</strong> ${row.due_date}</p>
         </div>
       </div><hr>
     `;
@@ -2857,7 +2873,7 @@ function format (row) {
           <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
           <p><strong>Borang D:</strong> ${row.borang_d}</p>
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
-          <p><strong>Due Date:</strong> ${row.due_date}</p>
+          <p><strong>Next Due Date:</strong> ${row.due_date}</p>
         </div>
       </div><hr>
     `;
@@ -2897,22 +2913,21 @@ function format (row) {
   }
 
   // Additional section for ATS
-  if (row.jenis_alat == 'ATS' || row.jenis_alat == 'ATS (H)'){
-    returnString += `</div><hr>
-                        <div class="row">
-                          <!-- ATS Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
-                        </div>
-                        `;
-  }else if(row.jenis_alat == 'ATP'){
+  // if (row.jenis_alat == 'ATS' || row.jenis_alat == 'ATS (H)'){
+  //   returnString += `</div><hr>
+  //                       <div class="row">
+  //                         <!-- ATS Section -->
+  //                         <div class="col-6">
+  //                           <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+  //                         </div>
+  //                       </div>
+  //                       `;
+  // }else 
+  
+  if(row.jenis_alat == 'ATP'){
     returnString += `</div><hr>
                         <div class="row">
                           <!-- ATP Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
                           <div class="col-6">
                             <p><strong>Jenis Penunjuk:</strong> ${row.jenis_penunjuk}</p>
                           </div>
@@ -2922,9 +2937,6 @@ function format (row) {
     returnString += `</div><hr>
                         <div class="row">
                           <!-- ATN Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
                           <div class="col-6">
                             <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
                           </div>
@@ -2938,9 +2950,6 @@ function format (row) {
                         <div class="row">
                           <!-- ATE Section -->
                           <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
-                          <div class="col-6">
                             <p><strong>Klass:</strong> ${row.class}</p>
                           </div>
                         </div>
@@ -2948,10 +2957,7 @@ function format (row) {
   }else if(row.jenis_alat == 'BTU'){
     returnString += `</div><hr>
                         <div class="row">
-                          <!-- BTU Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>`;
+                          <!-- BTU Section -->`;
     if (row.batu_ujian == 'OTHER'){
       returnString += `
                       <div class="col-6">
@@ -2973,9 +2979,6 @@ function format (row) {
                         <div class="row">
                           <!-- ATP-AUTO MACHINE Section -->
                           <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
-                          <div class="col-6">
                             <p><strong>Jenis Penunjuk:</strong> ${row.jenis_penunjuk}</p>
                           </div>
                         </div>
@@ -2984,9 +2987,6 @@ function format (row) {
     returnString += `</div><hr>
                         <div class="row">
                           <!-- ATS Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
                           <div class="col-6">
                             <p><strong>Had Terima Steelyard:</strong> ${row.steelyard} kg</p>
                           </div>
@@ -3010,10 +3010,7 @@ function format (row) {
   }else if(row.jenis_alat == 'SIA'){
     returnString += `</div><hr>
                         <div class="row">
-                          <!-- SIA Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>`;
+                          <!-- SIA Section -->`;
 
     if (row.nilai_jangka == 'OTHER'){
       returnString += `
@@ -3048,9 +3045,6 @@ function format (row) {
     returnString += `</div><hr>
                         <div class="row">
                           <!-- SLL Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
                           <div class="col-6">
                             <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
                           </div>
@@ -3217,6 +3211,7 @@ function newEntry(){
   $('#extendModal').find('#assignTo').val('').trigger('change');
   $('#extendModal').find('#address1').val('');
   $('#extendModal').find('#model').val("").trigger('change');
+  $('#extendModal').find('#makeIn').val("").trigger('change');
   $('#extendModal').find('#stampDate').val('');
   $('#extendModal').find('#address2').val('');
   $('#extendModal').find('#capacity').val('').trigger('change');
@@ -3317,6 +3312,7 @@ function edit(id) {
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
         $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
+        $('#extendModal').find('#makeIn').val(obj.message.make_in).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
         $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
@@ -3454,30 +3450,32 @@ function edit(id) {
                 loadCellCount++;
               }
             }
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '4'){
-            $('#addtionalSection').html($('#atsDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '2'){
+          }
+          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '4'){
+          //   $('#addtionalSection').html($('#atsDetails').html());
+          //   $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+          // }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '2'){
             $('#addtionalSection').html($('#atpDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '5'){
             $('#addtionalSection').html($('#atnDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '18'){
             $('#addtionalSection').html($('#atnDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '6'){
             $('#addtionalSection').html($('#ateDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#class').val(obj.message.class).trigger('change');
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '14'){
             $('#addtionalSection').html($('#sllDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#question1').val(obj.message.questions[0].answer).trigger('change');
             $('#extendModal').find('#question2').val(obj.message.questions[1].answer).trigger('change');
@@ -3489,7 +3487,7 @@ function edit(id) {
             $('#extendModal').find('#question7').val(obj.message.questions[7].answer).trigger('change');
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '7'){
             $('#addtionalSection').html($('#btuDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
 
             $('#extendModal').find('#batuUjian').on('change', function(){
               var batuUjian = $(this).val();
@@ -3512,14 +3510,16 @@ function edit(id) {
             // $('#extendModal').find('#nilai5').val(obj.message.nilais[4].nilai);
             // $('#extendModal').find('#nilai6').val(obj.message.nilais[5].nilai);
             $('#addtionalSection').html($('#autoPackDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '17'){
-            $('#addtionalSection').html($('#atsHDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '12'){
+          }
+          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '17'){
+          //   $('#addtionalSection').html($('#atsHDetails').html());
+          //   $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+          // }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '12'){
             $('#addtionalSection').html($('#siaDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
 
             $('#extendModal').find('#nilaiJangka').on('change', function(){
               var nilaiJangka = $(this).val();
@@ -3569,6 +3569,7 @@ function edit(id) {
         $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
         $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
+        $('#extendModal').find('#makeIn').val(obj.message.make_in).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
         $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
@@ -3672,30 +3673,32 @@ function edit(id) {
                 loadCellCount++;
               }
             }
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '4'){
-            $('#addtionalSection').html($('#atsDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '2'){
+          }
+          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '4'){
+          //   $('#addtionalSection').html($('#atsDetails').html());
+          //   $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+          // }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '2'){
             $('#addtionalSection').html($('#atpDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '5'){
             $('#addtionalSection').html($('#atnDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '18'){
             $('#addtionalSection').html($('#atnDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '6'){
             $('#addtionalSection').html($('#ateDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#class').val(obj.message.class).trigger('change');
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '14'){
             $('#addtionalSection').html($('#sllDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#question1').val(obj.message.questions[0].answer).trigger('change');
             $('#extendModal').find('#question2').val(obj.message.questions[1].answer).trigger('change');
@@ -3707,7 +3710,7 @@ function edit(id) {
             $('#extendModal').find('#question7').val(obj.message.questions[7].answer).trigger('change');
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '7'){
             $('#addtionalSection').html($('#btuDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
 
             $('#extendModal').find('#batuUjian').on('change', function(){
               var batuUjian = $(this).val();
@@ -3730,14 +3733,16 @@ function edit(id) {
             // $('#extendModal').find('#nilai5').val(obj.message.nilais[4].nilai);
             // $('#extendModal').find('#nilai6').val(obj.message.nilais[5].nilai);
             $('#addtionalSection').html($('#autoPackDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '17'){
-            $('#addtionalSection').html($('#atsHDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '12'){
+          }
+          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '17'){
+          //   $('#addtionalSection').html($('#atsHDetails').html());
+          //   $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+          // }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '12'){
             $('#addtionalSection').html($('#siaDetails').html());
-            $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
 
             $('#extendModal').find('#nilaiJangka').on('change', function(){
               var nilaiJangka = $(this).val();
@@ -3789,6 +3794,8 @@ function edit(id) {
     }
     $('#spinnerLoading').hide();
   });
+  $('#spinnerLoading').hide();
+
 }
 
 function complete(id) {

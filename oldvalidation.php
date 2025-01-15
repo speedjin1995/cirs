@@ -115,7 +115,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
 
             <div class="row">
             <div class="form-group col-4">
-                <label>From Date:</label>
+                <label>From Validation Date:</label>
                 <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
                   <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
                   <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
@@ -125,7 +125,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               </div>
 
               <div class="form-group col-4">
-                <label>To Date:</label>
+                <label>To Expired Date:</label>
                 <div class="input-group date" id="toDatePicker" data-target-input="nearest">
                   <input type="text" class="form-control datetimepicker-input" data-target="#toDatePicker" id="toDate"/>
                   <div class="input-group-append" data-target="#toDatePicker" data-toggle="datetimepicker">
@@ -152,8 +152,10 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
           <div class="card-header">
             <div class="row">
               <div class="col-10"><h4>Other Validation Record Pending / Expired Status :</h4></div>
-              <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="multiDeactivate">Delete Other Validations</button>
+              <div class="col-2 d-flex justify-content-end">
+                <div class="col-3">
+                  <button type="button" class="btn btn-block bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Delete Other Validations"><i class="fa-solid fa-ban"></i></button></button>
+                </div>
               </div>
               <!-- <div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
@@ -182,7 +184,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                   <th>Validator By</th>
                   <th width="10%">Capacity</th>
                   <th>Previous Cert. No</th>
-                  <th>Current Validation Date</th>
+                  <th>Validation Date</th>
                   <th>Expired Date</th>
                   <th>Status</th>
                   <th>Action</th>
@@ -1685,7 +1687,6 @@ $(function () {
   });
 
   $('#multiDeactivate').on('click', function () {
-    if (confirm('DO YOU CONFIRMED TO DELETE THE FOLLOWING OTHER VALIDATIONS?')) {
       $('#spinnerLoading').show();
       var selectedIds = []; // An array to store the selected 'id' values
 
@@ -1696,25 +1697,28 @@ $(function () {
       });
 
       if (selectedIds.length > 0) {
-        $.post('php/deleteValidation.php', {id: selectedIds, status: 'DELETE', type: 'MULTI'}, function(data){
-          var obj = JSON.parse(data);
+        if (confirm('DO YOU CONFIRMED TO DELETE THE FOLLOWING OTHER VALIDATIONS?')) {
+          $.post('php/deleteValidation.php', {id: selectedIds, status: 'DELETE', type: 'MULTI'}, function(data){
+            var obj = JSON.parse(data);
 
-          if(obj.status === 'success'){
-            toastr["success"](obj.message, "Success:");
-            $('#weightTable').DataTable().ajax.reload();
-          }
-          else if(obj.status === 'failed'){
-            toastr["error"](obj.message, "Failed:");
-          }
-          else{
-            toastr["error"]("Something wrong when activate", "Failed:");
-          }
-          $('#spinnerLoading').hide();
-        });
+            if(obj.status === 'success'){
+              toastr["success"](obj.message, "Success:");
+              $('#weightTable').DataTable().ajax.reload();
+            }
+            else if(obj.status === 'failed'){
+              toastr["error"](obj.message, "Failed:");
+            }
+            else{
+              toastr["error"]("Something wrong when activate", "Failed:");
+            }
+          });
+        }
+
+        $('#spinnerLoading').hide();
       }else{
         alert("Please select at least one other validation to delete.");
+        $('#spinnerLoading').hide();
       }
-    }
   });
 
   // $(".add-price").click(function(){
@@ -1784,7 +1788,7 @@ function format (row) {
   <div class="row">
     <!-- Customer Section -->
     <div class="col-md-6">
-      <p><span><strong style="font-size:120%; text-decoration: underline;">Customer</strong></span><br>
+      <p><span><strong style="font-size:120%; text-decoration: underline;">Validation To : Customer</strong></span><br>
       <strong>${row.customer}</strong><br>
       ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4} `;
 
@@ -1798,7 +1802,7 @@ function format (row) {
     returnString += `
     <!-- Reseller Section -->
     <div class="col-md-6">
-      <p><span><strong style="font-size:120%; text-decoration: underline;">Reseller</strong></span><br>
+      <p><span><strong style="font-size:120%; text-decoration: underline;">Billing or Supply by Reseller</strong></span><br>
       <strong>${row.dealer}</strong><br>
       ${row.reseller_address1}<br>${row.reseller_address2}<br>${row.reseller_address3}<br>${row.reseller_address4} `;
       

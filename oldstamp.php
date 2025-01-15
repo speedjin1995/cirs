@@ -63,7 +63,7 @@ else{
           <div class="card-body">
             <div class="row">
               <div class="form-group col-3">
-                <label>From Date:</label>
+                <label>From Stamp Date:</label>
                 <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
                   <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
                   <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
@@ -72,7 +72,7 @@ else{
               </div>
 
               <div class="form-group col-3">
-                <label>To Date:</label>
+                <label>To Expired Date:</label>
                 <div class="input-group date" id="toDatePicker" data-target-input="nearest">
                   <input type="text" class="form-control datetimepicker-input" data-target="#toDatePicker" id="toDate"/>
                   <div class="input-group-append" data-target="#toDatePicker" data-toggle="datetimepicker">
@@ -148,13 +148,16 @@ else{
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-8"><h4>Cancelled Stamping</h4></div>
-              <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="multiDeactivate">Delete Stamping</button>
+              <div class="col-10"><h4>Cancelled Stamping</h4></div>
+              <div class="col-2 d-flex justify-content-end">
+                <div class="col-3">
+                  <button type="button" class="btn btn-block bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Delete Stampings"><i class="fa-solid fa-ban"></i></button></button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-block bg-gradient-success" id="exportExcel" data-bs-toggle="tooltip" title="Export Excel"><i class="fa-regular fa-file-excel"></i></button>
+                </div>
               </div>
-              <div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="exportExcel">Export Excel</button>
-              </div>
+              
               <!--div class="col-2">
                 <button type="button" class="btn btn-block bg-gradient-info btn-sm" id="exportBorangs">Export Borangs</button>
               </div-->
@@ -184,8 +187,8 @@ else{
                   <th width="10%">Capacity</th>
                   <th>No. Daftar Lama</th>
                   <th>No. Daftar Baru</th>
-                  <th>Previous Stamp Date</th>
-                  <th>Expired Date</th>
+                  <th>Stamp Date</th>
+                  <th>Next Due Date</th>
                   <th>Status</th>
                   <th>Action</th>
                   <th></th>
@@ -1145,7 +1148,6 @@ $(function () {
   });
 
   $('#multiDeactivate').on('click', function () {
-    if (confirm('DO YOU CONFIRMED TO DELETE THE FOLLOWING STAMPINGS?')) {
       $('#spinnerLoading').show();
       var selectedIds = []; // An array to store the selected 'id' values
 
@@ -1156,25 +1158,28 @@ $(function () {
       });
 
       if (selectedIds.length > 0) {
-        $.post('php/deleteStamp.php', {id: selectedIds, status: 'DELETE', type: 'MULTI'}, function(data){
-          var obj = JSON.parse(data);
+        if (confirm('DO YOU CONFIRMED TO DELETE THE FOLLOWING STAMPINGS?')) {
+          $.post('php/deleteStamp.php', {id: selectedIds, status: 'DELETE', type: 'MULTI'}, function(data){
+            var obj = JSON.parse(data);
 
-          if(obj.status === 'success'){
-            toastr["success"](obj.message, "Success:");
-            $('#weightTable').DataTable().ajax.reload();
-          }
-          else if(obj.status === 'failed'){
-            toastr["error"](obj.message, "Failed:");
-          }
-          else{
-            toastr["error"]("Something wrong when activate", "Failed:");
-          }
-          $('#spinnerLoading').hide();
-        });
+            if(obj.status === 'success'){
+              toastr["success"](obj.message, "Success:");
+              $('#weightTable').DataTable().ajax.reload();
+            }
+            else if(obj.status === 'failed'){
+              toastr["error"](obj.message, "Failed:");
+            }
+            else{
+              toastr["error"]("Something wrong when activate", "Failed:");
+            }
+          });
+        }
+
+        $('#spinnerLoading').hide();
       }else{
         alert("Please select at least one stamping to delete.");
+        $('#spinnerLoading').hide();
       }
-    }
   });
 
   /*$('#refreshBtn').on('click', function(){
@@ -1456,7 +1461,7 @@ function format (row) {
   <div class="row">
     <!-- Customer Section -->
     <div class="col-md-6">
-      <p><span><strong style="font-size:120%; text-decoration: underline;">Customer</strong></span><br>
+      <p><span><strong style="font-size:120%; text-decoration: underline;">Stamping To : Customer</strong></span><br>
       <strong>${row.customers}</strong><br>
       ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4} `;
 
@@ -1470,7 +1475,7 @@ function format (row) {
     returnString += `
     <!-- Reseller Section -->
     <div class="col-md-6">
-      <p><span><strong style="font-size:120%; text-decoration: underline;">Reseller</strong></span><br>
+      <p><span><strong style="font-size:120%; text-decoration: underline;">Billing or Supply by Reseller</strong></span><br>
       <strong>${row.dealer}</strong><br>
       ${row.reseller_address1}<br>${row.reseller_address2}<br>${row.reseller_address3}<br>${row.reseller_address4} `;
       
@@ -1492,6 +1497,7 @@ function format (row) {
       <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
       <p><strong>Serial No:</strong> ${row.serial_no}</p>
       <p><strong>Assigned To:</strong> ${row.assignTo}</p>
+      <p><strong>Make In:</strong> ${row.make_in}</p>
     </div>`;
 
   if(row.stampType == 'RENEWAL'){
@@ -1505,7 +1511,7 @@ function format (row) {
           <p><strong>Borang E:</strong> ${row.borang_e}</p>
           <p><strong>Last Year Stamping Date:</strong> ${row.last_year_stamping_date}</p>
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
-          <p><strong>Due Date:</strong> ${row.due_date}</p>
+          <p><strong>Next Due Date:</strong> ${row.due_date}</p>
         </div>
       </div><hr>
     `;
@@ -1517,7 +1523,7 @@ function format (row) {
           <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
           <p><strong>Borang D:</strong> ${row.borang_d}</p>
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
-          <p><strong>Due Date:</strong> ${row.due_date}</p>
+          <p><strong>Next Due Date:</strong> ${row.due_date}</p>
         </div>
       </div><hr>
     `;
@@ -1557,22 +1563,21 @@ function format (row) {
   }
 
   // Additional section for ATS
-  if (row.jenis_alat == 'ATS' || row.jenis_alat == 'ATS (H)'){
-    returnString += `</div><hr>
-                        <div class="row">
-                          <!-- ATS Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
-                        </div>
-                        `;
-  }else if(row.jenis_alat == 'ATP'){
+  // if (row.jenis_alat == 'ATS' || row.jenis_alat == 'ATS (H)'){
+  //   returnString += `</div><hr>
+  //                       <div class="row">
+  //                         <!-- ATS Section -->
+  //                         <div class="col-6">
+  //                           <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+  //                         </div>
+  //                       </div>
+  //                       `;
+  // }else 
+  
+  if(row.jenis_alat == 'ATP'){
     returnString += `</div><hr>
                         <div class="row">
                           <!-- ATP Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
                           <div class="col-6">
                             <p><strong>Jenis Penunjuk:</strong> ${row.jenis_penunjuk}</p>
                           </div>
@@ -1582,9 +1587,6 @@ function format (row) {
     returnString += `</div><hr>
                         <div class="row">
                           <!-- ATN Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
                           <div class="col-6">
                             <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
                           </div>
@@ -1598,9 +1600,6 @@ function format (row) {
                         <div class="row">
                           <!-- ATE Section -->
                           <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
-                          <div class="col-6">
                             <p><strong>Klass:</strong> ${row.class}</p>
                           </div>
                         </div>
@@ -1608,10 +1607,7 @@ function format (row) {
   }else if(row.jenis_alat == 'BTU'){
     returnString += `</div><hr>
                         <div class="row">
-                          <!-- BTU Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>`;
+                          <!-- BTU Section -->`;
     if (row.batu_ujian == 'OTHER'){
       returnString += `
                       <div class="col-6">
@@ -1633,9 +1629,6 @@ function format (row) {
                         <div class="row">
                           <!-- ATP-AUTO MACHINE Section -->
                           <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
-                          <div class="col-6">
                             <p><strong>Jenis Penunjuk:</strong> ${row.jenis_penunjuk}</p>
                           </div>
                         </div>
@@ -1644,9 +1637,6 @@ function format (row) {
     returnString += `</div><hr>
                         <div class="row">
                           <!-- ATS Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
                           <div class="col-6">
                             <p><strong>Had Terima Steelyard:</strong> ${row.steelyard} kg</p>
                           </div>
@@ -1670,10 +1660,7 @@ function format (row) {
   }else if(row.jenis_alat == 'SIA'){
     returnString += `</div><hr>
                         <div class="row">
-                          <!-- SIA Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>`;
+                          <!-- SIA Section -->`;
 
     if (row.nilai_jangka == 'OTHER'){
       returnString += `
@@ -1708,9 +1695,6 @@ function format (row) {
     returnString += `</div><hr>
                         <div class="row">
                           <!-- SLL Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
                           <div class="col-6">
                             <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
                           </div>
