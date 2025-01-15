@@ -199,7 +199,7 @@ else{
               <div class="col-2">
                 <button type="button" class="btn btn-block btn-sm bg-gradient-warning" onclick="newEntry()" data-bs-toggle="tooltip" title="Add New Stamping"><i class="fa-solid fa-circle-plus"></i> Add New Stamping</button>
               </div>
-              </div>
+            </div>
               
               <!--div class="col-2">
                 <a href="/template/Stamping Record Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
