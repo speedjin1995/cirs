@@ -1801,6 +1801,7 @@ $(function () {
       { data: 'status' },
       {
         data: 'id',
+        className: 'action-button',
         render: function (data, type, row) {
           let dropdownMenu = '<div class="dropdown" style="width=20%">' +
             '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #074979;">' +
@@ -1851,9 +1852,14 @@ $(function () {
   });
 
   // Add event listener for opening and closing details on row click
-  $('#weightTable tbody').on('click', 'tr', function () {
+  $('#weightTable tbody').on('click', 'tr', function (e) {
       var tr = $(this); // The row that was clicked
       var row = table.row(tr);
+
+      // Exclude specific td elements by checking the event target
+      if ($(e.target).closest('td').hasClass('select-checkbox') || $(e.target).closest('td').hasClass('action-button')) {
+          return;
+      }
 
       if (row.child.isShown()) {
           // This row is already open - close it
@@ -2098,6 +2104,7 @@ $(function () {
         { data: 'status' },
         {
           data: 'id',
+          className: 'action-button',
           render: function (data, type, row) {
             let dropdownMenu = '<div class="dropdown" style="width=20%">' +
               '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #074979;">' +
@@ -3070,14 +3077,13 @@ function format (row) {
       <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>
       <div class="row">
         <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
-        <div class="col-1"><button title="Duplicate" type="button" id="duplicate${row.id}" onclick="duplicate(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-clone"></i></button></div>`; console.log(row.jenis_alat);
+        <div class="col-1"><button title="Duplicate" type="button" id="duplicate${row.id}" onclick="duplicate(${row.id})" class="btn btn-success btn-sm"><i class="fas fa-clone"></i></button></div>`; 
 
         if (allowedAlats.includes(row.jenis_alat)) {
-          returnString += '<div class="col-1"><button title="Print" type="button" id="print'+row.id+'" onclick="print('+row.id+
-          ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+          returnString += '<div class="col-1"><button title="Print" type="button" id="print'+row.id+'" onclick="print('+row.id+', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
         }
 
-        returnString += '<div class="col-1"><button title="Log" type="button" id="log'+row.id+'" onclick="log('+row.id+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+        returnString += '<div class="col-1"><button title="Log" type="button" id="log'+row.id+'" onclick="log('+row.id+')" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
 
         // Complete button if conditions are met
         if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '' && row.borang_e != '') {
@@ -3117,6 +3123,7 @@ function format (row) {
   
   if(row.jenis_alat == 'ATP'){
     returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATP)</strong></span>
                         <div class="row">
                           <!-- ATP Section -->
                           <div class="col-6">
@@ -3126,6 +3133,7 @@ function format (row) {
                         `;
   }else if(row.jenis_alat == 'ATN' || row.jenis_alat == 'ATN (G)'){
     returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATN)</strong></span>
                         <div class="row">
                           <!-- ATN Section -->
                           <div class="col-6">
@@ -3138,6 +3146,7 @@ function format (row) {
                         `;
   }else if(row.jenis_alat == 'ATE'){
     returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATE)</strong></span>
                         <div class="row">
                           <!-- ATE Section -->
                           <div class="col-6">
@@ -3147,6 +3156,7 @@ function format (row) {
                         `;
   }else if(row.jenis_alat == 'BTU'){
     returnString += `</div><hr>
+                      <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (BTU)</strong></span>
                         <div class="row">
                           <!-- BTU Section -->`;
     if (row.batu_ujian == 'OTHER'){
@@ -3167,6 +3177,7 @@ function format (row) {
     
   }else if(row.jenis_alat == 'ATP-AUTO MACHINE'){
     returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATP - AUTO MACHINE)</strong></span>
                         <div class="row">
                           <!-- ATP-AUTO MACHINE Section -->
                           <div class="col-6">
@@ -3176,6 +3187,7 @@ function format (row) {
                         `;
   }else if(row.jenis_alat == 'ATP (MOTORCAR)'){
     returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATP - MOTORCAR)</strong></span>
                         <div class="row">
                           <!-- ATS Section -->
                           <div class="col-6">
@@ -3200,6 +3212,7 @@ function format (row) {
                         `;
   }else if(row.jenis_alat == 'SIA'){
     returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (SIA)</strong></span>
                         <div class="row">
                           <!-- SIA Section -->`;
 
