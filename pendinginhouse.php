@@ -46,9 +46,14 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
 }
 ?>
 <style>
-  #weightTable tbody tr:hover {
-      background-color: #d4edda; 
-      cursor: pointer;       
+  #weightTable tbody tr.odd:hover {
+      background-color: #d4edda; /* Light gray color on hover */
+      cursor: pointer;          /* Pointer cursor to indicate clickability */
+  }
+
+  #weightTable tbody tr.even:hover {
+      background-color: #d4edda; /* Light gray color on hover */
+      cursor: pointer;          /* Pointer cursor to indicate clickability */
   }
 </style>
 
