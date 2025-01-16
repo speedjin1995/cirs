@@ -32,23 +32,27 @@ else{
 			<div class="col-12">
 				<div class="card">
 					<div class="card-header">
-              <div class="row">
-                  <div class="col-6"></div>
-                  <div class="col-2">
-                    <a href="/template/Reseller_Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
-                  </div>
-                  <div class="col-2">
-                    <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">Upload Excel</button>
-                  </div>
-                  <div class="col-2">
-                      <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addCustomers">Add Customers</button>
-                  </div>
-              </div>
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-block btn-sm bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Delete Customers"><i class="fa-solid fa-ban"></i> Delete Customers</button>
+                </div>
+                <div class="col-2">
+                  <a href="/template/Reseller_Template.xlsx" download><button type="button" class="btn btn-block btn-sm bg-gradient-info" id="downloadExccl"><i class="fa-solid fa-download"></i> Download Template</button></a>
+                </div>
+                <div class="col-2">
+                  <button type="button" class="btn btn-block btn-sm bg-gradient-success" id="uploadExccl"><i class="fa-regular fa-file-excel"></i> Upload Excel</button>
+                </div>
+                <div class="col-2">
+                  <button type="button" class="btn btn-block btn-sm bg-gradient-warning" id="addCustomers"><i class="fa-solid fa-circle-plus"></i> Add Customers</button>
+                </div>
+            </div>
           </div>
 					<div class="card-body">
 						<table id="customerTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
+                  <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
                   <th>Customer Code</th>
                   <th>Other Code</th>
 									<th>Name</th>
@@ -242,6 +246,11 @@ var contentIndex = 0;
 var pricingCount = $("#pricingTable").find(".details").length;
 
 $(function () {
+  $('#selectAllCheckbox').on('change', function() {
+      var checkboxes = $('#customerTable tbody input[type="checkbox"]');
+      checkboxes.prop('checked', $(this).prop('checked')).trigger('change');
+  });
+
   var table = $("#customerTable").DataTable({
       "responsive": true,
       "autoWidth": false,
@@ -252,6 +261,15 @@ $(function () {
           'url':'php/loadCustomers.php'
       },
       'columns': [
+        {
+            // Add a checkbox with a unique ID for each row
+            data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+            className: 'select-checkbox',
+            orderable: false,
+            render: function (data, type, row) {
+                return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+            }
+        },
         { data: 'customer_code' },
         { data: 'other_code' },
         { data: 'customer_name' },
@@ -319,7 +337,7 @@ $(function () {
           if(obj.status === 'success'){
             $('#addModal').modal('hide');
             toastr["success"](obj.message, "Success:");
-            $('#customerTable').DataTable().ajax.reload();
+            $('#customerTable').DataTable().ajax.reload(null, false);
             $('#spinnerLoading').hide();
           }
           else if(obj.status === 'failed'){
@@ -363,7 +381,7 @@ $(function () {
             if (obj.status === 'success') {
               $('#uploadModal').modal('hide');
               toastr["success"](obj.message, "Success:");
-              $('#customerTable').DataTable().ajax.reload();
+              $('#customerTable').DataTable().ajax.reload(null, false);
             } 
             else if (obj.status === 'failed') {
               toastr["error"](obj.message, "Failed:");
@@ -476,6 +494,46 @@ $(function () {
 
     reader.readAsBinaryString(file);
   });
+
+  $('#multiDeactivate').on('click', function () {
+        $('#spinnerLoading').show();
+        var selectedIds = []; // An array to store the selected 'id' values
+
+        $("#customerTable tbody input[type='checkbox']").each(function () {
+            if (this.checked) {
+                selectedIds.push($(this).val());
+            }
+        });
+
+        if (selectedIds.length > 0) {
+            if (confirm('Are you sure you want to cancel these items?')) {
+                $.post('php/deleteCustomer.php', {userID: selectedIds, type: 'MULTI'}, function(data){
+                    var obj = JSON.parse(data);
+                    
+                    if(obj.status === 'success'){
+                        toastr["success"](obj.message, "Success:");
+                        $('#customerTable').DataTable().ajax.reload(null, false);
+                        $('#spinnerLoading').hide();
+                    }
+                    else if(obj.status === 'failed'){
+                        toastr["error"](obj.message, "Failed:");
+                        $('#spinnerLoading').hide();
+                    }
+                    else{
+                        toastr["error"]("Something wrong when activate", "Failed:");
+                        $('#spinnerLoading').hide();
+                    }
+                });
+            }
+
+            $('#spinnerLoading').hide();
+        } 
+        else {
+            // Optionally, you can display a message or take another action if no IDs are selected
+            alert("Please select at least one customer to delete.");
+            $('#spinnerLoading').hide();
+        }     
+    });
 });
 
 function format(row){
@@ -584,7 +642,7 @@ function deactivate(id){
       
       if(obj.status === 'success'){
         toastr["success"](obj.message, "Success:");
-        $('#customerTable').DataTable().ajax.reload();
+        $('#customerTable').DataTable().ajax.reload(null, false);
         $('#spinnerLoading').hide();
       }
       else if(obj.status === 'failed'){

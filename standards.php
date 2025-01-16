@@ -34,9 +34,12 @@ else{
 				<div class="card">
 					<div class="card-header">
                         <div class="row">
-                            <div class="col-9"></div>
-                            <div class="col-3">
-                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addCapacity">Add Value of Standards</button>
+                            <div class="col-8"></div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-block btn-sm bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Delete Standard"><i class="fa-solid fa-ban"></i> Delete Standard</button>
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-block btn-sm bg-gradient-warning" id="addCapacity"><i class="fa-solid fa-circle-plus"></i> Add Value of Standards</button>
                             </div>
                         </div>
                     </div>
@@ -44,6 +47,7 @@ else{
 						<table id="capacityTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
+                                    <th rowspan="2"><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
                                     <th rowspan="2">Std. Avg. <br>Temperature</th>
 									<th rowspan="2">Relative <br>Humidity</th>
                                     <th rowspan="2">Capacity</th>
@@ -190,17 +194,31 @@ $(function () {
         });
     });
 
+    $('#selectAllCheckbox').on('change', function() {
+        var checkboxes = $('#capacityTable tbody input[type="checkbox"]');
+        checkboxes.prop('checked', $(this).prop('checked')).trigger('change');
+    });
+
     $("#capacityTable").DataTable({
         "responsive": true,
         "autoWidth": false,
         'processing': true,
         'serverSide': true,
         'serverMethod': 'post',
-        'order': [[ 0, 'asc' ]],
+        'order': [[ 1, 'asc' ]],
         'ajax': {
             'url':'php/loadStandards.php'
         },
         'columns': [
+            {
+                // Add a checkbox with a unique ID for each row
+                data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+                className: 'select-checkbox',
+                orderable: false,
+                render: function (data, type, row) {
+                    return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+                }
+            },
             { data: 'standard_avg_temp' },
             { data: 'relative_humidity' },
             { data: 'name' },
@@ -252,7 +270,7 @@ $(function () {
                 if(obj.status === 'success'){
                     $('#capacityModal').modal('hide');
                     toastr["success"](obj.message, "Success:");
-                    $('#capacityTable').DataTable().ajax.reload();
+                    $('#capacityTable').DataTable().ajax.reload(null, false);
                     $('#spinnerLoading').hide();
                 }
                 else if(obj.status === 'failed'){
@@ -336,6 +354,46 @@ $(function () {
             }
         });
     });
+
+    $('#multiDeactivate').on('click', function () {
+        $('#spinnerLoading').show();
+        var selectedIds = []; // An array to store the selected 'id' values
+
+        $("#capacityTable tbody input[type='checkbox']").each(function () {
+            if (this.checked) {
+                selectedIds.push($(this).val());
+            }
+        });
+
+        if (selectedIds.length > 0) {
+            if (confirm('Are you sure you want to cancel these items?')) {
+                $.post('php/deleteStandards.php', {userID: selectedIds, type: 'MULTI'}, function(data){
+                    var obj = JSON.parse(data);
+                    
+                    if(obj.status === 'success'){
+                        toastr["success"](obj.message, "Success:");
+                        $('#capacityTable').DataTable().ajax.reload(null, false);
+                        $('#spinnerLoading').hide();
+                    }
+                    else if(obj.status === 'failed'){
+                        toastr["error"](obj.message, "Failed:");
+                        $('#spinnerLoading').hide();
+                    }
+                    else{
+                        toastr["error"]("Something wrong when activate", "Failed:");
+                        $('#spinnerLoading').hide();
+                    }
+                });
+            }
+
+            $('#spinnerLoading').hide();
+        } 
+        else {
+            // Optionally, you can display a message or take another action if no IDs are selected
+            alert("Please select at least one standard to delete.");
+            $('#spinnerLoading').hide();
+        }     
+    });
 });
 
 function edit(id){
@@ -394,7 +452,7 @@ function deactivate(id){
             
             if(obj.status === 'success'){
                 toastr["success"](obj.message, "Success:");
-                $('#capacityTable').DataTable().ajax.reload();
+                $('#capacityTable').DataTable().ajax.reload(null, false);
                 $('#spinnerLoading').hide();
             }
             else if(obj.status === 'failed'){

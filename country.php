@@ -32,9 +32,12 @@ else{
 				<div class="card">
 					<div class="card-header">
                         <div class="row">
-                            <div class="col-9"></div>
-                            <div class="col-3">
-                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addUnits">Add Country</button>
+                            <div class="col-8"></div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-block btn-sm bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Delete Country"><i class="fa-solid fa-ban"></i> Delete Country</button>
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-block btn-sm bg-gradient-warning" id="addUnits"><i class="fa-solid fa-circle-plus"></i> Add Country</button>
                             </div>
                         </div>
                     </div>
@@ -42,6 +45,7 @@ else{
 						<table id="unitTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
+                                    <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
 									<th>No.</th>
 									<th>Country</th>
 									<th>Actions</th>
@@ -89,18 +93,32 @@ else{
 
 <script>
 $(function () {
+    $('#selectAllCheckbox').on('change', function() {
+        var checkboxes = $('#unitTable tbody input[type="checkbox"]');
+        checkboxes.prop('checked', $(this).prop('checked')).trigger('change');
+    });
+
     $("#unitTable").DataTable({
         "responsive": true,
         "autoWidth": false,
         'processing': true,
         'serverSide': true,
         'serverMethod': 'post',
-        'order': [[ 1, 'asc' ]],
+        'order': [[ 2, 'asc' ]],
         'columnDefs': [ { orderable: false, targets: [0] }],
         'ajax': {
             'url':'php/loadCountry.php'
         },
         'columns': [
+            {
+                // Add a checkbox with a unique ID for each row
+                data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+                className: 'select-checkbox',
+                orderable: false,
+                render: function (data, type, row) {
+                    return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+                }
+            },
             { data: 'counter' },
             { data: 'name' },
             {
@@ -140,7 +158,7 @@ $(function () {
                 if(obj.status === 'success'){
                     $('#unitModal').modal('hide');
                     toastr["success"](obj.message, "Success:");
-                    $('#unitTable').DataTable().ajax.reload();
+                    $('#unitTable').DataTable().ajax.reload(null, false);
                     $('#spinnerLoading').hide();
                 }
                 else if(obj.status === 'failed'){
@@ -173,6 +191,46 @@ $(function () {
                 $(element).removeClass('is-invalid');
             }
         });
+    });
+
+    $('#multiDeactivate').on('click', function () {
+        $('#spinnerLoading').show();
+        var selectedIds = []; // An array to store the selected 'id' values
+
+        $("#unitTable tbody input[type='checkbox']").each(function () {
+            if (this.checked) {
+                selectedIds.push($(this).val());
+            }
+        });
+
+        if (selectedIds.length > 0) {
+            if (confirm('Are you sure you want to cancel these items?')) {
+                $.post('php/deleteCountry.php', {userID: selectedIds, type: 'MULTI'}, function(data){
+                    var obj = JSON.parse(data);
+                    
+                    if(obj.status === 'success'){
+                        toastr["success"](obj.message, "Success:");
+                        $('#unitTable').DataTable().ajax.reload(null, false);
+                        $('#spinnerLoading').hide();
+                    }
+                    else if(obj.status === 'failed'){
+                        toastr["error"](obj.message, "Failed:");
+                        $('#spinnerLoading').hide();
+                    }
+                    else{
+                        toastr["error"]("Something wrong when activate", "Failed:");
+                        $('#spinnerLoading').hide();
+                    }
+                });
+            }
+
+            $('#spinnerLoading').hide();
+        } 
+        else {
+            // Optionally, you can display a message or take another action if no IDs are selected
+            alert("Please select at least one country to delete.");
+            $('#spinnerLoading').hide();
+        }     
     });
 });
 
@@ -218,7 +276,7 @@ function deactivate(id){
             
             if(obj.status === 'success'){
                 toastr["success"](obj.message, "Success:");
-                $('#unitTable').DataTable().ajax.reload();
+                $('#unitTable').DataTable().ajax.reload(null, false);
                 $('#spinnerLoading').hide();
             }
             else if(obj.status === 'failed'){

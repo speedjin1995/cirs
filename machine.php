@@ -33,9 +33,12 @@ else{
 				<div class="card">
 					<div class="card-header">
                         <div class="row">
-                            <div class="col-9"></div>
-                            <div class="col-3">
-                                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="addMachine">Add Machine Type</button>
+                            <div class="col-8"></div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-block btn-sm bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Delete Price"><i class="fa-solid fa-ban"></i> Delete Machine Type</button>
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-block btn-sm bg-gradient-warning" id="addMachine"><i class="fa-solid fa-circle-plus"></i> Add Machine Type</button>
                             </div>
                         </div>
                     </div>
@@ -43,6 +46,7 @@ else{
 						<table id="machineTable" class="table table-bordered table-striped">
 							<thead>
 								<tr>
+                                    <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
 									<th>No.</th>
 									<th>Machine Type</th>
                                     <th>Jenis Alat</th>
@@ -109,18 +113,32 @@ $(function () {
         });
     });
 
+    $('#selectAllCheckbox').on('change', function() {
+        var checkboxes = $('#machineTable tbody input[type="checkbox"]');
+        checkboxes.prop('checked', $(this).prop('checked')).trigger('change');
+    });
+
     $("#machineTable").DataTable({
         "responsive": true,
         "autoWidth": false,
         'processing': true,
         'serverSide': true,
         'serverMethod': 'post',
-        'order': [[ 1, 'asc' ]],
+        'order': [[ 2, 'asc' ]],
         'columnDefs': [ { orderable: false, targets: [0] }],
         'ajax': {
             'url':'php/loadMachine.php'
         },
         'columns': [
+            {
+                // Add a checkbox with a unique ID for each row
+                data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+                className: 'select-checkbox',
+                orderable: false,
+                render: function (data, type, row) {
+                    return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+                }
+            },
             { data: 'counter' },
             { data: 'machine_type' },
             { data: 'jenis_alat' },
@@ -161,7 +179,7 @@ $(function () {
                 if(obj.status === 'success'){
                     $('#machineModal').modal('hide');
                     toastr["success"](obj.message, "Success:");
-                    $('#machineTable').DataTable().ajax.reload();
+                    $('#machineTable').DataTable().ajax.reload(null, false);
                     $('#spinnerLoading').hide();
                 }
                 else if(obj.status === 'failed'){
@@ -195,6 +213,46 @@ $(function () {
                 $(element).removeClass('is-invalid');
             }
         });
+    });
+
+    $('#multiDeactivate').on('click', function () {
+        $('#spinnerLoading').show();
+        var selectedIds = []; // An array to store the selected 'id' values
+
+        $("#machineTable tbody input[type='checkbox']").each(function () {
+            if (this.checked) {
+                selectedIds.push($(this).val());
+            }
+        });
+
+        if (selectedIds.length > 0) {
+            if (confirm('Are you sure you want to cancel these items?')) {
+                $.post('php/deleteMachine.php', {userID: selectedIds, type: 'MULTI'}, function(data){
+                    var obj = JSON.parse(data);
+                    
+                    if(obj.status === 'success'){
+                        toastr["success"](obj.message, "Success:");
+                        $('#machineTable').DataTable().ajax.reload(null, false);
+                        $('#spinnerLoading').hide();
+                    }
+                    else if(obj.status === 'failed'){
+                        toastr["error"](obj.message, "Failed:");
+                        $('#spinnerLoading').hide();
+                    }
+                    else{
+                        toastr["error"]("Something wrong when activate", "Failed:");
+                        $('#spinnerLoading').hide();
+                    }
+                });
+            }
+
+            $('#spinnerLoading').hide();
+        } 
+        else {
+            // Optionally, you can display a message or take another action if no IDs are selected
+            alert("Please select at least one machine type to delete.");
+            $('#spinnerLoading').hide();
+        }     
     });
 });
 
@@ -241,7 +299,7 @@ function deactivate(id){
             
             if(obj.status === 'success'){
                 toastr["success"](obj.message, "Success:");
-                $('#machineTable').DataTable().ajax.reload();
+                $('#machineTable').DataTable().ajax.reload(null, false);
                 $('#spinnerLoading').hide();
             }
             else if(obj.status === 'failed'){

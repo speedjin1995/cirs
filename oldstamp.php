@@ -35,6 +35,12 @@ else{
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
 }
 ?>
+<style>
+  #weightTable tbody tr:hover {
+      background-color: #d4edda; 
+      cursor: pointer;       
+  }
+</style>
 
 <select class="form-control" style="width: 100%;" id="customerNoHidden" style="display: none;">
   <option value="" selected disabled hidden>Please Select</option>
@@ -189,7 +195,7 @@ else{
                   <th>Next Due Date</th>
                   <th>Status</th>
                   <th>Action</th>
-                  <th></th>
+                  <!-- <th></th> -->
                 </tr>
               </thead>
             </table>
@@ -840,36 +846,55 @@ $(function () {
       //     }
       //   }
       // },
-      { 
-        className: 'dt-control',
-        orderable: false,
-        data: null,
-        render: function ( data, type, row ) {
-          return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
-        }
-      }
+      // { 
+      //   className: 'dt-control',
+      //   orderable: false,
+      //   data: null,
+      //   render: function ( data, type, row ) {
+      //     return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
+      //   }
+      // }
     ],
   });
   
   // Add event listener for opening and closing details
-  $('#weightTable tbody').on('click', 'td.dt-control', function () {
-    var tr = $(this).closest('tr');
-    var row = table.row(tr);
+  $('#weightTable tbody').on('click', 'tr', function () {
+      var tr = $(this); // The row that was clicked
+      var row = table.row(tr);
 
-    if ( row.child.isShown() ) {
-      // This row is already open - close it
-      row.child.hide();
-      tr.removeClass('shown');
-    }
-    else {
-      $.post('php/getStamp.php', {userID: row.data().id, format: 'EXPANDABLE'}, function (data){
-        var obj = JSON.parse(data); 
-        if(obj.status === 'success'){ console.log(obj.message);
-          row.child( format(obj.message) ).show();tr.addClass("shown");
-        }
-      });
-    }
+      if (row.child.isShown()) {
+          // This row is already open - close it
+          row.child.hide();
+          tr.removeClass('shown');
+      } else {
+          $.post('php/getStamp.php', { userID: row.data().id, format: 'EXPANDABLE' }, function (data) {
+              var obj = JSON.parse(data);
+              if (obj.status === 'success') {
+                  row.child(format(obj.message)).show();
+                  tr.addClass("shown");
+              }
+          });
+      }
   });
+
+  // $('#weightTable tbody').on('click', 'td.dt-control', function () {
+  //   var tr = $(this).closest('tr');
+  //   var row = table.row(tr);
+
+  //   if ( row.child.isShown() ) {
+  //     // This row is already open - close it
+  //     row.child.hide();
+  //     tr.removeClass('shown');
+  //   }
+  //   else {
+  //     $.post('php/getStamp.php', {userID: row.data().id, format: 'EXPANDABLE'}, function (data){
+  //       var obj = JSON.parse(data); 
+  //       if(obj.status === 'success'){ console.log(obj.message);
+  //         row.child( format(obj.message) ).show();tr.addClass("shown");
+  //       }
+  //     });
+  //   }
+  // });
 
   $.validator.setDefaults({
     submitHandler: function () {
@@ -1082,14 +1107,14 @@ $(function () {
         //     }
         //   }
         // },
-        { 
-          className: 'dt-control',
-          orderable: false,
-          data: null,
-          render: function ( data, type, row ) {
-            return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
-          }
-        }
+        // { 
+        //   className: 'dt-control',
+        //   orderable: false,
+        //   data: null,
+        //   render: function ( data, type, row ) {
+        //     return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
+        //   }
+        // }
       ],
     });
   });
@@ -1162,7 +1187,7 @@ $(function () {
 
             if(obj.status === 'success'){
               toastr["success"](obj.message, "Success:");
-              $('#weightTable').DataTable().ajax.reload();
+              $('#weightTable').DataTable().ajax.reload(null, false);
             }
             else if(obj.status === 'failed'){
               toastr["error"](obj.message, "Failed:");
@@ -2059,7 +2084,7 @@ function deactivate(id) {
 
       if(obj.status === 'success'){
         toastr["success"](obj.message, "Success:");
-        $('#weightTable').DataTable().ajax.reload();
+        $('#weightTable').DataTable().ajax.reload(null, false);
       }
       else if(obj.status === 'failed'){
         toastr["error"](obj.message, "Failed:");
