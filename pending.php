@@ -2976,6 +2976,8 @@ $(function () {
 });
 
 function format (row) {
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA'];
+
   var returnString = `
   <div class="row">
     <!-- Customer Section -->
@@ -3066,6 +3068,26 @@ function format (row) {
       <p><strong>Total Amount:</strong> ${row.total_amount}</p>
       <p><strong>SST Price:</strong> ${row.sst}</p>
       <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>
+      <div class="row">
+        <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
+        <div class="col-1"><button title="Duplicate" type="button" id="duplicate${row.id}" onclick="duplicate(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-clone"></i></button></div>`; console.log(row.jenis_alat);
+
+        if (allowedAlats.includes(row.jenis_alat)) {
+          returnString += '<div class="col-1"><button title="Print" type="button" id="print'+row.id+'" onclick="print('+row.id+
+          ', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+        }
+
+        returnString += '<div class="col-1"><button title="Log" type="button" id="log'+row.id+'" onclick="log('+row.id+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+
+        // Complete button if conditions are met
+        if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '' && row.borang_e != '') {
+          returnString += '<div class="col-1"><button title="Complete" type="button" id="complete'+row.id+'" onclick="complete('+row.id+')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
+        }
+
+        // Cancelled button
+        returnString += '<div class="col-1"><button title="Cancelled" type="button" id="delete'+row.id+'" onclick="deactivate('+row.id+')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>';
+
+    returnString += `</div>
     </div>
   </div><br>
   `;
