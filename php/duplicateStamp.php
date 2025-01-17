@@ -53,10 +53,10 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
                     $insertStmt->execute([
                         $record['type'], $record['dealer'], $record['dealer_branch'], $record['customer_type'], $record['customers'],
                         $record['branch'], $record['products'], $record['brand'], $record['machine_type'], $record['model'],
-                        $record['capacity'], $record['capacity_high'], $record['assignTo'], $record['serial_no'], $record['validate_by'],
-                        $record['jenis_alat'], $record['trade'], $record['no_daftar_baru'], $record['no_daftar_baru'], null, null, null, 
-                        $record['include_cert'], null, null, $record['cawangan'], null, null, 'RENEWAL', $record['stamping_date'], 
-                        $record['due_date'], null, $record['pic'], $record['customer_pic'], null, null, null, null, $record['remarks'], 
+                        $record['capacity'], $record['capacity_high'], $record['assignTo'], null, $record['validate_by'],
+                        $record['jenis_alat'], $record['trade'], null, null, null, null, null, 
+                        $record['include_cert'], null, null, $record['cawangan'], null, null, 'RENEWAL', null, 
+                        null, null, $record['pic'], $record['customer_pic'], null, null, null, null, $record['remarks'], 
                         $record['log'], $record['unit_price'], $record['cert_price'], $record['total_amount'], $record['sst'], $record['subtotal_amount'], 
                         $record['reason_id'], $record['other_reason'], $record['id'], 'Pending', 'N', 'Y'
                     ]);
