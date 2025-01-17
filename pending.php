@@ -2168,7 +2168,7 @@ $(function () {
     if(!$('#validatorFilter').val()){
       alert("The records is consists of Metrology and De-Metrology stamping. Please filter ONLY 1 VALIDATORS before export!");
     }
-    else if (selectedIds.length > 0) {
+    else if (selectedIds.length <= 0) {
       // Optionally, you can display a message or take another action if no IDs are selected
       alert("Please select at least one DO to Deliver.");
     } 
