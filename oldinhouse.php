@@ -1870,9 +1870,20 @@ function format (row) {
       <p><strong>Model:</strong> ${row.model}</p>
       <p><strong>Structure Size:</strong> ${row.size}</p>
       <p><strong>Created Date:</strong> ${row.validation_date}</p>
-    </div> 
-  </div><hr>
-  `;
+      <div class="row">`;
+
+      if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
+        returnString += `<div class="col-1"><button title="Revert" type="button" id="revertBtn${row.id}" onclick="revertToPending(${row.id})" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>
+        <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+        <div class="col-1"><button title="Delete" type="button" id="delete${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>`;
+      }else{
+        returnString += `
+        <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>`;
+      }
+
+      returnString += `</div>
+    </div>
+  </div><br>`;
   
   if (row.tests !== undefined && row.tests !== null && row.tests !== ''){
     if (row.tests[0].length > 0) {

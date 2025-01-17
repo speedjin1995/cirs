@@ -1864,6 +1864,13 @@ function format (row) {
       <p><strong>Model:</strong> ${row.model}</p>
       <p><strong>Structure Size:</strong> ${row.size}</p>
       <p><strong>Created Date:</strong> ${row.validation_date}</p>
+      <div class="row">
+        <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
+        <div class="col-1"><button title="Print" type="button" id="print${row.id}" onclick="print(${row.id})" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>
+        <div class="col-1"><button title="Complete" type="button" id="complete${row.id}" onclick="complete(${row.id})" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>
+        <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+        <div class="col-1"><button title="Cancelled" type="button" id="deactivate${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
+      </div>
     </div> 
   </div><hr>
   `;
