@@ -17,7 +17,7 @@ if(isset($_POST['id'])){
             $companyName = $row2['name'];
             $certno_lesen = $row2['certno_lesen'];
             $bless_serahanno = $row2['bless_serahanno'];
-            $inhouseFilePath = 'scm/' . htmlspecialchars($row2['inhouse'], ENT_QUOTES, 'UTF-8');
+            $inhouseFilePath = $row2['inhouse'];
             $failno = $row2['failno'];
             $person_incharge = $row2['person_incharge'];
             $nmims = json_decode($row2['nmim'], true);
