@@ -819,7 +819,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            }
     
                             $pdf->SetXY(125.141 , 204.637); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -981,7 +983,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL') {
                             $pdf->SetXY(131.445, 162.670-2); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(138.428, 172.029-2); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -1144,7 +1148,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(146.141 , 215.637); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -1311,7 +1317,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(126.243 , 184.902-2); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(132.582 , 193.027-2); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -1477,7 +1485,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(126.141 , 201.5); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(136.141 , 210.637); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -1643,7 +1653,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(131.982, 191.832-2); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(138.459, 200.228-2); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -1799,7 +1811,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(138.188, 215.438-2); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(138.188, 224.002-2); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -1952,7 +1966,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(148.188, 184.438-2); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(155.596, 194.002-2); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -2104,7 +2120,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(112.243 , 228.902-2); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $state = explode(" ", searchStateNameById($res['cawangan'], $db));
                             if (count($state) > 1){
@@ -2286,7 +2304,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(24.256, 239.641-2); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(31.583, 245.724-2); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -3140,7 +3160,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(115.141 , 196.637); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(125.141 , 204.637); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -3302,7 +3324,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(131.445, 162.670-2); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(138.428, 172.029-2); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -3440,7 +3464,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(24.158, 123.106); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(76.255, 123.106); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -3622,7 +3648,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(24.158, 119.106-2); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(86.255, 119.106-2); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -3834,7 +3862,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(140.141 , 205.637); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(146.141 , 215.637); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -3998,7 +4028,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(126.243 , 184.902-2); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(132.582 , 193.027-2); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -4176,7 +4208,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(124.141 , 205.637); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(130.141 , 214.637); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -4353,7 +4387,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(132.541, 216.431-2); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(139.399, 225.241-2); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -4509,7 +4545,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(53, 118.637); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(58, 127); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
@@ -4665,7 +4703,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         if ($res['stamping_type'] == 'RENEWAL'){
                             $pdf->SetXY(53, 118.637); // Adjust for {tarikh}
-                            $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
 
                             $pdf->SetXY(58, 127); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
