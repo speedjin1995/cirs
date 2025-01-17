@@ -57,7 +57,7 @@ if ($res2 = $result2->fetch_assoc()) {
     $compcert = $res2['certno_lesen'];
     $compexp = $res2['tarikh_luput'];
     $noDaftarSyarikat = $res2['old_roc'];
-    $companySignature = $res2['signature'];
+    $companySignature = 'scm/' . htmlspecialchars($res2['signature'], ENT_QUOTES, 'UTF-8');
 }
 
 // Filter the excel data 

@@ -45,7 +45,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
         $companyAddress = $companyRow['address'];
         $companyTel = $companyRow['phone'];
         $companyFax = $companyRow['fax'];
-        $companySignature = $companyRow['signature'];
+        $companySignature = 'scm/' . htmlspecialchars($companyRow['signature'], ENT_QUOTES, 'UTF-8');
     }
 
     $select_stmt = $db->prepare("SELECT * FROM stamping WHERE id IN ($placeholders)");
