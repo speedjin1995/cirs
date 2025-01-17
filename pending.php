@@ -1798,7 +1798,16 @@ $(function () {
       { data: 'no_daftar_baru' },
       { data: 'stamping_date' },
       { data: 'due_date' },
-      { data: 'status' },
+      { 
+        data: 'status',
+        render: function (data, type, row) {
+          if (row.duplicate == 'N'){
+            return data;
+          }else{
+            return data + '<br>(Duplicated)';
+          }
+        }
+      },
       {
         data: 'id',
         className: 'action-button',
