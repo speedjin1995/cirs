@@ -2165,7 +2165,14 @@ $(function () {
       }
     });
 
-    if (selectedIds.length > 0) {
+    if(!$('#validatorFilter').val()){
+      alert("The records is consists of Metrology and De-Metrology stamping. Please filter ONLY 1 VALIDATORS before export!");
+    }
+    else if (selectedIds.length > 0) {
+      // Optionally, you can display a message or take another action if no IDs are selected
+      alert("Please select at least one DO to Deliver.");
+    } 
+    else {
       var validator = $('#validatorFilter').val();
       $("#printDOModal").find('#id').val(selectedIds);
       $("#printDOModal").find('#driver').val('P');
@@ -2188,10 +2195,6 @@ $(function () {
       });
 
       //$('#printDOForm').submit();
-    } 
-    else {
-      // Optionally, you can display a message or take another action if no IDs are selected
-      alert("Please select at least one DO to Deliver.");
     }
   });
 
