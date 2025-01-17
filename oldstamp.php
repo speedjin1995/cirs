@@ -1583,13 +1583,21 @@ function format (row) {
       <p><strong>Cert Price:</strong> ${row.cert_price}</p>
       <p><strong>Total Amount:</strong> ${row.total_amount}</p>
       <p><strong>SST Price:</strong> ${row.sst}</p>
-      <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>
-      <div class="row">
-        <div class="col-1"><button title="Revert" type="button" id="revertBtn${row.id}" onclick="revert(${row.id})" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>
-        <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
-        <div class="col-1"><button title="Cancel" type="button" id="delete${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
-      </div>
-    </div>
+      <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>`;
+
+      if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
+        returnString += `<div class="row">
+          <div class="col-1"><button title="Revert" type="button" id="revertBtn${row.id}" onclick="revert(${row.id})" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>
+          <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+          <div class="col-1"><button title="Cancel" type="button" id="delete${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
+        </div>`;
+      }else{
+        returnString += `<div class="row">
+          <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+        </div>`;
+      }
+
+     returnString += `</div>
   </div><br>
   `;
   
