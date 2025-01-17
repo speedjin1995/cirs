@@ -805,6 +805,7 @@ $(function () {
       { data: 'status' },
       {
         data: 'id',
+        className: 'action-button',
         render: function (data, type, row) {
           let dropdownMenu = '<div class="dropdown" style="width=20%">' +
             '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #074979;">' +
@@ -863,9 +864,14 @@ $(function () {
   });
   
   // Add event listener for opening and closing details
-  $('#weightTable tbody').on('click', 'tr', function () {
+  $('#weightTable tbody').on('click', 'tr', function (e) {
       var tr = $(this); // The row that was clicked
       var row = table.row(tr);
+
+      // Exclude specific td elements by checking the event target
+      if ($(e.target).closest('td').hasClass('select-checkbox') || $(e.target).closest('td').hasClass('action-button')) {
+          return;
+      }
 
       if (row.child.isShown()) {
           // This row is already open - close it
@@ -1066,6 +1072,7 @@ $(function () {
         { data: 'status' },
         {
           data: 'id',
+          className: 'action-button',
           render: function (data, type, row) {
             let dropdownMenu = '<div class="dropdown" style="width=20%">' +
               '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #074979;">' +
@@ -1485,6 +1492,8 @@ $(function () {
 });
 
 function format (row) {
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA'];
+
   var returnString = `
   <div class="row">
     <!-- Customer Section -->
@@ -1574,8 +1583,21 @@ function format (row) {
       <p><strong>Cert Price:</strong> ${row.cert_price}</p>
       <p><strong>Total Amount:</strong> ${row.total_amount}</p>
       <p><strong>SST Price:</strong> ${row.sst}</p>
-      <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>
-    </div>
+      <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>`;
+
+      if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
+        returnString += `<div class="row">
+          <div class="col-1"><button title="Revert" type="button" id="revertBtn${row.id}" onclick="revert(${row.id})" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>
+          <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+          <div class="col-1"><button title="Cancel" type="button" id="delete${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
+        </div>`;
+      }else{
+        returnString += `<div class="row">
+          <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+        </div>`;
+      }
+
+     returnString += `</div>
   </div><br>
   `;
   
@@ -1604,6 +1626,7 @@ function format (row) {
   
   if(row.jenis_alat == 'ATP'){
     returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATP)</strong></span>
                         <div class="row">
                           <!-- ATP Section -->
                           <div class="col-6">
@@ -1613,6 +1636,7 @@ function format (row) {
                         `;
   }else if(row.jenis_alat == 'ATN' || row.jenis_alat == 'ATN (G)'){
     returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATN)</strong></span>
                         <div class="row">
                           <!-- ATN Section -->
                           <div class="col-6">
@@ -1625,6 +1649,7 @@ function format (row) {
                         `;
   }else if(row.jenis_alat == 'ATE'){
     returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATE)</strong></span>
                         <div class="row">
                           <!-- ATE Section -->
                           <div class="col-6">
@@ -1634,6 +1659,7 @@ function format (row) {
                         `;
   }else if(row.jenis_alat == 'BTU'){
     returnString += `</div><hr>
+                      <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (BTU)</strong></span>
                         <div class="row">
                           <!-- BTU Section -->`;
     if (row.batu_ujian == 'OTHER'){
@@ -1654,6 +1680,7 @@ function format (row) {
     
   }else if(row.jenis_alat == 'ATP-AUTO MACHINE'){
     returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATP - AUTO MACHINE)</strong></span>
                         <div class="row">
                           <!-- ATP-AUTO MACHINE Section -->
                           <div class="col-6">
@@ -1663,6 +1690,7 @@ function format (row) {
                         `;
   }else if(row.jenis_alat == 'ATP (MOTORCAR)'){
     returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATP - MOTORCAR)</strong></span>
                         <div class="row">
                           <!-- ATS Section -->
                           <div class="col-6">
@@ -1687,6 +1715,7 @@ function format (row) {
                         `;
   }else if(row.jenis_alat == 'SIA'){
     returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (SIA)</strong></span>
                         <div class="row">
                           <!-- SIA Section -->`;
 

@@ -124,7 +124,7 @@ if(isset($_POST['userID'])){
                     $message['capacity_range'] = $capacityType;
                     $message['assignTo'] = $row['assignTo'] != null ? searchStaffNameById($row['assignTo'], $db) : '';
                     $message['serial_no'] = $row['serial_no'];
-                    $message['validate_by'] = $row['validate_by'];
+                    $message['validate_by'] = searchValidatorNameById($row['validate_by'], $db) ?? '';
                     $message['jenis_alat'] = $row['jenis_alat'] != null ? searchJenisAlatNameByid($row['jenis_alat'], $db) : '';
                     $message['no_daftar_lama'] = $row['no_daftar_lama'] ?? '';
                     $message['no_daftar_baru'] = $row['no_daftar_baru'] ?? '';

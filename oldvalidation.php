@@ -863,6 +863,7 @@ $(function () {
       { data: 'status' },
       {
         data: 'id',
+        className: 'action-button',
         render: function (data, type, row) {
           let dropdownMenu = '<div class="dropdown" style="width=20%">' +
             '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
@@ -920,9 +921,14 @@ $(function () {
   });
   
   // Add event listener for opening and closing details
-  $('#weightTable tbody').on('click', 'tr', function () {
+  $('#weightTable tbody').on('click', 'tr', function (e) {
       var tr = $(this); // The row that was clicked
       var row = table.row(tr);
+
+      // Exclude specific td elements by checking the event target
+      if ($(e.target).closest('td').hasClass('select-checkbox') || $(e.target).closest('td').hasClass('action-button')) {
+          return;
+      }
 
       if (row.child.isShown()) {
           // This row is already open - close it
@@ -1165,6 +1171,7 @@ $(function () {
         { data: 'status' },
         {
           data: 'id',
+          className: 'action-button',
           render: function (data, type, row) {
             let dropdownMenu = '<div class="dropdown" style="width=20%">' +
               '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
