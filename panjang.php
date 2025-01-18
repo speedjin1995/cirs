@@ -26,6 +26,12 @@ else{
 }
 ?>
 
+<style>
+  th {
+    text-align: center;
+  }
+</style>
+
 <div class="content-header">
   <div class="container-fluid">
     <div class="row mb-2">
