@@ -1002,6 +1002,8 @@ $(function () {
       //   }
       // }
     ],
+    "lengthMenu": [ [10, 25, 50, 100, 300, 600, 1000], [10, 25, 50, 100, 300, 600, 1000] ], // More show options
+    "pageLength": 10 // Default rows per page
   });
   
   $('#weightTable tbody').on('click', 'tr', function (e) {
@@ -1278,6 +1280,8 @@ $(function () {
         //   }
         // }
       ],
+      "lengthMenu": [ [10, 25, 50, 100, 300, 600, 1000], [10, 25, 50, 100, 300, 600, 1000] ], // More show options
+      "pageLength": 10 // Default rows per page
     });
   });
 
