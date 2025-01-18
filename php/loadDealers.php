@@ -14,7 +14,7 @@ $searchValue = mysqli_real_escape_string($db,$_POST['search']['value']); // Sear
 ## Search 
 $searchQuery = " ";
 if($searchValue != ''){
-  $searchQuery = " and (
+  $searchQuery .= " and (
     customer_code like '%".$searchValue."%' or 
     other_code like '%".$searchValue."%' or 
     customer_name like '%".$searchValue."%' or 

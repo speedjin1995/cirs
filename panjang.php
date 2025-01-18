@@ -248,7 +248,7 @@ $(function () {
     'processing': true,
     'serverSide': true,
     'serverMethod': 'post',
-    'searching': false,
+    'searching': true,
     'order': [[ 2, 'asc' ]],
     'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
@@ -280,27 +280,55 @@ $(function () {
           // }
         }
       },
-      { data: 'no' },
-      { data: 'jenis_alat' },
-      { data: 'capacity' },
+      { 
+        orderable: false,
+        data: 'no' 
+      },
+      { 
+        data: 'jenis_alat',
+        name: 'jenis_alat'
+      },
+      { 
+        data: 'capacity',
+        name: 'capacity'
+      },
       {
         data: null, // We set data to null to allow custom rendering
+        name: 'brand_model',
         render: function (data, type, row) {
           return row.brand + '<br>' + row.model;
         }
       },
-      { data: 'serial_no' },
+      { 
+        data: 'serial_no',
+        name: 'serial_no'
+      },
       {
         data: null, // We set data to null to allow custom rendering
+        name: 'customers',
         render: function (data, type, row) {
           return row.customers + '<br>' + row.full_address2;
         }
       },
-      { data: 'batch_no' },
-      { data: 'no_daftar_lama' },
-      { data: 'no_daftar_baru' },
-      { data: 'siri_keselamatan' },
+      { 
+        orderable: false,
+        data: 'batch_no',
+        name: 'batch_no' 
+      },
+      { 
+        data: 'no_daftar_lama',
+        name: 'no_daftar_lama' 
+      },
+      { 
+        data: 'no_daftar_baru',
+        name: 'no_daftar_baru' 
+      },
+      { 
+        data: 'siri_keselamatan',
+        name: 'siri_keselamatan' 
+      },
       {
+        orderable: false,
         data: null, // Custom rendering for unit_price and cert_price
         render: function (data, type, row) {
           if (row.cert_price != 0){

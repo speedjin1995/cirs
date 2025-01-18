@@ -15,7 +15,7 @@ $searchValue = mysqli_real_escape_string($db,$_POST['search']['value']); // Sear
 ## Search 
 $searchQuery = " ";
 if($searchValue != ''){
-  $searchQuery = " AND (
+  $searchQuery .= " AND (
     name like '%".$searchValue."%' OR
     range_type like '%".$searchValue."%' OR
     capacity like '%".$searchValue."%' OR 

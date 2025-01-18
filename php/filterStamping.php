@@ -52,7 +52,7 @@ if($_POST['quotation'] != null && $_POST['quotation'] != '' && $_POST['quotation
 }
 
 if($searchValue != ''){
-  $searchQuery = " and 
+  $searchQuery .= " and 
   (c.customer_name like '%".$searchValue."%' OR 
     b.brand like '%".$searchValue."%' OR
     m.machine_type like '%".$searchValue."%' OR 

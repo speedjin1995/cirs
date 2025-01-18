@@ -40,7 +40,7 @@ if($_POST['autoFormNo'] != null && $_POST['autoFormNo'] != '' && $_POST['autoFor
 }
 
 if($searchValue != ''){
-  $searchQuery = " and 
+  $searchQuery .= " and 
   (c.customer_name like '%".$searchValue."%' OR 
     brand.brand like '%".$searchValue."%' OR
     m.machine_type like '%".$searchValue."%' OR 
