@@ -312,6 +312,11 @@ else{
       background-color:rgb(7 73 121);
       color: #ffffff;
     }
+
+    .dropdown-item:hover {
+      background-color: rgba(144, 238, 144, 0.5);
+      color: black;
+    }
   </style>
 </head>
 <!--
