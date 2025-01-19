@@ -48,59 +48,70 @@ else{
     <div class="row">
       <div class="col-lg-12">
         <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <div class="form-group col-3">
-                <label>From Date:</label>
-                <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
-                  <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
-                  <div class="input-group-text"><i class="fa fa-calendar"></i></div></div>
-                </div>
-              </div>
+          <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0 font-weight-bold">Search Filters</h5>
+              <button class="btn btn-link btn-sm p-0" type="button" data-toggle="collapse" data-target="#searchFilters" aria-expanded="true" aria-controls="searchFilters">
+                <i class="fa fa-chevron-up" id="toggleIcon"></i>
+              </button>
+            </div>
+          </div>
 
-              <div class="form-group col-3">
-                <label>To Date:</label>
-                <div class="input-group date" id="toDatePicker" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#toDatePicker" id="toDate"/>
-                  <div class="input-group-append" data-target="#toDatePicker" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+          <div class="collapse show" id="searchFilters">
+            <div class="card-body">
+              <div class="row">
+                <div class="form-group col-3">
+                  <label>From Date:</label>
+                  <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
+                    <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div></div>
+                  </div>
+                </div>
+
+                <div class="form-group col-3">
+                  <label>To Date:</label>
+                  <div class="input-group date" id="toDatePicker" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#toDatePicker" id="toDate"/>
+                    <div class="input-group-append" data-target="#toDatePicker" data-toggle="datetimepicker">
+                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Customer No</label>
+                    <select class="form-control select2" id="customerNoFilter" name="customerNoFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while($rowCustomer2=mysqli_fetch_assoc($customers2)){ ?>
+                        <option value="<?=$rowCustomer2['id'] ?>"><?=$rowCustomer2['customer_name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Validator</label>
+                    <select class="form-control select2" id="validatorFilter" name="validatorFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while($rowValidators=mysqli_fetch_assoc($validators)){ ?>
+                        <option value="<?=$rowValidators['id'] ?>"><?=$rowValidators['validator'] ?></option>
+                      <?php } ?>
+                    </select>
                   </div>
                 </div>
               </div>
 
-              <div class="col-3">
-                <div class="form-group">
-                  <label>Customer No</label>
-                  <select class="form-control select2" id="customerNoFilter" name="customerNoFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <?php while($rowCustomer2=mysqli_fetch_assoc($customers2)){ ?>
-                      <option value="<?=$rowCustomer2['id'] ?>"><?=$rowCustomer2['customer_name'] ?></option>
-                    <?php } ?>
-                  </select>
+              <div class="row">
+                <div class="col-9"></div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-block bg-gradient-warning btn-sm"  id="filterSearch">
+                    <i class="fas fa-search"></i>
+                    Search
+                  </button>
                 </div>
-              </div>
-
-              <div class="col-3">
-                <div class="form-group">
-                  <label>Validator</label>
-                  <select class="form-control select2" id="validatorFilter" name="validatorFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <?php while($rowValidators=mysqli_fetch_assoc($validators)){ ?>
-                      <option value="<?=$rowValidators['id'] ?>"><?=$rowValidators['validator'] ?></option>
-                    <?php } ?>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-9"></div>
-              <div class="col-3">
-                <button type="button" class="btn btn-block bg-gradient-warning btn-sm"  id="filterSearch">
-                  <i class="fas fa-search"></i>
-                  Search
-                </button>
               </div>
             </div>
           </div>
