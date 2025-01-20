@@ -47,13 +47,17 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
 ?>
 <style>
   #weightTable tbody tr.odd:hover {
-      background-color: #d4edda; /* Light gray color on hover */
-      cursor: pointer;          /* Pointer cursor to indicate clickability */
+    background-color: #DFFFFD; /* Light gray color on hover */
+    cursor: pointer;          /* Pointer cursor to indicate clickability */
   }
 
   #weightTable tbody tr.even:hover {
-      background-color: #d4edda; /* Light gray color on hover */
-      cursor: pointer;          /* Pointer cursor to indicate clickability */
+    background-color: #DFFFFD; /* Light gray color on hover */
+    cursor: pointer;          /* Pointer cursor to indicate clickability */
+  }
+
+  th {
+    text-align: center;
   }
 </style>
 
@@ -81,75 +85,86 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
     <div class="row">
       <div class="col-lg-12">
         <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-4">
-                <div class="form-group">
-                  <label>Select Validators</label>
-                  <select class="form-control select2" id="validatorFilter" name="validatorFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <?php while($validator=mysqli_fetch_assoc($validators)){ ?>
-                      <option value="<?=$validator['id'] ?>"><?=$validator['validator'] ?></option>
-                    <?php } ?>
-                  </select>
-                </div>
-              </div>
-              <div class="col-4">
-                <div class="form-group">
-                  <label>Name of Purchaser</label>
-                  <select class="form-control select2" id="customerNoFilter" name="customerNoFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <?php while($customer2=mysqli_fetch_assoc($customers2)){ ?>
-                      <option value="<?=$customer2['id'] ?>"><?=$customer2['customer_name'] ?></option>
-                    <?php } ?>
-                  </select>
-                </div>
-              </div>
-              <div class="col-4">
-                <div class="form-group">
-                  <label>Certificate No.</label>
-                  <input class="form-control" type="text" placeholder="Certificate No." id="autoFormNoFilter" name="autoFormNoFilter">
-                </div>
-              </div>
-
-              <!--div class="col-3">
-                <div class="form-group">
-                  <label>Status</label>
-                  <select class="form-control" id="statusFilter" name="statusFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <option value="Active">Active</option>
-                    <option value="Complete">Complete</option>
-                  </select>
-                </div>
-              </div-->
+          <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0 font-weight-bold">Search Filters</h5>
+              <button class="btn btn-link btn-sm p-0" type="button" data-toggle="collapse" data-target="#searchFilters" aria-expanded="true" aria-controls="searchFilters">
+                <i class="fa fa-chevron-up" id="toggleIcon"></i>
+              </button>
             </div>
+          </div>
 
-            <div class="row">
-            <div class="form-group col-4">
-                <label>From Validation Date:</label>
-                <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
-                  <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+          <div class="collapse show" id="searchFilters">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Select Validators</label>
+                    <select class="form-control select2" id="validatorFilter" name="validatorFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while($validator=mysqli_fetch_assoc($validators)){ ?>
+                        <option value="<?=$validator['id'] ?>"><?=$validator['validator'] ?></option>
+                      <?php } ?>
+                    </select>
                   </div>
                 </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Name of Purchaser</label>
+                    <select class="form-control select2" id="customerNoFilter" name="customerNoFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while($customer2=mysqli_fetch_assoc($customers2)){ ?>
+                        <option value="<?=$customer2['id'] ?>"><?=$customer2['customer_name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Certificate No.</label>
+                    <input class="form-control" type="text" placeholder="Certificate No." id="autoFormNoFilter" name="autoFormNoFilter">
+                  </div>
+                </div>
+
+                <!--div class="col-3">
+                  <div class="form-group">
+                    <label>Status</label>
+                    <select class="form-control" id="statusFilter" name="statusFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <option value="Active">Active</option>
+                      <option value="Complete">Complete</option>
+                    </select>
+                  </div>
+                </div-->
               </div>
 
+              <div class="row">
               <div class="form-group col-4">
-                <label>To Expired Date:</label>
-                <div class="input-group date" id="toDatePicker" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#toDatePicker" id="toDate"/>
-                  <div class="input-group-append" data-target="#toDatePicker" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  <label>From Validation Date:</label>
+                  <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
+                    <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
+                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-9"></div>
-              <div class="col-3">
-                <button type="button" class="btn btn-block bg-gradient-warning btn-sm"  id="filterSearch">
-                  <i class="fas fa-search"></i>
-                  Search
-                </button>
+
+                <div class="form-group col-4">
+                  <label>To Expired Date:</label>
+                  <div class="input-group date" id="toDatePicker" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#toDatePicker" id="toDate"/>
+                    <div class="input-group-append" data-target="#toDatePicker" data-toggle="datetimepicker">
+                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-9"></div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-block bg-gradient-warning btn-sm"  id="filterSearch">
+                    <i class="fas fa-search"></i>
+                    Search
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -162,7 +177,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
         <div class="card card-primary">
           <div class="card-header">
             <div class="row">
-              <div class="col-10"><h4>Other Validation Record Pending / Expired Status :</h4></div>
+              <div class="col-10"><p class="mb-0" style="font-size: 110%">Other Validation Record Pending / Expired Status :</p></div>
               <div class="col-2">
                 <button type="button" class="btn btn-block btn-sm bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Delete Other Validations"><i class="fa-solid fa-ban"></i> Delete Validations</button></button>
               </div>
@@ -918,6 +933,8 @@ $(function () {
       //   }
       // }
     ],
+    "lengthMenu": [ [10, 25, 50, 100, 300, 600, 1000], [10, 25, 50, 100, 300, 600, 1000] ], // More show options
+    "pageLength": 10 // Default rows per page
   });
   
   // Add event listener for opening and closing details
@@ -1226,6 +1243,8 @@ $(function () {
         //   }
         // }
       ],
+      "lengthMenu": [ [10, 25, 50, 100, 300, 600, 1000], [10, 25, 50, 100, 300, 600, 1000] ], // More show options
+      "pageLength": 10 // Default rows per page
     });
   });
 

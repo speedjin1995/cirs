@@ -21,6 +21,8 @@ else{
     $name = $row['name'];
   }
 
+  $datetime = date('d/m/Y - h:i:sa');
+
   $company_name = '';
   $result = $db->query("SELECT name FROM companies LIMIT 1");
 
@@ -310,6 +312,11 @@ else{
       background-color:rgb(7 73 121);
       color: #ffffff;
     }
+
+    .dropdown-item:hover {
+      background-color: rgba(144, 238, 144, 0.5);
+      color: black;
+    }
   </style>
 </head>
 <!--
@@ -333,12 +340,15 @@ to get the desired effect
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-light" style="background-color: #074979;color: white;">
     <!-- Left navbar links -->
-    <ul class="navbar-nav">
+    <ul class="navbar-nav w-100">
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars" style="background-color: #074979;color: white;"></i></a>
       </li>
       <li class="nav-item">
-        <h6 class="nav-link mb-0 pl-0" style="background-color: #074979;color: white;"><b>Licensed By : <?php echo $company_name ?></b></h6>
+        <h5 class="nav-link mb-0 pl-0" style="background-color: #074979;color: white;"><b>Licensed By : <?php echo $company_name ?></b></h5>
+      </li>
+      <li class="nav-item ml-auto">
+        <h6 class="nav-link mb-0 pl-0" style="background-color: #074979;color: white;"><b>Date : <?php echo $datetime ?></b></h6>
       </li>
     </ul>
   </nav>

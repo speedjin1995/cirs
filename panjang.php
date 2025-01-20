@@ -26,6 +26,12 @@ else{
 }
 ?>
 
+<style>
+  th {
+    text-align: center;
+  }
+</style>
+
 <div class="content-header">
   <div class="container-fluid">
     <div class="row mb-2">
@@ -43,71 +49,82 @@ else{
     <div class="row">
       <div class="col-lg-12">
         <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <div class="form-group col-3">
-                <label>From Date:</label>
-                <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
-                  <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
-                  <div class="input-group-text"><i class="fa fa-calendar"></i></div></div>
-                </div>
-              </div>
+          <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0 font-weight-bold">Search Filters</h5>
+              <button class="btn btn-link btn-sm p-0" type="button" data-toggle="collapse" data-target="#searchFilters" aria-expanded="true" aria-controls="searchFilters">
+                <i class="fa fa-chevron-up" id="toggleIcon"></i>
+              </button>
+            </div>
+          </div>
 
-              <div class="form-group col-3">
-                <label>To Date:</label>
-                <div class="input-group date" id="toDatePicker" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#toDatePicker" id="toDate"/>
-                  <div class="input-group-append" data-target="#toDatePicker" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+          <div class="collapse show" id="searchFilters">
+            <div class="card-body">
+              <div class="row">
+                <div class="form-group col-3">
+                  <label>From Date:</label>
+                  <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
+                    <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div></div>
+                  </div>
+                </div>
+
+                <div class="form-group col-3">
+                  <label>To Date:</label>
+                  <div class="input-group date" id="toDatePicker" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#toDatePicker" id="toDate"/>
+                    <div class="input-group-append" data-target="#toDatePicker" data-toggle="datetimepicker">
+                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Customer No</label>
+                    <select class="form-control select2" id="customerNoFilter" name="customerNoFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while($rowCustomer2=mysqli_fetch_assoc($customers2)){ ?>
+                        <option value="<?=$rowCustomer2['id'] ?>"><?=$rowCustomer2['customer_name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Validator</label>
+                    <select class="form-control select2" id="validatorFilter" name="validatorFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while($rowValidators=mysqli_fetch_assoc($validators)){ ?>
+                        <option value="<?=$rowValidators['id'] ?>"><?=$rowValidators['validator'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Cawangan</label>
+                    <select class="form-control select2" id="cawanganFilter" name="cawanganFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while($rowCawangan=mysqli_fetch_assoc($cawangans)){ ?>
+                        <option value="<?=$rowCawangan['id'] ?>"><?=$rowCawangan['state'] ?></option>
+                      <?php } ?>
+                    </select>
                   </div>
                 </div>
               </div>
 
-              <div class="col-3">
-                <div class="form-group">
-                  <label>Customer No</label>
-                  <select class="form-control select2" id="customerNoFilter" name="customerNoFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <?php while($rowCustomer2=mysqli_fetch_assoc($customers2)){ ?>
-                      <option value="<?=$rowCustomer2['id'] ?>"><?=$rowCustomer2['customer_name'] ?></option>
-                    <?php } ?>
-                  </select>
+              <div class="row">
+                <div class="col-9"></div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-block bg-gradient-warning btn-sm"  id="filterSearch">
+                    <i class="fas fa-search"></i>
+                    Search
+                  </button>
                 </div>
-              </div>
-
-              <div class="col-3">
-                <div class="form-group">
-                  <label>Validator</label>
-                  <select class="form-control select2" id="validatorFilter" name="validatorFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <?php while($rowValidators=mysqli_fetch_assoc($validators)){ ?>
-                      <option value="<?=$rowValidators['id'] ?>"><?=$rowValidators['validator'] ?></option>
-                    <?php } ?>
-                  </select>
-                </div>
-              </div>
-
-              <div class="col-3">
-                <div class="form-group">
-                  <label>Cawangan</label>
-                  <select class="form-control select2" id="cawanganFilter" name="cawanganFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <?php while($rowCawangan=mysqli_fetch_assoc($cawangans)){ ?>
-                      <option value="<?=$rowCawangan['id'] ?>"><?=$rowCawangan['state'] ?></option>
-                    <?php } ?>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-9"></div>
-              <div class="col-3">
-                <button type="button" class="btn btn-block bg-gradient-warning btn-sm"  id="filterSearch">
-                  <i class="fas fa-search"></i>
-                  Search
-                </button>
               </div>
             </div>
           </div>
@@ -248,7 +265,7 @@ $(function () {
     'processing': true,
     'serverSide': true,
     'serverMethod': 'post',
-    'searching': false,
+    'searching': true,
     'order': [[ 2, 'asc' ]],
     'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
@@ -280,27 +297,55 @@ $(function () {
           // }
         }
       },
-      { data: 'no' },
-      { data: 'jenis_alat' },
-      { data: 'capacity' },
+      { 
+        orderable: false,
+        data: 'no' 
+      },
+      { 
+        data: 'jenis_alat',
+        name: 'jenis_alat'
+      },
+      { 
+        data: 'capacity',
+        name: 'capacity'
+      },
       {
         data: null, // We set data to null to allow custom rendering
+        name: 'brand_model',
         render: function (data, type, row) {
           return row.brand + '<br>' + row.model;
         }
       },
-      { data: 'serial_no' },
+      { 
+        data: 'serial_no',
+        name: 'serial_no'
+      },
       {
         data: null, // We set data to null to allow custom rendering
+        name: 'customers',
         render: function (data, type, row) {
           return row.customers + '<br>' + row.full_address2;
         }
       },
-      { data: 'batch_no' },
-      { data: 'no_daftar_lama' },
-      { data: 'no_daftar_baru' },
-      { data: 'siri_keselamatan' },
+      { 
+        orderable: false,
+        data: 'batch_no',
+        name: 'batch_no' 
+      },
+      { 
+        data: 'no_daftar_lama',
+        name: 'no_daftar_lama' 
+      },
+      { 
+        data: 'no_daftar_baru',
+        name: 'no_daftar_baru' 
+      },
+      { 
+        data: 'siri_keselamatan',
+        name: 'siri_keselamatan' 
+      },
       {
+        orderable: false,
         data: null, // Custom rendering for unit_price and cert_price
         render: function (data, type, row) {
           if (row.cert_price != 0){
