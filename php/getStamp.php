@@ -13,7 +13,7 @@ if(isset($_POST['userID'])){
     }
 
     $stampExtArray = [
-        1,4,2,5,6,14,7,10,17,23,12,18
+        1,4,2,5,6,14,7,10,17,23,12,18,11
     ];
 
     if ($update_stmt = $db->prepare("SELECT * FROM stamping WHERE id=?")) {
@@ -188,6 +188,12 @@ if(isset($_POST['userID'])){
                                     $message['nilai_jangka_other'] = $row2['nilai_jangka_other'] ?? '';
                                     $message['diperbuat_daripada'] = $row2['diperbuat_daripada'] ?? '';
                                     $message['diperbuat_daripada_other'] = $row2['diperbuat_daripada_other'] ?? '';
+                                    $message['pam_no'] = $row2['pam_no'] ?? '';
+                                    $message['kelulusan_bentuk'] = $row2['kelulusan_bentuk'] ?? '';
+                                    $message['kadar_pengaliran'] = $row2['kadar_pengaliran'] ?? '';
+                                    $message['bentuk_penunjuk'] = $row2['bentuk_penunjuk'] ?? '';
+                                    $message['jenama'] = $row2['jenama'] ?? '';
+                                    $message['jenama_other'] = $row2['jenama_other'] ?? '';
 
                                 }
                             }
@@ -278,6 +284,12 @@ if(isset($_POST['userID'])){
                                     $message['nilai_jangka_other'] = $row2['nilai_jangka_other'] ?? '';
                                     $message['diperbuat_daripada'] = $row2['diperbuat_daripada'] ?? '';
                                     $message['diperbuat_daripada_other'] = $row2['diperbuat_daripada_other'] ?? '';
+                                    $message['pam_no'] = $row2['pam_no'] ?? '';
+                                    $message['kelulusan_bentuk'] = $row2['kelulusan_bentuk'] ?? '';
+                                    $message['kadar_pengaliran'] = $row2['kadar_pengaliran'] ?? '';
+                                    $message['bentuk_penunjuk'] = $row2['bentuk_penunjuk'] ?? '';
+                                    $message['jenama'] = $row2['jenama'] ?? '';
+                                    $message['jenama_other'] = $row2['jenama_other'] ?? '';
                                 }
                             }
                         }

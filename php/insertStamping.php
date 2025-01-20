@@ -797,6 +797,51 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					}
 				}
 
+				// For BAP Additional fields	
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '11'){
+					$pamNo = null;
+					$kelulusanBentuk = null;
+					$alatType = null;
+					$kadarPengaliran = null;
+					$bentukPenunjuk = null;
+					$jenama = null;
+					$jenamaOther = null;
+
+					if(isset($_POST['pamNo']) && $_POST['pamNo']!=null && $_POST['pamNo']!=""){
+						$pamNo = $_POST['pamNo'];
+					}
+
+					if(isset($_POST['kelulusanBentuk']) && $_POST['kelulusanBentuk']!=null && $_POST['kelulusanBentuk']!=""){
+						$kelulusanBentuk = $_POST['kelulusanBentuk'];
+					}
+
+					if(isset($_POST['alatType']) && $_POST['alatType']!=null && $_POST['alatType']!=""){
+						$alatType = $_POST['alatType'];
+					}
+
+					if(isset($_POST['kadarPengaliran']) && $_POST['kadarPengaliran']!=null && $_POST['kadarPengaliran']!=""){
+						$kadarPengaliran = $_POST['kadarPengaliran'];
+					}
+
+					if(isset($_POST['bentukPenunjuk']) && $_POST['bentukPenunjuk']!=null && $_POST['bentukPenunjuk']!=""){
+						$bentukPenunjuk = $_POST['bentukPenunjuk'];
+					}
+
+					if(isset($_POST['jenama']) && $_POST['jenama']!=null && $_POST['jenama']!=""){
+						$jenama = $_POST['jenama'];
+					}
+
+					if(isset($_POST['jenamaOther']) && $_POST['jenamaOther']!=null && $_POST['jenamaOther']!=""){
+						$jenamaOther = $_POST['jenamaOther'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET pam_no = ?, kelulusan_bentuk = ?, alat_type=?, kadar_pengaliran=?, bentuk_penunjuk=?, jenama=?, jenama_other=? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('ssssssss', $pamNo, $kelulusanBentuk, $alatType, $kadarPengaliran, $bentukPenunjuk, $jenama, $jenamaOther, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
 				// UPDATE Stamping System Log
 				if ($insert_stmt3 = $db->prepare("INSERT INTO stamping_log (action, user_id, item_id) 
 				VALUES (?, ?, ?)")){
@@ -1274,6 +1319,53 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, nilai_jangka, nilai_jangka_other, diperbuat_daripada,diperbuat_daripada_other ) 
 					VALUES (?, ?, ?, ?, ?, ?)")){
 						$insert_stmt2->bind_param('ssssss', $stamp_id, $platform_country, $nilaiJangka, $nilaiJangkaOther, $diperbuatDaripada, $diperbuatDaripadaOther);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+
+				}
+
+				// For SIA Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '11'){
+					$pamNo = null;
+					$kelulusanBentuk = null;
+					$alatType = null;
+					$kadarPengaliran = null;
+					$bentukPenunjuk = null;
+					$jenama = null;
+					$jenamaOther = null;
+
+					if(isset($_POST['pamNo']) && $_POST['pamNo']!=null && $_POST['pamNo']!=""){
+						$pamNo = $_POST['pamNo'];
+					}
+
+					if(isset($_POST['kelulusanBentuk']) && $_POST['kelulusanBentuk']!=null && $_POST['kelulusanBentuk']!=""){
+						$kelulusanBentuk = $_POST['kelulusanBentuk'];
+					}
+
+					if(isset($_POST['alatType']) && $_POST['alatType']!=null && $_POST['alatType']!=""){
+						$alatType = $_POST['alatType'];
+					}
+
+					if(isset($_POST['kadarPengaliran']) && $_POST['kadarPengaliran']!=null && $_POST['kadarPengaliran']!=""){
+						$kadarPengaliran = $_POST['kadarPengaliran'];
+					}
+
+					if(isset($_POST['bentukPenunjuk']) && $_POST['bentukPenunjuk']!=null && $_POST['bentukPenunjuk']!=""){
+						$bentukPenunjuk = $_POST['bentukPenunjuk'];
+					}
+
+					if(isset($_POST['jenama']) && $_POST['jenama']!=null && $_POST['jenama']!=""){
+						$jenama = $_POST['jenama'];
+					}
+
+					if(isset($_POST['jenamaOther']) && $_POST['jenamaOther']!=null && $_POST['jenamaOther']!=""){
+						$jenamaOther = $_POST['jenamaOther'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, pam_no, kelulusan_bentuk, alat_type, kadar_pengaliran, bentuk_penunjuk, jenama, jenama_Other) 
+					VALUES (?, ?, ?, ?, ?, ?, ?, ?)")){
+						$insert_stmt2->bind_param('ssssssss', $stamp_id, $pamNo, $kelulusanBentuk, $alatType, $kadarPengaliran , $bentukPenunjuk, $jenama, $jenamaOther);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}

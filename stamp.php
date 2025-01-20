@@ -1491,6 +1491,60 @@ else{
   </div>
 </script>
 
+<script type="text/html" id="bapDetails">
+  <div class="card card-primary">
+    <div class="card-body">
+      <div class="row">
+        <h4>Addtional Information (BAP)</h4>
+      </div>
+      <div class="row">
+        <div class="form-group col-4">
+          <label for="pamNo">Pam No</label>
+          <input type="text" class="form-control" id="pamNo" name="pamNo">
+        </div>
+        <div class="form-group col-4">
+          <label for="kelulusanBentuk">No Kelulusan Bentuk</label>
+          <input type="text" class="form-control" id="kelulusanBentuk" name="kelulusanBentuk">
+        </div>
+        <div class="form-group col-4">
+          <label for="jenama">Jenama / Nama Pembuat</label>
+          <select class="form-control select2" id="jenama" name="jenama" required>
+            <option value="" disabled hidden selected>Please Select</option>
+            <option value="GRACO">GRACO</option>
+            <option value="BADGER">BADGER</option>
+            <option value="OTHER">OTHER</option>
+          </select>
+        </div>
+        <div class="form-group col-4" id="jenamaOtherDisplay" style="display:none">
+          <label for="jenamaOther">Jenama / Nama Pembuat Other *</label>
+          <input type="text" class="form-control" id="jenamaOther" name="jenamaOther">
+        </div>
+        <div class="form-group col-4">
+          <label for="alatType">Alat Type</label>
+          <select class="form-control select2" id="alatType" name="alatType" required>
+            <option value="" disabled hidden selected>Please Select</option>
+            <option value="AUTOMATIK">AUTOMATIK</option>
+            <option value="MANUAL">MANUAL</option>
+            <option value="PNEUMATIK">PNEUMATIK</option>
+          </select>
+        </div>
+        <div class="form-group col-4">
+          <label for="kadarPengaliran">Kadar Pengaliran</label>
+          <input type="text" class="form-control" id="kadarPengaliran" name="kadarPengaliran">
+        </div>
+        <div class="form-group col-4">
+          <label for="bentukPenunjuk">Bentuk Penunjuk Harga/Kuantiti</label>
+          <select class="form-control select2" id="bentukPenunjuk" name="bentukPenunjuk" required>
+            <option value="" disabled hidden selected>Please Select</option>
+            <option value="MEKANIKAL">MEKANIKAL</option>
+            <option value="DIGITAL">DIGITAL</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
 <script type="text/html" id="pricingDetails">
   <tr class="details">
     <td>
@@ -2653,6 +2707,10 @@ $(function () {
       $('#addtionalSection').html($('#siaDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
+    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '11'){
+      $('#addtionalSection').html($('#bapDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
     else{
       $('#addtionalSection').html('');
     }
@@ -2770,6 +2828,10 @@ $(function () {
       $('#addtionalSection').html($('#siaDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
+    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '11'){
+      $('#addtionalSection').html($('#bapDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
     else{
       $('#addtionalSection').html('');
     }
@@ -2849,7 +2911,7 @@ $(function () {
 });
 
 function format (row) {
-  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA'];
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP'];
 
   var returnString = `
   <div class="row">
@@ -3197,6 +3259,39 @@ function format (row) {
         </div>
       </div>`;
     }
+  }else if(row.jenis_alat == 'BAP'){
+    returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (BAP)</strong></span>
+                        <div class="row">
+                          <!-- BAP Section -->
+                          <div class="col-6">
+                            <p><strong>Pam No.:</strong> ${row.pam_no}</p>
+                          </div>      
+                          <div class="col-6">
+                            <p><strong>No Kelulusan Bentuk:</strong> ${row.kelulusan_bentuk}</p>
+                          </div>      
+                          <div class="col-6">
+                            <p><strong>Jenis Alat:</strong> ${row.alat_type}</p>
+                          </div>      
+                          <div class="col-6">
+                            <p><strong>Kadar Pengaliran:</strong> ${row.kadar_pengaliran} liter/min</p>
+                          </div>      
+                          <div class="col-6">
+                            <p><strong>Bentuk Penunjuk Harga/Kuantiti:</strong> ${row.bentuk_penunjuk}</p>
+                          </div>      
+                    `;
+
+    if (row.jenama == 'OTHER'){
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Jenama / Name Pembuat:</strong> ${row.jenama_other}</p>
+                          </div>`;
+    }else{
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Jenama / Name Pembuat:</strong> ${row.jenama}</p>
+                          </div>`;
+    }                     
   }
 
   return returnString;
@@ -3299,6 +3394,43 @@ function newEntry(){
     }
   });
 
+  $('#extendModal').on('atkLoaded', function() {
+    $('#extendModal').find('#batuUjian').on('change', function(){
+      var batuUjian = $(this).val();
+      if (batuUjian == 'OTHER'){
+        $('#extendModal').find('#batuUjianLainDisplay').show();
+      }else{
+        $('#extendModal').find('#batuUjianLainDisplay').hide();
+      }
+    });
+
+    $('#extendModal').find('#nilaiJangka').on('change', function(){
+      var nilaiJangka = $(this).val();
+      if (nilaiJangka == 'OTHER'){
+        $('#extendModal').find('#nilaiJangkaOtherDisplay').show();
+      }else{
+        $('#extendModal').find('#nilaiJangkaOtherDisplay').hide();
+      }
+    });
+
+    $('#extendModal').find('#diperbuatDaripada').on('change', function(){
+      var diperbuatDaripada = $(this).val();
+      if (diperbuatDaripada == 'OTHER'){
+        $('#extendModal').find('#diperbuatDaripadaOtherDisplay').show();
+      }else{
+        $('#extendModal').find('#diperbuatDaripadaOtherDisplay').hide();
+      }
+    });
+
+    $('#extendModal').find('#jenama').on('change', function(){
+      var jenama = $(this).val();
+      if (jenama == 'OTHER'){
+        $('#extendModal').find('#jenamaOtherDisplay').show();
+      }else{
+        $('#extendModal').find('#jenamaOtherDisplay').hide();
+      }
+    });
+  });
 
   customer = 0;
   branch = 0;
@@ -3600,6 +3732,26 @@ function edit(id) {
             $('#extendModal').find('#nilaiJangka').val(obj.message.nilai_jangka).trigger('change');
             $('#extendModal').find('#diperbuatDaripada').val(obj.message.diperbuat_daripada).trigger('change');
           }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '11'){ console.log(obj.message);
+            $('#addtionalSection').html($('#bapDetails').html());
+            $('#extendModal').find('#pamNo').val(obj.message.pam_no).trigger('change');
+            $('#extendModal').find('#kelulusanBentuk').val(obj.message.kelulusan_bentuk).trigger('change');
+            $('#extendModal').find('#alatType').val(obj.message.alat_type).trigger('change');
+            $('#extendModal').find('#kadarPengaliran').val(obj.message.kadar_pengaliran).trigger('change');
+            $('#extendModal').find('#bentukPenunjuk').val(obj.message.bentuk_penunjuk).trigger('change');
+
+            $('#extendModal').find('#jenama').on('change', function(){
+              var jenama = $(this).val();
+              if (jenama == 'OTHER'){
+                $('#extendModal').find('#jenamaOtherDisplay').show();
+                $('#extendModal').find('#jenamaOther').val(obj.message.jenama_other);
+              }else{
+                $('#extendModal').find('#jenamaOtherDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#jenama').val(obj.message.jenama).trigger('change');
+          }
         });
         
         $('#extendModal').modal('show');
@@ -3822,6 +3974,26 @@ function edit(id) {
 
             $('#extendModal').find('#nilaiJangka').val(obj.message.nilai_jangka).trigger('change');
             $('#extendModal').find('#diperbuatDaripada').val(obj.message.diperbuat_daripada).trigger('change');
+          }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '11'){
+            $('#addtionalSection').html($('#bapDetails').html());
+            $('#extendModal').find('#pamNo').val(obj.message.pam_no).trigger('change');
+            $('#extendModal').find('#kelulusanBentuk').val(obj.message.kelulusan_bentuk).trigger('change');
+            $('#extendModal').find('#alatType').val(obj.message.alat_type).trigger('change');
+            $('#extendModal').find('#kadarPengaliran').val(obj.message.kadar_pengaliran).trigger('change');
+            $('#extendModal').find('#bentukPenunjuk').val(obj.message.bentuk_penunjuk).trigger('change');
+
+            $('#extendModal').find('#jenama').on('change', function(){
+              var jenama = $(this).val();
+              if (jenama == 'OTHER'){
+                $('#extendModal').find('#jenamaOtherDisplay').show();
+                $('#extendModal').find('#jenamaOther').val(obj.message.jenama_other);
+              }else{
+                $('#extendModal').find('#jenamaOtherDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#jenama').val(obj.message.jenama).trigger('change');
           }
         });
 

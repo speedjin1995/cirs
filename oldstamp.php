@@ -1867,6 +1867,39 @@ function format (row) {
         </div>
       </div>`;
     }
+  }else if(row.jenis_alat == 'BAP'){
+    returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (BAP)</strong></span>
+                        <div class="row">
+                          <!-- BAP Section -->
+                          <div class="col-6">
+                            <p><strong>Pam No.:</strong> ${row.pam_no}</p>
+                          </div>      
+                          <div class="col-6">
+                            <p><strong>No Kelulusan Bentuk:</strong> ${row.kelulusan_bentuk}</p>
+                          </div>      
+                          <div class="col-6">
+                            <p><strong>Jenis Alat:</strong> ${row.alat_type}</p>
+                          </div>      
+                          <div class="col-6">
+                            <p><strong>Kadar Pengaliran:</strong> ${row.kadar_pengaliran} liter/min</p>
+                          </div>      
+                          <div class="col-6">
+                            <p><strong>Bentuk Penunjuk Harga/Kuantiti:</strong> ${row.bentuk_penunjuk}</p>
+                          </div>      
+                    `;
+
+    if (row.jenama == 'OTHER'){
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Jenama / Name Pembuat:</strong> ${row.jenama_other}</p>
+                          </div>`;
+    }else{
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Jenama / Name Pembuat:</strong> ${row.jenama}</p>
+                          </div>`;
+    }                     
   }
 
   return returnString;
