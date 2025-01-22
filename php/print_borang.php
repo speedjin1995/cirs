@@ -493,9 +493,9 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                                     <th style="font-size:12px;">Jenama</th>
                                     <th style="font-size:12px;" width="10%">No. Siri Alat</th>
                                     <th style="font-size:12px;">Nama Dan Alamat Pemilik</th>
-                                    <th style="font-size:12px;" width="10%">Kod</th>
-                                    <th style="font-size:12px;">No. Daftar Lama</th>
-                                    <th style="font-size:12px;">No. Daftar Baru</th>
+                                    <th style="font-size:12px;" width="5%">Kod</th>
+                                    <th style="font-size:12px;" width="10%">No. Daftar Lama</th>
+                                    <th style="font-size:12px;" width="10%">No. Daftar Baru</th>
                                     <th style="font-size:12px;">No. Siri Pelekat Keselamatan</th>
                                     <th style="font-size:12px;" width="8%">Fi / Bayaran</th>
                                 </tr>';
