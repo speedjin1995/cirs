@@ -13,7 +13,7 @@ if(isset($_POST['userID'])){
     }
 
     $stampExtArray = [
-        1,4,2,5,6,14,7,10,17,23,12,18
+        1,4,2,5,6,14,7,10,17,23,12,18,11
     ];
 
     if ($update_stmt = $db->prepare("SELECT * FROM stamping WHERE id=?")) {
@@ -173,6 +173,7 @@ if(isset($_POST['userID'])){
                                     $message['jenis_penunjuk'] = $row2['jenis_penunjuk'] ?? '';
                                     $message['alat_type'] = $row2['alat_type'] ?? '';
                                     $message['bentuk_dulang'] = $row2['bentuk_dulang'] ?? '';
+                                    $message['penandaan_batu_ujian'] = $row2['penandaan_batu_ujian'] ?? '';
                                     $message['batu_ujian'] = $row2['batu_ujian'] ?? '';
                                     $message['batu_ujian_lain'] = $row2['batu_ujian_lain'] ?? '';
                                     $message['class'] = $row2['class'] ?? '';
@@ -188,6 +189,12 @@ if(isset($_POST['userID'])){
                                     $message['nilai_jangka_other'] = $row2['nilai_jangka_other'] ?? '';
                                     $message['diperbuat_daripada'] = $row2['diperbuat_daripada'] ?? '';
                                     $message['diperbuat_daripada_other'] = $row2['diperbuat_daripada_other'] ?? '';
+                                    $message['pam_no'] = $row2['pam_no'] ?? '';
+                                    $message['kelulusan_bentuk'] = $row2['kelulusan_bentuk'] ?? '';
+                                    $message['kadar_pengaliran'] = $row2['kadar_pengaliran'] ?? '';
+                                    $message['bentuk_penunjuk'] = $row2['bentuk_penunjuk'] ?? '';
+                                    $message['jenama'] = $row2['jenama'] ?? '';
+                                    $message['jenama_other'] = $row2['jenama_other'] ?? '';
 
                                 }
                             }
@@ -264,6 +271,7 @@ if(isset($_POST['userID'])){
                                     $message['alat_type'] = $row2['alat_type'] ?? '';
                                     $message['bentuk_dulang'] = $row2['bentuk_dulang'] ?? '';
                                     $message['class'] = $row2['class'] ?? '';
+                                    $message['penandaan_batu_ujian'] = $row2['penandaan_batu_ujian'] ?? '';
                                     $message['batu_ujian'] = $row2['batu_ujian'] ?? '';
                                     $message['batu_ujian_lain'] = $row2['batu_ujian_lain'] ?? '';
                                     $message['questions'] = json_decode($row2['questions'], true);
@@ -278,6 +286,12 @@ if(isset($_POST['userID'])){
                                     $message['nilai_jangka_other'] = $row2['nilai_jangka_other'] ?? '';
                                     $message['diperbuat_daripada'] = $row2['diperbuat_daripada'] ?? '';
                                     $message['diperbuat_daripada_other'] = $row2['diperbuat_daripada_other'] ?? '';
+                                    $message['pam_no'] = $row2['pam_no'] ?? '';
+                                    $message['kelulusan_bentuk'] = $row2['kelulusan_bentuk'] ?? '';
+                                    $message['kadar_pengaliran'] = $row2['kadar_pengaliran'] ?? '';
+                                    $message['bentuk_penunjuk'] = $row2['bentuk_penunjuk'] ?? '';
+                                    $message['jenama'] = $row2['jenama'] ?? '';
+                                    $message['jenama_other'] = $row2['jenama_other'] ?? '';
                                 }
                             }
                         }

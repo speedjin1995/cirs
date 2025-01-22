@@ -680,7 +680,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     else if($file == 'ATP' && $validator == 'METROLOGY'){
         $fillFile = 'forms/Metrology/ATP_FORM.pdf';
 
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -848,7 +848,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     else if($file == 'ATP' && $validator == 'DE METROLOGY'){
         $fillFile = 'forms/DE_Metrology/DMSB_ATP.pdf';
 
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -1014,7 +1014,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     else if($file == 'ATS' && $validator == 'METROLOGY'){
         $fillFile = 'forms/Metrology/ATS_FORM.pdf';
 
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -1177,7 +1177,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     else if($file == 'ATS' && $validator == 'DE METROLOGY'){
         $fillFile = 'forms/DE_Metrology/DMSB_ATS.pdf';
 
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -1347,7 +1347,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     else if($file == 'ATE' && $validator == 'METROLOGY'){
         $fillFile = 'forms/Metrology/ATE_FORM.pdf';
 
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -1773,11 +1773,14 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(17.282, 166.599-2); // Adjust for {Company_Name}
                         $pdf->Write(0, $compname);
 
-                        $pdf->SetXY(17.282, 179.528-2); // Adjust for {No_Lesen}
+                        $pdf->SetXY(17.282, 179-2); // Adjust for {No_Lesen}
                         $pdf->Write(0, $compcert);
 
                         $pdf->SetXY(17.282, 191.873-2); // Adjust for {no_daftar}
                         $pdf->Write(0, $noDaftarSyarikat);
+
+                        $pdf->SetXY(153.197, 162.163-2); // Adjust for {Penandaan Batu Ujian}
+                        $pdf->Write(0, $res['penandaan_batu_ujian']);
 
                         $pdf->SetXY(131.197, 170.163-2); // Adjust for {Nilai Jangkaan}
                         $pdf->Write(0, searchCapacityNameById($capacity,$db));
@@ -1810,12 +1813,12 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         }
 
                         if ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->SetXY(138.188, 215.438-2); // Adjust for {tarikh}
+                            $pdf->SetXY(140.188, 215.438-2); // Adjust for {tarikh}
                             if (!empty($res['last_year_stamping_date'])){
                                 $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
                             } 
 
-                            $pdf->SetXY(138.188, 224.002-2); // Adjust for {Cawangan}
+                            $pdf->SetXY(140.188, 224.002-2); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
                             $pdf->SetXY(118.188, 236.567-2); // Adjust for {no_penentusahan}
@@ -1840,7 +1843,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     else if($file == 'BTU' && $validator == 'DE METROLOGY'){
         $fillFile = 'forms/DE_Metrology/DMSB_BTU.pdf';
 
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -1931,6 +1934,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(19.282, 155.728-2); // Adjust for {No_Lesen}
                         $pdf->Write(0, $compcert);
 
+                        $pdf->SetXY(175.204, 136.599-2); // Adjust for {Penandaan Batu Ujian}
+                        $pdf->Write(0, $res['penandaan_batu_ujian']);
+
                         $pdf->SetXY(149.197, 146.163-2); // Adjust for {Nilai Jangkaan}
                         $pdf->Write(0, searchCapacityNameById($capacity,$db));
 
@@ -1995,7 +2001,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     else if(str_contains($file, 'ATN') && $validator == 'METROLOGY'){
         $fillFile = 'forms/Metrology/ATN_FORM.pdf';
 
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -2159,7 +2165,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     else if(str_contains($file, 'ATN') && $validator == 'DE METROLOGY'){
         $fillFile = 'forms/DE_Metrology/DMSB_ATN.pdf';
 
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -3021,7 +3027,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     else if($file == 'ATP-AUTO MACHINE' && $validator == 'METROLOGY'){
         $fillFile = 'forms/Metrology/ATP_FORM.pdf';
 
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -3189,7 +3195,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     else if($file == 'ATP-AUTO MACHINE' && $validator == 'DE METROLOGY'){
         $fillFile = 'forms/DE_Metrology/DMSB_ATP.pdf';
 
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -3546,7 +3552,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     else if($file == 'SLL' && $validator == 'DE METROLOGY'){
         $fillFile = 'forms/DE_Metrology/DMSB_SLL.pdf';
 
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -3728,7 +3734,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     else if($file == 'ATS (H)' && $validator == 'METROLOGY'){
         $fillFile = 'forms/Metrology/ATS_FORM.pdf';
 
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -3891,7 +3897,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     else if($file == 'ATS (H)' && $validator == 'DE METROLOGY'){
         $fillFile = 'forms/DE_Metrology/DMSB_ATS.pdf';
 
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -4058,7 +4064,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     else if($file == 'ATP (MOTORCAR)' && $validator == 'METROLOGY'){
         $fillFile = 'forms/Metrology/ATP_MOTOCAR_FORM.pdf';
 
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -4237,7 +4243,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     else if($file == 'ATP (MOTORCAR)' && $validator == 'DE METROLOGY'){
         $fillFile = 'forms/DE_Metrology/DMSB_ATP_MOTOCAR.pdf';
 
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -4416,7 +4422,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     else if($file == 'SIA' && $validator == 'METROLOGY'){
         $fillFile = 'forms/Metrology/SIA_FORM.pdf';
 
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -4574,7 +4580,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     else if($file == 'SIA' && $validator == 'DE METROLOGY'){
         $fillFile = 'forms/DE_Metrology/DMSB_SIA.pdf';
 
-        $pdf = new Fpdi();
+        $pdf = new PDFWithEllipse();
         $pageCount = $pdf->setSourceFile($fillFile);
 
         $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
@@ -4711,6 +4717,324 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
                             $pdf->SetXY(71, 134.637); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
+                    }
+                }
+
+            }
+        }
+        else{
+            echo json_encode(
+                array(
+                    "status"=> "failed", 
+                    "message"=> "Failed to get the data"
+                )
+            ); 
+        }
+
+        $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
+    }
+    else if($file == 'BAP' && $validator == 'METROLOGY'){
+        $fillFile = 'forms/Metrology/BAP_FORM.pdf';
+
+        $pdf = new PDFWithEllipse();
+        $pageCount = $pdf->setSourceFile($fillFile);
+
+        $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
+        // Check if the statement is prepared successfully
+        if ($select_stmt) {
+            // Bind variables to the prepared statement
+            $select_stmt->bind_param('s', $id); // 'i' indicates the type of $id (integer)
+            $select_stmt->execute();
+            $result = $select_stmt->get_result();
+            $message = '';
+
+            if ($res = $result->fetch_assoc()) {
+                $branch = $res['branch'];
+                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                $branchDetail = mysqli_query($db, $branchQuery);
+                $branchRow = mysqli_fetch_assoc($branchDetail);
+
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
+
+                if(!empty($branchRow)){
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
+                }
+
+                $capacity = $res['capacity'];
+                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                $capacityDetail = mysqli_query($db, $capacityQuery);
+                $capacityRow = mysqli_fetch_assoc($capacityDetail);
+
+                $capacityValue = null;
+                $capacityDivision = null;
+
+                if(!empty($capacityRow)){
+                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                    $templateId = $pdf->importPage($pageNo);
+                    $size = $pdf->getTemplateSize($templateId);
+                    $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                    $pdf->useTemplate($templateId);
+                
+                    // Fill in the fields for the current page
+                    $pdf->SetFont('Arial', '', 8);
+                    
+                    // Example field placements for each page (you'll adjust these according to your PDF)
+                    if ($pageNo == 1) {
+                        // Fill in the fields at the appropriate positions
+                        $pdf->SetFont('Arial', 'B', 10);
+                        $pdf->SetXY(88.283, 53.668-2); // Adjust for Customer Name
+                        $pdf->Write(0, searchCustNameById($res['customers'], $db));
+                        $pdf->SetFont('Arial', '', 10);
+
+                        $pdf->SetXY(21.608, 60.812-2); // Adjust for {3. Alamat Pemilik Address 2}
+                        $pdf->Write(0, $address1 . ' ' .$address2);
+
+                        $pdf->SetXY(21.608, 67.938-2); // Adjust for {3. Alamat Pemilik Address 2}
+                        $pdf->Write(0, $address3 . ' ' .$address4);
+
+                        $pdf->SetXY(34.149, 84.448-2); // Adjust for {Pembaik_name}
+                        $pdf->Write(0, $compname);
+
+                        $pdf->SetXY(41.469, 94.256-2); // Adjust for {No_Lesen}
+                        $pdf->Write(0, $compcert);
+
+                        $pdf->SetXY(120.122, 84.448-2); // Adjust for {Nama_Wakil_Pembaik}
+                        $pdf->Write(0, searchStaffNameById($res['assignTo'], $db));
+
+                        $pdf->SetXY(123.120, 94.256-2); // Adjust for {No_KP}
+                        $pdf->Write(0, searchStaffICById($res['assignTo'], $db));
+
+                        $pdf->SetXY(54.840, 104.045-2); // {Borang_e}
+                        $pdf->Write(0, $res['borang_e']); 
+
+                        $pdf->SetXY(72.620, 120.591-2); // {pam_no}
+                        $pdf->Write(0, $res['pam_no']); 
+
+                        $pdf->SetXY(71.226, 130.416-2); // {kelulusan_bentuk}
+                        $pdf->Write(0, $res['kelulusan_bentuk']); 
+
+                        $pdf->SetXY(70.679, 140.241-2); // {model}
+                        $pdf->Write(0, searchModelNameById($res['model'], $db));
+
+                        $pdf->SetXY(71.226, 150.066-2); // {no_siri}
+                        $pdf->Write(0, $res['serial_no']); 
+
+                        # Adjust for {jenama}
+                        if ($res['jenama'] == 'GRACO'){
+                            $pdf->Image($tickImage, 168, 125.5, 6);
+                        }elseif ($res['jenama'] == 'BADGER'){
+                            $pdf->Image($tickImage, 168, 135.637, 6);
+                        }elseif ($res['jenama'] == 'OTHER'){
+                            $pdf->SetXY(125.837, 155.692-2);
+                            $pdf->Write(0, $res['jenama_other']); 
+                        }
+
+                        if($res['alat_type'] == 'AUTOMATIK'){
+                            $pdf->Ellipse(55, 169, 10, 4, 'D', [200, 255, 200]);
+                        }elseif($res['alat_type'] == 'MANUAL'){
+                            $pdf->Ellipse(73, 169, 8, 4, 'D', [200, 255, 200]);
+                        }elseif($res['alat_type'] == 'PNEUMATIK'){
+                            $pdf->Ellipse(92, 169, 11, 4, 'D', [200, 255, 200]);
+                        }
+
+                        $pdf->SetXY(144.252, 170.421-2); // {kadar_pengaliran}
+                        $pdf->Write(0, $res['kadar_pengaliran']); 
+
+                        if ($res['bentuk_penunjuk'] == 'MEKANIKAL'){
+                            $pdf->Image($tickImage, 75, 185, 6);  // {bentuk_penunjuk}
+                        }else if ($res['bentuk_penunjuk'] == 'DIGITAL'){
+                            $pdf->Image($tickImage, 75, 195, 6); // {bentuk_penunjuk}
+                        }
+
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 118.664, 217.083, 41);  // Adjust for company signature
+                        }
+
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(42.404, 216.388-2); // Adjust for {tarikh}
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
+
+                            $pdf->SetXY(50.059, 226.213-2); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+
+                            $pdf->SetXY(65.846, 236.162-2); // Adjust for {no_penentusahan}
+                            $pdf->Write(0, $res['no_daftar_lama']);
+                        }
+                    }
+                }
+
+            }
+        }
+        else{
+            echo json_encode(
+                array(
+                    "status"=> "failed", 
+                    "message"=> "Failed to get the data"
+                )
+            ); 
+        }
+
+        $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
+    }
+    else if($file == 'BAP' && $validator == 'DE METROLOGY'){
+        $fillFile = 'forms/DE_Metrology/DMSB_BAP.pdf';
+
+        $pdf = new PDFWithEllipse();
+        $pageCount = $pdf->setSourceFile($fillFile);
+
+        $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id = ?");
+        // Check if the statement is prepared successfully
+        if ($select_stmt) {
+            // Bind variables to the prepared statement
+            $select_stmt->bind_param('s', $id); // 'i' indicates the type of $id (integer)
+            $select_stmt->execute();
+            $result = $select_stmt->get_result();
+            $message = '';
+
+            if ($res = $result->fetch_assoc()) {
+                $branch = $res['branch'];
+                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                $branchDetail = mysqli_query($db, $branchQuery);
+                $branchRow = mysqli_fetch_assoc($branchDetail);
+
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
+
+                if(!empty($branchRow)){
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
+                }
+
+                $capacity = $res['capacity'];
+                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                $capacityDetail = mysqli_query($db, $capacityQuery);
+                $capacityRow = mysqli_fetch_assoc($capacityDetail);
+
+                $capacityValue = null;
+                $capacityDivision = null;
+
+                if(!empty($capacityRow)){
+                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                    $templateId = $pdf->importPage($pageNo);
+                    $size = $pdf->getTemplateSize($templateId);
+                    $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                    $pdf->useTemplate($templateId);
+                
+                    // Fill in the fields for the current page
+                    $pdf->SetFont('Arial', '', 10);
+                    
+                    // Example field placements for each page (you'll adjust these according to your PDF)
+                    if ($pageNo == 1) {
+                        // Fill in the fields at the appropriate positions
+                        $pdf->SetFont('Arial', 'B', 10);
+                        $pdf->SetXY(88.283, 53.668-2); // Adjust for Customer Name
+                        $pdf->Write(0, searchCustNameById($res['customers'], $db));
+                        $pdf->SetFont('Arial', '', 10);
+
+                        $pdf->SetXY(21.608, 60.812-2); // Adjust for {3. Alamat Pemilik Address 2}
+                        $pdf->Write(0, $address1 . ' ' .$address2);
+
+                        $pdf->SetXY(21.608, 67.938-2); // Adjust for {3. Alamat Pemilik Address 2}
+                        $pdf->Write(0, $address3 . ' ' .$address4);
+
+                        $pdf->SetXY(34.149, 84.448-2); // Adjust for {Pembaik_name}
+                        $pdf->Write(0, $compname);
+
+                        $pdf->SetXY(41.469, 94.256-2); // Adjust for {No_Lesen}
+                        $pdf->Write(0, $compcert);
+
+                        $pdf->SetXY(120.122, 84.448-2); // Adjust for {Nama_Wakil_Pembaik}
+                        $pdf->Write(0, searchStaffNameById($res['assignTo'], $db));
+
+                        $pdf->SetXY(123.120, 94.256-2); // Adjust for {No_KP}
+                        $pdf->Write(0, searchStaffICById($res['assignTo'], $db));
+
+                        $pdf->SetXY(54.840, 104.045-2); // {Borang_e}
+                        $pdf->Write(0, $res['borang_e']); 
+
+                        $pdf->SetXY(72.620, 120.591-2); // {pam_no}
+                        $pdf->Write(0, $res['pam_no']); 
+
+                        $pdf->SetXY(71.226, 130.416-2); // {kelulusan_bentuk}
+                        $pdf->Write(0, $res['kelulusan_bentuk']); 
+
+                        $pdf->SetXY(70.679, 140.241-2); // {model}
+                        $pdf->Write(0, searchModelNameById($res['model'], $db));
+
+                        $pdf->SetXY(71.226, 150.066-2); // {no_siri}
+                        $pdf->Write(0, $res['serial_no']); 
+
+                        # Adjust for {jenama}
+                        if ($res['jenama'] == 'GRACO'){
+                            $pdf->Image($tickImage, 168, 125.5, 6);
+                        }elseif ($res['jenama'] == 'BADGER'){
+                            $pdf->Image($tickImage, 168, 135.637, 6);
+                        }elseif ($res['jenama'] == 'OTHER'){
+                            $pdf->SetXY(125.837, 155.692-2);
+                            $pdf->Write(0, $res['jenama_other']); 
+                        }
+
+                        if($res['alat_type'] == 'AUTOMATIK'){
+                            $pdf->Ellipse(55, 169, 10, 4, 'D', [200, 255, 200]);
+                        }elseif($res['alat_type'] == 'MANUAL'){
+                            $pdf->Ellipse(73, 169, 8, 4, 'D', [200, 255, 200]);
+                        }elseif($res['alat_type'] == 'PNEUMATIK'){
+                            $pdf->Ellipse(92, 169, 11, 4, 'D', [200, 255, 200]);
+                        }
+
+                        $pdf->SetXY(144.252, 170.421-2); // {kadar_pengaliran}
+                        $pdf->Write(0, $res['kadar_pengaliran']); 
+
+                        if ($res['bentuk_penunjuk'] == 'MEKANIKAL'){
+                            $pdf->Image($tickImage, 75, 185, 6);  // {bentuk_penunjuk}
+                        }else if ($res['bentuk_penunjuk'] == 'DIGITAL'){
+                            $pdf->Image($tickImage, 75, 195, 6); // {bentuk_penunjuk}
+                        }
+
+                        if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                            $pdf->Image($companySignature, 118.664, 217.083, 41);  // Adjust for company signature
+                        }
+
+                        if ($res['stamping_type'] == 'RENEWAL'){
+                            $pdf->SetXY(42.404, 216.388-2); // Adjust for {tarikh}
+                            if (!empty($res['last_year_stamping_date'])){
+                                $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                            } 
+
+                            $pdf->SetXY(50.059, 226.213-2); // Adjust for {Cawangan}
+                            $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+
+                            $pdf->SetXY(65.846, 236.162-2); // Adjust for {no_penentusahan}
                             $pdf->Write(0, $res['no_daftar_lama']);
                         }
                     }
