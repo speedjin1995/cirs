@@ -173,6 +173,7 @@ if(isset($_POST['userID'])){
                                     $message['jenis_penunjuk'] = $row2['jenis_penunjuk'] ?? '';
                                     $message['alat_type'] = $row2['alat_type'] ?? '';
                                     $message['bentuk_dulang'] = $row2['bentuk_dulang'] ?? '';
+                                    $message['penandaan_batu_ujian'] = $row2['penandaan_batu_ujian'] ?? '';
                                     $message['batu_ujian'] = $row2['batu_ujian'] ?? '';
                                     $message['batu_ujian_lain'] = $row2['batu_ujian_lain'] ?? '';
                                     $message['class'] = $row2['class'] ?? '';
@@ -270,6 +271,7 @@ if(isset($_POST['userID'])){
                                     $message['alat_type'] = $row2['alat_type'] ?? '';
                                     $message['bentuk_dulang'] = $row2['bentuk_dulang'] ?? '';
                                     $message['class'] = $row2['class'] ?? '';
+                                    $message['penandaan_batu_ujian'] = $row2['penandaan_batu_ujian'] ?? '';
                                     $message['batu_ujian'] = $row2['batu_ujian'] ?? '';
                                     $message['batu_ujian_lain'] = $row2['batu_ujian_lain'] ?? '';
                                     $message['questions'] = json_decode($row2['questions'], true);

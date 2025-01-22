@@ -1773,11 +1773,14 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         $pdf->SetXY(17.282, 166.599-2); // Adjust for {Company_Name}
                         $pdf->Write(0, $compname);
 
-                        $pdf->SetXY(17.282, 179.528-2); // Adjust for {No_Lesen}
+                        $pdf->SetXY(17.282, 179-2); // Adjust for {No_Lesen}
                         $pdf->Write(0, $compcert);
 
                         $pdf->SetXY(17.282, 191.873-2); // Adjust for {no_daftar}
                         $pdf->Write(0, $noDaftarSyarikat);
+
+                        $pdf->SetXY(153.197, 162.163-2); // Adjust for {Penandaan Batu Ujian}
+                        $pdf->Write(0, $res['penandaan_batu_ujian']);
 
                         $pdf->SetXY(131.197, 170.163-2); // Adjust for {Nilai Jangkaan}
                         $pdf->Write(0, searchCapacityNameById($capacity,$db));
@@ -1810,12 +1813,12 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
                         }
 
                         if ($res['stamping_type'] == 'RENEWAL'){
-                            $pdf->SetXY(138.188, 215.438-2); // Adjust for {tarikh}
+                            $pdf->SetXY(140.188, 215.438-2); // Adjust for {tarikh}
                             if (!empty($res['last_year_stamping_date'])){
                                 $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
                             } 
 
-                            $pdf->SetXY(138.188, 224.002-2); // Adjust for {Cawangan}
+                            $pdf->SetXY(140.188, 224.002-2); // Adjust for {Cawangan}
                             $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
 
                             $pdf->SetXY(118.188, 236.567-2); // Adjust for {no_penentusahan}
@@ -1930,6 +1933,9 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
 
                         $pdf->SetXY(19.282, 155.728-2); // Adjust for {No_Lesen}
                         $pdf->Write(0, $compcert);
+
+                        $pdf->SetXY(175.204, 136.599-2); // Adjust for {Penandaan Batu Ujian}
+                        $pdf->Write(0, $res['penandaan_batu_ujian']);
 
                         $pdf->SetXY(149.197, 146.163-2); // Adjust for {Nilai Jangkaan}
                         $pdf->Write(0, searchCapacityNameById($capacity,$db));

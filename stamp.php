@@ -1340,6 +1340,10 @@ else{
           <label for="model">Batu Ujian Lain *</label>
           <input type="text" class="form-control" id="batuUjianLain" name="batuUjianLain">
         </div>
+        <div class="form-group col-4">
+          <label for="model">Penandaan Pada Batu Ujian</label>
+          <input type="text" class="form-control" id="penandaanBatuUjian" name="penandaanBatuUjian">
+        </div>
       </div>
     </div>
   </div>
@@ -3072,7 +3076,10 @@ function format (row) {
     returnString += `</div><hr>
                       <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (BTU)</strong></span>
                         <div class="row">
-                          <!-- BTU Section -->`;
+                          <!-- BTU Section -->
+                          <div class="col-6">
+                            <p><strong>Penandaan Pada Batu Ujian:</strong> ${row.penandaan_batu_ujian}</p>
+                          </div>`;
     if (row.batu_ujian == 'OTHER'){
       returnString += `
                       <div class="col-6">
@@ -3676,6 +3683,7 @@ function edit(id) {
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '7'){
             $('#addtionalSection').html($('#btuDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#penandaanBatuUjian').val(obj.message.penandaan_batu_ujian).trigger('change');
 
             $('#extendModal').find('#batuUjian').on('change', function(){
               var batuUjian = $(this).val();
@@ -3919,6 +3927,7 @@ function edit(id) {
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '7'){
             $('#addtionalSection').html($('#btuDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#penandaanBatuUjian').val(obj.message.penandaan_batu_ujian).trigger('change');
 
             $('#extendModal').find('#batuUjian').on('change', function(){
               var batuUjian = $(this).val();

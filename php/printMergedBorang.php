@@ -1400,6 +1400,9 @@ if(isset($_GET['userID'])){
                         $pdf->SetXY(17.282, 191.873-2); // Adjust for {no_daftar}
                         $pdf->Write(0, $noDaftarSyarikat);
 
+                        $pdf->SetXY(153.197, 162.163-2); // Adjust for {Penandaan Batu Ujian}
+                        $pdf->Write(0, $res['penandaan_batu_ujian']);
+
                         $pdf->SetXY(131.197, 170.163-2); // Adjust for {Nilai Jangkaan}
                         $pdf->Write(0, searchCapacityNameById($capacity,$db));
 
@@ -1502,6 +1505,9 @@ if(isset($_GET['userID'])){
 
                         $pdf->SetXY(19.282, 155.728-2); // Adjust for {No_Lesen}
                         $pdf->Write(0, $compcert);
+
+                        $pdf->SetXY(175.204, 136.599-2); // Adjust for {Penandaan Batu Ujian}
+                        $pdf->Write(0, $res['penandaan_batu_ujian']);
 
                         $pdf->SetXY(149.197, 146.163-2); // Adjust for {Nilai Jangkaan}
                         $pdf->Write(0, searchCapacityNameById($capacity,$db));

@@ -1680,7 +1680,10 @@ function format (row) {
     returnString += `</div><hr>
                       <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (BTU)</strong></span>
                         <div class="row">
-                          <!-- BTU Section -->`;
+                          <!-- BTU Section -->
+                          <div class="col-6">
+                            <p><strong>Penandaan Pada Batu Ujian:</strong> ${row.penandaan_batu_ujian}</p>
+                          </div>`;
     if (row.batu_ujian == 'OTHER'){
       returnString += `
                       <div class="col-6">

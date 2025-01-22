@@ -664,11 +664,16 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				// For BTU Additional fields	
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '7'){
 					$platform_country = null;
+					$penandaanBatuUjian = null;
 					$batuUjian = null;
 					$batuUjianLain = null;
 
 					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
 						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['penandaanBatuUjian']) && $_POST['penandaanBatuUjian']!=null && $_POST['penandaanBatuUjian']!=""){
+						$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
 					}
 
 					if(isset($_POST['batuUjian']) && $_POST['batuUjian']!=null && $_POST['batuUjian']!=""){
@@ -679,8 +684,8 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						$batuUjianLain = $_POST['batuUjianLain'];
 					}
 
-					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, batu_ujian = ?, batu_ujian_lain=? WHERE stamp_id = ?")){
-						$insert_stmt2->bind_param('ssss', $platform_country, $batuUjian, $batuUjianLain, $_POST['id']);
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, penandaan_batu_ujian = ?, batu_ujian = ?, batu_ujian_lain=? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('sssss', $platform_country, $penandaanBatuUjian, $batuUjian, $batuUjianLain, $_POST['id']);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
@@ -1188,9 +1193,14 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					$platform_country = null;
 					$batuUjian = null;
 					$batuUjianLain = null;
+					$penandaanBatuUjian = null;
 
 					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
 						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['penandaanBatuUjian']) && $_POST['penandaanBatuUjian']!=null && $_POST['penandaanBatuUjian']!=""){
+						$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
 					}
 
 					if(isset($_POST['batuUjian']) && $_POST['batuUjian']!=null && $_POST['batuUjian']!=""){
@@ -1201,9 +1211,9 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						$batuUjianLain = $_POST['batuUjianLain'];
 					}
 
-					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, batu_ujian, batu_ujian_lain) 
-					VALUES (?, ?, ?, ?)")){
-						$insert_stmt2->bind_param('ssss', $stamp_id, $platform_country, $batuUjian, $batuUjianLain);
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, penandaan_batu_ujian, batu_ujian, batu_ujian_lain) 
+					VALUES (?, ?, ?, ?, ?)")){
+						$insert_stmt2->bind_param('sssss', $stamp_id, $platform_country, $penandaanBatuUjian, $batuUjian, $batuUjianLain);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
