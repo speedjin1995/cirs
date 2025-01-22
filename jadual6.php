@@ -592,12 +592,22 @@ $(function () {
   });
 
   $('#exportExcel').on('click', function () {
+    var selectedIds = []; // An array to store the selected 'id' values
+
+    $("#weightTable tbody input[type='checkbox']").each(function () {
+      if (this.checked) {
+        selectedIds.push($(this).val());
+      }
+    });
+
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-    
-    window.open("php/export.php?fromDate="+fromDateValue+"&toDate="+toDateValue+
-    "&customer="+customerNoFilter+"&type=6");
+
+    if(selectedIds.length > 0){
+      window.open("php/export.php?fromDate="+fromDateValue+"&toDate="+toDateValue+
+      "&customer="+customerNoFilter+"&type=6&id="+selectedIds);
+    }
   });
 });
 

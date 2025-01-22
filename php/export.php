@@ -40,6 +40,11 @@ if(isset($_GET['type'])){
         $searchQuery .= " and stamping_date <= '".$toDateTime."'";
     }
     
+    if($_GET['id'] != null && $_GET['id'] != ''){
+        $ids = $_GET['id'];
+        $searchQuery .= " and id IN (".$ids.")";
+    }
+    
     $driver = $_GET['type'];
     $todayDate = date('d/m/Y');
     $todayDate2 = date('d M Y');
@@ -57,6 +62,7 @@ if(isset($_GET['type'])){
             $searchQuery .= " and customers = '".$_GET['customer']."'";
         }
     
+        $test = "SELECT * FROM stamping where status = 'Complete'".$searchQuery;
         $select_stmt = $db->prepare("SELECT * FROM stamping WHERE status = 'Complete'".$searchQuery);
     }
 
