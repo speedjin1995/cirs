@@ -464,7 +464,7 @@ $(function () {
       'processing': true,
       'serverSide': true,
       'serverMethod': 'post',
-      'searching': false,
+      'searching': true,
       'order': [[ 2, 'asc' ]],
       'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
@@ -503,19 +503,42 @@ $(function () {
             return meta.row + meta.settings._iDisplayStart + 1;
           }
         },
-        { data: 'stamping_date' },
-        { data: 'customers' },
+        { 
+          data: 'stamping_date',
+          name: 'stamping_date'
+        },
+        { 
+          data: 'customers',
+          name: 'customers'
+        },
         {
           data: null, // We set data to null to allow custom rendering
+          name: 'brand_model',
           render: function (data, type, row) {
             return row.brand + '<br>' + row.model;
           }
         },
-        { data: 'capacity' },
-        { data: 'quantity' },
-        { data: 'no_daftar_lama' },
-        { data: 'no_daftar_baru' },
-        { data: 'siri_keselamatan' },
+        { 
+          data: 'capacity',
+          name: 'capacity'
+        },
+        { 
+          orderable: false,
+          data: 'quantity',
+          name: 'quantity'
+        },
+        { 
+          data: 'no_daftar_lama',
+          name: 'no_daftar_lama'
+        },
+        { 
+          data: 'no_daftar_baru',
+          name: 'no_daftar_baru'
+        },
+        { 
+          data: 'siri_keselamatan',
+          name: 'siri_keselamatan'
+        },
         // { data: 'full_address' },
         { 
           className: 'dt-control',
@@ -569,12 +592,22 @@ $(function () {
   });
 
   $('#exportExcel').on('click', function () {
+    var selectedIds = []; // An array to store the selected 'id' values
+
+    $("#weightTable tbody input[type='checkbox']").each(function () {
+      if (this.checked) {
+        selectedIds.push($(this).val());
+      }
+    });
+
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-    
-    window.open("php/export.php?fromDate="+fromDateValue+"&toDate="+toDateValue+
-    "&customer="+customerNoFilter+"&type=6");
+
+    if(selectedIds.length > 0){
+      window.open("php/export.php?fromDate="+fromDateValue+"&toDate="+toDateValue+
+      "&customer="+customerNoFilter+"&type=6&id="+selectedIds);
+    }
   });
 });
 

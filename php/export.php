@@ -40,6 +40,11 @@ if(isset($_GET['type'])){
         $searchQuery .= " and stamping_date <= '".$toDateTime."'";
     }
     
+    if($_GET['id'] != null && $_GET['id'] != ''){
+        $ids = $_GET['id'];
+        $searchQuery .= " and id IN (".$ids.")";
+    }
+    
     $driver = $_GET['type'];
     $todayDate = date('d/m/Y');
     $todayDate2 = date('d M Y');
@@ -57,6 +62,7 @@ if(isset($_GET['type'])){
             $searchQuery .= " and customers = '".$_GET['customer']."'";
         }
     
+        $test = "SELECT * FROM stamping where status = 'Complete'".$searchQuery;
         $select_stmt = $db->prepare("SELECT * FROM stamping WHERE status = 'Complete'".$searchQuery);
     }
 
@@ -74,10 +80,52 @@ if(isset($_GET['type'])){
         $message = '';
 
         if($driver == '6'){
-            $fields = array('DATE', 'ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS', 'CAPACITY', 'QUANTITY', 'REGISTER NO.', 
-            'CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN', 'NAME OF PURCHASE', 'ADDRESS'); 
-                
-            $excelData = implode("\t", array_values($fields)) . "\n"; 
+            $excelData = "
+                            <style>
+                                .header {
+                                    text-align:center;
+                                    font-weight:bold;
+                                    white-space:pre-wrap;
+                                    border-bottom: none;
+                                    border-top: none;
+                                }  
+                                .body {
+                                    text-align: center;
+                                }
+                            </style>
+                        ";
+            $excelData .= "<table border='1'>";
+            $excelData .= "
+                        <tr>
+                            <td colspan='11' class='header'>JADUAL 6</td>
+                        </tr>
+                        <tr>
+                            <td colspan='11' class='header'>AKTA TIMBANG DAN SUKAT 1972</td>
+                        </tr>
+                        <tr>
+                            <td colspan='11' class='header'>PERATURAN-PERATURAN TIMBANG DAN SUKAT 1981</td>
+                        </tr>
+                        <tr>
+                            <td colspan='11' class='header'>(PERATURAN 35)</td>
+                        </tr>
+                        <tr>
+                            <td colspan='11' class='header'>DAFTAR TIMBANG, SUKAT DAN ALAT TIMBANG SUKAT YANG DIJUAL/DIBUAT</td>
+                        </tr>
+                        <tr>
+                            <th>DATE</th>
+                            <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
+                            <th>MODEL</th>
+                            <th>JENIS ALAT</th>
+                            <th>CAPACITY</th>
+                            <th>QUANTITY</th>
+                            <th>NO. DAFTAR (LAMA)</th>
+                            <th>NO. DAFTAR (BARU)</th>
+                            <th>CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
+                            <th>NAME OF PURCHASE</th>
+                            <th>ADDRESS</th>
+                        </tr>
+                        ";
+
             while ($row = $result->fetch_assoc()) {
                 $branch = $row['branch'];
                 $branchQuery = "SELECT * FROM branches WHERE id = $branch";
@@ -100,19 +148,73 @@ if(isset($_GET['type'])){
                     $pic_phone = $branchRow['pic_contact'];
                 }
 
-                $lineData = array($todayDate2, searchBrandNameById($row['brand'], $db).'\n'.searchModelNameById($row['model'], $db).'\n'.searchAlatNameById($row['jenis_alat'], $db), 
-                searchCapacityNameById($row['capacity'], $db), '1', $row['no_daftar'], $row['siri_keselamatan'], searchCustNameById($row['customers'], $db),
-                $address1.' '.$address2.' '.$address3.' '.$address4);
-                
-                array_walk($lineData, 'filterData'); 
-                $excelData .= implode("\t", array_values($lineData)) . "\n"; 
+                $stampingDate = new DateTime($row['stamping_date']);
+                $formattedStampingDate = $stampingDate->format('d-m-Y');
+                $custAddress = $address1 . ' ' . $address2 . ' ' . $address3 . ' ' . $address4;
+
+                $excelData .= '<tr>
+                                <td class="body">'.$formattedStampingDate.'</td>
+                                <td class="body">'.searchBrandNameById($row['brand'], $db).'</td>
+                                <td class="body">'.searchModelNameById($row['model'], $db).'</td>
+                                <td class="body">'.searchAlatNameById($row['jenis_alat'], $db).'</td>
+                                <td class="body">'.searchCapacityNameById($row['capacity'], $db).'</td>
+                                <td class="body">1</td>
+                                <td class="body">'.$row['no_daftar_lama'].'</td>
+                                <td class="body">'.$row['no_daftar_baru'].'</td>
+                                <td class="body">'.$row['siri_keselamatan'].'</td>
+                                <td class="body">'.searchCustNameById($row['customers'], $db).'</td>
+                                <td class="body">'.$custAddress.'</td>
+                            </tr>';
             }
         }
         else if($driver == '7'){
-            $fields = array('BRG E BIL NO.', 'DATE', 'ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS', 'CAPACITY', 'LIST NO. (STMP. NO.)', 
-            'REGISTER NO. (BARU / LAMA)', 'DETAILS OF REPAIR', 'CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN', 'NAME OF PURCHASE', 'ADDRESS', 
-            'FEE');
-            $excelData = implode("\t", array_values($fields)) . "\n"; 
+            $excelData = "
+                            <style>
+                                .header {
+                                    text-align:center;
+                                    font-weight:bold;
+                                    white-space:pre-wrap;
+                                    border-bottom: none;
+                                    border-top: none;
+                                }  
+                                .body {
+                                    text-align: center;
+                                }
+                            </style>
+                        ";
+            $excelData .= "<table border='1'>";
+            $excelData .= "
+                        <tr>
+                            <td colspan='13' class='header'>JADUAL 7</td>
+                        </tr>
+                        <tr>
+                            <td colspan='13' class='header'>AKTA TIMBANG DAN SUKAT 1972</td>
+                        </tr>
+                        <tr>
+                            <td colspan='13' class='header'>PERATURAN-PERATURAN TIMBANG DAN SUKAT 1981</td>
+                        </tr>
+                        <tr>
+                            <td colspan='13' class='header'>(PERATURAN 35)</td>
+                        </tr>
+                        <tr>
+                            <td colspan='13' class='header'>DAFTAR TIMBANG, SUKAT DAN ALAT TIMBANG SUKAT YANG TELAH DIBAIKI</td>
+                        </tr>
+                        <tr>
+                            <th>BORANG (E) NO.</th>
+                            <th>STAMPING DATE</th>
+                            <th>NAME OF PURCHASE</th>
+                            <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
+                            <th>MODEL</th>
+                            <th>JENIS ALAT</th>
+                            <th>CAPACITY</th>
+                            <th>LIST NO. (STAMP.NO.)</th>
+                            <th>NO. DAFTAR (LAMA)</th>
+                            <th>NO. DAFTAR (BARU)</th>
+                            <th>DETAILS OF REPAIR</th>
+                            <th>CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
+                            <th>FEE (RM)</th>
+                        </tr>
+                        ";
 
             while ($row = $result->fetch_assoc()) {
                 $branch = $row['branch'];
@@ -136,12 +238,40 @@ if(isset($_GET['type'])){
                     $pic_phone = $branchRow['pic_contact'];
                 }
 
-                $lineData = array('', $todayDate2, searchBrandNameById($row['brand'], $db).'\n'.searchModelNameById($row['model'], $db).'\n'.searchAlatNameById($row['jenis_alat'], $db), 
-                searchCapacityNameById($row['capacity'], $db), $row['pin_keselamatan'], $row['no_daftar'], 'SERVICE / STMP', $row['siri_keselamatan'], searchCustNameById($row['customers'], $db),
-                $address1.' '.$address2.' '.$address3.' '.$address4, $row['unit_price']);
+                $stampingDate = new DateTime($row['stamping_date']);
+                $formattedStampingDate = $stampingDate->format('d-m-Y');
+
+                $excelData .= '<tr>
+                                <td class="body">'.$row['borang_e'].'</td>
+                                <td class="body">'.$formattedStampingDate.'</td>
+                                <td class="body">'.searchCustNameById($row['customers'], $db).'</td>
+                                <td class="body">'.searchBrandNameById($row['brand'], $db).'</td>
+                                <td class="body">'.searchModelNameById($row['model'], $db).'</td>
+                                <td class="body">'.searchAlatNameById($row['jenis_alat'], $db).'</td>
+                                <td class="body">'.searchCapacityNameById($row['capacity'], $db).'</td>
+                                <td class="body">'.$row['pin_keselamatan'].'</td>
+                                <td class="body">'.$row['no_daftar_lama'].'</td>
+                                <td class="body">'.$row['no_daftar_baru'].'</td>
+                                <td class="body">SERVICE / STMP</td>
+                                <td class="body">'.$row['siri_keselamatan'].'</td>';
+
+                                if($row['cert_price'] != 0){
+                                    $excelData .= '<td class="body">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').'</td>
+                                    </tr>';
+                                }else{
+                                    $excelData .= '<td class="body">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'</td>
+                                    </tr>';
+                                }
+
+
+                $excelData .= '</tr>';
+
+                // $lineData = array('', $todayDate2, searchBrandNameById($row['brand'], $db).'\n'.searchModelNameById($row['model'], $db).'\n'.searchAlatNameById($row['jenis_alat'], $db), 
+                // searchCapacityNameById($row['capacity'], $db), $row['pin_keselamatan'], $row['no_daftar'], 'SERVICE / STMP', $row['siri_keselamatan'], searchCustNameById($row['customers'], $db),
+                // $address1.' '.$address2.' '.$address3.' '.$address4, $row['unit_price']);
                 
-                array_walk($lineData, 'filterData'); 
-                $excelData .= implode("\t", array_values($lineData)) . "\n"; 
+                // array_walk($lineData, 'filterData'); 
+                // $excelData .= implode("\t", array_values($lineData)) . "\n"; 
             }
         }
         else if($driver == 'cancelledStamp'){
@@ -162,11 +292,45 @@ if(isset($_GET['type'])){
             $rows = array();
             $count = 1;
             $validator = '2';
+            $totalAmt = 0;
 
-            $fields = array('Bil.', 'Jenis Alat', 'Had Terima', 'Jenama', 'No. Siri Alat', 
-                'Nama Dan Alamat Pemilik', 'Kod', 'No. Daftar', 'No. Siri Pelekat Keselamatan',  
-                'Fi / Bayaran');
-            $excelData = implode("\t", array_values($fields)) . "\n"; 
+            $excelData = "
+                            <style>
+                                .header {
+                                    text-align:center;
+                                    font-weight:bold;
+                                    white-space:pre-wrap;
+                                    border-bottom: none;
+                                    border-top: none;
+                                }  
+                                .body {
+                                    text-align: center;
+                                }
+                            </style>
+                        ";
+            $excelData .= "<table border='1' style='border-bottom:none; border-right:none;'>";
+            $excelData .= "
+                        <tr>
+                            <td rowspan='2' colspan='13' class='header'>BUTIRAN SENARAI ALAT-ALAT TIMBANG DAN SUKAT UNTUK PENGUJIAN DAN PENENTUSAHAN</td>
+                        </tr>
+                        <tr></tr>
+                        <tr>
+                            <th>VALIDATOR BY</th>
+                            <th>CAWANGAN</th>
+                            <th>JENIS ALAT</th>
+                            <th>HAD TERIMA</th>
+                            <th>JENAMA</th>
+                            <th>NO. SIRI ALAT</th>
+                            <th>NAMA PEMILIK</th>
+                            <th>ADDRESS</th>
+                            <th>KOD</th>
+                            <th>NO. DAFTAR (LAMA)</th>
+                            <th>NO. DAFTAR (BARU)</th>
+                            <th>NO. SIRI PELEKAT KESELAMATAN</th>
+                            <th>FEE/BAYARAN (RM)</th>
+                            <th style='border-top:none;border-bottom:none;'></th>
+                        </tr>
+                        ";
 
             while ($row = $result->fetch_assoc()) {
                 $validator = $row['validate_by'];
@@ -191,17 +355,67 @@ if(isset($_GET['type'])){
                     $pic_phone = $branchRow['pic_contact'];
                 }
 
-                $lineData = array($count, searchAlatNameById($row['jenis_alat'], $db), searchCapacityNameById($row['capacity'], $db), 
-                searchBrandNameById($row['brand'], $db).'\n'.searchModelNameById($row['model'], $db).'\n'.searchAlatNameById($row['jenis_alat'], $db), 
-                $row['serial_no'], searchCustNameById($row['customers'], $db).'\n'.$address1.' '.$address2.' '.$address3.' '.$address4, 
-                $row['no_daftar'], $row['siri_keselamatan'], $row['unit_price']);
+                $custAddress = $address1 . ' ' . $address2 . ' ' . $address3 . ' ' . $address4;
+                $stampingDate = new DateTime($row['stamping_date']);
+                $formattedStampingDate = $stampingDate->format('d-m-Y');
+                $totalAmt += floatval($row['unit_price']) + floatval($row['cert_price']);
+
+                $excelData .= '<tr>
+                                <td class="body">'.searchValidatorNameById($row['validate_by'], $db).'</td>
+                                <td class="body">'.searchStateNameById($row['cawangan'], $db).'</td>
+                                <td class="body">'.searchAlatNameById($row['jenis_alat'], $db).'</td>
+                                <td class="body">'.searchCapacityNameById($row['capacity'], $db).'</td>
+                                <td class="body">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
+                                <td class="body">'.$row['serial_no'].'</td>
+                                <td class="body">'.searchCustNameById($row['customers'], $db).'</td>
+                                <td class="body">'.$custAddress.'</td>
+                                <td class="body"></td>
+                                <td class="body">'.$row['no_daftar_lama'].'</td>
+                                <td class="body">'.$row['no_daftar_baru'].'</td>
+                                <td class="body">'.$row['siri_keselamatan'].'</td>';
+
+                                if ($row['cert_price'] != 0) {
+                                    $excelData .= '<td class="body">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').'</td>';
+                                } else {
+                                    $excelData .= '<td class="body">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'</td>';
+                                }
+
+                // $lineData = array($count, searchAlatNameById($row['jenis_alat'], $db), searchCapacityNameById($row['capacity'], $db), 
+                // searchBrandNameById($row['brand'], $db).'\n'.searchModelNameById($row['model'], $db).'\n'.searchAlatNameById($row['jenis_alat'], $db), 
+                // $row['serial_no'], searchCustNameById($row['customers'], $db).'\n'.$address1.' '.$address2.' '.$address3.' '.$address4, 
+                // $row['no_daftar'], $row['siri_keselamatan'], $row['unit_price']);
                 
-                array_walk($lineData, 'filterData'); 
-                $excelData .= implode("\t", array_values($lineData)) . "\n"; 
-                $count++;
+                // array_walk($lineData, 'filterData'); 
+                // $excelData .= implode("\t", array_values($lineData)) . "\n"; 
+                // $count++;
             }
+
+            $sst = $totalAmt * (8/100);
+            $subTotalAmt = $totalAmt + $sst;
+
+            $excelData .= '<tr>
+                            <td class="body" colspan="11" style="border:none"></td>
+                            <td class="body">SUB TOTAL</td>
+                            <td class="body">RM ' . number_format(floatval($totalAmt), 2, '.', '') . '</td>
+                        </tr>';
+
+            $excelData .= '<tr>
+                            <td class="body" colspan="11" style="border:none"></td>
+                            <td class="body">SST 8%</td>
+                            <td class="body">RM ' . number_format(floatval($sst), 2, '.', '') . '</td>
+                        </tr>';
+
+            $excelData .= '<tr>
+                            <td class="body" colspan="11" style="border:none"></td>
+                            <td class="body">TOTAL AMOUNT</td>
+                            <td class="body">RM ' . number_format(floatval($subTotalAmt), 2, '.', '') . '</td>
+                        </tr>';
+
+            $excelData .= '<tr>
+                        </tr>';
         } 
 
+        $excelData .= "</table>";
         // Fetch each row
         $select_stmt->close();
     } 
@@ -214,8 +428,8 @@ else{
 }
 
 // Headers for download 
-header("Content-Type: application/vnd.ms-excel"); 
-header("Content-Disposition: attachment; filename=\"$fileName\""); 
+header("Content-Type: application/vnd.ms-excel");
+header("Content-Disposition: attachment; filename=\"$fileName\"");
  
 // Render excel data 
 echo $excelData; 

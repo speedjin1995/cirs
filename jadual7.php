@@ -478,7 +478,7 @@ $(function () {
       'processing': true,
       'serverSide': true,
       'serverMethod': 'post',
-      'searching': false,
+      'searching': true,
       'order': [[ 2, 'asc' ]],
       'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
@@ -502,7 +502,7 @@ $(function () {
           render: function (data, type, row) {
             return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
 
-            // if (row.status == 'Active') { // Assuming 'isInvoiced' is a boolean field in your row data
+            // if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
             //   return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
             // } 
             // else {
@@ -510,29 +510,61 @@ $(function () {
             // }
           }
         },
-        { data: 'borang_e' },
-        { data: 'stamping_date' },
-        { data: 'customers' },
+        { 
+          data: 'borang_e', 
+          name: 'borang_e'
+        },
+        { 
+          data: 'stamping_date', 
+          name: 'stamping_date'
+        },
+        { 
+          data: 'customers', 
+          name: 'customers'
+        }
+        ,
         {
           data: null, // We set data to null to allow custom rendering
+          name: 'brand_model',
           render: function (data, type, row) {
             return row.brand + '<br>' + row.model;
           }
         },
-        { data: 'capacity' },
-        { data: 'pin_keselamatan' },
-        { data: 'no_daftar_lama' },
-        { data: 'no_daftar_baru' },
-        { data: 'reason' },
-        { data: 'siri_keselamatan' },
+        { 
+          data: 'capacity', 
+          name: 'capacity'
+        },
+        { 
+          data: 'pin_keselamatan', 
+          name: 'pin_keselamatan'
+        },
+        { 
+          data: 'no_daftar_lama', 
+          name: 'no_daftar_lama'
+        },
+        { 
+          data: 'no_daftar_baru', 
+          name: 'no_daftar_baru'
+        },
+        { 
+          orderable: false,
+          data: 'reason', 
+          name: 'reason'
+        },
+        { 
+          data: 'siri_keselamatan', 
+          name: 'siri_keselamatan'
+        },
         {
           data: null, // Custom rendering for unit_price and cert_price
+          name: 'price',
+          orderable: false,
           render: function (data, type, row) {
             if (row.cert_price != 0){
               return 'RM ' + parseFloat(row.unit_price).toFixed(2) + '<br>' + 'RM ' + parseFloat(row.cert_price).toFixed(2);
             }else{
               return 'RM ' + parseFloat(row.unit_price).toFixed(2);
-            } 
+            }  
           }
         },
         { 
@@ -583,12 +615,22 @@ $(function () {
   });
 
   $('#exportExcel').on('click', function () {
+    var selectedIds = []; // An array to store the selected 'id' values
+
+    $("#weightTable tbody input[type='checkbox']").each(function () {
+      if (this.checked) {
+        selectedIds.push($(this).val());
+      }
+    });
+
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
     
-    window.open("php/export.php?fromDate="+fromDateValue+"&toDate="+toDateValue+
-    "&customer="+customerNoFilter+"&type=6");
+    if(selectedIds.length > 0){
+      window.open("php/export.php?fromDate="+fromDateValue+"&toDate="+toDateValue+
+      "&customer="+customerNoFilter+"&type=7&id="+selectedIds);
+    }
   });
 });
 
