@@ -2008,8 +2008,8 @@ function newEntry(){
   $('#extendModal').find('#size').val('').trigger('change');
   $('#extendModal').find('#calibrator').val('').trigger('change');
   $('#extendModal').find('#companyText').val('').trigger('change');
-  $('#extendModal').find('#validationDate').val(formatDate3(today));
-  $('#extendModal').find('#expiredDate').val(formatDate3(getExpiredDt(today)));
+  $('#extendModal').find('#validationDate').val('');
+  $('#extendModal').find('#expiredDate').val('');
 
   // $('#extendModal').find('#validationDate').change(function(){
   //   var date = $(this).val();
