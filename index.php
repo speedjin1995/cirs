@@ -317,6 +317,15 @@ else{
       background-color: rgba(144, 238, 144, 0.5);
       color: black;
     }
+
+    .search-filter {
+      background-color: rgb(7, 73, 121);
+      color: white;
+    }
+
+    .search-filter button{
+      color: white;
+    }
   </style>
 </head>
 <!--
