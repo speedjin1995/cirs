@@ -650,6 +650,8 @@ $(function () {
         if(selectedIds.length > 0){
           window.open("php/export.php?fromDate="+fromDateValue+"&toDate="+toDateValue+
           "&customer="+customerNoFilter+"&type=panjang&id="+selectedIds);
+        }else{
+          alert("Please select at least one record to export.");
         }
   });
 });
