@@ -85,7 +85,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
     <div class="row">
       <div class="col-lg-12">
         <div class="card">
-          <div class="card-header">
+          <div class="card-header search-filter">
             <div class="d-flex justify-content-between align-items-center">
               <h5 class="card-title mb-0 font-weight-bold">Search Filters</h5>
               <button class="btn btn-link btn-sm p-0" type="button" data-toggle="collapse" data-target="#searchFilters" aria-expanded="true" aria-controls="searchFilters">
@@ -94,7 +94,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
             </div>
           </div>
 
-          <div class="collapse show" id="searchFilters">
+          <div class="collapse" id="searchFilters">
             <div class="card-body">
               <div class="row">
                 <div class="col-4">
@@ -455,7 +455,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
-                <div class="col-3">
+                <!-- <div class="col-3">
                   <div class="form-group">
                     <label>Create Date </label>
                     <div class='input-group date' id="datePicker3" data-target-input="nearest">
@@ -464,9 +464,8 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                       </div>
                     </div>
-                    <!-- <input class="form-control" type="text" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate"> -->
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>

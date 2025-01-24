@@ -48,7 +48,7 @@ else{
     <div class="row">
       <div class="col-lg-12">
         <div class="card">
-          <div class="card-header">
+          <div class="card-header search-filter">
             <div class="d-flex justify-content-between align-items-center">
               <h5 class="card-title mb-0 font-weight-bold">Search Filters</h5>
               <button class="btn btn-link btn-sm p-0" type="button" data-toggle="collapse" data-target="#searchFilters" aria-expanded="true" aria-controls="searchFilters">
@@ -57,7 +57,7 @@ else{
             </div>
           </div>
 
-          <div class="collapse show" id="searchFilters">
+          <div class="collapse" id="searchFilters">
             <div class="card-body">
               <div class="row">
                 <div class="form-group col-3">
