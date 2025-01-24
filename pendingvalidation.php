@@ -455,7 +455,7 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </select>
                   </div>
                 </div>
-                <div class="col-3">
+                <!-- <div class="col-3">
                   <div class="form-group">
                     <label>Create Date </label>
                     <div class='input-group date' id="datePicker3" data-target-input="nearest">
@@ -464,9 +464,8 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                       </div>
                     </div>
-                    <!-- <input class="form-control" type="text" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate"> -->
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
