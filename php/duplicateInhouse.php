@@ -30,7 +30,7 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
             $result = $select_stmt->get_result();
             $message = array();
             
-            if ($record = $result->fetch_assoc()) { var_dump($record);die;
+            if ($record = $result->fetch_assoc()) {
                 // Prepare insert statement for other_validations
                 $insertQuery = "INSERT INTO inhouse_validations (type, dealer, dealer_branch, validate_by, customer_type, customer, branch, auto_form_no, machines, unit_serial_no, expired_date, manufacturing, auto_cert_no, brand, model, capacity, size, calibrator, status, validation_date, duplicate) 
 					VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
