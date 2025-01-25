@@ -133,6 +133,7 @@ while($row = mysqli_fetch_assoc($validationRecords)) {
     "auto_form_no"=>$row['auto_form_no'] ?? '',
     "last_calibration_date"=>$row['last_calibration_date'] != null ? convertDatetimeToDate($row['last_calibration_date']) : '',
     "expired_calibration_date"=>$row['expired_calibration_date'] != null ? convertDatetimeToDate($row['expired_calibration_date']) : '',
+    "expiredDate"=>$row['expired_calibration_date'] != null ? $row['expired_calibration_date'] : '',
     // "address1"=>$address1,
     // "address2"=>$address2,
     // "address3"=>$address3,
@@ -145,6 +146,7 @@ while($row = mysqli_fetch_assoc($validationRecords)) {
     // "size"=>$row['size'] != null ? searchSizeNameById($row['size'], $db) : '',
     // "calibrations"=>json_decode($row['calibrations'], true) ?? '',
     "status"=>$row['status'] ?? '',
+    "duplicate"=>$row['duplicate'] ?? 'N',
     // "created_datetime"=> $createdDate->format('Y-m-d') ?? '',
     // "updated_datetime"=> $updatedDate->format('Y-m-d') ?? ''
   ); 
