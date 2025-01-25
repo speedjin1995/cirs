@@ -165,6 +165,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "stamping_date"=>$row['stamping_date'] != null ? convertDatetimeToDate($row['stamping_date']) : '',
     "last_year_stamping_date"=>$row['last_year_stamping_date'] != null ? convertDatetimeToDate($row['last_year_stamping_date']) : '',
     "due_date"=>$row['due_date'] != null ? convertDatetimeToDate($row['due_date']) : '',
+    "dueDate"=>$row['due_date'] != null ? $row['due_date'] : '',
     "pic"=>$row['pic'] != null ? searchStaffNameById($row['pic'], $db) : '',
     "customer_pic"=>$row['customer_pic'] ?? '',
     "quotation_date"=>$row['quotation_date'] ?? '',
