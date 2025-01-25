@@ -3,8 +3,12 @@ require_once 'db_connect.php';
 
 session_start();
 
+$uid = '';
+
 if(!isset($_SESSION['userID'])){
 	echo '<script type="text/javascript">location.href = "../login.php";</script>'; 
+}else{
+    $uid = $_SESSION['userID'];
 }
 
 if(isset($_POST['duplicateNo'], $_POST['id'])){
@@ -49,6 +53,13 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
 
                 $insertExtStmt = $db->prepare($insertExtQuery);
 
+                // Prepare insert statement for stamping_log
+                $insertLogQuery = "INSERT INTO stamping_log (
+                    action, user_id, item_id
+                ) VALUES (?, ?, ?)";
+
+                $insertLogStmt = $db->prepare($insertLogQuery);
+
                 for($i=0; $i<(int)$duplicateNo; $i++){
                     $insertStmt->execute([
                         $record['type'], $record['dealer'], $record['dealer_branch'], $record['customer_type'], $record['customers'],
@@ -82,6 +93,12 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
                             $extRecord['load_cell_no'], $extRecord['load_cells_info']
                         ]);
                     }
+
+                    // Insert for Log
+                    $action = "INSERT";
+                    $insertLogStmt->execute([
+                        $action, $uid, $newStampId
+                    ]);
                 }
 
                 $db->close();
