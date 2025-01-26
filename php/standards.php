@@ -8,12 +8,12 @@ if(!isset($_SESSION['userID'])){
     echo 'window.location.href = "../login.php";</script>';
 }
 
-if(isset($_POST['satemperature'], $_POST['capacity'], $_POST['unitsHidden'], $_POST['variance'], $_POST['tester1'], 
+if(isset($_POST['satemperature'], $_POST['capacity'], $_POST['units'], $_POST['variance'], $_POST['tester1'], 
 $_POST['tester2'], $_POST['tester3'], $_POST['tester4'], $_POST['tester5'], $_POST['tester6'], $_POST['tester7'], 
 $_POST['tester8'], $_POST['tester9'], $_POST['tester10'])){
     $satemperature = filter_input(INPUT_POST, 'satemperature', FILTER_SANITIZE_STRING);
     $capacity = filter_input(INPUT_POST, 'capacity', FILTER_SANITIZE_STRING);
-    $units = filter_input(INPUT_POST, 'unitsHidden', FILTER_SANITIZE_STRING);
+    $units = filter_input(INPUT_POST, 'units', FILTER_SANITIZE_STRING);
     $variance = filter_input(INPUT_POST, 'variance', FILTER_SANITIZE_STRING);
 
     $relHumidity = null;
