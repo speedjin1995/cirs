@@ -296,14 +296,16 @@ $(function () {
           //     }
           // },
           { 
-          className: 'dt-control',
-          orderable: false,
-          data: null,
-          render: function ( data, type, row ) {
-              return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.id+'"><i class="fas fa-angle-down"></i></td>';
-          }
+            className: 'dt-control',
+            orderable: false,
+            data: null,
+            render: function ( data, type, row ) {
+                return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.id+'"><i class="fas fa-angle-down"></i></td>';
+            }
           }
       ],
+      "lengthMenu": [ [10, 25, 50, 100, 300, 600, 1000], [10, 25, 50, 100, 300, 600, 1000] ], // More show options
+      "pageLength": 10, // Default rows per page
       "rowCallback": function( row, data, index ) {
 
           $('td', row).css('background-color', '#E6E6FA');
