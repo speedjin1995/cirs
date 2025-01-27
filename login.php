@@ -1,4 +1,5 @@
 <?php
+    $license = include(dirname(__DIR__, 2) . '/license.php');
     require_once 'php/db_connect.php';
     $company_name = '';
     $result = $db->query("SELECT name FROM companies LIMIT 1");
@@ -39,7 +40,7 @@
   <div class="text-center font-weight-bold">
     <p>Licensed By :</p>
     <p><?php echo $company_name; ?></p>
-    <p style="margin-top:-5%">Valid: 30/12/2024 - 29/12/2029</p>
+    <p style="margin-top:-5%">Valid: <?=$license['from'] ?> - <?=$license['to'] ?></p>
   </div>
   <!-- /.login-logo -->
   <div class="card">

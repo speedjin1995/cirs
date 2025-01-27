@@ -1,7 +1,10 @@
 <?php
 date_default_timezone_set('Asia/Kuala_Lumpur');
-$db = mysqli_connect("srv605.hstgr.io", "u664110560_cirs", "Aa@111222333", "u664110560_cirs");
-//$db = mysqli_connect("localhost", "u664110560_cirs", "Aa@111222333", "u664110560_cirs");
+// Load DB credentials securely
+$config = include(dirname(__DIR__, 3) . '/db_config.php');
+
+// Establish database connection
+$db = mysqli_connect($config['host'], $config['username'], $config['password'], $config['database']);
 
 if(mysqli_connect_errno()){
     echo 'Database connection failed with following errors: ' . mysqli_connect_error();
