@@ -10,11 +10,14 @@ if(!isset($_SESSION['userID'])){
 else{
   $user = $_SESSION['userID'];
   $_SESSION['page']='size';
+
+  $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
+
 }
 ?>
 
 <style>
-  th {
+  #sizeTable {
     text-align: center;
   }
 </style>
@@ -54,6 +57,7 @@ else{
                                     <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
                                     <th>No.</th>
 									<th>Size</th>
+									<th>Jenis Alat</th>
 									<th>Actions</th>
 								</tr>
 							</thead>
@@ -84,6 +88,14 @@ else{
                   <label for="size">Size *</label>
                   <input type="text" class="form-control" name="size" id="size" placeholder="Enter Size" required>
                 </div>
+                <div class="form-group">
+                <label>Jenis Alat *</label>
+                <select class="form-control select2" id="jenisAlat" name="jenisAlat[]" multiple required>
+                    <?php while($rowA=mysqli_fetch_assoc($alats)){ ?>
+                    <option value="<?=$rowA['id'] ?>"><?=$rowA['alat'] ?></option>
+                    <?php } ?>
+                </select>
+                </div>
               </div>
             </div>
             <div class="modal-footer justify-content-between">
@@ -99,6 +111,15 @@ else{
 
 <script>
 $(function () {
+    $('.select2').each(function() {
+        $(this).select2({
+            allowClear: true,
+            placeholder: "Please Select",
+            // Conditionally set dropdownParent based on the element’s location
+            dropdownParent: $(this).closest('.modal').length ? $(this).closest('.modal-body') : undefined
+        });
+    });
+
     $('#selectAllCheckbox').on('change', function() {
         var checkboxes = $('#sizeTable tbody input[type="checkbox"]');
         checkboxes.prop('checked', $(this).prop('checked')).trigger('change');
@@ -126,6 +147,7 @@ $(function () {
             },
             { data: 'counter' },
             { data: 'size' },
+            { data: 'alat' },
             {
                 data: 'id',
                 render: function (data, type, row) {
@@ -181,6 +203,7 @@ $(function () {
     $('#addSize').on('click', function(){
         $('#sizeModal').find('#id').val("");
         $('#sizeModal').find('#size').val("");
+        $('#sizeModal').find('#jenisAlat').val("");
         $('#sizeModal').modal('show');
         
         $('#sizeForm').validate({
@@ -247,6 +270,7 @@ function edit(id){
         if(obj.status === 'success'){
             $('#sizeModal').find('#id').val(obj.message.id);
             $('#sizeModal').find('#size').val(obj.message.size);
+            $('#sizeModal').find('#jenisAlat').val(obj.message.alat).trigger('change');
             $('#sizeModal').modal('show');
             
             $('#sizeForm').validate({

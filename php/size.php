@@ -8,12 +8,17 @@ if(!isset($_SESSION['userID'])){
     echo 'window.location.href = "../login.php";</script>';
 }
 
-if(isset($_POST['size'])){
+if(isset($_POST['size']) && isset($_POST['jenisAlat'])){
     $size = filter_input(INPUT_POST, 'size', FILTER_SANITIZE_STRING);
+    $jenisAlat = null;
+
+    if(isset($_POST['jenisAlat']) && $_POST['jenisAlat']!=null && $_POST['jenisAlat']!=""){
+        $jenisAlat = json_encode($_POST['jenisAlat']);
+    }
 
     if($_POST['id'] != null && $_POST['id'] != ''){
-        if ($update_stmt = $db->prepare("UPDATE size SET size=? WHERE id=?")) {
-            $update_stmt->bind_param('ss', $size, $_POST['id']);
+        if ($update_stmt = $db->prepare("UPDATE size SET size=?, alat=? WHERE id=?")) {
+            $update_stmt->bind_param('sss', $size, $jenisAlat, $_POST['id']);
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
@@ -38,8 +43,8 @@ if(isset($_POST['size'])){
         }
     }
     else{
-        if ($insert_stmt = $db->prepare("INSERT INTO size (size) VALUES (?)")) {
-            $insert_stmt->bind_param('s', $size);
+        if ($insert_stmt = $db->prepare("INSERT INTO size (size, alat) VALUES (?, ?)")) {
+            $insert_stmt->bind_param('ss', $size, $jenisAlat);
             
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {

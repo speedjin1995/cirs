@@ -1,6 +1,7 @@
 <?php
 ## Database configuration
 require_once 'db_connect.php';
+require_once 'requires/lookup.php';
 
 ## Read value
 $draw = $_POST['draw'];
@@ -34,10 +35,20 @@ $data = array();
 $counter = 1;
 
 while($row = mysqli_fetch_assoc($empRecords)) {
+    $alats = json_decode($row['alat']);
+    $jenisAlat = "";
+
+    if(!empty($alats)){
+      foreach ($alats as $alat) {
+        $jenisAlat .= searchJenisAlatNameByid($alat, $db) . "<br>";
+      }
+    }
+
     $data[] = array( 
       "counter"=>$counter,
       "id"=>$row['id'],
-      "size"=>$row['size']
+      "size"=>$row['size'],
+      "alat"=>$jenisAlat
     );
 
     $counter++;
