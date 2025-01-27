@@ -2895,6 +2895,7 @@ $(function () {
   $('#extendModal').find('#jenisAlat').on('change', function(){
     alat = $(this).val();
     jalat = $(this).val();
+    alatId = $(this).val();
     $('#addtionalSection').html('');
 
     if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
@@ -2926,6 +2927,25 @@ $(function () {
       if(type == 'RESELLER'){
         $('#extendModal').find('#penentusanSemula').attr('required', true);
       }
+
+      $.post('php/getSizeFromJA.php', {jenisAlat: alatId}, function(data){
+        var obj = JSON.parse(data);
+
+        if(obj.status === 'success'){
+          $('#size').html('');
+
+          for(var i=0; i<obj.message.length; i++){
+            var size = obj.message[i];
+            $('#size').append('<option value="'+size.id+'">'+size.size+'</option>')
+          }
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+      });
     }
     // else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '4'){
     //   $('#addtionalSection').html($('#atsDetails').html());
@@ -3042,6 +3062,8 @@ $(function () {
     }
 
     if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '1'){
+      var alatId = $('#jenisAlat').val();
+
       $('#addtionalSection').html($('#atkDetails').html());
       loadCellCount = 0;
       $("#loadCellTable").html('');
@@ -3051,6 +3073,25 @@ $(function () {
       if(type == 'RESELLER'){
         $('#extendModal').find('#penentusanSemula').attr('required', true);
       }
+
+      $.post('php/getSizeFromJA.php', {jenisAlat: alatId}, function(data){
+        var obj = JSON.parse(data);
+
+        if(obj.status === 'success'){
+          $('#size').html('');
+
+          for(var i=0; i<obj.message.length; i++){
+            var size = obj.message[i]; 
+            $('#size').append('<option value="'+size.id+'">'+size.size+'</option>')
+          }
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+      });
     }
     // else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '4'){
     //   $('#addtionalSection').html($('#atsDetails').html());
@@ -3677,6 +3718,15 @@ function newEntry(){
   $('#extendModal').find('#poDate').val('');
   $('#extendModal').find('#cashBill').val("");
   $('#extendModal').find('#invoice').val('');
+  $('#extendModal').find('#penentusanBaru').val('');
+  $('#extendModal').find('#penentusanSemula').val('');
+  $('#extendModal').find('#kelulusanMSPK').val('').trigger('change');
+  $('#extendModal').find('#noMSPK').val('');
+  $('#extendModal').find('#platformCountry').val('').trigger('change');
+  $('#extendModal').find('#platformType').val('').trigger('change');
+  $('#extendModal').find('#size').val('').trigger('change');
+  $('#extendModal').find('#jenisPelantar').val('').trigger('change');
+  $('#extendModal').find('#others').val('');
 
   //Additonal field reset
   // var value = $('#extendModal').find('#additionalSection').find('#batuUjian').val();
@@ -4052,7 +4102,7 @@ function edit(id) {
             $('#extendModal').find('#nilaiJangka').val(obj.message.nilai_jangka).trigger('change');
             $('#extendModal').find('#diperbuatDaripada').val(obj.message.diperbuat_daripada).trigger('change');
           }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '11'){ console.log(obj.message);
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '11'){ 
             $('#addtionalSection').html($('#bapDetails').html());
             $('#extendModal').find('#pamNo').val(obj.message.pam_no).trigger('change');
             $('#extendModal').find('#kelulusanBentuk').val(obj.message.kelulusan_bentuk).trigger('change');
@@ -4256,7 +4306,7 @@ function edit(id) {
             $('#extendModal').find('#batuUjian').on('change', function(){
               var batuUjian = $(this).val();
               if (batuUjian == 'OTHER'){
-                $('#extendModal').find('#batuUjianLainDisplay').show(); console.log(obj.message.batu_ujian_lain);
+                $('#extendModal').find('#batuUjianLainDisplay').show(); 
                 $('#extendModal').find('#batuUjianLain').val(obj.message.batu_ujian_lain);
               }else{
                 $('#extendModal').find('#batuUjianLainDisplay').hide();
