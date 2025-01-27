@@ -272,7 +272,7 @@ function edit(id){
         if(obj.status === 'success'){
             $('#sizeModal').find('#id').val(obj.message.id);
             $('#sizeModal').find('#size').val(obj.message.size);
-            $('#sizeModal').find('#jenisAlat').val(obj.message.alat).trigger('change');
+            $('#sizeModal').find('#jenisAlat').val(JSON.parse(obj.message.alat)).trigger('change');
             $('#sizeModal').modal('show');
             
             $('#sizeForm').validate({
