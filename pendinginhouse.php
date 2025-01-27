@@ -709,6 +709,39 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
   </div>
 </div>
 
+<div class="modal fade" id="duplicateModal"> 
+  <div class="modal-dialog modal-xl" style="max-width: 50%;">
+    <div class="modal-content">
+
+      <form role="form" id="duplicateForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Duplicate Inhouse</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" class="form-control" id="id" name="id">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>No of records to duplicate *</label>
+                <input type="number" class="form-control" id="duplicateNo" name="duplicateNo" required>
+              </div>
+            </div>
+          </div>    
+        </div>
+
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="logModal"> 
   <div class="modal-dialog modal-xl" style="max-width: 80%;">
     <div class="modal-content">
@@ -931,7 +964,16 @@ $(function () {
       { data: 'validation_date' },
       { data: 'expired_date' },
       { data: 'calibrator' },
-      { data: 'status' },
+      { 
+        data: 'status',
+        render: function (data, type, row) {
+          if (row.duplicate == 'N'){
+            return data;
+          }else{
+            return data + '<br>(Duplicated)';
+          }
+        }
+      },
       {
         data: 'id',
         className: 'action-button',
@@ -942,6 +984,7 @@ $(function () {
             '</button>' +
             '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">' +
             '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>' +
+            '<a class="dropdown-item" id="duplicate'+ data + '" onclick="duplicate(' + data + ')"><i class="fa-solid fa-clone"></i> Duplicate</a>'+
             '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ')"><i class="fas fa-print"></i> Print</a>'+
             '<a class="dropdown-item" id="complete' + data + '" onclick="complete(' + data + ')"><i class="fas fa-check"></i> Complete</a>' +
             '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>' +
@@ -997,6 +1040,16 @@ $(function () {
       //   }
       // }
     ],
+    'createdRow': function (row, data, dataIndex) {
+      var expiredDate = new Date(data.expiredDate); // Parse into a Date object
+      if (data.duplicate === 'Y') {
+        $(row).css('color', '#800080');
+      }else if (data.renewed === 'Y') {
+        $(row).css('color', 'blue');
+      }else if (expiredDate < today){
+        $(row).css('color', 'red');
+      }
+    },
     "lengthMenu": [ [10, 25, 50, 100, 300, 600, 1000], [10, 25, 50, 100, 300, 600, 1000] ], // More show options
     "pageLength": 10 // Default rows per page
   });
@@ -1052,6 +1105,24 @@ $(function () {
           var obj = JSON.parse(data); 
           if(obj.status === 'success'){
             $('#cancelModal').modal('hide');
+            toastr["success"](obj.message, "Success:");
+            $('#weightTable').DataTable().ajax.reload(null, false);
+          }
+          else if(obj.status === 'failed'){
+            toastr["error"](obj.message, "Failed:");
+          }
+          else{
+            toastr["error"]("Something wrong when edit", "Failed:");
+          }
+
+          $('#spinnerLoading').hide();
+        });
+      }
+      else if($('#duplicateModal').hasClass('show')){
+        $.post('php/duplicateInhouse.php', $('#duplicateForm').serialize(), function(data){
+          var obj = JSON.parse(data); 
+          if(obj.status === 'success'){
+            $('#duplicateModal').modal('hide');
             toastr["success"](obj.message, "Success:");
             $('#weightTable').DataTable().ajax.reload(null, false);
           }
@@ -1219,7 +1290,16 @@ $(function () {
         { data: 'validation_date' },
         { data: 'expired_date' },
         { data: 'calibrator' },
-        { data: 'status' },
+        { 
+          data: 'status',
+          render: function (data, type, row) {
+            if (row.duplicate == 'N'){
+              return data;
+            }else{
+              return data + '<br>(Duplicated)';
+            }
+          }
+        },
         {
           data: 'id',
           className: 'action-button',
@@ -1230,6 +1310,7 @@ $(function () {
               '</button>' +
               '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">' +
               '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>' +
+              '<a class="dropdown-item" id="duplicate'+ data + '" onclick="duplicate(' + data + ')"><i class="fa-solid fa-clone"></i> Duplicate</a>'+
               '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ')"><i class="fas fa-print"></i> Print</a>'+
               '<a class="dropdown-item" id="complete' + data + '" onclick="complete(' + data + ')"><i class="fas fa-check"></i> Complete</a>' +
               '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>' +
@@ -1285,6 +1366,16 @@ $(function () {
         //   }
         // }
       ],
+      'createdRow': function (row, data, dataIndex) {
+        var expiredDate = new Date(data.expiredDate); // Parse into a Date object
+        if (data.duplicate === 'Y') {
+          $(row).css('color', '#800080');
+        }else if (data.renewed === 'Y') {
+          $(row).css('color', 'blue');
+        }else if (expiredDate < today){
+          $(row).css('color', 'red');
+        }
+      },
       "lengthMenu": [ [10, 25, 50, 100, 300, 600, 1000], [10, 25, 50, 100, 300, 600, 1000] ], // More show options
       "pageLength": 10 // Default rows per page
     });
@@ -2186,7 +2277,7 @@ function edit(id) {
       let varianceDecimalPart = variance.toString().split('.')[1];
       let varianceDecimalPoint = varianceDecimalPart.length;
       var unit = obj.message.capacityUnit;
-      if(obj.message.type == 'DIRECT'){
+      if(obj.message.type == 'DIRECT'){ console.log(obj.message.capacity);
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#dealer').val('');
@@ -2819,6 +2910,25 @@ function log(id) {
       toastr["error"]("Something wrong when pull data", "Failed:");
     }
     $('#spinnerLoading').hide();
+  });
+}
+
+function duplicate(id) {
+  $('#duplicateModal').find('#id').val(id);
+  $('#duplicateModal').modal('show');
+
+  $('#duplicateForm').validate({
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+      error.addClass('invalid-feedback');
+      element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass('is-invalid');
+    }
   });
 }
 </script>

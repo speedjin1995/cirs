@@ -116,12 +116,8 @@ else{
                         </div>
                         <div class="form-group col-4">
                             <label>Units *</label>
-                            <select class="form-control select2" style="width: 100%;" id="units" name="units" required disabled>
-                                <?php while($rowVA2=mysqli_fetch_assoc($units)){ ?>
-                                    <option value="<?=$rowVA2['id'] ?>"><?=$rowVA2['units'] ?></option>
-                                <?php } ?>
+                            <select class="form-control select2" style="width: 100%;" id="units" name="units" required>
                             </select>
-                            <input type="hidden" id="unitsHidden" name="unitsHidden">
                         </div>
                         <div class="form-group col-4">
                             <label for="variance">Variance +/- *</label>
@@ -293,10 +289,30 @@ $(function () {
 
     $('#capacityModal').find('#capacity').change(function(){
         var id = $(this).val();
-        $.post('php/getCapacity.php', {userID: id}, function(data){
+        $.post('php/getCapacity.php', {userID: id, standardTag: "Y"}, function(data){
             var obj = JSON.parse(data);
-            $('#capacityModal').find('#units').val(obj.message.units).trigger('change');
-            $('#capacityModal').find('#unitsHidden').val(obj.message.units);
+            var units = [
+                {value: obj.message.units, text: obj.message.mainUnit}, 
+                {value: obj.message.division_unit, text: obj.message.divisionUnit}
+            ];
+
+            $('#capacityModal').find('#units').empty();
+            
+            // Use a Set to track distinct values
+            const seenValues = new Set();
+
+            units.forEach(unit => {
+                if (unit.value === undefined || unit.text === undefined) {
+                    return; // Skip this iteration
+                }
+
+                if (!seenValues.has(unit.value)) {
+                    // Add the value to the Set and append the option
+                    seenValues.add(unit.value);
+                    $('#capacityModal').find('#units').append(`<option value="${unit.value}">${unit.text}</option>`);
+                }
+            });
+
         });
     });
 
@@ -412,7 +428,9 @@ function edit(id){
             $('#capacityModal').find('#satemperature').val(obj.message.standard_avg_temp);
             $('#capacityModal').find('#relHumidity').val(obj.message.relative_humidity);
             $('#capacityModal').find('#capacity').val(obj.message.capacity).trigger('change');
-            $('#capacityModal').find('#units').val(obj.message.unit).trigger('change');
+            setTimeout(function(){
+                $('#capacityModal').find('#units').val(obj.message.unit).trigger('change');
+            }, 1000);
             $('#capacityModal').find('#variance').val(obj.message.variance);
             $('#capacityModal').find('#tester1').val(obj.message.test_1);
             $('#capacityModal').find('#tester2').val(obj.message.test_2);

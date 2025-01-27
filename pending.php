@@ -2021,10 +2021,13 @@ $(function () {
       // }
     ],
     'createdRow': function (row, data, dataIndex) {
+      var dueDate = new Date(data.dueDate); // Parse into a Date object
       if (data.duplicate === 'Y') {
-          $(row).css('color', 'red');
+          $(row).css('color', '#800080');
       } else if (data.renewed === 'Y') {
           $(row).css('color', 'blue');
+      } else if (dueDate < today){
+          $(row).css('color', 'red');
       }
     },
     "lengthMenu": [ [10, 25, 50, 100, 300, 600, 1000], [10, 25, 50, 100, 300, 600, 1000] ], // More show options
@@ -2326,11 +2329,13 @@ $(function () {
         // }
       ],
       'createdRow': function (row, data, dataIndex) {
+        var dueDate = new Date(data.dueDate);
         if (data.duplicate === 'Y') {
-          $(row).css('color', 'red');
-        } 
-        else if (data.renewed === 'Y') {
-          $(row).css('color', 'blue');
+            $(row).css('color', '#800080');
+        } else if (data.renewed === 'Y') {
+            $(row).css('color', 'blue');
+        } else if (dueDate < today){
+            $(row).css('color', 'red');
         }
       },
       "lengthMenu": [ [10, 25, 50, 100, 300, 600, 1000], [10, 25, 50, 100, 300, 600, 1000] ], // More show options

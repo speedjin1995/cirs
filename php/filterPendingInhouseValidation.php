@@ -140,9 +140,10 @@ while($row = mysqli_fetch_assoc($validationRecords)) {
     "capacity"=>$row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '',
     "auto_cert_no"=>$row['auto_cert_no'] ?? '',
     "expired_date"=>$row['expired_date'] != null ? convertDatetimeToDate($row['expired_date']) : '',
+    "expiredDate"=>$row['expired_date'] != null ? $row['expired_date'] : '',
     "calibrator"=>$row['size'] != null ? searchStaffNameById($row['calibrator'], $db) : '',
     "status"=>$row['status'] ?? '',
-
+    "duplicate"=>$row['duplicate'] ?? 'N',
     // "validate_by"=>$row['validate_by'] != null ? searchValidatorNameById($row['validate_by'], $db) : '',
     // "customer_code"=>$row['customer'] != null ? searchCustCodeById($row['customer'], $db) : '',
     // "address1"=>$address1,
