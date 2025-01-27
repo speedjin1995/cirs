@@ -2671,6 +2671,25 @@ $(function () {
       if(type == 'RESELLER'){
         $('#extendModal').find('#penentusanSemula').attr('required', true);
       }
+
+      $.post('php/getSizeFromJA.php', {jenisAlat: alatId}, function(data){
+        var obj = JSON.parse(data);
+
+        if(obj.status === 'success'){
+          $('#size').html('');
+
+          for(var i=0; i<obj.message.length; i++){
+            var size = obj.message[i];
+            $('#size').append('<option value="'+size.id+'">'+size.size+'</option>')
+          }
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+      });
     }
     // else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '4'){
     //   $('#addtionalSection').html($('#atsDetails').html());
@@ -2791,6 +2810,25 @@ $(function () {
       if(type == 'RESELLER'){
         $('#extendModal').find('#penentusanSemula').attr('required', true);
       }
+
+      $.post('php/getSizeFromJA.php', {jenisAlat: alatId}, function(data){
+        var obj = JSON.parse(data);
+
+        if(obj.status === 'success'){
+          $('#size').html('');
+
+          for(var i=0; i<obj.message.length; i++){
+            var size = obj.message[i];
+            $('#size').append('<option value="'+size.id+'">'+size.size+'</option>')
+          }
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+      });
     }
     // else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '4'){
     //   $('#addtionalSection').html($('#atsDetails').html());
@@ -3735,12 +3773,12 @@ function edit(id) {
               }else{
                 $('#extendModal').find('#diperbuatDaripadaOtherDisplay').hide();
               }
-            }); console.log(obj.message.nilai_jangka);
+            });
 
             $('#extendModal').find('#nilaiJangka').val(obj.message.nilai_jangka).trigger('change');
             $('#extendModal').find('#diperbuatDaripada').val(obj.message.diperbuat_daripada).trigger('change');
           }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '11'){ console.log(obj.message);
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '11'){ 
             $('#addtionalSection').html($('#bapDetails').html());
             $('#extendModal').find('#pamNo').val(obj.message.pam_no).trigger('change');
             $('#extendModal').find('#kelulusanBentuk').val(obj.message.kelulusan_bentuk).trigger('change');
@@ -3932,7 +3970,7 @@ function edit(id) {
             $('#extendModal').find('#batuUjian').on('change', function(){
               var batuUjian = $(this).val();
               if (batuUjian == 'OTHER'){
-                $('#extendModal').find('#batuUjianLainDisplay').show(); console.log(obj.message.batu_ujian_lain);
+                $('#extendModal').find('#batuUjianLainDisplay').show(); 
                 $('#extendModal').find('#batuUjianLain').val(obj.message.batu_ujian_lain);
               }else{
                 $('#extendModal').find('#batuUjianLainDisplay').hide();
