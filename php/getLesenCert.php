@@ -42,7 +42,7 @@ if(isset($_POST['companyId'])){
                             .
                             //Download Button
                             '<div class="col-2">
-                                <a href="' . $file_path . '" target="_blank" class="btn btn-success btn-sm" role="button">
+                                <a href="view_file.php?file=' . $file_path . '" target="_blank" class="btn btn-success btn-sm" role="button">
                                     <i class="fa fa-file-pdf-o"></i>
                                 </a>
                             </div>'
