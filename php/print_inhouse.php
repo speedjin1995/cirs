@@ -19,7 +19,7 @@ if(isset($_POST['id'])){
             $companyName = $row2['name'];
             $certno_lesen = $row2['certno_lesen'];
             $bless_serahanno = $row2['bless_serahanno'];
-            $inhouseFilePath = $row2['inhouse'];
+            $inhouseFilePath = 'scm/'.$row2['inhouse'];
             $failno = $row2['failno'];
             $person_incharge = $row2['person_incharge'];
 
