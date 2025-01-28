@@ -110,12 +110,12 @@ else{
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="division">Division *</label>
-                                    <input type="number" class="form-control" name="division" id="division" placeholder="Enter Division" required>
+                                    <label for="division">Division</label>
+                                    <input type="number" class="form-control" name="division" id="division" placeholder="Enter Division">
                                 </div>
                                 <div class="form-group">
-                                    <label>Units *</label>
-                                    <select class="form-control select2" style="width: 100%;" id="unitD" name="unitD" required>
+                                    <label>Units</label>
+                                    <select class="form-control select2" style="width: 100%;" id="unitD" name="unitD">
                                         <?php while($rowVA2=mysqli_fetch_assoc($units2)){ ?>
                                             <option value="<?=$rowVA2['id'] ?>"><?=$rowVA2['units'] ?></option>
                                         <?php } ?>

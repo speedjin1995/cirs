@@ -53,11 +53,15 @@ if(isset($_POST['range_type'], $_POST['capacity'], $_POST['unit'])){
     }
 
     if($range_type == 'SINGLE'){
-        $capacityName = $capacity.$unitString.' X '.$division.$dunitString;
+        if ($division){
+            $capacityName = $capacity.$unitString.' X '.$division.$dunitString;
+        }else{
+            $capacityName = $capacity.$unitString;
+        }
     }
     else{
         $capacityName = $capacity.$unitString.'X'.$division.$dunitString.' ~ '.$capacity2.$unitString2.'X'.$division2.$dunitString2;
-    }
+    } 
 
     if($_POST['id'] != null && $_POST['id'] != ''){
         if ($update_stmt = $db->prepare("UPDATE `capacity` SET range_type=?, `name`=?, `capacity`=?, `units`=?, `division`=?, `division_unit`=?, `capacity2`=?, `units2`=?, `division2`=?, `division_unit2`=? WHERE id=?")) {
