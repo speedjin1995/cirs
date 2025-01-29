@@ -362,6 +362,54 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 			} 
 			else{
 				$stampingId = $_POST['id'];
+
+				$uploadQuotationAttachment = null;
+				if(isset($_FILES['uploadQuotationAttachment']) && $_FILES['uploadQuotationAttachment']!=null && $_FILES['uploadQuotationAttachment']!=""){
+					$uploadQuotationAttachment = $_FILES['uploadQuotationAttachment'];
+
+					$ds = DIRECTORY_SEPARATOR;
+					if($uploadQuotationAttachment['error'] === 0){
+						# Delete Existing File 
+						// if(isset($_POST['quotationFilePath']) && $_POST['quotationFilePath']!=null && $_POST['quotationFilePath']!=""){
+						// 	$quotationFilePath = $_POST['quotationFilePath'];
+						// 	if (file_exists($quotationFilePath)) {
+						// 		unlink($quotationFilePath);
+						// 	}
+						// }
+
+						$timestamp = time();
+						$uploadDir = '../uploads/stamping/'; // Directory to store uploaded files
+						$folderDir = dirname(__DIR__, 2) . '/' . $uploadDir;
+						// Check if folder exists, if not, create it with correct permissions
+						if (!is_dir($folderDir)) {
+							mkdir($folderDir, 0777, true); // true allows recursive directory creation
+						}
+
+						$filename = $timestamp . '_' . basename($_FILES['uploadQuotationAttachment']['name']);
+						$uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
+						$tempFile = $_FILES['uploadQuotationAttachment']['tmp_name'];
+
+						// Move the uploaded file to the target directory
+						if (move_uploaded_file($tempFile, $uploadFile)) {
+							$dbDir = "../uploads/stamping/";
+							$quotationFilePath = $dbDir . $filename;
+							// Update certificate data in the database
+							if ($stmt3 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+								$stmt3->bind_param('ss', $filename, $quotationFilePath);
+								$stmt3->execute();
+								$fid = $stmt3->insert_id;
+								$stmt3->close();
+								
+								if ($stmtf = $db->prepare("UPDATE stamping SET quotation_attachment=? WHERE id=?")) {
+									$stmtf->bind_param('ss', $fid, $stampingId);
+									$stmtf->execute();
+									$stmtf->close();
+								}
+							} 
+						} 
+					}
+				}
+
 				$stampExtQuery = "SELECT * FROM stamping_ext WHERE stamp_id = $stampingId";
                 $stampExtDetail = mysqli_query($db, $stampExtQuery);
                 $stampExtRow = mysqli_fetch_assoc($stampExtDetail);
