@@ -231,23 +231,31 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 
 				foreach ($attachments as $index => $file) {
 					$timestamp = time();
-					$uploadDir = $storeFolder . $ds;
-					$uploadFile = $uploadDir . $timestamp . '_' . basename($file['name']);
+					$uploadDir = $storeFolder . $ds; // Directory to store uploaded files
+					$filename = $timestamp . '_' . basename($file['name']);
+					$uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
 					$tempFile = $file['tmp_name'];
 
 					// Move the uploaded file to the target directory
 					if (move_uploaded_file($tempFile, $uploadFile)) {
-						$certFilePath = $uploadFile;
+						$certFilePath = $uploadDir . $filename;
 
-						// Prepare the column name for the current file path
-						$columnName = "cert_file_path" . $index;
+						if ($stmt4 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+							$stmt4->bind_param('ss', $filename, $certFilePath);
+							$stmt4->execute();
+							$fid = $stmt4->insert_id;
+							$stmt4->close();
+							
+							// Prepare the column name based on the index
+							$columnName = "cert_file_path" . $index;
+							// Update the specific certificate data column in the database
+							$query = "UPDATE other_validations SET $columnName=? WHERE id=?";
 
-						// Update the specific certificate data column in the database
-						$query = "UPDATE other_validations SET $columnName=? WHERE id=?";
-						if ($stmt2 = $db->prepare($query)) {
-							$stmt2->bind_param('ss', $certFilePath, $_POST['id']);
-							$stmt2->execute();
-							$stmt2->close();
+							if ($stmt2 = $db->prepare($query)) {
+								$stmt2->bind_param('ss', $fid, $validation_id);
+								$stmt2->execute();
+								$stmt2->close();
+							} 
 						}
 					}
 				}
@@ -356,23 +364,31 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 				foreach ($attachments as $index => $file) {
 					$timestamp = time();
 					$uploadDir = $storeFolder . $ds; // Directory to store uploaded files
-					$uploadFile = $uploadDir . $timestamp . '_' . basename($file['name']);
+					$filename = $timestamp . '_' . basename($file['name']);
+					$uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
 					$tempFile = $file['tmp_name'];
 
 					// Move the uploaded file to the target directory
 					if (move_uploaded_file($tempFile, $uploadFile)) {
-						$certFilePath = $uploadFile;
+						$certFilePath = $uploadDir . $filename;
 
-						// Prepare the column name based on the index
-						$columnName = "cert_file_path" . $index;
+						if ($stmt4 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+							$stmt4->bind_param('ss', $filename, $certFilePath);
+							$stmt4->execute();
+							$fid = $stmt4->insert_id;
+							$stmt4->close();
+							
+							// Prepare the column name based on the index
+							$columnName = "cert_file_path" . $index;
+							// Update the specific certificate data column in the database
+							$query = "UPDATE other_validations SET $columnName=? WHERE id=?";
 
-						// Update the specific certificate data column in the database
-						$query = "UPDATE other_validations SET $columnName=? WHERE id=?";
-						if ($stmt2 = $db->prepare($query)) {
-							$stmt2->bind_param('ss', $certFilePath, $validation_id);
-							$stmt2->execute();
-							$stmt2->close();
-						} 
+							if ($stmt2 = $db->prepare($query)) {
+								$stmt2->bind_param('ss', $fid, $validation_id);
+								$stmt2->execute();
+								$stmt2->close();
+							} 
+						}
 					}
 				}
 

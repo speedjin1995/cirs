@@ -2073,7 +2073,7 @@ function format (row) {
         let filePath = row[`certFilePath${i}`];
         if (filePath) {
             returnString += `
-                <a href="${filePath}" target="_blank" class="btn btn-success btn-sm" role="button" title="View Certificate Attachment ${i}">
+                <a href="view_file.php?file=${filePath}" target="_blank" class="btn btn-success btn-sm" role="button" title="View Certificate Attachment ${i}">
                     <i class="fa fa-file-pdf-o"></i>
                 </a> `;
         }
@@ -2281,7 +2281,7 @@ function edit(id) {
           // Check if the certFilePath exists and update the modal
           if (obj.message[`certFilePath${i}`]) {
               const certFilePath = obj.message[`certFilePath${i}`];
-              $('#extendModal').find(`#viewCalibrationPdf${i}`).attr('href', certFilePath).show();
+              $('#extendModal').find(`#viewCalibrationPdf${i}`).attr('href', 'view_file.php?file='+certFilePath).show();
               $('#extendModal').find(`#calibrationFilePath${i}`).val(certFilePath);
           }
         }
