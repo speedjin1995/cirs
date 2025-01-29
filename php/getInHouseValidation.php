@@ -95,6 +95,7 @@ if(isset($_POST['validationId'])){
                     $message['pic_phone'] = $pic_phone;
                     $message['auto_form_no'] = $row['auto_form_no'] ?? '';
                     $message['machines'] = $row['machines'] != null ? searchMachineNameById($row['machines'], $db) : '';
+                    $message['alat'] = $row['jenis_alat'] != null ? searchAlatNameById($row['jenis_alat'], $db) : '';
                     $message['unit_serial_no'] = $row['unit_serial_no'];
                     $message['manufacturing'] = $row['manufacturing'];
                     $message['brand'] = $row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '';
