@@ -1915,7 +1915,7 @@ function format (row) {
         let filePath = row[`certFilePath${i}`];
         if (filePath) {
             returnString += `
-                <a href="${filePath}" target="_blank" class="btn btn-success btn-sm" role="button" title="View Certificate Attachment ${i}">
+                <a href="'view_file.php?file=${filePath}" target="_blank" class="btn btn-success btn-sm" role="button" title="View Certificate Attachment ${i}">
                     <i class="fa fa-file-pdf-o"></i>
                 </a> `;
         }
@@ -2123,12 +2123,12 @@ function edit(id) {
             $("#loadCalibrationTable").find('#no:last').attr('name', 'no['+loadCalibrationCount+']').attr("id", "no" + loadCalibrationCount).val(item.no);
             $("#loadCalibrationTable").find('#lastCalibrationDate:last').attr('name', 'lastCalibrationDate['+loadCalibrationCount+']').attr("id", "lastCalibrationDate" + loadCalibrationCount).val(item.lastCalibrationDate);
             $("#loadCalibrationTable").find('#uploadlastCalibrationPdf:last').attr('name', 'uploadlastCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadlastCalibrationPdf" + loadCalibrationCount).removeAttr('required');
-            $("#loadCalibrationTable").find('#viewLastCalibrationPdf:last').attr('name', 'viewLastCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewLastCalibrationPdf" + loadCalibrationCount).attr('href', item.lastCalibrationFilePath).show();
+            $("#loadCalibrationTable").find('#viewLastCalibrationPdf:last').attr('name', 'viewLastCalibrationPdf['+loadCalibrationCount+']').attr("id", "viewLastCalibrationPdf" + loadCalibrationCount).attr('href', 'view_file.php?file='+item.lastCalibrationFilePath).show();
             $("#loadCalibrationTable").find('#lastCalibrationFilePath:last').attr('name', 'lastCalibrationFilePath['+loadCalibrationCount+']').attr("id", "lastCalibrationFilePath" + loadCalibrationCount).val(item.lastCalibrationFilePath);
 
             $("#loadCalibrationTable").find('#expiredCalibrationDate:last').attr('name', 'expiredCalibrationDate['+loadCalibrationCount+']').attr("id", "expiredCalibrationDate" + loadCalibrationCount).val(item.expiredCalibrationDate);
             $("#loadCalibrationTable").find('#uploadexpiredCalibrationPdf:last').attr('name', 'uploadexpiredCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadexpiredCalibrationPdf" + loadCalibrationCount).removeAttr('required');
-            $("#loadCalibrationTable").find('#viewExpiredCalibrationPdf:last').attr('name', 'viewExpiredCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadexpiredCalibrationPdf" + loadCalibrationCount).attr('href', item.expiredCalibrationFilePath).show();
+            $("#loadCalibrationTable").find('#viewExpiredCalibrationPdf:last').attr('name', 'viewExpiredCalibrationPdf['+loadCalibrationCount+']').attr("id", "uploadexpiredCalibrationPdf" + loadCalibrationCount).attr('href', 'view_file.php?file='+item.expiredCalibrationFilePath).show();
             $("#loadCalibrationTable").find('#expiredCalibrationFilePath:last').attr('name', 'expiredCalibrationFilePath['+loadCalibrationCount+']').attr("id", "expiredCalibrationFilePath" + loadCalibrationCount).val(item.expiredCalibrationFilePath);
 
             loadCalibrationCount++;
