@@ -1883,19 +1883,16 @@ function format (row) {
       <p><strong>Unit Serial No:</strong> ${row.unit_serial_no}</p>
       <p><strong>Brand:</strong> ${row.brand}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
-      <div class="row">`;
-
-      if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
-        returnString += `<div class="col-1"><button title="Revert" type="button" id="revertBtn${row.id}" onclick="revertToPending(${row.id})" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>
+      <p><strong>Jenis Alat:</strong> ${row.alat}</p>
+      <div class="row">
+        <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
+        <div class="col-1"><button title="Complete" type="button" id="complete${row.id}" onclick="complete(${row.id})" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>
         <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
-        <div class="col-1"><button title="Delete" type="button" id="delete${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>`;
-      }else{
-        returnString += `
-        <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>`;
-      }
-      returnString += `</div>
+        <div class="col-1"><button title="Cancelled" type="button" id="deactivate${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
+      </div>
     </div>
-  </div>`;
+  </div><br>
+  `;
 
   if (row.lastCalibrationDate && row.expiredCalibrationDate && row.auto_form_no) {
     returnString += `

@@ -399,6 +399,19 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 </div>
                 <div class="col-3">
                   <div class="form-group">
+                    <label>Jenis Alat *</label>
+                    <select class="form-control select2" style="width: 100%;" id="jenisAlat" name="jenisAlat" required disabled>
+                      <option selected="selected"></option>
+                      <?php while($rowA=mysqli_fetch_assoc($alats)){ ?>
+                        <option value="<?=$rowA['id'] ?>"><?=$rowA['alat'] ?></option>
+                      <?php } ?>
+                    </select>
+
+                    <input type="hidden" id="alatHidden" name="alatHidden">
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
                     <label>Brand *</label>
                     <select class="form-control select2" style="width: 100%;" id="brand" name="brand" required>
                       <option selected="selected"></option>
@@ -478,9 +491,9 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
               <div class="row">
                 <div class="col-3">
                   <div class="form-group">
-                    <label>Last Calibration Date</label>
+                    <label>Last Calibration Date *</label>
                     <div class='input-group date' id="datePicker" data-target-input="nearest">
-                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker" id="lastCalibrationDate" name="lastCalibrationDate"/>
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker" id="lastCalibrationDate" name="lastCalibrationDate" required/>
                       <div class="input-group-append" data-target="#datePicker" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                       </div>
@@ -1846,6 +1859,8 @@ $(function () {
   });
 
   $('#extendModal').find('#machineType').on('change', function(){
+    var brandId = $(this).find(":selected").val();
+
     if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
       $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
         var obj = JSON.parse(data);
@@ -1862,6 +1877,31 @@ $(function () {
           toastr["error"]("Something wrong when pull data", "Failed:");
         }
         //$('#spinnerLoading').hide();
+      });
+    }
+
+    if(brandId){
+      $.post('php/getJAFromMT.php', {id: brandId}, function (data){
+        var obj = JSON.parse(data);
+
+        if(obj.status === 'success'){
+          $('#jenisAlat').html('');
+          // $('#jenisAlat').append('<option selected="selected">-</option>');
+
+          for(var i=0; i<obj.message.length; i++){
+            var modelInfo = obj.message[i];
+            $('#jenisAlat').append('<option value="'+modelInfo.id+'">'+modelInfo.jenis_alat+'</option>')
+          }
+
+          $('#alatHidden').val(modelInfo.id).trigger('change');
+          $('#extendModal').trigger('jaIsLoaded');
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
       });
     }
   });
@@ -2026,6 +2066,7 @@ function format (row) {
       <p><strong>Unit Serial No:</strong> ${row.unit_serial_no}</p>
       <p><strong>Brand:</strong> ${row.brand}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
+      <p><strong>Jenis Alat:</strong> ${row.alat}</p>
       <div class="row">
         <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
         <div class="col-1"><button title="Complete" type="button" id="complete${row.id}" onclick="complete(${row.id})" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>
@@ -2248,9 +2289,10 @@ function edit(id) {
         $('#extendModal').find('#companyText').val('');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#autoFormNo').val(obj.message.auto_form_no);
+        $('#extendModal').find('#alatHidden').val(obj.message.alat);
         setTimeout(function(){
           $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
-        }, 1000);
+        }, 1500);
         $('#extendModal').find('#machineType').val(obj.message.machines).trigger('change');
         $('#extendModal').find('#serial').val(obj.message.unit_serial_no);
         $('#extendModal').find('#manufacturing').val(obj.message.manufacturing).trigger('change');

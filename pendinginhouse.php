@@ -418,6 +418,19 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 </div>
                 <div class="col-3">
                   <div class="form-group">
+                    <label>Jenis Alat *</label>
+                    <select class="form-control select2" style="width: 100%;" id="jenisAlat" name="jenisAlat" required disabled>
+                      <option selected="selected"></option>
+                      <?php while($rowA=mysqli_fetch_assoc($alats)){ ?>
+                        <option value="<?=$rowA['id'] ?>"><?=$rowA['alat'] ?></option>
+                      <?php } ?>
+                    </select>
+
+                    <input type="hidden" id="alatHidden" name="alatHidden">
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
                     <label>Manufacturing *</label>
                     <select class="form-control select2" style="width: 100%;" id="manufacturing" name="manufacturing" required>
                       <option selected="selected"></option>
@@ -1781,6 +1794,8 @@ $(function () {
   });
 
   $('#extendModal').find('#machineType').on('change', function(){
+    var brandId = $(this).find(":selected").val();
+
     if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
       $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
         var obj = JSON.parse(data);
@@ -1797,6 +1812,31 @@ $(function () {
           toastr["error"]("Something wrong when pull data", "Failed:");
         }
         //$('#spinnerLoading').hide();
+      });
+    }
+
+    if(brandId){
+      $.post('php/getJAFromMT.php', {id: brandId}, function (data){
+        var obj = JSON.parse(data);
+
+        if(obj.status === 'success'){
+          $('#jenisAlat').html('');
+          // $('#jenisAlat').append('<option selected="selected">-</option>');
+
+          for(var i=0; i<obj.message.length; i++){
+            var modelInfo = obj.message[i];
+            $('#jenisAlat').append('<option value="'+modelInfo.id+'">'+modelInfo.jenis_alat+'</option>')
+          }
+
+          $('#alatHidden').val(modelInfo.id).trigger('change');
+          $('#extendModal').trigger('jaIsLoaded');
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
       });
     }
   });
@@ -1961,6 +2001,7 @@ function format (row) {
     <!-- Machine Section -->
     <div class="col-6">
       <p><strong>Machines / Instruments:</strong> ${row.machines}</p>
+      <p><strong>Jenis Alat:</strong> ${row.alat}</p>
       <p><strong>Inhouse Date:</strong> ${row.validation_date}</p>
       <p><strong>Manufacturing:</strong> ${row.manufacturing}</p>
       <p><strong>Brand:</strong> ${row.brand}</p>
@@ -2277,7 +2318,7 @@ function edit(id) {
       let varianceDecimalPart = variance.toString().split('.')[1];
       let varianceDecimalPoint = varianceDecimalPart.length;
       var unit = obj.message.capacityUnit;
-      if(obj.message.type == 'DIRECT'){ console.log(obj.message.capacity);
+      if(obj.message.type == 'DIRECT'){
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#dealer').val('');
@@ -2668,6 +2709,8 @@ function edit(id) {
     }
     $('#spinnerLoading').hide();
   });
+
+  $('#spinnerLoading').hide(); 
 
   // Hide the spinner when the modal is closed
   // $('#extendModal').on('hidden.bs.modal', function() {

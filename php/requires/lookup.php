@@ -442,4 +442,20 @@ function searchReasonById($value, $db) {
 
     return $id;
 }
+
+function searchFilePathById($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM files WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['filepath'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
 ?>

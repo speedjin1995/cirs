@@ -392,6 +392,19 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 </div>
                 <div class="col-3">
                   <div class="form-group">
+                    <label>Jenis Alat *</label>
+                    <select class="form-control select2" style="width: 100%;" id="jenisAlat" name="jenisAlat" required disabled>
+                      <option selected="selected"></option>
+                      <?php while($rowA=mysqli_fetch_assoc($alats)){ ?>
+                        <option value="<?=$rowA['id'] ?>"><?=$rowA['alat'] ?></option>
+                      <?php } ?>
+                    </select>
+
+                    <input type="hidden" id="alatHidden" name="alatHidden">
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
                     <label>Brand *</label>
                     <select class="form-control select2" style="width: 100%;" id="brand" name="brand" required>
                       <option selected="selected"></option>
@@ -448,18 +461,6 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                         <option value="<?=$rowSI['id'] ?>"><?=$rowSI['size'] ?></option>
                       <?php } ?>
                     </select>
-                  </div>
-                </div>
-                <div class="col-3">
-                  <div class="form-group">
-                    <label>Create Date </label>
-                    <div class='input-group date' id="datePicker3" data-target-input="nearest">
-                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker3" id="validationDate" name="validationDate"/>
-                      <div class="input-group-append" data-target="#datePicker3" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                      </div>
-                    </div>
-                    <!-- <input class="form-control" type="text" placeholder="dd/mm/yyyy" id="validationDate" name="validationDate"> -->
                   </div>
                 </div>
               </div>
@@ -1766,6 +1767,8 @@ $(function () {
   });
 
   $('#extendModal').find('#machineType').on('change', function(){
+    var brandId = $(this).find(":selected").val();
+
     if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
       $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
         var obj = JSON.parse(data);
@@ -1782,6 +1785,31 @@ $(function () {
           toastr["error"]("Something wrong when pull data", "Failed:");
         }
         //$('#spinnerLoading').hide();
+      });
+    }
+
+    if(brandId){
+      $.post('php/getJAFromMT.php', {id: brandId}, function (data){
+        var obj = JSON.parse(data);
+
+        if(obj.status === 'success'){
+          $('#jenisAlat').html('');
+          // $('#jenisAlat').append('<option selected="selected">-</option>');
+
+          for(var i=0; i<obj.message.length; i++){
+            var modelInfo = obj.message[i];
+            $('#jenisAlat').append('<option value="'+modelInfo.id+'">'+modelInfo.jenis_alat+'</option>')
+          }
+
+          $('#alatHidden').val(modelInfo.id).trigger('change');
+          $('#extendModal').trigger('jaIsLoaded');
+        }
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
       });
     }
   });
@@ -2044,13 +2072,16 @@ function format (row) {
       <p><strong>Unit Serial No:</strong> ${row.unit_serial_no}</p>
       <p><strong>Brand:</strong> ${row.brand}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
+      <p><strong>Jenis Alat:</strong> ${row.alat}</p>
       <div class="row">
         <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
+        <div class="col-1"><button title="Complete" type="button" id="complete${row.id}" onclick="complete(${row.id})" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>
         <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
         <div class="col-1"><button title="Cancelled" type="button" id="deactivate${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
       </div>
     </div>
-  </div>`;
+  </div><br>
+  `;
 
   if (row.lastCalibrationDate && row.expiredCalibrationDate && row.auto_form_no) {
     returnString += `

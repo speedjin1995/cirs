@@ -102,7 +102,8 @@ if(isset($_POST['validationId'])){
                     $message['machines'] = $row['machines'] != null ? searchMachineNameById($row['machines'], $db) : '';
                     $message['unit_serial_no'] = $row['unit_serial_no'];
                     $message['manufacturing'] = $row['manufacturing'];
-                    $message['brand'] = $row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '';
+                    $message['alat'] = $row['jenis_alat'] != null ? searchAlatNameById(($row['jenis_alat']), $db) : '';
+                    $message['brand'] = $row['brand'] != null ? searchBrandNameById($row['brand'], $db) : ''; 
                     $message['model'] = $row['model'] != null ? searchModelNameById($row['model'], $db) : '';
                     $message['capacity'] = $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '';
                     $message['size'] = $row['size'] != null ? searchSizeNameById($row['size'], $db) : '';

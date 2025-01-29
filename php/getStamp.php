@@ -140,6 +140,8 @@ if(isset($_POST['userID'])){
                     $message['due_date'] = $row['due_date'] != null ? convertDatetimeToDate($row['due_date']) : '';
                     $message['customer_pic'] = $row['customer_pic'];
                     $message['quotation_no'] = $row['quotation_no'] ?? '';
+                    $message['quotation_attachment'] = $row['quotation_attachment'] ?? '';
+                    $message['quotation_filepath'] = searchFilePathById($row['quotation_attachment'], $db) ?? '';
                     $message['quotation_date'] = $row['quotation_date'] != null ? convertDatetimeToDate($row['quotation_date']) : '';
                     $message['purchase_no'] = $row['purchase_no'] ?? '';
                     $message['purchase_date'] = $row['purchase_date'] != null ? convertDatetimeToDate($row['purchase_date']) : '';
@@ -238,6 +240,8 @@ if(isset($_POST['userID'])){
                     $message['customer_pic'] = $row['customer_pic'];
                     $message['quotation_no'] = $row['quotation_no'];
                     $message['quotation_date'] = $row['quotation_date'];
+                    $message['quotation_attachment'] = $row['quotation_attachment'] ?? '';
+                    $message['quotation_filepath'] = searchFilePathById($row['quotation_attachment'], $db) ?? '';
                     $message['purchase_no'] = $row['purchase_no'];
                     $message['purchase_date'] = $row['purchase_date'];
                     $message['remarks'] = $row['remarks'];

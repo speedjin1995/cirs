@@ -363,7 +363,7 @@ else{
 <div class="modal fade" id="extendModal">
   <div class="modal-dialog modal-xl" style="max-width: 90%;">
     <div class="modal-content">
-      <form role="form" id="extendForm">
+      <form role="form" id="extendForm" enctype="multipart/form-data">
         <div class="modal-header bg-gray-dark color-palette">
           <h4 class="modal-title">Stamping Forms</h4>
           <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
@@ -784,6 +784,28 @@ else{
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                       </div>
                     </div>
+                  </div>
+                </div>
+
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Upload Quotation Attachment</label>
+                    <div id="newQuotation" style="display:none">
+                      <input type="file" class="form-control file-input" id="uploadQuotationAttachment" name="uploadQuotationAttachment">
+                    </div>
+
+                    <div id="editQuotation" style="display:none">
+                      <div class="d-flex">
+                        <div class="col-10">
+                          <input type="file" class="form-control file-input" id="uploadQuotationAttachment" name="uploadQuotationAttachment">
+                        </div>
+                        <div class="col-2 mt-1">
+                          <a href="" id="viewQuotation" name="viewQuotation" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <input type="text" id="quotationFilePath" name="quotationFilePath" style="display:none">
                   </div>
                 </div>
                 <div class="col-4">
@@ -2079,29 +2101,78 @@ $(function () {
   //   }
   // });
 
+  // Bind form submission handler once
+	$('#extendForm').off('submit').on('submit', function(e) {
+		e.preventDefault(); 
+		var formData = new FormData(this); 
+
+    // Temporarily detach hidden file input
+    let hiddenInput = null;
+    $('.file-input').each(function () {
+        if (!$(this).is(':visible')) {
+          $(this).prop('disabled', true);
+        }
+    });
+
+		$.ajax({
+			url: 'php/insertStamping.php',
+			type: 'POST',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function(data) {
+				var obj = JSON.parse(data); 
+				if (obj.status === 'success') {
+					$('#extendModal').modal('hide');
+					toastr["success"](obj.message, "Success:");
+          // Restore hidden file input after success
+          if (hiddenInput) {
+            $('#extendForm').append(hiddenInput);
+          }
+
+          $('#weightTable').DataTable().ajax.reload(null, false);
+				} else {
+					toastr["error"](obj.message, "Failed:");
+				}
+        // Re-enable all file inputs after success
+        $('.file-input').prop('disabled', false);
+				$('#spinnerLoading').hide();
+				isModalOpen = false; // Set flag to false on error as well
+			},
+			error: function(xhr, status, error) {
+				console.error("AJAX request failed:", status, error);
+				toastr["error"]("An error occurred while processing the request.", "Failed:");
+        // Re-enable all file inputs after success
+        $('.file-input').prop('disabled', false);
+				$('#spinnerLoading').hide();
+				isModalOpen = false; // Set flag to false on error as well
+			}
+		});
+	});
+
   $.validator.setDefaults({
     submitHandler: function () {
-      if($('#extendModal').hasClass('show')){
-        $('#spinnerLoading').show();
+      // if($('#extendModal').hasClass('show')){
+      //   $('#spinnerLoading').show();
 
-        $.post('php/insertStamping.php', $('#extendForm').serialize(), function(data){
-          var obj = JSON.parse(data); 
-          if(obj.status === 'success'){
-            $('#extendModal').modal('hide');
-            toastr["success"](obj.message, "Success:");
-            $('#weightTable').DataTable().ajax.reload(null, false);
-          }
-          else if(obj.status === 'failed'){
-            toastr["error"](obj.message, "Failed:");
-          }
-          else{
-            toastr["error"]("Something wrong when edit", "Failed:");
-          }
+      //   $.post('php/insertStamping.php', $('#extendForm').serialize(), function(data){
+      //     var obj = JSON.parse(data); 
+      //     if(obj.status === 'success'){
+      //       $('#extendModal').modal('hide');
+      //       toastr["success"](obj.message, "Success:");
+      //       $('#weightTable').DataTable().ajax.reload(null, false);
+      //     }
+      //     else if(obj.status === 'failed'){
+      //       toastr["error"](obj.message, "Failed:");
+      //     }
+      //     else{
+      //       toastr["error"]("Something wrong when edit", "Failed:");
+      //     }
 
-          $('#spinnerLoading').hide();
-        });
-      }
-      else if($('#uploadModal').hasClass('show')){
+      //     $('#spinnerLoading').hide();
+      //   });
+      // }
+      if($('#uploadModal').hasClass('show')){
         $('#spinnerLoading').show();
 
         // Serialize the form data into an array of objects
@@ -3727,7 +3798,9 @@ function newEntry(){
   $('#extendModal').find('#size').val('').trigger('change');
   $('#extendModal').find('#jenisPelantar').val('').trigger('change');
   $('#extendModal').find('#others').val('');
-
+  $('#extendModal').find('#newQuotation').show();
+  $('#extendModal').find('#editQuotation').hide();
+  $('#extendModal').find('#quotationFilePath').val('');
   //Additonal field reset
   // var value = $('#extendModal').find('#additionalSection').find('#batuUjian').val();
   // $('#extendModal').find('#additionalSection').find('#jenis_penunjuk').val('').trigger('change');
@@ -3905,6 +3978,15 @@ function edit(id) {
         $('#extendModal').find('#remark').val(obj.message.remarks);
         $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
         $('#extendModal').find('#quotation').val(obj.message.quotation_no);
+        if(obj.message.quotation_attachment){
+          $('#extendModal').find('#editQuotation').show();
+          $('#extendModal').find('#newQuotation').hide();
+        }else{
+          $('#extendModal').find('#newQuotation').show();
+          $('#extendModal').find('#editQuotation').hide();
+        }
+        $('#extendModal').find('#quotationFilePath').val(obj.message.quotation_filepath);
+        $('#extendModal').find('#viewQuotation').attr('href', "view_file.php?file="+obj.message.quotation_attachment);
         $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
         $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
         $('#extendModal').find('#poNo').val(obj.message.purchase_no);
@@ -4200,6 +4282,15 @@ function edit(id) {
         $('#extendModal').find('#remark').val(obj.message.remarks);
         $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
         $('#extendModal').find('#quotation').val(obj.message.quotation_no);
+        if(obj.message.quotation_attachment){
+          $('#extendModal').find('#editQuotation').show();
+          $('#extendModal').find('#newQuotation').hide();
+        }else{
+          $('#extendModal').find('#newQuotation').show();
+          $('#extendModal').find('#editQuotation').hide();
+        }
+        $('#extendModal').find('#quotationFilePath').val(obj.message.quotation_filepath);
+        $('#extendModal').find('#viewQuotation').attr('href', "view_file.php?file="+obj.message.quotation_attachment);
         $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
         $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
         $('#extendModal').find('#poNo').val(obj.message.purchase_no);
