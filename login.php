@@ -103,7 +103,7 @@
   </div>
 
   <div class="text-center font-weight-bold" style="margin-top:20%">
-    <p>***** Ideal of Synctronix *****<br>Ver: 1.0.0</p>
+    <p>***** Ideal of Synctronix *****<br>Ver: 1.1.0</p>
   </div>
 </div>
 <!-- /.login-box -->
