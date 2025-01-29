@@ -4,8 +4,10 @@ require_once "db_connect.php";
 session_start();
 
 if(isset($_POST['companyId'])){
+    $draw = isset($_POST['draw']) ? intval($_POST['draw']) : 1;
+    $start = isset($_POST['start']) ? intval($_POST['start']) : 0;
+    $length = isset($_POST['length']) ? intval($_POST['length']) : 10;
 	$id = filter_input(INPUT_POST, 'companyId', FILTER_SANITIZE_STRING);
-
 
     if ($sql = $db->prepare("SELECT nmim FROM companies WHERE id = ?")) {
         $sql->bind_param('s', $id);
@@ -22,46 +24,38 @@ if(isset($_POST['companyId'])){
             $result = $sql->get_result();                 
             $data = array(); 
             
-            while ($row = $result->fetch_assoc()) {
+            if ($row = $result->fetch_assoc()) {
                 $nmims = json_decode($row['nmim'], true); 
                 if (is_array($nmims)) {
+                    $totalRecords = count($nmims);  // Get total number of records
+            
+                    // Slice array to return only required data for the current page
+                    $nmims = array_slice($nmims, $start, $length);
+                    
                     foreach ($nmims as $nmim) {
-                        $file_name = basename($nmim['file_path']);
+                        $file_path = !empty($nmim['file_path']) ? $nmim['file_path'] : '';
+                        
                         $data[] = array(
-                            $nmim['nmimDetail'],
-                            $nmim['nmimApprNo'],
-                            $nmim['nmimApprDt'],
-                            $nmim['nmimExpDt'],
-                            '<div class="row">'
-                            .
-                            //Download Button
-                            '<div class="col-2">
-                                <a href="view_file.php?file=' . $nmim['file_path'] . '" target="_blank" class="btn btn-success btn-sm" role="button">
-                                    <i class="fa fa-file-pdf-o"></i>
-                                </a>
-                            </div>'
-                            . 
-                            //Edit Button
-                            '<div class="col-2"><button title="edit" type="button" id="editNmim" name="editNmim" onclick="editNmim(' . $id . ', ' . $nmim['id'] . ')" class="btn btn-warning btn-sm">
-                                <i class="fas fa-pen"></i>
-                            </button></div>'
-                            . 
-                            //Delete Button
-                            '<div class="col-2"><button title="delete" type="button" id="deleteNmim" name="deleteNmim"  onclick="deleteNmim(' . $id . ', ' . $nmim['id'] . ')"" class="btn btn-danger btn-sm">X</button></div>'
-                            .
-                            '</div>'
-                            ,
-                            $nmim['id']
+                            'nmimDetail' => $nmim['nmimDetail'],
+                            'nmimApprNo' => $nmim['nmimApprNo'],
+                            'nmimApprDt' => $nmim['nmimApprDt'],
+                            'nmimExpDt' => $nmim['nmimExpDt'],
+                            'id' => $nmim['id'],
+                            'file_path' => $file_path,
+                            'companyId' => $id
                         );
                     }
                 }
             }
             
-            echo json_encode(
-                array(
-                    "status" => "success",
-                    "message" => $data
-                ));   
+            $response = array(
+                "draw" => intval($draw),
+                "iTotalRecords" => $totalRecords,
+                "iTotalDisplayRecords" => count($data),
+                "aaData" => $data
+            );
+            
+            echo json_encode($response);  
         }
     }
 }

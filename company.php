@@ -519,55 +519,55 @@ $(function () {
     var id = '<?php echo $id; ?>';
 
 	var table = $("#lesenCertTable").DataTable({
-		"responsive": true,
-		"autoWidth": false,
-		'processing': true,
-		'serverSide': true,
-		'serverMethod': 'post',
-		'searching': false,
-		'order': [[ 1, 'asc' ]],
-		'columnDefs': [ { orderable: false, targets: [0] }],
-		'ajax': {
-			'type': 'POST',
-			'url':'php/getLesenCert.php',
-			'data': {
-				companyId: id,
-			}, 
-			'dataSrc': function (json) {
-				// console.log(json); // Debugging: Check JSON response
-				if (json.status === "success") {
-					return json.message;
-				} else {
-					return [];
-				}
-			}
-		},
-		'columns': [
-			{ 
-				data: null,  
-				render: function (data, type, row, meta) {
-					return meta.row + 1;  
-				}
-			},
-			{ data: 0 },  
-            { data: 1 }, 
-            { data: 2 }, 
-            { data: 3 },
+        "responsive": true,
+        "autoWidth": false,
+        'processing': true,
+        'serverSide': true,
+        'serverMethod': 'post',
+        'searching': false,
+        'order': [[1, 'asc']],
+        'columnDefs': [{ orderable: false, targets: [0] }],
+        'ajax': {
+            'type': 'POST',
+            'url': 'php/getLesenCert.php',
+            'data': function (d) {
+                d.companyId = id;
+            },
+            /*'dataSrc': function (json) {
+                console.log(json); // Debugging: Check JSON response
+                if (json.status === "success") {
+                    return json.data;  // Ensure PHP returns "data"
+                } else {
+                    return [];
+                }
+            }*/
+        },
+        'columns': [
+            { 
+                data: null,  
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;  
+                }
+            },
+            { data: "lesenCertDetail" },  
+            { data: "lesenCertSerialNo" }, 
+            { data: "lesenCertApprDt" }, 
+            { data: "lesenCertExpDt" },
             {
-				data: 4,    // Attach PDF
-				render: function (data, type, row) {
-					return data; // Render the HTML as is
-				}
-			},
-			{ 
-				data: 5,
-				visible: false,
-				render: function (data, type, row) {
-					return data; 
-				}
-			}
-		],
-	});
+              data: 'id',
+              className: 'action-button',
+              render: function (data, type, row) {
+                let dropdownMenu = '<div class="row"><div class="col-2"><a href="view_file.php?file='+row.file_path+'" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></div><div class="col-2"><button title="edit" type="button" id="editLesenCert" name="editLesenCert" onclick="editLesenCert('+row.companyId+', '+ row.id +')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-2"><button title="delete" type="button" id="deleteLesenCert" name="deleteLesenCert"  onclick="deleteLesenCert('+row.companyId+', '+ row.id +')"" class="btn btn-danger btn-sm">X</button></div></div>';
+    
+                return dropdownMenu;
+              }
+            },
+            { 
+                data: "id", 
+                visible: false 
+            }
+        ],
+    });
 
 	// Bind form submission handler once
 	$('#addLesenCertForm').off('submit').on('submit', function(e) {
@@ -604,7 +604,9 @@ $(function () {
 	// Bind form submission handler once
 	$('#editLesenCertForm').off('submit').on('submit', function(e) {
 		e.preventDefault(); 
-		var formData = new FormData(this);
+		var formData = new FormData($('#editLesenCertForm')[0]); // Create FormData object from the form
+        formData.append('filename', $('#lesenCertPdf')[0].files[0]); // Append the image file to the FormData object
+
 		$.ajax({
 			url: 'php/editLesenCert.php',
 			type: 'POST',
@@ -614,6 +616,7 @@ $(function () {
 			success: function(data) {
 				var obj = JSON.parse(data); 
 				if (obj.status === 'success') {
+				    debugger;
 					$('#editLesenCertModal').modal('hide');
 					toastr["success"](obj.message, "Success:");
 					// $('#nmimTable').DataTable().ajax.reload();
@@ -648,39 +651,39 @@ $(function () {
 			'data': {
 				companyId: id,
 			}, 
-			'dataSrc': function (json) {
+			/*'dataSrc': function (json) {
 				// console.log(json); // Debugging: Check JSON response
 				if (json.status === "success") {
 					return json.message;
 				} else {
 					return [];
 				}
-			}
+			}*/
 		},
 		'columns': [
 			{ 
-				data: null,  
-				render: function (data, type, row, meta) {
-					return meta.row + 1;  
-				}
-			},
-			{ data: 0 },  
-            { data: 1 }, 
-            { data: 2 }, 
-            { data: 3 },
+                data: null,  
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;  
+                }
+            },
+            { data: "nmimDetail" },  
+            { data: "nmimApprNo" }, 
+            { data: "nmimApprDt" }, 
+            { data: "nmimExpDt" },
             {
-				data: 4,    // Attach PDF
-				render: function (data, type, row) {
-					return data; // Render the HTML as is
-				}
-			},
-			{ 
-				data: 5,
-				visible: false,
-				render: function (data, type, row) {
-					return data; 
-				}
-			}
+              data: 'id',
+              className: 'action-button',
+              render: function (data, type, row) {
+                let dropdownMenu = '<div class="row"><div class="col-2"><a href="view_file.php?file='+row.file_path+'" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></div><div class="col-2"><button title="edit" type="button" id="editNmim" name="editNmim" onclick="editNmim('+row.companyId+', '+ row.id +')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div><div class="col-2"><button title="delete" type="button" id="deleteNmim" name="deleteNmim"  onclick="deleteNmim('+row.companyId+', '+ row.id +')"" class="btn btn-danger btn-sm">X</button></div></div>';
+    
+                return dropdownMenu;
+              }
+            },
+            { 
+                data: "id", 
+                visible: false 
+            }
 		],
 	});
 

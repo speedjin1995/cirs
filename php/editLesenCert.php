@@ -34,28 +34,33 @@ if(isset($_POST['id'], $_POST['lesenCertId'], $_POST['lesenCertFilePath'], $_POS
                     if (isset($_FILES['lesenCertPdf']) && $_FILES['lesenCertPdf']['error'] === 0) { 
                         $updatedFilePath = str_replace('../cirs', '../', $lesenCertFilePath); 
                         if (file_exists($updatedFilePath)) {
-                            if (unlink($updatedFilePath)) {
-                                $response['file_status'] = "File deleted successfully.";
+                            unlink($updatedFilePath);
+                            $response['file_status'] = "File deleted successfully.";
+                        }   
 
-                                $uploadDir = '../uploads/lesenCert/'; // Directory to store uploaded files
-                                $uploadDirDB = '../cirs/uploads/lesenCert/'; // filepath for db
-                                $uploadFile = $uploadDir . $lesenCertId . '_' . $lesenCertDetail . '_' . $lesenCertSerialNo . '_'. basename($_FILES['lesenCertPdf']['name']);
-                                $uploadFileDB = $uploadDirDB . $lesenCertId . '_' . $lesenCertDetail . '_' . $lesenCertSerialNo . '_'. basename($_FILES['lesenCertPdf']['name']);
-                                
-                                // Move the uploaded file to the target directory
-                                if (move_uploaded_file($_FILES['lesenCertPdf']['tmp_name'], $uploadFile)) {
-                                    $response['file_status'] = "File successfully uploaded.";
-                                    $lesenCert['file_path'] = $uploadFileDB; // Add file path to data
-                                } else {
-                                    $response['file_status'] = "File upload failed.";
-                                }
-                            } else {
-                                $response['file_status'] = "Error deleting file.";
-                            }
-                        } else {
-                            $response['file_status'] = "File does not exist.";
+                        $uploadDir = '../uploads/lesenCert/'; // Directory to store uploaded files
+                        $uploadDirDB = '../uploads/lesenCert/'; // filepath for db
+                        $filename = $lesenCertId . '_' . $lesenCertDetail . '_' . $lesenCertSerialNo . '_'. basename($_FILES['lesenCertPdf']['name']);
+                        $uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
+                        $uploadFileDB = $uploadDirDB . $filename;
+                        
+                        // Move the uploaded file to the target directory
+                        if (move_uploaded_file($_FILES['lesenCertPdf']['tmp_name'], $uploadFile)) {
+                            $response['file_status'] = "File successfully uploaded.";
+        					// Update certificate data in the database
+        					if ($stmt4 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+        						$stmt4->bind_param('ss', $filename, $uploadFileDB);
+        						$stmt4->execute();
+        						$fid = $stmt4->insert_id;
+        						$stmt4->close();
+        						$lesenCert['file_path'] = $fid;
+        					} 
+                        } 
+                        else {
+                            $response['file_status'] = "File upload failed.";
                         }
-                    } else {
+                    } 
+                    else {
                         $response['file_status'] = "No file uploaded or there was an error.";
                     }
                 }

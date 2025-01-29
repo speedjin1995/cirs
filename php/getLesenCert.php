@@ -4,8 +4,10 @@ require_once "db_connect.php";
 session_start();
 
 if(isset($_POST['companyId'])){
+    $draw = isset($_POST['draw']) ? intval($_POST['draw']) : 1;
+    $start = isset($_POST['start']) ? intval($_POST['start']) : 0;
+    $length = isset($_POST['length']) ? intval($_POST['length']) : 10;
 	$id = filter_input(INPUT_POST, 'companyId', FILTER_SANITIZE_STRING);
-
 
     if ($sql = $db->prepare("SELECT lesen_cert FROM companies WHERE id = ?")) {
         $sql->bind_param('s', $id);
@@ -21,53 +23,41 @@ if(isset($_POST['companyId'])){
         else{
             $result = $sql->get_result();                 
             $data = array();
+            $totalRecords = 0;
             
-            while ($row = $result->fetch_assoc()) {
+            if ($row = $result->fetch_assoc()) {
                 $lesenCerts = json_decode($row['lesen_cert'], true); 
+            
                 if (is_array($lesenCerts)) {
+                    $totalRecords = count($lesenCerts);  // Get total number of records
+            
+                    // Slice array to return only required data for the current page
+                    $lesenCerts = array_slice($lesenCerts, $start, $length);
+            
                     foreach ($lesenCerts as $lesenCert) {
-                        // $file_name = basename($lesenCert['file_path']);
-                        $file_path = '';
-
-                        if (!empty($lesenCert['file_path'])){
-                            $file_path = $lesenCert['file_path'];
-                        }
-
-                        $data[] = array(
-                            $lesenCert['lesenCertDetail'],
-                            $lesenCert['lesenCertSerialNo'],
-                            $lesenCert['lesenCertApprDt'],
-                            $lesenCert['lesenCertExpDt'],
-                            '<div class="row">'
-                            .
-                            //Download Button
-                            '<div class="col-2">
-                                <a href="view_file.php?file=' . $file_path . '" target="_blank" class="btn btn-success btn-sm" role="button">
-                                    <i class="fa fa-file-pdf-o"></i>
-                                </a>
-                            </div>'
-                            . 
-                            //Edit Button
-                            '<div class="col-2"><button title="edit" type="button" id="editLesenCert" name="editLesenCert" onclick="editLesenCert(' . $id . ', ' . $lesenCert['id'] . ')" class="btn btn-warning btn-sm">
-                                <i class="fas fa-pen"></i>
-                            </button></div>'
-                            . 
-                            //Delete Button
-                            '<div class="col-2"><button title="delete" type="button" id="deleteLesenCert" name="deleteLesenCert"  onclick="deleteLesenCert(' . $id . ', ' . $lesenCert['id'] . ')"" class="btn btn-danger btn-sm">X</button></div>'
-                            .
-                            '</div>'
-                            ,
-                            $lesenCert['id']
-                        );
+                        $file_path = !empty($lesenCert['file_path']) ? $lesenCert['file_path'] : '';
+            
+                        $data[] = [
+                            'lesenCertDetail' => $lesenCert['lesenCertDetail'],
+                            'lesenCertSerialNo' => $lesenCert['lesenCertSerialNo'],
+                            'lesenCertApprDt' => $lesenCert['lesenCertApprDt'],
+                            'lesenCertExpDt' => $lesenCert['lesenCertExpDt'],
+                            'id' => $lesenCert['id'],
+                            'file_path' => $file_path,
+                            'companyId' => $id
+                        ];
                     }
                 }
             }
             
-            echo json_encode(
-                array(
-                    "status" => "success",
-                    "message" => $data
-                ));   
+            $response = array(
+                "draw" => intval($draw),
+                "iTotalRecords" => $totalRecords,
+                "iTotalDisplayRecords" => count($data),
+                "aaData" => $data
+            );
+            
+            echo json_encode($response);
         }
     }
 }
