@@ -19,7 +19,7 @@ if(isset($_POST['id'])){
             $companyName = $row2['name'];
             $certno_lesen = $row2['certno_lesen'];
             $bless_serahanno = $row2['bless_serahanno'];
-            $inhouseFilePath = 'scm/'.$row2['inhouse'];
+            $inhouseFilePath = $row2['inhouse'];
             $failno = $row2['failno'];
             $person_incharge = $row2['person_incharge'];
 
@@ -166,7 +166,7 @@ if(isset($_POST['id'])){
                         <body>
                             <div class="container-full">
                             <div class="header mb-3">
-                                <img src="'. $inhouseFilePath .'" alt="'. $companyName .'" width="100%" height="261px">
+                                 <img src="view_file.php?file='.$inhouseFilePath.'" alt="'.htmlspecialchars($companyName).'" width="100%" height="261px">
                             </div>';
 
                 $message .= '<table class="mb-3">

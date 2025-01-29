@@ -127,17 +127,25 @@ if(isset($_POST['new_roc'], $_POST['name'], $_POST['address'])){
 
 					$timestamp = time();
 					$uploadDir = '../uploads/signature/'; // Directory to store uploaded files
-					$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadAttachment']['name']);
+					$filename = $timestamp . '_' . basename($_FILES['uploadAttachment']['name']);
+					$uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
 					$tempFile = $_FILES['uploadAttachment']['tmp_name'];
 
 					// Move the uploaded file to the target directory
 					if (move_uploaded_file($tempFile, $uploadFile)) {
-						$signatureFilePath = $uploadFile;
+						$signatureFilePath = $uploadDir . $filename;
 						// Update certificate data in the database
-						if ($stmt3 = $db->prepare("UPDATE companies SET signature=? WHERE id=?")) {
-							$stmt3->bind_param('ss', $signatureFilePath, $id);
+						if ($stmt3 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+							$stmt3->bind_param('ss', $filename, $signatureFilePath);
 							$stmt3->execute();
+							$fid = $stmt3->insert_id;
 							$stmt3->close();
+							
+							if ($stmtf = $db->prepare("UPDATE companies SET signature=? WHERE id=?")) {
+    							$stmtf->bind_param('ss', $fid, $id);
+    							$stmtf->execute();
+    							$stmtf->close();
+    						}
 						} 
 					} 
 				}
@@ -159,17 +167,25 @@ if(isset($_POST['new_roc'], $_POST['name'], $_POST['address'])){
 
 					$timestamp = time();
 					$uploadDir = '../uploads/inhouseLetterHead/'; // Directory to store uploaded files
-					$uploadFile = $uploadDir . $timestamp . '_' . basename($_FILES['uploadInhouseAttachment']['name']);
+					$filename = $timestamp . '_' . basename($_FILES['uploadInhouseAttachment']['name']);
+					$uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
 					$tempFile = $_FILES['uploadInhouseAttachment']['tmp_name'];
 
 					// Move the uploaded file to the target directory
 					if (move_uploaded_file($tempFile, $uploadFile)) { 
-						$inhouseFilePath = $uploadFile;
+						$inhouseFilePath = $uploadDir . $filename;
 						// Update certificate data in the database
-						if ($stmt4 = $db->prepare("UPDATE companies SET inhouse=? WHERE id=?")) {
-							$stmt4->bind_param('ss', $inhouseFilePath, $id);
+						if ($stmt4 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+							$stmt4->bind_param('ss', $filename, $inhouseFilePath);
 							$stmt4->execute();
+							$fid = $stmt4->insert_id;
 							$stmt4->close();
+							
+							if ($stmtf2 = $db->prepare("UPDATE companies SET inhouse=? WHERE id=?")) {
+    							$stmtf2->bind_param('ss', $fid, $id);
+    							$stmtf2->execute();
+    							$stmtf2->close();
+    						}
 						} 
 					} 
 				}

@@ -36,14 +36,23 @@ if(isset($_POST['id'], $_POST['nmimDetail'], $_POST['nmimApprNo'], $_POST['nmimA
             if ($_FILES['nmimPdf']['error'] === 0) {
                 $uploadDir = '../uploads/nmim/'; // Directory to store uploaded files
                 $uploadDirDB = '../uploads/nmim/'; // filepath for db
-                $uploadFile = $uploadDir . $newId . '_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
-                $uploadFileDB = $uploadDirDB . $newId . '_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
+                $filename = $newId . '_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
+                $uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
+                $uploadFileDB = $uploadDirDB . $filename;
                 
                 // Move the uploaded file to the target directory
                 if (move_uploaded_file($_FILES['nmimPdf']['tmp_name'], $uploadFile)) {
                     $response['file_status'] = "File successfully uploaded.";
-                    $data['file_path'] = $uploadFileDB; // Add file path to data
-                } else {
+					// Update certificate data in the database
+					if ($stmt4 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+						$stmt4->bind_param('ss', $filename, $uploadFileDB);
+						$stmt4->execute();
+						$fid = $stmt4->insert_id;
+						$stmt4->close();
+						$data['file_path'] = $fid;
+					} 
+                } 
+                else {
                     $response['file_status'] = "File upload failed.";
                 }
             } else {
@@ -59,14 +68,23 @@ if(isset($_POST['id'], $_POST['nmimDetail'], $_POST['nmimApprNo'], $_POST['nmimA
         if ($_FILES['nmimPdf']['error'] === 0) {
             $uploadDir = '../uploads/nmim/'; // Directory to store uploaded files
             $uploadDirDB = '../uploads/nmim/'; // filepath for db
-            $uploadFile = $uploadDir . '1_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
-            $uploadFileDB = $uploadDirDB . '1_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
+            $filename = '1_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
+            $uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
+            $uploadFileDB = $uploadDirDB . $filename;
             
             // Move the uploaded file to the target directory
             if (move_uploaded_file($_FILES['nmimPdf']['tmp_name'], $uploadFile)) {
                 $response['file_status'] = "File successfully uploaded.";
-                $data['file_path'] = $uploadFileDB; // Add file path to data
-            } else {
+				// Update certificate data in the database
+				if ($stmt4 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+					$stmt4->bind_param('ss', $filename, $uploadFileDB);
+					$stmt4->execute();
+					$fid = $stmt4->insert_id;
+					$stmt4->close();
+					$data['file_path'] = $fid;
+				} 
+            } 
+            else {
                 $response['file_status'] = "File upload failed.";
             }
         } else {

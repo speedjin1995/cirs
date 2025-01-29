@@ -34,28 +34,34 @@ if(isset($_POST['id'], $_POST['nmimId'], $_POST['nmimFilePath'], $_POST['nmimDet
                     if (isset($_FILES['nmimPdf']) && $_FILES['nmimPdf']['error'] === 0) { 
                         $updatedFilePath = str_replace('../cirs', '../', $nmimFilePath); 
                         if (file_exists($updatedFilePath)) {
-                            if (unlink($updatedFilePath)) {
-                                $response['file_status'] = "File deleted successfully.";
-
-                                $uploadDir = '../uploads/nmim/'; // Directory to store uploaded files
-                                $uploadDirDB = '../cirs/uploads/nmim/'; // filepath for db
-                                $uploadFile = $uploadDir . $nmimId . '_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
-                                $uploadFileDB = $uploadDirDB . $nmimId . '_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
-                                
-                                // Move the uploaded file to the target directory
-                                if (move_uploaded_file($_FILES['nmimPdf']['tmp_name'], $uploadFile)) {
-                                    $response['file_status'] = "File successfully uploaded.";
-                                    $nmim['file_path'] = $uploadFileDB; // Add file path to data
-                                } else {
-                                    $response['file_status'] = "File upload failed.";
-                                }
-                            } else {
-                                $response['file_status'] = "Error deleting file.";
-                            }
-                        } else {
-                            $response['file_status'] = "File does not exist.";
+                            unlink($updatedFilePath);
                         }
-                    } else {
+                        
+                        $response['file_status'] = "File deleted successfully.";
+
+                        $uploadDir = '../uploads/nmim/'; // Directory to store uploaded files
+                        $uploadDirDB = '../uploads/nmim/'; // filepath for db
+                        $filename = $nmimId . '_' . $nmimDetail . '_' . $nmimApprNo . '_'. basename($_FILES['nmimPdf']['name']);
+                        $uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
+                        $uploadFileDB = $uploadDirDB . $filename;
+                        
+                        // Move the uploaded file to the target directory
+                        if (move_uploaded_file($_FILES['nmimPdf']['tmp_name'], $uploadFile)) {
+                            $response['file_status'] = "File successfully uploaded.";
+                            // Update certificate data in the database
+        					if ($stmt4 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+        						$stmt4->bind_param('ss', $filename, $uploadFileDB);
+        						$stmt4->execute();
+        						$fid = $stmt4->insert_id;
+        						$stmt4->close();
+        						$nmim['file_path'] = $fid;
+        					} 
+                        } 
+                        else {
+                            $response['file_status'] = "File upload failed.";
+                        }
+                    } 
+                    else {
                         $response['file_status'] = "No file uploaded or there was an error.";
                     }
                 }

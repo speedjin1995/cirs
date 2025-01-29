@@ -707,12 +707,12 @@ to get the desired effect
               </li>
             </ul>
           </li>
-          <!--li class="nav-item">
-            <a href="#transaction" data-file="transaction.html" class="nav-link link">
-              <i class="nav-icon fas fa-file"></i>
-              <p>Transaction</p>
+          <li class="nav-item">
+            <a href="https://mail.hostinger.com/" class="nav-link link">
+              <i class="nav-icon fas fa-envelope"></i>
+              <p>Webmail</p>
             </a>
-          </li-->
+          </li>
           <li class="nav-item">
             <a href="php/logout.php" class="nav-link">
               <i class="nav-icon fas fa-sign-out-alt"></i>
@@ -740,7 +740,7 @@ to get the desired effect
 
   <!-- Main Footer -->
   <footer class="main-footer">
-    <strong>Copyright &copy; 2025 <a href="#">SyncWeight</a>.</strong>All rights reserved.<div class="float-right d-none d-sm-inline-block"><b>Version</b> 1.0.0 </div>
+    <strong>Copyright &copy; 2025 <a href="#">SyncWeight</a>.</strong>All rights reserved.<div class="float-right d-none d-sm-inline-block"><b>Version</b> 1.1.0 </div>
   </footer>
 </div>
 <!-- ./wrapper -->
