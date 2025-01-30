@@ -1589,12 +1589,27 @@ function format (row) {
   <div class="row">
     <!-- Billing Section -->
     <div class="col-6">
-      <p><strong>Quotation No:</strong> ${row.quotation_no}</p>
+      <p><strong>Quotation No:</strong> ${row.quotation_no} `;
+      
+      if(row.quotation_attachment){
+        returnString += `<span class="ml-5"><a href="view_file.php?file=${row.quotation_attachment}" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></span></p>`;
+      }else{
+        returnString += `</p>`;
+      }
+
+      returnString += `
       <p><strong>Quotation Date:</strong> ${row.quotation_date}</p>
       <p><strong>Purchase No:</strong> ${row.purchase_no}</p>
       <p><strong>Purchase Date:</strong> ${row.purchase_date}</p>
-      <p><strong>Invoice/Cash Bill No:</strong> ${row.invoice_no}</p>
-    </div>
+      <p><strong>Invoice/Cash Bill No:</strong> ${row.invoice_no}`;
+
+      if(row.invoice_attachment){
+        returnString += `<span class="ml-5"><a href="view_file.php?file=${row.invoice_attachment}" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></span></p>`;
+      }else{
+        returnString += `</p>`;
+      }
+      
+    returnString += `</div>
 
     <!-- Price Section -->
     <div class="col-6">

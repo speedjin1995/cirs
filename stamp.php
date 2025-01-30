@@ -236,7 +236,7 @@ else{
 <div class="modal fade" id="extendModal">
   <div class="modal-dialog modal-xl" style="max-width: 90%;">
     <div class="modal-content">
-      <form role="form" id="extendForm">
+      <form role="form" id="extendForm" enctype="multipart/form-data">
         <div class="modal-header bg-gray-dark color-palette">
           <h4 class="modal-title">Stamping Forms</h4>
           <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
@@ -633,6 +633,27 @@ else{
                 </div>
                 <div class="col-4">
                   <div class="form-group">
+                    <label>Upload Quotation Attachment</label>
+                    <div id="newQuotation" style="display:none">
+                      <input type="file" class="form-control quotation-file-input" id="uploadQuotationAttachment" name="uploadQuotationAttachment">
+                    </div>
+
+                    <div id="editQuotation" style="display:none">
+                      <div class="d-flex">
+                        <div class="col-10">
+                          <input type="file" class="form-control quotation-file-input" id="uploadQuotationAttachment" name="uploadQuotationAttachment">
+                        </div>
+                        <div class="col-2 mt-1">
+                          <a href="" id="viewQuotation" name="viewQuotation" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <input type="text" id="quotationFilePath" name="quotationFilePath" style="display:none">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
                     <label>PO No.</label>
                     <input class="form-control" type="text" placeholder="PO No" id="poNo" name="poNo">
                   </div>
@@ -652,6 +673,27 @@ else{
                   <div class="form-group">
                     <label>Invoice / Cash Bill No.</label>
                     <input class="form-control" type="text" placeholder="Invoice No" id="invoice" name="invoice">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Upload Invoice Attachment</label>
+                    <div id="newInvoice" style="display:none">
+                      <input type="file" class="form-control invoice-file-input" id="uploadInvoiceAttachment" name="uploadInvoiceAttachment">
+                    </div>
+
+                    <div id="editInvoice" style="display:none">
+                      <div class="d-flex">
+                        <div class="col-10">
+                          <input type="file" class="form-control invoice-file-input" id="uploadInvoiceAttachment" name="uploadInvoiceAttachment">
+                        </div>
+                        <div class="col-2 mt-1">
+                          <a href="" id="viewInvoice" name="viewInvoice" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <input type="text" id="InvoiceFilePath" name="InvoiceFilePath" style="display:none">
                   </div>
                 </div>
               </div>
@@ -1874,29 +1916,79 @@ $(function () {
   //   }
   // });
 
+  // Bind form submission handler once
+	$('#extendForm').off('submit').on('submit', function(e) {
+		e.preventDefault(); 
+		var formData = new FormData(this); 
+
+    $('.quotation-file-input').each(function () {
+        if (!$(this).is(':visible')) {
+          $(this).prop('disabled', true);
+        }
+    });
+
+    $('.invoice-file-input').each(function () {
+        if (!$(this).is(':visible')) {
+          $(this).prop('disabled', true);
+        }
+    });
+
+		$.ajax({
+			url: 'php/insertStamping.php',
+			type: 'POST',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function(data) {
+				var obj = JSON.parse(data); 
+				if (obj.status === 'success') {
+					$('#extendModal').modal('hide');
+					toastr["success"](obj.message, "Success:");
+          $('#weightTable').DataTable().ajax.reload(null, false);
+				} else {
+					toastr["error"](obj.message, "Failed:");
+				}
+        // Re-enable all file inputs after success
+        $('.quotation-file-input').prop('disabled', false);
+        $('.invoice-file-input').prop('disabled', false);
+				$('#spinnerLoading').hide();
+				isModalOpen = false; // Set flag to false on error as well
+			},
+			error: function(xhr, status, error) {
+				console.error("AJAX request failed:", status, error);
+				toastr["error"]("An error occurred while processing the request.", "Failed:");
+        // Re-enable all file inputs after success
+        $('.quotation-file-input').prop('disabled', false);
+        $('.invoice-file-input').prop('disabled', false);
+				$('#spinnerLoading').hide();
+				isModalOpen = false; // Set flag to false on error as well
+			}
+		});
+	});
+
   $.validator.setDefaults({
     submitHandler: function () {
-      if($('#extendModal').hasClass('show')){
-        $('#spinnerLoading').show();
+      // if($('#extendModal').hasClass('show')){
+      //   $('#spinnerLoading').show();
 
-        $.post('php/insertStamping.php', $('#extendForm').serialize(), function(data){
-          var obj = JSON.parse(data); 
-          if(obj.status === 'success'){
-            $('#extendModal').modal('hide');
-            toastr["success"](obj.message, "Success:");
-            $('#weightTable').DataTable().ajax.reload(null, false);
-          }
-          else if(obj.status === 'failed'){
-            toastr["error"](obj.message, "Failed:");
-          }
-          else{
-            toastr["error"]("Something wrong when edit", "Failed:");
-          }
+      //   $.post('php/insertStamping.php', $('#extendForm').serialize(), function(data){
+      //     var obj = JSON.parse(data); 
+      //     if(obj.status === 'success'){
+      //       $('#extendModal').modal('hide');
+      //       toastr["success"](obj.message, "Success:");
+      //       $('#weightTable').DataTable().ajax.reload(null, false);
+      //     }
+      //     else if(obj.status === 'failed'){
+      //       toastr["error"](obj.message, "Failed:");
+      //     }
+      //     else{
+      //       toastr["error"]("Something wrong when edit", "Failed:");
+      //     }
 
-          $('#spinnerLoading').hide();
-        });
-      }
-      else if($('#uploadModal').hasClass('show')){
+      //     $('#spinnerLoading').hide();
+      //   });
+      // }
+      if($('#uploadModal').hasClass('show')){
         $('#spinnerLoading').show();
 
         // Serialize the form data into an array of objects
@@ -3031,12 +3123,26 @@ function format (row) {
   <div class="row">
     <!-- Billing Section -->
     <div class="col-6">
-      <p><strong>Quotation No:</strong> ${row.quotation_no}</p>
+      <p><strong>Quotation No:</strong> ${row.quotation_no} `;
+      
+      if(row.quotation_attachment){
+        returnString += `<span class="ml-5"><a href="view_file.php?file=${row.quotation_attachment}" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></span></p>`;
+      }else{
+        returnString += `</p>`;
+      }
+
+      returnString += `
       <p><strong>Quotation Date:</strong> ${row.quotation_date}</p>
       <p><strong>Purchase No:</strong> ${row.purchase_no}</p>
       <p><strong>Purchase Date:</strong> ${row.purchase_date}</p>
-      <p><strong>Invoice/Cash Bill No:</strong> ${row.invoice_no}</p>
-    </div>
+      <p><strong>Invoice/Cash Bill No:</strong> ${row.invoice_no}`;
+
+      if(row.invoice_attachment){
+        returnString += `<span class="ml-5"><a href="view_file.php?file=${row.invoice_attachment}" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></span></p>`;
+      }else{
+        returnString += `</p>`;
+      }
+    returnString += `</div>
 
     <!-- Price Section -->
     <div class="col-6">
@@ -3430,6 +3536,9 @@ function newEntry(){
   $('#extendModal').find('#poDate').val('');
   $('#extendModal').find('#cashBill').val("");
   $('#extendModal').find('#invoice').val('');
+  $('#extendModal').find('#newQuotation').show();
+  $('#extendModal').find('#editQuotation').hide();
+  $('#extendModal').find('#quotationFilePath').val('');
 
   $('#extendModal').find('#jenisAlat').change(function() {
     if($(this).val() == 1) {
@@ -3594,6 +3703,25 @@ function edit(id) {
         $('#extendModal').find('#remark').val(obj.message.remarks);
         $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
         $('#extendModal').find('#quotation').val(obj.message.quotation_no);
+        if(obj.message.quotation_attachment){
+          $('#extendModal').find('#editQuotation').show();
+          $('#extendModal').find('#newQuotation').hide();
+        }else{
+          $('#extendModal').find('#newQuotation').show();
+          $('#extendModal').find('#editQuotation').hide();
+        }
+        $('#extendModal').find('#quotationFilePath').val(obj.message.quotation_filepath);
+        $('#extendModal').find('#viewQuotation').attr('href', "view_file.php?file="+obj.message.quotation_attachment);
+
+        if(obj.message.invoice_attachment){
+          $('#extendModal').find('#editInvoice').show();
+          $('#extendModal').find('#newInvoice').hide();
+        }else{
+          $('#extendModal').find('#newInvoice').show();
+          $('#extendModal').find('#editInvoice').hide();
+        }
+        $('#extendModal').find('#InvoiceFilePath').val(obj.message.invoice_filepath);
+        $('#extendModal').find('#viewInvoice').attr('href', "view_file.php?file="+obj.message.invoice_attachment);
         $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
         $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
         $('#extendModal').find('#poNo').val(obj.message.purchase_no);
@@ -3644,8 +3772,10 @@ function edit(id) {
           }
         }
 
+        jalat = obj.message.jenis_alat;
+
         $('#extendModal').on('atkLoaded', function() {
-          if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '1'){
+          if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '1'){
             $('#addtionalSection').html($('#atkDetails').html());
             $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
             $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
@@ -3684,29 +3814,40 @@ function edit(id) {
               }
             }
           }
-          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '4'){
+          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '4'){
           //   $('#addtionalSection').html($('#atsDetails').html());
           //   $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
           // }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '2'){
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '2'){
             $('#addtionalSection').html($('#atpDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '5'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '23'){
+            $('#addtionalSection').html($('#atpMotorDetails').html());
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#steelyard').val(obj.message.steelyard).trigger('change');
+            $('#extendModal').find('#bilanganKaunterpois').val(obj.message.bilangan_kaunterpois).trigger('change');
+            $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
+            $('#extendModal').find('#nilai2').val(obj.message.nilais[1].nilai);
+            $('#extendModal').find('#nilai3').val(obj.message.nilais[2].nilai);
+            $('#extendModal').find('#nilai4').val(obj.message.nilais[3].nilai);
+            $('#extendModal').find('#nilai5').val(obj.message.nilais[4].nilai);
+            $('#extendModal').find('#nilai6').val(obj.message.nilais[5].nilai);
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '5'){
             $('#addtionalSection').html($('#atnDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '18'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '18'){
             $('#addtionalSection').html($('#atnDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '6'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '6'){
             $('#addtionalSection').html($('#ateDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#class').val(obj.message.class).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '14'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '14'){
             $('#addtionalSection').html($('#sllDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
@@ -3718,7 +3859,7 @@ function edit(id) {
             $('#extendModal').find('#question5_2').val(obj.message.questions[5].answer).trigger('change');
             $('#extendModal').find('#question6').val(obj.message.questions[6].answer).trigger('change');
             $('#extendModal').find('#question7').val(obj.message.questions[7].answer).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '7'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '7'){
             $('#addtionalSection').html($('#btuDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#penandaanBatuUjian').val(obj.message.penandaan_batu_ujian).trigger('change');
@@ -3734,7 +3875,7 @@ function edit(id) {
             });
 
             $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '10'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '10'){
             // $('#addtionalSection').html($('#autoPackDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
             // $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
@@ -3747,11 +3888,11 @@ function edit(id) {
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
           }
-          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '17'){
+          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '17'){
           //   $('#addtionalSection').html($('#atsHDetails').html());
           //   $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
           // }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '12'){
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '12'){
             $('#addtionalSection').html($('#siaDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
 
@@ -3826,6 +3967,7 @@ function edit(id) {
         $('#extendModal').find('#makeIn').val(obj.message.make_in).trigger('change');
         $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
         $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
+        $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
         $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
         $('#extendModal').find('#newRenew').val(obj.message.stampType).trigger('change');
         customer = obj.message.customers;
@@ -3859,7 +4001,6 @@ function edit(id) {
         $('#extendModal').on('modelsLoaded', function() {
           $('#extendModal').find('#model').val(obj.message.model).trigger('change');
         });
-        $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#lastYearStampDate').val(formatDate3(obj.message.last_year_stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
@@ -3876,6 +4017,26 @@ function edit(id) {
         $('#extendModal').find('#remark').val(obj.message.remarks);
         $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
         $('#extendModal').find('#quotation').val(obj.message.quotation_no);
+        if(obj.message.quotation_attachment){
+          $('#extendModal').find('#editQuotation').show();
+          $('#extendModal').find('#newQuotation').hide();
+        }else{
+          $('#extendModal').find('#newQuotation').show();
+          $('#extendModal').find('#editQuotation').hide();
+        }
+        $('#extendModal').find('#quotationFilePath').val(obj.message.quotation_filepath);
+        $('#extendModal').find('#viewQuotation').attr('href', "view_file.php?file="+obj.message.quotation_attachment);
+
+        if(obj.message.invoice_attachment){
+          $('#extendModal').find('#editInvoice').show();
+          $('#extendModal').find('#newInvoice').hide();
+        }else{
+          $('#extendModal').find('#newInvoice').show();
+          $('#extendModal').find('#editInvoice').hide();
+        }
+        $('#extendModal').find('#InvoiceFilePath').val(obj.message.invoice_filepath);
+        $('#extendModal').find('#viewInvoice').attr('href', "view_file.php?file="+obj.message.invoice_attachment);
+
         $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
         $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
         $('#extendModal').find('#poNo').val(obj.message.purchase_no);
@@ -3887,9 +4048,10 @@ function edit(id) {
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
         $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
+        jalat = obj.message.jenis_alat;
 
         $('#extendModal').on('atkLoaded', function() {
-          if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '1'){
+          if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '1'){
             $('#addtionalSection').html($('#atkDetails').html());
             $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
             $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
@@ -3928,29 +4090,40 @@ function edit(id) {
               }
             }
           }
-          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '4'){
+          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '4'){
           //   $('#addtionalSection').html($('#atsDetails').html());
           //   $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
           // }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '2'){
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '2'){
             $('#addtionalSection').html($('#atpDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '5'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '23'){
+            $('#addtionalSection').html($('#atpMotorDetails').html());
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#steelyard').val(obj.message.steelyard).trigger('change');
+            $('#extendModal').find('#bilanganKaunterpois').val(obj.message.bilangan_kaunterpois).trigger('change');
+            $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
+            $('#extendModal').find('#nilai2').val(obj.message.nilais[1].nilai);
+            $('#extendModal').find('#nilai3').val(obj.message.nilais[2].nilai);
+            $('#extendModal').find('#nilai4').val(obj.message.nilais[3].nilai);
+            $('#extendModal').find('#nilai5').val(obj.message.nilais[4].nilai);
+            $('#extendModal').find('#nilai6').val(obj.message.nilais[5].nilai);
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '5'){
             $('#addtionalSection').html($('#atnDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '18'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '18'){
             $('#addtionalSection').html($('#atnDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '6'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '6'){
             $('#addtionalSection').html($('#ateDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#class').val(obj.message.class).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '14'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '14'){
             $('#addtionalSection').html($('#sllDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
@@ -3962,7 +4135,7 @@ function edit(id) {
             $('#extendModal').find('#question5_2').val(obj.message.questions[5].answer).trigger('change');
             $('#extendModal').find('#question6').val(obj.message.questions[6].answer).trigger('change');
             $('#extendModal').find('#question7').val(obj.message.questions[7].answer).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '7'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '7'){
             $('#addtionalSection').html($('#btuDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#penandaanBatuUjian').val(obj.message.penandaan_batu_ujian).trigger('change');
@@ -3978,7 +4151,7 @@ function edit(id) {
             });
 
             $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '10'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '10'){
             // $('#addtionalSection').html($('#autoPackDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
             // $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
@@ -3991,11 +4164,11 @@ function edit(id) {
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
           }
-          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '17'){
+          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '17'){
           //   $('#addtionalSection').html($('#atsHDetails').html());
           //   $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
           // }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && obj.message.jenis_alat == '12'){
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '12'){
             $('#addtionalSection').html($('#siaDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
 

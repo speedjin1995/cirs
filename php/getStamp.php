@@ -134,6 +134,8 @@ if(isset($_POST['userID'])){
                     $message['borang_d'] = $row['borang_d'] ?? '';
                     $message['borang_e'] = $row['borang_e'] ?? '';
                     $message['invoice_no'] = $row['invoice_no'] ?? '';
+                    $message['invoice_attachment'] = $row['invoice_attachment'] ?? '';
+                    $message['invoice_filepath'] = searchFilePathById($row['invoice_attachment'], $db) ?? '';
                     $message['cash_bill'] = $row['cash_bill'] ?? '';
                     $message['stamping_date'] = $row['stamping_date'] != null ? convertDatetimeToDate($row['stamping_date']) : '';
                     $message['last_year_stamping_date'] = $row['last_year_stamping_date'] != null ? convertDatetimeToDate($row['last_year_stamping_date']) : '';
@@ -232,6 +234,8 @@ if(isset($_POST['userID'])){
                     $message['borang_d'] = $row['borang_d'];
                     $message['borang_e'] = $row['borang_e'];
                     $message['invoice_no'] = $row['invoice_no'];
+                    $message['invoice_attachment'] = $row['invoice_attachment'] ?? '';
+                    $message['invoice_filepath'] = searchFilePathById($row['invoice_attachment'], $db) ?? '';
                     $message['cash_bill'] = $row['cash_bill'];
                     $message['stamping_date'] = $row['stamping_date'];
                     $message['last_year_stamping_date'] = $row['last_year_stamping_date'];
