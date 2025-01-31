@@ -789,22 +789,15 @@ else{
                 <div class="col-4">
                   <div class="form-group">
                     <label>Upload Quotation Attachment</label>
-                    <div id="newQuotation" style="display:none">
-                      <input type="file" class="form-control quotation-file-input" id="uploadQuotationAttachment" name="uploadQuotationAttachment">
-                    </div>
-
-                    <div id="editQuotation" style="display:none">
-                      <div class="d-flex">
-                        <div class="col-10">
-                          <input type="file" class="form-control quotation-file-input" id="uploadQuotationAttachment" name="uploadQuotationAttachment">
-                        </div>
-                        <div class="col-2 mt-1">
-                          <a href="" id="viewQuotation" name="viewQuotation" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>
-                        </div>
+                    <div class="d-flex">
+                      <div class="col-10">
+                        <input type="file" class="form-control" id="uploadQuotationAttachment" name="uploadQuotationAttachment">
+                      </div>
+                      <div class="col-2 mt-1">
+                        <a href="" id="viewQuotation" name="viewQuotation" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
                       </div>
                     </div>
-                    
-                    <input type="text" id="quotationFilePath" name="quotationFilePath" style="display:none">
+                    <input type="text" id="quotationFilePath" name="quotationFilePath" style="display:none">           
                   </div>
                 </div>
                 <div class="col-4">
@@ -833,22 +826,15 @@ else{
                 <div class="col-4">
                   <div class="form-group">
                     <label>Upload Invoice Attachment</label>
-                    <div id="newInvoice" style="display:none">
-                      <input type="file" class="form-control invoice-file-input" id="uploadInvoiceAttachment" name="uploadInvoiceAttachment">
-                    </div>
-
-                    <div id="editInvoice" style="display:none">
-                      <div class="d-flex">
-                        <div class="col-10">
-                          <input type="file" class="form-control invoice-file-input" id="uploadInvoiceAttachment" name="uploadInvoiceAttachment">
-                        </div>
-                        <div class="col-2 mt-1">
-                          <a href="" id="viewInvoice" name="viewInvoice" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>
-                        </div>
+                    <div class="d-flex">
+                      <div class="col-10">
+                        <input type="file" class="form-control" id="uploadInvoiceAttachment" name="uploadInvoiceAttachment">
+                      </div>
+                      <div class="col-2 mt-1">
+                        <a href="" id="viewInvoice" name="viewInvoice" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
                       </div>
                     </div>
-                    
-                    <input type="text" id="InvoiceFilePath" name="InvoiceFilePath" style="display:none">
+                    <input type="text" id="InvoiceFilePath" name="InvoiceFilePath" style="display:none">           
                   </div>
                 </div>
               </div>
@@ -3833,11 +3819,12 @@ function newEntry(){
   $('#extendModal').find('#size').val('').trigger('change');
   $('#extendModal').find('#jenisPelantar').val('').trigger('change');
   $('#extendModal').find('#others').val('');
-  $('#extendModal').find('#newQuotation').show();
-  $('#extendModal').find('#editQuotation').hide();
+  $('#extendModal').find('#viewQuotation').hide();
+  $('#extendModal').find('#uploadQuotationAttachment').val('');
   $('#extendModal').find('#quotationFilePath').val('');
   $('#extendModal').find('#newInvoice').show();
-  $('#extendModal').find('#editInvoice').hide();
+  $('#extendModal').find('#uploadInvoiceAttachment').val('');
+  $('#extendModal').find('#viewInvoice').hide();
   $('#extendModal').find('#InvoiceFilePath').val('');
   //Additonal field reset
   // var value = $('#extendModal').find('#additionalSection').find('#batuUjian').val();
@@ -4016,25 +4003,17 @@ function edit(id) {
         $('#extendModal').find('#remark').val(obj.message.remarks);
         $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
         $('#extendModal').find('#quotation').val(obj.message.quotation_no);
+
         if(obj.message.quotation_attachment){
-          $('#extendModal').find('#editQuotation').show();
-          $('#extendModal').find('#newQuotation').hide();
-        }else{
-          $('#extendModal').find('#newQuotation').show();
-          $('#extendModal').find('#editQuotation').hide();
+          $('#extendModal').find('#viewQuotation').attr('href', "view_file.php?file="+obj.message.quotation_attachment).show();
+          $('#extendModal').find('#quotationFilePath').val(obj.message.quotation_filepath);
         }
-        $('#extendModal').find('#quotationFilePath').val(obj.message.quotation_filepath);
-        $('#extendModal').find('#viewQuotation').attr('href', "view_file.php?file="+obj.message.quotation_attachment);
 
         if(obj.message.invoice_attachment){
-          $('#extendModal').find('#editInvoice').show();
-          $('#extendModal').find('#newInvoice').hide();
-        }else{
-          $('#extendModal').find('#newInvoice').show();
-          $('#extendModal').find('#editInvoice').hide();
+          $('#extendModal').find('#InvoiceFilePath').val(obj.message.invoice_filepath);
+          $('#extendModal').find('#viewInvoice').attr('href', "view_file.php?file="+obj.message.invoice_attachment).show();
         }
-        $('#extendModal').find('#InvoiceFilePath').val(obj.message.invoice_filepath);
-        $('#extendModal').find('#viewInvoice').attr('href', "view_file.php?file="+obj.message.invoice_attachment);
+        
         $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
         $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
         $('#extendModal').find('#poNo').val(obj.message.purchase_no);
@@ -4330,25 +4309,16 @@ function edit(id) {
         $('#extendModal').find('#remark').val(obj.message.remarks);
         $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
         $('#extendModal').find('#quotation').val(obj.message.quotation_no);
+
         if(obj.message.quotation_attachment){
-          $('#extendModal').find('#editQuotation').show();
-          $('#extendModal').find('#newQuotation').hide();
-        }else{
-          $('#extendModal').find('#newQuotation').show();
-          $('#extendModal').find('#editQuotation').hide();
+          $('#extendModal').find('#viewQuotation').attr('href', "view_file.php?file="+obj.message.quotation_attachment).show();
+          $('#extendModal').find('#quotationFilePath').val(obj.message.quotation_filepath);
         }
-        $('#extendModal').find('#quotationFilePath').val(obj.message.quotation_filepath);
-        $('#extendModal').find('#viewQuotation').attr('href', "view_file.php?file="+obj.message.quotation_attachment);
 
         if(obj.message.invoice_attachment){
-          $('#extendModal').find('#editInvoice').show();
-          $('#extendModal').find('#newInvoice').hide();
-        }else{
-          $('#extendModal').find('#newInvoice').show();
-          $('#extendModal').find('#editInvoice').hide();
+          $('#extendModal').find('#InvoiceFilePath').val(obj.message.invoice_filepath);
+          $('#extendModal').find('#viewInvoice').attr('href', "view_file.php?file="+obj.message.invoice_attachment).show();
         }
-        $('#extendModal').find('#InvoiceFilePath').val(obj.message.invoice_filepath);
-        $('#extendModal').find('#viewInvoice').attr('href', "view_file.php?file="+obj.message.invoice_attachment);
 
         $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
         $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
