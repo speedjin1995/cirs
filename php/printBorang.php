@@ -57,6 +57,7 @@ if ($res2 = $result2->fetch_assoc()) {
     $compcert = $res2['certno_lesen'];
     $compexp = $res2['tarikh_luput'];
     $noDaftarSyarikat = $res2['old_roc'];
+    $baseUploadDir = realpath(dirname(__DIR__, 2));
     $companySignature = $res2['signature'];
     
     $select_stmtF = $db->prepare("SELECT * FROM files WHERE id = '$companySignature'");
