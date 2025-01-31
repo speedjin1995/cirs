@@ -58,7 +58,14 @@ if ($res2 = $result2->fetch_assoc()) {
     $compexp = $res2['tarikh_luput'];
     $noDaftarSyarikat = $res2['old_roc'];
     $companySignature = $res2['signature'];
-    $companySignature = $_SERVER['SERVER_NAME'].'/scm/view_file.php?file='.$companySignature;
+    
+    $select_stmtF = $db->prepare("SELECT * FROM files WHERE id = '$companySignature'");
+    $select_stmtF->execute();
+    $resultF = $select_stmtF->get_result();
+    
+    if ($resF = $resultF->fetch_assoc()) {
+        $companySignature = $baseUploadDir . '/' . $resF['filepath'];
+    }
 }
 
 // Filter the excel data 
