@@ -58,6 +58,7 @@ if ($res2 = $result2->fetch_assoc()) {
     $compexp = $res2['tarikh_luput'];
     $noDaftarSyarikat = $res2['old_roc'];
     $companySignature = $res2['signature'];
+    $companySignature = $_SERVER['SERVER_NAME'].'/scm/view_file.php?file='.$companySignature;
 }
 
 // Filter the excel data 
@@ -72,7 +73,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"])){
     $file = $_GET['file'];
     $validator = strtoupper($_GET['validator']);
     $tickImage = '../assets/tick.png';
-    $dmsbLogo = 'https://cirs.syncweigh.com/assets/DMCM.jpeg';
+    $dmsbLogo = '/assets/DMCM.jpeg';
     $currentDateTime = date('d/m/Y - h:i:sA');  // Format: DD/MM/YYYY - HH:MM:SS AM/PM
     $currentDate = date('d/m/Y');  // Format: DD/MM/YYYY
     $currentTime = date('h:i:sA');  // Format: HH:MM:SS AM/PM

@@ -45,7 +45,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
         $companyAddress = $companyRow['address'];
         $companyTel = $companyRow['phone'];
         $companyFax = $companyRow['fax'];
-        $companySignature = 'scm/' . htmlspecialchars($companyRow['signature'], ENT_QUOTES, 'UTF-8');
+        $companySignature = $companyRow['signature'];
     }
 
     $select_stmt = $db->prepare("SELECT * FROM stamping WHERE id IN ($placeholders)");
@@ -529,7 +529,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                                     <td width="40%">';
                         
                         if (isset($companySignature) && $companySignature!=null && $companySignature!="") {
-                            $message .= '<img src="' . $companySignature . '" style="margin-left:30%; padding-top:6%" width="30%" height="auto"/>';
+                            $message .= '<img src="view_file.php?file=' . $companySignature . '" style="margin-left:30%; padding-top:6%" width="30%" height="auto"/>';
                         }else{
                             $message .= '<div style="margin-left:30%; padding-top:6%; width:30%; height:auto; background-color:transparent;"></div>';
                         }

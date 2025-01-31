@@ -26,7 +26,7 @@ if(isset($_POST['id'])){
             if(!empty($row2['nmim'])){
                 $nmims = json_decode($row2['nmim'], true);
                 $latestRecord = end($nmims);
-                $nmim = $latestRecord['nmimApprNo'];
+                $nmim = $latestRecord['nmimApprNo'] ?? '';
             }            
         }
     }

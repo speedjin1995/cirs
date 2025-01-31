@@ -71,7 +71,7 @@ $pdfFilePath = [];
 if(isset($_GET['userID'])){
     $id = $_GET['userID'];
     $tickImage = '../assets/tick.png';
-    $dmsbLogo = 'https://cirs.syncweigh.com/assets/DMCM.jpeg';
+    $dmsbLogo = '../assets/DMCM.jpeg';
     $currentDateTime = date('d/m/Y - h:i:sA');  // Format: DD/MM/YYYY - HH:MM:SS AM/PM
     $currentDate = date('d/m/Y');  // Format: DD/MM/YYYY
     $currentTime = date('h:i:sA');  // Format: HH:MM:SS AM/PM
