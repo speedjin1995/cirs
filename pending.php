@@ -786,18 +786,17 @@ else{
                     </div>
                   </div>
                 </div>
-
                 <div class="col-4">
                   <div class="form-group">
                     <label>Upload Quotation Attachment</label>
                     <div id="newQuotation" style="display:none">
-                      <input type="file" class="form-control file-input" id="uploadQuotationAttachment" name="uploadQuotationAttachment">
+                      <input type="file" class="form-control quotation-file-input" id="uploadQuotationAttachment" name="uploadQuotationAttachment">
                     </div>
 
                     <div id="editQuotation" style="display:none">
                       <div class="d-flex">
                         <div class="col-10">
-                          <input type="file" class="form-control file-input" id="uploadQuotationAttachment" name="uploadQuotationAttachment">
+                          <input type="file" class="form-control quotation-file-input" id="uploadQuotationAttachment" name="uploadQuotationAttachment">
                         </div>
                         <div class="col-2 mt-1">
                           <a href="" id="viewQuotation" name="viewQuotation" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>
@@ -829,6 +828,27 @@ else{
                   <div class="form-group">
                     <label>Invoice / Cash Bill No.</label>
                     <input class="form-control" type="text" placeholder="Invoice No" id="invoice" name="invoice">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Upload Invoice Attachment</label>
+                    <div id="newInvoice" style="display:none">
+                      <input type="file" class="form-control invoice-file-input" id="uploadInvoiceAttachment" name="uploadInvoiceAttachment">
+                    </div>
+
+                    <div id="editInvoice" style="display:none">
+                      <div class="d-flex">
+                        <div class="col-10">
+                          <input type="file" class="form-control invoice-file-input" id="uploadInvoiceAttachment" name="uploadInvoiceAttachment">
+                        </div>
+                        <div class="col-2 mt-1">
+                          <a href="" id="viewInvoice" name="viewInvoice" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <input type="text" id="InvoiceFilePath" name="InvoiceFilePath" style="display:none">
                   </div>
                 </div>
               </div>
@@ -2106,9 +2126,13 @@ $(function () {
 		e.preventDefault(); 
 		var formData = new FormData(this); 
 
-    // Temporarily detach hidden file input
-    let hiddenInput = null;
-    $('.file-input').each(function () {
+    $('.quotation-file-input').each(function () {
+        if (!$(this).is(':visible')) {
+          $(this).prop('disabled', true);
+        }
+    });
+
+    $('.invoice-file-input').each(function () {
         if (!$(this).is(':visible')) {
           $(this).prop('disabled', true);
         }
@@ -2125,17 +2149,13 @@ $(function () {
 				if (obj.status === 'success') {
 					$('#extendModal').modal('hide');
 					toastr["success"](obj.message, "Success:");
-          // Restore hidden file input after success
-          if (hiddenInput) {
-            $('#extendForm').append(hiddenInput);
-          }
-
           $('#weightTable').DataTable().ajax.reload(null, false);
 				} else {
 					toastr["error"](obj.message, "Failed:");
 				}
         // Re-enable all file inputs after success
-        $('.file-input').prop('disabled', false);
+        $('.quotation-file-input').prop('disabled', false);
+        $('.invoice-file-input').prop('disabled', false);
 				$('#spinnerLoading').hide();
 				isModalOpen = false; // Set flag to false on error as well
 			},
@@ -2143,7 +2163,8 @@ $(function () {
 				console.error("AJAX request failed:", status, error);
 				toastr["error"]("An error occurred while processing the request.", "Failed:");
         // Re-enable all file inputs after success
-        $('.file-input').prop('disabled', false);
+        $('.quotation-file-input').prop('disabled', false);
+        $('.invoice-file-input').prop('disabled', false);
 				$('#spinnerLoading').hide();
 				isModalOpen = false; // Set flag to false on error as well
 			}
@@ -3371,12 +3392,26 @@ function format (row) {
   <div class="row">
     <!-- Billing Section -->
     <div class="col-6">
-      <p><strong>Quotation No:</strong> ${row.quotation_no}</p>
+      <p><strong>Quotation No:</strong> ${row.quotation_no} `;
+      
+      if(row.quotation_attachment){
+        returnString += `<span class="ml-5"><a href="view_file.php?file=${row.quotation_attachment}" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></span></p>`;
+      }else{
+        returnString += `</p>`;
+      }
+
+      returnString += `
       <p><strong>Quotation Date:</strong> ${row.quotation_date}</p>
       <p><strong>Purchase No:</strong> ${row.purchase_no}</p>
       <p><strong>Purchase Date:</strong> ${row.purchase_date}</p>
-      <p><strong>Invoice/Cash Bill No:</strong> ${row.invoice_no}</p>
-    </div>
+      <p><strong>Invoice/Cash Bill No:</strong> ${row.invoice_no}`;
+
+      if(row.invoice_attachment){
+        returnString += `<span class="ml-5"><a href="view_file.php?file=${row.invoice_attachment}" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></span></p>`;
+      }else{
+        returnString += `</p>`;
+      }
+    returnString += `</div>
 
     <!-- Price Section -->
     <div class="col-6">
@@ -3801,6 +3836,9 @@ function newEntry(){
   $('#extendModal').find('#newQuotation').show();
   $('#extendModal').find('#editQuotation').hide();
   $('#extendModal').find('#quotationFilePath').val('');
+  $('#extendModal').find('#newInvoice').show();
+  $('#extendModal').find('#editInvoice').hide();
+  $('#extendModal').find('#InvoiceFilePath').val('');
   //Additonal field reset
   // var value = $('#extendModal').find('#additionalSection').find('#batuUjian').val();
   // $('#extendModal').find('#additionalSection').find('#jenis_penunjuk').val('').trigger('change');
@@ -3987,6 +4025,16 @@ function edit(id) {
         }
         $('#extendModal').find('#quotationFilePath').val(obj.message.quotation_filepath);
         $('#extendModal').find('#viewQuotation').attr('href', "view_file.php?file="+obj.message.quotation_attachment);
+
+        if(obj.message.invoice_attachment){
+          $('#extendModal').find('#editInvoice').show();
+          $('#extendModal').find('#newInvoice').hide();
+        }else{
+          $('#extendModal').find('#newInvoice').show();
+          $('#extendModal').find('#editInvoice').hide();
+        }
+        $('#extendModal').find('#InvoiceFilePath').val(obj.message.invoice_filepath);
+        $('#extendModal').find('#viewInvoice').attr('href', "view_file.php?file="+obj.message.invoice_attachment);
         $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
         $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
         $('#extendModal').find('#poNo').val(obj.message.purchase_no);
@@ -4291,6 +4339,17 @@ function edit(id) {
         }
         $('#extendModal').find('#quotationFilePath').val(obj.message.quotation_filepath);
         $('#extendModal').find('#viewQuotation').attr('href', "view_file.php?file="+obj.message.quotation_attachment);
+
+        if(obj.message.invoice_attachment){
+          $('#extendModal').find('#editInvoice').show();
+          $('#extendModal').find('#newInvoice').hide();
+        }else{
+          $('#extendModal').find('#newInvoice').show();
+          $('#extendModal').find('#editInvoice').hide();
+        }
+        $('#extendModal').find('#InvoiceFilePath').val(obj.message.invoice_filepath);
+        $('#extendModal').find('#viewInvoice').attr('href', "view_file.php?file="+obj.message.invoice_attachment);
+
         $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
         $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
         $('#extendModal').find('#poNo').val(obj.message.purchase_no);
