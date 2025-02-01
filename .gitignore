@@ -16,5 +16,5 @@ composer.lock
 
 #/vendor
 /vendor
-/uploads
+
 /php/db_connect.php
