@@ -708,7 +708,7 @@ to get the desired effect
             </ul>
           </li>
           <li class="nav-item">
-            <a href="https://mail.hostinger.com/" class="nav-link link">
+            <a href="https://mail.hostinger.com/" target="_blank" class="nav-link link">
               <i class="nav-icon fas fa-envelope"></i>
               <p>Webmail</p>
             </a>
