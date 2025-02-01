@@ -1,9 +1,11 @@
 <?php
+$config = include(dirname(__DIR__, 3) . '/db_config.php');
+
 // Database connection
-$host = 'localhost';
-$dbname = 'u664110560_cirs';
-$username = 'u664110560_cirs';
-$password = 'Aa@111222333';
+$host = $config['host'];
+$dbname = $config['database'];
+$username = $config['username'];
+$password = $config['password'];
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
