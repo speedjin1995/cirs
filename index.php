@@ -444,6 +444,12 @@ to get the desired effect
                   <p>Cancelled Stamping</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="#stampsummary" data-file="stampsummary.php" class="nav-link link">
+                  <i class="nav-icon far fa-circle"></i>
+                  <p>Stamping Summary</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item has-treeview">
