@@ -122,7 +122,7 @@ if(isset($_POST['id'])){
                         <head>
                             <meta charset="UTF-8">
                             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                            <title>DX Weighing | CIRS</title>
+                            <title>'.$companyName.' | SCM</title>
 
                             <link rel="icon" href="assets/logoSmall.png" type="image">
                             <!-- Font Awesome Icons -->
