@@ -186,7 +186,7 @@ $(function () {
             // Build dynamic columns but keep the first column fixed
             var dynamicColumns = response.columns.map(function(col, index) {
                 return { data: col, orderable: false }; // Disable ordering per column
-            }); 
+            });
 
             $('#validatorTable').find('#validatorHeader').attr("colspan", response.columns.length); 
 
@@ -277,7 +277,7 @@ $(function () {
                 // Build dynamic columns but keep the first column fixed
                 var dynamicColumns = response.columns.map(function(col, index) {
                     return { data: col, orderable: false }; // Disable ordering per column
-                }); 
+                });
 
                 $('#validatorTable').find('#validatorHeader').attr("colspan", response.columns.length); 
 

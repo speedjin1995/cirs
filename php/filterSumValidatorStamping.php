@@ -3,15 +3,6 @@
 require_once 'db_connect.php';
 require_once 'requires/lookup.php';
 
-## Read value
-// $draw = $_POST['draw'];
-// $row = $_POST['start'];
-// $rowperpage = $_POST['length']; // Rows display per page
-// $columnIndex = $_POST['order'][0]['column']; // Column index
-// $columnName = $_POST['columns'][$columnIndex]['data']; // Column name
-// $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
-// $searchValue = mysqli_real_escape_string($db,$_POST['search']['value']); // Search value
-
 ## Search 
 $searchQuery = " ";
 
@@ -31,30 +22,77 @@ if($_POST['toDate'] != null && $_POST['toDate'] != ''){
 
 $months = calcDateDifference($fromDate, $toDate);
 
-## Fetch records
-$empQuery = "SELECT validate_by, status, COUNT(*) AS count FROM stamping WHERE deleted = 0 AND validate_by IN (9,10)".$searchQuery." GROUP BY status, validate_by order by validate_by";
-$empRecords = mysqli_query($db, $empQuery);
-$data = array();
+if(empty($months)){
+  $columns = ["column_1"]; // Start with the first static column
+  $columns[] = "last_column"; // Always add the last column for "Sub Total"
+  $data = [];
+}else{
+  ## Fetch records
+  $empQuery = "SELECT validate_by, DATE_FORMAT(stamping_date, '%b-%y') AS month, SUM(subtotal_amount) AS total_subtotal_amount, SUM(sst) AS total_sst FROM stamping WHERE deleted = 0 AND validate_by IN (9,10)".$searchQuery."and status = 'Complete' GROUP BY validate_by, month ORDER BY validate_by, stamping_date";
+  $empRecords = mysqli_query($db, $empQuery);
+  $data = array();
 
-while ($row = mysqli_fetch_assoc($empRecords)) {
-  
-}
+  // Individual Values
+  $metroSubTotalCost = array_fill_keys($months, 0);
+  $metroSubTotalSST = array_fill_keys($months, 0);
+  $dmetroSubTotalCost = array_fill_keys($months, 0);
+  $dmetroSubTotalSST = array_fill_keys($months, 0);
 
-## Format data for DataTable
-$columns = ["column_1"]; // Start with the first static column
-foreach ($months as $index => $month) {
+  // Sum Values
+  $metroSumCost = array_fill_keys($months, 0);
+  $metroSumSst = array_fill_keys($months, 0);
+  $dmetroSumCost = array_fill_keys($months, 0);
+  $dmetroSumSst = array_fill_keys($months, 0);
+
+  while ($row = mysqli_fetch_assoc($empRecords)) {
+    $monthYear = $row['month'];
+    
+    if ($row['validate_by'] == 10) {
+      $metroSumCost[$monthYear] = (float) $row['total_subtotal_amount'];
+      $metroSumSst[$monthYear] = (float) $row['total_sst'];
+      $metroSubTotalCost[$monthYear] = "RM " . number_format((float) $row['total_subtotal_amount'], 2);
+      $metroSubTotalSST[$monthYear] = "RM " . number_format((float) $row['total_sst'], 2);
+    } elseif ($row['validate_by'] == 9) {
+      $dmetroSumCost[$monthYear] = (float) $row['total_subtotal_amount'];
+      $dmetroSumSst[$monthYear] = (float) $row['total_sst'];
+      $dmetroSubTotalCost[$monthYear] = "RM " . number_format((float) $row['total_subtotal_amount'], 2);
+      $dmetroSubTotalSST[$monthYear] = "RM " . number_format((float) $row['total_sst'], 2);
+    }
+  }
+
+  ## Format data for DataTable
+  $columns = ["column_1"]; // Start with the first static column
+  foreach ($months as $index => $month) {
     $columns[] = "column_" . ($index + 2); // Create dynamic column names (column_2, column_3, etc.)
+  }
+  $columns[] = "last_column"; // Always add the last column for "Sub Total"
+
+  // Check if there are extra months
+  $metrologyMonthsQuery = array_keys($metroSumCost);
+  $dmetrologyMonthsQuery = array_keys($dmetroSumCost);
+
+  // Filter out any extra months from $metroSumCost that are not in $months
+  $metroMonths = array_intersect($months, $metrologyMonthsQuery);  // Keep only the common months
+  $dmetroMonths = array_intersect($months, $dmetrologyMonthsQuery);  // Keep only the common months
+
+  // filter arrays for consistency with $months
+  $metroSumCost = array_intersect_key($metroSumSst, array_flip($metroMonths));
+  $metroSumSst = array_intersect_key($metroSumSst, array_flip($metroMonths));
+  $metroSubTotalCost = array_intersect_key($metroSubTotalCost, array_flip($metroMonths));
+  $metroSubTotalSST = array_intersect_key($metroSubTotalSST, array_flip($metroMonths));
+  $dmetroSumCost = array_intersect_key($dmetroSumCost, array_flip($dmetroMonths));
+  $dmetroSumSst = array_intersect_key($dmetroSumSst, array_flip($dmetroMonths));
+  $dmetroSubTotalCost = array_intersect_key($dmetroSubTotalCost, array_flip($dmetroMonths));
+  $dmetroSubTotalSST = array_intersect_key($dmetroSubTotalSST, array_flip($dmetroMonths));
+
+  // Create data rows
+  $data[] = array_merge(["column_1" => "Metrology"], array_combine(array_slice($columns, 1, -1), $months), ["last_column" => "Sub Total"]);
+  $data[] = array_merge(["column_1" => "Sub Total Cost"], array_combine(array_slice($columns, 1, -1), array_values($metroSubTotalCost)), ["last_column" => "RM " . number_format((float) array_sum($metroSumCost), 2)]);
+  $data[] = array_merge(["column_1" => "Sub Total SST"], array_combine(array_slice($columns, 1, -1), array_values($metroSubTotalSST)), ["last_column" => "RM " . number_format((float) array_sum($metroSumSst), 2)]);
+  $data[] = array_merge(["column_1" => "DE Metrology"], array_combine(array_slice($columns, 1, -1), $months), ["last_column" => "Sub Total"]);
+  $data[] = array_merge(["column_1" => "Sub Total Cost"], array_combine(array_slice($columns, 1, -1), array_values($dmetroSubTotalCost)), ["last_column" => "RM " . number_format((float) array_sum($dmetroSumCost), 2)]);
+  $data[] = array_merge(["column_1" => "Sub Total SST"], array_combine(array_slice($columns, 1, -1), array_values($dmetroSubTotalSST)), ["last_column" => "RM " . number_format((float) array_sum($dmetroSumSst), 2)]);
 }
-$columns[] = "last_column"; // Always add the last column for "Sub Total"
-
-// Create data rows
-$data[] = array_merge(["column_1" => "Metrology"], array_combine(array_slice($columns, 1, -1), $months), ["last_column" => "Sub Total"]);
-$data[] = array_merge(["column_1" => "Sub Total Cost"], array_fill_keys(array_slice($columns, 1, -1), ""), ["last_column" => ""]);
-$data[] = array_merge(["column_1" => "Sub Total SST"], array_fill_keys(array_slice($columns, 1, -1), ""), ["last_column" => ""]);
-$data[] = array_merge(["column_1" => "DE Metrology"], array_combine(array_slice($columns, 1, -1), $months), ["last_column" => "Sub Total"]);
-$data[] = array_merge(["column_1" => "Sub Total Cost"], array_fill_keys(array_slice($columns, 1, -1), ""), ["last_column" => ""]);
-$data[] = array_merge(["column_1" => "Sub Total SST"], array_fill_keys(array_slice($columns, 1, -1), ""), ["last_column" => ""]);
-
 
 ## Response
 $response = array(
@@ -63,7 +101,6 @@ $response = array(
 );
 
 echo json_encode($response);
-
 
 function calcDateDifference($fromDate, $toDate){
   // Define the interval of 1 month
