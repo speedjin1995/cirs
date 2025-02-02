@@ -477,6 +477,12 @@ to get the desired effect
                   <p>Cancelled Validation</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="#othersummary" data-file="othersummary.php" class="nav-link link">
+                  <i class="nav-icon far fa-circle"></i>
+                  <p>Validation Summary</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item has-treeview">
@@ -502,6 +508,12 @@ to get the desired effect
                 <a href="#oldinhouse" data-file="oldinhouse.php" class="nav-link link">
                   <i class="nav-icon far fa-circle"></i>
                   <p>Cancelled Validation</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#inhousesummary" data-file="inhousesummary.php" class="nav-link link">
+                  <i class="nav-icon far fa-circle"></i>
+                  <p>Validation Summary</p>
                 </a>
               </li>
             </ul>

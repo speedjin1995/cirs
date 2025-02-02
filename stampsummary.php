@@ -9,24 +9,6 @@ if(!isset($_SESSION['userID'])){
 }
 else{
     $_SESSION['page']='stampsummary';
-    // $stmt = $db->prepare("SELECT * from companies where id = ?");
-	// $stmt->bind_param('s', $id);
-	// $stmt->execute();
-	// $result = $stmt->get_result();
-    // $name = '';
-	// $address = '';
-	// $phone = '';
-	// $email = '';
-	
-	// if(($row = $result->fetch_assoc()) !== null){
-    //     $data = $row;
-    //     // $name = $row['name'];
-    //     // $address = $row['address'];
-    //     // $phone = $row['phone'];
-    //     // $email = $row['email'];
-	// 	$filepath = $row['signature'];
-	// 	$inhouseFilePath = $row['inhouse'];
-    // }
 }
 ?>
 

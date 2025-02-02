@@ -76,7 +76,7 @@ if(empty($months)){
   $dmetroMonths = array_intersect($months, $dmetrologyMonthsQuery);  // Keep only the common months
 
   // filter arrays for consistency with $months
-  $metroSumCost = array_intersect_key($metroSumSst, array_flip($metroMonths));
+  $metroSumCost = array_intersect_key($metroSumCost, array_flip($metroMonths));
   $metroSumSst = array_intersect_key($metroSumSst, array_flip($metroMonths));
   $metroSubTotalCost = array_intersect_key($metroSubTotalCost, array_flip($metroMonths));
   $metroSubTotalSST = array_intersect_key($metroSubTotalSST, array_flip($metroMonths));
