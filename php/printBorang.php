@@ -60,12 +60,14 @@ if ($res2 = $result2->fetch_assoc()) {
     $baseUploadDir = realpath(dirname(__DIR__, 2));
     $companySignature = $res2['signature'];
     
-    $select_stmtF = $db->prepare("SELECT * FROM files WHERE id = '$companySignature'");
-    $select_stmtF->execute();
-    $resultF = $select_stmtF->get_result();
-    
-    if ($resF = $resultF->fetch_assoc()) {
-        $companySignature = $baseUploadDir . '/' . $resF['filepath'];
+    if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+        $select_stmtF = $db->prepare("SELECT * FROM files WHERE id = '$companySignature'");
+        $select_stmtF->execute();
+        $resultF = $select_stmtF->get_result();
+        
+        if ($resF = $resultF->fetch_assoc()) {
+            $companySignature = $baseUploadDir . '/' . $resF['filepath'];
+        }
     }
 }
 
