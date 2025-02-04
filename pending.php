@@ -20,6 +20,15 @@ else{
     $role = $row['role_code'];
   }
 
+  $stmt = $db->prepare("SELECT * from companies");
+	$stmt->execute();
+	$result2 = $stmt->get_result();
+  $stamp_prefer_validator = '';
+
+  if(($row = $result2->fetch_assoc()) !== null){
+    $stamp_prefer_validator = $row['stamp_prefer_validator'];
+  }
+
   $dealer = $db->query("SELECT * FROM dealer WHERE deleted = '0'");
   $customers = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
@@ -149,9 +158,12 @@ else{
                 <div class="form-group">
                   <label>Select Validators:</label>
                   <select class="form-control select2" id="validatorFilter" name="validatorFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
+                    <!-- <option value="" selected disabled hidden>Please Select</option> -->
                     <?php while ($validator2 = mysqli_fetch_assoc($validators2)) { ?>
-                    <option value="<?=$validator2['id'] ?>"><?=$validator2['validator'] ?></option>
+                      <option value="<?= $validator2['id'] ?>" 
+                        <?php if ($stamp_prefer_validator == $validator2['id']) echo 'selected'; ?>>
+                        <?= $validator2['validator'] ?>
+                      </option>
                     <?php } ?>
                   </select>
                 </div>

@@ -28,6 +28,8 @@ else{
 		$filepath = $row['signature'];
 		$inhouseFilePath = $row['inhouse'];
     }
+
+	$validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
 }
 ?>
 
@@ -140,6 +142,18 @@ else{
 					<div class="form-group col-6">
 						<label for="tarikh_dikeluarkan">Tarikh Dikeluarkan </label>
 						<input type="date" class="form-control" id="tarikh_dikeluarkan" name="tarikh_dikeluarkan" value="<?=$data['tarikh_dikeluarkan'] ?>">
+					</div>
+
+					<div class="form-group col-6">
+						<label for="stamp_prefer_validator">Stamping Preferred Validator</label>
+						<select class="form-control select2" style="width: 100%;" id="stamp_prefer_validator" name="stamp_prefer_validator" required>
+							<?php while ($rowVA = mysqli_fetch_assoc($validators)) { ?>
+								<option value="<?= $rowVA['id'] ?>" 
+									<?php if ($data['stamp_prefer_validator'] == $rowVA['id']) echo 'selected'; ?>>
+									<?= $rowVA['validator'] ?>
+								</option>
+							<?php } ?>
+						</select>
 					</div>
 
 					<div class="form-group col-6">
