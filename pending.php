@@ -1131,6 +1131,7 @@ else{
           <input type="hidden" class="form-control" id="id" name="id">
           <input type="hidden" class="form-control" id="type" name="type">
           <input type="hidden" class="form-control" id="validate" name="validate">
+          <input type="hidden" class="form-control" id="printType" name="printType">
           <div class="row">
             <div class="col-6">
               <div class="form-group">
@@ -2344,9 +2345,14 @@ $(function () {
         var id = $('#printBorangForm').find('#id').val();
         var type = $('#printBorangForm').find('#type').val();
         var validate = $('#printBorangForm').find('#validate').val();
+        var printType = $('#printBorangForm').find('#printType').val();
         var actualPrintDate = $('#printBorangForm').find('#actualPrintDate').val();
 
-        window.open('php/printBorang.php?userID='+id+'&file='+type+'&validator='+validate+'&actualPrintDate='+actualPrintDate, '_blank');
+        if(printType == 'SINGLE'){
+          window.open('php/printBorang.php?userID='+id+'&file='+type+'&validator='+validate+'&printType='+printType+'&actualPrintDate='+actualPrintDate, '_blank');
+        }else{
+          window.open('php/printMergedBorang.php?userID='+id+'&actualPrintDate='+actualPrintDate, '_blank');
+        }
 
         $('#printBorangModal').modal('hide');
       }
@@ -2584,7 +2590,26 @@ $(function () {
       });
 
       if (selectedIds.length > 0) {
-        window.open('php/printMergedBorang.php?userID='+selectedIds, '_blank');
+        $("#printBorangModal").find('#id').val(selectedIds);
+        $("#printBorangModal").find('#type').val('');
+        $("#printBorangModal").find('#validate').val('');
+        $("#printBorangModal").find('#actualPrintDate').val('');
+        $("#printBorangModal").find('#printType').val('MERGE');
+        $("#printBorangModal").modal("show");
+
+        $('#printBorangForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
       } 
       else {
         // Optionally, you can display a message or take another action if no IDs are selected
@@ -4676,6 +4701,7 @@ function print(id, type, validate) {
   $("#printBorangModal").find('#type').val(type);
   $("#printBorangModal").find('#validate').val(validate);
   $("#printBorangModal").find('#actualPrintDate').val('');
+  $("#printBorangModal").find('#printType').val('SINGLE');
   $("#printBorangModal").modal("show");
 
   $('#printBorangForm').validate({
