@@ -20,6 +20,15 @@ else{
     $role = $row['role_code'];
   }
 
+  $stmt = $db->prepare("SELECT * from companies");
+	$stmt->execute();
+	$result2 = $stmt->get_result();
+  $stamp_prefer_validator = '';
+
+  if(($row = $result2->fetch_assoc()) !== null){
+    $stamp_prefer_validator = $row['stamp_prefer_validator'];
+  }
+
   $dealer = $db->query("SELECT * FROM dealer WHERE deleted = '0'");
   $customers = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
@@ -149,9 +158,12 @@ else{
                 <div class="form-group">
                   <label>Select Validators:</label>
                   <select class="form-control select2" id="validatorFilter" name="validatorFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
+                    <!-- <option value="" selected disabled hidden>Please Select</option> -->
                     <?php while ($validator2 = mysqli_fetch_assoc($validators2)) { ?>
-                    <option value="<?=$validator2['id'] ?>"><?=$validator2['validator'] ?></option>
+                      <option value="<?= $validator2['id'] ?>" 
+                        <?php if ($stamp_prefer_validator == $validator2['id']) echo 'selected'; ?>>
+                        <?= $validator2['validator'] ?>
+                      </option>
                     <?php } ?>
                   </select>
                 </div>
@@ -1103,6 +1115,47 @@ else{
   </div>
 </div>
 
+<div class="modal fade" id="printBorangModal"> 
+  <div class="modal-dialog modal-xl" style="max-width: 50%;">
+    <div class="modal-content">
+
+      <form role="form" id="printBorangForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Print Borang Ujian</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" class="form-control" id="id" name="id">
+          <input type="hidden" class="form-control" id="type" name="type">
+          <input type="hidden" class="form-control" id="validate" name="validate">
+          <input type="hidden" class="form-control" id="printType" name="printType">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>Actual Print Date *</label>
+                <div class='input-group date' id="borangUjianDatePicker" data-target-input="nearest">
+                  <input type='text' class="form-control datetimepicker-input" data-target="#borangUjianDatePicker" id="actualPrintDate" name="actualPrintDate" required/>
+                  <div class="input-group-append" data-target="#borangUjianDatePicker" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> 
+        </div>
+
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <script type="text/html" id="atkDetails">
   <div class="card card-primary">
     <div class="card-body">
@@ -1894,6 +1947,12 @@ $(function () {
     defaultDate: ''
   });
   
+  $('#borangUjianDatePicker').datetimepicker({
+    icons: { time: 'far fa-calendar' },
+    format: 'DD/MM/YYYY',
+    defaultDate: ''
+  });
+  
   $('#datePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
@@ -1951,8 +2010,8 @@ $(function () {
       'data': {
         fromDate: fromDateValue,
         toDate: toDateValue,
-        customer: validatorFilter,
-        validator: customerNoFilter,
+        customer: customerNoFilter,
+        validator: validatorFilter,
         daftarLama: daftarLamaNoFilter,
         daftarBaru: daftarBaruNoFilter,
         borang: borangNoFilter,
@@ -2282,6 +2341,21 @@ $(function () {
           $('#spinnerLoading').hide();
         });
       }
+      else if($('#printBorangModal').hasClass('show')){
+        var id = $('#printBorangForm').find('#id').val();
+        var type = $('#printBorangForm').find('#type').val();
+        var validate = $('#printBorangForm').find('#validate').val();
+        var printType = $('#printBorangForm').find('#printType').val();
+        var actualPrintDate = $('#printBorangForm').find('#actualPrintDate').val();
+
+        if(printType == 'SINGLE'){
+          window.open('php/printBorang.php?userID='+id+'&file='+type+'&validator='+validate+'&printType='+printType+'&actualPrintDate='+actualPrintDate, '_blank');
+        }else{
+          window.open('php/printMergedBorang.php?userID='+id+'&actualPrintDate='+actualPrintDate, '_blank');
+        }
+
+        $('#printBorangModal').modal('hide');
+      }
     }
   });
 
@@ -2516,7 +2590,26 @@ $(function () {
       });
 
       if (selectedIds.length > 0) {
-        window.open('php/printMergedBorang.php?userID='+selectedIds, '_blank');
+        $("#printBorangModal").find('#id').val(selectedIds);
+        $("#printBorangModal").find('#type').val('');
+        $("#printBorangModal").find('#validate').val('');
+        $("#printBorangModal").find('#actualPrintDate').val('');
+        $("#printBorangModal").find('#printType').val('MERGE');
+        $("#printBorangModal").modal("show");
+
+        $('#printBorangForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
       } 
       else {
         // Optionally, you can display a message or take another action if no IDs are selected
@@ -4604,8 +4697,29 @@ function deactivate(id) {
 }
 
 function print(id, type, validate) {
+  $("#printBorangModal").find('#id').val(id);
+  $("#printBorangModal").find('#type').val(type);
+  $("#printBorangModal").find('#validate').val(validate);
+  $("#printBorangModal").find('#actualPrintDate').val('');
+  $("#printBorangModal").find('#printType').val('SINGLE');
+  $("#printBorangModal").modal("show");
+
+  $('#printBorangForm').validate({
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+      error.addClass('invalid-feedback');
+      element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass('is-invalid');
+    }
+  });
+
   //var optionText = $('#jenisAlat option[value="' + type + '"]').text();
-  window.open('php/printBorang.php?userID='+id+'&file='+type+'&validator='+validate, '_blank');
+  // window.open('php/printBorang.php?userID='+id+'&file='+type+'&validator='+validate, '_blank');
   /*$.get('php/printBorang.php', {userID: id, file: 'ATK'}, function(data){
     var obj = JSON.parse(data);
 
