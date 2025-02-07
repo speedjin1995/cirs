@@ -8,10 +8,10 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
     $arrayOfId = explode(",", $selectedIds);
     $driver = filter_input(INPUT_POST, 'driver', FILTER_SANITIZE_STRING);
     $cawangan = searchStateNameById(filter_input(INPUT_POST, 'cawanganBorang', FILTER_SANITIZE_STRING), $db);
-    $validator = filter_input(INPUT_POST, 'validatorBorang', FILTER_SANITIZE_STRING);
+    $validator2 = filter_input(INPUT_POST, 'validatorBorang', FILTER_SANITIZE_STRING);
 
     if(isset($_POST['validatorBorang']) && $_POST['validatorBorang']!=null && $_POST['validatorBorang']!=""){
-        $validatorFilter = searchValidatorNameById($validator, $db);
+        $validatorFilter = searchValidatorNameById($validator2, $db);
 	}else{
         echo json_encode(
             array(
@@ -23,6 +23,8 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
     }
     
     $actualPrintDate = filter_input(INPUT_POST, 'actualPrintDate', FILTER_SANITIZE_STRING);
+    $actualPrintDateTime = DateTime::createFromFormat('d/m/Y', $actualPrintDate);
+    $fromDateTime = $actualPrintDateTime->format('Y-m-d 00:00:00');
     $todayDate = date('d/m/Y');
     $todayDate2 = date('d M Y');
     $todayDate3 = date('d.m.Y');
@@ -565,7 +567,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                         }
                 }
 
-                $update_stmt = $db->prepare("UPDATE stamping SET stamping_date = '$today', validate_by = '$validator' WHERE id IN ($placeholders)");
+                $update_stmt = $db->prepare("UPDATE stamping SET stamping_date = '$fromDateTime', validate_by = '$validator2' WHERE id IN ($placeholders)");
                 $update_stmt->bind_param($types, ...$arrayOfId);
                 $update_stmt->execute();
             }    
