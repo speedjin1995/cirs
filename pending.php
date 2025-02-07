@@ -43,7 +43,8 @@ else{
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $technicians = $db->query("SELECT * FROM users WHERE role_code != 'SUPER_ADMIN' AND deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
-  $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
+  $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");  
+  $validatorsF = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
   $states = $db->query("SELECT * FROM state WHERE deleted = '0'");
   $cawangans = $db->query("SELECT * FROM state WHERE deleted = '0'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
@@ -158,12 +159,9 @@ else{
                 <div class="form-group">
                   <label>Select Validators:</label>
                   <select class="form-control select2" id="validatorFilter" name="validatorFilter">
-                    <!-- <option value="" selected disabled hidden>Please Select</option> -->
+                    <option value="" selected disabled hidden>Please Select</option>
                     <?php while ($validator2 = mysqli_fetch_assoc($validators2)) { ?>
-                      <option value="<?= $validator2['id'] ?>" 
-                        <?php if ($stamp_prefer_validator == $validator2['id']) echo 'selected'; ?>>
-                        <?= $validator2['validator'] ?>
-                      </option>
+                      <option value="<?= $validator2['id'] ?>"><?= $validator2['validator'] ?></option>
                     <?php } ?>
                   </select>
                 </div>
@@ -959,8 +957,6 @@ else{
                 </select>
               </div>
             </div>
-          </div>  
-          <div class="row">
             <div class="col-6">
               <div class="form-group">
                 <label>Cawangan *</label>
@@ -972,7 +968,7 @@ else{
                 </select>
               </div>
             </div>
-          </div>  
+          </div> 
           <div class="row">
             <div class="col-6">
               <div class="form-group">
@@ -985,8 +981,19 @@ else{
                 </div>
               </div>
             </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label>Validator *</label>
+                <select class="form-control select2" style="width: 100%;" id="validatorBorang" name="validatorBorang" required>
+                  <option selected="selected"></option>
+                  <?php while($valF=mysqli_fetch_assoc($validatorsF)){ ?>
+                    <option value="<?=$valF['id'] ?>"><?=$valF['validator'] ?></option>
+                  <?php } ?>
+                </select>
+              </div>
+            </div>
           </div>
-          <input type="hidden" class="form-control" id="validatorBorang" name="validatorBorang">
+          <!--input type="hidden" class="form-control" id="validatorBorang" name="validatorBorang"-->
           <input type="hidden" class="form-control" id="userId" name="userId">
 
         </div>
@@ -2504,10 +2511,10 @@ $(function () {
       }
     });
 
-    if(!$('#validatorFilter').val()){
+    /*if(!$('#validatorFilter').val()){
       alert("The records is consists of Metrology and De-Metrology stamping. Please filter ONLY 1 VALIDATORS before export!");
     }
-    else if (selectedIds.length <= 0) {
+    else */if (selectedIds.length <= 0) {
       // Optionally, you can display a message or take another action if no IDs are selected
       alert("Please select at least one DO to Deliver.");
     } 

@@ -144,7 +144,7 @@ else{
 						<input type="date" class="form-control" id="tarikh_dikeluarkan" name="tarikh_dikeluarkan" value="<?=$data['tarikh_dikeluarkan'] ?>">
 					</div>
 
-					<div class="form-group col-6">
+					<div class="form-group col-6" style="display:none;">
 						<label for="stamp_prefer_validator">Stamping Preferred Validator</label>
 						<select class="form-control select2" style="width: 100%;" id="stamp_prefer_validator" name="stamp_prefer_validator" required>
 							<?php while ($rowVA = mysqli_fetch_assoc($validators)) { ?>

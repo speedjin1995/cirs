@@ -8,9 +8,10 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
     $arrayOfId = explode(",", $selectedIds);
     $driver = filter_input(INPUT_POST, 'driver', FILTER_SANITIZE_STRING);
     $cawangan = searchStateNameById(filter_input(INPUT_POST, 'cawanganBorang', FILTER_SANITIZE_STRING), $db);
+    $validator = filter_input(INPUT_POST, 'validatorBorang', FILTER_SANITIZE_STRING);
 
     if(isset($_POST['validatorBorang']) && $_POST['validatorBorang']!=null && $_POST['validatorBorang']!=""){
-        $validatorFilter = searchValidatorNameById($_POST['validatorBorang'], $db);
+        $validatorFilter = searchValidatorNameById($validator, $db);
 	}else{
         echo json_encode(
             array(
@@ -564,9 +565,9 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                         }
                 }
 
-                /*$update_stmt = $db->prepare("UPDATE stamping SET stamping_date = '$today' WHERE id IN ($placeholders)");
+                $update_stmt = $db->prepare("UPDATE stamping SET stamping_date = '$today', validate_by = '$validator' WHERE id IN ($placeholders)");
                 $update_stmt->bind_param($types, ...$arrayOfId);
-                $update_stmt->execute();*/
+                $update_stmt->execute();
             }    
     
         $message .= '</body></html>';
