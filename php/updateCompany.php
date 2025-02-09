@@ -86,6 +86,10 @@ if(isset($_POST['new_roc'], $_POST['name'], $_POST['address'])){
 		$tarikh_dikeluarkan = filter_input(INPUT_POST, 'tarikh_dikeluarkan', FILTER_SANITIZE_STRING);
 	}
 	
+	if($_POST['stamp_prefer_validator'] != null && $_POST['stamp_prefer_validator'] != ""){
+		$stamp_prefer_validator = filter_input(INPUT_POST, 'stamp_prefer_validator', FILTER_SANITIZE_STRING);
+	}
+	
 	// if($_POST['engineer_name'] != null && $_POST['engineer_name'] != ""){
 	// 	$engineer_name = filter_input(INPUT_POST, 'engineer_name', FILTER_SANITIZE_STRING);
 	// }
@@ -104,8 +108,8 @@ if(isset($_POST['new_roc'], $_POST['name'], $_POST['address'])){
 
 	// if ($stmt2 = $db->prepare("UPDATE companies SET new_roc=?, old_roc=?, name=?, address=?, phone=?, fax=?, person_incharge=?, contact_no=?, email=?, lesen_type=?, certno_lesen=?, certats_serialno=?, failno=?, bless_serahanno=?, resitno=?, tarikh_kuatkuasa=?, tarikh_luput=?, tarikh_dikeluarkan=?, engineer_name=?, engineer_ic=?, engineer_position=?, engineer_contact=? WHERE id=?")) {
 	// 	$stmt2->bind_param('sssssssssssssssssssssss', $new_roc, $old_roc, $name, $address, $phone, $fax, $person_incharge, $contact_no, $email, $lesen_type, $certno_lesen, $certats_serialno, $failno, $bless_serahanno, $resitno, $tarikh_kuatkuasa, $tarikh_luput, $tarikh_dikeluarkan, $engineer_name, $engineer_ic, $engineer_position, $engineer_contact, $id);
-	if ($stmt2 = $db->prepare("UPDATE companies SET new_roc=?, old_roc=?, name=?, address=?, phone=?, fax=?, person_incharge=?, contact_no=?, email=?, lesen_type=?, certno_lesen=?, certats_serialno=?, failno=?, bless_serahanno=?, resitno=?, tarikh_kuatkuasa=?, tarikh_luput=?, tarikh_dikeluarkan=? WHERE id=?")) {
-		$stmt2->bind_param('sssssssssssssssssss', $new_roc, $old_roc, $name, $address, $phone, $fax, $person_incharge, $contact_no, $email, $lesen_type, $certno_lesen, $certats_serialno, $failno, $bless_serahanno, $resitno, $tarikh_kuatkuasa, $tarikh_luput, $tarikh_dikeluarkan, $id);
+	if ($stmt2 = $db->prepare("UPDATE companies SET new_roc=?, old_roc=?, name=?, address=?, phone=?, fax=?, person_incharge=?, contact_no=?, email=?, lesen_type=?, certno_lesen=?, certats_serialno=?, failno=?, bless_serahanno=?, resitno=?, tarikh_kuatkuasa=?, tarikh_luput=?, tarikh_dikeluarkan=?, stamp_prefer_validator=? WHERE id=?")) {
+		$stmt2->bind_param('ssssssssssssssssssss', $new_roc, $old_roc, $name, $address, $phone, $fax, $person_incharge, $contact_no, $email, $lesen_type, $certno_lesen, $certats_serialno, $failno, $bless_serahanno, $resitno, $tarikh_kuatkuasa, $tarikh_luput, $tarikh_dikeluarkan, $stamp_prefer_validator, $id);
 		
 		if($stmt2->execute()){
 			$uploadAttachment = null;
