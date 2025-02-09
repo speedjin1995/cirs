@@ -79,13 +79,9 @@ else{
             <table id="dashboardTable" class="table table-bordered table-striped display" style="text-align:center">
                 <thead>
                     <tr>
-                        <th colspan="3">PROCAL</th>
-                        <th colspan="3">SIRIM</th>
+                        <th colspan="3">Other Validations</th>
                     </tr>
                     <tr style="background-color: rgb(1, 162, 226);">
-                        <th>Pending Job</th>
-                        <th>Complete Job</th>
-                        <th>Cancel Job</th>
                         <th>Pending Job</th>
                         <th>Complete Job</th>
                         <th>Cancel Job</th>
@@ -95,15 +91,20 @@ else{
         </div>
     </div>
 
-    <!-- <div class="row">
+    <div class="row" id="displayDashboardDetail" style="display:none;">
         <div class="col-lg-12">
-            <table id="validatorTable" class="table table-bordered table-striped display">
+            <table id="dashboardDetailTable" class="table table-bordered table-striped display">
                 <thead>
-                    <tr><th id="validatorHeader">Validator Ranking Count</th></tr>
+                    <tr>
+                      <th id="dashboardDetailHeader">Validator Ranking Count</th>
+                    </tr>
                 </thead>
+                <tbody id="dashboardDetailBody">
+
+                </tbody>
             </table>
         </div>
-    </div> -->
+    </div>
   </div>
 </div>
 
@@ -130,6 +131,73 @@ $(function () {
     var toDateValue = $('#toDate').val();
 
     var table = $("#dashboardTable").DataTable({
+      "responsive": true,
+      "autoWidth": false,
+      'processing': true,
+      'serverSide': true,
+      'serverMethod': 'post',
+      'searching': false,
+      'paging': false,
+      'info': false,
+      'ajax': {
+          'type': 'POST',
+          'url':'php/filterSumCountValidation.php',
+          'data': {
+              fromDate: fromDateValue,
+              toDate: toDateValue
+          } 
+      },
+      'columns': [
+        { 
+          data: 'pending',
+          createdCell: function(td, cellData, rowData, row, col) {
+            $(td).attr('id', 'pending');
+            $(td).addClass('clickable-column');
+            if (parseInt(cellData) > 0) {
+              $(td).html(cellData + ' <i class="fa fa-eye view-icon" style="cursor: pointer;"></i>');
+            }        
+          }
+        },
+        { 
+          data: 'complete',
+          createdCell: function(td, cellData, rowData, row, col) {
+            $(td).attr('id', 'complete');
+            $(td).addClass('clickable-column');
+            if (parseInt(cellData) > 0) {
+              $(td).html(cellData + ' <i class="fa fa-eye view-icon" style="cursor: pointer;"></i>');
+            }
+          }
+        },
+        { 
+          data: 'cancel',
+          createdCell: function(td, cellData, rowData, row, col) {
+            $(td).attr('id', 'cancel');
+            $(td).addClass('clickable-column');
+            if (parseInt(cellData) > 0) {
+              $(td).html(cellData + ' <i class="fa fa-eye view-icon" style="cursor: pointer;"></i>');
+            }
+          }
+        }
+      ]
+    });
+
+    // Attach click event to dynamically created elements
+    $('#dashboardTable tbody').on('click', '.clickable-column', function() {
+      var status = $(this).attr('id');
+
+      displayDashboardDetail(status);
+    });
+
+    $('#filterSearch').on('click', function(){
+      var fromDateValue = $('#fromDate').val();
+      var toDateValue = $('#toDate').val();
+
+      //Destroy the old Datatable
+      $('#displayDashboardDetail').hide();
+      $("#dashboardTable").DataTable().clear().destroy();
+
+      //Create new Datatable
+      table = $("#dashboardTable").DataTable({
         "responsive": true,
         "autoWidth": false,
         'processing': true,
@@ -142,165 +210,43 @@ $(function () {
             'type': 'POST',
             'url':'php/filterSumCountValidation.php',
             'data': {
-                fromDate: fromDateValue,
-                toDate: toDateValue
+              fromDate: fromDateValue,
+              toDate: toDateValue
             } 
         },
         'columns': [
-            { data: 'pending_procal' },
-            { data: 'complete_procal' },
-            { data: 'cancel_procal' },
-            { data: 'pending_sirim' },
-            { data: 'complete_sirim' },
-            { data: 'cancel_sirim' },
-        ]
-    });
-
-    // $.ajax({
-    //     url: 'php/filterSumValidatorStamping.php',
-    //     type: 'POST',
-    //     data: {
-    //         fromDate: fromDateValue,
-    //         toDate: toDateValue
-    //     },
-    //     dataType: 'json',
-    //     success: function(response) {
-    //         // Build dynamic columns but keep the first column fixed
-    //         var dynamicColumns = response.columns.map(function(col, index) {
-    //             return { data: col, orderable: false }; // Disable ordering per column
-    //         });
-
-    //         $('#validatorTable').find('#validatorHeader').attr("colspan", response.columns.length); 
-
-    //         // Initialize DataTable
-    //         var validatorTable = $("#validatorTable").DataTable({
-    //             "destroy": true, // Allow reinitialization
-    //             "responsive": true,
-    //             "autoWidth": false,
-    //             'processing': true,
-    //             'paging': false,
-    //             'info': false,
-    //             'searching': false,
-    //             "ordering": false,
-    //             'data': response.aaData, // Load dynamic data
-    //             'columns': dynamicColumns, // Use dynamic columns
-    //             'createdRow': function(row, data, dataIndex) {
-    //                 $('td:eq(0)', row).css({
-    //                     'font-weight': 'bold',
-    //                     'color': 'white',
-    //                     'background-color': 'rgb(1, 162, 226)'
-    //                 });
-
-    //                 //Styling for Metrology & DE Metrology Row
-    //                 if (dataIndex === 0 || dataIndex === 3) { 
-    //                     $(row).css({
-    //                         'font-weight': 'bold',
-    //                         'color': 'white',
-    //                         'background-color': 'rgb(1, 162, 226)'
-    //                     });
-
-    //                     // Apply styling to the last column of each row
-    //                     $('td:last', row).css({
-    //                         'font-weight': 'bold',
-    //                         'color': 'black',
-    //                         'background-color': '#FFECB3' // Example: Yellow background for last column
-    //                     });
-    //                 }
-    //             }
-    //         });
-    //     }
-    // });
-
-    $('#filterSearch').on('click', function(){
-        var fromDateValue = $('#fromDate').val();
-        var toDateValue = $('#toDate').val();
-
-        //Destroy the old Datatable
-        $("#dashboardTable").DataTable().clear().destroy();
-        $("#validatorTable").DataTable().clear().destroy();
-
-        //Create new Datatable
-        table = $("#dashboardTable").DataTable({
-            "responsive": true,
-            "autoWidth": false,
-            'processing': true,
-            'serverSide': true,
-            'serverMethod': 'post',
-            'searching': false,
-            'paging': false,
-            'info': false,
-            'ajax': {
-                'type': 'POST',
-                'url':'php/filterSumCountValidation.php',
-                'data': {
-                    fromDate: fromDateValue,
-                    toDate: toDateValue
-                } 
-            },
-            'columns': [
-                { data: 'pending_procal' },
-                { data: 'complete_procal' },
-                { data: 'cancel_procal' },
-                { data: 'pending_sirim' },
-                { data: 'complete_sirim' },
-                { data: 'cancel_sirim' },
-            ]
-        });
-
-        // $.ajax({
-        //     url: 'php/filterSumValidatorStamping.php',
-        //     type: 'POST',
-        //     data: {
-        //         fromDate: fromDateValue,
-        //         toDate: toDateValue
-        //     },
-        //     dataType: 'json',
-        //     success: function(response) {
-        //         // Build dynamic columns but keep the first column fixed
-        //         var dynamicColumns = response.columns.map(function(col, index) {
-        //             return { data: col, orderable: false }; // Disable ordering per column
-        //         });
-
-        //         $('#validatorTable').find('#validatorHeader').attr("colspan", response.columns.length); 
-
-        //         // Initialize DataTable
-        //         var validatorTable = $("#validatorTable").DataTable({
-        //             "destroy": true, // Allow reinitialization
-        //             "responsive": true,
-        //             "autoWidth": false,
-        //             'processing': true,
-        //             'paging': false,
-        //             'info': false,
-        //             'searching': false,
-        //             "ordering": false,
-        //             'data': response.aaData, // Load dynamic data
-        //             'columns': dynamicColumns, // Use dynamic columns
-        //             'createdRow': function(row, data, dataIndex) {
-        //                 $('td:eq(0)', row).css({
-        //                     'font-weight': 'bold',
-        //                     'color': 'white',
-        //                     'background-color': 'rgb(1, 162, 226)'
-        //                 });
-
-        //                 //Styling for Metrology & DE Metrology Row
-        //                 if (dataIndex === 0 || dataIndex === 3) { 
-        //                     $(row).css({
-        //                         'font-weight': 'bold',
-        //                         'color': 'white',
-        //                         'background-color': 'rgb(1, 162, 226)'
-        //                     });
-
-        //                     // Apply styling to the last column of each row
-        //                     $('td:last', row).css({
-        //                         'font-weight': 'bold',
-        //                         'color': 'black',
-        //                         'background-color': '#FFECB3' // Example: Yellow background for last column
-        //                     });
-        //                 }
-        //             }
-        //         });
-        //     }
-        // });
+        { 
+          data: 'pending',
+          createdCell: function(td, cellData, rowData, row, col) {
+            $(td).attr('id', 'pending');
+            $(td).addClass('clickable-column');
+            if (parseInt(cellData) > 0) {
+              $(td).html(cellData + ' <i class="fa fa-eye view-icon" style="cursor: pointer;"></i>');
+            }          
+          }
+        },
+        { 
+          data: 'complete',
+          createdCell: function(td, cellData, rowData, row, col) {
+            $(td).attr('id', 'complete');
+            $(td).addClass('clickable-column');
+            if (parseInt(cellData) > 0) {
+              $(td).html(cellData + ' <i class="fa fa-eye view-icon" style="cursor: pointer;"></i>');
+            }          
+          }
+        },
+        { 
+          data: 'cancel',
+          createdCell: function(td, cellData, rowData, row, col) {
+            $(td).attr('id', 'cancel');
+            $(td).addClass('clickable-column');
+            if (parseInt(cellData) > 0) {
+              $(td).html(cellData + ' <i class="fa fa-eye view-icon" style="cursor: pointer;"></i>');
+            }
+          }
+        }
+      ]
+      });
     });
 
     // Event listener for changes in the #fromDatePicker
@@ -331,9 +277,77 @@ $(function () {
 });
 
 function dateDifferenceInMonths(fromDate, toDate) {
-    const from = new Date(fromDate);
-    const to = new Date(toDate);
-    const months = (to.getFullYear() - from.getFullYear()) * 12 + (to.getMonth() - from.getMonth());
-    return months;
+  const from = new Date(fromDate);
+  const to = new Date(toDate);
+  const months = (to.getFullYear() - from.getFullYear()) * 12 + (to.getMonth() - from.getMonth());
+  return months;
 }
+
+function displayDashboardDetail(id){
+  console.log(id);
+  var fromDateValue = $('#fromDate').val();
+  var toDateValue = $('#toDate').val();
+
+  if (fromDateValue && toDateValue){
+    $('#displayDashboardDetail').show();
+    $.ajax({
+      url: 'php/loadValidationDashboardDetail.php',
+      type: 'POST',
+      data: {
+        status: id,
+        fromDate: fromDateValue,
+        toDate: toDateValue
+      },
+      dataType: 'json',
+      success: function(response) {
+          // Build dynamic columns but keep the first column fixed
+          var dynamicColumns = response.columns.map(function(col, index) {
+            return { data: col, orderable: false }; // Disable ordering per column
+          });
+
+          $('#dashboardDetailTable').find('#dashboardDetailHeader').attr("colspan", response.columns.length); 
+
+          // Initialize DataTable
+          var dashboardDetailTable = $("#dashboardDetailTable").DataTable({
+              "destroy": true, // Allow reinitialization
+              "responsive": true,
+              "autoWidth": false,
+              'processing': true,
+              'paging': false,
+              'info': false,
+              'searching': false,
+              "ordering": false,
+              'data': response.aaData, // Load dynamic data
+              'columns': dynamicColumns, // Use dynamic columns
+              'createdRow': function(row, data, dataIndex) {
+                  $('td:eq(0)', row).css({
+                      'font-weight': 'bold',
+                      'color': 'white',
+                      'background-color': 'rgb(1, 162, 226)'
+                  });
+
+                  if (dataIndex === 0) { 
+                      $(row).css({
+                          'font-weight': 'bold',
+                          'color': 'white',
+                          'background-color': 'rgb(1, 162, 226)'
+                      });
+
+                      // Apply styling to the last column of each row
+                      $('td:last', row).css({
+                          'font-weight': 'bold',
+                          'color': 'black',
+                          'background-color': '#FFECB3' // Example: Yellow background for last column
+                      });
+                  }
+              }
+          });
+      }
+    });
+  }else{
+    $('#displayDashboardDetail').hide();
+    alert("Please filter from and to date.");
+  }
+}
+
 </script>

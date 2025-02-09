@@ -19,7 +19,7 @@ if($_POST['toDate'] != null && $_POST['toDate'] != ''){
 }
 
 ## Fetch records
-$empQuery = "SELECT validate_by, status, COUNT(*) AS count FROM other_validations WHERE deleted = 0 AND validate_by IN (1,5)".$searchQuery." GROUP BY status, validate_by order by validate_by";
+$empQuery = "SELECT status, COUNT(*) AS count FROM other_validations WHERE deleted = 0 AND validate_by IN (1,5)".$searchQuery." GROUP BY status order by status ASC";
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 
@@ -33,20 +33,16 @@ $pivotData = [
 $validateByList = [1, 5]; 
 
 while ($row = mysqli_fetch_assoc($empRecords)) {
-  $validateBy = $row['validate_by'];
   $status = $row['status'];
-  $pivotData[$status][$validateBy] = $row['count'];
+  $pivotData[$status] = $row['count'];
 }
 
 ## Format data for DataTable
 $data = [
   [
-    "pending_procal" => $pivotData['Pending']['1'] ?? "0",
-    "complete_procal" => $pivotData['Complete']['1'] ?? "0",
-    "cancel_procal" => $pivotData['Cancelled']['1'] ?? "0",
-    "pending_sirim" => $pivotData['Pending']['5'] ?? "0",
-    "complete_sirim" => $pivotData['Complete']['5'] ?? "0",
-    "cancel_sirim" => $pivotData['Cancelled']['5'] ?? "0"
+    "pending" => !empty($pivotData['Pending']) ? $pivotData['Pending'] : "0",
+    "complete" => !empty($pivotData['Complete']) ? $pivotData['Complete'] : "0",
+    "cancel" => !empty($pivotData['Cancelled']) ? $pivotData['Cancelled'] : "0",
   ]
 ];
 
