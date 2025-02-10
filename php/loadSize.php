@@ -35,19 +35,22 @@ $data = array();
 $counter = 1;
 
 while($row = mysqli_fetch_assoc($empRecords)) {
-    $alats = json_decode($row['alat']);
-    $jenisAlat = "";
+    $jenisAlat = '';
 
-    if(!empty($alats)){
-      foreach ($alats as $alat) {
-        $jenisAlat .= searchJenisAlatNameByid($alat, $db) . "<br>";
+    if($row['alat'] != null && $row['alat'] != ''){
+      $alats = json_decode($row['alat']);
+
+      if(!empty($alats)){
+        foreach ($alats as $alat) {
+          $jenisAlat .= searchJenisAlatNameByid($alat, $db) . "<br>";
+        }
       }
     }
 
     $data[] = array( 
       "counter"=>$counter,
       "id"=>$row['id'],
-      "size"=>$row['size'],
+      "size"=>htmlspecialchars_decode($row['size']),
       "alat"=>$jenisAlat
     );
 
