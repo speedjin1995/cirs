@@ -4042,7 +4042,7 @@ function extraAction(id){
 
 function edit(id) {
   $('#spinnerLoading').show();
-  $.post('php/getStamp.php', {userID: id}, function(data){
+  $.post('php/getStamp.php', {userID: id}, function(data){ console.log(id);
     var obj = JSON.parse(data);
     
     if(obj.status === 'success'){

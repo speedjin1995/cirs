@@ -276,12 +276,9 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
 
             while ($row = $result->fetch_assoc()) {
                 $validator = $row['validate_by'];
-                $branch = $row['branch'];
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
                 array_push($updateIds, $row['id']);
 
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -289,13 +286,20 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($row['branch'] != null && $row['branch'] != ''){
+                    $branch = $row['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $jenisAlat = searchAlatNameById($row['jenis_alat'], $db);

@@ -56,7 +56,7 @@ if(isset($_POST['id'])){
 
             while ($row = $result->fetch_assoc()) {
                 $customer = searchCustNameById($row['customer'],$db);
-                $branch = $row['branch'];
+                $branch = $row['branch'] ?? null;
                 $autoFormNo = $row['auto_form_no'];
                 $validationDate = formatDate($row['validation_date']);
                 $dueDate =  new DateTime($row['validation_date']);

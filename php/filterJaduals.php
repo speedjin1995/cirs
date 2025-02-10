@@ -127,20 +127,19 @@ $data = array();
 $counter = 1;
 
 while($row = mysqli_fetch_assoc($empRecords)) {
-  $branch = $row['branch'];
-  $address1 = '';
-  $address2 = '';
-  $address3 = '';
-  $address4 = '';
-  $pic = '';
-  $pic_phone = '';
+  $branch = null;
+  $address1 = null;
+  $address2 = null;
+  $address3 = null;
+  $address4 = null;
+  $pic = null;
+  $pic_phone = null;
 
-
-  if($branch != null && $branch != ''){
+  if($row['branch'] != null && $row['branch'] != ''){
+    $branch = $row['branch'];
     $branchQuery = "SELECT * FROM branches WHERE id = $branch";
     $branchDetail = mysqli_query($db, $branchQuery);
     $branchRow = mysqli_fetch_assoc($branchDetail);
-  
     
     if(!empty($branchRow)){
       $address1 = $branchRow['address'];

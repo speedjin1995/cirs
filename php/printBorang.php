@@ -125,11 +125,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 }
 
                 # Branch Address
-                $branch = $res['branch'];
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -137,13 +133,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
                 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -427,11 +430,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $hqAddress4 = $customerRow['address4'];
                 }
 
-                $branch = $res['branch'];
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -439,13 +438,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
                 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -706,12 +712,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -719,13 +721,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -874,12 +883,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -887,13 +892,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -1040,12 +1052,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -1053,13 +1061,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -1203,12 +1218,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -1216,13 +1227,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -1373,12 +1391,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -1386,13 +1400,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -1540,12 +1561,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -1553,13 +1570,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -1710,12 +1734,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -1723,13 +1743,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -1869,12 +1896,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -1882,13 +1905,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -2027,12 +2057,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -2040,13 +2066,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -2191,12 +2224,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -2204,13 +2233,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -2365,12 +2401,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -2378,13 +2410,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -2533,12 +2572,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -2546,13 +2581,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -2698,12 +2740,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -2711,13 +2749,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -2890,12 +2935,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -2903,13 +2944,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -3072,12 +3120,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -3085,13 +3129,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -3235,12 +3286,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -3248,13 +3295,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -3403,12 +3457,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
 
             if ($res = $result->fetch_assoc()) {
                 $nilais = json_decode($res['nilais'], true);
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -3416,13 +3466,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -3582,12 +3639,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
 
             if ($res = $result->fetch_assoc()) {
                 $nilais = json_decode($res['nilais'], true);
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -3595,13 +3648,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -3761,12 +3821,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
 
             if ($res = $result->fetch_assoc()) {
                 $nilais = json_decode($res['nilais'], true);
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -3774,13 +3830,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -3919,12 +3982,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
 
             if ($res = $result->fetch_assoc()) {
                 $nilais = json_decode($res['nilais'], true);
-                $branch = $res['branch'];
                 $loadcells = json_decode($res['load_cells_info'], true);
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -3932,13 +3991,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -4076,11 +4142,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -4088,13 +4150,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];
@@ -4235,11 +4304,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $branch = $res['branch'];
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -4247,13 +4312,20 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                if($res['branch'] != null && $res['branch'] != ''){
+                    $branch = $res['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $capacity = $res['capacity'];

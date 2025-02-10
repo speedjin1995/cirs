@@ -28,47 +28,51 @@ if(isset($_POST['validationId'])){
             $message = array();
             
             if ($row = $result->fetch_assoc()) {
-                $branch = $row['branch'];
-                $address1 = '';
-                $address2 = '';
-                $address3 = '';
-                $address4 = '';
-                $pic = '';
-                $pic_phone = '';
+                $branch = null;
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
 
-                if(isset($branch) && $branch != '' ){
+                if($row['branch'] != null && $row['branch'] != ''){
+                    $branch = $row['branch'];
                     $branchQuery = "SELECT * FROM branches WHERE id = $branch";
                     $branchDetail = mysqli_query($db, $branchQuery);
                     $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
                     if(!empty($branchRow)){
-                      $address1 = $branchRow['address'];
-                      $address2 = $branchRow['address2'];
-                      $address3 = $branchRow['address3'];
-                      $address4 = $branchRow['address4'];
-                      $pic = $branchRow['pic'];
-                      $pic_phone = $branchRow['pic_contact'];
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
                     }
                 }
                 
-                $reseller_branch = $row['dealer_branch'];
-                $reseller_address1 = '';
-                $reseller_address2 = '';
-                $reseller_address3 = '';
-                $reseller_address4 = '';
-                $reseller_pic = '';
-                $reseller_pic_phone = '';
+                $reseller_branch = null;
+                $reseller_address1 = null;
+                $reseller_address2 = null;
+                $reseller_address3 = null;
+                $reseller_address4 = null;
+                $reseller_pic = null;
+                $reseller_pic_phone = null;
 
-                if(isset($reseller_branch) && $reseller_branch != ''){
+                if($row['dealer_branch'] != null && $row['dealer_branch'] != ''){
+                    $reseller_branch = $row['dealer_branch'];
                     $resellerQuery = "SELECT * FROM reseller_branches WHERE id = $reseller_branch";
                     $resellerDetail = mysqli_query($db, $resellerQuery);
                     $resellerRow = mysqli_fetch_assoc($resellerDetail);
+                    
                     if(!empty($resellerRow)){
-                      $reseller_address1 = $resellerRow['address'];
-                      $reseller_address2 = $resellerRow['address2'];
-                      $reseller_address3 = $resellerRow['address3'];
-                      $reseller_address4 = $resellerRow['address4'];
-                      $reseller_pic = $resellerRow['pic'];
-                      $reseller_pic_phone = $resellerRow['pic_contact'];
+                        $reseller_address1 = $resellerRow['address'];
+                        $reseller_address2 = $resellerRow['address2'];
+                        $reseller_address3 = $resellerRow['address3'];
+                        $reseller_address4 = $resellerRow['address4'];
+                        $reseller_pic = $resellerRow['pic'];
+                        $reseller_pic_phone = $resellerRow['pic_contact'];
                     }
                 }
 
