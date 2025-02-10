@@ -112,6 +112,7 @@ $data = array();
 $counter = 1;
 
 while($row = mysqli_fetch_assoc($empRecords)) {
+  $branch = null;
   $address1 = null;
   $address2 = null;
   $address3 = null;
@@ -124,7 +125,6 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     $branchQuery = "SELECT * FROM branches WHERE id = $branch";
     $branchDetail = mysqli_query($db, $branchQuery);
     $branchRow = mysqli_fetch_assoc($branchDetail);
-  
     
     if(!empty($branchRow)){
       $address1 = $branchRow['address'];

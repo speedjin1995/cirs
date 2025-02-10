@@ -163,11 +163,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                     </tr>';
 
             while ($row = $result->fetch_assoc()) {
-                $branch = $row['branch'];
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -175,13 +171,20 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
+                if($row['branch'] != null && $row['branch'] != ''){
+                    $branch = $row['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
                     $address1 = $branchRow['address'];
                     $address2 = $branchRow['address2'];
                     $address3 = $branchRow['address3'];
                     $address4 = $branchRow['address4'];
                     $pic = $branchRow['pic'];
                     $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $stampingDate = new DateTime($row['stamping_date']);
@@ -288,11 +291,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                     </tr>';
 
             while ($row = $result->fetch_assoc()) {
-                $branch = $row['branch'];
-                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                $branchDetail = mysqli_query($db, $branchQuery);
-                $branchRow = mysqli_fetch_assoc($branchDetail);
-
+                $branch = null;
                 $address1 = null;
                 $address2 = null;
                 $address3 = null;
@@ -300,13 +299,20 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                 $pic = null;
                 $pic_phone = null;
 
-                if(!empty($branchRow)){
+                if($row['branch'] != null && $row['branch'] != ''){
+                    $branch = $row['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
                     $address1 = $branchRow['address'];
                     $address2 = $branchRow['address2'];
                     $address3 = $branchRow['address3'];
                     $address4 = $branchRow['address4'];
                     $pic = $branchRow['pic'];
                     $pic_phone = $branchRow['pic_contact'];
+                    }
                 }
 
                 $stampingDate = new DateTime($row['stamping_date']);
@@ -377,25 +383,28 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
     
                 while ($row = $result->fetch_assoc()) {
                     $validator = $row['validate_by'];
-                    $branch = $row['branch'];
-                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
-                    $branchDetail = mysqli_query($db, $branchQuery);
-                    $branchRow = mysqli_fetch_assoc($branchDetail);
-    
+                    $branch = null;
                     $address1 = null;
                     $address2 = null;
                     $address3 = null;
                     $address4 = null;
                     $pic = null;
                     $pic_phone = null;
-    
-                    if(!empty($branchRow)){
+
+                    if($row['branch'] != null && $row['branch'] != ''){
+                        $branch = $row['branch'];
+                        $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                        $branchDetail = mysqli_query($db, $branchQuery);
+                        $branchRow = mysqli_fetch_assoc($branchDetail);
+                        
+                        if(!empty($branchRow)){
                         $address1 = $branchRow['address'];
                         $address2 = $branchRow['address2'];
                         $address3 = $branchRow['address3'];
                         $address4 = $branchRow['address4'];
                         $pic = $branchRow['pic'];
                         $pic_phone = $branchRow['pic_contact'];
+                        }
                     }
     
                     $jenisAlat = searchAlatNameById($row['jenis_alat'], $db);
