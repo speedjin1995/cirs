@@ -69,7 +69,7 @@ else{
   <link rel="stylesheet" href="dist/css/adminlte.min.css?v=3.2.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-
+  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.css">
   
   <style>
     body {
@@ -725,6 +725,41 @@ to get the desired effect
               </li>
             </ul>
           </li>
+          <?php 
+            if($role == "ADMIN" || $role == "SUPER_ADMIN"){
+              echo '
+                <li class="nav-item has-treeview">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-tools"></i>
+                    <p>Email Setup<i class="fas fa-angle-left right"></i></p>
+                  </a>
+              
+                  <ul class="nav nav-treeview" style="display: none;">
+                    <li class="nav-item">
+                      <a href="#stampemailsetup" data-file="stampEmailSetup.php" class="nav-link link">
+                        <i class="nav-icon fas fa-certificate"></i>
+                        <p>Stamping Email</p>
+                      </a>
+                    </li>
+
+                    <li class="nav-item">
+                      <a href="#otheremailsetup" data-file="otherEmailSetup.php" class="nav-link link">
+                        <i class="nav-icon fas fa-check"></i>
+                        <p>Other Validation Email</p>
+                      </a>
+                    </li>
+
+                    <li class="nav-item">
+                      <a href="#inhouseemailsetup" data-file="inhouseEmailSetup.php" class="nav-link link">
+                        <i class="nav-icon fas fa-align-justify"></i>
+                        <p>Inhouse Email</p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              ';
+            }
+          ?>
           <li class="nav-item">
             <a href="https://mail.hostinger.com/" target="_blank" class="nav-link link">
               <i class="nav-icon fas fa-envelope"></i>
@@ -787,6 +822,7 @@ to get the desired effect
 <script src="plugins/chart.js/Chart.min.js"></script>
 <script src="plugins/daterangepicker/daterangepicker.js"></script>
 <script src="plugins/sheets/xlsx.full.min.js"></script>
+<script src="plugins/summernote/summernote-bs4.min.js"></script>
 <script>
 $(function () {
   toastr.options = {

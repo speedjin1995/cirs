@@ -3,11 +3,11 @@ require_once "db_connect.php";
 
 session_start();
 
-if(isset($_POST['userID'])){
-	$id = filter_input(INPUT_POST, 'userID', FILTER_SANITIZE_STRING);
+if(isset($_POST['id'])){
+	$type = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING);
 
-    if ($update_stmt = $db->prepare("SELECT * FROM size WHERE id=?")) {
-        $update_stmt->bind_param('s', $id);
+    if ($update_stmt = $db->prepare("SELECT * FROM email_setup WHERE type=?")) {
+        $update_stmt->bind_param('s', $type);
         
         // Execute the prepared query.
         if (! $update_stmt->execute()) {
@@ -22,9 +22,9 @@ if(isset($_POST['userID'])){
             $message = array();
             
             while ($row = $result->fetch_assoc()) {
-                $message['id'] = $row['id'];
-                $message['size'] = htmlspecialchars_decode($row['size']);
-                $message['alat'] = $row['alat'];
+                $message['emailCC'] = $row['email_cc'];
+                $message['emailTitle'] = $row['email_title'];
+                $message['emailBody'] = $row['email_body'];
             }
             
             echo json_encode(
