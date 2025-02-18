@@ -360,7 +360,7 @@ $(function () {
         data: null, // Custom rendering for unit_price and cert_price
         render: function (data, type, row) {
           if (row.cert_price != 0){
-            return 'RM ' + parseFloat(row.unit_price).toFixed(2) + '<br>' + 'RM ' + parseFloat(row.cert_price).toFixed(2);
+            return 'RM ' + parseFloat(row.unit_price).toFixed(2) + '<br>' + 'RM ' + parseFloat(row.cert_price).toFixed(2) + ' (Laporan)';
           }else{
             return 'RM ' + parseFloat(row.unit_price).toFixed(2);
           } 
@@ -591,7 +591,7 @@ $(function () {
           data: null, // Custom rendering for unit_price and cert_price
           render: function (data, type, row) {
             if (row.cert_price != 0){
-              return 'RM ' + parseFloat(row.unit_price).toFixed(2) + '<br>' + 'RM ' + parseFloat(row.cert_price).toFixed(2);
+              return 'RM ' + parseFloat(row.unit_price).toFixed(2) + '<br>' + 'RM ' + parseFloat(row.cert_price).toFixed(2) + ' (Laporan)';
             }else{
               return 'RM ' + parseFloat(row.unit_price).toFixed(2);
             } 
