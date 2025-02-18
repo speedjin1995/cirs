@@ -736,21 +736,21 @@ to get the desired effect
               
                   <ul class="nav nav-treeview" style="display: none;">
                     <li class="nav-item">
-                      <a href="#stampemailsetup" data-file="stampEmailSetup.php" class="nav-link link">
+                      <a href="#stampemailsetup" data-file="stampemailsetup.php" class="nav-link link">
                         <i class="nav-icon fas fa-certificate"></i>
                         <p>Stamping Email</p>
                       </a>
                     </li>
 
                     <li class="nav-item">
-                      <a href="#otheremailsetup" data-file="otherEmailSetup.php" class="nav-link link">
+                      <a href="#otheremailsetup" data-file="otheremailsetup.php" class="nav-link link">
                         <i class="nav-icon fas fa-check"></i>
                         <p>Other Validation Email</p>
                       </a>
                     </li>
 
                     <li class="nav-item">
-                      <a href="#inhouseemailsetup" data-file="inhouseEmailSetup.php" class="nav-link link">
+                      <a href="#inhouseemailsetup" data-file="inhouseemailsetup.php" class="nav-link link">
                         <i class="nav-icon fas fa-align-justify"></i>
                         <p>Inhouse Email</p>
                       </a>
