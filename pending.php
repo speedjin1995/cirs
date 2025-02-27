@@ -1832,6 +1832,39 @@ else{
   </div>
 </script>
 
+<script type="text/html" id="sicDetails">
+  <div class="card card-primary">
+    <div class="card-body">
+      <div class="row">
+        <h4>Addtional Information (SIC)</h4>
+      </div>
+      <div class="row">
+        <div class="form-group col-4">
+          <label for="nilaiMaksimum">Nilai Jangka Maksimum (Kapasiti) *</label>
+          <input type="text" class="form-control" id="nilaiMaksimum" name="nilaiMaksimum">
+        </div>
+        <div class="form-group col-4">
+          <label for="bahanPembuat">Bahan Pembuat *</label>
+          <select class="form-control select2" id="bahanPembuat" name="bahanPembuat" required>
+            <option value="" disabled hidden selected>Please Select</option>
+            <option value="PANCALOGAM">PANCALOGAM</option>
+            <option value="LOGAM BERENAMEL">LOGAM BERENAMEL</option>
+            <option value="BESI BERSADUR">BESI BERSADUR</option>
+            <option value="KACA">KACA</option>
+            <option value="TEMBIKAR">TEMBIKAR</option>
+            <option value="KELULI">KELULI</option>
+            <option value="OTHER">OTHER</option>
+          </select>
+        </div>
+        <div class="form-group col-4" id="bahanPembuatOtherDisplay" style="display:none">
+          <label for="bahanPembuatOther">Bahan Pembuat Other *</label>
+          <input type="text" class="form-control" id="bahanPembuatOther" name="bahanPembuatOther">
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
 <script type="text/html" id="pricingDetails">
   <tr class="details">
     <td>
@@ -1999,7 +2032,7 @@ $(function () {
   var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
   var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
 
-  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP'];
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC'];
 
   var table = $("#weightTable").DataTable({
     "responsive": true,
@@ -3173,6 +3206,10 @@ $(function () {
       $('#addtionalSection').html($('#bapDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
+    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '13'){
+      $('#addtionalSection').html($('#sicDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
     else{
       $('#addtionalSection').html('');
     }
@@ -3319,6 +3356,10 @@ $(function () {
       $('#addtionalSection').html($('#bapDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
+    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '13'){
+      $('#addtionalSection').html($('#sicDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
     else{
       $('#addtionalSection').html('');
     }
@@ -3400,7 +3441,7 @@ $(function () {
 });
 
 function format (row) {
-  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP'];
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC'];
 
   var returnString = `
   <div class="row">
@@ -3812,6 +3853,27 @@ function format (row) {
                             <p><strong>Jenama / Name Pembuat:</strong> ${row.jenama}</p>
                           </div>`;
     }                     
+  }else if(row.jenis_alat == 'SIC'){
+    returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (SIC)</strong></span>
+                        <div class="row">
+                          <!-- BAP Section -->
+                          <div class="col-6">
+                            <p><strong>Nilai Jangkaan Maksimum (Kapasiti):</strong> ${row.nilai_jangkaan_maksimum} Liter</p>
+                          </div>      
+                    `;
+
+    if (row.bahan_pembuat == 'OTHER'){
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Bahan Pembuat:</strong> ${row.bahan_pembuat_other}</p>
+                          </div>`;
+    }else{
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Bahan Pembuat:</strong> ${row.bahan_pembuat}</p>
+                          </div>`;
+    }                     
   }
 
   return returnString;
@@ -4042,7 +4104,7 @@ function extraAction(id){
 
 function edit(id) {
   $('#spinnerLoading').show();
-  $.post('php/getStamp.php', {userID: id}, function(data){ console.log(id);
+  $.post('php/getStamp.php', {userID: id}, function(data){
     var obj = JSON.parse(data);
     
     if(obj.status === 'success'){
@@ -4313,7 +4375,7 @@ function edit(id) {
           }
           else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '11'){ 
             $('#addtionalSection').html($('#bapDetails').html());
-            $('#extendModal').find('#pamNo').val(obj.message.pam_no).trigger('change');
+            $('#extendModal').find('#nilaiMaksimum').val(obj.message.nilai_jangkaan_maksimum).trigger('change');
             $('#extendModal').find('#kelulusanBentuk').val(obj.message.kelulusan_bentuk).trigger('change');
             $('#extendModal').find('#alatType').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#kadarPengaliran').val(obj.message.kadar_pengaliran).trigger('change');
@@ -4330,6 +4392,22 @@ function edit(id) {
             });
 
             $('#extendModal').find('#jenama').val(obj.message.jenama).trigger('change');
+          }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '13'){ 
+            $('#addtionalSection').html($('#sicDetails').html());
+            $('#extendModal').find('#nilaiMaksimum').val(obj.message.nilai_jangkaan_maksimum).trigger('change');
+
+            $('#extendModal').find('#bahanPembuat').on('change', function(){
+              var bahanPembuat = $(this).val();
+              if (bahanPembuat == 'OTHER'){
+                $('#extendModal').find('#bahanPembuatOtherDisplay').show();
+                $('#extendModal').find('#bahanPembuatOther').val(obj.message.bahan_pembuat_other);
+              }else{
+                $('#extendModal').find('#bahanPembuatOtherDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#bahanPembuat').val(obj.message.bahan_pembuat).trigger('change');
           }
         });
         
@@ -4597,6 +4675,22 @@ function edit(id) {
             });
 
             $('#extendModal').find('#jenama').val(obj.message.jenama).trigger('change');
+          }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '13'){ 
+            $('#addtionalSection').html($('#sicDetails').html());
+            $('#extendModal').find('#nilaiMaksimum').val(obj.message.nilai_jangkaan_maksimum).trigger('change');
+
+            $('#extendModal').find('#bahanPembuat').on('change', function(){
+              var bahanPembuat = $(this).val();
+              if (bahanPembuat == 'OTHER'){
+                $('#extendModal').find('#bahanPembuatOtherDisplay').show();
+                $('#extendModal').find('#bahanPembuatOther').val(obj.message.bahan_pembuat_other);
+              }else{
+                $('#extendModal').find('#bahanPembuatOtherDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#bahanPembuat').val(obj.message.bahan_pembuat).trigger('change');
           }
         });
 

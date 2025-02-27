@@ -34,3 +34,8 @@ ALTER TABLE `email_setup`
 ALTER TABLE `email_setup`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
+
+-- 27/02/2025 --
+ALTER TABLE `stamping_ext` ADD `nilai_jangkaan_maksimum` VARCHAR(10) NULL AFTER `jenama_other`, ADD `bahan_pembuat` VARCHAR(30) NULL AFTER `nilai_jangkaan_maksimum`;
+
+ALTER TABLE `stamping_ext` ADD `bahan_pembuat_other` VARCHAR(50) NULL AFTER `bahan_pembuat`;
