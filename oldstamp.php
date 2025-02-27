@@ -1511,7 +1511,7 @@ $(function () {
 });
 
 function format (row) {
-  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA'];
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC'];
 
   var returnString = `
   <div class="row">
@@ -1916,6 +1916,27 @@ function format (row) {
       returnString += `
                           <div class="col-6">
                             <p><strong>Jenama / Name Pembuat:</strong> ${row.jenama}</p>
+                          </div>`;
+    }                     
+  }else if(row.jenis_alat == 'SIC'){
+    returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (SIC)</strong></span>
+                        <div class="row">
+                          <!-- BAP Section -->
+                          <div class="col-6">
+                            <p><strong>Nilai Jangkaan Maksimum (Kapasiti):</strong> ${row.nilai_jangkaan_maksimum} Liter</p>
+                          </div>      
+                    `;
+
+    if (row.bahan_pembuat == 'OTHER'){
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Bahan Pembuat:</strong> ${row.bahan_pembuat_other}</p>
+                          </div>`;
+    }else{
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Bahan Pembuat:</strong> ${row.bahan_pembuat}</p>
                           </div>`;
     }                     
   }
