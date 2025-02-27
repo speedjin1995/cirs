@@ -13,7 +13,7 @@ if(isset($_POST['userID'])){
     }
 
     $stampExtArray = [
-        1,4,2,5,6,14,7,10,17,23,12,18,11,13
+        1,4,2,5,6,14,7,10,17,23,12,18,11,13,26
     ];
 
     if ($update_stmt = $db->prepare("SELECT * FROM stamping WHERE id=?")) {
@@ -205,7 +205,7 @@ if(isset($_POST['userID'])){
                                     $message['nilai_jangkaan_maksimum'] = $row2['nilai_jangkaan_maksimum'] ?? '';
                                     $message['bahan_pembuat'] = $row2['bahan_pembuat'] ?? '';
                                     $message['bahan_pembuat_other'] = $row2['bahan_pembuat_other'] ?? '';
-
+                                    $message['btu_box_info'] = json_decode($row2['btu_box_info'], true);
                                 }
                             }
                         }
@@ -309,6 +309,7 @@ if(isset($_POST['userID'])){
                                     $message['nilai_jangkaan_maksimum'] = $row2['nilai_jangkaan_maksimum'] ?? '';
                                     $message['bahan_pembuat'] = $row2['bahan_pembuat'] ?? '';
                                     $message['bahan_pembuat_other'] = $row2['bahan_pembuat_other'] ?? '';
+                                    $message['btu_box_info'] = json_decode($row2['btu_box_info'], true);
                                 }
                             }
                         }
