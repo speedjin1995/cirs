@@ -3503,8 +3503,297 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                     }
                 }
             }
+            else if($file == 'BTU - (BOX)' && $validator == 'METROLOGY'){
+                // Temporary directory to save individual PDFs
+                $tempBtuBoxDir = dirname(__DIR__) . '\uploads\btubox_tempujian';
+                if (!is_dir($tempBtuBoxDir)) {
+                    mkdir($tempBtuBoxDir, 0777, true);
+                }
+
+                $btuBoxFilePath = [];
+                $fillFile = 'forms/Metrology/BU_FORM.pdf';
+        
+                $capacity = $res['capacity'];
+                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                $capacityDetail = mysqli_query($db, $capacityQuery);
+                $capacityRow = mysqli_fetch_assoc($capacityDetail);
+
+                $capacityValue = null;
+                $capacityDivision = null;
+
+                if(!empty($capacityRow)){
+                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                $btuBoxInfo = json_decode($res['btu_box_info'], true);
+                
+                if(count($btuBoxInfo) > 0){
+                    foreach ($btuBoxInfo as $btuBox){
+                        $pdf = new PDFWithEllipse();
+                        $pageCount = $pdf->setSourceFile($fillFile);
+
+                        for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                            $templateId = $pdf->importPage($pageNo);
+                            $size = $pdf->getTemplateSize($templateId);
+                            $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                            $pdf->useTemplate($templateId);
+                            $pdf->SetMargins(0, 0, 0); // Remove all margins
+                        
+                            // Fill in the fields for the current page
+                            $pdf->SetFont('Arial', '', 10);
+                            
+                            // Example field placements for each page (you'll adjust these according to your PDF)
+                            if ($pageNo == 1) {
+                                // Fill in the fields at the appropriate positions
+                                $pdf->SetXY(18, 68); 
+                                $pdf->Write(0, $actualPrintDate);
+        
+                                $pdf->Image($tickImage, 88, 89, 6); 
+        
+                                $pdf->SetXY(135.902, 81.823-2); // Adjust for nama pembuat
+                                $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
+        
+                                $pdf->SetXY(124.182, 70.241-2); // Adjust for Jenama
+                                $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
+        
+                                $pdf->SetXY(17.282, 124.716-2); // Adjust for Customer Name
+                                $pdf->SetFont('Arial', 'B', 10);
+                                $pdf->Write(0, searchCustNameById($res['customers'], $db));
+                                $pdf->SetFont('Arial', '', 10);
+        
+                                $pdf->SetXY(17.282, 133.307-2); // Adjust for {3. Alamat Pemilik Address 1}
+                                $pdf->Write(0, $address1);
+        
+                                $pdf->SetXY(17.282, 142.080-2); // Adjust for {3. Alamat Pemilik Address 2}
+                                $pdf->Write(0, $address2);
+                                
+                                $pdf->SetXY(17.282, 149.871-2); // Adjust for {3. Alamat Pemilik Address 3 & 4}
+                                $pdf->Write(0, $address3 . ' ' . $address4);
+        
+                                $pdf->SetXY(17.282, 166.599-2); // Adjust for {Company_Name}
+                                $pdf->Write(0, $compname);
+        
+                                $pdf->SetXY(17.282, 179-2); // Adjust for {No_Lesen}
+                                $pdf->Write(0, $compcert);
+        
+                                $pdf->SetXY(17.282, 191.873-2); // Adjust for {no_daftar}
+                                $pdf->Write(0, $noDaftarSyarikat);
+        
+                                $pdf->SetXY(153.197, 162.163-2); // Adjust for {Penandaan Batu Ujian}
+                                $pdf->Write(0, $btuBox['penandaanBatuUjian']);
+        
+                                $pdf->SetXY(131.197, 170.163-2); // Adjust for {Nilai Jangkaan}
+                                $pdf->Write(0, searchCapacityNameById($capacity,$db));
+        
+                                $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                                $pdf->Rect(177.350, 170.163-4, 20, 7, 'F');
+        
+                                # Adjust for {Alat Type}
+                                if ($btuBox['batuUjian'] == 'BESI_TUANGAN'){
+                                    $pdf->Image($tickImage, 148.238+22, 108.866-6, 6);
+                                }elseif ($btuBox['batuUjian'] == 'TEMBAGA'){
+                                    $pdf->Image($tickImage, 148.238+22, 121.516-6, 6);
+                                }elseif ($btuBox['batuUjian'] == 'NIKARAT'){
+                                    $pdf->Image($tickImage, 148.238+22, 133.995-6, 6);
+                                }elseif ($btuBox['batuUjian'] == 'OTHER'){
+                                    $pdf->SetXY(128.526, 146.034-2); // Adjust for {Nilai Jangkaan}
+                                    $pdf->Write(0, $btuBox['batuUjianLain']);                                 
+                                    $pdf->Image($tickImage, 148.238+22, 146.034-4, 6);
+                                }
+        
+                                // Adjust for {Keadaan Alat}
+                                if ($res['stamping_type'] == 'NEW'){
+                                    $pdf->Image($tickImage, 119.989+12, 187.292-5, 6); 
+                                }elseif ($res['stamping_type'] == 'RENEWAL'){
+                                    $pdf->Image($tickImage, 158.178+12, 187.292-5, 6);
+                                }
+        
+                                if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                                    $pdf->Image($companySignature, 24.644, 215.922-4, 40.6);  // Adjust for company signature
+                                }
+        
+                                if ($res['stamping_type'] == 'RENEWAL'){
+                                    $pdf->SetXY(140.188, 215.438-2); // Adjust for {tarikh}
+                                    if (!empty($res['last_year_stamping_date'])){
+                                        $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                                    } 
+        
+                                    $pdf->SetXY(140.188, 224.002-2); // Adjust for {Cawangan}
+                                    $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+        
+                                    $pdf->SetXY(118.188, 236.567-2); // Adjust for {no_penentusahan}
+                                    $pdf->Write(0, $res['no_daftar_lama']);
+                                }
+                            }
+                        }
+
+                        $fileName = "filled_metrology_BTU(BOX)_form_{$btuBox['no']}.pdf"; 
+                        $btuOutputPath = $tempBtuBoxDir . DIRECTORY_SEPARATOR . $fileName;
+                        $pdf->Output('F', $btuOutputPath);
+                        $btuBoxFilePath[] = $btuOutputPath;
+                    }
+                }
+            }
+            else if($file == 'BTU - (BOX)' && $validator == 'DE METROLOGY'){
+                // Temporary directory to save individual PDFs
+                $tempBtuBoxDir = dirname(__DIR__) . '\uploads\btubox_tempujian';
+                if (!is_dir($tempBtuBoxDir)) {
+                    mkdir($tempBtuBoxDir, 0777, true);
+                }
+
+                $btuBoxFilePath = [];
+                $fillFile = 'forms/DE_Metrology/DMSB_BTU.pdf';
+        
+                $capacity = $res['capacity'];
+                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                $capacityDetail = mysqli_query($db, $capacityQuery);
+                $capacityRow = mysqli_fetch_assoc($capacityDetail);
+
+                $capacityValue = null;
+                $capacityDivision = null;
+
+                if(!empty($capacityRow)){
+                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                $btuBoxInfo = json_decode($res['btu_box_info'], true);
+
+                if(count($btuBoxInfo) > 0){
+                    foreach ($btuBoxInfo as $btuBox){
+                        $pdf = new PDFWithEllipse();
+                        $pageCount = $pdf->setSourceFile($fillFile);
+
+                        for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                            $templateId = $pdf->importPage($pageNo);
+                            $size = $pdf->getTemplateSize($templateId);
+                            $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                            $pdf->useTemplate($templateId);
+                        
+                            // Fill in the fields for the current page
+                            $pdf->SetFont('Arial', '', 10);
+                            
+                            // Example field placements for each page (you'll adjust these according to your PDF)
+                            if ($pageNo == 1) {
+                                // Fill in the fields at the appropriate positions
+                                $pdf->SetXY(60, 53); 
+                                $pdf->Write(0, $actualPrintDate);
+        
+                                $pdf->Image($tickImage, 57.395+12, 73.823-5, 6); 
+        
+                                $pdf->SetXY(153.902, 73.823-2); // Adjust for nama pembuat
+                                $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
+        
+                                $pdf->SetXY(142.182, 64.241-2); // Adjust for Jenama
+                                $pdf->Write(0, searchBrandNameById($res['brand'], $db)); 
+        
+                                $pdf->SetXY(19.282, 102.516-2); // Adjust for Customer Name
+                                $pdf->SetFont('Arial', 'B', 10);
+                                $pdf->Write(0, searchCustNameById($res['customers'], $db));
+                                $pdf->SetFont('Arial', '', 10);
+        
+                                $pdf->SetXY(19.282, 107.307-2); // Adjust for {3. Alamat Pemilik Address 1}
+                                $pdf->Write(0, $address1);
+        
+                                $pdf->SetXY(19.282, 112.080-2); // Adjust for {3. Alamat Pemilik Address 2}
+                                $pdf->Write(0, $address2);
+                                
+                                $pdf->SetXY(19.282, 116.871-2); // Adjust for {3. Alamat Pemilik Address 3 & 4}
+                                $pdf->Write(0, $address3 . ' ' . $address4);
+        
+                                $pdf->SetXY(19.282, 136.599-2); // Adjust for {Company_Name}
+                                $pdf->Write(0, $compname);
+        
+                                $pdf->SetXY(19.282, 155.728-2); // Adjust for {No_Lesen}
+                                $pdf->Write(0, $compcert);
+        
+                                $pdf->SetXY(175.204, 136.599-2); // Adjust for {Penandaan Batu Ujian}
+                                $pdf->Write(0, $btuBox['penandaanBatuUjian']);
+        
+                                $pdf->SetXY(149.197, 146.163-2); // Adjust for {Nilai Jangkaan}
+                                $pdf->Write(0, searchCapacityNameById($capacity,$db));
+        
+                                $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                                $pdf->Rect(185.350, 146.163-4, 30, 7, 'F');
+        
+                                # Adjust for {Alat Type}
+                                if ($btuBox['batuUjian'] == 'BESI_TUANGAN'){
+                                    $pdf->Image($tickImage, 154.238+22, 92.866-5, 6);
+                                }elseif ($btuBox['batuUjian'] == 'TEMBAGA'){
+                                    $pdf->Image($tickImage, 154.238+22, 102.516-5, 6);
+                                }elseif ($btuBox['batuUjian'] == 'NIKARAT'){
+                                    $pdf->Image($tickImage, 154.238+22, 111.995-5, 6);
+                                }elseif ($btuBox['batuUjian'] == 'OTHER'){
+                                    $pdf->SetXY(135.526, 127.034-2); // Adjust for {Nilai Jangkaan}
+                                    $pdf->Write(0, $btuBox['batuUjianLain']);                                 
+                                    $pdf->Image($tickImage, 154.238+22, 127.034-5, 6);
+                                }
+                                 
+                                $pdf->SetXY(19.282, 174.873-2); // Adjust for {no_daftar}
+                                $pdf->Write(0, $noDaftarSyarikat);
+        
+                                // Adjust for {Keadaan Alat}
+                                if ($res['stamping_type'] == 'NEW'){
+                                    $pdf->Image($tickImage, 127.989+12, 165.292-5, 6); 
+                                }elseif ($res['stamping_type'] == 'RENEWAL'){
+                                    $pdf->Image($tickImage, 164.178+12, 165.292-5, 6);
+                                }
+        
+                                if (isset($companySignature) && $companySignature!=null && $companySignature!=""){
+                                    $pdf->Image($companySignature, 21.644, 196.922-4, 40.6);  // Adjust for company signature
+                                }
+        
+                                if ($res['stamping_type'] == 'RENEWAL'){
+                                    $pdf->SetXY(148.188, 184.438-2); // Adjust for {tarikh}
+                                    if (!empty($res['last_year_stamping_date'])){
+                                        $pdf->Write(0, date("d/m/Y", strtotime($res['last_year_stamping_date']))); 
+                                    } 
+        
+                                    $pdf->SetXY(155.596, 194.002-2); // Adjust for {Cawangan}
+                                    $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
+        
+                                    $pdf->SetXY(168.805, 203.567-2); // Adjust for {no_penentusahan}
+                                    $pdf->Write(0, $res['no_daftar_lama']);
+                                }
+                            }
+                        }
+
+                        $fileName = "filled_metrology_BTU(BOX)_form_{$btuBox['no']}.pdf"; 
+                        $btuOutputPath = $tempBtuBoxDir . DIRECTORY_SEPARATOR . $fileName;
+                        $pdf->Output('F', $btuOutputPath);
+                        $btuBoxFilePath[] = $btuOutputPath;
+                    }
+                }
+            }
             
-            $pdf->Output('F', $outputPath);
+            if ($file == 'BTU - (BOX)'){
+                // Merge the generated PDFs
+                $btuMergedPdf = new PDFWithEllipse();
+
+                foreach ($btuBoxFilePath as $file) {
+                    $pageCount = $btuMergedPdf->setSourceFile($file);
+
+                    for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                        $templateId = $btuMergedPdf->importPage($pageNo);
+                        $size = $btuMergedPdf->getTemplateSize($templateId);
+                        $btuMergedPdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                        $btuMergedPdf->useTemplate($templateId);
+                    }
+                }
+
+                // Output the merged PDF
+                $btuMergedPdf->Output('F', $outputPath);
+
+                // Clean up temporary files
+                foreach ($btuBoxFilePath as $file) {
+                    unlink($file);
+                }
+                rmdir($tempBtuBoxDir);
+            }else{
+                $pdf->Output('F', $outputPath);
+            }
+
             $pdfFilePath[] = $outputPath;
         }
 
