@@ -1577,6 +1577,73 @@ else{
   </div>
 </script>
 
+<script type="text/html" id="sicDetails">
+  <div class="card card-primary">
+    <div class="card-body">
+      <div class="row">
+        <h4>Addtional Information (SIC)</h4>
+      </div>
+      <div class="row">
+        <div class="form-group col-4">
+          <label for="nilaiMaksimum">Nilai Jangka Maksimum (Kapasiti) *</label>
+          <input type="text" class="form-control" id="nilaiMaksimum" name="nilaiMaksimum">
+        </div>
+        <div class="form-group col-4">
+          <label for="bahanPembuat">Bahan Pembuat *</label>
+          <select class="form-control select2" id="bahanPembuat" name="bahanPembuat" required>
+            <option value="" disabled hidden selected>Please Select</option>
+            <option value="PANCALOGAM">PANCALOGAM</option>
+            <option value="LOGAM BERENAMEL">LOGAM BERENAMEL</option>
+            <option value="BESI BERSADUR">BESI BERSADUR</option>
+            <option value="KACA">KACA</option>
+            <option value="TEMBIKAR">TEMBIKAR</option>
+            <option value="KELULI">KELULI</option>
+            <option value="OTHER">OTHER</option>
+          </select>
+        </div>
+        <div class="form-group col-4" id="bahanPembuatOtherDisplay" style="display:none">
+          <label for="bahanPembuatOther">Bahan Pembuat Other *</label>
+          <input type="text" class="form-control" id="bahanPembuatOther" name="bahanPembuatOther">
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/html" id="btuBoxDetails">
+  <div class="card card-primary">
+    <div class="card-body">
+      <div class="row">
+        <h4>Addtional Information (BTU - BOX)</h4>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <div class="form-group">
+            <label>No. of BTU *</label>
+            <input type="number" class="form-control" id="noOfBtu" name="noOfBtu" required>
+          </div>
+        </div>
+        <div class="col-8 d-flex justify-content-end align-items-start">
+          <button style="margin-left:auto;margin-right: 25px;" type="button" class="btn btn-primary add-btu">Add BTU</button>
+        </div>
+        <div class="col-12">
+          <table style="width: 100%;">
+            <thead>
+              <tr>
+                <th width="10%">No.</th>
+                <th width="40%">Batu Ujian</th>
+                <th>Penandaan Pada Batu Ujian</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody id="btuTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
 <script type="text/html" id="pricingDetails">
   <tr class="details">
     <td>
@@ -1645,6 +1712,32 @@ else{
       <input type="text" class="form-control" id="loadCellSerial" name="loadCellSerial" required>
     </td>
     <td><button class="btn btn-danger btn-sm" id="remove"><i class="fa fa-times"></i></button></td>
+  </tr>
+</script>
+
+<script type="text/html" id="btuCellDetails">
+  <tr class="details">
+    <td>
+      <input type="text" class="form-control" id="no" name="no" readonly>
+    </td>
+    <td>
+      <div class="d-flex">
+        <select class="form-control select2 w-100" id="batuUjian" name="batuUjian" required>
+            <option value="" disabled hidden selected>Please Select</option>
+            <option value="BESI_TUANGAN">BESI TUANGAN</option>
+            <option value="TEMBAGA">TEMBAGA</option>
+            <option value="NIKARAT">NIKARAT</option>
+            <option value="OTHER">LAIN-LAIN</option>
+        </select>
+        <input type="text" class="form-control w-50 ms-2" id="batuUjianLain" name="batuUjianLain" style="display:none" placeholder="Batu Ujian Lain">
+      </div>
+    </td>
+    <td>
+      <input type="text" class="form-control" id="penandaanBatuUjian" name="penandaanBatuUjian" required>
+    </td>
+    <td class="d-flex justify-content-center">
+      <button class="btn btn-danger btn-sm text-center" id="remove"><i class="fa fa-times"></i></button>
+    </td>
   </tr>
 </script>
 
@@ -1902,78 +1995,48 @@ $(function () {
   //   }
   // });
 
-  // Bind form submission handler once
-	$('#extendForm').off('submit').on('submit', function(e) {
-		e.preventDefault(); 
-		var formData = new FormData(this); 
-
-    $('.quotation-file-input').each(function () {
-        if (!$(this).is(':visible')) {
-          $(this).prop('disabled', true);
-        }
-    });
-
-    $('.invoice-file-input').each(function () {
-        if (!$(this).is(':visible')) {
-          $(this).prop('disabled', true);
-        }
-    });
-
-		$.ajax({
-			url: 'php/insertStamping.php',
-			type: 'POST',
-			data: formData,
-			processData: false,
-			contentType: false,
-			success: function(data) {
-				var obj = JSON.parse(data); 
-				if (obj.status === 'success') {
-					$('#extendModal').modal('hide');
-					toastr["success"](obj.message, "Success:");
-          $('#weightTable').DataTable().ajax.reload(null, false);
-				} else {
-					toastr["error"](obj.message, "Failed:");
-				}
-        // Re-enable all file inputs after success
-        $('.quotation-file-input').prop('disabled', false);
-        $('.invoice-file-input').prop('disabled', false);
-				$('#spinnerLoading').hide();
-				isModalOpen = false; // Set flag to false on error as well
-			},
-			error: function(xhr, status, error) {
-				console.error("AJAX request failed:", status, error);
-				toastr["error"]("An error occurred while processing the request.", "Failed:");
-        // Re-enable all file inputs after success
-        $('.quotation-file-input').prop('disabled', false);
-        $('.invoice-file-input').prop('disabled', false);
-				$('#spinnerLoading').hide();
-				isModalOpen = false; // Set flag to false on error as well
-			}
-		});
-	});
-
   $.validator.setDefaults({
-    submitHandler: function () {
-      // if($('#extendModal').hasClass('show')){
-      //   $('#spinnerLoading').show();
+    submitHandler: function (form) {
+      if ($('#extendModal').hasClass('show')) {
+          var formData = new FormData(form);
 
-      //   $.post('php/insertStamping.php', $('#extendForm').serialize(), function(data){
-      //     var obj = JSON.parse(data); 
-      //     if(obj.status === 'success'){
-      //       $('#extendModal').modal('hide');
-      //       toastr["success"](obj.message, "Success:");
-      //       $('#weightTable').DataTable().ajax.reload(null, false);
-      //     }
-      //     else if(obj.status === 'failed'){
-      //       toastr["error"](obj.message, "Failed:");
-      //     }
-      //     else{
-      //       toastr["error"]("Something wrong when edit", "Failed:");
-      //     }
+          // Disable hidden file inputs before submission
+          $('.quotation-file-input, .invoice-file-input').each(function () {
+              if (!$(this).is(':visible')) {
+                  $(this).prop('disabled', true);
+              }
+          });
 
-      //     $('#spinnerLoading').hide();
-      //   });
-      // }
+          $('#spinnerLoading').show(); // Show loading indicator
+
+          $.ajax({
+              url: 'php/insertStamping.php',
+              type: 'POST',
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function (data) {
+                  var obj = JSON.parse(data);
+                  if (obj.status === 'success') {
+                      $('#extendModal').modal('hide');
+                      toastr["success"](obj.message, "Success:");
+                      $('#weightTable').DataTable().ajax.reload(null, false);
+                  } else {
+                      toastr["error"](obj.message, "Failed:");
+                  }
+              },
+              error: function (xhr, status, error) {
+                  console.error("AJAX request failed:", status, error);
+                  toastr["error"]("An error occurred while processing the request.", "Failed:");
+              },
+              complete: function () {
+                  // Re-enable file inputs and hide spinner
+                  $('.quotation-file-input, .invoice-file-input').prop('disabled', false);
+                  $('#spinnerLoading').hide();
+                  isModalOpen = false; // Reset flag
+              }
+          });
+      }
       if($('#uploadModal').hasClass('show')){
         $('#spinnerLoading').show();
 
@@ -2812,6 +2875,16 @@ $(function () {
       $('#addtionalSection').html($('#bapDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
+    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '13'){
+      $('#addtionalSection').html($('#sicDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
+    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '26'){
+      $('#addtionalSection').html($('#btuBoxDetails').html());
+      btuCount = 0;
+      $("#btuTable").html('');
+      $('#extendModal').trigger('atkLoaded');
+    }
     else{
       $('#addtionalSection').html('');
     }
@@ -2952,6 +3025,16 @@ $(function () {
       $('#addtionalSection').html($('#bapDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
+    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '13'){
+      $('#addtionalSection').html($('#sicDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
+    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '26'){
+      $('#addtionalSection').html($('#btuBoxDetails').html());
+      btuCount = 0;
+      $("#btuTable").html('');
+      $('#extendModal').trigger('atkLoaded');
+    }
     else{
       $('#addtionalSection').html('');
     }
@@ -2998,6 +3081,8 @@ $(function () {
 
   $(document).on('click', '.add-load-cell', function() {
     var loadCellValue = parseInt($('#noOfLoadCell').val());
+    $("#loadCellTable").html('');
+    loadCellCount = 0;
     // Trigger the cloning and appending logic loadCellNoValue times
     for (var i = 0; i < loadCellValue; i++) {
       var $addContents = $("#loadCellDetails").clone();
@@ -3031,7 +3116,7 @@ $(function () {
 });
 
 function format (row) {
-  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP'];
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC'];
 
   var returnString = `
   <div class="row">
@@ -3429,6 +3514,60 @@ function format (row) {
                             <p><strong>Jenama / Name Pembuat:</strong> ${row.jenama}</p>
                           </div>`;
     }                     
+  }else if(row.jenis_alat == 'SIC'){
+    returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (SIC)</strong></span>
+                        <div class="row">
+                          <!-- BAP Section -->
+                          <div class="col-6">
+                            <p><strong>Nilai Jangkaan Maksimum (Kapasiti):</strong> ${row.nilai_jangkaan_maksimum} Liter</p>
+                          </div>      
+                    `;
+
+    if (row.bahan_pembuat == 'OTHER'){
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Bahan Pembuat:</strong> ${row.bahan_pembuat_other}</p>
+                          </div>`;
+    }else{
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Bahan Pembuat:</strong> ${row.bahan_pembuat}</p>
+                          </div>`;
+    }                     
+  }else if(row.jenis_alat == 'BTU - (BOX)'){
+    returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (BTU - BOX)</strong></span>
+                        <div class="row">  
+                    `;
+
+    if (row.btu_box_info.length > 0){
+      returnString += `
+        <table style="width: 100%;">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Batu Ujian</th>
+              <th>Penandaan Pada Batu Ujian</th>
+            </tr>
+          </thead>
+          <tbody>`;
+          
+          for (i = 0; i < row.btu_box_info.length; i++) {
+            returnString += `<tr><td>${row.btu_box_info[i].no}</td>`;
+
+            if (row.btu_box_info[i].batuUjian == 'OTHER'){
+              returnString += `<td>${row.btu_box_info[i].batuUjianLain}</td>`;
+            }else{
+              returnString += `<td>${row.btu_box_info[i].batuUjian}</td>`;
+            }
+
+            returnString += `<td>${row.btu_box_info[i].penandaanBatuUjian}</td></tr>`;
+          }
+      returnString += `</tbody>
+        </table>
+      `;
+    }                
   }
 
   return returnString;
@@ -3921,6 +4060,49 @@ function edit(id) {
 
             $('#extendModal').find('#jenama').val(obj.message.jenama).trigger('change');
           }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '13'){ 
+            $('#addtionalSection').html($('#sicDetails').html());
+            $('#extendModal').find('#nilaiMaksimum').val(obj.message.nilai_jangkaan_maksimum).trigger('change');
+
+            $('#extendModal').find('#bahanPembuat').on('change', function(){
+              var bahanPembuat = $(this).val();
+              if (bahanPembuat == 'OTHER'){
+                $('#extendModal').find('#bahanPembuatOtherDisplay').show();
+                $('#extendModal').find('#bahanPembuatOther').val(obj.message.bahan_pembuat_other);
+              }else{
+                $('#extendModal').find('#bahanPembuatOtherDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#bahanPembuat').val(obj.message.bahan_pembuat).trigger('change');
+          }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '26'){
+            $('#addtionalSection').html($('#btuBoxDetails').html());
+            $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_info.length);
+
+            if(obj.message.btu_box_info.length > 0){
+              $("#btuTable").html('');
+              btuCount = 0;
+
+              for(var i = 0; i < obj.message.btu_box_info.length; i++){
+                var item = obj.message.btu_box_info[i];
+                var $addContents = $("#btuCellDetails").clone();
+
+                $("#btuTable").append($addContents.html());
+
+                $("#btuTable").find('.details:last').attr("id", "detail" + btuCount);
+                $("#btuTable").find('.details:last').attr("data-index", btuCount);
+                $("#btuTable").find('#remove:last').attr("id", "remove" + btuCount);
+
+                $("#btuTable").find('#no:last').attr('name', 'no['+btuCount+']').attr("id", "no" + btuCount).val(item.no);
+                $("#btuTable").find('#batuUjian:last').attr('name', 'batuUjian['+btuCount+']').attr("id", "batuUjian" + btuCount).val(item.batuUjian).trigger('change');
+                $("#btuTable").find('#batuUjianLain:last').attr('name', 'batuUjianLain['+btuCount+']').attr("id", "batuUjianLain" + btuCount).val(item.batuUjianLain);
+                $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount).val(item.penandaanBatuUjian);
+
+                btuCount++;
+              }
+            }
+          }
         });
         
         $('#extendModal').modal('show');
@@ -4187,6 +4369,49 @@ function edit(id) {
             });
 
             $('#extendModal').find('#jenama').val(obj.message.jenama).trigger('change');
+          }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '13'){ 
+            $('#addtionalSection').html($('#sicDetails').html());
+            $('#extendModal').find('#nilaiMaksimum').val(obj.message.nilai_jangkaan_maksimum).trigger('change');
+
+            $('#extendModal').find('#bahanPembuat').on('change', function(){
+              var bahanPembuat = $(this).val();
+              if (bahanPembuat == 'OTHER'){
+                $('#extendModal').find('#bahanPembuatOtherDisplay').show();
+                $('#extendModal').find('#bahanPembuatOther').val(obj.message.bahan_pembuat_other);
+              }else{
+                $('#extendModal').find('#bahanPembuatOtherDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#bahanPembuat').val(obj.message.bahan_pembuat).trigger('change');
+          }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '26'){
+            $('#addtionalSection').html($('#btuBoxDetails').html());
+            $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_info.length);
+
+            if(obj.message.btu_box_info.length > 0){
+              $("#btuTable").html('');
+              btuCount = 0;
+
+              for(var i = 0; i < obj.message.btu_box_info.length; i++){
+                var item = obj.message.btu_box_info[i];
+                var $addContents = $("#btuCellDetails").clone();
+
+                $("#btuTable").append($addContents.html());
+
+                $("#btuTable").find('.details:last').attr("id", "detail" + btuCount);
+                $("#btuTable").find('.details:last').attr("data-index", btuCount);
+                $("#btuTable").find('#remove:last').attr("id", "remove" + btuCount);
+
+                $("#btuTable").find('#no:last').attr('name', 'no['+btuCount+']').attr("id", "no" + btuCount).val(item.no);
+                $("#btuTable").find('#batuUjian:last').attr('name', 'batuUjian['+btuCount+']').attr("id", "batuUjian" + btuCount).val(item.batuUjian).trigger('change');
+                $("#btuTable").find('#batuUjianLain:last').attr('name', 'batuUjianLain['+btuCount+']').attr("id", "batuUjianLain" + btuCount).val(item.batuUjianLain);
+                $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount).val(item.penandaanBatuUjian);
+
+                btuCount++;
+              }
+            }
           }
         });
 

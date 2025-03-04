@@ -34,3 +34,40 @@ ALTER TABLE `email_setup`
 ALTER TABLE `email_setup`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
+
+-- 27/02/2025 --
+ALTER TABLE `stamping_ext` ADD `nilai_jangkaan_maksimum` VARCHAR(10) NULL AFTER `jenama_other`, ADD `bahan_pembuat` VARCHAR(30) NULL AFTER `nilai_jangkaan_maksimum`;
+
+ALTER TABLE `stamping_ext` ADD `bahan_pembuat_other` VARCHAR(50) NULL AFTER `bahan_pembuat`;
+
+DELETE FROM `alat`;
+
+INSERT INTO `alat` (`id`, `alat`, `deleted`) VALUES
+(1, 'ATK', '0'),
+(2, 'ATP', '0'),
+(3, 'ATM', '1'),
+(4, 'ATS', '0'),
+(5, 'ATN', '0'),
+(6, 'ATE', '0'),
+(7, 'BTU', '0'),
+(8, 'ATN', '1'),
+(9, 'ATL', '0'),
+(10, 'ATP-AUTO MACHINE', '0'),
+(11, 'BAP', '0'),
+(12, 'SIA', '0'),
+(13, 'SIC', '0'),
+(14, 'SLL', '0'),
+(15, 'SMM', '0'),
+(16, 'SMP', '0'),
+(17, 'ATS (H)', '0'),
+(18, 'ATN (G)', '0'),
+(19, 'PROCAL - (SA)', '0'),
+(20, 'SIRIM - (SA)', '0'),
+(21, 'MSPK - (SA)', '0'),
+(22, 'UNKNOWN', '1'),
+(23, 'ATP (MOTORCAR)', '0'),
+(24, 'test', '1'),
+(25, 'test2', '1'),
+(26, 'BTU - (BOX)', '0');
+
+ALTER TABLE `stamping_ext` ADD `btu_box_info` TEXT NULL AFTER `batu_ujian_lain`;

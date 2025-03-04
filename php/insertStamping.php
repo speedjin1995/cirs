@@ -943,6 +943,59 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					}
 				}
 
+				// For SIC Additional fields	
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '13'){
+					$nilaiMaksimum = null;
+					$bahanPembuat = null;
+					$bahanPembuatOther = null;
+
+					if(isset($_POST['nilaiMaksimum']) && $_POST['nilaiMaksimum']!=null && $_POST['nilaiMaksimum']!=""){
+						$nilaiMaksimum = $_POST['nilaiMaksimum'];
+					}
+
+					if(isset($_POST['bahanPembuat']) && $_POST['bahanPembuat']!=null && $_POST['bahanPembuat']!=""){
+						$bahanPembuat = $_POST['bahanPembuat'];
+					}
+
+					if(isset($_POST['bahanPembuatOther']) && $_POST['bahanPembuatOther']!=null && $_POST['bahanPembuatOther']!=""){
+						$bahanPembuatOther = $_POST['bahanPembuatOther'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET nilai_jangkaan_maksimum = ?, bahan_pembuat = ?, bahan_pembuat_other = ? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('ssss', $nilaiMaksimum, $bahanPembuat, $bahanPembuatOther, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For BTU (BOX) Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '26'){
+					$btu_info = [];
+
+					$no = $_POST['no'];
+					$batuUjian = $_POST['batuUjian'];
+					$batuUjianLain = $_POST['batuUjianLain'];
+					$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
+
+					if(isset($no) && $no != null && count($no) > 0){
+						for($i=0; $i<count($no); $i++){
+							$btu_info[] = array(
+								"no" => $no[$i],
+								"batuUjian" => $batuUjian[$i],
+								"batuUjianLain" => $batuUjianLain[$i],
+								"penandaanBatuUjian" => $penandaanBatuUjian[$i]
+							);
+						}
+					}
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET btu_box_info = ? WHERE stamp_id = ?")){
+						$btuInfo = json_encode($btu_info);
+						$insert_stmt2->bind_param('ss', $btuInfo, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
 				// UPDATE Stamping System Log
 				if ($insert_stmt3 = $db->prepare("INSERT INTO stamping_log (action, user_id, item_id) 
 				VALUES (?, ?, ?)")){
@@ -1431,7 +1484,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 
 				}
 
-				// For SIA Additional fields
+				// For BAP Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '11'){
 					$pamNo = null;
 					$kelulusanBentuk = null;
@@ -1475,7 +1528,61 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
+				}
 
+				// For SIC Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '13'){
+					$nilaiMaksimum = null;
+					$bahanPembuat = null;
+					$bahanPembuatOther = null;
+
+					if(isset($_POST['nilaiMaksimum']) && $_POST['nilaiMaksimum']!=null && $_POST['nilaiMaksimum']!=""){
+						$nilaiMaksimum = $_POST['nilaiMaksimum'];
+					}
+
+					if(isset($_POST['bahanPembuat']) && $_POST['bahanPembuat']!=null && $_POST['bahanPembuat']!=""){
+						$bahanPembuat = $_POST['bahanPembuat'];
+					}
+
+					if(isset($_POST['bahanPembuatOther']) && $_POST['bahanPembuatOther']!=null && $_POST['bahanPembuatOther']!=""){
+						$bahanPembuatOther = $_POST['bahanPembuatOther'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, nilai_jangkaan_maksimum, bahan_pembuat, bahan_pembuat_other) 
+					VALUES (?, ?, ?, ?)")){
+						$insert_stmt2->bind_param('ssss', $stamp_id, $nilaiMaksimum, $bahanPembuat, $bahanPembuatOther);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For BTU (BOX) Additional fields
+				if(($validator == '10' || $validator == '9') && $jenisAlat == '26'){
+					$btu_info = [];
+
+					$no = $_POST['no'];
+					$batuUjian = $_POST['batuUjian'];
+					$batuUjianLain = $_POST['batuUjianLain'];
+					$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
+
+					if(isset($no) && $no != null && count($no) > 0){
+						for($i=0; $i<count($no); $i++){
+							$btu_info[] = array(
+								"no" => $no[$i],
+								"batuUjian" => $batuUjian[$i],
+								"batuUjianLain" => $batuUjianLain[$i],
+								"penandaanBatuUjian" => $penandaanBatuUjian[$i]
+							);
+						}
+					}
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, btu_box_info) 
+					VALUES (?, ?)")){
+						$btuInfo = json_encode($btu_info);
+						$insert_stmt2->bind_param('ss', $stamp_id, $btuInfo);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
 				}
 				
 				// Insert Stamping System Log

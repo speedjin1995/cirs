@@ -1511,7 +1511,7 @@ $(function () {
 });
 
 function format (row) {
-  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA'];
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
 
   var returnString = `
   <div class="row">
@@ -1918,6 +1918,60 @@ function format (row) {
                             <p><strong>Jenama / Name Pembuat:</strong> ${row.jenama}</p>
                           </div>`;
     }                     
+  }else if(row.jenis_alat == 'SIC'){
+    returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (SIC)</strong></span>
+                        <div class="row">
+                          <!-- BAP Section -->
+                          <div class="col-6">
+                            <p><strong>Nilai Jangkaan Maksimum (Kapasiti):</strong> ${row.nilai_jangkaan_maksimum} Liter</p>
+                          </div>      
+                    `;
+
+    if (row.bahan_pembuat == 'OTHER'){
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Bahan Pembuat:</strong> ${row.bahan_pembuat_other}</p>
+                          </div>`;
+    }else{
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Bahan Pembuat:</strong> ${row.bahan_pembuat}</p>
+                          </div>`;
+    }                     
+  }else if(row.jenis_alat == 'BTU - (BOX)'){
+    returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (BTU - BOX)</strong></span>
+                        <div class="row">  
+                    `;
+
+    if (row.btu_box_info.length > 0){
+      returnString += `
+        <table style="width: 100%;">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Batu Ujian</th>
+              <th>Penandaan Pada Batu Ujian</th>
+            </tr>
+          </thead>
+          <tbody>`;
+          
+          for (i = 0; i < row.btu_box_info.length; i++) {
+            returnString += `<tr><td>${row.btu_box_info[i].no}</td>`;
+
+            if (row.btu_box_info[i].batuUjian == 'OTHER'){
+              returnString += `<td>${row.btu_box_info[i].batuUjianLain}</td>`;
+            }else{
+              returnString += `<td>${row.btu_box_info[i].batuUjian}</td>`;
+            }
+
+            returnString += `<td>${row.btu_box_info[i].penandaanBatuUjian}</td></tr>`;
+          }
+      returnString += `</tbody>
+        </table>
+      `;
+    }                
   }
 
   return returnString;

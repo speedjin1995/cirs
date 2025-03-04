@@ -331,7 +331,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                         <td style="font-size:12px;">'.$row['siri_keselamatan'].'</td>';
 
                 if($row['cert_price'] != 0){
-                    $message .= '<td style="padding-left: 0.5%" width="7%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').' (Report)</td>
+                    $message .= '<td style="padding-left: 0.5%" width="7%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').' (Laporan)</td>
                     </tr>';
                 }else{
                     $message .= '<td style="padding-left: 0.5%" width="7%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'</td>
