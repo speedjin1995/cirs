@@ -34,7 +34,10 @@ else{
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $technicians = $db->query("SELECT * FROM users WHERE role_code != 'SUPER_ADMIN' AND deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
+  $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");  
+  $validatorsF = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
   $states = $db->query("SELECT * FROM state WHERE deleted = '0'");
+  $cawangans = $db->query("SELECT * FROM state WHERE deleted = '0'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
   $cancelledReasons = $db->query("SELECT * FROM reasons WHERE deleted = '0'");
@@ -43,6 +46,7 @@ else{
   $country3 = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryAts = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryAtp = $db->query("SELECT * FROM country WHERE deleted = '0'");
+  $countryAtpMotor = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryAtn = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countryAte = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countrySll = $db->query("SELECT * FROM country WHERE deleted = '0'");
@@ -141,6 +145,18 @@ else{
                   </div>
                 </div>
 
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Select Validators:</label>
+                    <select class="form-control select2" id="validatorFilter" name="validatorFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($validator2 = mysqli_fetch_assoc($validators2)) { ?>
+                        <option value="<?= $validator2['id'] ?>"><?= $validator2['validator'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                
                 <div class="col-3">
                   <div class="form-group">
                     <label>No. Daftar Lama:</label>
@@ -290,7 +306,7 @@ else{
                 <h4>Customer Information</h4>
               </div>
               <div class="row">
-                <div class="col-4">
+                <div class="col-3">
                   <div class="form-group">
                     <label>Customer Type * </label>
                     <select class="form-control" style="width: 100%;" id="customerType" name="customerType" required>
@@ -300,7 +316,13 @@ else{
                     <input type="hidden" id="customerTypeEdit" name="customerTypeEdit">
                   </div>
                 </div>
-                <div class="col-4">
+                <div class="col-3" id="otherCodeView" style="display: none;">
+                  <div class="form-group">
+                    <label>Other Code (AutoCount etc.)</label>
+                    <input class="form-control" type="text" placeholder="Enter Other System Code" id="otherCode" name="otherCode">
+                  </div>
+                </div>
+                <div class="col-3">
                   <div class="form-group">
                     <label>Customer * </label>
                     <select class="form-control select2" style="width: 100%;" id="company" name="company" required></select>
@@ -313,34 +335,56 @@ else{
                     <select class="form-control select2" style="width: 100%;" id="branch" name="branch" required></select>
                   </div>
                 </div>
-                <div class="col-4" id="addr1" style="display: none;">
-                  <div class="form-group">
-                    <label>Address Line 1 * </label>
-                    <input class="form-control" type="text" placeholder="Address Line 1" id="address1" name="address1">
+                <div class="row col-12">
+                  <div class="col-3" id="addr1" style="display: none;">
+                    <div class="form-group">
+                      <label>Address Line 1 * </label>
+                      <input class="form-control" type="text" placeholder="Address Line 1" id="address1" name="address1">
+                    </div>
+                  </div>
+                  <div class="col-3" id="addr2" style="display: none;">
+                    <div class="form-group">
+                      <label>Address Line 2 </label>
+                      <input class="form-control" type="text" placeholder="Address Line 2" id="address2" name="address2">
+                    </div>
+                  </div>
+                  <div class="col-3" id="addr3" style="display: none;">
+                    <div class="form-group">
+                      <label>Address Line 3 </label>
+                      <input class="form-control" type="text" placeholder="Address Line 3" id="address3" name="address3">
+                    </div>
+                  </div>
+                  <div class="col-3" id="addr4" style="display: none;">
+                    <div class="form-group">
+                      <label>Address Line 4 </label>
+                      <input class="form-control" type="text" placeholder="Address Line 4" id="address4" name="address4">
+                    </div>
                   </div>
                 </div>
-                <div class="col-4" id="addr2" style="display: none;">
-                  <div class="form-group">
-                    <label>Address Line 2 </label>
-                    <input class="form-control" type="text" placeholder="Address Line 2" id="address2" name="address2">
+                <div class="row col-12">
+                  <div class="col-3" id="phone" style="display: none;">
+                    <div class="form-group">
+                      <label>Tel</label>
+                      <input class="form-control" type="text" placeholder="Phone" id="phone" name="phone">
+                    </div>
                   </div>
-                </div>
-                <div class="col-4" id="addr3" style="display: none;">
-                  <div class="form-group">
-                    <label>Address Line 3 </label>
-                    <input class="form-control" type="text" placeholder="Address Line 3" id="address3" name="address3">
+                  <div class="col-3" id="email" style="display: none;">
+                    <div class="form-group">
+                      <label>Email</label>
+                      <input class="form-control" type="text" placeholder="Email" id="email" name="email">
+                    </div>
                   </div>
-                </div>
-                <div class="col-4" id="addr4" style="display: none;">
-                  <div class="form-group">
-                    <label>Address Line 4 </label>
-                    <input class="form-control" type="text" placeholder="Address Line 4" id="address4" name="address4">
+                  <div class="col-3" id="pic" style="display: none;">
+                    <div class="form-group">
+                      <label>P.I.C</label>
+                      <input class="form-control" type="text" placeholder="PIC" id="pic" name="pic">
+                    </div>
                   </div>
-                </div>
-                <div class="col-4" id="pic1" style="display: none;">
-                  <div class="form-group">
-                    <label>P.I.C</label>
-                    <input class="form-control" type="text" placeholder="PIC" id="pic" name="pic">
+                  <div class="col-3" id="contact" style="display: none;">
+                    <div class="form-group">
+                      <label>P.I.C Contact No.</label>
+                      <input class="form-control" type="text" placeholder="PIC Contact" id="contact" name="contact">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -792,7 +836,45 @@ else{
                 </select>
               </div>
             </div>
-          </div>  
+            <div class="col-6">
+              <div class="form-group">
+                <label>Cawangan *</label>
+                <select class="form-control select2" style="width: 100%;" id="cawanganBorang" name="cawanganBorang" required>
+                  <option selected="selected"></option>
+                  <?php while($cawangan=mysqli_fetch_assoc($cawangans)){ ?>
+                    <option value="<?=$cawangan['id'] ?>"><?=$cawangan['state'] ?></option>
+                  <?php } ?>
+                </select>
+              </div>
+            </div>
+          </div> 
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>Actual Print Date *</label>
+                <div class='input-group date' id="actualPrintDatePicker" data-target-input="nearest">
+                  <input type='text' class="form-control datetimepicker-input" data-target="#actualPrintDatePicker" id="actualPrintDate" name="actualPrintDate" required/>
+                  <div class="input-group-append" data-target="#actualPrintDatePicker" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label>Validator *</label>
+                <select class="form-control select2" style="width: 100%;" id="validatorBorang" name="validatorBorang" required>
+                  <option selected="selected"></option>
+                  <?php while($valF=mysqli_fetch_assoc($validatorsF)){ ?>
+                    <option value="<?=$valF['id'] ?>"><?=$valF['validator'] ?></option>
+                  <?php } ?>
+                </select>
+              </div>
+            </div>
+          </div>
+          <!--input type="hidden" class="form-control" id="validatorBorang" name="validatorBorang"-->
+          <input type="hidden" class="form-control" id="userId" name="userId">
+
         </div>
 
         <div class="modal-footer justify-content-between bg-gray-dark color-palette">
@@ -851,6 +933,39 @@ else{
   </div>
 </div>
 
+<div class="modal fade" id="duplicateModal"> 
+  <div class="modal-dialog modal-xl" style="max-width: 50%;">
+    <div class="modal-content">
+
+      <form role="form" id="duplicateForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Duplicate Stamping</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" class="form-control" id="id" name="id">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>No of records to duplicate *</label>
+                <input type="number" class="form-control" id="duplicateNo" name="duplicateNo" required>
+              </div>
+            </div>
+          </div>    
+        </div>
+
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="logModal"> 
   <div class="modal-dialog modal-xl" style="max-width: 80%;">
     <div class="modal-content">
@@ -882,6 +997,47 @@ else{
       <div class="modal-footer justify-content-between bg-gray-dark color-palette">
         <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="printBorangModal"> 
+  <div class="modal-dialog modal-xl" style="max-width: 50%;">
+    <div class="modal-content">
+
+      <form role="form" id="printBorangForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Print Borang Ujian</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" class="form-control" id="id" name="id">
+          <input type="hidden" class="form-control" id="type" name="type">
+          <input type="hidden" class="form-control" id="validate" name="validate">
+          <input type="hidden" class="form-control" id="printType" name="printType">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>Actual Print Date *</label>
+                <div class='input-group date' id="borangUjianDatePicker" data-target-input="nearest">
+                  <input type='text' class="form-control datetimepicker-input" data-target="#borangUjianDatePicker" id="actualPrintDate" name="actualPrintDate" required/>
+                  <div class="input-group-append" data-target="#borangUjianDatePicker" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> 
+        </div>
+
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
@@ -918,13 +1074,13 @@ else{
             <input type="text" class="form-control" id="noMSPK" name="noMSPK">
           </div>
         </div>
-        <div class="col-4">
+        <!-- <div class="col-4">
           <div class="form-group">
             <label>No. Serial Indicator *</label>
             <input type="text" class="form-control" id="noSerialIndicator" name="noSerialIndicator">
           </div>
-        </div>
-        <!-- <div class="form-group col-4">
+        </div> -->
+        <div class="form-group col-4">
           <label for="model">Platform Made In *</label>
           <select class="form-control select2" id="platformCountry" name="platformCountry" required>
             <option value="" selected disabled hidden>Please Select</option>
@@ -932,7 +1088,7 @@ else{
               <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
             <?php } ?>
           </select>
-        </div> -->
+        </div>
         <div class="form-group col-4">
           <label for="model">Platform Type *</label>
           <select class="form-control select2" id="platformType" name="platformType" required>
@@ -964,7 +1120,7 @@ else{
         </div>
         <div class="col-12">
           <div class="form-group">
-            <label>Others</label>
+            <label>Lain-lain Butiran</label>
             <textarea class="form-control" type="text" placeholder="Remark" id="others" name="others"></textarea>
           </div>
         </div>
@@ -1054,6 +1210,64 @@ else{
             <option value="DIGITAL">DIGITAL</option>
             <option value="DAIL">DAIL</option>
           </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/html" id="atpMotorDetails">
+  <div class="card card-primary">
+    <div class="card-body">
+      <div class="row">
+        <h4>Addtional Information (ATP - MOTORCAR)</h4>
+      </div>
+      <div class="row">
+        <!-- <div class="form-group col-4">
+          <label for="model">Platform Made In *</label>
+          <select class="form-control select2" id="platformCountry" name="platformCountry" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <?php while($rowcountry=mysqli_fetch_assoc($countryAtpMotor)){ ?>
+              <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
+            <?php } ?>
+          </select>
+        </div> -->
+        <div class="form-group col-4">
+          <label>Had Terima Steelyard (kg)*</label>
+          <input type="text" class="form-control" id="steelyard" name="steelyard">
+        </div>
+        <div class="form-group col-4">
+          <label>Bilangan Kaunterpois (biji)*</label>
+          <input type="text" class="form-control" id="bilanganKaunterpois" name="bilanganKaunterpois">
+        </div>
+      </div>
+      <div class="row">
+        <label for="model" class="form-group">Nilai Berat Kaunterpois (kg) *</label>
+      </div>
+      <div class="row">
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 1 (kg)</label>
+          <input class="form-control" id ="nilai1" name="nilai1">
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 2 (kg)</label>
+          <input class="form-control" id ="nilai2" name="nilai2">
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 3 (kg)</label>
+          <input class="form-control" id ="nilai3" name="nilai3">
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 4 (kg)</label>
+          <input class="form-control" id ="nilai4" name="nilai4">
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 5 (kg)</label>
+          <input class="form-control" id ="nilai5" name="nilai5">
+        </div>
+        <div class="form-group col-4">
+          <label for="model">Nilai Berat Kaunterpois 6 (kg)</label>
+          <input class="form-control" id ="nilai6" name="nilai6">
         </div>
       </div>
     </div>
@@ -1156,86 +1370,6 @@ else{
           BAHAGIAN II
         </div>
         <div class="card-body">
-          <!-- <div class="row mb-3">
-              <div class="form-group col-12">
-                <label  class="col-9" for="question1">1. Adakah Sukat Linar ini diperbuat dari keluli, tembaga pancalogam, aluminium, ivory, bakelait berlapis, kaca gantian yang dikukuhkan, kayu keras atau apa-apa bahan lain yang diluluskan oleh Penjimpan Timbang dan Sukat.</label>
-                <select class="form-control select2 col-2" id="question1" name="question1" required>
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <option value="YA">YA</option>
-                    <option value="TIDAK">TIDAK</option>
-                </select>
-              </div>
-          </div>
-          <div class="row mb-3">
-              <div class="form-group col-12">
-                  <label for="question2">2. Adakah Sukat Linar ini lurus dan tiada kecacatan.</label>
-                  <select class="form-control select2" id="question2" name="question2" required>
-                      <option value="" selected disabled hidden>Please Select</option>
-                      <option value="YA">YA</option>
-                      <option value="TIDAK">TIDAK</option>
-                  </select>
-              </div>
-          </div>
-          <div class="row mb-3">
-              <div class="form-group col-12">
-                  <label for="question3">3. Adakah Sukat Linar yang diperbuat daripada kayu, dibubuh kedua-dua hujungnya dengan logam dan hujungnya dipaku menembusi kayu itu.</label>
-                  <select class="form-control select2" id="question3" name="question3" required>
-                      <option value="" selected disabled hidden>Please Select</option>
-                      <option value="YA">YA</option>
-                      <option value="TIDAK">TIDAK</option>
-                  </select>
-              </div>
-          </div>
-          <div class="row mb-3">
-              <div class="form-group col-12">
-                  <label for="question4">4. Adakah Sukat Linar bersenggat dengan jelas dan tidak boleh dipadam, dan senggatan yang dinombor ditanda dengan garisan yang lebih panjang daripada senggatan yang tidak dinombor.</label>
-                  <select class="form-control select2" id="question4" name="question4" required>
-                      <option value="" selected disabled hidden>Please Select</option>
-                      <option value="YA">YA</option>
-                      <option value="TIDAK">TIDAK</option>
-                  </select>
-              </div>
-          </div>
-          <div class="row mb-3">
-              <div class="form-group col-12">
-                  <label for="question5">5.1 Adakah Sukat Linar disenggat dengan jelas dan tidak boleh dipadam dalam ukuran sentimeter di atas satu belah dan dalam sukatan meter di sebelah belakang dan senggatan yang dinombor ditanda dengan garis yang lebih panjang daripada senggatan yang tidak dinombor.</label>
-                  <select class="form-control select2" id="question5" name="question5" required>
-                      <option value="" selected disabled hidden>Please Select</option>
-                      <option value="YA">YA</option>
-                      <option value="TIDAK">TIDAK</option>
-                  </select>
-              </div>
-          </div>
-          <div class="row mb-3">
-              <div class="form-group col-12">
-                  <label for="question6">5.2 Adakah Sukat itu panjangnya 1 m (satu meter)</label>
-                  <select class="form-control select2" id="question6" name="question6" required>
-                      <option value="" selected disabled hidden>Please Select</option>
-                      <option value="YA">YA</option>
-                      <option value="TIDAK">TIDAK</option>
-                  </select>
-              </div>
-          </div>
-          <div class="row mb-3">
-              <div class="form-group col-12">
-                  <label for="question7">6. Adakah Sukat Linar mempunyai nilai jangkahan maksimum yang mudah dibihat, diukir dan tidak boleh dipadam ditanda di satu hujung Sukat Linar dengan cara salah satu daripada cara salah satu tanda-pertukaran-ringkas yang berikut masing-masing di bawah satu meter (cm, in, atau mm)</label>
-                  <select class="form-control select2" id="question7" name="question7" required>
-                      <option value="" selected disabled hidden>Please Select</option>
-                      <option value="YA">YA</option>
-                      <option value="TIDAK">TIDAK</option>
-                  </select>
-              </div>
-          </div>
-          <div class="row mb-3">
-              <div class="form-group col-12">
-                  <label for="question8">7. Adakah Sukat Linar ini ditanda dengan cap dekat permukaan Skel pada sebelah tiap-tiap tap yang bersenggat.</label>
-                  <select class="form-control select2" id="question8" name="question8" required>
-                      <option value="" selected disabled hidden>Please Select</option>
-                      <option value="YA">YA</option>
-                      <option value="TIDAK">TIDAK</option>
-                  </select>
-              </div>
-          </div> -->
           <div class="row mb-3 ml-4">
               <div class="col-md-8">
                   <label>1. Adakah Sukat Linar ini diperbuat dari keluli, tembaga pancalogam, aluminium, ivory, bakelait berlapis, kaca gantian yang dikukuhkan, kayu keras atau apa-apa bahan lain yang diluluskan oleh Penjimpan Timbang dan Sukat.</label>
@@ -1342,7 +1476,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (BATU)</h4>
+        <h4>Addtional Information (BTU)</h4>
       </div>
       <div class="row">
         <!-- <div class="form-group col-4">
@@ -1405,57 +1539,6 @@ else{
     </div>
   </div>
 </script>
-
-<!-- <script type="text/html" id="autoPackDetails">
-  <div class="card card-primary">
-    <div class="card-body">
-      <div class="row">
-        <h4>Addtional Information (Auto Packer)</h4>
-      </div>
-      <div class="row">
-        <div class="form-group col-12">
-          <label for="model">Platform Made In *</label>
-          <select class="form-control select2" id="platformCountry" name="platformCountry" required>
-            <option value="" selected disabled hidden>Please Select</option>
-            <?php while($rowcountry=mysqli_fetch_assoc($countryAutoPack)){ ?>
-              <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
-            <?php } ?>
-          </select>
-        </div>
-      </div>
-      <div class="row">
-        <label for="model" class="form-group">Nilai Berat Kaunterpois (kg) *</label>
-      </div>
-      <div class="row">
-        <div class="form-group col-4">
-          <label for="model">Nilai Berat Kaunterpois 1 (kg)</label>
-          <input class="form-control" id ="nilai1" name="nilai1">
-        </div>
-        <div class="form-group col-4">
-          <label for="model">Nilai Berat Kaunterpois 2 (kg)</label>
-          <input class="form-control" id ="nilai2" name="nilai2">
-        </div>
-        <div class="form-group col-4">
-          <label for="model">Nilai Berat Kaunterpois 3 (kg)</label>
-          <input class="form-control" id ="nilai3" name="nilai3">
-        </div>
-        <div class="form-group col-4">
-          <label for="model">Nilai Berat Kaunterpois 4 (kg)</label>
-          <input class="form-control" id ="nilai4" name="nilai4">
-        </div>
-        <div class="form-group col-4">
-          <label for="model">Nilai Berat Kaunterpois 5 (kg)</label>
-          <input class="form-control" id ="nilai5" name="nilai5">
-        </div>
-        <div class="form-group col-4">
-          <label for="model">Nilai Berat Kaunterpois 6 (kg)</label>
-          <input class="form-control" id ="nilai6" name="nilai6">
-        </div>
-      </div>
-
-    </div>
-  </div>
-</script> -->
 
 <script type="text/html" id="atsHDetails">
   <div class="card card-primary">

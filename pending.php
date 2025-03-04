@@ -109,207 +109,112 @@ else{
   <div class="container-fluid">
     <div class="row">
       <div class="col-lg-12">
-      <div class="card">
-        <div class="card-header search-filter">
-          <div class="d-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-0 font-weight-bold">Search Filters</h5>
-            <button class="btn btn-link btn-sm p-0" type="button" data-toggle="collapse" data-target="#searchFilters" aria-expanded="true" aria-controls="searchFilters">
-              <i class="fa fa-chevron-up" id="toggleIcon"></i>
-            </button>
-          </div>
-        </div>
-
-        <div class="collapse" id="searchFilters">
-          <div class="card-body">
-            <div class="row">
-              <div class="form-group col-3">
-                <label>From Stamp Date:</label>
-                <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate" />
-                  <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group col-3">
-                <label>To Expired Date:</label>
-                <div class="input-group date" id="toDatePicker" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#toDatePicker" id="toDate" />
-                  <div class="input-group-append" data-target="#toDatePicker" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Additional Fields -->
-              <div class="col-3">
-                <div class="form-group">
-                  <label>Customer No:</label>
-                  <select class="form-control select2" id="customerNoFilter" name="customerNoFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <?php while ($rowCustomer2 = mysqli_fetch_assoc($customers2)) { ?>
-                    <option value="<?=$rowCustomer2['id'] ?>"><?=$rowCustomer2['customer_name'] ?></option>
-                    <?php } ?>
-                  </select>
-                </div>
-              </div>
-
-              <div class="col-3">
-                <div class="form-group">
-                  <label>Select Validators:</label>
-                  <select class="form-control select2" id="validatorFilter" name="validatorFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <?php while ($validator2 = mysqli_fetch_assoc($validators2)) { ?>
-                      <option value="<?= $validator2['id'] ?>"><?= $validator2['validator'] ?></option>
-                    <?php } ?>
-                  </select>
-                </div>
-              </div>
-
-              <div class="col-3">
-                <div class="form-group">
-                  <label>No. Daftar Lama:</label>
-                  <input type="text" class="form-control" id="daftarLamaNoFilter" name="daftarLamaNoFilter">
-                </div>
-              </div>
-
-              <div class="col-3">
-                <div class="form-group">
-                  <label>No. Daftar Baru:</label>
-                  <input type="text" class="form-control" id="daftarBaruNoFilter" name="daftarBaruNoFilter">
-                </div>
-              </div>
-
-              <div class="col-3">
-                <div class="form-group">
-                  <label>No. Borang D:</label>
-                  <input type="text" class="form-control" id="borangNoFilter" name="borangNoFilter">
-                </div>
-              </div>
-
-              <div class="col-3">
-                <div class="form-group">
-                  <label>Machine Serial No:</label>
-                  <input type="text" class="form-control" id="serialNoFilter" name="serialNoFilter">
-                </div>
-              </div>
-              
-              <div class="col-3">
-                <div class="form-group">
-                  <label>Quotation No:</label>
-                  <input type="text" class="form-control" id="quoteNoFilter" name="quoteNoFilter">
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-9"></div>
-              <div class="col-3">
-                <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="filterSearch">
-                  <i class="fas fa-search"></i>
-                  Search
-                </button>
-              </div>
+        <div class="card">
+          <div class="card-header search-filter">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0 font-weight-bold">Search Filters</h5>
+              <button class="btn btn-link btn-sm p-0" type="button" data-toggle="collapse" data-target="#searchFilters" aria-expanded="true" aria-controls="searchFilters">
+                <i class="fa fa-chevron-up" id="toggleIcon"></i>
+              </button>
             </div>
           </div>
-        </div>
-      </div>
 
-        <!-- <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <div class="form-group col-3">
-                <label>From Stamp Date:</label>
-                <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
-                  <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+          <div class="collapse" id="searchFilters">
+            <div class="card-body">
+              <div class="row">
+                <div class="form-group col-3">
+                  <label>From Stamp Date:</label>
+                  <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate" />
+                    <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
+                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="form-group col-3">
-                <label>To Expired Date:</label>
-                <div class="input-group date" id="toDatePicker" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#toDatePicker" id="toDate"/>
-                  <div class="input-group-append" data-target="#toDatePicker" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                <div class="form-group col-3">
+                  <label>To Expired Date:</label>
+                  <div class="input-group date" id="toDatePicker" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#toDatePicker" id="toDate" />
+                    <div class="input-group-append" data-target="#toDatePicker" data-toggle="datetimepicker">
+                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="col-3">
-                <div class="form-group">
-                  <label>Customer No: </label>
-                  <select class="form-control select2" id="customerNoFilter" name="customerNoFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <?php while($rowCustomer2=mysqli_fetch_assoc($customers2)){ ?>
+                <!-- Additional Fields -->
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Customer No:</label>
+                    <select class="form-control select2" id="customerNoFilter" name="customerNoFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($rowCustomer2 = mysqli_fetch_assoc($customers2)) { ?>
                       <option value="<?=$rowCustomer2['id'] ?>"><?=$rowCustomer2['customer_name'] ?></option>
-                    <?php } ?>
-                  </select>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Select Validators:</label>
+                    <select class="form-control select2" id="validatorFilter" name="validatorFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($validator2 = mysqli_fetch_assoc($validators2)) { ?>
+                        <option value="<?= $validator2['id'] ?>"><?= $validator2['validator'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>No. Daftar Lama:</label>
+                    <input type="text" class="form-control" id="daftarLamaNoFilter" name="daftarLamaNoFilter">
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>No. Daftar Baru:</label>
+                    <input type="text" class="form-control" id="daftarBaruNoFilter" name="daftarBaruNoFilter">
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>No. Borang D:</label>
+                    <input type="text" class="form-control" id="borangNoFilter" name="borangNoFilter">
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Machine Serial No:</label>
+                    <input type="text" class="form-control" id="serialNoFilter" name="serialNoFilter">
+                  </div>
+                </div>
+                
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Quotation No:</label>
+                    <input type="text" class="form-control" id="quoteNoFilter" name="quoteNoFilter">
+                  </div>
                 </div>
               </div>
 
-              <div class="col-3">
-                <div class="form-group">
-                  <label>Select Validators</label>
-                  <select class="form-control select2" id="validatorFilter" name="validatorFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
-                    <?php while($validator2=mysqli_fetch_assoc($validators2)){ ?>
-                      <option value="<?=$validator2['id'] ?>"><?=$validator2['validator'] ?></option>
-                    <?php } ?>
-                  </select>
+              <div class="row">
+                <div class="col-9"></div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="filterSearch">
+                    <i class="fas fa-search"></i>
+                    Search
+                  </button>
                 </div>
-              </div>
-
-              <div class="col-3">
-                <div class="form-group">
-                  <label>No. Daftar Lama:</label>
-                  <input type="text" class="form-control" id="daftarLamaNoFilter" name="daftarLamaNoFilter">
-                </div>
-              </div>
-
-              <div class="col-3">
-                <div class="form-group">
-                  <label>No. Daftar Baru:</label>
-                  <input type="text" class="form-control" id="daftarBaruNoFilter" name="daftarBaruNoFilter">
-                </div>
-              </div>
-
-              <div class="col-3">
-                <div class="form-group">
-                  <label>No. Borang D:</label>
-                  <input type="text" class="form-control" id="borangNoFilter" name="borangNoFilter">
-                </div>
-              </div>
-
-              <div class="col-3">
-                <div class="form-group">
-                  <label>Machine Serial No:</label>
-                  <input type="text" class="form-control" id="serialNoFilter" name="serialNoFilter">
-                </div>
-              </div>
-              
-              <div class="col-3">
-                <div class="form-group">
-                  <label>Quotation No:</label>
-                  <input type="text" class="form-control" id="quoteNoFilter" name="quoteNoFilter">
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-9"></div>
-              <div class="col-3">
-                <button type="button" class="btn btn-block bg-gradient-warning btn-sm"  id="filterSearch">
-                  <i class="fas fa-search"></i>
-                  Search
-                </button>
               </div>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
 
@@ -1660,57 +1565,6 @@ else{
     </div>
   </div>
 </script>
-
-<!-- <script type="text/html" id="autoPackDetails">
-  <div class="card card-primary">
-    <div class="card-body">
-      <div class="row">
-        <h4>Addtional Information (Auto Packer)</h4>
-      </div>
-      <div class="row">
-        <div class="form-group col-12">
-          <label for="model">Platform Made In *</label>
-          <select class="form-control select2" id="platformCountry" name="platformCountry" required>
-            <option value="" selected disabled hidden>Please Select</option>
-            <?php while($rowcountry=mysqli_fetch_assoc($countryAutoPack)){ ?>
-              <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
-            <?php } ?>
-          </select>
-        </div>
-      </div>
-      <div class="row">
-        <label for="model" class="form-group">Nilai Berat Kaunterpois (kg) *</label>
-      </div>
-      <div class="row">
-        <div class="form-group col-4">
-          <label for="model">Nilai Berat Kaunterpois 1 (kg)</label>
-          <input class="form-control" id ="nilai1" name="nilai1">
-        </div>
-        <div class="form-group col-4">
-          <label for="model">Nilai Berat Kaunterpois 2 (kg)</label>
-          <input class="form-control" id ="nilai2" name="nilai2">
-        </div>
-        <div class="form-group col-4">
-          <label for="model">Nilai Berat Kaunterpois 3 (kg)</label>
-          <input class="form-control" id ="nilai3" name="nilai3">
-        </div>
-        <div class="form-group col-4">
-          <label for="model">Nilai Berat Kaunterpois 4 (kg)</label>
-          <input class="form-control" id ="nilai4" name="nilai4">
-        </div>
-        <div class="form-group col-4">
-          <label for="model">Nilai Berat Kaunterpois 5 (kg)</label>
-          <input class="form-control" id ="nilai5" name="nilai5">
-        </div>
-        <div class="form-group col-4">
-          <label for="model">Nilai Berat Kaunterpois 6 (kg)</label>
-          <input class="form-control" id ="nilai6" name="nilai6">
-        </div>
-      </div>
-
-    </div>
-  </div>
-</script> -->
 
 <script type="text/html" id="atsHDetails">
   <div class="card card-primary">
