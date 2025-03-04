@@ -4071,8 +4071,7 @@ function edit(id) {
           }
           else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '11'){ 
             $('#addtionalSection').html($('#bapDetails').html());
-            $('#extendModal').find('#nilaiMaksimum').val(obj.message.nilai_jangkaan_maksimum).trigger('change');
-            $('#extendModal').find('#kelulusanBentuk').val(obj.message.kelulusan_bentuk).trigger('change');
+            $('#extendModal').find('#pamNo').val(obj.message.pam_no).trigger('change');            $('#extendModal').find('#kelulusanBentuk').val(obj.message.kelulusan_bentuk).trigger('change');
             $('#extendModal').find('#alatType').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#kadarPengaliran').val(obj.message.kadar_pengaliran).trigger('change');
             $('#extendModal').find('#bentukPenunjuk').val(obj.message.bentuk_penunjuk).trigger('change');
