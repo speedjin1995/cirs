@@ -33,6 +33,7 @@ else{
   $customers = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $machinetypes = $db->query("SELECT * FROM machines WHERE deleted = '0'");
+  $machinetypes2 = $db->query("SELECT * FROM machines WHERE deleted = '0'");
   $brands = $db->query("SELECT * FROM brand WHERE deleted = '0'");
   $models = $db->query("SELECT * FROM model WHERE deleted = '0'");
   $sizes = $db->query("SELECT * FROM size WHERE deleted = '0'");
@@ -162,6 +163,18 @@ else{
                       <option value="" selected disabled hidden>Please Select</option>
                       <?php while ($validator2 = mysqli_fetch_assoc($validators2)) { ?>
                         <option value="<?= $validator2['id'] ?>"><?= $validator2['validator'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Select Machine Type:</label>
+                    <select class="form-control select2" id="machineTypeFilter" name="machineTypeFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($machineType2 = mysqli_fetch_assoc($machinetypes2)) { ?>
+                        <option value="<?= $machineType2['id'] ?>"><?= $machineType2['machine_type'] ?></option>
                       <?php } ?>
                     </select>
                   </div>
@@ -1941,6 +1954,7 @@ $(function () {
   var toDateValue = $('#toDate').val();
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
   var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
+  var machineTypeFilter = $('#machineTypeFilter').val() ? $('#machineTypeFilter').val() : '';
   var daftarLamaNoFilter = $('#daftarLamaNoFilter').val() ? $('#daftarLamaNoFilter').val() : '';
   var daftarBaruNoFilter = $('#daftarBaruNoFilter').val() ? $('#daftarBaruNoFilter').val() : '';
   var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
@@ -1967,6 +1981,7 @@ $(function () {
         toDate: toDateValue,
         customer: customerNoFilter,
         validator: validatorFilter,
+        machineType: machineTypeFilter,
         daftarLama: daftarLamaNoFilter,
         daftarBaru: daftarBaruNoFilter,
         borang: borangNoFilter,
@@ -2271,6 +2286,7 @@ $(function () {
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
     var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
+    var machineTypeFilter = $('#machineTypeFilter').val() ? $('#machineTypeFilter').val() : '';
     var daftarLamaNoFilter = $('#daftarLamaNoFilter').val() ? $('#daftarLamaNoFilter').val() : '';
     var daftarBaruNoFilter = $('#daftarBaruNoFilter').val() ? $('#daftarBaruNoFilter').val() : '';
     var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
@@ -2299,6 +2315,7 @@ $(function () {
           toDate: toDateValue,
           customer: customerNoFilter,
           validator: validatorFilter,
+          machineType: machineTypeFilter,
           daftarLama: daftarLamaNoFilter,
           daftarBaru: daftarBaruNoFilter,
           borang: borangNoFilter,

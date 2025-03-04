@@ -35,6 +35,10 @@ if($_POST['validator'] != null && $_POST['validator'] != '' && $_POST['validator
 	$searchQuery .= " and s.validate_by = '".$_POST['validator']."'";
 }
 
+if($_POST['machineType'] != null && $_POST['machineType'] != '' && $_POST['machineType'] != '-'){
+	$searchQuery .= " and s.machine_type = '".$_POST['machineType']."'";
+}
+
 if($_POST['daftarLama'] != null && $_POST['daftarLama'] != '' && $_POST['daftarLama'] != '-'){
 	$searchQuery .= " and s.no_daftar_lama like '%".$_POST['daftarLama']."%'";
 }
