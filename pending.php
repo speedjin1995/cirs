@@ -2246,26 +2246,6 @@ $(function () {
           });
       }
   });
-  
-  // // Add event listener for opening and closing details
-  // $('#weightTable tbody').on('click', 'td.dt-control', function () {
-  //   var tr = $(this).closest('tr');
-  //   var row = table.row(tr);
-
-  //   if ( row.child.isShown() ) {
-  //     // This row is already open - close it
-  //     row.child.hide();
-  //     tr.removeClass('shown');
-  //   }
-  //   else {
-  //     $.post('php/getStamp.php', {userID: row.data().id, format: 'EXPANDABLE'}, function (data){
-  //       var obj = JSON.parse(data); 
-  //       if(obj.status === 'success'){
-  //         row.child( format(obj.message) ).show();tr.addClass("shown");
-  //       }
-  //     });
-  //   }
-  // });
 
   $.validator.setDefaults({
     submitHandler: function (form) {
@@ -2575,10 +2555,7 @@ $(function () {
       }
     });
 
-    /*if(!$('#validatorFilter').val()){
-      alert("The records is consists of Metrology and De-Metrology stamping. Please filter ONLY 1 VALIDATORS before export!");
-    }
-    else */if (selectedIds.length <= 0) {
+    if (selectedIds.length <= 0) {
       // Optionally, you can display a message or take another action if no IDs are selected
       alert("Please select at least one DO to Deliver.");
     } 
@@ -2759,6 +2736,7 @@ $(function () {
         
         if(obj.status === 'success'){
           $('#reseller_branch').html('');
+          $('#reseller_branch').append('<option selected="selected">-</option>');
 
           for(var i=0; i<obj.message.branches.length; i++){
             var branchInfo = obj.message.branches[i];
