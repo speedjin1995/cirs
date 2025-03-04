@@ -2267,79 +2267,49 @@ $(function () {
   //   }
   // });
 
-  // Bind form submission handler once
-	$('#extendForm').off('submit').on('submit', function(e) {
-		e.preventDefault(); 
-		var formData = new FormData(this); 
-
-    $('.quotation-file-input').each(function () {
-        if (!$(this).is(':visible')) {
-          $(this).prop('disabled', true);
-        }
-    });
-
-    $('.invoice-file-input').each(function () {
-        if (!$(this).is(':visible')) {
-          $(this).prop('disabled', true);
-        }
-    });
-
-		$.ajax({
-			url: 'php/insertStamping.php',
-			type: 'POST',
-			data: formData,
-			processData: false,
-			contentType: false,
-			success: function(data) {
-				var obj = JSON.parse(data); 
-				if (obj.status === 'success') {
-					$('#extendModal').modal('hide');
-					toastr["success"](obj.message, "Success:");
-          $('#weightTable').DataTable().ajax.reload(null, false);
-				} else {
-					toastr["error"](obj.message, "Failed:");
-				}
-        // Re-enable all file inputs after success
-        $('.quotation-file-input').prop('disabled', false);
-        $('.invoice-file-input').prop('disabled', false);
-				$('#spinnerLoading').hide();
-				isModalOpen = false; // Set flag to false on error as well
-			},
-			error: function(xhr, status, error) {
-				console.error("AJAX request failed:", status, error);
-				toastr["error"]("An error occurred while processing the request.", "Failed:");
-        // Re-enable all file inputs after success
-        $('.quotation-file-input').prop('disabled', false);
-        $('.invoice-file-input').prop('disabled', false);
-				$('#spinnerLoading').hide();
-				isModalOpen = false; // Set flag to false on error as well
-			}
-		});
-	});
-
   $.validator.setDefaults({
-    submitHandler: function () {
-      // if($('#extendModal').hasClass('show')){
-      //   $('#spinnerLoading').show();
+    submitHandler: function (form) {
+      if ($('#extendModal').hasClass('show')) {
+          var formData = new FormData(form);
 
-      //   $.post('php/insertStamping.php', $('#extendForm').serialize(), function(data){
-      //     var obj = JSON.parse(data); 
-      //     if(obj.status === 'success'){
-      //       $('#extendModal').modal('hide');
-      //       toastr["success"](obj.message, "Success:");
-      //       $('#weightTable').DataTable().ajax.reload(null, false);
-      //     }
-      //     else if(obj.status === 'failed'){
-      //       toastr["error"](obj.message, "Failed:");
-      //     }
-      //     else{
-      //       toastr["error"]("Something wrong when edit", "Failed:");
-      //     }
+          // Disable hidden file inputs before submission
+          $('.quotation-file-input, .invoice-file-input').each(function () {
+              if (!$(this).is(':visible')) {
+                  $(this).prop('disabled', true);
+              }
+          });
 
-      //     $('#spinnerLoading').hide();
-      //   });
-      // }
-      if($('#uploadModal').hasClass('show')){
+          $('#spinnerLoading').show(); // Show loading indicator
+
+          $.ajax({
+              url: 'php/insertStamping.php',
+              type: 'POST',
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function (data) {
+                  var obj = JSON.parse(data);
+                  if (obj.status === 'success') {
+                      $('#extendModal').modal('hide');
+                      toastr["success"](obj.message, "Success:");
+                      $('#weightTable').DataTable().ajax.reload(null, false);
+                  } else {
+                      toastr["error"](obj.message, "Failed:");
+                  }
+              },
+              error: function (xhr, status, error) {
+                  console.error("AJAX request failed:", status, error);
+                  toastr["error"]("An error occurred while processing the request.", "Failed:");
+              },
+              complete: function () {
+                  // Re-enable file inputs and hide spinner
+                  $('.quotation-file-input, .invoice-file-input').prop('disabled', false);
+                  $('#spinnerLoading').hide();
+                  isModalOpen = false; // Reset flag
+              }
+          });
+      }
+      else if($('#uploadModal').hasClass('show')){
         $('#spinnerLoading').show();
 
         // Serialize the form data into an array of objects
