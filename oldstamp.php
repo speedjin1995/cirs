@@ -31,6 +31,7 @@ else{
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE deleted = '0'");
+  $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");  
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
 }
@@ -90,16 +91,17 @@ else{
                 <div class="form-group col-3">
                   <label>From Stamp Date:</label>
                   <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
+                    <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate" />
                     <div class="input-group-append" data-target="#fromDatePicker" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fa fa-calendar"></i></div></div>
+                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
                   </div>
                 </div>
 
                 <div class="form-group col-3">
                   <label>To Expired Date:</label>
                   <div class="input-group date" id="toDatePicker" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" data-target="#toDatePicker" id="toDate"/>
+                    <input type="text" class="form-control datetimepicker-input" data-target="#toDatePicker" id="toDate" />
                     <div class="input-group-append" data-target="#toDatePicker" data-toggle="datetimepicker">
                       <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div>
@@ -108,11 +110,23 @@ else{
 
                 <div class="col-3">
                   <div class="form-group">
-                    <label>Customer No: </label>
+                    <label>Customer No:</label>
                     <select class="form-control select2" id="customerNoFilter" name="customerNoFilter">
                       <option value="" selected disabled hidden>Please Select</option>
-                      <?php while($rowCustomer2=mysqli_fetch_assoc($customers2)){ ?>
-                        <option value="<?=$rowCustomer2['id'] ?>"><?=$rowCustomer2['customer_name'] ?></option>
+                      <?php while ($rowCustomer2 = mysqli_fetch_assoc($customers2)) { ?>
+                      <option value="<?=$rowCustomer2['id'] ?>"><?=$rowCustomer2['customer_name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Select Validators:</label>
+                    <select class="form-control select2" id="validatorFilter" name="validatorFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($validator2 = mysqli_fetch_assoc($validators2)) { ?>
+                        <option value="<?= $validator2['id'] ?>"><?= $validator2['validator'] ?></option>
                       <?php } ?>
                     </select>
                   </div>
@@ -757,6 +771,7 @@ $(function () {
   var fromDateValue = $('#fromDate').val();
   var toDateValue = $('#toDate').val();
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
+  var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
   var daftarLamaNoFilter = $('#daftarLamaNoFilter').val() ? $('#daftarLamaNoFilter').val() : '';
   var daftarBaruNoFilter = $('#daftarBaruNoFilter').val() ? $('#daftarBaruNoFilter').val() : '';
   var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
@@ -780,6 +795,7 @@ $(function () {
         fromDate: fromDateValue,
         toDate: toDateValue,
         customer: customerNoFilter,
+        validator: validatorFilter,
         daftarLama: daftarLamaNoFilter,
         daftarBaru: daftarBaruNoFilter,
         borang: borangNoFilter,
@@ -843,38 +859,6 @@ $(function () {
           return dropdownMenu;
         }
       },
-      // { 
-      //   data: 'id',
-      //   render: function ( data, type, row ) {
-      //     let buttons = '<div class="row">';
-
-      //     if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
-      //       buttons +=  '<div class="col-4"><button title="Revert" type="button" id="revertBtn'+data+'" onclick="revert('+data+
-      //       ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
-
-      //       // Log Button
-      //       buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
-
-      //       buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></button></div>';
-
-
-      //       return buttons;
-      //     } 
-      //     else {
-      //       // Log Button
-      //       buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
-      //       return ''; // Return an empty string or any other placeholder if the item is invoiced
-      //     }
-      //   }
-      // },
-      // { 
-      //   className: 'dt-control',
-      //   orderable: false,
-      //   data: null,
-      //   render: function ( data, type, row ) {
-      //     return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
-      //   }
-      // }
     ],
     "lengthMenu": [ [10, 25, 50, 100, 300, 600, 1000], [10, 25, 50, 100, 300, 600, 1000] ], // More show options
     "pageLength": 10 // Default rows per page
@@ -1022,6 +1006,7 @@ $(function () {
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
+    var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
     var daftarLamaNoFilter = $('#daftarLamaNoFilter').val() ? $('#daftarLamaNoFilter').val() : '';
     var daftarBaruNoFilter = $('#daftarBaruNoFilter').val() ? $('#daftarBaruNoFilter').val() : '';
     var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
@@ -1049,6 +1034,7 @@ $(function () {
           fromDate: fromDateValue,
           toDate: toDateValue,
           customer: customerNoFilter,
+          validator: validatorFilter,
           daftarLama: daftarLamaNoFilter,
           daftarBaru: daftarBaruNoFilter,
           borang: borangNoFilter,
@@ -1112,38 +1098,6 @@ $(function () {
             return dropdownMenu;
           }
         },
-        // { 
-        //   data: 'id',
-        //   render: function ( data, type, row ) {
-        //     let buttons = '<div class="row">';
-
-        //     if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') { // Assuming 'isInvoiced' is a boolean field in your row data
-        //       buttons +=  '<div class="col-4"><button title="Revert" type="button" id="revertBtn'+data+'" onclick="revert('+data+
-        //       ')" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>';
-
-        //       // Log Button
-        //       buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
-
-        //       buttons += '<div class="col-4"><button title="Delete" type="button" id="delete'+data+'" onclick="deactivate('+data+')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></button></div>';
-
-
-        //       return buttons;
-        //     } 
-        //     else {
-        //       // Log Button
-        //       buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
-        //       return ''; // Return an empty string or any other placeholder if the item is invoiced
-        //     }
-        //   }
-        // },
-        // { 
-        //   className: 'dt-control',
-        //   orderable: false,
-        //   data: null,
-        //   render: function ( data, type, row ) {
-        //     return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
-        //   }
-        // }
       ],
       "lengthMenu": [ [10, 25, 50, 100, 300, 600, 1000], [10, 25, 50, 100, 300, 600, 1000] ], // More show options
       "pageLength": 10 // Default rows per page
@@ -1511,7 +1465,7 @@ $(function () {
 });
 
 function format (row) {
-  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC'];
 
   var returnString = `
   <div class="row">
@@ -1922,7 +1876,7 @@ function format (row) {
     returnString += `</div><hr>
                         <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (SIC)</strong></span>
                         <div class="row">
-                          <!-- BAP Section -->
+                          <!-- SIC Section -->
                           <div class="col-6">
                             <p><strong>Nilai Jangkaan Maksimum (Kapasiti):</strong> ${row.nilai_jangkaan_maksimum} Liter</p>
                           </div>      

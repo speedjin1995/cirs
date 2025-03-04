@@ -1901,11 +1901,14 @@ $(function () {
   var fromDateValue = $('#fromDate').val();
   var toDateValue = $('#toDate').val();
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
+  var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
   var daftarLamaNoFilter = $('#daftarLamaNoFilter').val() ? $('#daftarLamaNoFilter').val() : '';
   var daftarBaruNoFilter = $('#daftarBaruNoFilter').val() ? $('#daftarBaruNoFilter').val() : '';
   var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
   var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
   var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
+
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
 
   var table = $("#weightTable").DataTable({
     "responsive": true,
@@ -1924,6 +1927,7 @@ $(function () {
         fromDate: fromDateValue,
         toDate: toDateValue,
         customer: customerNoFilter,
+        validator: validatorFilter,
         daftarLama: daftarLamaNoFilter,
         daftarBaru: daftarBaruNoFilter,
         borang: borangNoFilter,
@@ -1984,57 +1988,12 @@ $(function () {
           return dropdownMenu;
         }
       },
-      // { 
-      //   data: 'id',
-      //   render: function (data, type, row) {
-      //     let buttons = '<div class="row">';
-
-      //     // Edit button
-      //     buttons += '<div class="col-4"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
-      //               ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
-
-      //     // Extra button if validate_by is 3
-      //     if (row.validate_by == 3) {
-      //       buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
-      //                 ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
-      //     }
-
-      //     // Print button
-      //     // buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-      //     //           ', \''+row.validator+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
-
-      //     // Complete button if conditions are met
-      //     // if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
-      //     //   buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
-      //     //             ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
-      //     // }
-
-      //     // Log Button
-      //     buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
-
-      //     // Cancelled button
-      //     buttons += '<div class="col-4"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-      //               ')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></button></div>';
-
-      //     buttons += '</div>'; // Closing row div
-
-      //     return buttons;
-      //   }
-      // },
-      // { 
-      //   className: 'dt-control',
-      //   orderable: false,
-      //   data: null,
-      //   render: function ( data, type, row ) {
-      //     return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
-      //   }
-      // }
     ],
     "lengthMenu": [ [10, 25, 50, 100, 300, 600, 1000], [10, 25, 50, 100, 300, 600, 1000] ], // More show options
     "pageLength": 10 // Default rows per page
   });
   
-  // Add event listener for opening and closing details
+  // Add event listener for opening and closing details on row click
   $('#weightTable tbody').on('click', 'tr', function (e) {
       var tr = $(this); // The row that was clicked
       var row = table.row(tr);
@@ -2195,6 +2154,7 @@ $(function () {
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
+    var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
     var daftarLamaNoFilter = $('#daftarLamaNoFilter').val() ? $('#daftarLamaNoFilter').val() : '';
     var daftarBaruNoFilter = $('#daftarBaruNoFilter').val() ? $('#daftarBaruNoFilter').val() : '';
     var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
@@ -2282,51 +2242,6 @@ $(function () {
             return dropdownMenu;
           }
         },
-        // { 
-        //   data: 'id',
-        //   render: function (data, type, row) {
-        //     let buttons = '<div class="row">';
-
-        //     // Edit button
-        //     buttons += '<div class="col-4"><button title="Edit" type="button" id="edit'+data+'" onclick="edit('+data+
-        //               ')" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>';
-
-        //     // Extra button if validate_by is 3
-        //     if (row.validate_by == 3) {
-        //       buttons += '<div class="col-3"><button title="Extra Details" type="button" id="extra'+data+'" onclick="extraAction('+data+
-        //                 ')" class="btn btn-primary btn-sm"><i class="fas fa-star"></i></button></div>';
-        //     }
-
-        //     // Print button
-        //     // buttons += '<div class="col-3"><button title="Print" type="button" id="print'+data+'" onclick="print('+data+
-        //     //         ', \''+row.validator+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
-
-        //     // Complete button if conditions are met
-        //     // if (row.stamping_date != '' && row.due_date != '' && row.pin_keselamatan != '' && row.siri_keselamatan != '' && row.borang_d != '') {
-        //     //   buttons += '<div class="col-3"><button title="Complete" type="button" id="complete'+data+'" onclick="complete('+data+
-        //     //             ')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
-        //     // }
-
-        //     // Log Button
-        //     buttons += '<div class="col-4"><button title="Log" type="button" id="log'+data+'" onclick="log('+data+')" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
-
-        //     // Cancelled button
-        //     buttons += '<div class="col-4"><button title="Cancelled" type="button" id="delete'+data+'" onclick="deactivate('+data+
-        //               ')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></button></div>';
-
-        //     buttons += '</div>'; // Closing row div
-
-        //     return buttons;
-        //   }
-        // },
-        // { 
-        //   className: 'dt-control',
-        //   orderable: false,
-        //   data: null,
-        //   render: function ( data, type, row ) {
-        //     return '<td class="table-elipse" data-toggle="collapse" data-target="#demo'+row.serialNo+'"><i class="fas fa-angle-down"></i></td>';
-        //   }
-        // }
       ],
       "lengthMenu": [ [10, 25, 50, 100, 300, 600, 1000], [10, 25, 50, 100, 300, 600, 1000] ], // More show options
       "pageLength": 10 // Default rows per page
@@ -2453,7 +2368,7 @@ $(function () {
       $('#lastYearStampDateView').show();
     }
   });
-  
+
   $('#extendModal').find('#type').on('change', function(){
     if($(this).val() == "DIRECT"){
       $('#isResseller').hide();
@@ -2665,7 +2580,6 @@ $(function () {
         $('#extendModal').find('#email').val(obj.message.customer_email);
 
         $('#branch').html('');
-        // $('#branch').append('<option selected="selected">-</option>');
 
         for(var i=0; i<obj.message.pricing.length; i++){
           var branchInfo = obj.message.pricing[i];
@@ -2705,53 +2619,57 @@ $(function () {
   $('#extendModal').find('#brand').on('change', function(){
     var brandId = $(this).find(":selected").val();
 
-    $.post('php/getModelFromBrand.php', {id: brandId}, function (data){
-      var obj = JSON.parse(data);
+    if(brandId){
+      $.post('php/getModelFromBrand.php', {id: brandId}, function (data){
+        var obj = JSON.parse(data);
 
-      if(obj.status === 'success'){
-        $('#model').html('');
-        $('#model').append('<option selected="selected">-</option>');
+        if(obj.status === 'success'){
+          $('#model').html('');
+          $('#model').append('<option selected="selected">-</option>');
 
-        for(var i=0; i<obj.message.length; i++){
-          var modelInfo = obj.message[i];
-          $('#model').append('<option value="'+modelInfo.id+'">'+modelInfo.model+'</option>')
+          for(var i=0; i<obj.message.length; i++){
+            var modelInfo = obj.message[i];
+            $('#model').append('<option value="'+modelInfo.id+'">'+modelInfo.model+'</option>')
+          }
+
+          $('#extendModal').trigger('modelsLoaded');
         }
-
-        $('#extendModal').trigger('modelsLoaded');
-      }
-      else if(obj.status === 'failed'){
-        toastr["error"](obj.message, "Failed:");
-      }
-      else{
-        toastr["error"]("Something wrong when pull data", "Failed:");
-      }
-    });
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+      });
+    }
   });
 
   $('#extendModal').find('#machineType').on('change', function(){
     var brandId = $(this).find(":selected").val();
 
-    $.post('php/getJAFromMT.php', {id: brandId}, function (data){
-      var obj = JSON.parse(data);
+    if(brandId){
+      $.post('php/getJAFromMT.php', {id: brandId}, function (data){
+        var obj = JSON.parse(data);
 
-      if(obj.status === 'success'){
-        $('#jenisAlat').html('');
-        // $('#jenisAlat').append('<option selected="selected">-</option>');
+        if(obj.status === 'success'){
+          $('#jenisAlat').html('');
+          // $('#jenisAlat').append('<option selected="selected">-</option>');
 
-        for(var i=0; i<obj.message.length; i++){
-          var modelInfo = obj.message[i];
-          $('#jenisAlat').append('<option value="'+modelInfo.id+'">'+modelInfo.jenis_alat+'</option>')
+          for(var i=0; i<obj.message.length; i++){
+            var modelInfo = obj.message[i];
+            $('#jenisAlat').append('<option value="'+modelInfo.id+'">'+modelInfo.jenis_alat+'</option>')
+          }
+
+          $('#extendModal').trigger('jaIsLoaded');
         }
-
-        $('#extendModal').trigger('jaIsLoaded');
-      }
-      else if(obj.status === 'failed'){
-        toastr["error"](obj.message, "Failed:");
-      }
-      else{
-        toastr["error"]("Something wrong when pull data", "Failed:");
-      }
-    });
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+      });
+    }
   });
 
   $('#extendModal').find('#product').on('change', function(){
@@ -2916,6 +2834,10 @@ $(function () {
       $('#addtionalSection').html($('#atpDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
+    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '23'){
+      $('#addtionalSection').html($('#atpMotorDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '5'){
       $('#addtionalSection').html($('#atnDetails').html());
       $('#extendModal').trigger('atkLoaded');
@@ -2923,7 +2845,8 @@ $(function () {
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '18'){
       $('#addtionalSection').html($('#atnDetails').html());
       $('#extendModal').trigger('atkLoaded');
-    }else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '6'){
+    }
+    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '6'){
       $('#addtionalSection').html($('#ateDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
@@ -2990,7 +2913,7 @@ $(function () {
     if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
       $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
         var obj = JSON.parse(data);
-        
+
         if(obj.status === 'success'){
           $('#product').val(obj.message.id);
           $('#unitPrice').val(obj.message.price);
@@ -3028,6 +2951,8 @@ $(function () {
     }
 
     if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '1'){
+      var alatId = $('#jenisAlat').val();
+
       $('#addtionalSection').html($('#atkDetails').html());
       loadCellCount = 0;
       $("#loadCellTable").html('');
@@ -3045,7 +2970,7 @@ $(function () {
           $('#size').html('');
 
           for(var i=0; i<obj.message.length; i++){
-            var size = obj.message[i];
+            var size = obj.message[i]; 
             $('#size').append('<option value="'+size.id+'">'+size.size+'</option>')
           }
         }
@@ -3063,6 +2988,10 @@ $(function () {
     // }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '2'){
       $('#addtionalSection').html($('#atpDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+    }
+    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '23'){
+      $('#addtionalSection').html($('#atpMotorDetails').html());
       $('#extendModal').trigger('atkLoaded');
     }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '5'){
@@ -3631,7 +3560,7 @@ function format (row) {
     returnString += `</div><hr>
                         <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (SIC)</strong></span>
                         <div class="row">
-                          <!-- BAP Section -->
+                          <!-- SIC Section -->
                           <div class="col-6">
                             <p><strong>Nilai Jangkaan Maksimum (Kapasiti):</strong> ${row.nilai_jangkaan_maksimum} Liter</p>
                           </div>      
@@ -3748,13 +3677,18 @@ function newEntry(){
   $('#extendModal').find('#companyText').val('').trigger('change');
   $('#extendModal').find('#machineType').val('').trigger('change');
   $('#extendModal').find('#jenisAlat').val('').trigger('change');
-  $('#extendModal').find('#assignTo').val('').trigger('change');
   $('#extendModal').find('#address1').val('');
   $('#extendModal').find('#model').val("").trigger('change');
   $('#extendModal').find('#makeIn').val("").trigger('change');
+  $('#extendModal').find('#cawangan').val("").trigger('change');
   $('#extendModal').find('#stampDate').val('');
+  $('#extendModal').find('#lastYearStampDate').val('');
   $('#extendModal').find('#address2').val('');
-  $('#extendModal').find('#capacity').val('').trigger('change');
+  $('#extendModal').find('#capacity_single').val('').trigger('change');
+  $('#extendModal').find('#capacity_multi').val('').trigger('change');
+  $('#extendModal').find('#assignTo').val('').trigger('change');
+  $('#extendModal').find('#trade').val('').trigger('change');
+  $('#extendModal').find('#branch').val('').trigger('change');
   $('#extendModal').find('#noDaftarLama').val('');
   $('#extendModal').find('#noDaftarBaru').val('');
   $('#extendModal').find('#address3').val('');
@@ -3774,12 +3708,25 @@ function newEntry(){
   $('#extendModal').find('#poDate').val('');
   $('#extendModal').find('#cashBill').val("");
   $('#extendModal').find('#invoice').val('');
+  $('#extendModal').find('#penentusanBaru').val('');
+  $('#extendModal').find('#penentusanSemula').val('');
+  $('#extendModal').find('#kelulusanMSPK').val('').trigger('change');
+  $('#extendModal').find('#noMSPK').val('');
+  $('#extendModal').find('#platformCountry').val('').trigger('change');
+  $('#extendModal').find('#platformType').val('').trigger('change');
+  $('#extendModal').find('#size').val('').trigger('change');
+  $('#extendModal').find('#jenisPelantar').val('').trigger('change');
+  $('#extendModal').find('#others').val('');
   $('#extendModal').find('#viewQuotation').hide();
   $('#extendModal').find('#uploadQuotationAttachment').val('');
   $('#extendModal').find('#quotationFilePath').val('');
   $('#extendModal').find('#newInvoice').show();
   $('#extendModal').find('#uploadInvoiceAttachment').val('');
   $('#extendModal').find('#viewInvoice').hide();
+  $('#extendModal').find('#InvoiceFilePath').val('');
+  //Additonal field reset
+  // var value = $('#extendModal').find('#additionalSection').find('#batuUjian').val();
+  // $('#extendModal').find('#additionalSection').find('#jenis_penunjuk').val('').trigger('change');
 
   $('#extendModal').find('#jenisAlat').change(function() {
     if($(this).val() == 1) {
@@ -3839,6 +3786,16 @@ function newEntry(){
   $('#cerId').hide();
   $('#extendModal').modal('show');
   
+  $('#extendModal').find('#platformCountry').val('');
+  $('#extendModal').find('#jenis_penunjuk').val('');
+  $('#extendModal').find('#nilai1').val('');
+  $('#extendModal').find('#nilai2').val('');
+  $('#extendModal').find('#nilai3').val('');
+  $('#extendModal').find('#nilai4').val('');
+  $('#extendModal').find('#nilai5').val('');
+  $('#extendModal').find('#nilai6').val('');
+
+
   $('#extendForm').validate({
     errorElement: 'span',
     errorPlacement: function (error, element) {
@@ -3955,7 +3912,7 @@ function edit(id) {
           $('#extendModal').find('#viewInvoice').attr('href', "view_file.php?file="+obj.message.invoice_attachment).show();
         }
         
-         $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
+        $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
         $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
         $('#extendModal').find('#poNo').val(obj.message.purchase_no);
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
@@ -4292,7 +4249,7 @@ function edit(id) {
         $('#extendModal').find('#remark').val(obj.message.remarks);
         $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
         $('#extendModal').find('#quotation').val(obj.message.quotation_no);
-        
+
         if(obj.message.quotation_attachment){
           $('#extendModal').find('#viewQuotation').attr('href', "view_file.php?file="+obj.message.quotation_attachment).show();
           $('#extendModal').find('#quotationFilePath').val(obj.message.quotation_filepath);

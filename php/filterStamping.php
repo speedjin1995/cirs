@@ -18,17 +18,21 @@ $searchQuery = " ";
 if($_POST['fromDate'] != null && $_POST['fromDate'] != ''){
   $dateTime = DateTime::createFromFormat('d/m/Y', $_POST['fromDate']);
   $fromDateTime = $dateTime->format('Y-m-d 00:00:00');
-  $searchQuery = " and stamping_date >= '".$fromDateTime."'";
+  $searchQuery = " and s.stamping_date >= '".$fromDateTime."'";
 }
 
 if($_POST['toDate'] != null && $_POST['toDate'] != ''){
   $dateTime = DateTime::createFromFormat('d/m/Y', $_POST['toDate']);
   $toDateTime = $dateTime->format('Y-m-d 23:59:59');
-	$searchQuery .= " and stamping_date <= '".$toDateTime."'";
+	$searchQuery .= " and s.stamping_date <= '".$toDateTime."'";
 }
 
 if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] != '-'){
-	$searchQuery .= " and customers = '".$_POST['customer']."'";
+	$searchQuery .= " and s.customers = '".$_POST['customer']."'";
+}
+
+if($_POST['validator'] != null && $_POST['validator'] != '' && $_POST['validator'] != '-'){
+	$searchQuery .= " and s.validate_by = '".$_POST['validator']."'";
 }
 
 if($_POST['daftarLama'] != null && $_POST['daftarLama'] != '' && $_POST['daftarLama'] != '-'){
@@ -40,15 +44,15 @@ if($_POST['daftarBaru'] != null && $_POST['daftarBaru'] != '' && $_POST['daftarB
 }
 
 if($_POST['borang'] != null && $_POST['borang'] != '' && $_POST['borang'] != '-'){
-  $searchQuery .= " and borang_d like '%".$_POST['borang']."%'";
+  $searchQuery .= " and s.borang_d like '%".$_POST['borang']."%'";
 }
 
 if($_POST['serial'] != null && $_POST['serial'] != '' && $_POST['serial'] != '-'){
-  $searchQuery .= " and serial_no like '%".$_POST['serial']."%'";
+  $searchQuery .= " and s.serial_no like '%".$_POST['serial']."%'";
 }
 
 if($_POST['quotation'] != null && $_POST['quotation'] != '' && $_POST['quotation'] != '-'){
-  $searchQuery .= " and quotation_no like '%".$_POST['quotation']."%'";
+  $searchQuery .= " and s.quotation_no like '%".$_POST['quotation']."%'";
 }
 
 if($searchValue != ''){
@@ -73,7 +77,7 @@ if ($columnName == 'customers'){
   $columnName = "c.customer_name";
 }else if ($columnName == 'brand'){
   $columnName = "b.". $columnName;
-}else if ($columnName == 'machine_type'){
+}else if ($columnName == 'machines'){
   $columnName = "m.machine_type";
 }else if ($columnName == 'validate_by'){
   $columnName = "v.validator";
@@ -84,7 +88,7 @@ if ($columnName == 'customers'){
 } 
 
 ## Total number of records without filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM stamping WHERE status = 'Complete'");
+$sel = mysqli_query($db,"select count(*) as allcount FROM stamping");
 $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
@@ -161,6 +165,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "stamping_date"=>$row['stamping_date'] != null ? convertDatetimeToDate($row['stamping_date']) : '',
     "last_year_stamping_date"=>$row['last_year_stamping_date'] != null ? convertDatetimeToDate($row['last_year_stamping_date']) : '',
     "due_date"=>$row['due_date'] != null ? convertDatetimeToDate($row['due_date']) : '',
+    "dueDate"=>$row['due_date'] != null ? $row['due_date'] : '',
     "pic"=>$row['pic'] != null ? searchStaffNameById($row['pic'], $db) : '',
     "customer_pic"=>$row['customer_pic'] ?? '',
     "quotation_date"=>$row['quotation_date'] ?? '',
@@ -183,36 +188,6 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "created_datetime"=>$row['created_datetime'] != null ? convertDatetimeToDate($row['created_datetime']) : '',
     "updated_datetime"=>$row['updated_datetime'] != null ? convertDatetimeToDate($row['updated_datetime']) : ''
   );
-
-  // Check if additional data from stamping_ext is needed
-  // if(($row['validate_by'] == '10' || $row['validate_by'] == '9') && $row['jenis_alat'] == '1') {
-  //   if ($update_stmt2 = $db->prepare("SELECT * FROM stamping_ext WHERE stamp_id = ?")) {
-  //     $update_stmt2->bind_param('s', $row['id']);
-  
-  //     if($update_stmt2->execute()) {
-  //       $result2 = $update_stmt2->get_result();
-  
-  //       if($row2 = $result2->fetch_assoc()) {
-  //         // Update the last item in the $data array with additional fields from stamping_ext
-  //         $data[$counter - 1] = array_merge($data[$counter - 1], [
-  //           'penentusan_baru' => $row2['penentusan_baru'] ?? '',
-  //           'penentusan_semula' => $row2['penentusan_semula'] ?? '',
-  //           'kelulusan_mspk' => $row2['kelulusan_mspk'] ?? '',
-  //           'no_kelulusan' => $row2['no_kelulusan'] ?? '',
-  //           'indicator_serial' => $row2['indicator_serial'] ?? '',
-  //           'platform_country' => $row2['platform_country'] ?? '',
-  //           'platform_type' => $row2['platform_type'] ?? '',
-  //           'size' => $row2['size'] ?? '',
-  //           'jenis_pelantar' => $row2['jenis_pelantar'] ?? '',
-  //           'other_info' => $row2['other_info'] ?? '',
-  //           'load_cell_country' => $row2['load_cell_country'] ?? '',
-  //           'load_cell_no' => $row2['load_cell_no'] ?? '',
-  //           'load_cells_info' => json_decode($row2['load_cells_info'], true)
-  //         ]);
-  //       }
-  //     }
-  //   }
-  // }
 
   $counter++;
 }
