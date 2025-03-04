@@ -205,7 +205,19 @@ if(isset($_POST['userID'])){
                                     $message['nilai_jangkaan_maksimum'] = $row2['nilai_jangkaan_maksimum'] ?? '';
                                     $message['bahan_pembuat'] = $row2['bahan_pembuat'] ?? '';
                                     $message['bahan_pembuat_other'] = $row2['bahan_pembuat_other'] ?? '';
-                                    $message['btu_box_info'] = json_decode($row2['btu_box_info'], true);
+                                    $btuBox = [];
+                                    foreach (json_decode($row2['btu_box_info'], true) as $btu) {
+                                        $penandaanBatuUjian = searchCapacityNameById($btu['penandaanBatuUjian'], $db);
+
+                                        $btuBox[] = [
+                                            "no" => $btu["no"],
+                                            "batuUjian" => $btu["batuUjian"],
+                                            "batuUjianLain" => $btu["batuUjianLain"],
+                                            "penandaanBatuUjian" => $penandaanBatuUjian
+                                        ];
+                                        
+                                    }
+                                    $message['btu_box_info'] = $btuBox;
                                 }
                             }
                         }

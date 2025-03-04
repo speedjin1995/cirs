@@ -1511,7 +1511,7 @@ $(function () {
 });
 
 function format (row) {
-  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC'];
 
   var returnString = `
   <div class="row">
@@ -1608,7 +1608,6 @@ function format (row) {
       }else{
         returnString += `</p>`;
       }
-      
     returnString += `</div>
 
     <!-- Price Section -->
@@ -1617,21 +1616,27 @@ function format (row) {
       <p><strong>Cert Price:</strong> ${row.cert_price}</p>
       <p><strong>Total Amount:</strong> ${row.total_amount}</p>
       <p><strong>SST Price:</strong> ${row.sst}</p>
-      <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>`;
+      <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>
+      <div class="row">
+        <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
+        <div class="col-1"><button title="Duplicate" type="button" id="duplicate${row.id}" onclick="duplicate(${row.id})" class="btn btn-success btn-sm"><i class="fas fa-clone"></i></button></div>`; 
 
-      if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
-        returnString += `<div class="row">
-          <div class="col-1"><button title="Revert" type="button" id="revertBtn${row.id}" onclick="revert(${row.id})" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>
-          <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
-          <div class="col-1"><button title="Cancel" type="button" id="delete${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
-        </div>`;
-      }else{
-        returnString += `<div class="row">
-          <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
-        </div>`;
-      }
+        if (allowedAlats.includes(row.jenis_alat)) {
+          returnString += '<div class="col-1"><button title="Print" type="button" id="print'+row.id+'" onclick="print('+row.id+', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+        }
 
-     returnString += `</div>
+        returnString += '<div class="col-1"><button title="Log" type="button" id="log'+row.id+'" onclick="log('+row.id+')" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+
+        // Complete button if conditions are met
+        if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '' && row.borang_e != '') {
+          returnString += '<div class="col-1"><button title="Complete" type="button" id="complete'+row.id+'" onclick="complete('+row.id+')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
+        }
+
+        // Cancelled button
+        returnString += '<div class="col-1"><button title="Cancelled" type="button" id="delete'+row.id+'" onclick="deactivate('+row.id+')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>';
+
+    returnString += `</div>
+    </div>
   </div><br>
   `;
   
@@ -1922,7 +1927,7 @@ function format (row) {
     returnString += `</div><hr>
                         <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (SIC)</strong></span>
                         <div class="row">
-                          <!-- BAP Section -->
+                          <!-- SIC Section -->
                           <div class="col-6">
                             <p><strong>Nilai Jangkaan Maksimum (Kapasiti):</strong> ${row.nilai_jangkaan_maksimum} Liter</p>
                           </div>      
@@ -1946,6 +1951,7 @@ function format (row) {
                     `;
 
     if (row.btu_box_info.length > 0){
+      var batuUjianVal = '';
       returnString += `
         <table style="width: 100%;">
           <thead>
@@ -1956,14 +1962,24 @@ function format (row) {
             </tr>
           </thead>
           <tbody>`;
-          
+
           for (i = 0; i < row.btu_box_info.length; i++) {
             returnString += `<tr><td>${row.btu_box_info[i].no}</td>`;
 
             if (row.btu_box_info[i].batuUjian == 'OTHER'){
               returnString += `<td>${row.btu_box_info[i].batuUjianLain}</td>`;
             }else{
-              returnString += `<td>${row.btu_box_info[i].batuUjian}</td>`;
+              if (row.btu_box_info[i].batuUjian == 'BESI_TUANGAN'){
+                batuUjianVal = 'BESI TUANGAN';
+              }
+              else if (row.btu_box_info[i].batuUjian == 'TEMBAGA'){
+                batuUjianVal = 'TEMBAGA';
+              }
+              else if (row.btu_box_info[i].batuUjian == 'NIKARAT'){
+                batuUjianVal = 'NIKARAT';
+              }
+
+              returnString += `<td>${batuUjianVal}</td>`;
             }
 
             returnString += `<td>${row.btu_box_info[i].penandaanBatuUjian}</td></tr>`;
