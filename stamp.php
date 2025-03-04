@@ -1833,7 +1833,7 @@ $(function () {
     'searching': true,
     // "stateSave": true,
     'order': [[ 2, 'asc' ]],
-    // 'columnDefs': [ { orderable: false, targets: [0] }],
+    'columnDefs': [ { orderable: false, targets: [0] }],
     'ajax': {
       'type': 'POST',
       'url':'php/filterStamping.php',
@@ -1976,25 +1976,6 @@ $(function () {
       }
   });
 
-  // $('#weightTable tbody').on('click', 'td.dt-control', function () {
-  //   var tr = $(this).closest('tr');
-  //   var row = table.row(tr);
-
-  //   if ( row.child.isShown() ) {
-  //     // This row is already open - close it
-  //     row.child.hide();
-  //     tr.removeClass('shown');
-  //   }
-  //   else {
-  //     $.post('php/getStamp.php', {userID: row.data().id, format: 'EXPANDABLE'}, function (data){
-  //       var obj = JSON.parse(data); 
-  //       if(obj.status === 'success'){
-  //         row.child( format(obj.message) ).show();tr.addClass("shown");
-  //       }
-  //     });
-  //   }
-  // });
-
   $.validator.setDefaults({
     submitHandler: function (form) {
       if ($('#extendModal').hasClass('show')) {
@@ -2037,7 +2018,7 @@ $(function () {
               }
           });
       }
-      if($('#uploadModal').hasClass('show')){
+      else if($('#uploadModal').hasClass('show')){
         $('#spinnerLoading').show();
 
         // Serialize the form data into an array of objects
@@ -2088,7 +2069,7 @@ $(function () {
           if(obj.status === 'success'){
             $('#printDOModal').modal('hide');
             $('#weightTable').DataTable().ajax.reload(null, false);
-            var printWindow = window.open('', '', 'height=400,width=800');
+            var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
             printWindow.document.write(obj.message);
             printWindow.document.close();
             setTimeout(function(){
@@ -2150,7 +2131,7 @@ $(function () {
       'searching': true,
       // "stateSave": true,
       'order': [[ 2, 'asc' ]],
-      // 'columnDefs': [ { orderable: false, targets: [0] }],
+      'columnDefs': [ { orderable: false, targets: [0] }],
       'ajax': {
         'type': 'POST',
         'url':'php/filterStamping.php',
@@ -2487,6 +2468,7 @@ $(function () {
       
       // Add 1 year to the date
       date.setFullYear(date.getFullYear() + 1);
+      date.setDate(date.getDate() - 1);
       
       /*/ Format the new date back to 'DD/MM/YYYY'
       var newDay = ("0" + date.getDate()).slice(-2);
@@ -2503,13 +2485,17 @@ $(function () {
   $('#extendModal').find('#customerType').on('change', function(){
     if($(this).val() == "NEW"){
       $('#extendModal').find('#company').hide();
+      $('#extendModal').find('#otherCodeView').show();
       $('#extendModal').find('#custbranch').hide();
       
       $('#extendModal').find('#addr1').show();
       $('#extendModal').find('#addr2').show();
       $('#extendModal').find('#addr3').show();
       $('#extendModal').find('#addr4').show();
-      $('#extendModal').find('#pic1').show();
+      $('#extendModal').find('#contact').show();
+      $('#extendModal').find('#email').show();
+      $('#extendModal').find('#phone').show();
+      $('#extendModal').find('#pic').show();
 
       $('#extendModal').find('#address1').val('');
       $('#extendModal').find('#address2').val('');
@@ -2525,13 +2511,17 @@ $(function () {
     else{
       $('#extendModal').find('#company').html($('select#customerNoHidden').html());
       $('#extendModal').find('#company').show();
+      $('#extendModal').find('#otherCodeView').hide();
       $('#extendModal').find('#custbranch').show();
 
       $('#extendModal').find('#addr1').hide();
       $('#extendModal').find('#addr2').hide();
       $('#extendModal').find('#addr3').hide();
       $('#extendModal').find('#addr4').hide();
-      $('#extendModal').find('#pic1').hide();
+      $('#extendModal').find('#contact').hide();
+      $('#extendModal').find('#email').hide();
+      $('#extendModal').find('#phone').hide();
+      $('#extendModal').find('#pic').hide();
 
       $('#extendModal').find('#company').parents('.form-group').find('.select2-container').show();
       $('#extendModal').find('#companyText').hide();
@@ -2780,8 +2770,11 @@ $(function () {
     }
   });
 
-   $('#extendModal').find('#jenisAlat').on('change', function(){
-      alat = $(this).val();
+  $('#extendModal').find('#jenisAlat').on('change', function(){
+    alat = $(this).val();
+    jalat = $(this).val();
+    alatId = $(this).val();
+    $('#addtionalSection').html('');
 
     if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
       $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
@@ -3077,6 +3070,43 @@ $(function () {
     });
 
     pricingCount++;
+  });
+
+  $(document).on('click', '.add-btu', function() {
+    var btuValue = parseInt($('#noOfBtu').val());
+    $("#btuTable").html('');
+    btuCount = 0;
+    // Trigger the cloning and appending logic btuValue times
+    for (var i = 0; i < btuValue; i++) {
+      var $addContents = $("#btuCellDetails").clone();
+      $("#btuTable").append($addContents.html());
+
+      $("#btuTable").find('.details:last').attr("id", "detail" + btuCount);
+      $("#btuTable").find('.details:last').attr("data-index", btuCount);
+      $("#btuTable").find('#remove:last').attr("id", "remove" + btuCount);
+
+      $("#btuTable").find('#no:last').attr('name', 'no['+btuCount+']').attr("id", "no" + btuCount).val((btuCount + 1).toString());
+      $("#btuTable").find('#batuUjian:last').attr('name', 'batuUjian['+btuCount+']').attr("id", "batuUjian" + btuCount);
+      $("#btuTable").find('#batuUjianLain:last').attr('name', 'batuUjianLain['+btuCount+']').attr("id", "batuUjianLain" + btuCount);
+      $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount);
+
+      btuCount++;
+    }
+  });
+
+  // Event delegation: use 'select' instead of 'input' for dropdowns
+  $(document).on('change', 'select[id^="batuUjian"]', function(){
+    // Retrieve the selected option's value
+    var batuUjian = $(this).find(":selected").val();
+
+    // Show batuUjianLain input
+    if (batuUjian === 'OTHER') {
+      $(this).removeClass('w-100').addClass('w-50');
+      $(this).closest('.details').find('input[id^="batuUjianLain"]').addClass('w-50').show();
+    } else {
+      $(this).removeClass('w-50').addClass('w-100');
+      $(this).closest('.details').find('input[id^="batuUjianLain"]').removeClass('w-50').hide();
+    }
   });
 
   $(document).on('click', '.add-load-cell', function() {
@@ -3841,9 +3871,8 @@ function edit(id) {
           $('#extendModal').find('#InvoiceFilePath').val(obj.message.invoice_filepath);
           $('#extendModal').find('#viewInvoice').attr('href', "view_file.php?file="+obj.message.invoice_attachment).show();
         }
-
-        $('#extendModal').find('#viewInvoice').attr('href', "view_file.php?file="+obj.message.invoice_attachment);
-        $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
+        
+         $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
         $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
         $('#extendModal').find('#poNo').val(obj.message.purchase_no);
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
@@ -4042,8 +4071,7 @@ function edit(id) {
           }
           else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '11'){ 
             $('#addtionalSection').html($('#bapDetails').html());
-            $('#extendModal').find('#pamNo').val(obj.message.pam_no).trigger('change');
-            $('#extendModal').find('#kelulusanBentuk').val(obj.message.kelulusan_bentuk).trigger('change');
+            $('#extendModal').find('#pamNo').val(obj.message.pam_no).trigger('change');            $('#extendModal').find('#kelulusanBentuk').val(obj.message.kelulusan_bentuk).trigger('change');
             $('#extendModal').find('#alatType').val(obj.message.alat_type).trigger('change');
             $('#extendModal').find('#kadarPengaliran').val(obj.message.kadar_pengaliran).trigger('change');
             $('#extendModal').find('#bentukPenunjuk').val(obj.message.bentuk_penunjuk).trigger('change');
