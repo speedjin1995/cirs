@@ -31,9 +31,17 @@ if($_POST['customer'] != null && $_POST['customer'] != '' && $_POST['customer'] 
 	$searchQuery .= " and s.customers = '".$_POST['customer']."'";
 }
 
+if($_POST['machineType'] != null && $_POST['machineType'] != '' && $_POST['machineType'] != '-'){
+	$searchQuery .= " and s.machine_type = '".$_POST['machineType']."'";
+}
+
 if($_POST['validator'] != null && $_POST['validator'] != '' && $_POST['validator'] != '-'){
 	$searchQuery .= " and s.validate_by = '".$_POST['validator']."'";
 }
+
+if($_POST['brand'] != null && $_POST['brand'] != '' && $_POST['brand'] != '-'){
+	$searchQuery .= " and s.brand = '".$_POST['brand']."'";
+} 
 
 if($_POST['daftarLama'] != null && $_POST['daftarLama'] != '' && $_POST['daftarLama'] != '-'){
 	$searchQuery .= " and s.no_daftar_lama like '%".$_POST['daftarLama']."%'";
