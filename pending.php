@@ -35,6 +35,7 @@ else{
   $machinetypes = $db->query("SELECT * FROM machines WHERE deleted = '0'");
   $machinetypes2 = $db->query("SELECT * FROM machines WHERE deleted = '0'");
   $brands = $db->query("SELECT * FROM brand WHERE deleted = '0'");
+  $brands2 = $db->query("SELECT * FROM brand WHERE deleted = '0'");
   $models = $db->query("SELECT * FROM model WHERE deleted = '0'");
   $sizes = $db->query("SELECT * FROM size WHERE deleted = '0'");
   $singleCapacities = $db->query("SELECT * FROM capacity WHERE range_type = 'SINGLE' AND deleted = '0'");
@@ -158,6 +159,18 @@ else{
 
                 <div class="col-3">
                   <div class="form-group">
+                    <label>Description Instruments:</label>
+                    <select class="form-control select2" id="machineTypeFilter" name="machineTypeFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($machineType2 = mysqli_fetch_assoc($machinetypes2)) { ?>
+                        <option value="<?= $machineType2['id'] ?>"><?= $machineType2['machine_type'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
                     <label>Select Validators:</label>
                     <select class="form-control select2" id="validatorFilter" name="validatorFilter">
                       <option value="" selected disabled hidden>Please Select</option>
@@ -170,11 +183,11 @@ else{
 
                 <div class="col-3">
                   <div class="form-group">
-                    <label>Select Machine Type:</label>
-                    <select class="form-control select2" id="machineTypeFilter" name="machineTypeFilter">
+                    <label>Brand:</label>
+                    <select class="form-control select2" id="brandFilter" name="brandFilter">
                       <option value="" selected disabled hidden>Please Select</option>
-                      <?php while ($machineType2 = mysqli_fetch_assoc($machinetypes2)) { ?>
-                        <option value="<?= $machineType2['id'] ?>"><?= $machineType2['machine_type'] ?></option>
+                      <?php while ($brand2 = mysqli_fetch_assoc($brands2)) { ?>
+                        <option value="<?= $brand2['id'] ?>"><?= $brand2['brand'] ?></option>
                       <?php } ?>
                     </select>
                   </div>
@@ -1953,8 +1966,9 @@ $(function () {
   var fromDateValue = $('#fromDate').val();
   var toDateValue = $('#toDate').val();
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-  var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
   var machineTypeFilter = $('#machineTypeFilter').val() ? $('#machineTypeFilter').val() : '';
+  var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
+  var brandFilter = $('#brandFilter').val() ? $('#brandFilter').val() : '';
   var daftarLamaNoFilter = $('#daftarLamaNoFilter').val() ? $('#daftarLamaNoFilter').val() : '';
   var daftarBaruNoFilter = $('#daftarBaruNoFilter').val() ? $('#daftarBaruNoFilter').val() : '';
   var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
@@ -1980,8 +1994,9 @@ $(function () {
         fromDate: fromDateValue,
         toDate: toDateValue,
         customer: customerNoFilter,
-        validator: validatorFilter,
         machineType: machineTypeFilter,
+        validator: validatorFilter,
+        brand: brandFilter,
         daftarLama: daftarLamaNoFilter,
         daftarBaru: daftarBaruNoFilter,
         borang: borangNoFilter,
@@ -2285,8 +2300,9 @@ $(function () {
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-    var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
     var machineTypeFilter = $('#machineTypeFilter').val() ? $('#machineTypeFilter').val() : '';
+    var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
+    var brandFilter = $('#brandFilter').val() ? $('#brandFilter').val() : '';
     var daftarLamaNoFilter = $('#daftarLamaNoFilter').val() ? $('#daftarLamaNoFilter').val() : '';
     var daftarBaruNoFilter = $('#daftarBaruNoFilter').val() ? $('#daftarBaruNoFilter').val() : '';
     var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
@@ -2314,8 +2330,9 @@ $(function () {
           fromDate: fromDateValue,
           toDate: toDateValue,
           customer: customerNoFilter,
-          validator: validatorFilter,
           machineType: machineTypeFilter,
+          validator: validatorFilter,
+          brand: brandFilter,
           daftarLama: daftarLamaNoFilter,
           daftarBaru: daftarBaruNoFilter,
           borang: borangNoFilter,
