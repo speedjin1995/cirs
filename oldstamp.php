@@ -1596,11 +1596,10 @@ function format (row) {
       }else{
         returnString += `</p>`;
       }
-      
     returnString += `</div>
 
     <!-- Price Section -->
-    <div class="col-6">
+     <div class="col-6">
       <p><strong>Unit Price:</strong> ${row.unit_price}</p>
       <p><strong>Cert Price:</strong> ${row.cert_price}</p>
       <p><strong>Total Amount:</strong> ${row.total_amount}</p>
@@ -1934,6 +1933,7 @@ function format (row) {
                     `;
 
     if (row.btu_box_info.length > 0){
+      var batuUjianVal = '';
       returnString += `
         <table style="width: 100%;">
           <thead>
@@ -1944,14 +1944,24 @@ function format (row) {
             </tr>
           </thead>
           <tbody>`;
-          
+
           for (i = 0; i < row.btu_box_info.length; i++) {
             returnString += `<tr><td>${row.btu_box_info[i].no}</td>`;
 
             if (row.btu_box_info[i].batuUjian == 'OTHER'){
               returnString += `<td>${row.btu_box_info[i].batuUjianLain}</td>`;
             }else{
-              returnString += `<td>${row.btu_box_info[i].batuUjian}</td>`;
+              if (row.btu_box_info[i].batuUjian == 'BESI_TUANGAN'){
+                batuUjianVal = 'BESI TUANGAN';
+              }
+              else if (row.btu_box_info[i].batuUjian == 'TEMBAGA'){
+                batuUjianVal = 'TEMBAGA';
+              }
+              else if (row.btu_box_info[i].batuUjian == 'NIKARAT'){
+                batuUjianVal = 'NIKARAT';
+              }
+
+              returnString += `<td>${batuUjianVal}</td>`;
             }
 
             returnString += `<td>${row.btu_box_info[i].penandaanBatuUjian}</td></tr>`;
