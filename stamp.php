@@ -29,6 +29,7 @@ else{
   $models = $db->query("SELECT * FROM model WHERE deleted = '0'");
   $sizes = $db->query("SELECT * FROM size WHERE deleted = '0'");
   $singleCapacities = $db->query("SELECT * FROM capacity WHERE range_type = 'SINGLE' AND deleted = '0'");
+  $singleCapacities2 = $db->query("SELECT * FROM capacity WHERE range_type = 'SINGLE' AND deleted = '0'");
   $multiCapacities = $db->query("SELECT * FROM capacity WHERE range_type = 'MULTI' AND deleted = '0'");
   $problems = $db->query("SELECT * FROM problem WHERE deleted = '0'");
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
@@ -1729,6 +1730,7 @@ else{
                 <th width="10%">No.</th>
                 <th width="40%">Batu Ujian</th>
                 <th>Penandaan Pada Batu Ujian</th>
+                <th>Price</th>
                 <th>Delete</th>
               </tr>
             </thead>
@@ -1829,7 +1831,15 @@ else{
       </div>
     </td>
     <td>
-      <input type="text" class="form-control" id="penandaanBatuUjian" name="penandaanBatuUjian" required>
+      <select class="form-control select2 w-100" id="penandaanBatuUjian" name="penandaanBatuUjian" required>
+          <option value="" disabled hidden selected>Please Select</option>
+          <?php while($rowCA=mysqli_fetch_assoc($singleCapacities2)){ ?>
+            <option value="<?=$rowCA['id'] ?>"><?=$rowCA['name'] ?></option>
+          <?php } ?>
+      </select>
+    </td>
+    <td>
+      <input type="text" class="form-control" id="price" name="price" readonly>    
     </td>
     <td class="d-flex justify-content-center">
       <button class="btn btn-danger btn-sm text-center" id="remove"><i class="fa fa-times"></i></button>
@@ -2724,8 +2734,13 @@ $(function () {
 
   $('#extendModal').find('#unitPrice').on('change', function(){
     var price = parseFloat($(this).val());
+    var alat = $('#jenisAlat').val();
     var includeCert = $('#includeCert').val();
-    var certPrice = 28.5;
+    if (alat == 26){
+      var certPrice = 57.0;
+    }else{
+      var certPrice = 28.5;
+    }
     var sst = 0;
     var totalAmt = price;
 
@@ -2747,7 +2762,12 @@ $(function () {
   $('#extendModal').find('#includeCert').on('change', function(){
     var price = parseFloat($('#product').find(":selected").attr("data-price"));
     var includeCert = $(this).val();
-    var certPrice = 28.5;
+    var alat = $('#jenisAlat').val();
+    if (alat == 26){
+      var certPrice = 57.0;
+    }else{
+      var certPrice = 28.5;
+    }
     var sst = 0;
     var totalAmt = price;
 
@@ -2819,6 +2839,12 @@ $(function () {
       loadCellCount = 0;
       $("#loadCellTable").html('');
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
 
       type = $('#extendModal').find('#type').val();
       if(type == 'RESELLER'){
@@ -2851,6 +2877,12 @@ $(function () {
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '2'){
       $('#addtionalSection').html($('#atpDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '23'){
       $('#addtionalSection').html($('#atpMotorDetails').html());
@@ -2859,6 +2891,12 @@ $(function () {
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '5'){
       $('#addtionalSection').html($('#atnDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '18'){
       $('#addtionalSection').html($('#atnDetails').html());
@@ -2867,18 +2905,42 @@ $(function () {
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '6'){
       $('#addtionalSection').html($('#ateDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '14'){
       $('#addtionalSection').html($('#sllDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '7'){
       $('#addtionalSection').html($('#btuDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '10'){
       $('#addtionalSection').html($('#autoPackDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     // else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '17'){
     //   $('#addtionalSection').html($('#atsHDetails').html());
@@ -2887,20 +2949,44 @@ $(function () {
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '12'){
       $('#addtionalSection').html($('#siaDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '11'){
       $('#addtionalSection').html($('#bapDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '13'){
       $('#addtionalSection').html($('#sicDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '26'){
       $('#addtionalSection').html($('#btuBoxDetails').html());
       btuCount = 0;
       $("#btuTable").html('');
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else{
       $('#addtionalSection').html('');
@@ -2975,6 +3061,12 @@ $(function () {
       loadCellCount = 0;
       $("#loadCellTable").html('');
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
 
       type = $('#extendModal').find('#type').val();
       if(type == 'RESELLER'){
@@ -3007,6 +3099,12 @@ $(function () {
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '2'){
       $('#addtionalSection').html($('#atpDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '23'){
       $('#addtionalSection').html($('#atpMotorDetails').html());
@@ -3015,26 +3113,62 @@ $(function () {
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '5'){
       $('#addtionalSection').html($('#atnDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '18'){
       $('#addtionalSection').html($('#atnDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '6'){
       $('#addtionalSection').html($('#ateDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '14'){
       $('#addtionalSection').html($('#sllDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '7'){
       $('#addtionalSection').html($('#btuDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '10'){
       $('#addtionalSection').html($('#autoPackDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     // else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '17'){
     //   $('#addtionalSection').html($('#atsHDetails').html());
@@ -3043,20 +3177,44 @@ $(function () {
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '12'){
       $('#addtionalSection').html($('#siaDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '11'){
       $('#addtionalSection').html($('#bapDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '13'){
       $('#addtionalSection').html($('#sicDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '26'){
       $('#addtionalSection').html($('#btuBoxDetails').html());
       btuCount = 0;
       $("#btuTable").html('');
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else{
       $('#addtionalSection').html('');
@@ -3173,6 +3331,90 @@ $(function () {
     $(this).closest('.details').find('input[id^="loadCellBrand"]').val(brand);
     $(this).closest('.details').find('input[id^="loadCellModel"]').val(model);
   });
+
+  $(document).on('click', '.add-btu', function() {
+    var btuValue = parseInt($('#noOfBtu').val());
+    $("#btuTable").html('');
+    btuCount = 0;
+    // Trigger the cloning and appending logic btuValue times
+    for (var i = 0; i < btuValue; i++) {
+      var $addContents = $("#btuCellDetails").clone();
+      $("#btuTable").append($addContents.html());
+
+      $("#btuTable").find('.details:last').attr("id", "detail" + btuCount);
+      $("#btuTable").find('.details:last').attr("data-index", btuCount);
+      $("#btuTable").find('#remove:last').attr("id", "remove" + btuCount);
+
+      $("#btuTable").find('#no:last').attr('name', 'no['+btuCount+']').attr("id", "no" + btuCount).val((btuCount + 1).toString());
+      $("#btuTable").find('#batuUjian:last').attr('name', 'batuUjian['+btuCount+']').attr("id", "batuUjian" + btuCount);
+      $("#btuTable").find('#batuUjianLain:last').attr('name', 'batuUjianLain['+btuCount+']').attr("id", "batuUjianLain" + btuCount);
+      $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount);
+      $("#btuTable").find('#price:last').attr('name', 'price['+btuCount+']').attr("id", "price" + btuCount).val('');
+
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
+
+      btuCount++;
+    }
+  });
+
+  // Event delegation: use 'select' instead of 'input' for dropdowns
+  $(document).on('change', 'select[id^="batuUjian"]', function(){
+    // Retrieve the selected option's value
+    var batuUjian = $(this).find(":selected").val();
+
+    // Show batuUjianLain input
+    if (batuUjian === 'OTHER') {
+      $(this).removeClass('w-100').addClass('w-50');
+      $(this).closest('.details').find('input[id^="batuUjianLain"]').addClass('w-50').show();
+    } else {
+      $(this).removeClass('w-50').addClass('w-100');
+      $(this).closest('.details').find('input[id^="batuUjianLain"]').removeClass('w-50').hide();
+    }
+  });
+
+  // Event delegation: use 'select' instead of 'input' for dropdowns
+  $(document).on('change', 'select[id^="penandaanBatuUjian"]', function(){
+    // Retrieve the selected option's value
+    var weight = $(this).find(":selected").val();
+    var alatId = $('#jenisAlat').val();
+    var row = $(this).closest('.details');
+
+    $.post('php/getProductsBtu.php', {userID: weight, alat: alatId}, function(data){
+      var obj = JSON.parse(data);
+
+      if(obj.status === 'success'){
+        var price = obj.message.price;
+        row.find('input[id^="price"]').val(price);
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when activate", "Failed:");
+      }
+    });
+
+    var price = 0;
+    setTimeout(function() {
+      $('#btuTable').find('input[id^="price"]').each(function() {
+        var btuPrice = $(this).val();
+        if (btuPrice === undefined || btuPrice.trim() === "") {
+          btuPrice = 0;
+        }
+
+        price += parseFloat(btuPrice);
+      });
+
+      $('#extendModal').find('#unitPrice').val(price.toFixed(2)).trigger('change');
+      
+    }, 500);
+
+  });
 });
 
 function format (row) {
@@ -3284,9 +3526,23 @@ function format (row) {
       <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>
       <div class="row">
         <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
-        <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
-        <div class="col-1"><button title="Cancel" type="button" id="deactivate${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
-      </div>
+        <div class="col-1"><button title="Duplicate" type="button" id="duplicate${row.id}" onclick="duplicate(${row.id})" class="btn btn-success btn-sm"><i class="fas fa-clone"></i></button></div>`; 
+
+        if (allowedAlats.includes(row.jenis_alat)) {
+          returnString += '<div class="col-1"><button title="Print" type="button" id="print'+row.id+'" onclick="print('+row.id+', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
+        }
+
+        returnString += '<div class="col-1"><button title="Log" type="button" id="log'+row.id+'" onclick="log('+row.id+')" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+
+        // Complete button if conditions are met
+        if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '' && row.borang_e != '') {
+          returnString += '<div class="col-1"><button title="Complete" type="button" id="complete'+row.id+'" onclick="complete('+row.id+')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
+        }
+
+        // Cancelled button
+        returnString += '<div class="col-1"><button title="Cancelled" type="button" id="delete'+row.id+'" onclick="deactivate('+row.id+')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>';
+
+    returnString += `</div>
     </div>
   </div><br>
   `;
@@ -3602,6 +3858,7 @@ function format (row) {
                     `;
 
     if (row.btu_box_info.length > 0){
+      var batuUjianVal = '';
       returnString += `
         <table style="width: 100%;">
           <thead>
@@ -3612,14 +3869,24 @@ function format (row) {
             </tr>
           </thead>
           <tbody>`;
-          
+
           for (i = 0; i < row.btu_box_info.length; i++) {
             returnString += `<tr><td>${row.btu_box_info[i].no}</td>`;
 
             if (row.btu_box_info[i].batuUjian == 'OTHER'){
               returnString += `<td>${row.btu_box_info[i].batuUjianLain}</td>`;
             }else{
-              returnString += `<td>${row.btu_box_info[i].batuUjian}</td>`;
+              if (row.btu_box_info[i].batuUjian == 'BESI_TUANGAN'){
+                batuUjianVal = 'BESI TUANGAN';
+              }
+              else if (row.btu_box_info[i].batuUjian == 'TEMBAGA'){
+                batuUjianVal = 'TEMBAGA';
+              }
+              else if (row.btu_box_info[i].batuUjian == 'NIKARAT'){
+                batuUjianVal = 'NIKARAT';
+              }
+
+              returnString += `<td>${batuUjianVal}</td>`;
             }
 
             returnString += `<td>${row.btu_box_info[i].penandaanBatuUjian}</td></tr>`;
@@ -3936,7 +4203,9 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
-        $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
+        setTimeout(function(){
+          $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
+        }, 500);
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
@@ -4183,7 +4452,8 @@ function edit(id) {
                 $("#btuTable").find('#no:last').attr('name', 'no['+btuCount+']').attr("id", "no" + btuCount).val(item.no);
                 $("#btuTable").find('#batuUjian:last').attr('name', 'batuUjian['+btuCount+']').attr("id", "batuUjian" + btuCount).val(item.batuUjian).trigger('change');
                 $("#btuTable").find('#batuUjianLain:last').attr('name', 'batuUjianLain['+btuCount+']').attr("id", "batuUjianLain" + btuCount).val(item.batuUjianLain);
-                $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount).val(item.penandaanBatuUjian);
+                $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount).val(item.penandaanBatuUjian).trigger('change');
+                $("#btuTable").find('#price:last').attr('name', 'price['+btuCount+']').attr("id", "price" + btuCount).val('');
 
                 btuCount++;
               }
@@ -4284,7 +4554,9 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
-        $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
+        setTimeout(function(){
+          $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
+        }, 500);
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
@@ -4493,7 +4765,8 @@ function edit(id) {
                 $("#btuTable").find('#no:last').attr('name', 'no['+btuCount+']').attr("id", "no" + btuCount).val(item.no);
                 $("#btuTable").find('#batuUjian:last').attr('name', 'batuUjian['+btuCount+']').attr("id", "batuUjian" + btuCount).val(item.batuUjian).trigger('change');
                 $("#btuTable").find('#batuUjianLain:last').attr('name', 'batuUjianLain['+btuCount+']').attr("id", "batuUjianLain" + btuCount).val(item.batuUjianLain);
-                $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount).val(item.penandaanBatuUjian);
+                $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount).val(item.penandaanBatuUjian).trigger('change');
+                $("#btuTable").find('#price:last').attr('name', 'price['+btuCount+']').attr("id", "price" + btuCount).val('');
 
                 btuCount++;
               }
