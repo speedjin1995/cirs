@@ -1604,7 +1604,21 @@ function format (row) {
       <p><strong>Cert Price:</strong> ${row.cert_price}</p>
       <p><strong>Total Amount:</strong> ${row.total_amount}</p>
       <p><strong>SST Price:</strong> ${row.sst}</p>
-      <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>`;
+      <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>
+     </div>
+    </div><hr>`;
+
+    returnString += `
+    <div class="row">
+      <div class="col-6">
+        <p><strong>Labour Charge:</strong> ${row.labour_charge}</p>
+        <p><strong>Total Stamping Fee + Labour Charge:</strong> ${row.stampfee_labourcharge}</p>
+        <p><strong>Remark:</strong> ${row.remarks}</p>
+      </div>
+      
+      <div class="col-6">
+        <p><strong>Internal Round Up:</strong> ${row.int_round_up}</p>
+        <p><strong>SST Price:</strong> ${row.total_charges}</p>`;
 
       if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
         returnString += `<div class="row">

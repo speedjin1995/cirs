@@ -794,6 +794,35 @@ else{
                   </div>
                 </div>
               </div>
+              <div class="row">
+                <h5 class="text-danger">Service & Labour Charges</h5>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Labour Charge</label>
+                    <input type="number" class="form-control" id="labourCharge" name="labourCharge">
+                  </div>
+                </div>
+                <div class="col-4" id="cerId">
+                  <div class="form-group">
+                    <label>Total Stamping Fee + Labour Charge</label>
+                    <input type="text" class="form-control" id="stampLabourCharge" name="stampLabourCharge" readonly>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Internal Round Up</label>
+                    <input type="number" class="form-control" id="roundUp" name="roundUp">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Total Charges to Customer</label>
+                    <input type="text" class="form-control" id="totalCharge" name="totalCharge" readonly>
+                  </div>
+                </div>      
+              </div>
             </div>
           </div>
 
@@ -2808,6 +2837,26 @@ $(function () {
     $('#extendModal').trigger('unitPriceLoaded');
   });
 
+  $('#extendModal').find('#labourCharge').on('change', function(){
+    var labourCharge = parseFloat($(this).val());
+    var subTotalAmt = parseFloat($('#subAmount').val());
+    var stampLabourCharge = labourCharge + subTotalAmt;
+
+    $('#stampLabourCharge').val(stampLabourCharge.toFixed(2));
+
+    if ($('#roundUp').val().trim() !== '') {
+      $('#roundUp').trigger('change');
+    }
+  });
+
+  $('#extendModal').find('#roundUp').on('change', function(){
+    var roundUp = parseFloat($(this).val());
+    var stampLabourCharge = parseFloat($('#stampLabourCharge').val());
+    var totalCharges = stampLabourCharge + roundUp;
+
+    $('#totalCharge').val(totalCharges.toFixed(2));
+  });
+
   $('#extendModal').find('#machineType').on('change', function(){
     if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
       $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
@@ -2929,6 +2978,12 @@ $(function () {
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '18'){
       $('#addtionalSection').html($('#atnDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '6'){
       $('#addtionalSection').html($('#ateDetails').html());
@@ -3468,6 +3523,8 @@ function format (row) {
           <p><strong>Last Year Stamping Date:</strong> ${row.last_year_stamping_date}</p>
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
           <p><strong>Next Due Date:</strong> ${row.due_date}</p>
+          <p><strong>Create By:</strong> ${row.create_by}</p>
+          <p><strong>Last Update By:</strong> ${row.modified_by}</p>
         </div>
       </div><hr>
     `;
@@ -3480,6 +3537,8 @@ function format (row) {
           <p><strong>Borang D:</strong> ${row.borang_d}</p>
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
           <p><strong>Next Due Date:</strong> ${row.due_date}</p>
+          <p><strong>Create By:</strong> ${row.create_by}</p>
+          <p><strong>Last Update By:</strong> ${row.modified_by}</p>
         </div>
       </div><hr>
     `;
@@ -3517,25 +3576,26 @@ function format (row) {
       <p><strong>Total Amount:</strong> ${row.total_amount}</p>
       <p><strong>SST Price:</strong> ${row.sst}</p>
       <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>
-      <div class="row">
-        <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
-        <div class="col-1"><button title="Duplicate" type="button" id="duplicate${row.id}" onclick="duplicate(${row.id})" class="btn btn-success btn-sm"><i class="fas fa-clone"></i></button></div>`; 
+    </div>
+  </div><hr>`;
 
-        if (allowedAlats.includes(row.jenis_alat)) {
-          returnString += '<div class="col-1"><button title="Print" type="button" id="print'+row.id+'" onclick="print('+row.id+', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
-        }
+    returnString += `
+    <div class="row">
+      <div class="col-6">
+        <p><strong>Labour Charge:</strong> ${row.labour_charge}</p>
+        <p><strong>Total Stamping Fee + Labour Charge:</strong> ${row.stampfee_labourcharge}</p>
+        <p><strong>Remark:</strong> ${row.remarks}</p>
+      </div>
 
-        returnString += '<div class="col-1"><button title="Log" type="button" id="log'+row.id+'" onclick="log('+row.id+')" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
-
-        // Complete button if conditions are met
-        if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '' && row.borang_e != '') {
-          returnString += '<div class="col-1"><button title="Complete" type="button" id="complete'+row.id+'" onclick="complete('+row.id+')" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>';
-        }
-
-        // Cancelled button
-        returnString += '<div class="col-1"><button title="Cancelled" type="button" id="delete'+row.id+'" onclick="deactivate('+row.id+')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>';
-
-    returnString += `</div>
+      <div class="col-6">
+        <p><strong>Internal Round Up:</strong> ${row.int_round_up}</p>
+        <p><strong>SST Price:</strong> ${row.total_charges}</p>
+        <div class="row">
+          <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
+          <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+          <div class="col-1"><button title="Cancel" type="button" id="deactivate${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
+        </div>
+      </div>
     </div>
   </div><br>
   `;
@@ -4061,6 +4121,10 @@ function newEntry(){
   $('#extendModal').find('#totalAmount').val("");
   $('#extendModal').find('#sst').val('');
   $('#extendModal').find('#subAmount').val('');
+  $('#extendModal').find('#labourCharge').val('0.00');
+  $('#extendModal').find('#stampLabourCharge').val('');
+  $('#extendModal').find('#roundUp').val('');
+  $('#extendModal').find('#totalCharge').val('');
   $('#cerId').hide();
   $('#extendModal').modal('show');
   
@@ -4203,6 +4267,10 @@ function edit(id) {
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
         $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
+        $('#extendModal').find('#labourCharge').val(obj.message.labour_charge);
+        $('#extendModal').find('#stampLabourCharge').val(obj.message.stampfee_labourcharge);
+        $('#extendModal').find('#roundUp').val(obj.message.int_round_up);
+        $('#extendModal').find('#totalCharge').val(obj.message.total_charges);
 
         $('#pricingTable').html('');
         pricingCount = 0;
@@ -4558,6 +4626,11 @@ function edit(id) {
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
         $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
+        $('#extendModal').find('#labourCharge').val(obj.message.labour_charge);
+        $('#extendModal').find('#stampLabourCharge').val(obj.message.stampfee_labourcharge);
+        $('#extendModal').find('#roundUp').val(obj.message.int_round_up);
+        $('#extendModal').find('#totalCharge').val(obj.message.total_charges);
+
         jalat = obj.message.jenis_alat;
 
         $('#extendModal').on('atkLoaded', function() {
@@ -4858,23 +4931,6 @@ function deactivate(id) {
       $('#spinnerLoading').hide();
 
     });
-
-
-    // $.post('php/deleteStamp.php', {userID: id}, function(data){
-    //   var obj = JSON.parse(data);
-
-    //   if(obj.status === 'success'){
-    //     toastr["success"](obj.message, "Success:");
-    //     $('#weightTable').DataTable().ajax.reload();
-    //   }
-    //   else if(obj.status === 'failed'){
-    //     toastr["error"](obj.message, "Failed:");
-    //   }
-    //   else{
-    //     toastr["error"]("Something wrong when activate", "Failed:");
-    //   }
-    //   $('#spinnerLoading').hide();
-    // });
   }
 }
 

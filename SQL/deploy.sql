@@ -71,3 +71,8 @@ INSERT INTO `alat` (`id`, `alat`, `deleted`) VALUES
 (26, 'BTU - (BOX)', '0');
 
 ALTER TABLE `stamping_ext` ADD `btu_box_info` TEXT NULL AFTER `batu_ujian_lain`;
+
+-- 06/03/2025 --
+
+ALTER TABLE `stamping` ADD `labour_charge` VARCHAR(10) NULL AFTER `subtotal_amount`, ADD `stampfee_labourcharge` VARCHAR(10) NULL AFTER `labour_charge`, ADD `int_round_up` VARCHAR(10) NULL AFTER `stampfee_labourcharge`, ADD `total_charges` VARCHAR(10) NULL AFTER `int_round_up`;
+

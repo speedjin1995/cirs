@@ -150,15 +150,39 @@ if(isset($_POST['userID'])){
                     $message['quotation_date'] = $row['quotation_date'] != null ? convertDatetimeToDate($row['quotation_date']) : '';
                     $message['purchase_no'] = $row['purchase_no'] ?? '';
                     $message['purchase_date'] = $row['purchase_date'] != null ? convertDatetimeToDate($row['purchase_date']) : '';
-                    $message['remarks'] = $row['remarks'];
+                    $message['remarks'] = $row['remarks'] ?? '';
                     $message['log'] = json_decode($row['log'], true);
-                    $message['unit_price'] = $row['unit_price'];
-                    $message['cert_price'] = $row['cert_price'];
-                    $message['total_amount'] = $row['total_amount'];
-                    $message['sst'] = $row['sst'];
-                    $message['subtotal_amount'] = $row['subtotal_amount'];
+                    $message['unit_price'] = 'RM ' . $row['unit_price'];
+                    $message['cert_price'] = 'RM ' . $row['cert_price'];
+                    $message['total_amount'] = 'RM ' . $row['total_amount'];
+                    $message['sst'] = 'RM ' . $row['sst'];
+                    $message['subtotal_amount'] = 'RM ' . $row['subtotal_amount'];
+                    $message['labour_charge'] = 'RM ' . $row['labour_charge'];
+                    $message['stampfee_labourcharge'] = 'RM ' . $row['stampfee_labourcharge'];
+                    $message['int_round_up'] = $row['int_round_up'];
+                    $message['total_charges'] = 'RM ' . $row['total_charges'];
                     $message['status'] = $row['status'];
                     $message['existing_id'] = $row['existing_id'];
+
+                    # Create by & Update By
+                    $createBy = '';
+                    $modifiedBy = '';
+
+                    $logQuery = "(SELECT * FROM stamping_log WHERE item_id = $id ORDER BY id ASC LIMIT 1) UNION (SELECT * FROM stamping_log WHERE item_id = $id ORDER BY id DESC LIMIT 1)";
+                    $logDetail = mysqli_query($db, $logQuery);
+                    
+                    while($logRow = mysqli_fetch_assoc($logDetail)) {
+                        $date = new DateTime($logRow['date']);
+                        $formattedDate = $date->format("d/m/Y - h:i:sA");
+                        if ($logRow['action'] == "INSERT"){
+                            $createBy = searchStaffNameById($logRow['user_id'], $db). ' ' . $formattedDate;
+                        }else{
+                            $modifiedBy = searchStaffNameById($logRow['user_id'], $db). ' ' . $formattedDate;
+                        }
+                    }
+
+                    $message['create_by'] = $createBy;
+                    $message['modified_by'] = $modifiedBy;
 
                     if(($row['validate_by'] == '10' || $row['validate_by'] == '9') && in_array($row['jenis_alat'], $stampExtArray)){
                         if ($update_stmt2 = $db->prepare("SELECT * FROM stamping_ext WHERE stamp_id=?")) {
@@ -205,19 +229,22 @@ if(isset($_POST['userID'])){
                                     $message['nilai_jangkaan_maksimum'] = $row2['nilai_jangkaan_maksimum'] ?? '';
                                     $message['bahan_pembuat'] = $row2['bahan_pembuat'] ?? '';
                                     $message['bahan_pembuat_other'] = $row2['bahan_pembuat_other'] ?? '';
-                                    $btuBox = [];
-                                    foreach (json_decode($row2['btu_box_info'], true) as $btu) {
-                                        $penandaanBatuUjian = searchCapacityNameById($btu['penandaanBatuUjian'], $db);
 
-                                        $btuBox[] = [
-                                            "no" => $btu["no"],
-                                            "batuUjian" => $btu["batuUjian"],
-                                            "batuUjianLain" => $btu["batuUjianLain"],
-                                            "penandaanBatuUjian" => $penandaanBatuUjian
-                                        ];
-                                        
+                                    if ($message['jenis_alat'] == 'BTU - (BOX)'){
+                                        $btuBox = [];
+                                        foreach (json_decode($row2['btu_box_info'], true) as $btu) {
+                                            $penandaanBatuUjian = searchCapacityNameById($btu['penandaanBatuUjian'], $db);
+    
+                                            $btuBox[] = [
+                                                "no" => $btu["no"],
+                                                "batuUjian" => $btu["batuUjian"],
+                                                "batuUjianLain" => $btu["batuUjianLain"],
+                                                "penandaanBatuUjian" => $penandaanBatuUjian
+                                            ];
+                                            
+                                        }
+                                        $message['btu_box_info'] = $btuBox;
                                     }
-                                    $message['btu_box_info'] = $btuBox;
                                 }
                             }
                         }
@@ -266,13 +293,17 @@ if(isset($_POST['userID'])){
                     $message['quotation_filepath'] = searchFilePathById($row['quotation_attachment'], $db) ?? '';
                     $message['purchase_no'] = $row['purchase_no'];
                     $message['purchase_date'] = $row['purchase_date'];
-                    $message['remarks'] = $row['remarks'];
+                    $message['remarks'] = $row['remarks'] ?? '';
                     $message['log'] = json_decode($row['log'], true);
                     $message['unit_price'] = $row['unit_price'];
                     $message['cert_price'] = $row['cert_price'];
                     $message['total_amount'] = $row['total_amount'];
                     $message['sst'] = $row['sst'];
                     $message['subtotal_amount'] = $row['subtotal_amount'];
+                    $message['labour_charge'] = $row['labour_charge'];
+                    $message['stampfee_labourcharge'] = $row['stampfee_labourcharge'];
+                    $message['int_round_up'] = $row['int_round_up'];
+                    $message['total_charges'] = $row['total_charges'];
                     $message['status'] = $row['status'];
                     $message['existing_id'] = $row['existing_id'];
 
