@@ -1756,7 +1756,7 @@ else{
         <div class="col-4">
           <div class="form-group">
             <label>No. of BTU *</label>
-            <input type="number" class="form-control" id="noOfBtu" name="noOfBtu" required>
+            <input type="number" class="form-control" id="noOfBtu" name="noOfBtu" required min="1">
           </div>
         </div>
         <div class="col-8 d-flex justify-content-end align-items-start">
@@ -3001,6 +3001,8 @@ $(function () {
     $('#totalAmount').val(totalAmt);
     $('#sst').val((totalAmt * 0.08).toFixed(2));
     $('#subAmount').val((totalAmt + (totalAmt * 0.08)).toFixed(2));
+
+    $('#extendModal').trigger('unitPriceLoaded');
   });
 
   $('#extendModal').find('#machineType').on('change', function(){
@@ -4263,7 +4265,7 @@ function newEntry(){
   branch = 0;
   $('#pricingTable').html('');
   pricingCount = 0;
-  $('#extendModal').find('#unitPrice').val("");
+  $('#extendModal').find('#unitPrice').val('0.00');
   $('#extendModal').find('#certPrice').val('');
   $('#extendModal').find('#totalAmount').val("");
   $('#extendModal').find('#sst').val('');
@@ -4403,9 +4405,9 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
-        setTimeout(function(){
+        $('#extendModal').on('unitPriceLoaded', function () {
           $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
-        }, 500);
+        });
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
@@ -4636,9 +4638,9 @@ function edit(id) {
           }
           else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '26'){
             $('#addtionalSection').html($('#btuBoxDetails').html());
-            $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_info.length);
 
             if(obj.message.btu_box_info.length > 0){
+              $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_info.length);
               $("#btuTable").html('');
               btuCount = 0;
 
@@ -4660,6 +4662,8 @@ function edit(id) {
 
                 btuCount++;
               }
+            }else{
+              $('#extendModal').find('#noOfBtu').val(0);
             }
           }
         });
@@ -4757,9 +4761,9 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
-        setTimeout(function(){
+        $('#extendModal').on('unitPriceLoaded', function () {
           $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
-        }, 500);
+        });
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
@@ -4951,9 +4955,9 @@ function edit(id) {
           }
           else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '26'){
             $('#addtionalSection').html($('#btuBoxDetails').html());
-            $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_info.length);
 
             if(obj.message.btu_box_info.length > 0){
+              $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_info.length);
               $("#btuTable").html('');
               btuCount = 0;
 
@@ -4975,6 +4979,8 @@ function edit(id) {
 
                 btuCount++;
               }
+            }else{
+              $('#extendModal').find('#noOfBtu').val(0);
             }
           }
         });

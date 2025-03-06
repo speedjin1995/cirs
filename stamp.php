@@ -1730,7 +1730,7 @@ else{
         <div class="col-4">
           <div class="form-group">
             <label>No. of BTU *</label>
-            <input type="number" class="form-control" id="noOfBtu" name="noOfBtu" required>
+            <input type="number" class="form-control" id="noOfBtu" name="noOfBtu" required min="1">
           </div>
         </div>
         <div class="col-8 d-flex justify-content-end align-items-start">
@@ -1863,6 +1863,7 @@ else{
 <script>
 var pricingCount = $("#pricingTable").find(".details").length;
 var loadCellCount = $("#loadCellTable").find(".details").length;
+var btuCount = $("#btuTable").find(".details").length;
 var customer = 0;
 var branch = 0;
 
@@ -2803,6 +2804,8 @@ $(function () {
     $('#totalAmount').val(totalAmt);
     $('#sst').val((totalAmt * 0.08).toFixed(2));
     $('#subAmount').val((totalAmt + (totalAmt * 0.08)).toFixed(2));
+
+    $('#extendModal').trigger('unitPriceLoaded');
   });
 
   $('#extendModal').find('#machineType').on('change', function(){
@@ -2906,6 +2909,12 @@ $(function () {
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '23'){
       $('#addtionalSection').html($('#atpMotorDetails').html());
       $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
     }
     else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '5'){
       $('#addtionalSection').html($('#atnDetails').html());
@@ -3298,78 +3307,6 @@ $(function () {
       $("#btuTable").find('#batuUjian:last').attr('name', 'batuUjian['+btuCount+']').attr("id", "batuUjian" + btuCount);
       $("#btuTable").find('#batuUjianLain:last').attr('name', 'batuUjianLain['+btuCount+']').attr("id", "batuUjianLain" + btuCount);
       $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount);
-
-      btuCount++;
-    }
-  });
-
-  // Event delegation: use 'select' instead of 'input' for dropdowns
-  $(document).on('change', 'select[id^="batuUjian"]', function(){
-    // Retrieve the selected option's value
-    var batuUjian = $(this).find(":selected").val();
-
-    // Show batuUjianLain input
-    if (batuUjian === 'OTHER') {
-      $(this).removeClass('w-100').addClass('w-50');
-      $(this).closest('.details').find('input[id^="batuUjianLain"]').addClass('w-50').show();
-    } else {
-      $(this).removeClass('w-50').addClass('w-100');
-      $(this).closest('.details').find('input[id^="batuUjianLain"]').removeClass('w-50').hide();
-    }
-  });
-
-  $(document).on('click', '.add-load-cell', function() {
-    var loadCellValue = parseInt($('#noOfLoadCell').val());
-    $("#loadCellTable").html('');
-    loadCellCount = 0;
-    // Trigger the cloning and appending logic loadCellNoValue times
-    for (var i = 0; i < loadCellValue; i++) {
-      var $addContents = $("#loadCellDetails").clone();
-      $("#loadCellTable").append($addContents.html());
-
-      $("#loadCellTable").find('.details:last').attr("id", "detail" + loadCellCount);
-      $("#loadCellTable").find('.details:last').attr("data-index", loadCellCount);
-      $("#loadCellTable").find('#remove:last').attr("id", "remove" + loadCellCount);
-
-      $("#loadCellTable").find('#no:last').attr('name', 'no['+loadCellCount+']').attr("id", "no" + loadCellCount).val((loadCellCount + 1).toString());
-      $("#loadCellTable").find('#loadCells:last').attr('name', 'loadCells['+loadCellCount+']').attr("id", "loadCells" + loadCellCount);
-      $("#loadCellTable").find('#loadCellBrand:last').attr('name', 'loadCellBrand['+loadCellCount+']').attr("id", "loadCellBrand" + loadCellCount);
-      $("#loadCellTable").find('#loadCellModel:last').attr('name', 'loadCellModel['+loadCellCount+']').attr("id", "loadCellModel" + loadCellCount);
-      $("#loadCellTable").find('#loadCellCapacity:last').attr('name', 'loadCellCapacity['+loadCellCount+']').attr("id", "loadCellCapacity" + loadCellCount);
-      $("#loadCellTable").find('#loadCellSerial').attr('name', 'loadCellSerial['+loadCellCount+']').attr("id", "loadCellSerial" + loadCellCount);
-
-      loadCellCount++;
-    }
-  });
-
-  // Event delegation: use 'select' instead of 'input' for dropdowns
-  $(document).on('change', 'select[id^="loadCells"]', function(){
-    // Retrieve the selected option's attributes
-    var brand = $(this).find(":selected").attr('data-brand');
-    var model = $(this).find(":selected").attr('data-model');
-
-    // Update the respective inputs for brand and model
-    $(this).closest('.details').find('input[id^="loadCellBrand"]').val(brand);
-    $(this).closest('.details').find('input[id^="loadCellModel"]').val(model);
-  });
-
-  $(document).on('click', '.add-btu', function() {
-    var btuValue = parseInt($('#noOfBtu').val());
-    $("#btuTable").html('');
-    btuCount = 0;
-    // Trigger the cloning and appending logic btuValue times
-    for (var i = 0; i < btuValue; i++) {
-      var $addContents = $("#btuCellDetails").clone();
-      $("#btuTable").append($addContents.html());
-
-      $("#btuTable").find('.details:last').attr("id", "detail" + btuCount);
-      $("#btuTable").find('.details:last').attr("data-index", btuCount);
-      $("#btuTable").find('#remove:last').attr("id", "remove" + btuCount);
-
-      $("#btuTable").find('#no:last').attr('name', 'no['+btuCount+']').attr("id", "no" + btuCount).val((btuCount + 1).toString());
-      $("#btuTable").find('#batuUjian:last').attr('name', 'batuUjian['+btuCount+']').attr("id", "batuUjian" + btuCount);
-      $("#btuTable").find('#batuUjianLain:last').attr('name', 'batuUjianLain['+btuCount+']').attr("id", "batuUjianLain" + btuCount);
-      $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount);
       $("#btuTable").find('#price:last').attr('name', 'price['+btuCount+']').attr("id", "price" + btuCount).val('');
 
       $('#addtionalSection').find('.select2').select2({
@@ -3435,6 +3372,41 @@ $(function () {
       
     }, 500);
 
+  });
+
+  $(document).on('click', '.add-load-cell', function() {
+    var loadCellValue = parseInt($('#noOfLoadCell').val());
+    $("#loadCellTable").html('');
+    loadCellCount = 0;
+    // Trigger the cloning and appending logic loadCellNoValue times
+    for (var i = 0; i < loadCellValue; i++) {
+      var $addContents = $("#loadCellDetails").clone();
+      $("#loadCellTable").append($addContents.html());
+
+      $("#loadCellTable").find('.details:last').attr("id", "detail" + loadCellCount);
+      $("#loadCellTable").find('.details:last').attr("data-index", loadCellCount);
+      $("#loadCellTable").find('#remove:last').attr("id", "remove" + loadCellCount);
+
+      $("#loadCellTable").find('#no:last').attr('name', 'no['+loadCellCount+']').attr("id", "no" + loadCellCount).val((loadCellCount + 1).toString());
+      $("#loadCellTable").find('#loadCells:last').attr('name', 'loadCells['+loadCellCount+']').attr("id", "loadCells" + loadCellCount);
+      $("#loadCellTable").find('#loadCellBrand:last').attr('name', 'loadCellBrand['+loadCellCount+']').attr("id", "loadCellBrand" + loadCellCount);
+      $("#loadCellTable").find('#loadCellModel:last').attr('name', 'loadCellModel['+loadCellCount+']').attr("id", "loadCellModel" + loadCellCount);
+      $("#loadCellTable").find('#loadCellCapacity:last').attr('name', 'loadCellCapacity['+loadCellCount+']').attr("id", "loadCellCapacity" + loadCellCount);
+      $("#loadCellTable").find('#loadCellSerial').attr('name', 'loadCellSerial['+loadCellCount+']').attr("id", "loadCellSerial" + loadCellCount);
+
+      loadCellCount++;
+    }
+  });
+
+  // Event delegation: use 'select' instead of 'input' for dropdowns
+  $(document).on('change', 'select[id^="loadCells"]', function(){
+    // Retrieve the selected option's attributes
+    var brand = $(this).find(":selected").attr('data-brand');
+    var model = $(this).find(":selected").attr('data-model');
+
+    // Update the respective inputs for brand and model
+    $(this).closest('.details').find('input[id^="loadCellBrand"]').val(brand);
+    $(this).closest('.details').find('input[id^="loadCellModel"]').val(model);
   });
 });
 
@@ -4084,7 +4056,7 @@ function newEntry(){
   branch = 0;
   $('#pricingTable').html('');
   pricingCount = 0;
-  $('#extendModal').find('#unitPrice').val("");
+  $('#extendModal').find('#unitPrice').val("0.00");
   $('#extendModal').find('#certPrice').val('');
   $('#extendModal').find('#totalAmount').val("");
   $('#extendModal').find('#sst').val('');
@@ -4224,9 +4196,9 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
-        setTimeout(function(){
+        $('#extendModal').on('unitPriceLoaded', function () {
           $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
-        }, 500);
+        });
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
@@ -4456,9 +4428,9 @@ function edit(id) {
           }
           else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '26'){
             $('#addtionalSection').html($('#btuBoxDetails').html());
-            $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_info.length);
 
             if(obj.message.btu_box_info.length > 0){
+              $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_info.length);
               $("#btuTable").html('');
               btuCount = 0;
 
@@ -4480,6 +4452,8 @@ function edit(id) {
 
                 btuCount++;
               }
+            }else{
+              $('#extendModal').find('#noOfBtu').val(0);
             }
           }
         });
@@ -4577,9 +4551,9 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
-        setTimeout(function(){
+        $('#extendModal').on('unitPriceLoaded', function () {
           $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
-        }, 500);
+        });
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
@@ -4771,9 +4745,9 @@ function edit(id) {
           }
           else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '26'){
             $('#addtionalSection').html($('#btuBoxDetails').html());
-            $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_info.length);
 
             if(obj.message.btu_box_info.length > 0){
+              $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_info.length);
               $("#btuTable").html('');
               btuCount = 0;
 
@@ -4795,6 +4769,8 @@ function edit(id) {
 
                 btuCount++;
               }
+            }else{
+              $('#extendModal').find('#noOfBtu').val(0);
             }
           }
         });
