@@ -317,10 +317,33 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                 $jenisAlatData[$jenisAlat]['total_price'] += $totalPrice;
                 $jenisAlatData[$jenisAlat]['count']++;
 
+                // Logic for BTU - (BOX)
+                $capacity = '';
+                $count = 1;
+                if ($jenisAlat == 'BTU - (BOX)'){
+                    $id = $row['id']; 
+                    $stampExtQuery = "SELECT * FROM stamping_ext WHERE stamp_id = $id";
+                    $stampDetail = mysqli_query($db, $stampExtQuery);
+                    $stampRow = mysqli_fetch_assoc($stampDetail);
+                    
+                    if(!empty($stampRow)){
+                      if (!empty($stampRow['btu_box_info'])){
+                        $btuBox = json_decode($stampRow['btu_box_info'], true);
+                        foreach ($btuBox as $btu) {
+                          $capacity .= $count.'.'.searchCapacityUnitById($btu['penandaanBatuUjian'], $db). '<br>';
+
+                          $count++;
+                        }
+                      }
+                    }
+                }else{
+                    $capacity = $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '';
+                }
+
                 $rows[] = '<tr style="height: 30px;">
                             <td style="font-size:12px;padding-left: 0.5%">'.$indexCount.'</td>
                             <td style="font-size:12px;padding-left: 0.5%">'.$jenisAlat.'</td>
-                            <td style="font-size:12px;padding-left: 0.5%">'.searchCapacityNameById($row['capacity'], $db).'</td>
+                            <td style="font-size:12px;padding-left: 0.5%">'.$capacity.'</td>
                             <td style="font-size:12px;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
                             <td style="font-size:12px;padding-left: 0.5%">'.$row['serial_no'].'</td>
                             <td style="font-size:12px;padding-left: 0.5%"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>

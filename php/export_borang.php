@@ -189,12 +189,35 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
 
                 $stampingDate = new DateTime($row['stamping_date']);
                 $formattedStampingDate = $stampingDate->format('d-m-Y');
+
+                // Logic for BTU - (BOX)
+                $capacity = '';
+                $count = 1;
+                if (searchAlatNameById($row['jenis_alat'], $db) == 'BTU - (BOX)'){
+                    $id = $row['id']; 
+                    $stampExtQuery = "SELECT * FROM stamping_ext WHERE stamp_id = $id";
+                    $stampDetail = mysqli_query($db, $stampExtQuery);
+                    $stampRow = mysqli_fetch_assoc($stampDetail);
+                    
+                    if(!empty($stampRow)){
+                      if (!empty($stampRow['btu_box_info'])){
+                        $btuBox = json_decode($stampRow['btu_box_info'], true);
+                        foreach ($btuBox as $btu) {
+                            $capacity .= $count.'.'.searchCapacityUnitById($btu['penandaanBatuUjian'], $db). '<br>';
+
+                          $count++;
+                        }
+                      }
+                    }
+                }else{
+                    $capacity = $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '';
+                }
               
                 $message .= '<tr>
                                 <td style="font-size:12px;">'.$formattedStampingDate.'</td>
                                 <td style="font-size:12px;"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
                                 <td style="font-size:12px;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
-                                <td style="font-size:12px;">'.searchCapacityNameById($row['capacity'], $db).'</td>
+                                <td style="font-size:12px;">'.$capacity.'</td>
                                 <td style="font-size:12px;">1</td>
                                 <td style="font-size:12px;">'.$row['no_daftar_lama'].'</td>
                                 <td style="font-size:12px;">'.$row['no_daftar_baru'].'</td>
@@ -318,12 +341,35 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                 $stampingDate = new DateTime($row['stamping_date']);
                 $formattedStampingDate = $stampingDate->format('d-m-Y');
 
+                // Logic for BTU - (BOX)
+                $capacity = '';
+                $count = 1;
+                if (searchAlatNameById($row['jenis_alat'], $db) == 'BTU - (BOX)'){
+                    $id = $row['id']; 
+                    $stampExtQuery = "SELECT * FROM stamping_ext WHERE stamp_id = $id";
+                    $stampDetail = mysqli_query($db, $stampExtQuery);
+                    $stampRow = mysqli_fetch_assoc($stampDetail);
+                    
+                    if(!empty($stampRow)){
+                      if (!empty($stampRow['btu_box_info'])){
+                        $btuBox = json_decode($stampRow['btu_box_info'], true);
+                        foreach ($btuBox as $btu) {
+                          $capacity .= $count.'.'.searchCapacityUnitById($btu['penandaanBatuUjian'], $db). '<br>';
+
+                          $count++;
+                        }
+                      }
+                    }
+                }else{
+                    $capacity = $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '';
+                }
+
                 $message .= '<tr>
                         <td style="font-size:12px;">'.$row['borang_e'].'</td>
                         <td style="font-size:12px;">'.$formattedStampingDate.'</td>
                         <td style="font-size:12px;"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
                         <td style="font-size:12px;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
-                        <td style="font-size:12px;">'.searchCapacityNameById($row['capacity'], $db).'</td>
+                        <td style="font-size:12px;">'.$capacity.'</td>
                         <td style="font-size:12px;">'.$row['pin_keselamatan'].'</td>
                         <td style="font-size:12px;">'.$row['no_daftar_lama'].'</td>
                         <td style="font-size:12px;">'.$row['no_daftar_baru'].'</td>
@@ -407,7 +453,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                         }
                     }
     
-                    $jenisAlat = searchAlatNameById($row['jenis_alat'], $db);
+                    $jenisAlat = searchAlatNameById($row['jenis_alat'], $db);                    
                     $totalPrice = $row['total_amount'];
     
                     // Initialize the data for this jenis_alat if it doesn't exist yet
@@ -421,11 +467,34 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                     // Increment the count for the current jenis_alat
                     $jenisAlatData[$jenisAlat]['total_price'] += $totalPrice;
                     $jenisAlatData[$jenisAlat]['count']++;
-    
+
+                    // Logic for BTU - (BOX)
+                    $capacity = '';
+                    $count = 1;
+                    if ($jenisAlat == 'BTU - (BOX)'){
+                        $id = $row['id']; 
+                        $stampExtQuery = "SELECT * FROM stamping_ext WHERE stamp_id = $id";
+                        $stampDetail = mysqli_query($db, $stampExtQuery);
+                        $stampRow = mysqli_fetch_assoc($stampDetail);
+                        
+                        if(!empty($stampRow)){
+                          if (!empty($stampRow['btu_box_info'])){
+                            $btuBox = json_decode($stampRow['btu_box_info'], true);
+                            foreach ($btuBox as $btu) {
+                                $capacity .= $count.'.'.searchCapacityUnitById($btu['penandaanBatuUjian'], $db). '<br>';
+
+                                $count++;
+                            }
+                          }
+                        }
+                    }else{
+                        $capacity = $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '';
+                    }
+                        
                     $rows[] = '<tr style="height: 30px;">
                                 <td style="font-size:12px;padding-left: 0.5%">'.$indexCount.'</td>
                                 <td style="font-size:12px;padding-left: 0.5%">'.$jenisAlat.'</td>
-                                <td style="font-size:12px;padding-left: 0.5%">'.searchCapacityNameById($row['capacity'], $db).'</td>
+                                <td style="font-size:12px;padding-left: 0.5%">'.$capacity.'</td>
                                 <td style="font-size:12px;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
                                 <td style="font-size:12px;padding-left: 0.5%">'.$row['serial_no'].'</td>
                                 <td style="font-size:12px;padding-left: 0.5%"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
@@ -598,7 +667,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                 <tr>
                                     <th style="font-size:12px;">Bil.</th>
                                     <th style="font-size:12px;">Jenis Alat</th>
-                                    <th style="font-size:12px;">Had Terima</th>
+                                    <th style="font-size:12px;" width="8%">Had Terima</th>
                                     <th style="font-size:12px;">Jenama</th>
                                     <th style="font-size:12px;" width="10%">No. Siri Alat</th>
                                     <th style="font-size:12px;">Nama Dan Alamat Pemilik</th>
