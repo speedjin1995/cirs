@@ -3030,8 +3030,6 @@ $(function () {
     $('#totalAmount').val(totalAmt);
     $('#sst').val((totalAmt * 0.08).toFixed(2));
     $('#subAmount').val((totalAmt + (totalAmt * 0.08)).toFixed(2));
-
-    $('#extendModal').trigger('unitPriceLoaded');
   });
 
   $('#extendModal').find('#labourCharge').on('change', function(){
@@ -3063,6 +3061,8 @@ $(function () {
           $('#product').val(obj.message.id);
           $('#unitPrice').val(obj.message.price);
           $('#unitPrice').trigger('change');
+
+          $('#extendModal').trigger('priceLoaded');
         }
         else if(obj.status === 'failed'){
           toastr["error"](obj.message, "Failed:");
@@ -3089,6 +3089,8 @@ $(function () {
           $('#product').val(obj.message.id);
           $('#unitPrice').val(obj.message.price);
           $('#unitPrice').trigger('change');
+
+          $('#extendModal').trigger('priceLoaded');
         }
         else if(obj.status === 'failed'){
           toastr["error"](obj.message, "Failed:");
@@ -3302,6 +3304,8 @@ $(function () {
           $('#product').val(obj.message.id);
           $('#unitPrice').val(obj.message.price);
           $('#unitPrice').trigger('change');
+
+          $('#extendModal').trigger('priceLoaded');
         }
         else if(obj.status === 'failed'){
           toastr["error"](obj.message, "Failed:");
@@ -3323,6 +3327,8 @@ $(function () {
           $('#product').val(obj.message.id);
           $('#unitPrice').val(obj.message.price);
           $('#unitPrice').trigger('change');
+
+          $('#extendModal').trigger('priceLoaded');
         }
         else if(obj.status === 'failed'){
           toastr["error"](obj.message, "Failed:");
@@ -4478,9 +4484,6 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
-        $('#extendModal').on('unitPriceLoaded', function () {
-          $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
-        });
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
@@ -4744,6 +4747,10 @@ function edit(id) {
             }
           }
         });
+
+        $('#extendModal').on('priceLoaded', function() {
+          $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
+        });
         
         $('#extendModal').modal('show');
 
@@ -4838,9 +4845,6 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
-        $('#extendModal').on('unitPriceLoaded', function () {
-          $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
-        });
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
@@ -5065,6 +5069,10 @@ function edit(id) {
               $('#extendModal').find('#noOfBtu').val(0);
             }
           }
+        });
+
+        $('#extendModal').on('priceLoaded', function() {
+          $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
         });
 
         $('#extendModal').modal('show');
