@@ -820,6 +820,35 @@ else{
                   </div>
                 </div>
               </div>
+              <div class="row">
+                <h5 class="text-danger">Service & Labour Charges</h5>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Labour Charge</label>
+                    <input type="number" class="form-control" id="labourCharge" name="labourCharge">
+                  </div>
+                </div>
+                <div class="col-4" id="cerId">
+                  <div class="form-group">
+                    <label>Total Stamping Fee + Labour Charge</label>
+                    <input type="text" class="form-control" id="stampLabourCharge" name="stampLabourCharge" readonly>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Internal Round Up</label>
+                    <input type="number" class="form-control" id="roundUp" name="roundUp">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Total Charges to Customer</label>
+                    <input type="text" class="form-control" id="totalCharge" name="totalCharge" readonly>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -3005,6 +3034,26 @@ $(function () {
     $('#extendModal').trigger('unitPriceLoaded');
   });
 
+  $('#extendModal').find('#labourCharge').on('change', function(){
+    var labourCharge = parseFloat($(this).val());
+    var subTotalAmt = parseFloat($('#subAmount').val());
+    var stampLabourCharge = labourCharge + subTotalAmt;
+
+    $('#stampLabourCharge').val(stampLabourCharge.toFixed(2));
+
+    if ($('#roundUp').val().trim() !== '') {
+      $('#roundUp').trigger('change');
+    }
+  });
+
+  $('#extendModal').find('#roundUp').on('change', function(){
+    var roundUp = parseFloat($(this).val());
+    var stampLabourCharge = parseFloat($('#stampLabourCharge').val());
+    var totalCharges = stampLabourCharge + roundUp;
+
+    $('#totalCharge').val(totalCharges.toFixed(2));
+  });
+
   $('#extendModal').find('#machineType').on('change', function(){
     if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
       $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
@@ -3677,6 +3726,8 @@ function format (row) {
           <p><strong>Last Year Stamping Date:</strong> ${row.last_year_stamping_date}</p>
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
           <p><strong>Next Due Date:</strong> ${row.due_date}</p>
+          <p><strong>Create By:</strong> ${row.create_by}</p>
+          <p><strong>Last Update By:</strong> ${row.modified_by}</p>
         </div>
       </div><hr>
     `;
@@ -3689,6 +3740,8 @@ function format (row) {
           <p><strong>Borang D:</strong> ${row.borang_d}</p>
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
           <p><strong>Next Due Date:</strong> ${row.due_date}</p>
+          <p><strong>Create By:</strong> ${row.create_by}</p>
+          <p><strong>Last Update By:</strong> ${row.modified_by}</p>
         </div>
       </div><hr>
     `;
@@ -3726,6 +3779,21 @@ function format (row) {
       <p><strong>Total Amount:</strong> ${row.total_amount}</p>
       <p><strong>SST Price:</strong> ${row.sst}</p>
       <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>
+    </div>
+  </div><hr>`;
+
+  returnString += `
+  <div class="row">
+    <div class="col-6">
+      <p><strong>Labour Charge:</strong> ${row.labour_charge}</p>
+      <p><strong>Total Stamping Fee + Labour Charge:</strong> ${row.stampfee_labourcharge}</p>
+      <p><strong>Remark:</strong> ${row.remarks}</p>
+    </div>
+    
+    <div class="col-6">
+      <p><strong>Internal Round Up:</strong> ${row.int_round_up}</p>
+      <p><strong>SST Price:</strong> ${row.total_charges}</p>
+
       <div class="row">
         <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
         <div class="col-1"><button title="Duplicate" type="button" id="duplicate${row.id}" onclick="duplicate(${row.id})" class="btn btn-success btn-sm"><i class="fas fa-clone"></i></button></div>`; 
@@ -4270,6 +4338,11 @@ function newEntry(){
   $('#extendModal').find('#totalAmount').val("");
   $('#extendModal').find('#sst').val('');
   $('#extendModal').find('#subAmount').val('');
+  $('#extendModal').find('#labourCharge').val('0.00');
+  $('#extendModal').find('#stampLabourCharge').val('');
+  $('#extendModal').find('#roundUp').val('');
+  $('#extendModal').find('#totalCharge').val('');
+
   $('#cerId').hide();
   $('#extendModal').modal('show');
   
@@ -4412,6 +4485,10 @@ function edit(id) {
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
         $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
+        $('#extendModal').find('#labourCharge').val(obj.message.labour_charge);
+        $('#extendModal').find('#stampLabourCharge').val(obj.message.stampfee_labourcharge);
+        $('#extendModal').find('#roundUp').val(obj.message.int_round_up);
+        $('#extendModal').find('#totalCharge').val(obj.message.total_charges);
 
         $('#pricingTable').html('');
         pricingCount = 0;
@@ -4768,6 +4845,11 @@ function edit(id) {
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
         $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
+        $('#extendModal').find('#labourCharge').val(obj.message.labour_charge);
+        $('#extendModal').find('#stampLabourCharge').val(obj.message.stampfee_labourcharge);
+        $('#extendModal').find('#roundUp').val(obj.message.int_round_up);
+        $('#extendModal').find('#totalCharge').val(obj.message.total_charges);
+
         jalat = obj.message.jenis_alat;
 
         $('#extendModal').on('atkLoaded', function() {

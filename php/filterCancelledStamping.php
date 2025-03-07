@@ -148,28 +148,30 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     }
   }
 
-  $capacity = '';
-  $count = 1;
-  if (searchAlatNameById($row['jenis_alat'], $db) == 'BTU - (BOX)'){
-    $id = $row['id']; 
-    $stampExtQuery = "SELECT * FROM stamping_ext WHERE stamp_id = $id";
-    $stampDetail = mysqli_query($db, $stampExtQuery);
-    $stampRow = mysqli_fetch_assoc($stampDetail);
+  // $capacity = '';
+  // $count = 1;
+  // if (searchAlatNameById($row['jenis_alat'], $db) == 'BTU - (BOX)'){
+  //   $id = $row['id']; 
+  //   $stampExtQuery = "SELECT * FROM stamping_ext WHERE stamp_id = $id";
+  //   $stampDetail = mysqli_query($db, $stampExtQuery);
+  //   $stampRow = mysqli_fetch_assoc($stampDetail);
     
-    if(!empty($stampRow)){
-      if (!empty($stampRow['btu_box_info'])){
-        $btuBox = json_decode($stampRow['btu_box_info'], true);
-        foreach ($btuBox as $btu) {
-          $capacity .= $count.'.'.searchCapacityUnitById($btu['penandaanBatuUjian'], $db). '<br>';
+  //   if(!empty($stampRow)){
+  //     if (!empty($stampRow['btu_box_info'])){
+  //       $btuBox = json_decode($stampRow['btu_box_info'], true);
+  //       foreach ($btuBox as $btu) {
+  //         $capacity .= $count.'.'.searchCapacityUnitById($btu['penandaanBatuUjian'], $db). '<br>';
 
-          $count++;
-        }
-      }
-    }
-  }else{
-    $capacity = $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '';
-  }
+  //         $count++;
+  //       }
+  //     }
+  //   }
+  // }else{
+  //   $capacity = $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '';
+  // }
   
+  $capacity = $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '';
+
   $data[] = array( 
     "no"=>$counter,
     "id"=>$row['id'],
