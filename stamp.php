@@ -3597,7 +3597,7 @@ function format (row) {
 
       <div class="col-6">
         <p><strong>Internal Round Up:</strong> ${row.int_round_up}</p>
-        <p><strong>SST Price:</strong> ${row.total_charges}</p>
+        <p><strong>Total Billing Price:</strong> ${row.total_charges}</p>
         <div class="row">
           <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
           <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>

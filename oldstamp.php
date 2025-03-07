@@ -1618,7 +1618,7 @@ function format (row) {
       
       <div class="col-6">
         <p><strong>Internal Round Up:</strong> ${row.int_round_up}</p>
-        <p><strong>SST Price:</strong> ${row.total_charges}</p>`;
+        <p><strong>Total Billing Price:</strong> ${row.total_charges}</p>`;
 
       if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
         returnString += `<div class="row">
