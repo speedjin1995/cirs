@@ -199,9 +199,11 @@ if(isset($_POST['userID'])){
                                     $message['indicator_serial'] = $row2['indicator_serial'] ?? '';
                                     $message['platform_country'] = searchCountryById($row2['platform_country'], $db) ?? '';
                                     $message['platform_type'] = $row2['platform_type'];
-                                    $message['size'] = $row2['size'] ?? '';
+                                    $message['size'] = searchSizeNameById($row2['size'], $db) ?? '';
                                     $message['jenis_pelantar'] = $row2['jenis_pelantar'] ?? '';
                                     $message['jenis_penunjuk'] = $row2['jenis_penunjuk'] ?? '';
+                                    $message['load_cell_country'] = searchCountryById($row2['load_cell_country'], $db) ?? '';
+                                    $message['load_cell_no'] = $row2['load_cell_no'] ?? '';
                                     $message['alat_type'] = $row2['alat_type'] ?? '';
                                     $message['bentuk_dulang'] = $row2['bentuk_dulang'] ?? '';
                                     $message['penandaan_batu_ujian'] = $row2['penandaan_batu_ujian'] ?? '';
@@ -213,9 +215,6 @@ if(isset($_POST['userID'])){
                                     $message['steelyard'] = $row2['steelyard'] ?? '';
                                     $message['bilangan_kaunterpois'] = $row2['bilangan_kaunterpois'] ?? '';
                                     $message['other_info'] = $row2['other_info'] ?? '';
-                                    $message['load_cell_country'] = $row2['load_cell_country'] ?? '';
-                                    $message['load_cell_no'] = $row2['load_cell_no'] ?? '';
-                                    $message['load_cells_info'] = json_decode($row2['load_cells_info'], true);
                                     $message['nilai_jangka'] = $row2['nilai_jangka'] ?? '';
                                     $message['nilai_jangka_other'] = $row2['nilai_jangka_other'] ?? '';
                                     $message['diperbuat_daripada'] = $row2['diperbuat_daripada'] ?? '';
@@ -241,9 +240,24 @@ if(isset($_POST['userID'])){
                                                 "batuUjianLain" => $btu["batuUjianLain"],
                                                 "penandaanBatuUjian" => $penandaanBatuUjian
                                             ];
-                                            
                                         }
                                         $message['btu_box_info'] = $btuBox;
+                                    }else if ($message['jenis_alat'] == 'ATK'){
+                                        $loadCell = [];
+                                        foreach (json_decode($row2['load_cells_info'], true) as $atk) {
+                                            $loadCells = searchLoadCellById($atk['loadCells'], $db);
+                                            $loadCellCapacity = searchCapacityNameById($atk['loadCellCapacity'], $db);
+    
+                                            $loadCell[] = [
+                                                "no" => $atk["no"],
+                                                "loadCells" => $loadCells,
+                                                "loadCellBrand" => $atk["loadCellBrand"],
+                                                "loadCellModel" => $atk["loadCellModel"],
+                                                "loadCellCapacity" => $loadCellCapacity,
+                                                "loadCellSerial" => $atk["loadCellSerial"]
+                                            ];
+                                        }
+                                        $message['load_cells_info'] = $loadCell;
                                     }
                                 }
                             }
