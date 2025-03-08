@@ -2807,34 +2807,51 @@ $(function () {
   });
 
   $('#extendModal').find('#includeCert').on('change', function(){
-    var price = parseFloat($('#product').find(":selected").attr("data-price"));
-    var includeCert = $(this).val();
-    var alat = $('#jenisAlat').val();
-    if (alat == 26){
-      var certPrice = 57.0;
-    }else{
-      var certPrice = 28.5;
-    }
-    var sst = 0;
-    var totalAmt = price;
+    // changed code to pull instead of taking from product field
+    $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
+      var obj = JSON.parse(data);
+      
+      if(obj.status === 'success'){
+        $('#unitPrice').val(obj.message.price);
+        $('#unitPrice').trigger('change');
 
-    $('#unitPrice').val(price);
+        $('#extendModal').trigger('priceLoaded');
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when pull data", "Failed:");
+      }
+      $('#spinnerLoading').hide();
+    });
 
-    if(includeCert == 'YES'){
-      $('#certPrice').val(certPrice);
-      $('#cerId').show();
-      totalAmt += certPrice;
-    }
-    else{
-      $('#certPrice').val(0.00);
-      $('#cerId').hide();
-    }
+    // var price = parseFloat($('#product').find(":selected").attr("data-price"));
+    // var includeCert = $(this).val();
+    // var alat = $('#jenisAlat').val();
+    // if (alat == 26){
+    //   var certPrice = 57.0;
+    // }else{
+    //   var certPrice = 28.5;
+    // }
+    // var sst = 0;
+    // var totalAmt = price;
 
-    $('#totalAmount').val(totalAmt);
-    $('#sst').val((totalAmt * 0.08).toFixed(2));
-    $('#subAmount').val((totalAmt + (totalAmt * 0.08)).toFixed(2));
+    // $('#unitPrice').val(price);
 
-    $('#extendModal').trigger('unitPriceLoaded');
+    // if(includeCert == 'YES'){
+    //   $('#certPrice').val(certPrice);
+    //   $('#cerId').show();
+    //   totalAmt += certPrice;
+    // }
+    // else{
+    //   $('#certPrice').val(0.00);
+    //   $('#cerId').hide();
+    // }
+
+    // $('#totalAmount').val(totalAmt);
+    // $('#sst').val((totalAmt * 0.08).toFixed(2));
+    // $('#subAmount').val((totalAmt + (totalAmt * 0.08)).toFixed(2));
   });
 
   $('#extendModal').find('#labourCharge').on('change', function(){
@@ -4580,7 +4597,7 @@ function edit(id) {
         });
 
         $('#extendModal').on('priceLoaded', function() {
-          $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
+          $('#extendModal').find('#unitPrice').val(obj.message.unit_price).trigger('change');
         });
         
         $('#extendModal').modal('show');
@@ -4903,7 +4920,7 @@ function edit(id) {
         });
 
         $('#extendModal').on('priceLoaded', function() {
-          $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
+          $('#extendModal').find('#unitPrice').val(obj.message.unit_price).trigger('change');
         });
 
         $('#extendModal').modal('show');
