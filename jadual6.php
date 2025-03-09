@@ -338,7 +338,7 @@ $(function () {
     "lengthMenu": [ [10, 25, 50, 100, 300, 600, 1000], [10, 25, 50, 100, 300, 600, 1000] ], // More show options
     "pageLength": 10 // Default rows per page
   });
-  
+
   // Add event listener for opening and closing details
   $('#weightTable tbody').on('click', 'td.dt-control', function () {
     var tr = $(this).closest('tr');
@@ -350,7 +350,13 @@ $(function () {
       tr.removeClass('shown');
     }
     else {
-      row.child( format(row.data()) ).show();tr.addClass("shown");
+      $.post('php/getStamp.php', { userID: row.data().id, format: 'EXPANDABLE' }, function (data) {
+        var obj = JSON.parse(data);
+        if (obj.status === 'success') {
+          row.child(format(obj.message)).show();
+          tr.addClass("shown");
+        }
+      });
     }
   });
 
@@ -618,11 +624,13 @@ $(function () {
 });
 
 function format (row) {
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC'];
+
   var returnString = `
   <div class="row">
     <!-- Customer Section -->
     <div class="col-md-6">
-      <p><span><strong style="font-size:120%; text-decoration: underline;">Customer</strong></span><br>
+      <p><span><strong style="font-size:120%; text-decoration: underline;">Stamping To : Customer</strong></span><br>
       <strong>${row.customers}</strong><br>
       ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4} `;
 
@@ -636,7 +644,7 @@ function format (row) {
     returnString += `
     <!-- Reseller Section -->
     <div class="col-md-6">
-      <p><span><strong style="font-size:120%; text-decoration: underline;">Reseller</strong></span><br>
+      <p><span><strong style="font-size:120%; text-decoration: underline;">Billing or Supply by Reseller</strong></span><br>
       <strong>${row.dealer}</strong><br>
       ${row.reseller_address1}<br>${row.reseller_address2}<br>${row.reseller_address3}<br>${row.reseller_address4} `;
       
@@ -658,29 +666,66 @@ function format (row) {
       <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
       <p><strong>Serial No:</strong> ${row.serial_no}</p>
       <p><strong>Assigned To:</strong> ${row.assignTo}</p>
-    </div>
+      <p><strong>Make In:</strong> ${row.make_in}</p>
+    </div>`;
 
-    <!-- Stamping Section -->
-    <div class="col-6">
-      <p><strong>Lama No. Daftar:</strong> ${row.no_daftar_lama}</p>
-      <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
-      <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
-      <p><strong>Borang D:</strong> ${row.borang_d}</p>
-      <p><strong>Borang E:</strong> ${row.borang_e}</p>
-      <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
-      <p><strong>Due Date:</strong> ${row.due_date}</p>
-    </div>
-  </div><hr>
-
+  if(row.stampType == 'RENEWAL'){
+    returnString += `
+      <!-- Stamping Section -->
+        <div class="col-6">
+          <p><strong>Lama No. Daftar:</strong> ${row.no_daftar_lama}</p>
+          <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
+          <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
+          <p><strong>Borang D:</strong> ${row.borang_d}</p>
+          <p><strong>Borang E:</strong> ${row.borang_e}</p>
+          <p><strong>Last Year Stamping Date:</strong> ${row.last_year_stamping_date}</p>
+          <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
+          <p><strong>Next Due Date:</strong> ${row.due_date}</p>
+          <p><strong>Create By:</strong> ${row.create_by}</p>
+          <p><strong>Last Update By:</strong> ${row.modified_by}</p>
+        </div>
+      </div><hr>
+    `;
+  }else{
+    returnString += `
+      <!-- Stamping Section -->
+        <div class="col-6">
+          <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
+          <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
+          <p><strong>Borang D:</strong> ${row.borang_d}</p>
+          <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
+          <p><strong>Next Due Date:</strong> ${row.due_date}</p>
+          <p><strong>Create By:</strong> ${row.create_by}</p>
+          <p><strong>Last Update By:</strong> ${row.modified_by}</p>
+        </div>
+      </div><hr>
+    `;
+  }
+    
+  returnString += `
   <div class="row">
     <!-- Billing Section -->
     <div class="col-6">
-      <p><strong>Quotation No:</strong> ${row.quotation_no}</p>
+      <p><strong>Quotation No:</strong> ${row.quotation_no} `;
+      
+      if(row.quotation_attachment){
+        returnString += `<span class="ml-5"><a href="view_file.php?file=${row.quotation_attachment}" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></span></p>`;
+      }else{
+        returnString += `</p>`;
+      }
+
+      returnString += `
       <p><strong>Quotation Date:</strong> ${row.quotation_date}</p>
       <p><strong>Purchase No:</strong> ${row.purchase_no}</p>
       <p><strong>Purchase Date:</strong> ${row.purchase_date}</p>
-      <p><strong>Invoice/Cash Bill No:</strong> ${row.invoice_no}</p>
-    </div>
+      <p><strong>Invoice/Cash Bill No:</strong> ${row.invoice_no}`;
+
+      if(row.invoice_attachment){
+        returnString += `<span class="ml-5"><a href="view_file.php?file=${row.invoice_attachment}" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></span></p>`;
+      }else{
+        returnString += `</p>`;
+      }
+    returnString += `</div>
 
     <!-- Price Section -->
     <div class="col-6">
@@ -689,6 +734,20 @@ function format (row) {
       <p><strong>Total Amount:</strong> ${row.total_amount}</p>
       <p><strong>SST Price:</strong> ${row.sst}</p>
       <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>
+    </div>
+  </div><hr>`;
+
+  returnString += `
+  <div class="row">
+    <div class="col-6">
+      <p><strong>Labour Charge:</strong> ${row.labour_charge}</p>
+      <p><strong>Total Stamping Fee + Labour Charge:</strong> ${row.stampfee_labourcharge}</p>
+      <p><strong>Remark:</strong> ${row.remarks}</p>
+    </div>
+    
+    <div class="col-6">
+      <p><strong>Internal Round Up:</strong> ${row.int_round_up}</p>
+      <p><strong>Total Billing Price:</strong> ${row.total_charges}</p>
     </div>
   </div><br>
   `;
@@ -704,35 +763,21 @@ function format (row) {
     returnString += '</tbody></table>';
   }
 
-  // Additional section for ATS
-  if (row.jenis_alat == 'ATS'){
+  if(row.jenis_alat == 'ATP'){
     returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATP)</strong></span>
                         <div class="row">
-                          <!-- ATS Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
-                        </div>
-                        `;
-  }else if(row.jenis_alat == 'ATP'){
-    returnString += `</div><hr>
-                        <div class="row">
-                          <!-- ATS Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
+                          <!-- ATP Section -->
                           <div class="col-6">
                             <p><strong>Jenis Penunjuk:</strong> ${row.jenis_penunjuk}</p>
                           </div>
                         </div>
                         `;
-  }else if(row.jenis_alat == 'ATN'){
+  }else if(row.jenis_alat == 'ATN' || row.jenis_alat == 'ATN (G)'){
     returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATN)</strong></span>
                         <div class="row">
-                          <!-- ATS Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
+                          <!-- ATN Section -->
                           <div class="col-6">
                             <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
                           </div>
@@ -743,23 +788,112 @@ function format (row) {
                         `;
   }else if(row.jenis_alat == 'ATE'){
     returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATE)</strong></span>
                         <div class="row">
-                          <!-- ATS Section -->
-                          <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
-                          </div>
+                          <!-- ATE Section -->
                           <div class="col-6">
                             <p><strong>Klass:</strong> ${row.class}</p>
                           </div>
                         </div>
                         `;
-  }else if(row.jenis_alat == 'SLL'){
+  }else if(row.jenis_alat == 'BTU'){
     returnString += `</div><hr>
+                      <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (BTU)</strong></span>
+                        <div class="row">
+                          <!-- BTU Section -->
+                          <div class="col-6">
+                            <p><strong>Penandaan Pada Batu Ujian:</strong> ${row.penandaan_batu_ujian}</p>
+                          </div>`;
+    if (row.batu_ujian == 'OTHER'){
+      returnString += `
+                      <div class="col-6">
+                        <p><strong>Batu Ujian:</strong> ${row.batu_ujian_lain}</p>
+                      </div>
+                    </div>
+                    `;
+    }else{
+      returnString += `
+                      <div class="col-6">
+                        <p><strong>Batu Ujian:</strong> ${row.batu_ujian}</p>
+                      </div>
+                    </div>
+                    `;
+    }
+    
+  }else if(row.jenis_alat == 'ATP-AUTO MACHINE'){
+    returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATP - AUTO MACHINE)</strong></span>
+                        <div class="row">
+                          <!-- ATP-AUTO MACHINE Section -->
+                          <div class="col-6">
+                            <p><strong>Jenis Penunjuk:</strong> ${row.jenis_penunjuk}</p>
+                          </div>
+                        </div>
+                        `;
+  }else if(row.jenis_alat == 'ATP (MOTORCAR)'){
+    returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATP - MOTORCAR)</strong></span>
                         <div class="row">
                           <!-- ATS Section -->
                           <div class="col-6">
-                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                            <p><strong>Had Terima Steelyard:</strong> ${row.steelyard} kg</p>
                           </div>
+                          <div class="col-6">
+                            <p><strong>Bilangan Kaunterpois:</strong> ${row.bilangan_kaunterpois} biji</p>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <p><strong>Nilai Berat Kaunterpois (kg)</strong></p>
+                            <p><strong>(1):</strong> ${row.nilais[0]?.nilai+' kg' || ''}</p>
+                            <p><strong>(2):</strong> ${row.nilais[1]?.nilai+' kg' || ''}</p>
+                            <p><strong>(3):</strong> ${row.nilais[2]?.nilai+' kg' || ''}</p>
+                            <p><strong>(4):</strong> ${row.nilais[3]?.nilai+' kg' || ''}</p>
+                            <p><strong>(5):</strong> ${row.nilais[4]?.nilai+' kg' || ''}</p>
+                            <p><strong>(6):</strong> ${row.nilais[5]?.nilai+' kg' || ''}</p>
+                          </div>
+                        </div>
+                        
+                        `;
+  }else if(row.jenis_alat == 'SIA'){
+    returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (SIA)</strong></span>
+                        <div class="row">
+                          <!-- SIA Section -->`;
+
+    if (row.nilai_jangka == 'OTHER'){
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Nilai Jangka Maksima:</strong> ${row.nilai_jangka_other} ml</p>
+                          </div>`;
+    }else{
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Nilai Jangka Maksima:</strong> ${row.nilai_jangka} ml</p>
+                          </div>`;
+    }
+
+    if (row.nilai_jangka == 'OTHER'){
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Diperbuat Daripada:</strong> ${row.diperbuat_daripada_other}</p>
+                          </div>
+                        </div>
+                        `;
+    }else{
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Diperbuat Daripada:</strong> ${row.diperbuat_daripada}</p>
+                          </div>
+                        </div>
+                        `;
+    }
+    
+                          
+  }else if(row.jenis_alat == 'SLL'){
+    returnString += `</div><hr>
+                        <div class="row">
+                          <!-- SLL Section -->
                           <div class="col-6">
                             <p><strong>Jenis Alat Type:</strong> ${row.alat_type}</p>
                           </div>
@@ -767,15 +901,241 @@ function format (row) {
                         `;
 
     if (row.questions.length > 0) {
-      returnString += '<h4>BAHAGIAN II</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="15%">Date Created</th><th>Notes</th><th width="17%">Next Follow Date</th><th width="15%">Follow Up By</th><th width="13%">Status</th></tr></thead><tbody>'
-    
-      for (var i = 0; i < row.log.length; i++) {
-        var item = row.log[i];
-        returnString += '<tr><td>' + item.no + '</td><td>' + item.date + '</td><td>' + item.notes + '</td><td>' + item.followUpDate + '</td><td>' + item.picAttend + '</td><td>' + item.status + '</td></tr>'
-      }
-
-      returnString += '</tbody></table>';
+      returnString +=`
+      <div class="card card-primary">
+        <div class="card-header">
+          BAHAGIAN II
+        </div>
+        <div class="card-body">
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>1. Adakah Sukat Linar ini diperbuat dari keluli, tembaga pancalogam, aluminium, ivory, bakelait berlapis, kaca gantian yang dikukuhkan, kayu keras atau apa-apa bahan lain yang diluluskan oleh Penjimpan Timbang dan Sukat.</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question1" name="question1" disabled>
+                    <option value="" selected>${row.questions[0]['answer']}</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+            <div class="col-md-8">
+                <label>2. Adakah Sukat Linar ini lurus dan tiada kecacatan.</label>
+            </div>
+            <div class="col-md-3 ml-4">
+              <select class="form-control select2" id="question2" name="question2" disabled>
+                    <option value="" selected>${row.questions[1]['answer']}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>3. Adakah Sukat Linar yang diperbuat daripada kayu, dibubuh kedua-dua hujungnya dengan logam dan hujungnya dipaku menembusi kayu itu.</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question3" name="question3" disabled>
+                    <option value="" selected>${row.questions[2]['answer']}</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>4. Adakah Sukat Linar bersenggat dengan jelas dan tidak boleh dipadam, dan senggatan yang dinombor ditanda dengan garisan yang lebih panjang daripada senggatan yang tidak dinombor.</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question4" name="question4" disabled>
+                    <option value="" selected>${row.questions[3]['answer']}</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>5.1 Adakah Sukat Linar disenggat dengan jelas dan tidak boleh dipadam dalam ukuran sentimeter di atas satu belah dan dalam sukatan meter di sebelah belakang dan senggatan yang dinombor ditanda dengan garis yang lebih panjang daripada senggatan yang tidak dinombor.</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question5_1" name="question5_1" disabled>
+                    <option value="" selected>${row.questions[4]['answer']}</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>5.2 Adakah Sukat itu panjangnya 1 m (satu meter)</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question5_2" name="question5_2" disabled>
+                    <option value="" selected>${row.questions[5]['answer']}</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>6. Adakah Sukat Linar mempunyai nilai jangkahan maksimum yang mudah dibihat, diukir dan tidak boleh dipadam ditanda di satu hujung Sukat Linar dengan cara salah satu daripada cara salah satu tanda-pertukaran-ringkas yang berikut masing-masing di bawah satu meter (cm, in, atau mm)</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question6" name="question6" disabled>
+                    <option value="" selected>${row.questions[6]['answer']}</option>
+                </select>
+              </div>
+          </div>
+          <div class="row mb-3 ml-4">
+              <div class="col-md-8">
+                  <label>7. Adakah Sukat Linar ini ditanda dengan cap dekat permukaan Skel pada sebelah tiap-tiap tap yang bersenggat.</label>
+              </div>
+              <div class="col-md-3 ml-4">
+                <select class="form-control select2" id="question7" name="question7" disabled>
+                    <option value="" selected>${row.questions[7]['answer']}</option>
+                </select>
+              </div>
+          </div>
+        </div>
+      </div>`;
     }
+  }else if(row.jenis_alat == 'BAP'){
+    returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (BAP)</strong></span>
+                        <div class="row">
+                          <!-- BAP Section -->
+                          <div class="col-6">
+                            <p><strong>Pam No.:</strong> ${row.pam_no}</p>
+                          </div>      
+                          <div class="col-6">
+                            <p><strong>No Kelulusan Bentuk:</strong> ${row.kelulusan_bentuk}</p>
+                          </div>      
+                          <div class="col-6">
+                            <p><strong>Jenis Alat:</strong> ${row.alat_type}</p>
+                          </div>      
+                          <div class="col-6">
+                            <p><strong>Kadar Pengaliran:</strong> ${row.kadar_pengaliran} liter/min</p>
+                          </div>      
+                          <div class="col-6">
+                            <p><strong>Bentuk Penunjuk Harga/Kuantiti:</strong> ${row.bentuk_penunjuk}</p>
+                          </div>      
+                    `;
+
+    if (row.jenama == 'OTHER'){
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Jenama / Name Pembuat:</strong> ${row.jenama_other}</p>
+                          </div>`;
+    }else{
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Jenama / Name Pembuat:</strong> ${row.jenama}</p>
+                          </div>`;
+    }                     
+  }else if(row.jenis_alat == 'SIC'){
+    returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (SIC)</strong></span>
+                        <div class="row">
+                          <!-- SIC Section -->
+                          <div class="col-6">
+                            <p><strong>Nilai Jangkaan Maksimum (Kapasiti):</strong> ${row.nilai_jangkaan_maksimum} Liter</p>
+                          </div>      
+                    `;
+
+    if (row.bahan_pembuat == 'OTHER'){
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Bahan Pembuat:</strong> ${row.bahan_pembuat_other}</p>
+                          </div>`;
+    }else{
+      returnString += `
+                          <div class="col-6">
+                            <p><strong>Bahan Pembuat:</strong> ${row.bahan_pembuat}</p>
+                          </div>`;
+    }                     
+  }else if(row.jenis_alat == 'BTU - (BOX)'){
+    returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (BTU - BOX)</strong></span>
+                        <div class="row">  
+                    `;
+
+    if (row.btu_box_info.length > 0){
+      var batuUjianVal = '';
+      returnString += `
+        <table style="width: 100%;">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Batu Ujian</th>
+              <th>Penandaan Pada Batu Ujian</th>
+            </tr>
+          </thead>
+          <tbody>`;
+
+          for (i = 0; i < row.btu_box_info.length; i++) {
+            returnString += `<tr><td>${row.btu_box_info[i].no}</td>`;
+
+            if (row.btu_box_info[i].batuUjian == 'OTHER'){
+              returnString += `<td>${row.btu_box_info[i].batuUjianLain}</td>`;
+            }else{
+              if (row.btu_box_info[i].batuUjian == 'BESI_TUANGAN'){
+                batuUjianVal = 'BESI TUANGAN';
+              }
+              else if (row.btu_box_info[i].batuUjian == 'TEMBAGA'){
+                batuUjianVal = 'TEMBAGA';
+              }
+              else if (row.btu_box_info[i].batuUjian == 'NIKARAT'){
+                batuUjianVal = 'NIKARAT';
+              }
+
+              returnString += `<td>${batuUjianVal}</td>`;
+            }
+
+            returnString += `<td>${row.btu_box_info[i].penandaanBatuUjian}</td></tr>`;
+          }
+      returnString += `</tbody>
+        </table>
+      `;
+    }                
+  }else if(row.jenis_alat == 'ATK'){
+    returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATK)</strong></span>
+                        <div class="row">
+                          <!-- ATK Section -->
+                          <div class="col-6">
+                            <p><strong>Penentusan Baru:</strong> ${row.penentusan_baru}</p>
+                            <p><strong>Kelulusan MSPK:</strong> ${row.kelulusan_mspk}</p>
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                            <p><strong>Structure Size:</strong> ${row.size}</p>
+                            <p><strong>Lain-lain Butiran:</strong> ${row.other_info}</p>
+                            <p><strong>No. of Load Cells:</strong> ${row.load_cell_no}</p>
+                          </div>      
+                          <div class="col-6">
+                            <p><strong>Penetusan Semula:</strong> ${row.penentusan_semula}</p>
+                            <p><strong>No. Kelulusan MSPK:</strong> ${row.no_kelulusan}</p>
+                            <p><strong>Platform Type:</strong> ${row.platform_type}</p>
+                            <p><strong>Jenis Pelantar:</strong> ${row.jenis_pelantar}</p>
+                            <p><strong>Load Cells Made In:</strong> ${row.load_cell_country}</p>
+                          </div>      
+                        </div>
+                        <div class="row">
+                          <table style="width: 100%;">
+                            <thead>
+                              <tr>
+                                <th>No.</th>
+                                <th>Load Cells Type</th>
+                                <th>Brand</th>
+                                <th>Model</th>
+                                <th>Load Cell Capacity</th>
+                                <th>Serial No</th>
+                              </tr>
+                            </thead>
+                            <tbody>`;
+
+                            for (i = 0; i < row.load_cells_info.length; i++) {
+                              returnString += 
+                                `<tr>
+                                  <td>${row.load_cells_info[i].no}</td>
+                                  <td>${row.load_cells_info[i].loadCells}</td>
+                                  <td>${row.load_cells_info[i].loadCellBrand}</td>
+                                  <td>${row.load_cells_info[i].loadCellModel}</td>
+                                  <td>${row.load_cells_info[i].loadCellCapacity}</td>
+                                  <td>${row.load_cells_info[i].loadCellSerial}</td>
+                                </tr>`;
+                            }
+
+                        returnString += `</tbody></table></div>`;                   
   }
 
   return returnString;

@@ -3614,7 +3614,7 @@ function format (row) {
 
       <div class="col-6">
         <p><strong>Internal Round Up:</strong> ${row.int_round_up}</p>
-        <p><strong>SST Price:</strong> ${row.total_charges}</p>
+        <p><strong>Total Billing Price:</strong> ${row.total_charges}</p>
         <div class="row">
           <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
           <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
@@ -3973,6 +3973,54 @@ function format (row) {
         </table>
       `;
     }                
+  }else if(row.jenis_alat == 'ATK'){
+    returnString += `</div><hr>
+                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATK)</strong></span>
+                        <div class="row">
+                          <!-- ATK Section -->
+                          <div class="col-6">
+                            <p><strong>Penentusan Baru:</strong> ${row.penentusan_baru}</p>
+                            <p><strong>Kelulusan MSPK:</strong> ${row.kelulusan_mspk}</p>
+                            <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
+                            <p><strong>Structure Size:</strong> ${row.size}</p>
+                            <p><strong>Lain-lain Butiran:</strong> ${row.other_info}</p>
+                            <p><strong>No. of Load Cells:</strong> ${row.load_cell_no}</p>
+                          </div>      
+                          <div class="col-6">
+                            <p><strong>Penetusan Semula:</strong> ${row.penentusan_semula}</p>
+                            <p><strong>No. Kelulusan MSPK:</strong> ${row.no_kelulusan}</p>
+                            <p><strong>Platform Type:</strong> ${row.platform_type}</p>
+                            <p><strong>Jenis Pelantar:</strong> ${row.jenis_pelantar}</p>
+                            <p><strong>Load Cells Made In:</strong> ${row.load_cell_country}</p>
+                          </div>      
+                        </div>
+                        <div class="row">
+                          <table style="width: 100%;">
+                            <thead>
+                              <tr>
+                                <th>No.</th>
+                                <th>Load Cells Type</th>
+                                <th>Brand</th>
+                                <th>Model</th>
+                                <th>Load Cell Capacity</th>
+                                <th>Serial No</th>
+                              </tr>
+                            </thead>
+                            <tbody>`;
+
+                            for (i = 0; i < row.load_cells_info.length; i++) {
+                              returnString += 
+                                `<tr>
+                                  <td>${row.load_cells_info[i].no}</td>
+                                  <td>${row.load_cells_info[i].loadCells}</td>
+                                  <td>${row.load_cells_info[i].loadCellBrand}</td>
+                                  <td>${row.load_cells_info[i].loadCellModel}</td>
+                                  <td>${row.load_cells_info[i].loadCellCapacity}</td>
+                                  <td>${row.load_cells_info[i].loadCellSerial}</td>
+                                </tr>`;
+                            }
+
+                        returnString += `</tbody></table></div>`;                   
   }
 
   return returnString;
