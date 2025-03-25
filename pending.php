@@ -2350,8 +2350,7 @@ $(function () {
         if(printType == 'SINGLE'){
           window.open('php/printBorang.php?userID='+id+'&file='+type+'&validator='+validate+'&printType='+printType+'&actualPrintDate='+actualPrintDate, '_blank');
         }else{
-          console.log(id);
-          // window.open('php/printMergedBorang.php?userID='+id+'&actualPrintDate='+actualPrintDate, '_blank');
+          window.open('php/printMergedBorang.php?userID='+id+'&actualPrintDate='+actualPrintDate, '_blank');
         }
 
         $('#printBorangModal').modal('hide');
@@ -2602,7 +2601,6 @@ $(function () {
           orderTable.destroy();
         }
 
-        // ✅ Reinitialize DataTable correctly
         orderTable = $("#printBorangModal").find("#orderTable").DataTable({
           "responsive": true,
           "autoWidth": false,
@@ -2628,14 +2626,6 @@ $(function () {
             }
           },
           "columns": [
-            {
-              data: null,
-              className: "auto-increment",
-              orderable: false,
-              render: function (data, type, row, meta) {
-                return meta.row + 1; // Auto-generate numbering dynamically
-              }
-            },
             { data: "customers" },
             { data: "brand" },
             { data: "machine_type" },
@@ -2646,7 +2636,7 @@ $(function () {
             { data: "no_daftar_baru" },
             { data: "stamping_date" },
             { data: "due_date" },
-            { data: "id", visible: true }, // Hide 'id' but keep it in DataTable
+            { data: "id", visible: false }, // Hide 'id' but keep it in DataTable
           ]
         });
 
@@ -2654,16 +2644,14 @@ $(function () {
         $("#printBorangModal").modal("show");
 
         orderTable.off("row-reorder").on("row-reorder", function (e, diff, edit) {
-          console.log("HI - Row Reordered");
-
           var newOrderedIds = [];
-          orderTable.rows().nodes().each(function (row) {
-          var rowData = orderTable.row(row).data();
-            if (rowData && rowData.id) {
-                newOrderedIds.push(rowData.id);
-            }
+
+          $('#orderTable tbody tr').each(function () {
+              let rowData = orderTable.row(this).data(); // Fetch row data
+              if (rowData) {
+                newOrderedIds.push(rowData.id); // Assuming ID is in column index 0
+              }
           });
-          console.log("Updated Row Order:", newOrderedIds);
 
           $("#printBorangModal").find('#id').val(newOrderedIds.join(','));
         });
