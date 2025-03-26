@@ -1084,7 +1084,7 @@ else{
 </div>
 
 <div class="modal fade" id="printBorangModal"> 
-  <div class="modal-dialog modal-xl" style="max-width: 50%;">
+  <div class="modal-dialog modal-xl" style="max-width: 90%;">
     <div class="modal-content">
 
       <form role="form" id="printBorangForm">
@@ -1110,6 +1110,29 @@ else{
                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div> 
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <table id="orderTable" class="table table-bordered table-striped display">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Company Name</th>
+                      <th>Brands</th>
+                      <th>Description<br> Instruments</th>
+                      <th>Serial No.</th>
+                      <th>Validators</th>
+                      <th width="10%">Capacity</th>
+                      <th>No. Daftar Lama</th>
+                      <th>No. Daftar Baru</th>
+                      <th>Stamp Date</th>
+                      <th>Next Due Date</th>
+                    </tr>
+                  </thead>
+                </table>
               </div>
             </div>
           </div> 
@@ -1933,6 +1956,8 @@ $(function () {
   tomorrow.setDate(tomorrow.getDate() + 1);
   yesterday.setDate(tomorrow.getDate() - 7);
 
+  var orderTable;
+
   $('.select2').each(function() {
     $(this).select2({
         allowClear: true,
@@ -2570,7 +2595,66 @@ $(function () {
         $("#printBorangModal").find('#validate').val('');
         $("#printBorangModal").find('#actualPrintDate').val('');
         $("#printBorangModal").find('#printType').val('MERGE');
+
+        // Destroy existing DataTable instance safely
+        if ($.fn.DataTable.isDataTable("#printBorangModal #orderTable")) {
+          orderTable.destroy();
+        }
+
+        orderTable = $("#printBorangModal").find("#orderTable").DataTable({
+          "responsive": true,
+          "autoWidth": false,
+          "processing": true,
+          "serverSide": true,
+          "serverMethod": "post",
+          "paging": false,        // Disable pagination
+          "searching": false,     // Disable search box
+          "ordering": false,      // Disable sorting
+          "info": false,          // Disable "Showing X of Y entries"
+          "rowReorder": {
+            selector: 'tr', // Makes the entire row draggable
+            dataSrc: 'id',   // Track row position using 'id'
+            update: false // Prevent automatic update after reordering
+          },
+          "columnDefs": [ { orderable: false, targets: "_all" }], // Disable sorting
+          "ajax": {
+            "type": "POST",
+            "url": "php/getMultiStamping.php",
+            "data": function (d) {
+              d.selectedIds = selectedIds; // Pass the selected IDs
+              d.status = "Pending";
+            }
+          },
+          "columns": [
+            { data: "customers" },
+            { data: "brand" },
+            { data: "machine_type" },
+            { data: "serial_no" },
+            { data: "validate_by" },
+            { data: "capacity" },
+            { data: "no_daftar_lama" },
+            { data: "no_daftar_baru" },
+            { data: "stamping_date" },
+            { data: "due_date" },
+            { data: "id", visible: false }, // Hide 'id' but keep it in DataTable
+          ]
+        });
+
+        $("#printBorangModal").find('#orderTable').show();
         $("#printBorangModal").modal("show");
+
+        orderTable.off("row-reorder").on("row-reorder", function (e, diff, edit) {
+          var newOrderedIds = [];
+
+          $('#orderTable tbody tr').each(function () {
+              let rowData = orderTable.row(this).data(); // Fetch row data
+              if (rowData) {
+                newOrderedIds.push(rowData.id); // Assuming ID is in column index 0
+              }
+          });
+
+          $("#printBorangModal").find('#id').val(newOrderedIds.join(','));
+        });
 
         $('#printBorangForm').validate({
           errorElement: 'span',
@@ -5250,6 +5334,7 @@ function print(id, type, validate) {
   $("#printBorangModal").find('#validate').val(validate);
   $("#printBorangModal").find('#actualPrintDate').val('');
   $("#printBorangModal").find('#printType').val('SINGLE');
+  $("#printBorangModal").find('#orderTable').hide();
   $("#printBorangModal").modal("show");
 
   $('#printBorangForm').validate({

@@ -88,7 +88,7 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
     $currentDate = date('d/m/Y');  // Format: DD/MM/YYYY
     $currentTime = date('h:i:sA');  // Format: HH:MM:SS AM/PM
 
-    $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id IN ($id)");
+    $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id IN ($id) ORDER BY FIELD(A.id, $id)");
 
     // Check if the statement is prepared successfully
     if ($select_stmt) {

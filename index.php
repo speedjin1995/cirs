@@ -70,7 +70,7 @@ else{
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.css">
-  
+
   <style>
     body {
       background: #eee;
@@ -823,6 +823,9 @@ to get the desired effect
 <script src="plugins/daterangepicker/daterangepicker.js"></script>
 <script src="plugins/sheets/xlsx.full.min.js"></script>
 <script src="plugins/summernote/summernote-bs4.min.js"></script>
+<link rel="stylesheet" href="plugins/datatables-rowreorder/css/rowReorder.bootstrap4.min.css">
+<script src="plugins/datatables-rowreorder/js/dataTables.rowReorder.min.js"></script>
+
 <script>
 $(function () {
   toastr.options = {
