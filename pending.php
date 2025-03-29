@@ -1957,6 +1957,7 @@ $(function () {
   yesterday.setDate(tomorrow.getDate() - 7);
 
   var orderTable;
+  let priceLoadedTriggered = false;
 
   $('.select2').each(function() {
     $(this).select2({
@@ -3094,7 +3095,11 @@ $(function () {
         $('#unitPrice').val(obj.message.price);
         $('#unitPrice').trigger('change');
 
-        $('#extendModal').trigger('priceLoaded');
+        // 🔥 Ensure `priceLoaded` is triggered only ONCE per edit session
+        if (!priceLoadedTriggered) {
+          $('#extendModal').trigger('priceLoaded');
+          priceLoadedTriggered = true; // ✅ Prevents re-triggering
+        }
       }
       else if(obj.status === 'failed'){
         toastr["error"](obj.message, "Failed:");
@@ -3164,7 +3169,11 @@ $(function () {
           $('#unitPrice').val(obj.message.price);
           $('#unitPrice').trigger('change');
 
-          $('#extendModal').trigger('priceLoaded');
+          // 🔥 Ensure `priceLoaded` is triggered only ONCE per edit session
+          if (!priceLoadedTriggered) {
+            $('#extendModal').trigger('priceLoaded');
+            priceLoadedTriggered = true; // ✅ Prevents re-triggering
+          }
         }
         else if(obj.status === 'failed'){
           toastr["error"](obj.message, "Failed:");
@@ -3192,7 +3201,11 @@ $(function () {
           $('#unitPrice').val(obj.message.price);
           $('#unitPrice').trigger('change');
 
-          $('#extendModal').trigger('priceLoaded');
+          // 🔥 Ensure `priceLoaded` is triggered only ONCE per edit session
+          if (!priceLoadedTriggered) {
+            $('#extendModal').trigger('priceLoaded');
+            priceLoadedTriggered = true; // ✅ Prevents re-triggering
+          }
         }
         else if(obj.status === 'failed'){
           toastr["error"](obj.message, "Failed:");
@@ -3407,7 +3420,11 @@ $(function () {
           $('#unitPrice').val(obj.message.price);
           $('#unitPrice').trigger('change');
 
-          $('#extendModal').trigger('priceLoaded');
+          // 🔥 Ensure `priceLoaded` is triggered only ONCE per edit session
+          if (!priceLoadedTriggered) {
+            $('#extendModal').trigger('priceLoaded');
+            priceLoadedTriggered = true; // ✅ Prevents re-triggering
+          }
         }
         else if(obj.status === 'failed'){
           toastr["error"](obj.message, "Failed:");
@@ -3430,7 +3447,11 @@ $(function () {
           $('#unitPrice').val(obj.message.price);
           $('#unitPrice').trigger('change');
 
-          $('#extendModal').trigger('priceLoaded');
+          // 🔥 Ensure `priceLoaded` is triggered only ONCE per edit session
+          if (!priceLoadedTriggered) {
+            $('#extendModal').trigger('priceLoaded');
+            priceLoadedTriggered = true; // ✅ Prevents re-triggering
+          }
         }
         else if(obj.status === 'failed'){
           toastr["error"](obj.message, "Failed:");
@@ -4561,6 +4582,9 @@ function edit(id) {
     
     if(obj.status === 'success'){
       if(obj.message.type == 'DIRECT'){
+        // Reset the flag when modal opens
+        priceLoadedTriggered = false; 
+
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#dealer').val('');
@@ -4919,6 +4943,9 @@ function edit(id) {
         });
       }
       else{
+        // Reset the flag when modal opens
+        priceLoadedTriggered = false; 
+
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
