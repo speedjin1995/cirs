@@ -707,8 +707,10 @@ $(function () {
           }
         },
         "columns": [
+          { data: 'borang_e' },
           { data: 'stamping_date' },
           { data: 'customers' },
+
           {
             data: null, // We set data to null to allow custom rendering
             name: 'brand_model',
@@ -717,10 +719,23 @@ $(function () {
             }
           },
           { data: 'capacity' },
-          { data: 'quantity' },
+          { data: 'pin_keselamatan' },
           { data: 'no_daftar_lama' },
           { data: 'no_daftar_baru' },
+          { data: 'reason' },
           { data: 'siri_keselamatan' },
+          {
+            data: null, // Custom rendering for unit_price and cert_price
+            name: 'price',
+            orderable: false,
+            render: function (data, type, row) {
+              if (row.cert_price != 0){
+                return 'RM ' + parseFloat(row.unit_price).toFixed(2) + '<br>' + 'RM ' + parseFloat(row.cert_price).toFixed(2) + ' (Laporan)';
+              }else{
+                return 'RM ' + parseFloat(row.unit_price).toFixed(2);
+              }  
+            }
+          },
           { data: "id", visible: false }, // Hide 'id' but keep it in DataTable
         ]
       });
@@ -758,28 +773,6 @@ $(function () {
       // Optionally, you can display a message or take another action if no IDs are selected
       alert("Please select at least one record.");
     }
-
-
-    // $.post('php/export_borang.php', {"driver": "7", "fromDate": fromDateValue, "toDate": toDateValue, "customer": customerNoFilter}, function(data){
-    $.post('php/export_borang.php', {"ids": selectedIds, "driver": "7"}, function(data){
-      var obj = JSON.parse(data);
-  
-      if(obj.status === 'success'){
-        var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
-        printWindow.document.write(obj.message);
-        printWindow.document.close();
-        setTimeout(function(){
-          printWindow.print();
-          printWindow.close();
-        }, 1000);
-      }
-      else if(obj.status === 'failed'){
-        toastr["error"](obj.message, "Failed:");
-      }
-      else{
-        toastr["error"]("Something wrong when pull data", "Failed:");
-      }
-    });
   });
 
   $('#exportExcel').on('click', function () {

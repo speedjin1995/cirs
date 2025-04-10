@@ -32,9 +32,14 @@ if(isset($_POST['selectedIds'])){
                 "quantity"=>'1',
                 "no_daftar_lama"=>$row['no_daftar_lama'] ?? '',
                 "no_daftar_baru"=>$row['no_daftar_baru'] ?? '',
+                "pin_keselamatan"=>$row['pin_keselamatan'] ?? '',
                 "siri_keselamatan"=>$row['siri_keselamatan'] ?? '',
+                "unit_price"=>$row['unit_price'] ?? '',
+                "cert_price"=>$row['cert_price'] ?? '',     
+                "borang_e"=>$row['borang_e'] ?? '',       
                 "stamping_date"=>$row['stamping_date'] != null ? convertDatetimeToDate($row['stamping_date']) : '',
                 "due_date"=>$row['due_date'] != null ? convertDatetimeToDate($row['due_date']) : '',
+                "reason"=>'SERVICE / STMP'
             );
         
             $counter++;
