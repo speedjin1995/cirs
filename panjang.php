@@ -227,6 +227,57 @@ else{
   </div>
 </div>
 
+<div class="modal fade" id="printPanjangModal">
+  <div class="modal-dialog modal-xl" style="max-width: 90%;">
+    <div class="modal-content">
+
+      <form role="form" id="printPanjangForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Order Records</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" class="form-control" id="ids" name="ids">
+          <input type="hidden" class="form-control" id="validator" name="validator">
+          <input type="hidden" class="form-control" id="cawangan" name="cawangan">
+          <input type="hidden" class="form-control" id="driver" name="driver">
+          <input type="hidden" class="form-control" id="userId" name="userId">
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <table id="orderPanjangTable" class="table table-bordered table-striped display">
+                  <thead>
+                    <tr>
+                      <th>Jenis Alat</th>
+                      <th>Had Terima</th>
+                      <th>Jenama</th>
+                      <th>No. Siri Alat</th>
+                      <th>Nama Dan Alamat Pemilik</th>
+                      <th>Kod</th>
+                      <th>No. Daftar Lama</th>
+                      <th>No. Daftar Baru</th>
+                      <th>No. Siri Pelekat Keselamatan</th>
+                      <th>Fi / Bayaran</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+          </div> 
+        </div>
+
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <script>
 $(function () {
   $('#customerNoHidden').hide();
@@ -489,6 +540,27 @@ $(function () {
           }
         });
       }
+      else if($('#printPanjangModal').hasClass('show')){
+        $.post('php/export_borang.php', $('#printPanjangForm').serialize(), function(data){
+          var obj = JSON.parse(data);
+
+          if(obj.status === 'success'){
+            var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
+            printWindow.document.write(obj.message);
+            printWindow.document.close();
+            setTimeout(function(){
+              printWindow.print();
+              printWindow.close();
+            }, 1000);
+          }
+          else if(obj.status === 'failed'){
+            toastr["error"](obj.message, "Failed:");
+          }
+          else{
+            toastr["error"]("Something wrong when pull data", "Failed:");
+          }
+        });
+      }
     }
   });
 
@@ -626,33 +698,117 @@ $(function () {
       }
     });
 
-    var fromDateValue = $('#fromDate').val();
-    var toDateValue = $('#toDate').val();
-    var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-    var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
-    var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
+    if(selectedIds.length > 0){
+      var fromDateValue = $('#fromDate').val();
+      var toDateValue = $('#toDate').val();
+      var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
+      var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
+      var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
 
-    // $.post('php/export_borang.php', {"driver": "P", "fromDate": fromDateValue, "toDate": toDateValue, "customer": customerNoFilter}, function(data){
-    $.post('php/export_borang.php', {"ids": selectedIds, "driver": "P", "validator": validatorFilter, "cawangan": cawanganFilter, "userid": userId}, function(data){
+      $('#printPanjangModal').find('#ids').val(selectedIds);
+      $('#printPanjangModal').find('#validator').val(validatorFilter);
+      $('#printPanjangModal').find('#cawangan').val(cawanganFilter);
+      $('#printPanjangModal').find('#driver').val('P');
+      $('#printPanjangModal').find('#userId').val(userId);
 
-      var obj = JSON.parse(data);
-  
-      if(obj.status === 'success'){
-        var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
-        printWindow.document.write(obj.message);
-        printWindow.document.close();
-        setTimeout(function(){
-          printWindow.print();
-          printWindow.close();
-        }, 1000);
+      // Destroy existing DataTable instance safely
+      if ($.fn.DataTable.isDataTable("#printPanjangModal #orderPanjangTable")) {
+        orderPanjangTable.destroy();
       }
-      else if(obj.status === 'failed'){
-        toastr["error"](obj.message, "Failed:");
-      }
-      else{
-        toastr["error"]("Something wrong when pull data", "Failed:");
-      }
-    });
+
+      orderPanjangTable = $("#printPanjangModal").find("#orderPanjangTable").DataTable({
+        "responsive": true,
+        "autoWidth": false,
+        "processing": true,
+        "serverSide": true,
+        "serverMethod": "post",
+        "paging": false,        // Disable pagination
+        "searching": false,     // Disable search box
+        "ordering": false,      // Disable sorting
+        "info": false,          // Disable "Showing X of Y entries"
+        "rowReorder": {
+          selector: 'tr', // Makes the entire row draggable
+          dataSrc: 'id',   // Track row position using 'id'
+          update: false // Prevent automatic update after reordering
+        },
+        "columnDefs": [ { orderable: false, targets: "_all" }], // Disable sorting
+        "ajax": {
+          "type": "POST",
+          "url": "php/getMultiStamping.php",
+          "data": function (d) {
+            d.selectedIds = selectedIds; // Pass the selected IDs
+          }
+        },
+        "columns": [
+          { data: 'jenis_alat' },
+          { data: 'capacity' },
+          {
+            data: null, // We set data to null to allow custom rendering
+            name: 'brand_model',
+            render: function (data, type, row) {
+              return row.brand + '<br>' + row.model;
+            }
+          },
+          { data: 'serial_no' },
+          {
+            data: null, // We set data to null to allow custom rendering
+            name: 'customers',
+            render: function (data, type, row) {
+              return row.customers + '<br>' + row.full_address2;
+            }
+          },
+          { data: 'batch_no' },
+          { data: 'no_daftar_lama' },
+          { data: 'no_daftar_baru' },
+          { data: 'siri_keselamatan' },
+          {
+            orderable: false,
+            data: null, // Custom rendering for unit_price and cert_price
+            render: function (data, type, row) {
+              if (row.cert_price != 0){
+                return 'RM ' + parseFloat(row.unit_price).toFixed(2) + '<br>' + 'RM ' + parseFloat(row.cert_price).toFixed(2) + ' (Laporan)';
+              }else{
+                return 'RM ' + parseFloat(row.unit_price).toFixed(2);
+              } 
+            }
+          },
+          { data: "id", visible: false }, // Hide 'id' but keep it in DataTable
+        ]
+      });
+
+      $("#printPanjangModal").find('#orderPanjangTable').show();
+      $("#printPanjangModal").modal("show");
+
+      orderPanjangTable.off("row-reorder").on("row-reorder", function (e, diff, edit) {
+        var newOrderedIds = [];
+
+        $('#orderPanjangTable tbody tr').each(function () {
+          let rowData = orderPanjangTable.row(this).data(); // Fetch row data
+          if (rowData) {
+            newOrderedIds.push(rowData.id); // Assuming ID is in column index 0
+          }
+        });
+
+        $("#printPanjangModal").find('#ids').val(newOrderedIds.join(','));
+      });
+
+      $('#printPanjangForm').validate({
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        }
+      });
+    }else{
+      // Optionally, you can display a message or take another action if no IDs are selected
+      alert("Please select at least one record.");
+    }
   });
 
   $('#exportExcel').on('click', function () {

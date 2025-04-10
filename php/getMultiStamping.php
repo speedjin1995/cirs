@@ -17,21 +17,56 @@ if(isset($_POST['selectedIds'])){
         $counter = 1;
 
         while ($row = $result->fetch_assoc()) {
+            $branch = null;
+            $address1 = null;
+            $address2 = null;
+            $address3 = null;
+            $address4 = null;
+            $pic = null;
+            $pic_phone = null;
+
+            if($row['branch'] != null && $row['branch'] != ''){
+                $branch = $row['branch'];
+                $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                $branchDetail = mysqli_query($db, $branchQuery);
+                $branchRow = mysqli_fetch_assoc($branchDetail);
+                
+                if(!empty($branchRow)){
+                $address1 = $branchRow['address'];
+                $address2 = $branchRow['address2'];
+                $address3 = $branchRow['address3'];
+                $address4 = $branchRow['address4'];
+                $pic = $branchRow['pic'];
+                $pic_phone = $branchRow['pic_contact'];
+                }
+            }
+
             $capacity = $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '';
 
             $data[] = array( 
                 "no"=>$counter,
                 "id"=>$row['id'],
                 "customers"=>$row['customers'] != null ? searchCustNameById($row['customers'], $db) : '',
+                "full_address2"=>$address1.'<br>'.$address2.'<br>'.$address3.'<br>'.$address4,
                 "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
+                "model"=>$row['model'] != null  ? searchModelNameById($row['model'], $db) : '',
+                "jenis_alat"=>$row['jenis_alat'] != null ? searchAlatNameById($row['jenis_alat'], $db) : '', 
                 "machine_type"=>$row['machine_type'] != null ? searchMachineNameById($row['machine_type'], $db) : '',
                 "serial_no"=>$row['serial_no'] ?? '',
                 "validate_by"=>$row['validate_by'] != null ? searchValidatorNameById($row['validate_by'], $db) : '',
                 "capacity"=>$capacity,
+                "quantity"=>'1',
                 "no_daftar_lama"=>$row['no_daftar_lama'] ?? '',
                 "no_daftar_baru"=>$row['no_daftar_baru'] ?? '',
+                "pin_keselamatan"=>$row['pin_keselamatan'] ?? '',
+                "siri_keselamatan"=>$row['siri_keselamatan'] ?? '',
+                "unit_price"=>$row['unit_price'] ?? '',
+                "cert_price"=>$row['cert_price'] ?? '',     
+                "borang_e"=>$row['borang_e'] ?? '',       
                 "stamping_date"=>$row['stamping_date'] != null ? convertDatetimeToDate($row['stamping_date']) : '',
                 "due_date"=>$row['due_date'] != null ? convertDatetimeToDate($row['due_date']) : '',
+                "batch_no"=>'',
+                "reason"=>'SERVICE / STMP'
             );
         
             $counter++;

@@ -202,7 +202,56 @@ else{
   </div>
 </div>
 
+<div class="modal fade" id="printJadualModal">
+  <div class="modal-dialog modal-xl" style="max-width: 90%;">
+    <div class="modal-content">
+
+      <form role="form" id="printJadualForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Order Records</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" class="form-control" id="ids" name="ids">
+          <input type="hidden" class="form-control" id="validatorFilter" name="validatorFilter">
+          <input type="hidden" class="form-control" id="cawanganFilter" name="cawanganFilter">
+          <input type="hidden" class="form-control" id="driver" name="driver">
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <table id="orderJadualTable" class="table table-bordered table-striped display">
+                  <thead>
+                    <tr>
+                      <th>STAMPING DATE</th>
+                      <th>NAME OF PURCHASE</th>
+                      <th>ABOUT WEIGHING,MEASURING AND <br>WEIGHING INSTRUMENTS</th>
+                      <th width="15%">CAPACITY</th>
+                      <th>QTY</th>
+                      <th>NO. DAFTAR LAMA</th>
+                      <th>NO. DAFTAR BARU</th>
+                      <th>CERTIFICATE NO./ <br>NO.SIRI PELEKAT <br>KESELAMATAN</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+          </div> 
+        </div>
+
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <script>
+var orderJadualTable;
 $(function () {
   $('#customerNoHidden').hide();
 
@@ -449,6 +498,27 @@ $(function () {
           }
         });
       }
+      else if($('#printJadualModal').hasClass('show')){
+        $.post('php/export_borang.php', $('#printJadualForm').serialize(), function(data){
+          var obj = JSON.parse(data);
+
+          if(obj.status === 'success'){
+            var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
+            printWindow.document.write(obj.message);
+            printWindow.document.close();
+            setTimeout(function(){
+              printWindow.print();
+              printWindow.close();
+            }, 1000);
+          }
+          else if(obj.status === 'failed'){
+            toastr["error"](obj.message, "Failed:");
+          }
+          else{
+            toastr["error"]("Something wrong when pull data", "Failed:");
+          }
+        });
+      }
     }
   });
 
@@ -579,25 +649,91 @@ $(function () {
 
     if(selectedIds.length > 0){
       //$.post('php/export_borang.php', {"ids": selectedIds, "driver": "6", "fromDate": fromDateValue, "toDate": toDateValue, "customer": customerNoFilter}, function(data){
-      $.post('php/export_borang.php', {"ids": selectedIds, "driver": "6", "validator": validatorFilter, "cawangan": cawanganFilter}, function(data){
-        var obj = JSON.parse(data);
-    
-        if(obj.status === 'success'){
-          var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
-          printWindow.document.write(obj.message);
-          printWindow.document.close();
-          setTimeout(function(){
-            printWindow.print();
-            printWindow.close();
-          }, 1000);
-        }
-        else if(obj.status === 'failed'){
-          toastr["error"](obj.message, "Failed:");
-        }
-        else{
-          toastr["error"]("Something wrong when pull data", "Failed:");
+
+      $('#printJadualModal').find('#ids').val(selectedIds);
+      $('#printJadualModal').find('#validatorFilter').val(validatorFilter);
+      $('#printJadualModal').find('#cawanganFilter').val(cawanganFilter);
+      $('#printJadualModal').find('#driver').val('6');
+
+      // Destroy existing DataTable instance safely
+      if ($.fn.DataTable.isDataTable("#printJadualModal #orderJadualTable")) {
+        orderJadualTable.destroy();
+      }
+
+      orderJadualTable = $("#printJadualModal").find("#orderJadualTable").DataTable({
+        "responsive": true,
+        "autoWidth": false,
+        "processing": true,
+        "serverSide": true,
+        "serverMethod": "post",
+        "paging": false,        // Disable pagination
+        "searching": false,     // Disable search box
+        "ordering": false,      // Disable sorting
+        "info": false,          // Disable "Showing X of Y entries"
+        "rowReorder": {
+          selector: 'tr', // Makes the entire row draggable
+          dataSrc: 'id',   // Track row position using 'id'
+          update: false // Prevent automatic update after reordering
+        },
+        "columnDefs": [ { orderable: false, targets: "_all" }], // Disable sorting
+        "ajax": {
+          "type": "POST",
+          "url": "php/getMultiStamping.php",
+          "data": function (d) {
+            d.selectedIds = selectedIds; // Pass the selected IDs
+          }
+        },
+        "columns": [
+          { data: 'stamping_date' },
+          { data: 'customers' },
+          {
+            data: null, // We set data to null to allow custom rendering
+            name: 'brand_model',
+            render: function (data, type, row) {
+              return row.brand + '<br>' + row.model;
+            }
+          },
+          { data: 'capacity' },
+          { data: 'quantity' },
+          { data: 'no_daftar_lama' },
+          { data: 'no_daftar_baru' },
+          { data: 'siri_keselamatan' },
+          { data: "id", visible: false }, // Hide 'id' but keep it in DataTable
+        ]
+      });
+
+      $("#printJadualModal").find('#orderJadualTable').show();
+      $("#printJadualModal").modal("show");
+
+      orderJadualTable.off("row-reorder").on("row-reorder", function (e, diff, edit) {
+        var newOrderedIds = [];
+
+        $('#orderJadualTable tbody tr').each(function () {
+            let rowData = orderJadualTable.row(this).data(); // Fetch row data
+            if (rowData) {
+              newOrderedIds.push(rowData.id); // Assuming ID is in column index 0
+            }
+        });
+
+        $("#printJadualModal").find('#ids').val(newOrderedIds.join(','));
+      });
+
+      $('#printJadualForm').validate({
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
         }
       });
+    }else{
+      // Optionally, you can display a message or take another action if no IDs are selected
+      alert("Please select at least one record.");
     }
   });
 

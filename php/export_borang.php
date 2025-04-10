@@ -24,15 +24,21 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
 
     
     if($_POST['ids'] != null && $_POST['ids'] != ''){
-        // Sanitize the values and prepare them for SQL
-        $sanitized_ids = array_map(function($id) {
-            return "'" . addslashes($id) . "'";
-        }, $_POST['ids']);
+        if (strpos($_POST['ids'], ',') !== false) {
+            $id_list = $_POST['ids'];
 
-        // Convert the sanitized array into a string
-        $id_list = implode(",", $sanitized_ids);
-        
-        $searchQuery .= " and id IN ($id_list)";
+            $searchQuery .= " and id IN ($id_list)";
+        }else{
+            // Sanitize the values and prepare them for SQL
+            $sanitized_ids = array_map(function($id) {
+                return "'" . addslashes($id) . "'";
+            }, $_POST['ids']);
+
+            // Convert the sanitized array into a string
+            $id_list = implode(",", $sanitized_ids);
+
+            $searchQuery .= " and id IN ($id_list)";
+        }
     }
 
     $driver = $_POST['driver'];
@@ -60,7 +66,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
         $companySignature = $companyRow['signature'];
     }
 
-    $select_stmt = $db->prepare("SELECT * FROM stamping WHERE status = 'Complete'".$searchQuery);
+    $select_stmt = $db->prepare("SELECT * FROM stamping WHERE status = 'Complete'".$searchQuery." ORDER BY FIELD(id, ".$id_list. ")");
 
     // Check if the statement is prepared successfully
     if ($select_stmt) {

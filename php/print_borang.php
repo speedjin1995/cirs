@@ -51,7 +51,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
         $companySignature = $companyRow['signature'];
     }
 
-    $select_stmt = $db->prepare("SELECT * FROM stamping WHERE id IN ($placeholders)");
+    $select_stmt = $db->prepare("SELECT * FROM stamping WHERE id IN ($placeholders) ORDER BY FIELD(id, $selectedIds)");
 
     // Check if the statement is prepared successfully
     if ($select_stmt) {
