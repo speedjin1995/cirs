@@ -2697,7 +2697,7 @@ $(function () {
         $("#printBorangModal").find('#type').val('');
         $("#printBorangModal").find('#validate').val('');
         $("#printBorangModal").find('#actualPrintDate').val('');
-        $("#printBorangModal").find('#doubleSided').val('N');
+        $("#printBorangModal").find('#doubleSided').val('N').trigger('change');
         $("#printBorangModal").find('#printType').val('MERGE');
         $("#printBorangModal").find('#needDouble').show();
 
