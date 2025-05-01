@@ -1136,6 +1136,15 @@ else{
                 </div>
               </div>
             </div>
+            <div class="col-6" id="needDouble">
+              <div class="form-group">
+                <label>Double Sides *</label>
+                <select class="form-control select2" id="doubleSided" name="doubleSided">
+                  <option value="Y">Yes</option>
+                  <option value="N">No</option>
+                </select>
+              </div>
+            </div>
           </div> 
           <div class="row">
             <div class="col-12">
@@ -2380,11 +2389,12 @@ $(function () {
         var validate = $('#printBorangForm').find('#validate').val();
         var printType = $('#printBorangForm').find('#printType').val();
         var actualPrintDate = $('#printBorangForm').find('#actualPrintDate').val();
+        var doubleSided = $('#printBorangForm').find('#doubleSided').val();
 
         if(printType == 'SINGLE'){
-          window.open('php/printBorang.php?userID='+id+'&file='+type+'&validator='+validate+'&printType='+printType+'&actualPrintDate='+actualPrintDate, '_blank');
+          window.open('php/printBorang.php?userID='+id+'&file='+type+'&validator='+validate+'&printType='+printType+'&actualPrintDate='+actualPrintDate+'&doubleSided=N', '_blank');
         }else{
-          window.open('php/printMergedBorang.php?userID='+id+'&actualPrintDate='+actualPrintDate, '_blank');
+          window.open('php/printMergedBorang.php?userID='+id+'&actualPrintDate='+actualPrintDate+'&doubleSided='+doubleSided, '_blank');
         }
 
         $('#printBorangModal').modal('hide');
@@ -2687,7 +2697,9 @@ $(function () {
         $("#printBorangModal").find('#type').val('');
         $("#printBorangModal").find('#validate').val('');
         $("#printBorangModal").find('#actualPrintDate').val('');
+        $("#printBorangModal").find('#doubleSided').val('N');
         $("#printBorangModal").find('#printType').val('MERGE');
+        $("#printBorangModal").find('#needDouble').show();
 
         // Destroy existing DataTable instance safely
         if ($.fn.DataTable.isDataTable("#printBorangModal #orderTable")) {
@@ -5468,6 +5480,7 @@ function print(id, type, validate) {
   $("#printBorangModal").find('#actualPrintDate').val('');
   $("#printBorangModal").find('#printType').val('SINGLE');
   $("#printBorangModal").find('#orderTable').hide();
+  $("#printBorangModal").find('#needDouble').hide();
   $("#printBorangModal").modal("show");
 
   $('#printBorangForm').validate({

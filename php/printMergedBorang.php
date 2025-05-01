@@ -87,6 +87,7 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
     $currentDateTime = date('d/m/Y - h:i:sA');  // Format: DD/MM/YYYY - HH:MM:SS AM/PM
     $currentDate = date('d/m/Y');  // Format: DD/MM/YYYY
     $currentTime = date('h:i:sA');  // Format: HH:MM:SS AM/PM
+    $doubleSided = $_GET['doubleSided'];
 
     $select_stmt = $db->prepare("SELECT * FROM stamping A LEFT JOIN stamping_ext B ON A.id = B.stamp_id WHERE A.id IN ($id) ORDER BY FIELD(A.id, $id)");
 
@@ -391,6 +392,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         }
                     }
                 }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
+                }
             }
             else if($file == 'ATK' && $validator == 'DE METROLOGY'){
                 $fillFile = 'forms/DE_Metrology/DMSB_ATK.pdf';
@@ -645,6 +651,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         }
                     }
                 }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
+                }
             }
             else if($file == 'ATP' && $validator == 'METROLOGY'){
                 $fillFile = 'forms/Metrology/ATP_FORM.pdf';
@@ -766,6 +777,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         }
                     }
                 }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
+                }
             }
             else if($file == 'ATP' && $validator == 'DE METROLOGY'){
                 $fillFile = 'forms/DE_Metrology/DMSB_ATP.pdf';
@@ -885,6 +901,12 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         
                     }
                 }
+                
+                if ($pageCount % 2 !== 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $lastPageSize = $pdf->getTemplateSize($templateId); // Use last template ID from the loop
+                    $pdf->AddPage($lastPageSize['orientation'], [$lastPageSize['width'], $lastPageSize['height']]);
+                }
             }
             else if($file == 'ATS' && $validator == 'METROLOGY'){
                 $fillFile = 'forms/Metrology/ATS_FORM.pdf';
@@ -1000,6 +1022,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                             $pdf->Write(0, $res['no_daftar_lama']);
                         }
                     }
+                }
+                
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
                 }
             }
             else if($file == 'ATS' && $validator == 'DE METROLOGY'){
@@ -1124,6 +1151,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         
                     }
                 }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
+                }
             }
             else if($file == 'ATE' && $validator == 'METROLOGY'){
                 $fillFile = 'forms/Metrology/ATE_FORM.pdf';
@@ -1243,6 +1275,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                             $pdf->Write(0, $res['no_daftar_lama']);
                         }
                     }
+                }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
                 }
             }
             else if($file == 'ATE' && $validator == 'DE METROLOGY'){
@@ -1366,6 +1403,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         
                     }
                 }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
+                }
             }
             else if($file == 'BTU' && $validator == 'METROLOGY'){
                 $fillFile = 'forms/Metrology/BU_FORM.pdf';        
@@ -1477,7 +1519,12 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                             $pdf->Write(0, $res['no_daftar_lama']);
                         }
                     }
-                }       
+                }      
+                
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
+                }
             }
             else if($file == 'BTU' && $validator == 'DE METROLOGY'){
                 $fillFile = 'forms/DE_Metrology/DMSB_BTU.pdf';
@@ -1588,6 +1635,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                             $pdf->Write(0, $res['no_daftar_lama']);
                         }
                     }
+                }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
                 }
             }
             else if(str_contains($file, 'ATN') && $validator == 'METROLOGY'){
@@ -1705,6 +1757,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                             $pdf->Write(0, $res['no_daftar_lama']);
                         }
                     }
+                }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
                 }
             }
             else if(str_contains($file, 'ATN') && $validator == 'DE METROLOGY'){
@@ -1834,6 +1891,10 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                     }
                 }
         
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
+                }
             }
             else if($file == 'ATP-AUTO MACHINE' && $validator == 'METROLOGY'){
                 $fillFile = 'forms/Metrology/ATP_FORM.pdf';
@@ -1955,6 +2016,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         }
                     }
                 }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
+                }
             }
             else if($file == 'ATP-AUTO MACHINE' && $validator == 'DE METROLOGY'){
                 $fillFile = 'forms/DE_Metrology/DMSB_ATP.pdf';
@@ -2071,6 +2137,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                             $pdf->Write(0, $res['no_daftar_lama']);
                         }
                     }
+                }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
                 }
             }
             else if($file == 'SLL' && $validator == 'METROLOGY'){
@@ -2217,6 +2288,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         }
                     }
                 }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
+                }
             }
             else if($file == 'SLL' && $validator == 'DE METROLOGY'){
                 $fillFile = 'forms/DE_Metrology/DMSB_SLL.pdf';
@@ -2352,6 +2428,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
 
                     }
                 }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
+                }
             }
             else if($file == 'ATS (H)' && $validator == 'METROLOGY'){
                 $fillFile = 'forms/Metrology/ATS_FORM.pdf';
@@ -2467,6 +2548,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                             $pdf->Write(0, $res['no_daftar_lama']);
                         }
                     }
+                }
+                
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
                 }
             }
             else if($file == 'ATS (H)' && $validator == 'DE METROLOGY'){
@@ -2587,6 +2673,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         }
                         
                     }
+                }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
                 }
             }
             else if($file == 'ATP (MOTORCAR)' && $validator == 'METROLOGY'){
@@ -2720,6 +2811,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         }
                     }
                 }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
+                }
             }
             else if($file == 'ATP (MOTORCAR)' && $validator == 'DE METROLOGY'){
                 $fillFile = 'forms/DE_Metrology/DMSB_ATP_MOTOCAR.pdf';
@@ -2852,6 +2948,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         }
                     }
                 }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
+                }
             }
             else if($file == 'SIA' && $validator == 'METROLOGY'){
                 $fillFile = 'forms/Metrology/SIA_FORM.pdf';
@@ -2962,6 +3063,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         }
                     }
                 }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
+                }
             }
             else if($file == 'SIA' && $validator == 'DE METROLOGY'){
                 $fillFile = 'forms/DE_Metrology/DMSB_SIA.pdf';
@@ -3071,6 +3177,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                             $pdf->Write(0, $res['no_daftar_lama']);
                         }
                     }
+                }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
                 }
             }
             else if($file == 'BAP' && $validator == 'METROLOGY'){
@@ -3185,6 +3296,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         }
                     }
                 }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
+                }
             }
             else if($file == 'BAP' && $validator == 'DE METROLOGY'){
                 $fillFile = 'forms/DE_Metrology/DMSB_BAP.pdf';
@@ -3202,7 +3318,6 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                     $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
-
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
@@ -3298,6 +3413,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                             $pdf->Write(0, $res['no_daftar_lama']);
                         }
                     }
+                }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
                 }
             }
             else if($file == 'SIC' && $validator == 'METROLOGY'){
@@ -3400,6 +3520,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         }
                     }
                 }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
+                }
             }
             else if($file == 'SIC' && $validator == 'DE METROLOGY'){
                 $fillFile = 'forms/DE_Metrology/DMSB_SIC.pdf';
@@ -3417,7 +3542,6 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                     $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
-
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
@@ -3501,6 +3625,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                             $pdf->Write(0, $res['no_daftar_lama']);
                         }
                     }
+                }
+
+                if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                    // Add a blank page with same dimensions as the last page
+                    $pdf->AddPage();
                 }
             }
             else if($file == 'BTU - (BOX)' && $validator == 'METROLOGY'){
@@ -3626,6 +3755,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                                     $pdf->Write(0, $res['no_daftar_lama']);
                                 }
                             }
+                        }
+
+                        if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                            // Add a blank page with same dimensions as the last page
+                            $pdf->AddPage();
                         }
 
                         $fileName = "filled_metrology_BTU(BOX)_form_{$btuBox['no']}.pdf"; 
@@ -3759,6 +3893,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                             }
                         }
 
+                        if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                            // Add a blank page with same dimensions as the last page
+                            $pdf->AddPage();
+                        }
+
                         $fileName = "filled_metrology_BTU(BOX)_form_{$btuBox['no']}.pdf"; 
                         $btuOutputPath = $tempBtuBoxDir . DIRECTORY_SEPARATOR . $fileName;
                         $pdf->Output('F', $btuOutputPath);
@@ -3779,6 +3918,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         $size = $btuMergedPdf->getTemplateSize($templateId);
                         $btuMergedPdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
                         $btuMergedPdf->useTemplate($templateId);
+                    }
+
+                    if ($doubleSided=='Y' && $pageCount % 2 != 0) {
+                        // Add a blank page with same dimensions as the last page
+                        $pdf->AddPage();
                     }
                 }
 
