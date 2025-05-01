@@ -1955,6 +1955,8 @@ function format (row) {
               <th>No.</th>
               <th>Batu Ujian</th>
               <th>Penandaan Pada Batu Ujian</th>
+              <th>No Daftar Lama</th>
+              <th>No Daftar Baru</th>
             </tr>
           </thead>
           <tbody>`;
@@ -1978,7 +1980,12 @@ function format (row) {
               returnString += `<td>${batuUjianVal}</td>`;
             }
 
-            returnString += `<td>${row.btu_box_info[i].penandaanBatuUjian}</td></tr>`;
+            returnString += `
+              <td>${row.btu_box_info[i].penandaanBatuUjian}</td>
+              <td>${row.btu_box_info[i].batuDaftarLama}</td>
+              <td>${row.btu_box_info[i].batuDaftarBaru}</td>
+              </tr>
+            `;
           }
       returnString += `</tbody>
         </table>

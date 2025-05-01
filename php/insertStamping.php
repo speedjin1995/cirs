@@ -996,6 +996,8 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					$batuUjian = $_POST['batuUjian'];
 					$batuUjianLain = $_POST['batuUjianLain'];
 					$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
+					$batuDaftarLama = $_POST['batuDaftarLama'];
+					$batuDaftarBaru = $_POST['batuDaftarBaru'];
 
 					if(isset($no) && $no != null && count($no) > 0){
 						for($i=0; $i<count($no); $i++){
@@ -1003,7 +1005,9 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 								"no" => $no[$i],
 								"batuUjian" => $batuUjian[$i],
 								"batuUjianLain" => $batuUjianLain[$i],
-								"penandaanBatuUjian" => $penandaanBatuUjian[$i]
+								"penandaanBatuUjian" => $penandaanBatuUjian[$i],
+								"batuDaftarLama" => $batuDaftarLama[$i],
+								"batuDaftarBaru" => $batuDaftarBaru[$i]
 							);
 						}
 					}
@@ -1584,6 +1588,8 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					$batuUjian = $_POST['batuUjian'];
 					$batuUjianLain = $_POST['batuUjianLain'];
 					$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
+					$batuDaftarLama = $_POST['batuDaftarLama'];
+					$batuDaftarBaru = $_POST['batuDaftarBaru'];
 
 					if(isset($no) && $no != null && count($no) > 0){
 						for($i=0; $i<count($no); $i++){
@@ -1591,7 +1597,9 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 								"no" => $no[$i],
 								"batuUjian" => $batuUjian[$i],
 								"batuUjianLain" => $batuUjianLain[$i],
-								"penandaanBatuUjian" => $penandaanBatuUjian[$i]
+								"penandaanBatuUjian" => $penandaanBatuUjian[$i],
+								"batuDaftarLama" => $batuDaftarLama[$i],
+								"batuDaftarBaru" => $batuDaftarBaru[$i]
 							);
 						}
 					}
