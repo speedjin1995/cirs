@@ -3192,27 +3192,29 @@ $(function () {
 
   $('#extendModal').find('#includeCert').on('change', function(){
     // changed code to pull instead of taking from product field
-    $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
-      var obj = JSON.parse(data);
-      
-      if(obj.status === 'success'){
-        $('#unitPrice').val(obj.message.price);
-        $('#unitPrice').trigger('change');
+    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
+      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
+        var obj = JSON.parse(data);
+        
+        if(obj.status === 'success'){
+          $('#unitPrice').val(obj.message.price);
+          $('#unitPrice').trigger('change');
 
-        // 🔥 Ensure `priceLoaded` is triggered only ONCE per edit session
-        if (!priceLoadedTriggered) {
-          $('#extendModal').trigger('priceLoaded');
-          priceLoadedTriggered = true; // ✅ Prevents re-triggering
+          // 🔥 Ensure `priceLoaded` is triggered only ONCE per edit session
+          if (!priceLoadedTriggered) {
+            $('#extendModal').trigger('priceLoaded');
+            priceLoadedTriggered = true; // ✅ Prevents re-triggering
+          }
         }
-      }
-      else if(obj.status === 'failed'){
-        toastr["error"](obj.message, "Failed:");
-      }
-      else{
-        toastr["error"]("Something wrong when pull data", "Failed:");
-      }
-      $('#spinnerLoading').hide();
-    });
+        else if(obj.status === 'failed'){
+          toastr["error"](obj.message, "Failed:");
+        }
+        else{
+          toastr["error"]("Something wrong when pull data", "Failed:");
+        }
+        $('#spinnerLoading').hide();
+      });
+    }
     // var price = parseFloat($('#product').find(":selected").attr("data-price"));
     // var alat = $('#jenisAlat').val();
     // var includeCert = $(this).val();
@@ -4514,7 +4516,7 @@ function newEntry(){
   $('#isResseller3').hide();
   $('#isResseller4').hide();
   $('#isResseller5').hide();
-  $('#extendModal').find('#customerType').val("EXISTING").attr('readonly', false).trigger('change');
+  $('#extendModal').find('#customerType').val("EXISTING").attr('disabled', false).trigger('change');
   $('#extendModal').find('#brand').val('').trigger('change');
   $('#extendModal').find('#validator').val('').trigger('change');
   $('#extendModal').find('#product').val('');
