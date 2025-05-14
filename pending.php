@@ -4514,7 +4514,7 @@ function newEntry(){
   $('#isResseller3').hide();
   $('#isResseller4').hide();
   $('#isResseller5').hide();
-  $('#extendModal').find('#customerType').val("EXISTING").attr('readonly', false).trigger('change');
+  $('#extendModal').find('#customerType').val("EXISTING").attr('disabled', false).trigger('change');
   $('#extendModal').find('#brand').val('').trigger('change');
   $('#extendModal').find('#validator').val('').trigger('change');
   $('#extendModal').find('#product').val('');
