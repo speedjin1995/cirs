@@ -71,6 +71,7 @@ if(isset($_POST['id'])){
                 $manufacturer = $row['manufacturing'];
                 $serialNo = $row['unit_serial_no'];
                 $autoFormNo = $row['auto_form_no'];
+                $autoCertNo = $row['auto_cert_no'];
                 $capacity = searchCapacityNameById($row['capacity'],$db);
                 $calibrator = searchStaffNameById($row['calibrator'],$db);
                 $tests = json_decode($row['tests'], true);
@@ -175,7 +176,7 @@ if(isset($_POST['id'])){
                                     <td width="5%" class="align-top"><b>To Company:</b></td>
                                     <td width="28%" class="align-top"><b>' . $customer . '</b></td>
                                     <td width="12%" class="align-top"><b>Certificate No:</b></td>
-                                    <td width="10%" class="align-top">'. $autoFormNo .'</td>
+                                    <td width="10%" class="align-top">'. $autoCertNo .'</td>
                                 </tr>
                                 <tr>
                                     <td class="align-top"><b>Address:</b></td>
@@ -292,7 +293,7 @@ if(isset($_POST['id'])){
                                     <div class="col-6" id="calibratedDt"><b>Date Calibrated:</b> '. $validationDate .'</div>
                                     <div class="col-6" id="nextDueDt" style="color:red"><b style="color:black">Next Due Date:</b> '. $nextDueDate .'</div>
                                     <div class="col-6" id="calibratedBy"><b>Calibrated By:</b> '. $calibrator .'</div>
-                                    <div class="col-6" id="calibrationStickerNo"><b>Calibration Sticker No:</b> '. $autoFormNo .'</div>
+                                    <div class="col-6" id="calibrationStickerNo"><b>Calibration Sticker No:</b> '. $autoCertNo .'</div>
                                     <div class="col-6" id="standardUsedInstru"><b>Standard Used Instrument:</b> Standard.Test Weight</div>
                                     <div class="col-6" id="sirimTrace"><b>SIRIM Traceability: '. $nmim.'</b></div>
                                 </div>
