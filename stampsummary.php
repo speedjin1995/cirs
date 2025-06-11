@@ -192,7 +192,7 @@ $(function () {
                     });
 
                     //Styling for Metrology & DE Metrology Row
-                    if (dataIndex === 0 || dataIndex === 3) { 
+                    if (dataIndex === 0 || dataIndex === 4) { 
                         $(row).css({
                             'font-weight': 'bold',
                             'color': 'white',
