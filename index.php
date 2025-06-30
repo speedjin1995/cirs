@@ -392,13 +392,13 @@ to get the desired effect
         <ul class="nav nav-pills nav-sidebar flex-column" id="sideMenu" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
             with font-awesome or any other icon font library -->
-          <!--li class="nav-item">
+          <li class="nav-item">
             <a href="#dashboard" data-file="dashboard.php" class="nav-link link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>Dashboard</p>
             </a>
-          </li-->
-          <!--li class="nav-item has-treeview">
+          </li>
+          <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>Inquries<i class="fas fa-angle-left right"></i></p>
@@ -410,15 +410,14 @@ to get the desired effect
                   <p>Monitoring</p>
                 </a>
               </li>
-              <?php if($role == "ADMIN" || $role == "SUPER_ADMIN"){
-                echo '<li class="nav-item">
+              <li class="nav-item">
                 <a href="#inquiry" data-file="inquiry.php" class="nav-link link">
                   <i class="nav-icon fas fa-tachometer-alt"></i>
                   <p>Inquries</p>
-                </a></li>';
-              }?>
+                </a>
+              </li>
             </ul>
-          </li-->
+          </li>
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-certificate"></i>
