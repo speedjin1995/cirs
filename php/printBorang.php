@@ -1,4 +1,9 @@
 <?php
+// Set proper error reporting for character encoding issues
+ini_set('default_charset', 'UTF-8');
+mb_internal_encoding('UTF-8');
+mb_http_output('UTF-8');
+
 require_once 'db_connect.php';
 require_once 'requires/lookup.php';
 require_once '../vendor/autoload.php'; 
@@ -6,6 +11,37 @@ require_once '../vendor/autoload.php';
 use setasign\Fpdi\Fpdi;
 
 class PDFWithEllipse extends \setasign\Fpdi\Fpdi {
+    
+    public function __construct($orientation = 'P', $unit = 'mm', $size = 'A4') {
+        parent::__construct($orientation, $unit, $size);
+        // Enable auto page break
+        $this->SetAutoPageBreak(true, 10);
+    }
+    
+    // Override Text method to handle special characters
+    public function Text($x, $y, $txt) {
+        $txt = sanitizeForPDF($txt);
+        parent::Text($x, $y, $txt);
+    }
+    
+    // Override Cell method to handle special characters
+    public function Cell($w, $h = 0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = '') {
+        $txt = sanitizeForPDF($txt);
+        parent::Cell($w, $h, $txt, $border, $ln, $align, $fill, $link);
+    }
+    
+    // Override Write method to handle special characters
+    public function Write($h, $txt, $link = '') {
+        $txt = sanitizeForPDF($txt);
+        parent::Write($h, $txt, $link);
+    }
+    
+    // Override MultiCell method to handle special characters
+    public function MultiCell($w, $h, $txt, $border = 0, $align = 'J', $fill = false) {
+        $txt = sanitizeForPDF($txt);
+        parent::MultiCell($w, $h, $txt, $border, $align, $fill);
+    }
+    
     // Custom Ellipse function using Bézier curves
     function Ellipse($x, $y, $rx, $ry, $style='D', $fillColor = [255, 255, 255]) {
         $k = $this->k;
@@ -52,11 +88,11 @@ $select_stmt2->execute();
 $result2 = $select_stmt2->get_result();
 
 if ($res2 = $result2->fetch_assoc()) {
-    $compname = $res2['name'];
-    $compaddress = str_replace(["\r", "\n"], '', $res2['address']);
-    $compcert = $res2['certno_lesen'];
+    $compname = sanitizeForPDF($res2['name']);
+    $compaddress = sanitizeForPDF(str_replace(["\r", "\n"], '', $res2['address']));
+    $compcert = sanitizeForPDF($res2['certno_lesen']);
     $compexp = $res2['tarikh_luput'];
-    $noDaftarSyarikat = $res2['old_roc'];
+    $noDaftarSyarikat = sanitizeForPDF($res2['old_roc']);
     $baseUploadDir = realpath(dirname(__DIR__, 2));
     $companySignature = $res2['signature'];
     
@@ -76,6 +112,108 @@ function filterData(&$str){
     $str = preg_replace("/\t/", "\\t", $str); 
     $str = preg_replace("/\r?\n/", "\\n", $str); 
     if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"'; 
+}
+
+// Function to properly handle special characters for PDF output
+function sanitizeForPDF($str) {
+    if (empty($str)) return '';
+    
+    // Ensure UTF-8 encoding
+    if (!mb_check_encoding($str, 'UTF-8')) {
+        $str = mb_convert_encoding($str, 'UTF-8', 'auto');
+    }
+    
+    // Convert HTML entities to their character equivalents
+    $str = html_entity_decode($str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    
+    // Handle common special characters that might cause PDF issues
+    $replacements = [
+        '\u2018' => "'",  // Smart single quote left
+        '\u2019' => "'",  // Smart single quote right
+        '\u201c' => '"',  // Smart double quote left
+        '\u201d' => '"',  // Smart double quote right
+        '\u2013' => '-',  // En dash
+        '\u2014' => '-',  // Em dash
+        '\u2026' => '...',  // Ellipsis
+        '\u00ae' => '(R)',  // Registered trademark
+        '\u2122' => '(TM)', // Trademark
+        '\u00a9' => '(C)',  // Copyright
+        chr(8216) => "'",  // Smart single quote left
+        chr(8217) => "'",  // Smart single quote right
+        chr(8220) => '"',  // Smart double quote left
+        chr(8221) => '"',  // Smart double quote right
+        chr(8211) => '-',  // En dash
+        chr(8212) => '-',  // Em dash
+        chr(8230) => '...',  // Ellipsis
+    ];
+    
+    $str = str_replace(array_keys($replacements), array_values($replacements), $str);
+    
+    // Convert to Windows-1252 (ISO-8859-1 extended) for FPDF compatibility
+    // This handles most Western European characters
+    $str = mb_convert_encoding($str, 'Windows-1252', 'UTF-8');
+    
+    // Remove any remaining problematic characters
+    $str = preg_replace('/[^\x20-\x7E\x80-\xFF]/', '', $str);
+    
+    return $str;
+}
+
+// Function to safely decode JSON with special character handling
+function safeJsonDecode($json, $assoc = false) {
+    if (empty($json)) return $assoc ? [] : null;
+    
+    // Ensure proper UTF-8 encoding before decoding
+    if (!mb_check_encoding($json, 'UTF-8')) {
+        $json = mb_convert_encoding($json, 'UTF-8', 'auto');
+    }
+    
+    $decoded = json_decode($json, $assoc);
+    
+    // Check for JSON errors
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        error_log("JSON decode error: " . json_last_error_msg() . " for data: " . substr($json, 0, 100));
+        return $assoc ? [] : null;
+    }
+    
+    return $decoded;
+}
+
+// Function to safely process address fields
+function processAddressField($field) {
+    if (empty($field)) return '';
+    return sanitizeForPDF(trim($field));
+}
+
+// Function to safely execute database queries with proper character handling
+function safeDbQuery($db, $query) {
+    $result = mysqli_query($db, $query);
+    
+    if (!$result) {
+        error_log("Database query error: " . mysqli_error($db) . " for query: " . $query);
+        return false;
+    }
+    
+    return $result;
+}
+
+// Function to safely fetch associative array with character encoding
+function safeFetchAssoc($result) {
+    $row = mysqli_fetch_assoc($result);
+    
+    if (!$row) return false;
+    
+    // Ensure all string values are properly encoded
+    foreach ($row as $key => $value) {
+        if (is_string($value) && !empty($value)) {
+            // Convert to UTF-8 if not already
+            if (!mb_check_encoding($value, 'UTF-8')) {
+                $row[$key] = mb_convert_encoding($value, 'UTF-8', 'auto');
+            }
+        }
+    }
+    
+    return $row;
 }
 
 if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintDate'])){
@@ -105,7 +243,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
             
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
+                $loadcells = safeJsonDecode($res['load_cells_info'], true);
                 # HQ Address
                 $customer = $res['customers'];
                 $customerQuery = "SELECT * FROM customers WHERE id = $customer";
