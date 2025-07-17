@@ -1614,7 +1614,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (BTU)</h4>
+        <h4>Additional Information (BTU)</h4>
       </div>
       <div class="row">
         <!-- <div class="form-group col-4">
