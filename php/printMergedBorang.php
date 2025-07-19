@@ -3831,6 +3831,15 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                             $pdf->SetXY(70, 94); // Adjust for {no_penentusahan}
                             $pdf->Write(0, $res['no_daftar_lama']);
                         }
+                        
+                        $pdf->Image($tickImage, 166, 111, 6); 
+                        $pdf->Image($tickImage, 166, 119, 6); 
+                        $pdf->Image($tickImage, 166, 127, 6); 
+                        $pdf->Image($tickImage, 166, 135, 6); 
+                        $pdf->Image($tickImage, 166, 143, 6); 
+                        $pdf->Image($tickImage, 166, 156, 6); 
+                        $pdf->Image($tickImage, 166, 168, 6); 
+                        $pdf->Image($tickImage, 166, 176, 6); 
                     }
                 }
 
@@ -3905,6 +3914,15 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                             $pdf->SetXY(168, 106); // Adjust for {no_penentusahan}
                             $pdf->Write(0, $res['no_daftar_lama']);
                         }
+
+                        $pdf->Image($tickImage, 158, 125, 6); 
+                        $pdf->Image($tickImage, 158, 136, 6); 
+                        $pdf->Image($tickImage, 158, 148, 6); 
+                        $pdf->Image($tickImage, 158, 160, 6); 
+                        $pdf->Image($tickImage, 158, 172, 6); 
+                        $pdf->Image($tickImage, 158, 192, 6); 
+                        $pdf->Image($tickImage, 158, 207, 6);
+                        $pdf->Image($tickImage, 158, 218, 6);
                     }
                 }
 
