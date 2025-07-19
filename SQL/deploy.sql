@@ -80,3 +80,16 @@ ALTER TABLE `stamping` MODIFY `serial_no` VARCHAR(50);
 
 -- 19/07/2025 --
 ALTER TABLE `stamping_ext` ADD `btu_info` TEXT NULL AFTER `batu_ujian_lain`;
+
+UPDATE stamping_ext
+SET btu_info = JSON_ARRAY(
+  JSON_OBJECT(
+    'no', '1',
+    'batuUjian', batu_ujian,
+    'batuUjianLain', batu_ujian_lain,
+    'penandaanBatuUjian', penandaan_batu_ujian,
+    'batuDaftarLama', '',
+    'batuDaftarBaru', ''
+  )
+)
+WHERE batu_ujian IS NOT NULL;
