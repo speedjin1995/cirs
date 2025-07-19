@@ -244,6 +244,21 @@ if(isset($_POST['userID'])){
                                             ];
                                         }
                                         $message['btu_box_info'] = $btuBox;
+                                    }else if ($message['jenis_alat'] == 'BTU') {
+                                        $btuBox = [];
+                                        foreach (json_decode($row2['btu_info'], true) as $btu) {
+                                            $penandaanBatuUjian = searchCapacityNameById($btu['penandaanBatuUjian'], $db);
+    
+                                            $btuBox[] = [
+                                                "no" => $btu["no"],
+                                                "batuUjian" => $btu["batuUjian"],
+                                                "batuUjianLain" => $btu["batuUjianLain"],
+                                                "penandaanBatuUjian" => $penandaanBatuUjian,
+                                                "batuDaftarLama" => $btu["batuDaftarLama"],
+                                                "batuDaftarBaru" => $btu["batuDaftarBaru"],
+                                            ];
+                                        }
+                                        $message['btu_info'] = $btuBox;
                                     }else if ($message['jenis_alat'] == 'ATK'){
                                         $loadCell = [];
                                         foreach (json_decode($row2['load_cells_info'], true) as $atk) {
@@ -369,6 +384,7 @@ if(isset($_POST['userID'])){
                                     $message['bahan_pembuat'] = $row2['bahan_pembuat'] ?? '';
                                     $message['bahan_pembuat_other'] = $row2['bahan_pembuat_other'] ?? '';
                                     $message['btu_box_info'] = json_decode($row2['btu_box_info'], true);
+                                    $message['btu_info'] = json_decode($row2['btu_info'], true);
                                 }
                             }
                         }

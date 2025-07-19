@@ -777,35 +777,67 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					}
 				}
 
-				// For BTU Additional fields	
+				// For BTU Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '7'){
-					$platform_country = null;
-					$penandaanBatuUjian = null;
-					$batuUjian = null;
-					$batuUjianLain = null;
+					$btu_info = [];
 
-					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
-						$platform_country = $_POST['platformCountry'];
+					$no = $_POST['no'];
+					$batuUjian = $_POST['batuUjian'];
+					$batuUjianLain = $_POST['batuUjianLain'];
+					$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
+					$batuDaftarLama = $_POST['batuDaftarLama'];
+					$batuDaftarBaru = $_POST['batuDaftarBaru'];
+
+					if(isset($no) && $no != null && count($no) > 0){
+						for($i=0; $i<count($no); $i++){
+							$btu_info[] = array(
+								"no" => $no[$i],
+								"batuUjian" => $batuUjian[$i],
+								"batuUjianLain" => $batuUjianLain[$i],
+								"penandaanBatuUjian" => $penandaanBatuUjian[$i],
+								"batuDaftarLama" => $batuDaftarLama[$i],
+								"batuDaftarBaru" => $batuDaftarBaru[$i]
+							);
+						}
 					}
 
-					if(isset($_POST['penandaanBatuUjian']) && $_POST['penandaanBatuUjian']!=null && $_POST['penandaanBatuUjian']!=""){
-						$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
-					}
-
-					if(isset($_POST['batuUjian']) && $_POST['batuUjian']!=null && $_POST['batuUjian']!=""){
-						$batuUjian = $_POST['batuUjian'];
-					}
-
-					if(isset($_POST['batuUjianLain']) && $_POST['batuUjianLain']!=null && $_POST['batuUjianLain']!=""){
-						$batuUjianLain = $_POST['batuUjianLain'];
-					}
-
-					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, penandaan_batu_ujian = ?, batu_ujian = ?, batu_ujian_lain=? WHERE stamp_id = ?")){
-						$insert_stmt2->bind_param('sssss', $platform_country, $penandaanBatuUjian, $batuUjian, $batuUjianLain, $_POST['id']);
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET btu_info = ? WHERE stamp_id = ?")){
+						$btuInfo = json_encode($btu_info);
+						$insert_stmt2->bind_param('ss', $btuInfo, $_POST['id']);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
 				}
+
+				// // For BTU Additional fields	
+				// if(($validator == '10' || $validator == '9') && $jenisAlat == '7'){
+				// 	$platform_country = null;
+				// 	$penandaanBatuUjian = null;
+				// 	$batuUjian = null;
+				// 	$batuUjianLain = null;
+
+				// 	if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+				// 		$platform_country = $_POST['platformCountry'];
+				// 	}
+
+				// 	if(isset($_POST['penandaanBatuUjian']) && $_POST['penandaanBatuUjian']!=null && $_POST['penandaanBatuUjian']!=""){
+				// 		$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
+				// 	}
+
+				// 	if(isset($_POST['batuUjian']) && $_POST['batuUjian']!=null && $_POST['batuUjian']!=""){
+				// 		$batuUjian = $_POST['batuUjian'];
+				// 	}
+
+				// 	if(isset($_POST['batuUjianLain']) && $_POST['batuUjianLain']!=null && $_POST['batuUjianLain']!=""){
+				// 		$batuUjianLain = $_POST['batuUjianLain'];
+				// 	}
+
+				// 	if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, penandaan_batu_ujian = ?, batu_ujian = ?, batu_ujian_lain=? WHERE stamp_id = ?")){
+				// 		$insert_stmt2->bind_param('sssss', $platform_country, $penandaanBatuUjian, $batuUjian, $batuUjianLain, $_POST['id']);
+				// 		$insert_stmt2->execute();
+				// 		$insert_stmt2->close();
+				// 	}
+				// }
 				
 				// For AUTO_PACKER Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '10'){
@@ -1363,35 +1395,68 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 
 				// For BTU Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '7'){
-					$platform_country = null;
-					$batuUjian = null;
-					$batuUjianLain = null;
-					$penandaanBatuUjian = null;
+					$btu_info = [];
 
-					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
-						$platform_country = $_POST['platformCountry'];
+					$no = $_POST['no'];
+					$batuUjian = $_POST['batuUjian'];
+					$batuUjianLain = $_POST['batuUjianLain'];
+					$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
+					$batuDaftarLama = $_POST['batuDaftarLama'];
+					$batuDaftarBaru = $_POST['batuDaftarBaru'];
+
+					if(isset($no) && $no != null && count($no) > 0){
+						for($i=0; $i<count($no); $i++){
+							$btu_info[] = array(
+								"no" => $no[$i],
+								"batuUjian" => $batuUjian[$i],
+								"batuUjianLain" => $batuUjianLain[$i],
+								"penandaanBatuUjian" => $penandaanBatuUjian[$i],
+								"batuDaftarLama" => $batuDaftarLama[$i],
+								"batuDaftarBaru" => $batuDaftarBaru[$i]
+							);
+						}
 					}
 
-					if(isset($_POST['penandaanBatuUjian']) && $_POST['penandaanBatuUjian']!=null && $_POST['penandaanBatuUjian']!=""){
-						$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
-					}
-
-					if(isset($_POST['batuUjian']) && $_POST['batuUjian']!=null && $_POST['batuUjian']!=""){
-						$batuUjian = $_POST['batuUjian'];
-					}
-
-					if(isset($_POST['batuUjianLain']) && $_POST['batuUjianLain']!=null && $_POST['batuUjianLain']!=""){
-						$batuUjianLain = $_POST['batuUjianLain'];
-					}
-
-					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, penandaan_batu_ujian, batu_ujian, batu_ujian_lain) 
-					VALUES (?, ?, ?, ?, ?)")){
-						$insert_stmt2->bind_param('sssss', $stamp_id, $platform_country, $penandaanBatuUjian, $batuUjian, $batuUjianLain);
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, btu_info) 
+					VALUES (?, ?)")){
+						$btuInfo = json_encode($btu_info);
+						$insert_stmt2->bind_param('ss', $stamp_id, $btuInfo);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
-
 				}
+
+				// // For BTU Additional fields
+				// if(($validator == '10' || $validator == '9') && $jenisAlat == '7'){
+				// 	$platform_country = null;
+				// 	$batuUjian = null;
+				// 	$batuUjianLain = null;
+				// 	$penandaanBatuUjian = null;
+
+				// 	if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+				// 		$platform_country = $_POST['platformCountry'];
+				// 	}
+
+				// 	if(isset($_POST['penandaanBatuUjian']) && $_POST['penandaanBatuUjian']!=null && $_POST['penandaanBatuUjian']!=""){
+				// 		$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
+				// 	}
+
+				// 	if(isset($_POST['batuUjian']) && $_POST['batuUjian']!=null && $_POST['batuUjian']!=""){
+				// 		$batuUjian = $_POST['batuUjian'];
+				// 	}
+
+				// 	if(isset($_POST['batuUjianLain']) && $_POST['batuUjianLain']!=null && $_POST['batuUjianLain']!=""){
+				// 		$batuUjianLain = $_POST['batuUjianLain'];
+				// 	}
+
+				// 	if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, penandaan_batu_ujian, batu_ujian, batu_ujian_lain) 
+				// 	VALUES (?, ?, ?, ?, ?)")){
+				// 		$insert_stmt2->bind_param('sssss', $stamp_id, $platform_country, $penandaanBatuUjian, $batuUjian, $batuUjianLain);
+				// 		$insert_stmt2->execute();
+				// 		$insert_stmt2->close();
+				// 	}
+
+				// }
 
 				// For AUTO_PACKER Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '10'){

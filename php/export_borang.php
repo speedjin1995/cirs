@@ -22,7 +22,6 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
     //     $searchQuery .= " and customers = '".$_POST['customer']."'";
     // }
 
-    
     if($_POST['ids'] != null && $_POST['ids'] != ''){
         if (strpos($_POST['ids'], ',') !== false) {
             $id_list = $_POST['ids'];
@@ -30,14 +29,17 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
             $searchQuery .= " and id IN ($id_list)";
         }else{
             // Sanitize the values and prepare them for SQL
-            $sanitized_ids = array_map(function($id) {
-                return "'" . addslashes($id) . "'";
-            }, $_POST['ids']);
-
-            // Convert the sanitized array into a string
-            $id_list = implode(",", $sanitized_ids);
-
+            $id_list = "'" . addslashes($_POST['ids']) . "'";
             $searchQuery .= " and id IN ($id_list)";
+
+            // $sanitized_ids = array_map(function($id) {
+            //     return "'" . addslashes($id) . "'";
+            // }, $_POST['ids']);
+
+            // // Convert the sanitized array into a string
+            // $id_list = implode(",", $sanitized_ids);
+
+            // $searchQuery .= " and id IN ($id_list)";
         }
     }
 
