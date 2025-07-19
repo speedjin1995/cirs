@@ -77,3 +77,6 @@ ALTER TABLE `stamping` ADD `labour_charge` VARCHAR(10) NULL AFTER `subtotal_amou
 
 -- 10/06/2025 -- 
 ALTER TABLE `stamping` MODIFY `serial_no` VARCHAR(50);
+
+-- 19/07/2025 --
+ALTER TABLE `stamping_ext` ADD `btu_info` TEXT NULL AFTER `batu_ujian_lain`;
