@@ -998,6 +998,9 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
 					$batuDaftarLama = $_POST['batuDaftarLama'];
 					$batuDaftarBaru = $_POST['batuDaftarBaru'];
+					$batuNoSiriPelekatKeselamatan = $_POST['batuNoSiriPelekatKeselamatan'];
+					$batuBorangD = $_POST['batuBorangD'];
+					$batuBorangE = $_POST['batuBorangE'];
 
 					if(isset($no) && $no != null && count($no) > 0){
 						for($i=0; $i<count($no); $i++){
@@ -1007,7 +1010,10 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 								"batuUjianLain" => $batuUjianLain[$i],
 								"penandaanBatuUjian" => $penandaanBatuUjian[$i],
 								"batuDaftarLama" => $batuDaftarLama[$i],
-								"batuDaftarBaru" => $batuDaftarBaru[$i]
+								"batuDaftarBaru" => $batuDaftarBaru[$i],
+								"batuNoSiriPelekatKeselamatan" => $batuNoSiriPelekatKeselamatan[$i],
+								"batuBorangD" => $batuBorangD[$i],
+								"batuBorangE" => $batuBorangE[$i]
 							);
 						}
 					}
@@ -1589,6 +1595,9 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
 					$batuDaftarLama = $_POST['batuDaftarLama'];
 					$batuDaftarBaru = $_POST['batuDaftarBaru'];
+					$batuNoSiriPelekatKeselamatan = $_POST['batuNoSiriPelekatKeselamatan'];
+					$batuBorangD = $_POST['batuBorangD'];
+					$batuBorangE = $_POST['batuBorangE'];
 
 					if(isset($no) && $no != null && count($no) > 0){
 						for($i=0; $i<count($no); $i++){
@@ -1598,7 +1607,10 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 								"batuUjianLain" => $batuUjianLain[$i],
 								"penandaanBatuUjian" => $penandaanBatuUjian[$i],
 								"batuDaftarLama" => $batuDaftarLama[$i],
-								"batuDaftarBaru" => $batuDaftarBaru[$i]
+								"batuDaftarBaru" => $batuDaftarBaru[$i],
+								"batuNoSiriPelekatKeselamatan" => $batuNoSiriPelekatKeselamatan[$i],
+								"batuBorangD" => $batuBorangD[$i],
+								"batuBorangE" => $batuBorangE[$i]
 							);
 						}
 					}

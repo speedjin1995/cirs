@@ -241,6 +241,9 @@ if(isset($_POST['userID'])){
                                                 "penandaanBatuUjian" => $penandaanBatuUjian,
                                                 "batuDaftarLama" => $btu["batuDaftarLama"],
                                                 "batuDaftarBaru" => $btu["batuDaftarBaru"],
+                                                "batuNoSiriPelekatKeselamatan" => $btu["batuNoSiriPelekatKeselamatan"],
+                                                "batuBorangD" => $btu["batuBorangD"],
+                                                "batuBorangE" => $btu["batuBorangE"],
                                             ];
                                         }
                                         $message['btu_box_info'] = $btuBox;

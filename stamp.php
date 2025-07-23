@@ -1769,11 +1769,14 @@ else{
           <table style="width: 100%;">
             <thead>
               <tr>
-                <th>No.</th>
+                <th style="width: 5%;">No.</th>
                 <th>Batu Ujian</th>
                 <th>Penandaan Pada Batu Ujian</th>
                 <th>No Daftar Lama</th>
                 <th>No Daftar Baru</th>
+                <th>No Siri Pelekat Keselamatan</th>
+                <th>No Borang D</th>
+                <th>No Borang E</th>
                 <th>Price</th>
                 <th>Delete</th>
               </tr>
@@ -1887,6 +1890,15 @@ else{
     </td>
     <td>
       <input type="text" class="form-control" id="batuDaftarBaru" name="batuDaftarBaru">
+    </td>
+    <td>
+      <input type="text" class="form-control" id="batuNoSiriPelekatKeselamatan" name="batuNoSiriPelekatKeselamatan">
+    </td>
+    <td>
+      <input type="text" class="form-control" id="batuBorangD" name="batuBorangD">
+    </td>
+    <td>
+      <input type="text" class="form-control" id="batuBorangE" name="batuBorangE">
     </td>
     <td>
       <input type="text" class="form-control" id="price" name="price" readonly>
@@ -3419,6 +3431,9 @@ $(function () {
       $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount);
       $("#btuTable").find('#batuDaftarLama:last').attr('name', 'batuDaftarLama['+btuCount+']').attr("id", "batuDaftarLama" + btuCount);
       $("#btuTable").find('#batuDaftarBaru:last').attr('name', 'batuDaftarBaru['+btuCount+']').attr("id", "batuDaftarBaru" + btuCount);
+      $("#btuTable").find('#batuNoSiriPelekatKeselamatan:last').attr('name', 'batuNoSiriPelekatKeselamatan['+btuCount+']').attr("id", "batuNoSiriPelekatKeselamatan" + btuCount);
+      $("#btuTable").find('#batuBorangD:last').attr('name', 'batuBorangD['+btuCount+']').attr("id", "batuBorangD" + btuCount);
+      $("#btuTable").find('#batuBorangE:last').attr('name', 'batuBorangE['+btuCount+']').attr("id", "batuBorangE" + btuCount);
       $("#btuTable").find('#price:last').attr('name', 'price['+btuCount+']').attr("id", "price" + btuCount).val('');
 
       $('#addtionalSection').find('.select2').select2({
@@ -3976,6 +3991,9 @@ function format (row) {
               <th>Penandaan Pada Batu Ujian</th>
               <th>No Daftar Lama</th>
               <th>No Daftar Baru</th>
+              <th>No No Siri Pelekat Keselamatan</th>
+              <th>No Borang D</th>
+              <th>No Borang E</th>
             </tr>
           </thead>
           <tbody>`;
@@ -3999,10 +4017,14 @@ function format (row) {
               returnString += `<td>${batuUjianVal}</td>`;
             }
 
+            console.log(row.btu_box_info[i]);
             returnString += `
               <td>${row.btu_box_info[i].penandaanBatuUjian}</td>
               <td>${row.btu_box_info[i].batuDaftarLama}</td>
               <td>${row.btu_box_info[i].batuDaftarBaru}</td>
+              <td>${row.btu_box_info[i].batuNoSiriPelekatKeselamatan}</td>
+              <td>${row.btu_box_info[i].batuBorangD}</td>
+              <td>${row.btu_box_info[i].batuBorangE}</td>
               </tr>
             `;
           }
@@ -4629,6 +4651,9 @@ function edit(id) {
                 $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount).val(item.penandaanBatuUjian).trigger('change');
                 $("#btuTable").find('#batuDaftarLama:last').attr('name', 'batuDaftarLama['+btuCount+']').attr("id", "batuDaftarLama" + btuCount).val(item.batuDaftarLama);
                 $("#btuTable").find('#batuDaftarBaru:last').attr('name', 'batuDaftarBaru['+btuCount+']').attr("id", "batuDaftarBaru" + btuCount).val(item.batuDaftarBaru);
+                $("#btuTable").find('#batuNoSiriPelekatKeselamatan:last').attr('name', 'batuNoSiriPelekatKeselamatan['+btuCount+']').attr("id", "batuNoSiriPelekatKeselamatan" + btuCount).val(item.batuNoSiriPelekatKeselamatan);
+                $("#btuTable").find('#batuBorangD:last').attr('name', 'batuBorangD['+btuCount+']').attr("id", "batuBorangD" + btuCount).val(item.batuBorangD);
+                $("#btuTable").find('#batuBorangE:last').attr('name', 'batuBorangE['+btuCount+']').attr("id", "batuBorangE" + btuCount).val(item.batuBorangE);
                 $("#btuTable").find('#price:last').attr('name', 'price['+btuCount+']').attr("id", "price" + btuCount).val('');
 
                 btuCount++;
@@ -4957,6 +4982,9 @@ function edit(id) {
                 $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount).val(item.penandaanBatuUjian).trigger('change');
                 $("#btuTable").find('#batuDaftarLama:last').attr('name', 'batuDaftarLama['+btuCount+']').attr("id", "batuDaftarLama" + btuCount).val(item.batuDaftarLama);
                 $("#btuTable").find('#batuDaftarBaru:last').attr('name', 'batuDaftarBaru['+btuCount+']').attr("id", "batuDaftarBaru" + btuCount).val(item.batuDaftarBaru);
+                $("#btuTable").find('#batuNoSiriPelekatKeselamatan:last').attr('name', 'batuNoSiriPelekatKeselamatan['+btuCount+']').attr("id", "batuNoSiriPelekatKeselamatan" + btuCount).val(item.batuNoSiriPelekatKeselamatan);
+                $("#btuTable").find('#batuBorangD:last').attr('name', 'batuBorangD['+btuCount+']').attr("id", "batuBorangD" + btuCount).val(item.batuBorangD);
+                $("#btuTable").find('#batuBorangE:last').attr('name', 'batuBorangE['+btuCount+']').attr("id", "batuBorangE" + btuCount).val(item.batuBorangE);
                 $("#btuTable").find('#price:last').attr('name', 'price['+btuCount+']').attr("id", "price" + btuCount).val('');
 
                 btuCount++;

@@ -1955,6 +1955,9 @@ function format (row) {
               <th>Penandaan Pada Batu Ujian</th>
               <th>No Daftar Lama</th>
               <th>No Daftar Baru</th>
+              <th>No No Siri Pelekat Keselamatan</th>
+              <th>No Borang D</th>
+              <th>No Borang E</th>
             </tr>
           </thead>
           <tbody>`;
@@ -1978,10 +1981,14 @@ function format (row) {
               returnString += `<td>${batuUjianVal}</td>`;
             }
 
+            console.log(row.btu_box_info[i]);
             returnString += `
               <td>${row.btu_box_info[i].penandaanBatuUjian}</td>
               <td>${row.btu_box_info[i].batuDaftarLama}</td>
               <td>${row.btu_box_info[i].batuDaftarBaru}</td>
+              <td>${row.btu_box_info[i].batuNoSiriPelekatKeselamatan}</td>
+              <td>${row.btu_box_info[i].batuBorangD}</td>
+              <td>${row.btu_box_info[i].batuBorangE}</td>
               </tr>
             `;
           }
