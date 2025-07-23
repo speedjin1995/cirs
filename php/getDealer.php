@@ -46,6 +46,8 @@ if(isset($_POST['userID'])){
                                 "email" => $row2['email'] ?? ''
                             );
                         }
+                    } else {
+                        // Handle execution failure for update_stmt2
                     }
                     $update_stmt2->close();
                 }
@@ -75,6 +77,7 @@ if(isset($_POST['userID'])){
         }
         $update_stmt->close();
     }
+    $db->close();
 }
 else{
     echo json_encode(

@@ -133,4 +133,5 @@ function calcDateDifference($fromDate, $toDate){
   return $months;
 }
 
+$db->close();
 ?>

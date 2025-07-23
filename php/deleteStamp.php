@@ -62,6 +62,9 @@ if ($type == 'MULTI'){
 						)
 					);
 				} else{
+					$stmt2->close();
+					$db->close();
+
 					echo json_encode(
 						array(
 							"status"=> "failed", 
@@ -71,10 +74,12 @@ if ($type == 'MULTI'){
 				}
 			} 
 			else{
+				$db->close();
+
 				echo json_encode(
 					array(
 						"status"=> "failed", 
-						"message"=> "Somthings wrong"
+						"message"=> "Somethings wrong"
 					)
 				);
 			}
@@ -106,6 +111,9 @@ if ($type == 'MULTI'){
 						)
 					);
 				} else{
+					$stmt2->close();
+					$db->close();
+
 					echo json_encode(
 						array(
 							"status"=> "failed", 
@@ -115,10 +123,12 @@ if ($type == 'MULTI'){
 				}
 			} 
 			else{
+				$db->close();
+
 				echo json_encode(
 					array(
 						"status"=> "failed", 
-						"message"=> "Somthings wrong"
+						"message"=> "Somethings wrong"
 					)
 				);
 			}
@@ -154,6 +164,9 @@ if ($type == 'MULTI'){
 						)
 					);
 				} else{
+					$stmt2->close();
+					$db->close();
+
 					echo json_encode(
 						array(
 							"status"=> "failed", 
@@ -163,10 +176,12 @@ if ($type == 'MULTI'){
 				}
 			} 
 			else{
+				$db->close();
+
 				echo json_encode(
 					array(
 						"status"=> "failed", 
-						"message"=> "Somthings wrong"
+						"message"=> "Somethings wrong"
 					)
 				);
 			}
@@ -196,6 +211,9 @@ if ($type == 'MULTI'){
 						)
 					);
 				} else{
+					$stmt2->close();
+					$db->close();
+
 					echo json_encode(
 						array(
 							"status"=> "failed", 
@@ -205,10 +223,12 @@ if ($type == 'MULTI'){
 				}
 			} 
 			else{
+				$db->close();
+
 				echo json_encode(
 					array(
 						"status"=> "failed", 
-						"message"=> "Somthings wrong"
+						"message"=> "Somethings wrong"
 					)
 				);
 			}

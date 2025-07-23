@@ -34,6 +34,8 @@ if(isset($_POST['userID'])){
         }
         $update_stmt->close();
     }
+
+    $db->close();
 }
 else{
     echo json_encode(

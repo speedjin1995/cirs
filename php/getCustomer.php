@@ -11,7 +11,6 @@ if(isset($_POST['userID'])){
         
         // Execute the prepared query.
         if (! $update_stmt->execute()) {
-            $update_stmt->close();
             echo json_encode(
                 array(
                     "status" => "failed",
@@ -71,7 +70,6 @@ if(isset($_POST['userID'])){
                 $message['pic_contact'] = $row['pic_contact'];
                 $message['pricing'] = $pricing;
             }
-            $update_stmt->close();
             
             echo json_encode(
                 array(
@@ -79,7 +77,11 @@ if(isset($_POST['userID'])){
                     "message" => $message
                 ));   
         }
+
+        $update_stmt->close();
     }
+
+    $db->close();
 }
 else{
     echo json_encode(

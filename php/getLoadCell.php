@@ -11,6 +11,7 @@ if(isset($_POST['userID'])){
         
         // Execute the prepared query.
         if (! $update_stmt->execute()) {
+            $update_stmt->close();
             echo json_encode(
                 array(
                     "status" => "failed",
@@ -35,6 +36,8 @@ if(isset($_POST['userID'])){
                 $message['pattern_datetime'] = $row['pattern_datetime'];
                 $message['pattern_expiry'] = $row['pattern_expiry'];
             }
+
+            $update_stmt->close();
             
             echo json_encode(
                 array(
@@ -42,6 +45,8 @@ if(isset($_POST['userID'])){
                     "message" => $message
                 ));   
         }
+
+        $db->close();
     }
 }
 else{

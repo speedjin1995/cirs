@@ -87,7 +87,6 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
         // $alatDetail = mysqli_query($db, $alatQuery);
         // $alatRow = mysqli_fetch_assoc($alatDetail);
         
-
         if($driver == '6'){
             $message = '<html>
             <head>
@@ -755,11 +754,14 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
 
         // Fetch each row
         $select_stmt->close();
+        $db->close();
 
         // Return the results as JSON
         echo json_encode(array('status' => 'success', 'message' => $message));
     } 
     else {
+        $select_stmt->close();
+        $db->close();
         echo json_encode(
             array(
                 "status" => "failed",

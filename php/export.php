@@ -427,8 +427,11 @@ if(isset($_GET['type'])){
         $excelData .= "</table>";
         // Fetch each row
         $select_stmt->close();
+        $db->close();
     } 
     else {
+        $select_stmt->close();
+        $db->close();
         $excelData .= 'No records found...'. "\n"; 
     }
 }

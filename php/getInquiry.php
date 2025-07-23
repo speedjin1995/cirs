@@ -96,6 +96,8 @@ if(isset($_POST['userID'])){
                     "message" => $message
                 ));   
         }
+
+        $db->close();
     }
 }
 else{

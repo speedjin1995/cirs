@@ -18,6 +18,7 @@ if(isset($_POST['id'])){
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
+                $update_stmt->close();
                 echo json_encode(
                     array(
                         "status" => "failed",
@@ -43,6 +44,8 @@ if(isset($_POST['id'])){
                     );
                     $counter++;
                 }
+
+                $update_stmt->close();
                 
                 echo json_encode(
                     array(
@@ -51,6 +54,8 @@ if(isset($_POST['id'])){
                     )
                 );  
             }
+
+            $db->close();
         }
     }elseif ($type == 'Other') {
         if ($update_stmt = $db->prepare("SELECT * FROM other_validation_log WHERE item_id=? ORDER BY id DESC")) {
@@ -58,6 +63,7 @@ if(isset($_POST['id'])){
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
+                $update_stmt->close();
                 echo json_encode(
                     array(
                         "status" => "failed",
@@ -83,6 +89,8 @@ if(isset($_POST['id'])){
                     );
                     $counter++;
                 }
+
+                $update_stmt->close();
                 
                 echo json_encode(
                     array(
@@ -91,6 +99,8 @@ if(isset($_POST['id'])){
                     )
                 );  
             }
+
+            $db->close();
         }
     }elseif ($type == 'Inhouse') {
         if ($update_stmt = $db->prepare("SELECT * FROM inhouse_log WHERE item_id=? ORDER BY id DESC")) {
@@ -98,6 +108,7 @@ if(isset($_POST['id'])){
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
+                $update_stmt->close();
                 echo json_encode(
                     array(
                         "status" => "failed",
@@ -123,6 +134,8 @@ if(isset($_POST['id'])){
                     );
                     $counter++;
                 }
+
+                $update_stmt->close();
                 
                 echo json_encode(
                     array(
@@ -131,6 +144,8 @@ if(isset($_POST['id'])){
                     )
                 );  
             }
+
+            $db->close();
         }
     }
 }
