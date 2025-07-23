@@ -10,6 +10,7 @@ if(isset($_POST['id'])){
         
         // Execute the prepared query.
         if (! $update_stmt->execute()) {
+            $update_stmt->close();
             echo json_encode(
                 array(
                     "status" => "failed",
@@ -27,12 +28,16 @@ if(isset($_POST['id'])){
                 $message[] = $modelRow;
             }
 
+            $update_stmt->close();
+            
             echo json_encode(
                 array(
                     "status" => "success",
                     "message" => $message
                 ));   
         }
+
+        $db->close();
     }
 }
 else{
