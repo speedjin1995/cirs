@@ -77,6 +77,7 @@ if(isset($_POST['loadCell'], $_POST['model'], $_POST['capacity'], $_POST['madeIn
                                 }
                             }
                         }
+                        $certificateFile->close();
                     }
                 }
                 

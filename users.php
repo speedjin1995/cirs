@@ -17,6 +17,7 @@ else{
     if(($row = $result->fetch_assoc()) !== null){
         $role = $row['role_code'];
     }
+    $stmt->close();
 
     $superAdminRoles = $db->query("SELECT * FROM roles WHERE role_code != 'SUPER_ADMIN' AND deleted = '0'");
     $adminRoles = $db->query("SELECT * FROM roles WHERE role_code NOT IN ('SUPER_ADMIN', 'ADMIN') AND deleted = '0'");

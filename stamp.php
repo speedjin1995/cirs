@@ -19,6 +19,7 @@ else{
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
   }
+  $stmt->close();
 
   $dealer = $db->query("SELECT * FROM dealer WHERE deleted = '0'");
   $customers = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");

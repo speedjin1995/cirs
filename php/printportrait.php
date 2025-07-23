@@ -29,6 +29,7 @@ if(isset($_POST['userID'], $_POST["file"])){
         $compphone = $row['phone'];
         $compiemail = $row['email'];
     }
+    $stmt->close();
 
     if($_POST["file"] == 'weight'){
         //i remove this because both(billboard and weight) also call this print page.
@@ -45,6 +46,7 @@ if(isset($_POST['userID'], $_POST["file"])){
 
             // Execute the prepared query.
             if (! $select_stmt->execute()) {
+                $select_stmt->close();
                 echo json_encode(
                     array(
                         "status" => "failed",
@@ -100,6 +102,7 @@ if(isset($_POST['userID'], $_POST["file"])){
                                     $customerE = $row2['customer_email'];
                                 }
                             }
+                            $update_stmt->close();
                         }
                     }
                     
@@ -352,6 +355,7 @@ if(isset($_POST['userID'], $_POST["file"])){
 
             // Execute the prepared query.
             if (! $select_stmt->execute()) {
+                $select_stmt->close();
                 echo json_encode(
                     array(
                         "status" => "failed",
@@ -432,6 +436,7 @@ if(isset($_POST['userID'], $_POST["file"])){
                     </body>
                 </html>';
                 }
+                $select_stmt->close();
                 
                 echo json_encode(
                     array(

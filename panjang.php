@@ -19,6 +19,7 @@ else{
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
   }
+  $stmt->close();
 
   $stmt = $db->prepare("SELECT * from companies");
 	$stmt->execute();
@@ -28,6 +29,7 @@ else{
   if(($row = $result2->fetch_assoc()) !== null){
     $stamp_prefer_validator = $row['stamp_prefer_validator'];
   }
+  $stmt->close();
 
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE type = 'STAMPING' AND deleted = '0'");

@@ -21,6 +21,7 @@ else{
         $fullName = $row['name'];
         $userName = $row['username'];
     }
+    $stmt->close(); // Close the prepared statement
 }
 ?>
 

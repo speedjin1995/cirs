@@ -30,16 +30,19 @@ else{
                 // Output the file content with appropriate headers
                 header('Content-Type: ' . mime_content_type($filePath));
                 header('Content-Disposition: inline; filename="' . basename($filePath) . '"');
+                $stmt->close();
                 readfile($filePath); // Read and output the file content
                 exit;
             } 
             else {
                 // File does not exist on the server
+                $stmt->close();
                 echo 'File not found!!.';
             }
         } 
         else {
             // File ID not found in the database
+            $stmt->close();
             echo 'File not found!!.';
         }
     } else {

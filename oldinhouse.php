@@ -19,6 +19,7 @@ else{
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
   }
+  $stmt->close();
 
   $autoFormNos = $db->query("SELECT DISTINCT auto_form_no FROM inhouse_validations WHERE deleted='0'");
   $dealer = $db->query("SELECT * FROM dealer WHERE deleted = '0'");

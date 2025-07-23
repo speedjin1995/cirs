@@ -28,6 +28,7 @@ else{
 		$filepath = $row['signature'];
 		$inhouseFilePath = $row['inhouse'];
     }
+    $stmt->close();
 
 	$validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
 }

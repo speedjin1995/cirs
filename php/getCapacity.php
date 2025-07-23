@@ -52,6 +52,7 @@ if(isset($_POST['userID'])){
                     "message" => $message
                 ));   
         }
+        $update_stmt->close();
     }
 }
 else{

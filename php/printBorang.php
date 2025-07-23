@@ -104,8 +104,10 @@ if ($res2 = $result2->fetch_assoc()) {
         if ($resF = $resultF->fetch_assoc()) {
             $companySignature = $baseUploadDir . '/' . $resF['filepath'];
         }
+        $select_stmtF->close();
     }
 }
+$select_stmt2->close();
 
 // Filter the excel data 
 function filterData(&$str){ 

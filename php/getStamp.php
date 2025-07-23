@@ -278,6 +278,7 @@ if(isset($_POST['userID'])){
                                     }
                                 }
                             }
+                            $update_stmt2->close();
                         }
                     }
                 }else{
@@ -387,6 +388,7 @@ if(isset($_POST['userID'])){
                                     $message['btu_info'] = json_decode($row2['btu_info'], true);
                                 }
                             }
+                            $update_stmt2->close();
                         }
                     }
                 }
@@ -398,6 +400,7 @@ if(isset($_POST['userID'])){
                     "message" => $message
                 ));   
         }
+        $update_stmt->close();
     }
 }
 else{

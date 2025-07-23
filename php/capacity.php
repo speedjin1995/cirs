@@ -69,6 +69,9 @@ if(isset($_POST['range_type'], $_POST['capacity'], $_POST['unit'])){
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
+                $update_stmt->close();
+                $db->close();
+
                 echo json_encode(
                     array(
                         "status"=> "failed", 
@@ -95,6 +98,9 @@ if(isset($_POST['range_type'], $_POST['capacity'], $_POST['unit'])){
             
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {
+                $insert_stmt->close();
+                $db->close();
+
                 echo json_encode(
                     array(
                         "status"=> "failed", 

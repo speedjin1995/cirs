@@ -164,7 +164,9 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 						)
 					);
 				}
+				$insert_stmt->close();
 			}
+			$select_stmt->close();
 		}
 	}
 	else{
@@ -304,6 +306,7 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 						}
 					}
 				}
+				$misc_stmt->close();
 			}
 		}
 	}

@@ -17,6 +17,8 @@ if(isset($_POST['capacity'])){
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
+                $update_stmt->close();
+                $db->close();
                 echo json_encode(
                     array(
                         "status"=> "failed", 
@@ -43,6 +45,8 @@ if(isset($_POST['capacity'])){
             
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {
+                $insert_stmt->close();
+                $db->close();
                 echo json_encode(
                     array(
                         "status"=> "failed", 

@@ -29,6 +29,7 @@ if(isset($_POST['userID'])){
                 )
             );   
         }
+        $update_stmt2->close();
     }
 }
 else{

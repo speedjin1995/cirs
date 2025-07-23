@@ -99,8 +99,14 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
                     $insertLogStmt->execute([
                         $action, $uid, $newStampId
                     ]);
+                    
+                    $extStmt->close(); // Close the prepared statement for this iteration
                 }
 
+                $select_stmt->close(); // Close the prepared statement
+                $insertStmt->close(); // Close the prepared statement
+                $insertExtStmt->close(); // Close the prepared statement
+                $insertLogStmt->close(); // Close the prepared statement
                 $db->close();
 				
 				echo json_encode(

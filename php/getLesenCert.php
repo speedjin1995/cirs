@@ -59,6 +59,7 @@ if(isset($_POST['companyId'])){
             
             echo json_encode($response);
         }
+        $sql->close();
     }
 }
 else{
