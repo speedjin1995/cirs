@@ -13,6 +13,7 @@ if(isset($_POST['jenisAlat'], $_POST['capacity'], $_POST['validator'])){
         
         // Execute the prepared query.
         if (! $update_stmt->execute()) {
+            $update_stmt->close();
             echo json_encode(
                 array(
                     "status" => "failed",
@@ -36,12 +37,15 @@ if(isset($_POST['jenisAlat'], $_POST['capacity'], $_POST['validator'])){
                 $message['price'] = '0.00';
             }
             
+            $update_stmt->close();
             echo json_encode(
                 array(
                     "status" => "success",
                     "message" => $message
                 ));   
         }
+
+        $db->close();
     }
 }
 else{

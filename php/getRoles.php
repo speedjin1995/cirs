@@ -11,6 +11,7 @@ if(isset($_POST['userID'])){
         
         // Execute the prepared query.
         if (! $update_stmt->execute()) {
+            $update_stmt->close();
             echo json_encode(
                 array(
                     "status" => "failed",
@@ -27,12 +28,15 @@ if(isset($_POST['userID'])){
                 $message['role_name'] = $row['role_name'];
             }
             
+            $update_stmt->close();
             echo json_encode(
                 array(
                     "status" => "success",
                     "message" => $message
                 ));   
         }
+
+        $db->close();
     }
 }
 else{

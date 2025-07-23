@@ -21,6 +21,7 @@ if(isset($_POST['userID'])){
         
         // Execute the prepared query.
         if (! $update_stmt->execute()) {
+            $update_stmt->close();
             echo json_encode(
                 array(
                     "status" => "failed",
@@ -231,49 +232,60 @@ if(isset($_POST['userID'])){
 
                                     if ($message['jenis_alat'] == 'BTU - (BOX)'){
                                         $btuBox = [];
-                                        foreach (json_decode($row2['btu_box_info'], true) as $btu) {
-                                            $penandaanBatuUjian = searchCapacityNameById($btu['penandaanBatuUjian'], $db);
-    
-                                            $btuBox[] = [
-                                                "no" => $btu["no"],
-                                                "batuUjian" => $btu["batuUjian"],
-                                                "batuUjianLain" => $btu["batuUjianLain"],
-                                                "penandaanBatuUjian" => $penandaanBatuUjian,
-                                                "batuDaftarLama" => $btu["batuDaftarLama"],
-                                                "batuDaftarBaru" => $btu["batuDaftarBaru"],
-                                            ];
+
+                                        if ($row2['btu_box_info'] != null && $row2['btu_box_info'] != '') {
+                                            foreach (json_decode($row2['btu_box_info'], true) as $btu) {
+                                                $penandaanBatuUjian = searchCapacityNameById($btu['penandaanBatuUjian'], $db);
+        
+                                                $btuBox[] = [
+                                                    "no" => $btu["no"],
+                                                    "batuUjian" => $btu["batuUjian"],
+                                                    "batuUjianLain" => $btu["batuUjianLain"],
+                                                    "penandaanBatuUjian" => $penandaanBatuUjian,
+                                                    "batuDaftarLama" => $btu["batuDaftarLama"],
+                                                    "batuDaftarBaru" => $btu["batuDaftarBaru"],
+                                                ];
+                                            }
                                         }
                                         $message['btu_box_info'] = $btuBox;
                                     }else if ($message['jenis_alat'] == 'BTU') {
                                         $btuBox = [];
-                                        foreach (json_decode($row2['btu_info'], true) as $btu) {
-                                            $penandaanBatuUjian = searchCapacityNameById($btu['penandaanBatuUjian'], $db);
-    
-                                            $btuBox[] = [
-                                                "no" => $btu["no"],
-                                                "batuUjian" => $btu["batuUjian"],
-                                                "batuUjianLain" => $btu["batuUjianLain"],
-                                                "penandaanBatuUjian" => $penandaanBatuUjian,
-                                                "batuDaftarLama" => $btu["batuDaftarLama"],
-                                                "batuDaftarBaru" => $btu["batuDaftarBaru"],
-                                            ];
+
+                                        if ($row2['btu_info'] != null && $row2['btu_info'] != '') {
+                                            foreach (json_decode($row2['btu_info'], true) as $btu) {
+                                                $penandaanBatuUjian = searchCapacityNameById($btu['penandaanBatuUjian'], $db);
+        
+                                                $btuBox[] = [
+                                                    "no" => $btu["no"],
+                                                    "batuUjian" => $btu["batuUjian"],
+                                                    "batuUjianLain" => $btu["batuUjianLain"],
+                                                    "penandaanBatuUjian" => $penandaanBatuUjian,
+                                                    "batuDaftarLama" => $btu["batuDaftarLama"],
+                                                    "batuDaftarBaru" => $btu["batuDaftarBaru"],
+                                                ];
+                                            }
                                         }
+                                        
                                         $message['btu_info'] = $btuBox;
                                     }else if ($message['jenis_alat'] == 'ATK'){
                                         $loadCell = [];
-                                        foreach (json_decode($row2['load_cells_info'], true) as $atk) {
-                                            $loadCells = searchLoadCellById($atk['loadCells'], $db);
-                                            $loadCellCapacity = searchCapacityNameById($atk['loadCellCapacity'], $db);
-    
-                                            $loadCell[] = [
+
+                                        if ($row2['load_cells_info'] != null && $row2['load_cells_info'] != '') {
+                                            foreach (json_decode($row2['load_cells_info'], true) as $atk) {
+                                                $loadCells = searchLoadCellById($atk['loadCells'], $db);
+                                                $loadCellCapacity = searchCapacityNameById($atk['loadCellCapacity'], $db);
+
+                                                $loadCell[] = [
                                                 "no" => $atk["no"],
-                                                "loadCells" => $loadCells,
-                                                "loadCellBrand" => $atk["loadCellBrand"],
-                                                "loadCellModel" => $atk["loadCellModel"],
-                                                "loadCellCapacity" => $loadCellCapacity,
-                                                "loadCellSerial" => $atk["loadCellSerial"]
-                                            ];
+                                                    "loadCells" => $loadCells,
+                                                    "loadCellBrand" => $atk["loadCellBrand"],
+                                                    "loadCellModel" => $atk["loadCellModel"],
+                                                    "loadCellCapacity" => $loadCellCapacity,
+                                                    "loadCellSerial" => $atk["loadCellSerial"]
+                                                ];
+                                            }
                                         }
+
                                         $message['load_cells_info'] = $loadCell;
                                     }
                                 }
@@ -394,13 +406,15 @@ if(isset($_POST['userID'])){
                 }
             }
             
+            $update_stmt->close();
             echo json_encode(
                 array(
                     "status" => "success",
                     "message" => $message
                 ));   
         }
-        $update_stmt->close();
+        
+        $db->close();
     }
 }
 else{
