@@ -1872,7 +1872,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -5332,11 +5331,14 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
 
                 $capacityValue = null;
                 $capacityDivision = null;
+                $capacityName = null;
 
                 if(!empty($capacityRow)){
                     $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    $capacityName = $capacityRow['name'];
                 }
+
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
