@@ -20,9 +20,6 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
         $select_stmt->bind_param('s', $id);
 
         if (!$select_stmt->execute()) {
-            $select_stmt->close();
-            $db->close();
-
             echo json_encode(
                 array(
                     "status" => "failed",
@@ -32,9 +29,7 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
         else{
             $result = $select_stmt->get_result();
             $message = array();
-
-            $select_stmt->close();
-            
+    
             if ($record = $result->fetch_assoc()) {
                 // Prepare insert statement for other_validations
                 $insertQuery = "INSERT INTO other_validations (type, dealer, dealer_branch, validate_by, customer_type, customer, branch, machines, unit_serial_no, manufacturing, brand, model, capacity, size, last_calibration_date, expired_calibration_date, auto_form_no, status, validation_date, renewed, duplicate) 
@@ -63,7 +58,7 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
 
                 }
 				
-                $insertQuery->close();
+                $insertStmt->close();
                 $insertLogStmt->close();
 
                 echo json_encode(
@@ -74,11 +69,9 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
 				);
             }
 
-            $db->close();
         }
     }
     else{
-        $db->close();
         echo json_encode(
             array(
                 "status"=> "failed", 
@@ -86,6 +79,9 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
             )
         );
     }
+
+    $select_stmt->close();
+    $db->close();
 }
 else{
     echo json_encode(
