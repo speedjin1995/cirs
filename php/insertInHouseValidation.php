@@ -105,6 +105,8 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 			$select_stmt->bind_param('s', $_POST['companyText']);
 			$select_stmt->execute();
 			$result = $select_stmt->get_result();
+
+			$select_stmt->close();
         
 			if ($row = $result->fetch_assoc()) {
 				$customer = $row['id'];
@@ -146,6 +148,7 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 					$insert_stmt->bind_param('sssssssssss', $_POST['companyText'], $code, $address1, $address2, $address3, $address4, $phone, $email, $customer_status, $pic, $contact);
 					
 					if ($insert_stmt->execute()) {
+						$insert_stmt->close();
 						$customer = $insert_stmt->insert_id;
 						$customerType = 'EXISTING';
 
@@ -157,6 +160,7 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 						} 
 					} 
 				} else {
+					$insert_stmt->close();
 					echo json_encode(
 						array(
 							"status"=> "failed", 
@@ -165,6 +169,8 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 					);
 				}
 			}
+
+			$db->close();
 		}
 	}
 	else{
@@ -184,6 +190,7 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 			if (! $update_stmt->execute()){
 				$response['status'] = "failed";
     			$response['message'] = $update_stmt->error;
+				$update_stmt->close();
 			} 
 			else{
 				for($i=1; $i<=10; $i++){
@@ -214,20 +221,23 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 				}
 				
 				$update_stmt->close();
-				$db->close();
 				
 				$response['status'] = "success";
 				$response['message'] = "Updated Successfully!!";
 			}
 		}
 		else{
+			$update_stmt->close();
 			$response['status'] = "failed";
 			$response['message'] = "Error when creating query";
 		}
+
+		$db->close();
 	}
 	else{
 		if($misc_stmt = $db->prepare("SELECT * FROM miscellaneous WHERE code='inhouse'")){
 			if(!$misc_stmt->execute()){
+				$misc_stmt->close();
                 echo json_encode(
                     array(
                         "status" => "failed",
@@ -235,6 +245,8 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
                     )); 
             }else{
                 $result = $misc_stmt->get_result();
+				$misc_stmt->close();
+				
                 while ($row = $result->fetch_assoc()){
 					$description = $row['description'];
 					$charSize = strlen($row['value']);
@@ -258,6 +270,7 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 						if (! $insert_stmt->execute()){
 							$response['status'] = "failed";
 							$response['message'] = $insert_stmt->error;
+							$insert_stmt->close();
 						} 
 						else{
 							$validation_id = $insert_stmt->insert_id;
@@ -297,7 +310,6 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 								$insert_stmt3->close();
 							}
 							$insert_stmt->close();
-							$db->close();
 							
 							$response['status'] = "success";
 							$response['message'] = "Added Successfully!!";
@@ -305,6 +317,8 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 					}
 				}
 			}
+
+			$db->close();
 		}
 	}
 } 

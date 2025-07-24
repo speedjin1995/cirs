@@ -29,6 +29,7 @@ if(isset($_POST['userID'], $_POST["file"])){
         $compphone = $row['phone'];
         $compiemail = $row['email'];
     }
+    $stmt->close();
 
     if($_POST["file"] == 'weight'){
         //i remove this because both(billboard and weight) also call this print page.
@@ -100,6 +101,8 @@ if(isset($_POST['userID'], $_POST["file"])){
                                     $customerE = $row2['customer_email'];
                                 }
                             }
+
+                            $update_stmt->close();
                         }
                     }
                     
@@ -121,168 +124,169 @@ if(isset($_POST['userID'], $_POST["file"])){
                     QRcode::png($text, $file, $ecc, $pixel_Size, $frame_size);
                     
                     $message = '<html>
-    <head>
-        <style>
-            @media print {
-                @page {
-                    margin-left: 0.5in;
-                    margin-right: 0.5in;
-                    margin-top: 0.1in;
-                    margin-bottom: 0.1in;
-                }
-                
-            } 
-                    
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                
-            } 
-            
-            .table th, .table td {
-                padding: 0.70rem;
-                vertical-align: top;
-                border-top: 1px solid #dee2e6;
-                
-            } 
-            
-            .table-bordered {
-                border: 1px solid #000000;
-                
-            } 
-            
-            .table-bordered th, .table-bordered td {
-                border: 1px solid #000000;
-                font-family: sans-serif;
-                font-size: 12px;
-                
-            } 
-            
-            .row {
-                display: flex;
-                flex-wrap: wrap;
-                margin-top: 20px;
-                margin-right: -15px;
-                margin-left: -15px;
-                
-            } 
-            
-            .col-md-4{
-                position: relative;
-                width: 33.333333%;
-            }
-        </style>
-    </head>
-    <body>
-        <table style="width:100%">
-            <tr>
-                <td style="width: 60%;">
-                    <img src="https://speedjin.com/synctronix/assets/logoWhite.jpg" heigth="auto" width="30%" /><br>
-                    <p>
-                        <span style="font-weight: bold;font-size: 16px;">'.$compname.'</span><br><br>
-                        <span style="font-size: 12px;">'.$compaddress.'</span><br>
-                        <span style="font-size: 12px;">'.$compphone.' / EMAIL: '.$compiemail.'</span>
-                    </p>
-                </td>
-                <td>
-                    <p>
-                        <span style="font-weight: bold;font-size: 12px;">Transaction Date. : '.$row['dateTime'].'</span><br><br>
-                        <span style="font-size: 12px;">Transaction Status: '.$row['status'].'</span><br>';
-                        
-                    if($row['manual'] == '1'){
-                        $message .= '<span style="font-size: 12px;">Weight Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: Manual Weighing</span><br>';
-                    }
-                    else{
-                        $message .= '<span style="font-size: 12px;">Weight Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: Auto Weighing</span><br>';
-                    }
-                    
-                    $message .= '<span style="font-size: 12px;">Invoice No. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$row['invoiceNo'].'</span><br>
-                        <span style="font-size: 12px;">Delivery No. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$row['deliveryNo'].'</span><br>
-                        <span style="font-size: 12px;">Purchase No. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$row['purchaseNo'].'</span><br>
-                        <span style="font-size: 12px;">Batch No. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$row['batchNo'].'</span>
-                    </p>
-                </td>
-            </tr>
-        </table>
-        <hr>
-        <table style="width:100%">
-        <tr>
-            <td style="width: 40%;">
-                <p>
-                    <span style="font-weight: bold;font-size: 16px;">'.$customer.'</span><br>
-                </p>
-            </td>
-            <td style="width: 20%;">
-                <p>&nbsp;</p>
-            </td>
-            <td style="width: 40%;">
-                <p>
-                    <span style="font-weight: bold;font-size: 14px;margin: 0 auto;display: table;">CASH BILL</span><br>
-                    <span style="font-weight: bold;font-size: 12px;">Serial No. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$row['serialNo'].'</span>
-                </p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p>
-                    <span style="font-size: 12px;">'.$customerA.'</span><br>
-                    <span style="font-size: 12px;">TEL: '.$customerP.'</span><br>
-                    <span style="font-size: 12px;">EMAIL: '.$customerE.'</span>
-                </p>
-                <table style="width:100%; border:1px solid black;">
-                    <tr>
-                        <th colspan="2" style="border:1px solid black; font-size: 14px;">Order Weight</th>
-                        <th colspan="2" style="border:1px solid black; font-size: 14px;">Variance Weight</th>
-                        <th style="border:1px solid black; font-size: 14px;">Variance %</th>
-                    </tr>
-                    <tr>
-                        <td style="border:1px solid black;">'.$ow.'</td>
-                        <td style="border:1px solid black;">kg</td>
-                        <td style="border:1px solid black;">'.$vw.'</td>
-                        <td style="border:1px solid black;">kg</td>
-                        <td style="border:1px solid black;">'.$row['variancePerc'].' %</td>
-                    </tr>
-                </table>
-            </td>
-            <td style="width: 20%;">
-                <center><img src="https://speedjin.com/synctronix/php/'.$file.'" height="auto" width="50%" /></center>
-            </td>
-            <td>
-                <p>
-                    <span style="font-size: 12px;">Weight Date & Time : '.$row['inCDateTime'].'</span><br>
-                    <span style="font-size: 12px;">User Weight &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$row['name'].'</span><br>
-                    <span style="font-size: 12px;">Current Weight &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$cw.' kg</span><br>
-                    <span style="font-size: 12px;">Tare Weight &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$tw.' kg</span><br><br>
-                    <span style="font-size: 14px;font-weight: bold;">Total Weight &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$ttw.' kg</span><br>
-                </p>
-            </td>
-        </tr>
-        </table><br>
-        <table style="width:100%; border:1px solid black;">
-            <tr>
-                <th style="border:1px solid black;font-size: 14px;">Vehicle No.</th>
-                <th style="border:1px solid black;font-size: 14px;">Product Name</th>
-                <th style="border:1px solid black;font-size: 14px;">Package</th>
-                <th style="border:1px solid black;font-size: 14px;">Unit Price</th>
-                <th colspan="2" style="border:1px solid black;font-size: 14px;">Total Weight</th>
-                <th style="border:1px solid black;font-size: 14px;">Total Price</th>
-            </tr>
-            <tr>
-                <td style="border:1px solid black;font-size: 14px;">'.$row['vehicleNo'].'</td>
-                <td style="border:1px solid black;font-size: 14px;">'.$row['product_name'].'</td>
-                <td style="border:1px solid black;font-size: 14px;">'.$row['packages'].'</td>
-                <td style="border:1px solid black;font-size: 14px;">RM '.$row['unitPrice'].'</td>
-                <td style="border:1px solid black;font-size: 14px;">'.$ttw.'</td>
-                <td style="border:1px solid black;font-size: 14px;">kg</td>
-                <td style="border:1px solid black;font-weight: bold;font-size: 14px;">RM '.$row['totalPrice'].'</td>
-            </tr>
-        </table>
-        <p>
-            <span style="font-size: 12px;font-weight: bold;">Remark: </span>
-            <span style="font-size: 12px;">'.$row['remark'].'</span>
-        </p>
-    </body>
-</html>';
+                                    <head>
+                                        <style>
+                                            @media print {
+                                                @page {
+                                                    margin-left: 0.5in;
+                                                    margin-right: 0.5in;
+                                                    margin-top: 0.1in;
+                                                    margin-bottom: 0.1in;
+                                                }
+                                                
+                                            } 
+                                                    
+                                            table {
+                                                width: 100%;
+                                                border-collapse: collapse;
+                                                
+                                            } 
+                                            
+                                            .table th, .table td {
+                                                padding: 0.70rem;
+                                                vertical-align: top;
+                                                border-top: 1px solid #dee2e6;
+                                                
+                                            } 
+                                            
+                                            .table-bordered {
+                                                border: 1px solid #000000;
+                                                
+                                            } 
+                                            
+                                            .table-bordered th, .table-bordered td {
+                                                border: 1px solid #000000;
+                                                font-family: sans-serif;
+                                                font-size: 12px;
+                                                
+                                            } 
+                                            
+                                            .row {
+                                                display: flex;
+                                                flex-wrap: wrap;
+                                                margin-top: 20px;
+                                                margin-right: -15px;
+                                                margin-left: -15px;
+                                                
+                                            } 
+                                            
+                                            .col-md-4{
+                                                position: relative;
+                                                width: 33.333333%;
+                                            }
+                                        </style>
+                                    </head>
+                                    <body>
+                                        <table style="width:100%">
+                                            <tr>
+                                                <td style="width: 60%;">
+                                                    <img src="https://speedjin.com/synctronix/assets/logoWhite.jpg" heigth="auto" width="30%" /><br>
+                                                    <p>
+                                                        <span style="font-weight: bold;font-size: 16px;">'.$compname.'</span><br><br>
+                                                        <span style="font-size: 12px;">'.$compaddress.'</span><br>
+                                                        <span style="font-size: 12px;">'.$compphone.' / EMAIL: '.$compiemail.'</span>
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    <p>
+                                                        <span style="font-weight: bold;font-size: 12px;">Transaction Date. : '.$row['dateTime'].'</span><br><br>
+                                                        <span style="font-size: 12px;">Transaction Status: '.$row['status'].'</span><br>';
+                                                        
+                                                    if($row['manual'] == '1'){
+                                                        $message .= '<span style="font-size: 12px;">Weight Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: Manual Weighing</span><br>';
+                                                    }
+                                                    else{
+                                                        $message .= '<span style="font-size: 12px;">Weight Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: Auto Weighing</span><br>';
+                                                    }
+                                                    
+                                                    $message .= '<span style="font-size: 12px;">Invoice No. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$row['invoiceNo'].'</span><br>
+                                                        <span style="font-size: 12px;">Delivery No. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$row['deliveryNo'].'</span><br>
+                                                        <span style="font-size: 12px;">Purchase No. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$row['purchaseNo'].'</span><br>
+                                                        <span style="font-size: 12px;">Batch No. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$row['batchNo'].'</span>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <hr>
+                                        <table style="width:100%">
+                                        <tr>
+                                            <td style="width: 40%;">
+                                                <p>
+                                                    <span style="font-weight: bold;font-size: 16px;">'.$customer.'</span><br>
+                                                </p>
+                                            </td>
+                                            <td style="width: 20%;">
+                                                <p>&nbsp;</p>
+                                            </td>
+                                            <td style="width: 40%;">
+                                                <p>
+                                                    <span style="font-weight: bold;font-size: 14px;margin: 0 auto;display: table;">CASH BILL</span><br>
+                                                    <span style="font-weight: bold;font-size: 12px;">Serial No. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$row['serialNo'].'</span>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <p>
+                                                    <span style="font-size: 12px;">'.$customerA.'</span><br>
+                                                    <span style="font-size: 12px;">TEL: '.$customerP.'</span><br>
+                                                    <span style="font-size: 12px;">EMAIL: '.$customerE.'</span>
+                                                </p>
+                                                <table style="width:100%; border:1px solid black;">
+                                                    <tr>
+                                                        <th colspan="2" style="border:1px solid black; font-size: 14px;">Order Weight</th>
+                                                        <th colspan="2" style="border:1px solid black; font-size: 14px;">Variance Weight</th>
+                                                        <th style="border:1px solid black; font-size: 14px;">Variance %</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border:1px solid black;">'.$ow.'</td>
+                                                        <td style="border:1px solid black;">kg</td>
+                                                        <td style="border:1px solid black;">'.$vw.'</td>
+                                                        <td style="border:1px solid black;">kg</td>
+                                                        <td style="border:1px solid black;">'.$row['variancePerc'].' %</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td style="width: 20%;">
+                                                <center><img src="https://speedjin.com/synctronix/php/'.$file.'" height="auto" width="50%" /></center>
+                                            </td>
+                                            <td>
+                                                <p>
+                                                    <span style="font-size: 12px;">Weight Date & Time : '.$row['inCDateTime'].'</span><br>
+                                                    <span style="font-size: 12px;">User Weight &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$row['name'].'</span><br>
+                                                    <span style="font-size: 12px;">Current Weight &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$cw.' kg</span><br>
+                                                    <span style="font-size: 12px;">Tare Weight &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$tw.' kg</span><br><br>
+                                                    <span style="font-size: 14px;font-weight: bold;">Total Weight &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: '.$ttw.' kg</span><br>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        </table><br>
+                                        <table style="width:100%; border:1px solid black;">
+                                            <tr>
+                                                <th style="border:1px solid black;font-size: 14px;">Vehicle No.</th>
+                                                <th style="border:1px solid black;font-size: 14px;">Product Name</th>
+                                                <th style="border:1px solid black;font-size: 14px;">Package</th>
+                                                <th style="border:1px solid black;font-size: 14px;">Unit Price</th>
+                                                <th colspan="2" style="border:1px solid black;font-size: 14px;">Total Weight</th>
+                                                <th style="border:1px solid black;font-size: 14px;">Total Price</th>
+                                            </tr>
+                                            <tr>
+                                                <td style="border:1px solid black;font-size: 14px;">'.$row['vehicleNo'].'</td>
+                                                <td style="border:1px solid black;font-size: 14px;">'.$row['product_name'].'</td>
+                                                <td style="border:1px solid black;font-size: 14px;">'.$row['packages'].'</td>
+                                                <td style="border:1px solid black;font-size: 14px;">RM '.$row['unitPrice'].'</td>
+                                                <td style="border:1px solid black;font-size: 14px;">'.$ttw.'</td>
+                                                <td style="border:1px solid black;font-size: 14px;">kg</td>
+                                                <td style="border:1px solid black;font-weight: bold;font-size: 14px;">RM '.$row['totalPrice'].'</td>
+                                            </tr>
+                                        </table>
+                                        <p>
+                                            <span style="font-size: 12px;font-weight: bold;">Remark: </span>
+                                            <span style="font-size: 12px;">'.$row['remark'].'</span>
+                                        </p>
+                                    </body>
+                                </html>';
+
                     echo json_encode(
                         array(
                             "status" => "success",
@@ -298,8 +302,6 @@ if(isset($_POST['userID'], $_POST["file"])){
                         )
                     );
                 }
-                
-                
             }
         }
         else{
@@ -309,6 +311,8 @@ if(isset($_POST['userID'], $_POST["file"])){
                     "message" => "Something Goes Wrong"
                 ));
         }
+
+        $select_stmt->close();
     }
     else{
         $empQuery = "select count.id, count.serialNo, vehicles.veh_number, lots.lots_no, count.batchNo, count.invoiceNo, count.deliveryNo, 
@@ -331,77 +335,76 @@ if(isset($_POST['userID'], $_POST["file"])){
             }
             else{
                 $result = $select_stmt->get_result();
-                
-
+        
                 if ($row = $result->fetch_assoc()) {
                     $message = '<html>
-                    <head>
-                        <title>Html to PDF</title>
-                    </head>
-                    <body>
-                        <h3>'.$compname.'</h3>
-                        <p>No.34, Jalan Bagan 1, <br>Taman Bagan, 13400 Butterworth.<br> Penang. Malaysia.</p>
-                        <p>TEL: 6043325822 | EMAIL: admin@synctronix.com.my</p><hr>
-                        <table style="width:100%">
-                        <tr>
-                            <td>
-                                <h4>CUSTOMER NAME: '.$row['customer_name'].'</h4>
-                            </td>
-                            <td>
-                                <h4>SERIAL NO: '.$row['serialNo'].'</h4>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p>No.34, Jalan Bagan 1, <br>Taman Bagan, <br>13400 Butterworth. Penang. Malaysia.</p>
-                            </td>
-                            <td>
-                                <h4>Status: '.$row['status'].'</h4>
-                                <p>Date: 23/03/2022<br>Delivery No: '.$row['deliveryNo'].'</p>
-                            </td>
-                        </tr>
-                        </table>
-                        <table style="width:100%; border:1px solid black;">
-                        <tr>
-                            <th style="border:1px solid black;">Vehicle No.</th>
-                            <th style="border:1px solid black;">Product Name</th>
-                            <th style="border:1px solid black;">Date & Time</th>
-                            <th style="border:1px solid black;">Weight</th>
-                        </tr>
-                        <tr>
-                            <td style="border:1px solid black;">'.$row['veh_number'].'</td>
-                            <td style="border:1px solid black;">'.$row['product_name'].'</td>
-                            <td style="border:1px solid black;">'.$row['dateTime'].'</td>
-                            <td style="border:1px solid black;">'.$row['unitWeight'].' '.$row['units'].'</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td style="border:1px solid black;">Tare Weight</td>
-                            <td style="border:1px solid black;">'.$row['tare'].' '.$row['units'].'</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td style="border:1px solid black;">Net Weight</td>
-                            <td style="border:1px solid black;">'.$row['actualWeight'].' '.$row['units'].'</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td style="border:1px solid black;">M.O.Q</td>
-                            <td style="border:1px solid black;">'.$row['moq'].'</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td style="border:1px solid black;">Total Weight</td>
-                            <td style="border:1px solid black;">'.$row['totalWeight'].' '.$row['units'].'</td>
-                        </tr>
-                        </table>
-                        <p>Remark: '.$row['remark'].'</p>
-                    </body>
-                </html>';
+                                    <head>
+                                        <title>Html to PDF</title>
+                                    </head>
+                                    <body>
+                                        <h3>'.$compname.'</h3>
+                                        <p>No.34, Jalan Bagan 1, <br>Taman Bagan, 13400 Butterworth.<br> Penang. Malaysia.</p>
+                                        <p>TEL: 6043325822 | EMAIL: admin@synctronix.com.my</p><hr>
+                                        <table style="width:100%">
+                                        <tr>
+                                            <td>
+                                                <h4>CUSTOMER NAME: '.$row['customer_name'].'</h4>
+                                            </td>
+                                            <td>
+                                                <h4>SERIAL NO: '.$row['serialNo'].'</h4>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <p>No.34, Jalan Bagan 1, <br>Taman Bagan, <br>13400 Butterworth. Penang. Malaysia.</p>
+                                            </td>
+                                            <td>
+                                                <h4>Status: '.$row['status'].'</h4>
+                                                <p>Date: 23/03/2022<br>Delivery No: '.$row['deliveryNo'].'</p>
+                                            </td>
+                                        </tr>
+                                        </table>
+                                        <table style="width:100%; border:1px solid black;">
+                                        <tr>
+                                            <th style="border:1px solid black;">Vehicle No.</th>
+                                            <th style="border:1px solid black;">Product Name</th>
+                                            <th style="border:1px solid black;">Date & Time</th>
+                                            <th style="border:1px solid black;">Weight</th>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:1px solid black;">'.$row['veh_number'].'</td>
+                                            <td style="border:1px solid black;">'.$row['product_name'].'</td>
+                                            <td style="border:1px solid black;">'.$row['dateTime'].'</td>
+                                            <td style="border:1px solid black;">'.$row['unitWeight'].' '.$row['units'].'</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td style="border:1px solid black;">Tare Weight</td>
+                                            <td style="border:1px solid black;">'.$row['tare'].' '.$row['units'].'</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td style="border:1px solid black;">Net Weight</td>
+                                            <td style="border:1px solid black;">'.$row['actualWeight'].' '.$row['units'].'</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td style="border:1px solid black;">M.O.Q</td>
+                                            <td style="border:1px solid black;">'.$row['moq'].'</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td style="border:1px solid black;">Total Weight</td>
+                                            <td style="border:1px solid black;">'.$row['totalWeight'].' '.$row['units'].'</td>
+                                        </tr>
+                                        </table>
+                                        <p>Remark: '.$row['remark'].'</p>
+                                    </body>
+                                </html>';
                 }
                 
                 echo json_encode(
@@ -410,8 +413,12 @@ if(isset($_POST['userID'], $_POST["file"])){
                         "message" => $message
                     ));
             }
+
+            $select_stmt->close();
         }
     } 
+
+    $db->close();
 }
 else{
     echo json_encode(

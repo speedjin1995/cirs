@@ -21,6 +21,7 @@ if(isset($_POST['userID'])){
         
         // Execute the prepared query.
         if (! $update_stmt->execute()) {
+            $update_stmt->close();
             echo json_encode(
                 array(
                     "status" => "failed",
@@ -249,23 +250,28 @@ if(isset($_POST['userID'])){
                                         $message['btu_box_info'] = $btuBox;
                                     }else if ($message['jenis_alat'] == 'ATK'){
                                         $loadCell = [];
-                                        foreach (json_decode($row2['load_cells_info'], true) as $atk) {
-                                            $loadCells = searchLoadCellById($atk['loadCells'], $db);
-                                            $loadCellCapacity = searchCapacityNameById($atk['loadCellCapacity'], $db);
-    
-                                            $loadCell[] = [
+
+                                        if ($row2['load_cells_info'] != null && $row2['load_cells_info'] != '') {
+                                            foreach (json_decode($row2['load_cells_info'], true) as $atk) {
+                                                $loadCells = searchLoadCellById($atk['loadCells'], $db);
+                                                $loadCellCapacity = searchCapacityNameById($atk['loadCellCapacity'], $db);
+
+                                                $loadCell[] = [
                                                 "no" => $atk["no"],
-                                                "loadCells" => $loadCells,
-                                                "loadCellBrand" => $atk["loadCellBrand"],
-                                                "loadCellModel" => $atk["loadCellModel"],
-                                                "loadCellCapacity" => $loadCellCapacity,
-                                                "loadCellSerial" => $atk["loadCellSerial"]
-                                            ];
+                                                    "loadCells" => $loadCells,
+                                                    "loadCellBrand" => $atk["loadCellBrand"],
+                                                    "loadCellModel" => $atk["loadCellModel"],
+                                                    "loadCellCapacity" => $loadCellCapacity,
+                                                    "loadCellSerial" => $atk["loadCellSerial"]
+                                                ];
+                                            }
                                         }
+
                                         $message['load_cells_info'] = $loadCell;
                                     }
                                 }
                             }
+                            $update_stmt2->close();
                         }
                     }
                 }else{
@@ -374,17 +380,21 @@ if(isset($_POST['userID'])){
                                     $message['btu_box_info'] = json_decode($row2['btu_box_info'], true);
                                 }
                             }
+                            $update_stmt2->close();
                         }
                     }
                 }
             }
             
+            $update_stmt->close();
             echo json_encode(
                 array(
                     "status" => "success",
                     "message" => $message
                 ));   
         }
+        
+        $db->close();
     }
 }
 else{

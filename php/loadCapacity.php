@@ -40,22 +40,22 @@ $data = array();
 $counter = 1;
 
 while($row = mysqli_fetch_assoc($empRecords)) {
-    $data[] = array( 
-      "counter"=>$counter,
-      "id"=>$row['id'],
-      "name"=>$row['name'],
-      "range_type"=>$row['range_type'],
-      "capacity"=>$row['capacity'],
-      "units"=>searchUnitNameById($row['units'], $db),
-      "division"=>$row['division'] ?? '',
-      "division_unit"=>$row['division_unit'] != null ? searchUnitNameById($row['division_unit'], $db) : '',
-      "capacity2"=>$row['capacity2'],
-      "units2"=>$row['units2'] != null ? searchUnitNameById($row['units2'], $db) : '',
-      "division2"=>$row['division2'] ?? '',
-      "division_unit2"=>$row['division_unit2'] != null ? searchUnitNameById($row['division_unit2'], $db) : '',
-    );
+  $data[] = array( 
+    "counter"=>$counter,
+    "id"=>$row['id'],
+    "name"=>$row['name'],
+    "range_type"=>$row['range_type'],
+    "capacity"=>$row['capacity'],
+    "units"=>searchUnitNameById($row['units'], $db),
+    "division"=>$row['division'] ?? '',
+    "division_unit"=>$row['division_unit'] != null ? searchUnitNameById($row['division_unit'], $db) : '',
+    "capacity2"=>$row['capacity2'],
+    "units2"=>$row['units2'] != null ? searchUnitNameById($row['units2'], $db) : '',
+    "division2"=>$row['division2'] ?? '',
+    "division_unit2"=>$row['division_unit2'] != null ? searchUnitNameById($row['division_unit2'], $db) : '',
+  );
 
-    $counter++;
+  $counter++;
 }
 
 ## Response
@@ -67,6 +67,7 @@ $response = array(
   'empRecords' => $empQuery
 );
 
+$db->close(); // Close database connection
 echo json_encode($response);
 
 ?>

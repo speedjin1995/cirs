@@ -19,6 +19,7 @@ else{
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
   }
+  $stmt->close();
 
   $autoFormNos = $db->query("SELECT DISTINCT auto_form_no FROM other_validations WHERE deleted = '0'");
   $dealer = $db->query("SELECT * FROM dealer WHERE deleted = '0'");
@@ -43,6 +44,8 @@ else{
   $loadCells = $db->query("SELECT load_cells.*, machines.machine_type AS machinetype, brand.brand AS brand_name, model.model AS model_name, alat.alat, country.nicename 
 FROM load_cells, machines, brand, model, alat, country WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
 AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load_cells.deleted = '0'");
+
+  $db->close(); // Close the database connection
 }
 ?>
 <style>

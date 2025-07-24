@@ -89,6 +89,7 @@ if(isset($_POST['name'])){
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
+                $update_stmt->close();
                 echo json_encode(
                     array(
                         "status"=> "failed", 
@@ -200,6 +201,7 @@ if(isset($_POST['name'])){
             
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {
+                $insert_stmt->close(); // Close the first insert statement
                 echo json_encode(
                     array(
                         "status"=> "failed", 
@@ -229,7 +231,6 @@ if(isset($_POST['name'])){
                             $branchPicValue = isset($branchPic[$i]) ? $branchPic[$i] : '';
                             $branchPicContactVAlue = isset($branchPicContact[$i]) ? $branchPicContact[$i] : '';
     
-    
                             if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, branch_code, branch_name, map_url, office_no, email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                                 $insert_stmt2->bind_param('ssssssssssss', $invid, $addr1, $addr2, $addr3, $addr4, $branchCodeValue, $branchNameValue, $mapUrlValue, $branchPhoneValue, $branchEmailValue, $branchPicValue, $branchPicContactVAlue);
                                 $insert_stmt2->execute();
@@ -251,7 +252,6 @@ if(isset($_POST['name'])){
                     $branchPicValue = isset($pic) ? $pic : '';
                     $branchPicContactVAlue = isset($picContact) ? $picContact : '';
 
-
                     if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, branch_code, branch_name, map_url, office_no, email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                         $insert_stmt2->bind_param('ssssssssssss', $invid, $addr1, $addr2, $addr3, $addr4, $branchCodeValue, $branchNameValue, $mapUrlValue, $branchPhoneValue, $branchEmailValue, $branchPicValue, $branchPicContactVAlue);
                         $insert_stmt2->execute();
@@ -266,7 +266,9 @@ if(isset($_POST['name'])){
                     )
                 );
             }
-        } 
+
+            $db->close();
+        }
     }
 }
 else{

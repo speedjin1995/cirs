@@ -14,7 +14,7 @@ $searchValue = mysqli_real_escape_string($db,$_POST['search']['value']); // Sear
 ## Search 
 $searchQuery = " ";
 if($searchValue != ''){
-   $searchQuery .= " AND alat like '%".$searchValue."%'";
+  $searchQuery .= " AND alat like '%".$searchValue."%'";
 }
 
 ## Total number of records without filtering
@@ -34,13 +34,13 @@ $data = array();
 $counter = 1;
 
 while($row = mysqli_fetch_assoc($empRecords)) {
-    $data[] = array( 
-      "counter"=>$counter,
-      "id"=>$row['id'],
-      "alat"=>$row['alat']
-    );
+  $data[] = array( 
+    "counter"=>$counter,
+    "id"=>$row['id'],
+    "alat"=>$row['alat']
+  );
 
-    $counter++;
+  $counter++;
 }
 
 ## Response
@@ -52,6 +52,7 @@ $response = array(
   'empRecords' => $empQuery
 );
 
+$db->close(); // Close database connection
 echo json_encode($response);
 
 ?>

@@ -24,10 +24,7 @@ if(isset($_POST['brand'])){
                     )
                 );
             }
-            else{
-                $update_stmt->close();
-                $db->close();
-                
+            else{                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -35,6 +32,8 @@ if(isset($_POST['brand'])){
                     )
                 );
             }
+
+            $update_stmt->close();
         }
     }
     else{
@@ -51,9 +50,6 @@ if(isset($_POST['brand'])){
                 );
             }
             else{
-                $insert_stmt->close();
-                $db->close();
-                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -70,7 +66,11 @@ if(isset($_POST['brand'])){
                 )
             );
         }
+
+        $insert_stmt->close();
     }
+
+    $db->close();
 }
 else{
     echo json_encode(

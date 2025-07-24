@@ -181,8 +181,10 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 							)
 						);
 					}
+					$insert_stmt->close();
 				}
 			}
+			$select_stmt->close();
 		}
 	}
 	else{
@@ -261,7 +263,6 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 					}
 				}
 
-
 				// if(isset($no) && $no != null && count($no) > 0){
 				// 	for($i=0; $i<count($no); $i++){
 				// 		$load_calibrations_info[] = array(
@@ -320,17 +321,19 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 					$insert_stmt3->close();
 				}
 
-				$update_stmt->close();
-				$db->close();
-				
 				$response['status'] = "success";
 				$response['message'] = "Updated Successfully!!";
 			}
+
+			$update_stmt->close();
 		}
 		else{
+			$update_stmt->close();
 			$response['status'] = "failed";
 			$response['message'] = "Error when creating query";
 		}
+
+		$db->close();
 	}
 	else{
 		if ($insert_stmt = $db->prepare("INSERT INTO other_validations (type, dealer, dealer_branch, validate_by, customer_type, customer, branch, machines, unit_serial_no, manufacturing, jenis_alat, brand, model, capacity, size, last_calibration_date, expired_calibration_date, auto_form_no, status, validation_date) 
@@ -438,18 +441,20 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 					$insert_stmt3->execute();
 					$insert_stmt3->close();
 				}
-
-				$insert_stmt->close();
-				$db->close();
 				
 				$response['status'] = "success";
 				$response['message'] = "Added Successfully!!";
 			}
+
+			$insert_stmt->close();
 		}
 		else{
+			$insert_stmt->close();
 			$response['status'] = "failed";
 			$response['message'] = "Error when creating query";
 		}
+
+		$db->close();
 	}
 } 
 else{

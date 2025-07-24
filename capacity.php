@@ -14,6 +14,8 @@ else{
   $units2 = $db->query("SELECT * FROM units WHERE deleted = '0'");
   $units3 = $db->query("SELECT * FROM units WHERE deleted = '0'");
   $units4 = $db->query("SELECT * FROM units WHERE deleted = '0'");
+
+  $db->close();
 }
 ?>
 

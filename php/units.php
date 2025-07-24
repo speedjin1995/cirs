@@ -25,9 +25,6 @@ if(isset($_POST['units'])){
                 );
             }
             else{
-                $update_stmt->close();
-                $db->close();
-                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -35,6 +32,8 @@ if(isset($_POST['units'])){
                     )
                 );
             }
+
+            $update_stmt->close();
         }
     }
     else{
@@ -51,9 +50,6 @@ if(isset($_POST['units'])){
                 );
             }
             else{
-                $insert_stmt->close();
-                $db->close();
-                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -61,8 +57,12 @@ if(isset($_POST['units'])){
                     )
                 );
             }
+
+            $insert_stmt->close();
         }
     }
+
+    $db->close();
 }
 else{
     echo json_encode(

@@ -12,6 +12,8 @@ else{
   $_SESSION['page']='model';
   $brand = $db->query("SELECT * FROM brand WHERE deleted = '0' ORDER BY brand asc");
   $country = $db->query("SELECT * FROM country WHERE deleted = '0'");
+
+  $db->close();
 }
 ?>
 

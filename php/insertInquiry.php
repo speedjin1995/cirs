@@ -74,6 +74,7 @@ if(isset($_POST['customerType'], $_POST['machineType'], $_POST['problems'], $_PO
 		
 			// Execute the prepared query.
 			if (! $update_stmt->execute()){
+				$update_stmt->close();
 				echo json_encode(
 					array(
 						"status"=> "failed", 
@@ -83,7 +84,6 @@ if(isset($_POST['customerType'], $_POST['machineType'], $_POST['problems'], $_PO
 			} 
 			else{
 				$update_stmt->close();
-				$db->close();
 				
 				echo json_encode(
 					array(
@@ -92,8 +92,12 @@ if(isset($_POST['customerType'], $_POST['machineType'], $_POST['problems'], $_PO
 					)
 				);
 			}
+
+			$db->close();
 		}
 		else{
+			$update_stmt->close();
+			$db->close();
 			echo json_encode(
 				array(
 					"status"=> "failed", 
@@ -115,6 +119,7 @@ if(isset($_POST['customerType'], $_POST['machineType'], $_POST['problems'], $_PO
 			
 			// Execute the prepared query.
 			if (! $insert_stmt->execute()){
+				$insert_stmt->close();
 				echo json_encode(
 					array(
 						"status"=> "failed", 
@@ -124,7 +129,6 @@ if(isset($_POST['customerType'], $_POST['machineType'], $_POST['problems'], $_PO
 			} 
 			else{
 				$insert_stmt->close();
-				$db->close();
 				
 				echo json_encode(
 					array(
@@ -133,8 +137,12 @@ if(isset($_POST['customerType'], $_POST['machineType'], $_POST['problems'], $_PO
 					)
 				);
 			}
+
+			$db->close();
 		}
 		else{
+			$insert_stmt->close();
+			$db->close();
 			echo json_encode(
 				array(
 					"status"=> "failed", 

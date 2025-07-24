@@ -37,6 +37,8 @@ if(isset($_POST['userID'])){
 					)
 				);
 			} else{
+				$update_stmt->close();
+				$db->close();
 				echo json_encode(
 					array(
 						"status"=> "failed", 
@@ -46,6 +48,8 @@ if(isset($_POST['userID'])){
 			}
 		} 
 		else{
+			$db->close();
+
 			echo json_encode(
 				array(
 					"status"=> "failed", 
@@ -68,6 +72,9 @@ if(isset($_POST['userID'])){
 					)
 				);
 			} else{
+				$update_stmt->close();
+				$db->close();
+
 				echo json_encode(
 					array(
 						"status"=> "failed", 
@@ -77,10 +84,12 @@ if(isset($_POST['userID'])){
 			}
 		} 
 		else{
+			$db->close();
+
 			echo json_encode(
 				array(
 					"status"=> "failed", 
-					"message"=> "Somthings wrong"
+					"message"=> "Somethings wrong"
 				)
 			);
 		}

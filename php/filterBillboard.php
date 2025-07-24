@@ -114,6 +114,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
           $customerA = $row2['customer_address'];
         }
       }
+      $update_stmt->close();
     }
 	}
 
@@ -232,5 +233,7 @@ $response = array(
 );
 
 echo json_encode($response);
+
+$db->close();
 
 ?>

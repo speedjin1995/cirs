@@ -22,6 +22,9 @@ else{
 
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE type = 'STAMPING' AND deleted = '0'");
+
+  $stmt->close();
+  $db->close();
 }
 ?>
 

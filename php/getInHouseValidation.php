@@ -178,7 +178,11 @@ if(isset($_POST['validationId'])){
                     "message" => $message
                 ));   
         }
+
+        $update_stmt->close();
     }
+
+    $db->close();
 }
 else{
     echo json_encode(

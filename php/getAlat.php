@@ -25,14 +25,18 @@ if(isset($_POST['userID'])){
                 $message['id'] = $row['id'];
                 $message['alat'] = $row['alat'];
             }
-            
+                        
             echo json_encode(
                 array(
                     "status" => "success",
                     "message" => $message
                 ));   
         }
+
+        $update_stmt->close();
     }
+
+    $db->close();
 }
 else{
     echo json_encode(

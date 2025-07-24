@@ -29,6 +29,7 @@ if(isset($_POST['oldPassword'], $_POST['newPassword'], $_POST['confirmPassword']
 			
 			if($stmt2->execute()){
     			$stmt2->close();
+    			$stmt->close();
     			$db->close();
     			
     			echo json_encode(
@@ -38,6 +39,9 @@ if(isset($_POST['oldPassword'], $_POST['newPassword'], $_POST['confirmPassword']
         	        )
         	    );
     		} else{
+    		    $stmt2->close();
+    		    $stmt->close();
+    		    $db->close();
     		    echo json_encode(
         	        array(
         	            "status"=> "failed", 
@@ -46,6 +50,8 @@ if(isset($_POST['oldPassword'], $_POST['newPassword'], $_POST['confirmPassword']
         	    );
     		}
 		} else{
+		    $stmt->close();
+		    $db->close();
 		    echo json_encode(
     	        array(
     	            "status"=> "failed", 
@@ -54,6 +60,8 @@ if(isset($_POST['oldPassword'], $_POST['newPassword'], $_POST['confirmPassword']
     	    );
 		}
 	} else{
+	     $stmt->close();
+	     $db->close();
 	     echo json_encode(
 	        array(
 	            "status"=> "failed", 

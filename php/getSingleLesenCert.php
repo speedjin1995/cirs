@@ -12,6 +12,7 @@ if(isset($_POST['companyId']) && isset($_POST['lesenCertId'])){
         
         // Execute the prepared query.
         if (!$sql->execute()) {
+            $sql->close();
             echo json_encode(
                 array(
                     "status" => "failed",
@@ -37,12 +38,15 @@ if(isset($_POST['companyId']) && isset($_POST['lesenCertId'])){
                 }
             }
             
+            $sql->close();
             echo json_encode(
                 array(
                     "status" => "success",
                     "message" => $data
                 ));   
         }
+
+        $db->close();
     }
 }
 else{

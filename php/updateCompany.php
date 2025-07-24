@@ -195,9 +195,6 @@ if(isset($_POST['new_roc'], $_POST['name'], $_POST['address'])){
 				}
 			}
 
-			$stmt2->close();
-			$db->close();
-			
 			echo json_encode(
 				array(
 					"status"=> "success", 
@@ -221,6 +218,9 @@ if(isset($_POST['new_roc'], $_POST['name'], $_POST['address'])){
 			)
 		);
 	}
+
+	$stmt2->close();
+	$db->close();
 } 
 else{
 	echo json_encode(

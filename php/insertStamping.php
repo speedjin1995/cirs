@@ -99,9 +99,13 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						if ($insert_stmtP->execute()) {
 							$product = $insert_stmtP->insert_id;
 						} 
+
+						$insert_stmtP->close();
 					}
 				}
 			}
+
+			$select_stmtP->close();
 		}
 	}
 
@@ -229,8 +233,12 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 							)
 						);
 					}
+
+					$insert_stmt->close();
 				}
 			}
+
+			$select_stmt->close();
 		}
 	}
 	else{
@@ -1035,9 +1043,6 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					$insert_stmt3->close();
 				}
 
-				$update_stmt->close();
-				$db->close();
-				
 				echo json_encode(
 					array(
 						"status"=> "success", 
@@ -1045,8 +1050,11 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					)
 				);
 			}
+
+			$update_stmt->close();
 		}
 		else{
+			$update_stmt->close();
 			echo json_encode(
 				array(
 					"status"=> "failed", 
@@ -1054,6 +1062,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				)
 			);
 		}
+
 	}
 	else{
 		if ($insert_stmt = $db->prepare("INSERT INTO stamping (type, dealer, dealer_branch, customer_type, customers, brand, machine_type, model, make_in, capacity, serial_no, assignTo,
@@ -1632,10 +1641,6 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					$insert_stmt3->execute();
 					$insert_stmt3->close();
 				}
-
-
-				$insert_stmt->close();
-				$db->close();
 				
 				echo json_encode(
 					array(
@@ -1644,8 +1649,11 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					)
 				);
 			}
+
+			$insert_stmt->close();
 		}
 		else{
+			$insert_stmt->close();
 			echo json_encode(
 				array(
 					"status"=> "failed", 
@@ -1653,6 +1661,8 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				)
 			); 
 		}
+
+		$db->close();
 	}
 } 
 else{

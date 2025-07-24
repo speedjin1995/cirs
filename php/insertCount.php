@@ -41,7 +41,7 @@ if(isset($_POST['status'], $_POST['lotNo'], $_POST['invoiceNo'], $_POST['vehicle
             
             // Execute the prepared query.
             if (! $update_stmt->execute()){
-
+                $update_stmt->close();
                 echo json_encode(
                     array(
                         "status"=> "failed", 
@@ -50,10 +50,7 @@ if(isset($_POST['status'], $_POST['lotNo'], $_POST['invoiceNo'], $_POST['vehicle
                 );
 
             } else{
-
-                $update_stmt->close();
-                $db->close();
-                
+                $update_stmt->close();                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -62,8 +59,11 @@ if(isset($_POST['status'], $_POST['lotNo'], $_POST['invoiceNo'], $_POST['vehicle
                 );
 
             }
-        } else{
 
+            $db->close();
+        } else{
+            $update_stmt->close();
+            $db->close();
             echo json_encode(
                 array(
                     "status"=> "failed", 
@@ -88,6 +88,7 @@ if(isset($_POST['status'], $_POST['lotNo'], $_POST['invoiceNo'], $_POST['vehicle
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
+                $update_stmt->close();
                 echo json_encode(
                     array(
                         "status" => "failed",
@@ -95,7 +96,6 @@ if(isset($_POST['status'], $_POST['lotNo'], $_POST['invoiceNo'], $_POST['vehicle
                     )); 
             }
             else{
-
                 $result = $update_stmt->get_result();
                 $message = array();
                 
@@ -127,6 +127,7 @@ if(isset($_POST['status'], $_POST['lotNo'], $_POST['invoiceNo'], $_POST['vehicle
                         
                         // Execute the prepared query.
                         if (! $insert_stmt->execute()){
+                            $insert_stmt->close();
                             echo json_encode(
                                 array(
                                     "status"=> "failed", 
@@ -135,27 +136,25 @@ if(isset($_POST['status'], $_POST['lotNo'], $_POST['invoiceNo'], $_POST['vehicle
                             );
                         } 
                         else{
+                            $insert_stmt->close();
 
                             $misValue++;
                             ///insert miscellaneous
-                            if ($update_stmt = $db->prepare("UPDATE miscellaneous SET value=? WHERE id=?")){
-                                $update_stmt->bind_param('ss', $misValue, $mesId);
+                            if ($update_stmt2 = $db->prepare("UPDATE miscellaneous SET value=? WHERE id=?")){
+                                $update_stmt2->bind_param('ss', $misValue, $mesId);
                                 
                                 // Execute the prepared query.
-                                if (! $update_stmt->execute()){
-                    
+                                if (! $update_stmt2->execute()){
+                                    $update_stmt2->close();
                                     echo json_encode(
                                         array(
                                             "status"=> "failed", 
-                                            "message"=> $update_stmt->error
+                                            "message"=> $update_stmt2->error
                                         )
                                     );
                     
                                 } else{
-                    
-                                    $update_stmt->close();
-                                    $db->close();
-                                    
+                                    $update_stmt2->close();                                    
                                     echo json_encode(
                                         array(
                                             "status"=> "success", 
@@ -165,7 +164,7 @@ if(isset($_POST['status'], $_POST['lotNo'], $_POST['invoiceNo'], $_POST['vehicle
                     
                                 }
                             } else{
-                    
+                                $update_stmt2->close();
                                 echo json_encode(
                                     array(
                                         "status"=> "failed", 
@@ -173,13 +172,15 @@ if(isset($_POST['status'], $_POST['lotNo'], $_POST['invoiceNo'], $_POST['vehicle
                                     )
                                 );
                             }
-
-                            ////
                         }
                     }
                     
                 }
+
+                $update_stmt->close();
             }
+
+            $db->close();
         }
     }      
 	

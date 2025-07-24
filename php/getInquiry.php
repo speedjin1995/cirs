@@ -11,6 +11,7 @@ if(isset($_POST['userID'])){
         
         // Execute the prepared query.
         if (! $update_stmt->execute()) {
+            $update_stmt->close();
             echo json_encode(
                 array(
                     "status" => "failed",
@@ -87,6 +88,7 @@ if(isset($_POST['userID'])){
                 $message['pic_attend'] = $row['pic_attend'];
                 $message['created_datetime'] = $created_datetime;
             }
+            $update_stmt->close();
             
             echo json_encode(
                 array(
@@ -94,6 +96,8 @@ if(isset($_POST['userID'])){
                     "message" => $message
                 ));   
         }
+
+        $db->close();
     }
 }
 else{

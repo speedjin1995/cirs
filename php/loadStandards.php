@@ -80,6 +80,7 @@ $response = array(
   'empRecords' => $empQuery
 );
 
+$db->close(); // Close database connection
 echo json_encode($response);
 
 ?>

@@ -18,6 +18,7 @@ if(isset($_POST['companyId']) && isset($_POST['lesenCertId'])){
     if(($row = $result->fetch_assoc()) !== null){
         $existLesenCertJson = $row['lesen_cert'];
     }
+    $stmt->close(); // Close the prepared statement
 
     if(!empty($existLesenCertJson) && !is_null($existLesenCertJson)){
         $lesenCerts = json_decode($row['lesen_cert'], true);
@@ -56,6 +57,9 @@ if(isset($_POST['companyId']) && isset($_POST['lesenCertId'])){
 							)
 						);
 					} else{
+						$stmt2->close();
+						$db->close();
+
 						echo json_encode(
 							array(
 								"status"=> "failed", 
@@ -65,10 +69,12 @@ if(isset($_POST['companyId']) && isset($_POST['lesenCertId'])){
 					}
 				} 
 				else{
+					$db->close();
+
 					echo json_encode(
 						array(
 							"status"=> "failed", 
-							"message"=> "Somthings wrong"
+							"message"=> "Somethings wrong"
 						)
 					);
 				}
@@ -101,6 +107,9 @@ if(isset($_POST['companyId']) && isset($_POST['lesenCertId'])){
 							)
 						);
 					} else{
+						$stmt2->close();
+						$db->close();
+
 						echo json_encode(
 							array(
 								"status"=> "failed", 
@@ -110,10 +119,12 @@ if(isset($_POST['companyId']) && isset($_POST['lesenCertId'])){
 					}
 				} 
 				else{
+					$db->close();
+
 					echo json_encode(
 						array(
 							"status"=> "failed", 
-							"message"=> "Somthings wrong"
+							"message"=> "Somethings wrong"
 						)
 					);
 				}

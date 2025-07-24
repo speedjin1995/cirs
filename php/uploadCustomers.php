@@ -40,6 +40,7 @@ if (!empty($data)) {
                 $resultw = $misc_stmt->get_result();
                 $roww = $resultw->fetch_assoc();
                 $count = $row['branchCodeCount'];
+                $misc_stmt->close();
             }
 
             if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, branch_code, branch_name, map_url, office_no, email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
@@ -77,6 +78,8 @@ if (!empty($data)) {
                         $updmisc_stmt->close();
                     }
                 }
+
+                $misc_stmt->close();
             }
 
             if ($insert_stmt = $db->prepare("INSERT INTO customers (dealer, customer_code, other_code, customer_name, customer_address, address2, address3, address4, map_url, customer_phone, customer_email, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {

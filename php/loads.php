@@ -77,12 +77,10 @@ if(isset($_POST['loadCell'], $_POST['model'], $_POST['capacity'], $_POST['madeIn
                                 }
                             }
                         }
+                        $certificateFile->close();
                     }
                 }
-                
-                $update_stmt->close();
-                $db->close();
-                
+                                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -90,6 +88,8 @@ if(isset($_POST['loadCell'], $_POST['model'], $_POST['capacity'], $_POST['madeIn
                     )
                 );
             }
+
+            $update_stmt->close();
         }
     }
     else{
@@ -133,9 +133,6 @@ if(isset($_POST['loadCell'], $_POST['model'], $_POST['capacity'], $_POST['madeIn
                 } else {
                     $response['file_status'] = "No file uploaded or there was an error.";
                 }
-
-                $insert_stmt->close();
-                $db->close();
                 
                 echo json_encode(
                     array(
@@ -144,8 +141,12 @@ if(isset($_POST['loadCell'], $_POST['model'], $_POST['capacity'], $_POST['madeIn
                     )
                 );
             }
+
+            $insert_stmt->close();
         }
     }
+    
+    $db->close(); // Close database connection
 }
 else{
     echo json_encode(

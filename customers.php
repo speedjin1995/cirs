@@ -11,6 +11,8 @@ else{
   $user = $_SESSION['userID'];
   $_SESSION['page']='customers';
   $dealer = $db->query("SELECT * FROM dealer WHERE deleted = '0'");
+
+  $db->close();
 }
 ?>
 

@@ -51,6 +51,7 @@ if(isset($_POST['userID'])){
                             );
                         }
                     }
+                    $update_stmt2->close();
                 }
 
                 $message['id'] = $row['id'];
@@ -76,7 +77,11 @@ if(isset($_POST['userID'])){
                     "message" => $message
                 ));   
         }
+
+        $update_stmt->close();
     }
+
+    $db->close();
 }
 else{
     echo json_encode(

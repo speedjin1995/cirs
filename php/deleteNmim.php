@@ -19,6 +19,8 @@ if(isset($_POST['companyId']) && isset($_POST['nmimId'])){
         $existNmimJson = $row['nmim'];
     }
 
+	$stmt->close();
+
     if(!empty($existNmimJson) && !is_null($existNmimJson)){
         $nmims = json_decode($row['nmim'], true);
         if (is_array($nmims)) {
@@ -56,6 +58,9 @@ if(isset($_POST['companyId']) && isset($_POST['nmimId'])){
 							)
 						);
 					} else{
+						$stmt2->close();
+						$db->close();
+
 						echo json_encode(
 							array(
 								"status"=> "failed", 
@@ -65,10 +70,12 @@ if(isset($_POST['companyId']) && isset($_POST['nmimId'])){
 					}
 				} 
 				else{
+					$db->close();
+
 					echo json_encode(
 						array(
 							"status"=> "failed", 
-							"message"=> "Somthings wrong"
+							"message"=> "Somethings wrong"
 						)
 					);
 				}
@@ -101,6 +108,9 @@ if(isset($_POST['companyId']) && isset($_POST['nmimId'])){
 							)
 						);
 					} else{
+						$stmt2->close();
+						$db->close();
+
 						echo json_encode(
 							array(
 								"status"=> "failed", 
@@ -110,10 +120,12 @@ if(isset($_POST['companyId']) && isset($_POST['nmimId'])){
 					}
 				} 
 				else{
+					$db->close();
+					
 					echo json_encode(
 						array(
 							"status"=> "failed", 
-							"message"=> "Somthings wrong"
+							"message"=> "Somethings wrong"
 						)
 					);
 				}

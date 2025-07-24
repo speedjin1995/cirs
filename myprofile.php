@@ -21,6 +21,8 @@ else{
         $fullName = $row['name'];
         $userName = $row['username'];
     }
+    $stmt->close(); // Close the prepared statement
+    $db->close(); // Close the database connection
 }
 ?>
 

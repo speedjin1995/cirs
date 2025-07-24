@@ -25,10 +25,7 @@ if(isset($_POST['machineTypes'], $_POST['validatorType'])){
                     )
                 );
             }
-            else{
-                $update_stmt->close();
-                $db->close();
-                
+            else{                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -36,6 +33,7 @@ if(isset($_POST['machineTypes'], $_POST['validatorType'])){
                     )
                 );
             }
+            $update_stmt->close();
         }
     }
     else{
@@ -52,9 +50,6 @@ if(isset($_POST['machineTypes'], $_POST['validatorType'])){
                 );
             }
             else{
-                $insert_stmt->close();
-                $db->close();
-                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -62,8 +57,12 @@ if(isset($_POST['machineTypes'], $_POST['validatorType'])){
                     )
                 );
             }
+
+            $insert_stmt->close();
         }
     }
+
+    $db->close();
 }
 else{
     echo json_encode(

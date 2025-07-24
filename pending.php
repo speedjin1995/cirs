@@ -19,15 +19,17 @@ else{
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
   }
+  $stmt->close();
 
-  $stmt = $db->prepare("SELECT * from companies");
-	$stmt->execute();
-	$result2 = $stmt->get_result();
+  $stmt2 = $db->prepare("SELECT * from companies");
+	$stmt2->execute();
+	$result2 = $stmt2->get_result();
   $stamp_prefer_validator = '';
 
   if(($row = $result2->fetch_assoc()) !== null){
     $stamp_prefer_validator = $row['stamp_prefer_validator'];
   }
+  $stmt2->close();
 
   $dealer = $db->query("SELECT * FROM dealer WHERE deleted = '0'");
   $customers = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
@@ -71,6 +73,8 @@ else{
 //   $loadCells = $db->query("SELECT load_cells.*, machines.machine_type AS machinetype, brand.brand AS brand_name, model.model AS model_name, alat.alat, country.nicename 
 // FROM load_cells, machines, brand, model, alat, country WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
 // AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load_cells.deleted = '0'");
+
+  $db->close();
 }
 ?>
 <style>
@@ -4414,7 +4418,6 @@ function format (row) {
               returnString += `<td>${batuUjianVal}</td>`;
             }
 
-            console.log(row.btu_box_info[i]);
             returnString += `
               <td>${row.btu_box_info[i].penandaanBatuUjian}</td>
               <td>${row.btu_box_info[i].batuDaftarLama}</td>

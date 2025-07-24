@@ -27,9 +27,12 @@ else{
   $result = $db->query("SELECT name FROM companies LIMIT 1");
 
   if ($result && $result->num_rows > 0) {
-      $company = $result->fetch_assoc();
-      $company_name = htmlspecialchars($company['name']); // Store name in variable
+    $company = $result->fetch_assoc();
+    $company_name = htmlspecialchars($company['name']); // Store name in variable
   }
+
+  $stmt->close();
+  $db->close();
 }
 ?>
 

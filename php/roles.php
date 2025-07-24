@@ -25,10 +25,7 @@ if(isset($_POST['rolecode'], $_POST['roles'])){
                     )
                 );
             }
-            else{
-                $update_stmt->close();
-                $db->close();
-                
+            else{                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -36,6 +33,7 @@ if(isset($_POST['rolecode'], $_POST['roles'])){
                     )
                 );
             }
+            $update_stmt->close();
         }
     }
     else{
@@ -52,9 +50,6 @@ if(isset($_POST['rolecode'], $_POST['roles'])){
                 );
             }
             else{
-                $insert_stmt->close();
-                $db->close();
-                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -62,8 +57,11 @@ if(isset($_POST['rolecode'], $_POST['roles'])){
                     )
                 );
             }
+            $insert_stmt->close();
         }
     }
+
+    $db->close();
 }
 else{
     echo json_encode(

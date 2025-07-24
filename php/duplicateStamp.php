@@ -20,6 +20,9 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
         $select_stmt->bind_param('s', $id);
 
         if (!$select_stmt->execute()) {
+            $select_stmt->close();
+            $db->close();
+
             echo json_encode(
                 array(
                     "status" => "failed",
@@ -29,6 +32,8 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
         else{
             $result = $select_stmt->get_result();
             $message = array();
+
+            $select_stmt->close();
             
             if ($record = $result->fetch_assoc()) {
                 // Prepare insert statement for stamping
@@ -99,9 +104,13 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
                     $insertLogStmt->execute([
                         $action, $uid, $newStampId
                     ]);
+                    
+                    $extStmt->close(); // Close the prepared statement for this iteration
                 }
 
-                $db->close();
+                $insertStmt->close(); // Close the prepared statement
+                $insertExtStmt->close(); // Close the prepared statement
+                $insertLogStmt->close(); // Close the prepared statement
 				
 				echo json_encode(
 					array(
@@ -110,9 +119,13 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
 					)
 				);
             }
+
+            $db->close();
         }
     }
     else{
+        $db->close();
+
         echo json_encode(
             array(
                 "status"=> "failed", 

@@ -42,6 +42,9 @@ else{
             // File ID not found in the database
             echo 'File not found!!.';
         }
+
+        $stmt->close();
+        $db->close();
     } else {
         // No file ID provided in the request
         echo 'Invalid file request.';

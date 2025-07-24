@@ -25,6 +25,7 @@ if(isset($_POST['id'], $_POST['nmimDetail'], $_POST['nmimApprNo'], $_POST['nmimA
     if(($row = $result->fetch_assoc()) !== null){
         $existNmimJson = $row['nmim'];
     }
+    $stmt->close(); // Close the prepared statement
 
     if(!empty($existNmimJson) && !is_null($existNmimJson)){
         $dataArray = json_decode($existNmimJson, true);
@@ -110,7 +111,6 @@ if(isset($_POST['id'], $_POST['nmimDetail'], $_POST['nmimApprNo'], $_POST['nmimA
         $response['message'] = "Something went wrong!";
     }
     
-    $stmt->close();
     $stmt2->close();
     $db->close();
 } else {

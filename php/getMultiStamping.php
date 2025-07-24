@@ -78,9 +78,14 @@ if(isset($_POST['selectedIds'])){
             "aaData" => $data
         );
 
+        $select_stmt->close(); // Close the prepared statement
+        $db->close();
         echo json_encode($response);
 
     }else{
+        $select_stmt->close(); // Close the prepared statement
+        $db->close();
+        
         echo json_encode(
             array(
                 "status"=> "failed", 

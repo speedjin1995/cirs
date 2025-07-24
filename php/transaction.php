@@ -33,12 +33,17 @@ if(isset($_POST['transactions'])){
                             if (! $insert_stmt->execute()) {
                                 $success = false;
                             }
+                            $insert_stmt->close();
                         }
                     }
                 }
             }
+
+            $select_stmt->close();
         }
     }
+
+    $db->close();
 
     if($success){
         echo json_encode(

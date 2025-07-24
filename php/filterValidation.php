@@ -161,4 +161,6 @@ $response = array(
 
 echo json_encode($response);
 
+$db->close();
+
 ?>

@@ -31,6 +31,7 @@ if(isset($_POST['id'])){
         }
     }
 
+    $company_stmt->close();
 
     // $placeholders = implode(',', array_fill(0, count($arrayOfId), '?'));
     $select_stmt = $db->prepare("SELECT a.*, b.standard_avg_temp, b.relative_humidity, b.unit, b.variance FROM inhouse_validations a LEFT JOIN standard b ON a.capacity = b.capacity WHERE a.id=?");
@@ -90,6 +91,8 @@ if(isset($_POST['id'])){
                         $unitRow = $unitResult->fetch_assoc();
                         $unit = $unitRow['units'];
                     }
+
+                    $unit_stmt->close();
                 }
 
                 if(!empty($branch)){
@@ -109,6 +112,8 @@ if(isset($_POST['id'])){
                         }
                         
                     }
+
+                    $branch_stmt->close();
                 }
 
                 $count++;
@@ -351,9 +356,6 @@ if(isset($_POST['id'])){
     
         $message .= '</body></html>';
 
-        // Fetch each row
-        $select_stmt->close();
-
         // Return the results as JSON
         echo json_encode(array('status' => 'success', 'message' => $message));
     } 
@@ -364,6 +366,9 @@ if(isset($_POST['id'])){
                 "message" => "Statement preparation failed"
             ));
     }
+
+    $select_stmt->close();
+    $db->close();
 }
 else{
     echo json_encode(
@@ -378,6 +383,4 @@ function formatDate($dateString) {
     $date = new DateTime($dateString);
     return $date->format('d M Y');
 }
-
-
 ?>

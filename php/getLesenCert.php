@@ -14,6 +14,7 @@ if(isset($_POST['companyId'])){
         
         // Execute the prepared query.
         if (!$sql->execute()) {
+            $sql->close();
             echo json_encode(
                 array(
                     "status" => "failed",
@@ -49,6 +50,8 @@ if(isset($_POST['companyId'])){
                     }
                 }
             }
+
+            $sql->close();
             
             $response = array(
                 "draw" => intval($draw),
@@ -59,6 +62,7 @@ if(isset($_POST['companyId'])){
             
             echo json_encode($response);
         }
+        $db->close();
     }
 }
 else{

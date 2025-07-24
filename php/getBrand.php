@@ -32,7 +32,10 @@ if(isset($_POST['userID'])){
                     "message" => $message
                 ));   
         }
+        $update_stmt->close();
     }
+
+    $db->close();
 }
 else{
     echo json_encode(
