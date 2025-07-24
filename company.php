@@ -31,6 +31,8 @@ else{
     $stmt->close();
 
 	$validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
+
+	$db->close();
 }
 ?>
 

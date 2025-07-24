@@ -37,6 +37,8 @@ else{
   $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");  
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
+
+  $db->close(); // Close the database connection
 }
 ?>
 <style>

@@ -4,16 +4,18 @@ require_once 'php/db_connect.php';
 session_start();
 
 if(!isset($_SESSION['userID'])){
-  echo '<script type="text/javascript">';
-  echo 'window.location.href = "login.php";</script>';
+    echo '<script type="text/javascript">';
+    echo 'window.location.href = "login.php";</script>';
 }
 else{
-  $user = $_SESSION['userID'];
-  $_SESSION['page']='price';
-  $machinetypes = $db->query("SELECT * FROM machines WHERE deleted = '0'");
-  $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
-  $capacities = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
-  $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
+    $user = $_SESSION['userID'];
+    $_SESSION['page']='price';
+    $machinetypes = $db->query("SELECT * FROM machines WHERE deleted = '0'");
+    $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
+    $capacities = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
+    $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
+
+    $db->close();
 }
 ?>
 

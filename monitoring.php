@@ -28,6 +28,8 @@ else{
   $capacities = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
   $problems = $db->query("SELECT * FROM problem WHERE deleted = '0'");
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
+
+  $db->close();
 }
 ?>
 

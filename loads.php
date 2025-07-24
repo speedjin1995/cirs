@@ -22,6 +22,8 @@ else{
   $alats2 = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $country2 = $db->query("SELECT * FROM country");
   $capacity2 = $db->query("SELECT * FROM capacity");
+
+  $db->close();
 }
 ?>
 

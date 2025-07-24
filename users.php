@@ -21,6 +21,8 @@ else{
 
     $superAdminRoles = $db->query("SELECT * FROM roles WHERE role_code != 'SUPER_ADMIN' AND deleted = '0'");
     $adminRoles = $db->query("SELECT * FROM roles WHERE role_code NOT IN ('SUPER_ADMIN', 'ADMIN') AND deleted = '0'");
+
+    $db->close(); // Close the database connection
 }
 ?>
 

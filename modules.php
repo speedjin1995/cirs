@@ -10,6 +10,8 @@ if(!isset($_SESSION['userID'])){
 else{
   $user = $_SESSION['userID'];
   $modules = $db->query("SELECT * FROM modules WHERE parent_module_id = '0'");
+
+  $db->close();
 }
 ?>
 

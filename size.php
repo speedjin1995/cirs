@@ -4,15 +4,15 @@ require_once 'php/db_connect.php';
 session_start();
 
 if(!isset($_SESSION['userID'])){
-  echo '<script type="text/javascript">';
-  echo 'window.location.href = "login.php";</script>';
+    echo '<script type="text/javascript">';
+    echo 'window.location.href = "login.php";</script>';
 }
 else{
-  $user = $_SESSION['userID'];
-  $_SESSION['page']='size';
+    $user = $_SESSION['userID'];
+    $_SESSION['page']='size';
 
-  $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
-
+    $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
+    $db->close();
 }
 ?>
 

@@ -12,6 +12,8 @@ else{
   $_SESSION['page']='standards';
   $capacities = $db->query("SELECT * FROM capacity WHERE deleted = '0'");
   $units = $db->query("SELECT * FROM units WHERE deleted = '0'");
+
+  $db->close(); // Close the database connection
 }
 ?>
 
