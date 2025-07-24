@@ -1532,33 +1532,35 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (BTU)</h4>
+        <h4>Additional Information (BTU)</h4>
       </div>
       <div class="row">
-        <div class="col-4">
-          <div class="form-group">
-            <label>No. of BTU *</label>
-            <input type="number" class="form-control" id="noOfBtu" name="noOfBtu" required min="1">
-          </div>
+        <!-- <div class="form-group col-4">
+          <label for="model">Platform Made In *</label>
+          <select class="form-control select2" id="platformCountry" name="platformCountry" required>
+            <option value="" selected disabled hidden>Please Select</option>
+            <?php while($rowcountry=mysqli_fetch_assoc($countryBtu)){ ?>
+              <option value="<?=$rowcountry['id'] ?>"><?=$rowcountry['name'] ?></option>
+            <?php } ?>
+          </select>
+        </div> -->
+        <div class="form-group col-4">
+          <label for="model">Batu Ujian *</label>
+          <select class="form-control select2" id="batuUjian" name="batuUjian" required>
+            <option value="" disabled hidden selected>Please Select</option>
+            <option value="BESI_TUANGAN">BESI TUANGAN</option>
+            <option value="TEMBAGA">TEMBAGA</option>
+            <option value="NIKARAT">NIKARAT</option>
+            <option value="OTHER">LAIN-LAIN</option>
+          </select>
         </div>
-        <div class="col-8 d-flex justify-content-end align-items-start">
-          <button style="margin-left:auto;margin-right: 25px;" type="button" class="btn btn-primary add-btu">Add BTU</button>
+        <div class="form-group col-4" id="batuUjianLainDisplay" style="display:none">
+          <label for="model">Batu Ujian Lain *</label>
+          <input type="text" class="form-control" id="batuUjianLain" name="batuUjianLain">
         </div>
-        <div class="col-12">
-          <table style="width: 100%;">
-            <thead>
-              <tr>
-                <th>No.</th>
-                <th>Batu Ujian</th>
-                <th>Penandaan Pada Batu Ujian</th>
-                <th>No Daftar Lama</th>
-                <th>No Daftar Baru</th>
-                <th>Price</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tbody id="btuTable"></tbody>
-          </table>
+        <div class="form-group col-4">
+          <label for="model">Penandaan Pada Batu Ujian</label>
+          <input type="text" class="form-control" id="penandaanBatuUjian" name="penandaanBatuUjian">
         </div>
       </div>
     </div>
@@ -1767,11 +1769,14 @@ else{
           <table style="width: 100%;">
             <thead>
               <tr>
-                <th>No.</th>
+                <th style="width: 5%;">No.</th>
                 <th>Batu Ujian</th>
                 <th>Penandaan Pada Batu Ujian</th>
                 <th>No Daftar Lama</th>
                 <th>No Daftar Baru</th>
+                <th>No Siri Pelekat Keselamatan</th>
+                <th>No Borang D</th>
+                <th>No Borang E</th>
                 <th>Price</th>
                 <th>Delete</th>
               </tr>
@@ -1885,6 +1890,15 @@ else{
     </td>
     <td>
       <input type="text" class="form-control" id="batuDaftarBaru" name="batuDaftarBaru">
+    </td>
+    <td>
+      <input type="text" class="form-control" id="batuNoSiriPelekatKeselamatan" name="batuNoSiriPelekatKeselamatan">
+    </td>
+    <td>
+      <input type="text" class="form-control" id="batuBorangD" name="batuBorangD">
+    </td>
+    <td>
+      <input type="text" class="form-control" id="batuBorangE" name="batuBorangE">
     </td>
     <td>
       <input type="text" class="form-control" id="price" name="price" readonly>
@@ -3417,6 +3431,9 @@ $(function () {
       $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount);
       $("#btuTable").find('#batuDaftarLama:last').attr('name', 'batuDaftarLama['+btuCount+']').attr("id", "batuDaftarLama" + btuCount);
       $("#btuTable").find('#batuDaftarBaru:last').attr('name', 'batuDaftarBaru['+btuCount+']').attr("id", "batuDaftarBaru" + btuCount);
+      $("#btuTable").find('#batuNoSiriPelekatKeselamatan:last').attr('name', 'batuNoSiriPelekatKeselamatan['+btuCount+']').attr("id", "batuNoSiriPelekatKeselamatan" + btuCount);
+      $("#btuTable").find('#batuBorangD:last').attr('name', 'batuBorangD['+btuCount+']').attr("id", "batuBorangD" + btuCount);
+      $("#btuTable").find('#batuBorangE:last').attr('name', 'batuBorangE['+btuCount+']').attr("id", "batuBorangE" + btuCount);
       $("#btuTable").find('#price:last').attr('name', 'price['+btuCount+']').attr("id", "price" + btuCount).val('');
 
       $('#addtionalSection').find('.select2').select2({
@@ -3713,55 +3730,26 @@ function format (row) {
                         `;
   }else if(row.jenis_alat == 'BTU'){
     returnString += `</div><hr>
-                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (BTU)</strong></span>
-                        <div class="row">  
-                    `;
-
-    if (row.btu_info.length > 0){
-      var batuUjianVal = '';
+                      <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (BTU)</strong></span>
+                        <div class="row">
+                          <!-- BTU Section -->
+                          <div class="col-6">
+                            <p><strong>Penandaan Pada Batu Ujian:</strong> ${row.penandaan_batu_ujian}</p>
+                          </div>`;
+    if (row.batu_ujian == 'OTHER'){
       returnString += `
-        <table style="width: 100%;">
-          <thead>
-            <tr>
-              <th>No.</th>
-              <th>Batu Ujian</th>
-              <th>Penandaan Pada Batu Ujian</th>
-              <th>No Daftar Lama</th>
-              <th>No Daftar Baru</th>
-            </tr>
-          </thead>
-          <tbody>`;
-
-          for (i = 0; i < row.btu_info.length; i++) {
-            returnString += `<tr><td>${row.btu_info[i].no}</td>`;
-
-            if (row.btu_info[i].batuUjian == 'OTHER'){
-              returnString += `<td>${row.btu_info[i].batuUjianLain}</td>`;
-            }else{
-              if (row.btu_info[i].batuUjian == 'BESI_TUANGAN'){
-                batuUjianVal = 'BESI TUANGAN';
-              }
-              else if (row.btu_info[i].batuUjian == 'TEMBAGA'){
-                batuUjianVal = 'TEMBAGA';
-              }
-              else if (row.btu_info[i].batuUjian == 'NIKARAT'){
-                batuUjianVal = 'NIKARAT';
-              }
-
-              returnString += `<td>${batuUjianVal}</td>`;
-            }
-
-            returnString += `
-              <td>${row.btu_info[i].penandaanBatuUjian}</td>
-              <td>${row.btu_info[i].batuDaftarLama}</td>
-              <td>${row.btu_info[i].batuDaftarBaru}</td>
-              </tr>
-            `;
-          }
-      returnString += `</tbody>
-        </table>
-      `;
-    }    
+                      <div class="col-6">
+                        <p><strong>Batu Ujian:</strong> ${row.batu_ujian_lain}</p>
+                      </div>
+                    </div>`;
+    } else{
+      returnString += `
+                      <div class="col-6">
+                        <p><strong>Batu Ujian:</strong> ${row.batu_ujian}</p>
+                      </div>
+                    </div>
+                    `;
+    }
   }else if(row.jenis_alat == 'ATP-AUTO MACHINE'){
     returnString += `</div><hr>
                         <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATP - AUTO MACHINE)</strong></span>
@@ -4003,6 +3991,9 @@ function format (row) {
               <th>Penandaan Pada Batu Ujian</th>
               <th>No Daftar Lama</th>
               <th>No Daftar Baru</th>
+              <th>No No Siri Pelekat Keselamatan</th>
+              <th>No Borang D</th>
+              <th>No Borang E</th>
             </tr>
           </thead>
           <tbody>`;
@@ -4026,10 +4017,14 @@ function format (row) {
               returnString += `<td>${batuUjianVal}</td>`;
             }
 
+            console.log(row.btu_box_info[i]);
             returnString += `
               <td>${row.btu_box_info[i].penandaanBatuUjian}</td>
               <td>${row.btu_box_info[i].batuDaftarLama}</td>
               <td>${row.btu_box_info[i].batuDaftarBaru}</td>
+              <td>${row.btu_box_info[i].batuNoSiriPelekatKeselamatan}</td>
+              <td>${row.btu_box_info[i].batuBorangD}</td>
+              <td>${row.btu_box_info[i].batuBorangE}</td>
               </tr>
             `;
           }
@@ -4536,56 +4531,23 @@ function edit(id) {
             $('#extendModal').find('#question5_2').val(obj.message.questions[5].answer).trigger('change');
             $('#extendModal').find('#question6').val(obj.message.questions[6].answer).trigger('change');
             $('#extendModal').find('#question7').val(obj.message.questions[7].answer).trigger('change');
-          } else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '7'){
-            $('#addtionalSection').html($('#btuBoxDetails').html());
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '7'){
+            $('#addtionalSection').html($('#btuDetails').html());
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#penandaanBatuUjian').val(obj.message.penandaan_batu_ujian).trigger('change');
 
-            if(obj.message.btu_info.length > 0){
-              $('#extendModal').find('#noOfBtu').val(obj.message.btu_info.length);
-              $("#btuTable").html('');
-              btuCount = 0;
-
-              for(var i = 0; i < obj.message.btu_info.length; i++){
-                var item = obj.message.btu_info[i];
-                var $addContents = $("#btuCellDetails").clone();
-
-                $("#btuTable").append($addContents.html());
-
-                $("#btuTable").find('.details:last').attr("id", "detail" + btuCount);
-                $("#btuTable").find('.details:last').attr("data-index", btuCount);
-                $("#btuTable").find('#remove:last').attr("id", "remove" + btuCount);
-
-                $("#btuTable").find('#no:last').attr('name', 'no['+btuCount+']').attr("id", "no" + btuCount).val(item.no);
-                $("#btuTable").find('#batuUjian:last').attr('name', 'batuUjian['+btuCount+']').attr("id", "batuUjian" + btuCount).val(item.batuUjian).trigger('change');
-                $("#btuTable").find('#batuUjianLain:last').attr('name', 'batuUjianLain['+btuCount+']').attr("id", "batuUjianLain" + btuCount).val(item.batuUjianLain);
-                $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount).val(item.penandaanBatuUjian).trigger('change');
-                $("#btuTable").find('#batuDaftarLama:last').attr('name', 'batuDaftarLama['+btuCount+']').attr("id", "batuDaftarLama" + btuCount).val(item.batuDaftarLama);
-                $("#btuTable").find('#batuDaftarBaru:last').attr('name', 'batuDaftarBaru['+btuCount+']').attr("id", "batuDaftarBaru" + btuCount).val(item.batuDaftarBaru);
-                $("#btuTable").find('#price:last').attr('name', 'price['+btuCount+']').attr("id", "price" + btuCount).val('');
-
-                btuCount++;
+            $('#extendModal').find('#batuUjian').on('change', function(){
+              var batuUjian = $(this).val();
+              if (batuUjian == 'OTHER'){
+                $('#extendModal').find('#batuUjianLainDisplay').show();
+                $('#extendModal').find('#batuUjianLain').val(obj.message.batu_ujian_lain);
+              }else{
+                $('#extendModal').find('#batuUjianLainDisplay').hide();
               }
-            }else{
-              $('#extendModal').find('#noOfBtu').val(0);
-            }
-          }
-          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '7'){
-          //   $('#addtionalSection').html($('#btuDetails').html());
-          //   // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-          //   $('#extendModal').find('#penandaanBatuUjian').val(obj.message.penandaan_batu_ujian).trigger('change');
+            });
 
-          //   $('#extendModal').find('#batuUjian').on('change', function(){
-          //     var batuUjian = $(this).val();
-          //     if (batuUjian == 'OTHER'){
-          //       $('#extendModal').find('#batuUjianLainDisplay').show();
-          //       $('#extendModal').find('#batuUjianLain').val(obj.message.batu_ujian_lain);
-          //     }else{
-          //       $('#extendModal').find('#batuUjianLainDisplay').hide();
-          //     }
-          //   });
-
-          //   $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
-          // }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '10'){
+            $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '10'){
             // $('#addtionalSection').html($('#autoPackDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
             // $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
@@ -4689,6 +4651,9 @@ function edit(id) {
                 $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount).val(item.penandaanBatuUjian).trigger('change');
                 $("#btuTable").find('#batuDaftarLama:last').attr('name', 'batuDaftarLama['+btuCount+']').attr("id", "batuDaftarLama" + btuCount).val(item.batuDaftarLama);
                 $("#btuTable").find('#batuDaftarBaru:last').attr('name', 'batuDaftarBaru['+btuCount+']').attr("id", "batuDaftarBaru" + btuCount).val(item.batuDaftarBaru);
+                $("#btuTable").find('#batuNoSiriPelekatKeselamatan:last').attr('name', 'batuNoSiriPelekatKeselamatan['+btuCount+']').attr("id", "batuNoSiriPelekatKeselamatan" + btuCount).val(item.batuNoSiriPelekatKeselamatan);
+                $("#btuTable").find('#batuBorangD:last').attr('name', 'batuBorangD['+btuCount+']').attr("id", "batuBorangD" + btuCount).val(item.batuBorangD);
+                $("#btuTable").find('#batuBorangE:last').attr('name', 'batuBorangE['+btuCount+']').attr("id", "batuBorangE" + btuCount).val(item.batuBorangE);
                 $("#btuTable").find('#price:last').attr('name', 'price['+btuCount+']').attr("id", "price" + btuCount).val('');
 
                 btuCount++;
@@ -4898,55 +4863,22 @@ function edit(id) {
             $('#extendModal').find('#question6').val(obj.message.questions[6].answer).trigger('change');
             $('#extendModal').find('#question7').val(obj.message.questions[7].answer).trigger('change');
           } else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '7'){
-            $('#addtionalSection').html($('#btuBoxDetails').html());
+            $('#addtionalSection').html($('#btuDetails').html());
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#penandaanBatuUjian').val(obj.message.penandaan_batu_ujian).trigger('change');
 
-            if(obj.message.btu_info.length > 0){
-              $('#extendModal').find('#noOfBtu').val(obj.message.btu_info.length);
-              $("#btuTable").html('');
-              btuCount = 0;
-
-              for(var i = 0; i < obj.message.btu_info.length; i++){
-                var item = obj.message.btu_info[i];
-                var $addContents = $("#btuCellDetails").clone();
-
-                $("#btuTable").append($addContents.html());
-
-                $("#btuTable").find('.details:last').attr("id", "detail" + btuCount);
-                $("#btuTable").find('.details:last').attr("data-index", btuCount);
-                $("#btuTable").find('#remove:last').attr("id", "remove" + btuCount);
-
-                $("#btuTable").find('#no:last').attr('name', 'no['+btuCount+']').attr("id", "no" + btuCount).val(item.no);
-                $("#btuTable").find('#batuUjian:last').attr('name', 'batuUjian['+btuCount+']').attr("id", "batuUjian" + btuCount).val(item.batuUjian).trigger('change');
-                $("#btuTable").find('#batuUjianLain:last').attr('name', 'batuUjianLain['+btuCount+']').attr("id", "batuUjianLain" + btuCount).val(item.batuUjianLain);
-                $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount).val(item.penandaanBatuUjian).trigger('change');
-                $("#btuTable").find('#batuDaftarLama:last').attr('name', 'batuDaftarLama['+btuCount+']').attr("id", "batuDaftarLama" + btuCount).val(item.batuDaftarLama);
-                $("#btuTable").find('#batuDaftarBaru:last').attr('name', 'batuDaftarBaru['+btuCount+']').attr("id", "batuDaftarBaru" + btuCount).val(item.batuDaftarBaru);
-                $("#btuTable").find('#price:last').attr('name', 'price['+btuCount+']').attr("id", "price" + btuCount).val('');
-
-                btuCount++;
+            $('#extendModal').find('#batuUjian').on('change', function(){
+              var batuUjian = $(this).val();
+              if (batuUjian == 'OTHER'){
+                $('#extendModal').find('#batuUjianLainDisplay').show(); 
+                $('#extendModal').find('#batuUjianLain').val(obj.message.batu_ujian_lain);
+              }else{
+                $('#extendModal').find('#batuUjianLainDisplay').hide();
               }
-            }else{
-              $('#extendModal').find('#noOfBtu').val(0);
-            }
-          }
-          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '7'){
-          //   $('#addtionalSection').html($('#btuDetails').html());
-          //   // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-          //   $('#extendModal').find('#penandaanBatuUjian').val(obj.message.penandaan_batu_ujian).trigger('change');
+            });
 
-          //   $('#extendModal').find('#batuUjian').on('change', function(){
-          //     var batuUjian = $(this).val();
-          //     if (batuUjian == 'OTHER'){
-          //       $('#extendModal').find('#batuUjianLainDisplay').show(); 
-          //       $('#extendModal').find('#batuUjianLain').val(obj.message.batu_ujian_lain);
-          //     }else{
-          //       $('#extendModal').find('#batuUjianLainDisplay').hide();
-          //     }
-          //   });
-
-          //   $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
-          // }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '10'){
+            $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
+          } else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '10'){
             // $('#addtionalSection').html($('#autoPackDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
             // $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
@@ -5050,6 +4982,9 @@ function edit(id) {
                 $("#btuTable").find('#penandaanBatuUjian:last').attr('name', 'penandaanBatuUjian['+btuCount+']').attr("id", "penandaanBatuUjian" + btuCount).val(item.penandaanBatuUjian).trigger('change');
                 $("#btuTable").find('#batuDaftarLama:last').attr('name', 'batuDaftarLama['+btuCount+']').attr("id", "batuDaftarLama" + btuCount).val(item.batuDaftarLama);
                 $("#btuTable").find('#batuDaftarBaru:last').attr('name', 'batuDaftarBaru['+btuCount+']').attr("id", "batuDaftarBaru" + btuCount).val(item.batuDaftarBaru);
+                $("#btuTable").find('#batuNoSiriPelekatKeselamatan:last').attr('name', 'batuNoSiriPelekatKeselamatan['+btuCount+']').attr("id", "batuNoSiriPelekatKeselamatan" + btuCount).val(item.batuNoSiriPelekatKeselamatan);
+                $("#btuTable").find('#batuBorangD:last').attr('name', 'batuBorangD['+btuCount+']').attr("id", "batuBorangD" + btuCount).val(item.batuBorangD);
+                $("#btuTable").find('#batuBorangE:last').attr('name', 'batuBorangE['+btuCount+']').attr("id", "batuBorangE" + btuCount).val(item.batuBorangE);
                 $("#btuTable").find('#price:last').attr('name', 'price['+btuCount+']').attr("id", "price" + btuCount).val('');
 
                 btuCount++;
