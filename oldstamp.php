@@ -1695,55 +1695,26 @@ function format (row) {
                         `;
   }else if(row.jenis_alat == 'BTU'){
     returnString += `</div><hr>
-                        <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (BTU)</strong></span>
-                        <div class="row">  
-                    `;
-
-    if (row.btu_info.length > 0){
-      var batuUjianVal = '';
+                      <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (BTU)</strong></span>
+                        <div class="row">
+                          <!-- BTU Section -->
+                          <div class="col-6">
+                            <p><strong>Penandaan Pada Batu Ujian:</strong> ${row.penandaan_batu_ujian}</p>
+                          </div>`;
+    if (row.batu_ujian == 'OTHER'){
       returnString += `
-        <table style="width: 100%;">
-          <thead>
-            <tr>
-              <th>No.</th>
-              <th>Batu Ujian</th>
-              <th>Penandaan Pada Batu Ujian</th>
-              <th>No Daftar Lama</th>
-              <th>No Daftar Baru</th>
-            </tr>
-          </thead>
-          <tbody>`;
-
-          for (i = 0; i < row.btu_info.length; i++) {
-            returnString += `<tr><td>${row.btu_info[i].no}</td>`;
-
-            if (row.btu_info[i].batuUjian == 'OTHER'){
-              returnString += `<td>${row.btu_info[i].batuUjianLain}</td>`;
-            }else{
-              if (row.btu_info[i].batuUjian == 'BESI_TUANGAN'){
-                batuUjianVal = 'BESI TUANGAN';
-              }
-              else if (row.btu_info[i].batuUjian == 'TEMBAGA'){
-                batuUjianVal = 'TEMBAGA';
-              }
-              else if (row.btu_info[i].batuUjian == 'NIKARAT'){
-                batuUjianVal = 'NIKARAT';
-              }
-
-              returnString += `<td>${batuUjianVal}</td>`;
-            }
-
-            returnString += `
-              <td>${row.btu_info[i].penandaanBatuUjian}</td>
-              <td>${row.btu_info[i].batuDaftarLama}</td>
-              <td>${row.btu_info[i].batuDaftarBaru}</td>
-              </tr>
-            `;
-          }
-      returnString += `</tbody>
-        </table>
-      `;
-    }    
+                      <div class="col-6">
+                        <p><strong>Batu Ujian:</strong> ${row.batu_ujian_lain}</p>
+                      </div>
+                    </div>`;
+    } else{
+      returnString += `
+                      <div class="col-6">
+                        <p><strong>Batu Ujian:</strong> ${row.batu_ujian}</p>
+                      </div>
+                    </div>
+                    `;
+    }
   }else if(row.jenis_alat == 'ATP-AUTO MACHINE'){
     returnString += `</div><hr>
                         <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATP - AUTO MACHINE)</strong></span>
@@ -1985,6 +1956,9 @@ function format (row) {
               <th>Penandaan Pada Batu Ujian</th>
               <th>No Daftar Lama</th>
               <th>No Daftar Baru</th>
+              <th>No No Siri Pelekat Keselamatan</th>
+              <th>No Borang D</th>
+              <th>No Borang E</th>
             </tr>
           </thead>
           <tbody>`;
@@ -2008,10 +1982,14 @@ function format (row) {
               returnString += `<td>${batuUjianVal}</td>`;
             }
 
+            console.log(row.btu_box_info[i]);
             returnString += `
               <td>${row.btu_box_info[i].penandaanBatuUjian}</td>
               <td>${row.btu_box_info[i].batuDaftarLama}</td>
               <td>${row.btu_box_info[i].batuDaftarBaru}</td>
+              <td>${row.btu_box_info[i].batuNoSiriPelekatKeselamatan}</td>
+              <td>${row.btu_box_info[i].batuBorangD}</td>
+              <td>${row.btu_box_info[i].batuBorangE}</td>
               </tr>
             `;
           }
