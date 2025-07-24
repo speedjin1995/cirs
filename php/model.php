@@ -26,10 +26,7 @@ if(isset($_POST['brand'], $_POST['model'], $_POST['country'])){
                     )
                 );
             }
-            else{
-                $update_stmt->close();
-                $db->close();
-                
+            else{                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -37,6 +34,7 @@ if(isset($_POST['brand'], $_POST['model'], $_POST['country'])){
                     )
                 );
             }
+            $update_stmt->close();
         }
     }
     else{
@@ -52,10 +50,7 @@ if(isset($_POST['brand'], $_POST['model'], $_POST['country'])){
                     )
                 );
             }
-            else{
-                $insert_stmt->close();
-                $db->close();
-                
+            else{                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -63,8 +58,12 @@ if(isset($_POST['brand'], $_POST['model'], $_POST['country'])){
                     )
                 );
             }
+
+            $insert_stmt->close();
         }
     }
+
+    $db->close();
 }
 else{
     echo json_encode(

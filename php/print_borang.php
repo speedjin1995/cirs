@@ -597,12 +597,10 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                 $update_stmt = $db->prepare("UPDATE stamping SET stamping_date = '$fromDateTime', validate_by = '$validator2' WHERE id IN ($placeholders)");
                 $update_stmt->bind_param($types, ...$arrayOfId);
                 $update_stmt->execute();
+                $update_stmt->close();
             }    
     
         $message .= '</body></html>';
-
-        // Fetch each row
-        $select_stmt->close();
 
         // Return the results as JSON
         echo json_encode(array('status' => 'success', 'message' => $message));
@@ -614,6 +612,9 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                 "message" => "Statement preparation failed"
             ));
     }
+
+    $select_stmt->close();
+    $db->close();
 }
 else{
     echo json_encode(

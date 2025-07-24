@@ -37,10 +37,13 @@ if(isset($_POST['transactions'])){
                         }
                     }
                 }
-                $select_stmt->close();
             }
+
+            $select_stmt->close();
         }
     }
+
+    $db->close();
 
     if($success){
         echo json_encode(

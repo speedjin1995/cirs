@@ -13,10 +13,7 @@ if(isset($_POST['userID'])){
 	if ($stmt2 = $db->prepare("UPDATE users SET deleted=? WHERE id=?")) {
 		$stmt2->bind_param('ss', $del , $id);
 		
-		if($stmt2->execute()){
-			$stmt2->close();
-			$db->close();
-			
+		if($stmt2->execute()){			
 			echo json_encode(
     	        array(
     	            "status"=> "success", 
@@ -40,6 +37,10 @@ if(isset($_POST['userID'])){
 	        )
 	    );
 	}
+	
+	$stmt2->close();
+	$db->close();
+
 } 
 else{
     echo json_encode(

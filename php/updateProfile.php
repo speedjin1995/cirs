@@ -16,10 +16,7 @@ if(isset($_POST['userName'], $_POST['userEmail'])){
 	if ($stmt2 = $db->prepare("UPDATE users SET name=?, username=? WHERE id=?")) {
 		$stmt2->bind_param('sss', $name, $username, $id);
 		
-		if($stmt2->execute()){
-			$stmt2->close();
-			$db->close();
-			
+		if($stmt2->execute()){			
 			echo json_encode(
 				array(
 					"status"=> "success", 
@@ -43,6 +40,9 @@ if(isset($_POST['userName'], $_POST['userEmail'])){
 			)
 		);
 	}
+
+	$stmt2->close();
+	$db->close();
 } 
 else{
 	echo json_encode(

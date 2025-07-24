@@ -47,10 +47,7 @@ if(isset($_POST['type'], $_POST['price'])){
                     )
                 );
             }
-            else{
-                $update_stmt->close();
-                $db->close();
-                
+            else{                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -58,6 +55,8 @@ if(isset($_POST['type'], $_POST['price'])){
                     )
                 );
             }
+
+            $update_stmt->close();
         }
     }
     else{
@@ -73,10 +72,7 @@ if(isset($_POST['type'], $_POST['price'])){
                     )
                 );
             }
-            else{
-                $insert_stmt->close();
-                $db->close();
-                
+            else{                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -84,8 +80,11 @@ if(isset($_POST['type'], $_POST['price'])){
                     )
                 );
             }
+            $insert_stmt->close();
         }
     }
+
+    $db->close();
 }
 else{
     echo json_encode(

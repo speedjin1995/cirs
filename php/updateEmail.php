@@ -37,10 +37,7 @@ if(isset($_POST['type'], $_POST['emailTitle'], $_POST['emailBody'])){
 	if ($stmt2 = $db->prepare("UPDATE email_setup SET email_cc=?, email_title=?, email_body=? WHERE type=?")) {
 		$stmt2->bind_param('ssss', $emailCC, $emailTitle, $emailBody, $type);
 		
-		if($stmt2->execute()){
-			$stmt2->close();
-			$db->close();
-			
+		if($stmt2->execute()){			
 			echo json_encode(
 				array(
 					"status"=> "success", 
@@ -64,6 +61,9 @@ if(isset($_POST['type'], $_POST['emailTitle'], $_POST['emailBody'])){
 			)
 		);
 	}
+
+	$stmt2->close();
+	$db->close();
 } 
 else{
 	echo json_encode(

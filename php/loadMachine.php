@@ -57,6 +57,8 @@ while($row = mysqli_fetch_assoc($empRecords)) {
           $jenis_alat = $row2['alat'];
         }
       }
+
+      $update_stmt2->close();
     }
   }
   
@@ -79,6 +81,7 @@ $response = array(
   "aaData" => $data
 );
 
+$db->close(); // Close database connection
 echo json_encode($response);
 
 ?>

@@ -75,10 +75,7 @@ $_POST['tester8'], $_POST['tester9'], $_POST['tester10'])){
                     )
                 );
             }
-            else{
-                $update_stmt->close();
-                $db->close();
-                
+            else{                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -86,6 +83,8 @@ $_POST['tester8'], $_POST['tester9'], $_POST['tester10'])){
                     )
                 );
             }
+
+            $update_stmt->close();
         }
     }
     else{
@@ -101,10 +100,7 @@ $_POST['tester8'], $_POST['tester9'], $_POST['tester10'])){
                     )
                 );
             }
-            else{
-                $insert_stmt->close();
-                $db->close();
-                
+            else{                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -112,8 +108,11 @@ $_POST['tester8'], $_POST['tester9'], $_POST['tester10'])){
                     )
                 );
             }
+            $insert_stmt->close();
         }
     }
+
+    $db->close();
 }
 else{
     echo json_encode(

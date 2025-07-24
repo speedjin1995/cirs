@@ -24,10 +24,7 @@ if(isset($_POST['problem'])){
                     )
                 );
             }
-            else{
-                $update_stmt->close();
-                $db->close();
-                
+            else{                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -35,6 +32,8 @@ if(isset($_POST['problem'])){
                     )
                 );
             }
+
+            $update_stmt->close();
         }
     }
     else{
@@ -50,10 +49,7 @@ if(isset($_POST['problem'])){
                     )
                 );
             }
-            else{
-                $insert_stmt->close();
-                $db->close();
-                
+            else{                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -61,8 +57,11 @@ if(isset($_POST['problem'])){
                     )
                 );
             }
+            $insert_stmt->close();
         }
     }
+
+    $db->close();
 }
 else{
     echo json_encode(

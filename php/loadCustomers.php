@@ -61,6 +61,8 @@ while($row = mysqli_fetch_assoc($empRecords)) {
         );
       }
     }
+
+    $update_stmt2->close();
   }
   
   if(isset($row['map_url']) && !empty($row['map_url'])){
@@ -90,6 +92,7 @@ $response = array(
   "aaData" => $data
 );
 
+$db->close(); // Close database connection
 echo json_encode($response);
 
 ?>

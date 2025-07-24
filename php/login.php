@@ -18,24 +18,21 @@ if(($row = $result->fetch_assoc()) !== null){
 	if($password == $row['password']){
 		$_SESSION['userID']=$row['id'];
 		$_SESSION['page']='pending';
-		$stmt->close();
-		$db->close();
 		
 		echo '<script type="text/javascript">';
 		echo 'window.location.href = "../index.php";</script>';
 	} 
 	else{
-		$stmt->close();
-		$db->close();
 		echo '<script type="text/javascript">alert("Login unsuccessful, password or username is not matched");';
 		echo 'window.location.href = "../login.php";</script>';
-	}
-	
+	}	
 } 
 else{
-	 $stmt->close();
-	 $db->close();
-	 echo '<script type="text/javascript">alert("Login unsuccessful, password or username is not matched");';
-	 echo 'window.location.href = "../login.php";</script>';
+	echo '<script type="text/javascript">alert("Login unsuccessful, password or username is not matched");';
+	echo 'window.location.href = "../login.php";</script>';
 }
+
+$stmt->close();
+$db->close();
+
 ?>

@@ -533,6 +533,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATK' && $validator == 'DE METROLOGY'){
@@ -834,6 +835,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATP' && $validator == 'METROLOGY'){
@@ -1005,6 +1007,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATP' && $validator == 'DE METROLOGY'){
@@ -1174,6 +1177,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATS' && $validator == 'METROLOGY'){
@@ -1340,6 +1344,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATS' && $validator == 'DE METROLOGY'){
@@ -1513,6 +1518,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATE' && $validator == 'METROLOGY'){
@@ -1683,6 +1689,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATE' && $validator == 'DE METROLOGY'){
@@ -1855,6 +1862,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'BTU' && $validator == 'METROLOGY'){
@@ -2017,6 +2025,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'BTU' && $validator == 'DE METROLOGY'){
@@ -2178,6 +2187,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
     else if(str_contains($file, 'ATN') && $validator == 'METROLOGY'){
@@ -2345,6 +2355,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
     else if(str_contains($file, 'ATN') && $validator == 'DE METROLOGY'){
@@ -2522,6 +2533,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATP-AUTO MACHINE' && $validator == 'METROLOGY'){
@@ -2693,6 +2705,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATP-AUTO MACHINE' && $validator == 'DE METROLOGY'){
@@ -2860,6 +2873,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'SLL' && $validator == 'METROLOGY'){
@@ -3056,6 +3070,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'SLL' && $validator == 'DE METROLOGY'){
@@ -3241,6 +3256,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATS (H)' && $validator == 'METROLOGY'){
@@ -3407,6 +3423,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATS (H)' && $validator == 'DE METROLOGY'){
@@ -3577,6 +3594,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATP (MOTORCAR)' && $validator == 'METROLOGY'){
@@ -3759,6 +3777,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATP (MOTORCAR)' && $validator == 'DE METROLOGY'){
@@ -3941,6 +3960,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'SIA' && $validator == 'METROLOGY'){
@@ -4102,6 +4122,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'SIA' && $validator == 'DE METROLOGY'){
@@ -4263,6 +4284,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'BAP' && $validator == 'METROLOGY'){
@@ -4425,6 +4447,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'BAP' && $validator == 'DE METROLOGY'){
@@ -4587,6 +4610,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'SIC' && $validator == 'METROLOGY'){
@@ -4737,6 +4761,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'SIC' && $validator == 'DE METROLOGY'){
@@ -4887,6 +4912,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'BTU - (BOX)' && $validator == 'METROLOGY'){
@@ -5063,6 +5089,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 )
             ); 
         }
+
+        $select_stmt->close();
 
         // Merge the generated PDFs
         $mergedPdf = new PDFWithEllipse();
@@ -5261,6 +5289,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
+
         // Merge the generated PDFs
         $mergedPdf = new PDFWithEllipse();
 
@@ -5411,6 +5441,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_metrology_".$_GET['file']."_form.pdf");
     }
     else if($file == 'ATL' && $validator == 'DE METROLOGY'){
@@ -5537,6 +5568,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             ); 
         }
 
+        $select_stmt->close();
         $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
 }

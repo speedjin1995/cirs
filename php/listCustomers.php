@@ -39,6 +39,7 @@ if (isset($_POST['hypermarket'])) {
     }
 
     $check_zones_stmt->close();
+    $db->close();
 }
 else{
     echo json_encode(

@@ -34,13 +34,13 @@ $data = array();
 $counter = 1;
 
 while($row = mysqli_fetch_assoc($empRecords)) {
-    $data[] = array( 
-      "counter"=>$counter,
-      "id"=>$row['id'],
-      "name"=>$row['name']
-    );
+  $data[] = array( 
+    "counter"=>$counter,
+    "id"=>$row['id'],
+    "name"=>$row['name']
+  );
 
-    $counter++;
+  $counter++;
 }
 
 ## Response
@@ -51,6 +51,7 @@ $response = array(
   "aaData" => $data
 );
 
+$db->close(); // Close database connection
 echo json_encode($response);
 
 ?>

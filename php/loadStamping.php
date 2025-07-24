@@ -69,6 +69,7 @@ $response = array(
   "aaData" => $data
 );
 
+$db->close(); // Close database connection
 echo json_encode($response);
 
 ?>

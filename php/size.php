@@ -29,10 +29,7 @@ if(isset($_POST['size']) && isset($_POST['jenisAlat'])){
                     )
                 );
             }
-            else{
-                $update_stmt->close();
-                $db->close();
-                
+            else{                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -40,6 +37,8 @@ if(isset($_POST['size']) && isset($_POST['jenisAlat'])){
                     )
                 );
             }
+
+            $update_stmt->close();
         }
     }
     else{
@@ -55,10 +54,7 @@ if(isset($_POST['size']) && isset($_POST['jenisAlat'])){
                     )
                 );
             }
-            else{
-                $insert_stmt->close();
-                $db->close();
-                
+            else{                
                 echo json_encode(
                     array(
                         "status"=> "success", 
@@ -66,8 +62,12 @@ if(isset($_POST['size']) && isset($_POST['jenisAlat'])){
                     )
                 );
             }
+
+            $insert_stmt->close();
         }
     }
+
+    $db->close();
 }
 else{
     echo json_encode(

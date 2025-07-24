@@ -27,9 +27,6 @@ if(isset($_POST['userID'])){
 				$insert_stmt3->close();
 			}
 
-			$stmt2->close();
-			$db->close();
-			
 			echo json_encode(
     	        array(
     	            "status"=> "success", 
@@ -37,7 +34,6 @@ if(isset($_POST['userID'])){
     	        )
     	    );
 		} else{
-		    $stmt2->close();
 		    echo json_encode(
     	        array(
     	            "status"=> "failed", 
@@ -54,6 +50,9 @@ if(isset($_POST['userID'])){
 	        )
 	    );
 	}
+
+	$stmt2->close();
+	$db->close();
 } 
 else{
     echo json_encode(

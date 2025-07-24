@@ -91,6 +91,7 @@ $response = array(
   "aaData" => $data
 );
 
+$db->close(); // Close database connection
 echo json_encode($response);
 
 function calcDateDifference($fromDate, $toDate){
