@@ -5371,7 +5371,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $capacityName = $capacityRow['name'];
                 }
 
-
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
                     $size = $pdf->getTemplateSize($templateId);
@@ -5571,6 +5570,8 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
         $select_stmt->close();
         $pdf->Output('D', "filled_de_metrology_".$_GET['file']."_form.pdf");
     }
+
+    $db->close();
 }
 else{
     echo json_encode(

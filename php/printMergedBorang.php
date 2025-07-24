@@ -99,9 +99,12 @@ if ($res2 = $result2->fetch_assoc()) {
         if ($resF = $resultF->fetch_assoc()) {
             $companySignature = $baseUploadDir . '/' . $resF['filepath'];
         }
+
+        $select_stmtF->close(); // Close the prepared statement
     }
 }
 
+$select_stmt2->close(); // Close the prepared statement
 
 // Function to properly handle special characters for PDF output
 function sanitizeForPDF($str) {
@@ -4270,6 +4273,9 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
             )
         ); 
     }
+
+    $select_stmt->close();
+    $db->close();
 }
 else{
     echo json_encode(
