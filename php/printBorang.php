@@ -4917,7 +4917,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
     }
     else if($file == 'BTU - (BOX)' && $validator == 'METROLOGY'){
         // Temporary directory to save individual PDFs
-        $tempBtuBoxDir = dirname(__DIR__) . '\uploads\btubox_tempujian';
+        $tempBtuBoxDir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'btubox_tempujian';        
         if (!is_dir($tempBtuBoxDir)) {
             mkdir($tempBtuBoxDir, 0777, true);
         }
