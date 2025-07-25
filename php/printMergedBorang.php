@@ -3936,7 +3936,7 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
             }
             else if($file == 'BTU - (BOX)' && $validator == 'METROLOGY'){
                 // Temporary directory to save individual PDFs
-                $tempBtuBoxDir = dirname(__DIR__) . '\uploads\btubox_tempujian';
+                $tempBtuBoxDir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'btubox_tempujian';        
                 if (!is_dir($tempBtuBoxDir)) {
                     mkdir($tempBtuBoxDir, 0777, true);
                 }
@@ -4012,7 +4012,7 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                                 $pdf->Write(0, $noDaftarSyarikat);
         
                                 $pdf->SetXY(153.197, 162.163-2); // Adjust for {Penandaan Batu Ujian}
-                                $pdf->Write(0, $btuBox['penandaanBatuUjian']);
+                                $pdf->Write(0, searchCapacityNameById($btuBox['penandaanBatuUjian'], $db));
         
                                 $pdf->SetXY(131.197, 170.163-2); // Adjust for {Nilai Jangkaan}
                                 $pdf->Write(0, searchCapacityNameById($capacity,$db));
@@ -4073,7 +4073,7 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
             }
             else if($file == 'BTU - (BOX)' && $validator == 'DE METROLOGY'){
                 // Temporary directory to save individual PDFs
-                $tempBtuBoxDir = dirname(__DIR__) . '\uploads\btubox_tempujian';
+                $tempBtuBoxDir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'btubox_tempujian';        
                 if (!is_dir($tempBtuBoxDir)) {
                     mkdir($tempBtuBoxDir, 0777, true);
                 }
@@ -4145,7 +4145,7 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                                 $pdf->Write(0, $compcert);
         
                                 $pdf->SetXY(175.204, 136.599-2); // Adjust for {Penandaan Batu Ujian}
-                                $pdf->Write(0, $btuBox['penandaanBatuUjian']);
+                                $pdf->Write(0, searchCapacityNameById($btuBox['penandaanBatuUjian'], $db));
         
                                 $pdf->SetXY(149.197, 146.163-2); // Adjust for {Nilai Jangkaan}
                                 $pdf->Write(0, searchCapacityNameById($capacity,$db));
