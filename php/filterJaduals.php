@@ -66,6 +66,8 @@ if($searchValue != ''){
       s.pin_keselamatan like '%".$searchValue."%' OR
       s.siri_keselamatan like '%".$searchValue."%' OR
       s.serial_no like '%".$searchValue."%' OR
+      s.borang_d like '%".$searchValue."%' OR
+      s.borang_e like '%".$searchValue."%' OR
       DATE_FORMAT(s.stamping_date, '%d/%m/%Y') like '%".$formattedDate."%'
     )";
   }else{
@@ -79,7 +81,9 @@ if($searchValue != ''){
       s.borang_e like '%".$searchValue."%' OR
       s.pin_keselamatan like '%".$searchValue."%' OR
       s.siri_keselamatan like '%".$searchValue."%' OR
-      s.serial_no like '%".$searchValue."%'
+      s.serial_no like '%".$searchValue."%' OR
+      s.borang_d like '%".$searchValue."%' OR
+      s.borang_e like '%".$searchValue."%'
     )";
   }
 

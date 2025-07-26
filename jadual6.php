@@ -158,6 +158,8 @@ else{
                   <th>NO. DAFTAR LAMA</th>
                   <th>NO. DAFTAR BARU</th>
                   <th>CERTIFICATE NO./ <br>NO.SIRI PELEKAT <br>KESELAMATAN</th>
+                  <th>BRG D BIL NO.</th>
+                  <th>BRG E BIL NO.</th>
                   <!-- <th>ADDRESS</th> -->
                   <th></th>
                 </tr>
@@ -236,6 +238,8 @@ else{
                       <th>NO. DAFTAR LAMA</th>
                       <th>NO. DAFTAR BARU</th>
                       <th>CERTIFICATE NO./ <br>NO.SIRI PELEKAT <br>KESELAMATAN</th>
+                      <th>BRG D BIL NO.</th>
+                      <th>BRG E BIL NO.</th>
                     </tr>
                   </thead>
                 </table>
@@ -376,6 +380,14 @@ $(function () {
       { 
         data: 'siri_keselamatan',
         name: 'siri_keselamatan'
+      },
+      { 
+        data: 'borang_d',
+        name: 'borang_d'
+      },
+      { 
+        data: 'borang_e',
+        name: 'borang_e'
       },
       // { data: 'full_address' },
       { 
@@ -620,6 +632,14 @@ $(function () {
           data: 'siri_keselamatan',
           name: 'siri_keselamatan'
         },
+        { 
+          data: 'borang_d',
+          name: 'borang_d'
+        },
+        { 
+          data: 'borang_e',
+          name: 'borang_e'
+        },
         // { data: 'full_address' },
         { 
           className: 'dt-control',
@@ -701,6 +721,8 @@ $(function () {
           { data: 'no_daftar_lama' },
           { data: 'no_daftar_baru' },
           { data: 'siri_keselamatan' },
+          { data: 'borang_d' },
+          { data: 'borang_e' },
           { data: "id", visible: false }, // Hide 'id' but keep it in DataTable
         ]
       });

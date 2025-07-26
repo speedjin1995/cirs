@@ -3541,7 +3541,7 @@ $(function () {
 });
 
 function format (row) {
-  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC'];
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
 
   var returnString = `
   <div class="row">

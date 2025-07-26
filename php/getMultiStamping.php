@@ -62,6 +62,7 @@ if(isset($_POST['selectedIds'])){
                 "siri_keselamatan"=>$row['siri_keselamatan'] ?? '',
                 "unit_price"=>$row['unit_price'] ?? '',
                 "cert_price"=>$row['cert_price'] ?? '',     
+                "borang_d"=>$row['borang_d'] ?? '',       
                 "borang_e"=>$row['borang_e'] ?? '',       
                 "stamping_date"=>$row['stamping_date'] != null ? convertDatetimeToDate($row['stamping_date']) : '',
                 "due_date"=>$row['due_date'] != null ? convertDatetimeToDate($row['due_date']) : '',
