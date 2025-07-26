@@ -184,6 +184,8 @@ else{
                   <th>No. Daftar Lama</th>
                   <th>No. Daftar Baru</th>
                   <th>No. Siri Pelekat Keselamatan</th>
+                  <th>No. Borang D</th>
+                  <th>No. Borang E</th>
                   <th>Fi / Bayaran</th>
                   <th></th>
                 </tr>
@@ -264,6 +266,8 @@ else{
                       <th>No. Daftar Lama</th>
                       <th>No. Daftar Baru</th>
                       <th>No. Siri Pelekat Keselamatan</th>
+                      <th>No. Borang D</th>
+                      <th>No. Borang E</th>
                       <th>Fi / Bayaran</th>
                     </tr>
                   </thead>
@@ -409,6 +413,14 @@ $(function () {
       { 
         data: 'siri_keselamatan',
         name: 'siri_keselamatan' 
+      },
+      { 
+        data: 'borang_d',
+        name: 'borang_d' 
+      },
+      { 
+        data: 'borang_e',
+        name: 'borang_e' 
       },
       {
         orderable: false,
@@ -668,6 +680,14 @@ $(function () {
           data: 'siri_keselamatan',
           name: 'siri_keselamatan' 
         },
+        { 
+          data: 'borang_d',
+          name: 'borang_d' 
+        },
+        { 
+          data: 'borang_e',
+          name: 'borang_e' 
+        },
         {
           orderable: false,
           data: null, // Custom rendering for unit_price and cert_price
@@ -765,6 +785,8 @@ $(function () {
           { data: 'no_daftar_lama' },
           { data: 'no_daftar_baru' },
           { data: 'siri_keselamatan' },
+          { data: 'borang_d' },
+          { data: 'borang_e' },
           {
             orderable: false,
             data: null, // Custom rendering for unit_price and cert_price

@@ -104,7 +104,11 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                         border: 1px solid #000000;
                         font-family: sans-serif;
                         font-size: 12px;
-                        
+                        padding-left: 0.50rem;
+                        padding-right: 0.50rem;
+                        padding-left: 0.4rem;
+                        padding-right: 0.4rem;
+                        text-align: center;
                     } 
                     
                     .row {
@@ -113,7 +117,6 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                         margin-top: 20px;
                         margin-right: -15px;
                         margin-left: -15px;
-                        
                     } 
                     
                     .col-md-4{
@@ -132,32 +135,100 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
             <table class="table-bordered">
                 <tbody>
                     <tr>
-                        <th colspan="8" style="vertical-align: middle;">
+                        <th colspan="10" style="vertical-align: middle;">
                             JADUAL 6<br>AKTA TIMBANG DAN SUKAT 1972<br>PERATURAN-PERATURAN TIMBANG DAN SUKAT 1981<br>(PERATURAN 35)<br>DAFTAR TIMBANG , SUKAT DAN ALAT TIMBANG SUKAT YANG DIJUAL/DIBUAT
                         </th>
                     </tr>
                     <tr>
-                        <th>DATE</th>
-                        <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
-                        <th>CAPACITY</th>
-                        <th>QUANTITY</th>
-                        <th>REGISTER NO.</th>
-                        <th>CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
-                        <th>NAME OF PURCHASE</th>
-                        <th>ADDRESS</th>
+                        <th style="font-size:12px;">STAMPING DATE</th>
+                        <th style="font-size:12px;">NAME OF PURCHASE WITH ADDRESS</th>
+                        <th style="font-size:12px;">ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
+                        <th style="font-size:12px;" width="12%">CAPACITY</th>
+                        <th style="font-size:12px;">QTY</th>
+                        <th style="font-size:12px;" width="10%">NO. DAFTAR LAMA</th>
+                        <th style="font-size:12px;" width="10%">NO. DAFTAR BARU</th>
+                        <th style="font-size:12px;">CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
+                        <th style="font-size:12px;" width="10%">BRG D BIL NO.</th>
+                        <th style="font-size:12px;" width="10%">BRG E BIL NO.</th>
                     </tr>';
 
             while ($row = $result->fetch_assoc()) {
+                $branch = null;
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
+
+                if($row['branch'] != null && $row['branch'] != ''){
+                    $branch = $row['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
+                    }
+                }
+
+                $stampingDate = new DateTime($row['stamping_date']);
+                $formattedStampingDate = $stampingDate->format('d-m-Y');
+
+                // Logic for BTU - (BOX)
+                $capacity = '';
+                $borangD = '';
+                $borangE = '';
+                $siriKeselamatan = '';
+                $noDaftarLama = '';
+                $noDaftarBaru = '';
+                $count = 1;
+                if (searchAlatNameById($row['jenis_alat'], $db) == 'BTU - (BOX)'){
+                    $id = $row['id']; 
+                    $stampExtQuery = "SELECT * FROM stamping_ext WHERE stamp_id = $id";
+                    $stampDetail = mysqli_query($db, $stampExtQuery);
+                    $stampRow = mysqli_fetch_assoc($stampDetail);
+                    
+                    if(!empty($stampRow)){
+                      if (!empty($stampRow['btu_box_info'])){
+                        $btuBox = json_decode($stampRow['btu_box_info'], true);
+                        foreach ($btuBox as $btu) {
+                            $capacity .= $count.'.'.searchCapacityUnitById($btu['penandaanBatuUjian'], $db). '<br>';
+                            $borangD .= $count.'.'.$btu['batuBorangD'].'<br>';
+                            $borangE .= $count.'.'.$btu['batuBorangE'].'<br>';
+                            $siriKeselamatan .= $count.'.'.$btu['batuNoSiriPelekatKeselamatan'].'<br>';
+                            $noDaftarLama .= $count.'.'.$btu['batuDaftarLama'].'<br>';
+                            $noDaftarBaru .= $count.'.'.$btu['batuDaftarBaru'].'<br>';
+                            $count++;
+                        }
+                      }
+                    }
+                }else{
+                    $capacity = $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '';
+                    $siriKeselamatan = $row['siri_keselamatan'];
+                    $noDaftarLama = $row['no_daftar_lama'];
+                    $noDaftarBaru = $row['no_daftar_baru'];
+                    $borangD = $row['borang_d'];
+                    $borangE = $row['borang_e'];
+                }
+              
                 $message .= '<tr>
-                        <td>'.$todayDate2.'</td>
-                        <td>'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
-                        <td>'.searchCapacityNameById($row['capacity'], $db).'</td>
-                        <td>1</td>
-                        <td>'.$row['no_daftar'].'</td>
-                        <td>'.$row['siri_keselamatan'].'</td>
-                        <td>'.searchCustNameById($row['customers'], $db).'</td>
-                        <td>'.$row['address1'].' '.$row['address2'].' '.$row['address3'].'</td>
-                    </tr>';
+                                <td style="font-size:12px;">'.$formattedStampingDate.'</td>
+                                <td style="font-size:12px;"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
+                                <td style="font-size:12px;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
+                                <td style="font-size:12px;">'.$capacity.'</td>
+                                <td style="font-size:12px;">1</td>
+                                <td style="font-size:12px;">'.$noDaftarLama.'</td>
+                                <td style="font-size:12px;">'.$noDaftarBaru.'</td>
+                                <td style="font-size:12px;">'.$siriKeselamatan.'</td>
+                                <td style="font-size:12px;">'.$borangD.'</td>
+                                <td style="font-size:12px;">'.$borangE.'</td>
+                            </tr>';
             }
 
             $message .= '</tbody></table>';
@@ -198,7 +269,11 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                         border: 1px solid #000000;
                         font-family: sans-serif;
                         font-size: 12px;
-                        
+                        padding-left: 0.50rem;
+                        padding-right: 0.50rem;
+                        padding-left: 0.4rem;
+                        padding-right: 0.4rem;
+                        text-align: center;
                     } 
                     
                     .row {
@@ -226,38 +301,111 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
             <table class="table-bordered">
                 <tbody>
                     <tr>
-                        <th colspan="11" style="vertical-align: middle;">
+                        <th colspan="12" style="vertical-align: middle;">
                             JADUAL 7<br>AKTA TIMBANG DAN SUKAT 1972<br>PERATURAN-PERATURAN TIMBANG DAN SUKAT 1981<br>(PERATURAN 35)<br>DAFTAR TIMBANG , SUKAT DAN ALAT TIMBANG SUKAT YANG DIJUAL/DIBUAT
                         </th>
                     </tr>
                     <tr>
-                        <th>BRG E BIL NO.</th>
-                        <th>DATE</th>
-                        <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
-                        <th>CAPACITY</th>
-                        <th>LIST NO. (STMP. NO.)</th>
-                        <th>REGISTER NO. (BARU / LAMA)</th>
-                        <th>DETAILS OF REPAIR</th>
-                        <th>CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
-                        <th>NAME OF PURCHASE</th>
-                        <th>ADDRESS</th>
-                        <th>FEE</th>
+                        <th style="font-size:12px;" width="8%">BRG D BIL NO.</th>
+                        <th style="font-size:12px;" width="8%">BRG E BIL NO.</th>
+                        <th style="font-size:12px;">STAMPING DATE</th>
+                        <th style="font-size:12px;">NAME OF PURCHASE WITH ADDRESS</th>
+                        <th style="font-size:12px;">ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
+                        <th style="font-size:12px;">CAPACITY</th>
+                        <th style="font-size:12px;">LIST NO. (STMP. NO.)</th>
+                        <th style="font-size:12px;" width="10%">NO. DAFTAR LAMA</th>
+                        <th style="font-size:12px;" width="10%">NO. DAFTAR BARU</th>
+                        <th style="font-size:12px;">DETAILS OF REPAIR</th>
+                        <th style="font-size:12px;">CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
+                        <th style="font-size:12px;">FEE</th>
                     </tr>';
 
             while ($row = $result->fetch_assoc()) {
+                $branch = null;
+                $address1 = null;
+                $address2 = null;
+                $address3 = null;
+                $address4 = null;
+                $pic = null;
+                $pic_phone = null;
+
+                if($row['branch'] != null && $row['branch'] != ''){
+                    $branch = $row['branch'];
+                    $branchQuery = "SELECT * FROM branches WHERE id = $branch";
+                    $branchDetail = mysqli_query($db, $branchQuery);
+                    $branchRow = mysqli_fetch_assoc($branchDetail);
+                    
+                    if(!empty($branchRow)){
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
+                    }
+                }
+
+                $stampingDate = new DateTime($row['stamping_date']);
+                $formattedStampingDate = $stampingDate->format('d-m-Y');
+
+                // Logic for BTU - (BOX)
+                $capacity = '';
+                $borangD = '';
+                $borangE = '';
+                $siriKeselamatan = '';
+                $noDaftarLama = '';
+                $noDaftarBaru = '';
+                $count = 1;
+                if (searchAlatNameById($row['jenis_alat'], $db) == 'BTU - (BOX)'){
+                    $id = $row['id']; 
+                    $stampExtQuery = "SELECT * FROM stamping_ext WHERE stamp_id = $id";
+                    $stampDetail = mysqli_query($db, $stampExtQuery);
+                    $stampRow = mysqli_fetch_assoc($stampDetail);
+                    
+                    if(!empty($stampRow)){
+                      if (!empty($stampRow['btu_box_info'])){
+                        $btuBox = json_decode($stampRow['btu_box_info'], true);
+                        foreach ($btuBox as $btu) {
+                            $capacity .= $count.'.'.searchCapacityUnitById($btu['penandaanBatuUjian'], $db). '<br>';
+                            $borangD .= $count.'.'.$btu['batuBorangD'].'<br>';
+                            $borangE .= $count.'.'.$btu['batuBorangE'].'<br>';
+                            $siriKeselamatan .= $count.'.'.$btu['batuNoSiriPelekatKeselamatan'].'<br>';
+                            $noDaftarLama .= $count.'.'.$btu['batuDaftarLama'].'<br>';
+                            $noDaftarBaru .= $count.'.'.$btu['batuDaftarBaru'].'<br>';
+                            $count++;
+                        }
+                      }
+                    }
+                }else{
+                    $capacity = $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '';
+                    $siriKeselamatan = $row['siri_keselamatan'];
+                    $noDaftarLama = $row['no_daftar_lama'];
+                    $noDaftarBaru = $row['no_daftar_baru'];
+                    $borangD = $row['borang_d'];
+                    $borangE = $row['borang_e'];
+                }
+
                 $message .= '<tr>
-                        <td></td>
-                        <td>'.$todayDate2.'</td>
-                        <td>'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
-                        <td>'.searchCapacityNameById($row['capacity'], $db).'</td>
-                        <td>'.$row['pin_keselamatan'].'</td>
-                        <td>'.$row['no_daftar'].'</td>
-                        <td>SERVICE / STMP</td>
-                        <td>'.$row['siri_keselamatan'].'</td>
-                        <td>'.searchCustNameById($row['customers'], $db).'</td>
-                        <td>'.$row['address1'].' '.$row['address2'].' '.$row['address3'].'</td>
-                        <td>'.$row['unit_price'].'</td>
+                        <td style="font-size:12px;">'.$borangD.'</td>
+                        <td style="font-size:12px;">'.$borangE.'</td>
+                        <td style="font-size:12px;">'.$formattedStampingDate.'</td>
+                        <td style="font-size:12px;"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
+                        <td style="font-size:12px;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
+                        <td style="font-size:12px;">'.$capacity.'</td>
+                        <td style="font-size:12px;">'.$row['pin_keselamatan'].'</td>
+                        <td style="font-size:12px;">'.$noDaftarLama.'</td>
+                        <td style="font-size:12px;">'.$noDaftarBaru.'</td>
+                        <td style="font-size:12px;">SERVICE / STMP</td>
+                        <td style="font-size:12px;">'.$siriKeselamatan.'</td>';
+
+                if($row['cert_price'] != 0){
+                    $message .= '<td style="padding-left: 0.5%" width="7%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').' (Laporan)</td>
                     </tr>';
+                }else{
+                    $message .= '<td style="padding-left: 0.5%" width="7%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'</td>
+                    </tr>';
+                }
+                        
             }
 
             $message .= '</tbody></table>';
@@ -350,6 +498,8 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                     $siriKeselamatan = $row['siri_keselamatan'];
                     $noDaftarLama = $row['no_daftar_lama'];
                     $noDaftarBaru = $row['no_daftar_baru'];
+                    $borangD = $row['borang_d'];
+                    $borangE = $row['borang_e'];
                 }
 
                 $rows[] = '<tr style="height: 30px;">
@@ -422,7 +572,6 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                                     margin-top: 0.1in;
                                     margin-bottom: 0.1in;
                                 }
-                                
                             } 
                                     
                             table {
@@ -527,7 +676,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                         </table>
     
                         <p style="text-align: center;">BUTIRAN SENARAI ALAT-ALAT TIMBANG DAN SUKAT UNTUK PENGUJIAN DAN PENENTUSAHAN</p>
-                        <table class="table-bordered" style="border-left: none; border-bottom: none;">
+                        <table class="table-bordered" style="border-left: none; border-bottom: none; text-align:center;">
                             <tbody>
                                 <tr>
                                     <th style="font-size:12px;">Bil.</th>

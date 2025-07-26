@@ -149,6 +149,7 @@ else{
               <thead>
                 <tr>
                   <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
+                  <th width="8%">BRG D BIL NO.</th>
                   <th width="8%">BRG E BIL NO.</th>
                   <th>STAMPING DATE</th>
                   <th>NAME OF PURCHASE</th>
@@ -229,6 +230,7 @@ else{
                 <table id="orderJadualTable" class="table table-bordered table-striped display">
                   <thead>
                     <tr>
+                      <th width="8%">BRG D BIL NO.</th>
                       <th width="8%">BRG E BIL NO.</th>
                       <th>STAMPING DATE</th>
                       <th>NAME OF PURCHASE</th>
@@ -336,6 +338,10 @@ $(function () {
           //   return ''; // Return an empty string or any other placeholder if the item is invoiced
           // }
         }
+      },
+      { 
+        data: 'borang_d', 
+        name: 'borang_d'
       },
       { 
         data: 'borang_e', 
@@ -594,6 +600,10 @@ $(function () {
           }
         },
         { 
+          data: 'borang_d', 
+          name: 'borang_d'
+        },
+        { 
           data: 'borang_e', 
           name: 'borang_e'
         },
@@ -710,6 +720,7 @@ $(function () {
           }
         },
         "columns": [
+          { data: 'borang_d' },
           { data: 'borang_e' },
           { data: 'stamping_date' },
           { data: 'customers' },
