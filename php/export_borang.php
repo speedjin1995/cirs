@@ -477,6 +477,11 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
 
                     // Logic for BTU - (BOX)
                     $capacity = '';
+                    $borangD = '';
+                    $borangE = '';
+                    $siriKeselamatan = '';
+                    $noDaftarLama = '';
+                    $noDaftarBaru = '';
                     $count = 1;
                     if ($jenisAlat == 'BTU - (BOX)'){
                         $id = $row['id']; 
@@ -485,37 +490,46 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                         $stampRow = mysqli_fetch_assoc($stampDetail);
                         
                         if(!empty($stampRow)){
-                          if (!empty($stampRow['btu_box_info'])){
+                        if (!empty($stampRow['btu_box_info'])){
                             $btuBox = json_decode($stampRow['btu_box_info'], true);
                             foreach ($btuBox as $btu) {
                                 $capacity .= $count.'.'.searchCapacityUnitById($btu['penandaanBatuUjian'], $db). '<br>';
-
+                                $borangD .= $count.'.'.$btu['batuBorangD'].'<br>';
+                                $borangE .= $count.'.'.$btu['batuBorangE'].'<br>';
+                                $siriKeselamatan .= $count.'.'.$btu['batuNoSiriPelekatKeselamatan'].'<br>';
+                                $noDaftarLama .= $count.'.'.$btu['batuDaftarLama'].'<br>';
+                                $noDaftarBaru .= $count.'.'.$btu['batuDaftarBaru'].'<br>';
                                 $count++;
                             }
-                          }
+                        }
                         }
                     }else{
                         $capacity = $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '';
+                        $siriKeselamatan = $row['siri_keselamatan'];
+                        $noDaftarLama = $row['no_daftar_lama'];
+                        $noDaftarBaru = $row['no_daftar_baru'];
                     }
-                        
+
                     $rows[] = '<tr style="height: 30px;">
-                                <td style="font-size:12px;padding-left: 0.5%">'.$indexCount.'</td>
-                                <td style="font-size:12px;padding-left: 0.5%">'.$jenisAlat.'</td>
-                                <td style="font-size:12px;padding-left: 0.5%">'.$capacity.'</td>
-                                <td style="font-size:12px;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
-                                <td style="font-size:12px;padding-left: 0.5%">'.$row['serial_no'].'</td>
-                                <td style="font-size:12px;padding-left: 0.5%"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
-                                <td style="font-size:12px;padding-left: 0.5%"></td>
-                                <td style="font-size:12px;padding-left: 0.5%">'.$row['no_daftar_lama'].'</td>
-                                <td style="font-size:12px;padding-left: 0.5%">'.$row['no_daftar_baru'].'</td>
-                                <td style="font-size:12px;padding-left: 0.5%">'.$row['siri_keselamatan'].'</td>';
+                                <td style="font-size:12px;">'.$indexCount.'</td>
+                                <td style="font-size:12px;">'.$jenisAlat.'</td>
+                                <td style="font-size:12px;">'.$capacity.'</td>
+                                <td style="font-size:12px; padding-left:0.5%;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
+                                <td style="font-size:12px; padding-left:0.5%;">'.$row['serial_no'].'</td>
+                                <td style="font-size:12px;"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
+                                <td style="font-size:12px;"></td>
+                                <td style="font-size:12px; padding-left:0.5%;">'.$noDaftarLama.'</td>
+                                <td style="font-size:12px; padding-left:0.5%;">'.$noDaftarBaru.'</td>
+                                <td style="font-size:12px;">'.$siriKeselamatan.'</td>
+                                <td style="font-size:12px;">'.$borangD.'</td>
+                                <td style="font-size:12px;">'.$borangE.'</td>';
                                 
                                 if ($row['cert_price'] != 0) {
-                                    $rows[$rowCount] .= '<td style="font-size:12px;padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').' (Report)</td>';
+                                    $rows[$rowCount] .= '<td style="padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').' (Laporan)</td>';
                                 } else {
-                                    $rows[$rowCount] .= '<td style="font-size:12px;padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'</td>';
+                                    $rows[$rowCount] .= '<td style="padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'</td>';
                                 }
-                                
+
                     $rows[$rowCount] .= '</tr>';
 
                     $totalAmt += floatval($row['unit_price']) + floatval($row['cert_price']);
@@ -536,6 +550,9 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                     $remainingRows = 6 - (count($rows) % 6);
                     for ($i = 0; $i < $remainingRows; $i++) {
                         $rows[] = '<tr style="height: 30px;">
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -674,7 +691,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                 <tr>
                                     <th style="font-size:12px;">Bil.</th>
                                     <th style="font-size:12px;">Jenis Alat</th>
-                                    <th style="font-size:12px;" width="8%">Had Terima</th>
+                                    <th style="font-size:12px;">Had Terima</th>
                                     <th style="font-size:12px;">Jenama</th>
                                     <th style="font-size:12px;" width="10%">No. Siri Alat</th>
                                     <th style="font-size:12px;">Nama Dan Alamat Pemilik</th>
@@ -682,31 +699,34 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                     <th style="font-size:12px;" width="10%">No. Daftar Lama</th>
                                     <th style="font-size:12px;" width="10%">No. Daftar Baru</th>
                                     <th style="font-size:12px;">No. Siri Pelekat Keselamatan</th>
+                                    <th style="font-size:12px;" width="7%">Borang D</th>
+                                    <th style="font-size:12px;" width="7%">Borang E</th>
                                     <th style="font-size:12px;" width="8%">Fi / Bayaran</th>
                                 </tr>';
-                        
+                            
                             for ($i = $startIndex; $i < $startIndex + $recordsPerPage; $i++) {
                                 $message .= $rows[$i];
                             }
                             
                             if ($startIndex + $recordsPerPage >= $num_records) {
                                 $message .= '<tr>
-                                                <td colspan="8" style="border-left: none; border: none;"></td>
+                                                <td colspan="10" style="border-left: none; border: none;"></td>
                                                 <td colspan="2">Total Amount</td>
                                                 <td>RM ' . number_format(floatval($totalAmt), 2, '.', '') . '</td>
                                             </tr>';
                                 $message .= '<tr>
-                                                <td colspan="8" style="border-left: none; border: none;"></td>
+                                                <td colspan="10" style="border-left: none; border: none;"></td>
                                                 <td colspan="2">SST8%</td>
                                                 <td> RM ' . number_format(floatval($sst), 2, '.', '') . '</td>
                                             </tr>';
                                 $message .= '<tr>
-                                                <td colspan="8" style="border-left: none; border: none;"></td>
+                                                <td colspan="10" style="border-left: none; border: none;"></td>
                                                 <td colspan="2">Sub Total Amount</td>
                                                 <td>RM ' . number_format(floatval($subTotalAmt), 2, '.', '') . '</td>
                                             </tr>';
 
                             }
+                        
                         $message .= '
                             <table width="100%" style="padding: 10px;">
                                 <tr>
