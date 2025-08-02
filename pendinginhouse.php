@@ -2177,8 +2177,8 @@ function newEntry(){
           var standardAvTemp = obj.message.standard_avg_temp;
           var relativeHumidity = obj.message.relative_humidity;
           let variance = obj.message.variance;
-          let varianceDecimalPart = variance.toString().split('.')[1];
-          let varianceDecimalPoint = varianceDecimalPart.length;
+          let varianceString = variance.toString();
+          let varianceDecimalPoint = varianceString.includes('.') ? varianceString.split('.')[1].length : 0; // Added checking for no decimal point
           var unit = obj.message.unit;
 
           $('#calibrationHeader').text('Note - Standard Average Temperature: ('+ standardAvTemp +') / Average Relative Humidity: ('+ relativeHumidity +')');
@@ -2316,10 +2316,10 @@ function edit(id) {
     if(obj.status === 'success'){
       let variance = parseFloat(0).toFixed(1); 
       if (obj.message.variance) {
-          variance = parseFloat(obj.message.variance);
+        variance = parseFloat(obj.message.variance);
       }
-      let varianceDecimalPart = variance.toString().split('.')[1];
-      let varianceDecimalPoint = varianceDecimalPart.length;
+      let varianceString = variance.toString();
+      let varianceDecimalPoint = varianceString.includes('.') ? varianceString.split('.')[1].length : 0;
       var unit = obj.message.capacityUnit;
       if(obj.message.type == 'DIRECT'){
         $('#extendModal').find('#id').val(obj.message.id);
@@ -2416,8 +2416,8 @@ function edit(id) {
                 var standardAvTemp = obj.message.standard_avg_temp;
                 var relativeHumidity = obj.message.relative_humidity;
                 let variance = obj.message.variance;
-                let varianceDecimalPart = variance.toString().split('.')[1];
-                let varianceDecimalPoint = varianceDecimalPart.length;
+                let varianceString = variance.toString();
+                let varianceDecimalPoint = varianceString.includes('.') ? varianceString.split('.')[1].length : 0;
                 var unit = obj.message.unit;
 
                 $('#calibrationHeader').text('Note - Standard Average Temperature: ('+ standardAvTemp +') / Average Relative Humidity: ('+ relativeHumidity +')');
@@ -2590,8 +2590,8 @@ function edit(id) {
                 var standardAvTemp = obj.message.standard_avg_temp;
                 var relativeHumidity = obj.message.relative_humidity;
                 let variance = obj.message.variance;
-                let varianceDecimalPart = variance.toString().split('.')[1];
-                let varianceDecimalPoint = varianceDecimalPart.length;
+                let varianceString = variance.toString();
+                let varianceDecimalPoint = varianceString.includes('.') ? varianceString.split('.')[1].length : 0;
                 var unit = obj.message.unit;
 
                 $('#calibrationHeader').text('Note - Standard Average Temperature: ('+ standardAvTemp +') / Average Relative Humidity: ('+ relativeHumidity +')');
