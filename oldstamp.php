@@ -1586,6 +1586,7 @@ function format (row) {
   <div class="row">
     <!-- Billing Section -->
     <div class="col-6">
+      <p><strong>Validator Invoice:</strong> ${row.validator_invoice}</p>
       <p><strong>Quotation No:</strong> ${row.quotation_no} `;
       
       if(row.quotation_attachment){

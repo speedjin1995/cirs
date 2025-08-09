@@ -768,6 +768,12 @@ else{
               <div class="row">
                 <div class="col-4">
                   <div class="form-group">
+                    <label>Validator Invoice </label>
+                    <input type="text" class="form-control" id="validatorInvoice" name="validatorInvoice">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
                     <label>Unit Price *</label>
                     <input type="number" class="form-control" id="unitPrice" name="unitPrice" required>
                   </div>
@@ -3664,6 +3670,7 @@ function format (row) {
   <div class="row">
     <!-- Billing Section -->
     <div class="col-6">
+      <p><strong>Validator Invoice:</strong> ${row.validator_invoice}</p>
       <p><strong>Quotation No:</strong> ${row.quotation_no} `;
       
       if(row.quotation_attachment){
@@ -4445,6 +4452,7 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
+        $('#extendModal').find('#validatorInvoice').val(obj.message.validator_invoice);
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
@@ -4817,9 +4825,13 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
+        $('#extendModal').find('#validatorInvoice').val(obj.message.validator_invoice);
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
+        $('#extendModal').find('#subAmountSst').val(obj.message.subtotal_sst_amt);
+        $('#extendModal').find('#rebate').val(obj.message.rebate);
+        $('#extendModal').find('#rebateAmount').val(obj.message.rebate_amount);
         $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
         $('#extendModal').find('#labourCharge').val(obj.message.labour_charge);
         $('#extendModal').find('#stampLabourCharge').val(obj.message.stampfee_labourcharge);
