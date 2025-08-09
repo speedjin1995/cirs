@@ -1533,7 +1533,9 @@ function format (row) {
       returnString += `</p></div>`;
   }
 
-  returnString += `</div><hr>
+  returnString += `</div>
+  <h6 style="margin:0"><b>Information Details: 1</b></h6>
+  <hr style="margin-top:0">
   <div class="row">
     <!-- Machine Section -->
     <div class="col-6">
@@ -1560,7 +1562,9 @@ function format (row) {
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
           <p><strong>Next Due Date:</strong> ${row.due_date}</p>
         </div>
-      </div><hr>
+      </div>
+      <h6 style="margin:0"><b>Information Details: 2</b></h6>
+      <hr style="margin-top:0">
     `;
   }else{
     returnString += `
@@ -1572,7 +1576,9 @@ function format (row) {
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
           <p><strong>Next Due Date:</strong> ${row.due_date}</p>
         </div>
-      </div><hr>
+      </div>
+      <h6 style="margin:0"><b>Information Details: 2</b></h6>
+      <hr style="margin-top:0">
     `;
   }
     
@@ -1607,6 +1613,9 @@ function format (row) {
       <p><strong>Cert Price:</strong> ${row.cert_price}</p>
       <p><strong>Total Amount:</strong> ${row.total_amount}</p>
       <p><strong>SST Price:</strong> ${row.sst}</p>
+      <p><strong>Sub Total Price With SST:</strong> ${row.subtotal_sst_amt}</p>
+      <p><strong>Rebate (%):</strong> ${row.rebate}</p>
+      <p><strong>Rebate Amount:</strong> ${row.rebate_amount}</p>
       <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>
      </div>
     </div><hr>`;

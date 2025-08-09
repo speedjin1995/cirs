@@ -157,6 +157,9 @@ if(isset($_POST['userID'])){
                     $message['cert_price'] = 'RM ' . $row['cert_price'];
                     $message['total_amount'] = 'RM ' . $row['total_amount'];
                     $message['sst'] = 'RM ' . $row['sst'];
+                    $message['subtotal_sst_amt'] = 'RM ' . $row['subtotal_sst_amt'];
+                    $message['rebate'] = $row['rebate'] . '%';
+                    $message['rebate_amount'] = 'RM ' . $row['rebate_amount'];
                     $message['subtotal_amount'] = 'RM ' . $row['subtotal_amount'];
                     $message['labour_charge'] = 'RM ' . $row['labour_charge'];
                     $message['stampfee_labourcharge'] = 'RM ' . $row['stampfee_labourcharge'];
@@ -324,6 +327,9 @@ if(isset($_POST['userID'])){
                     $message['cert_price'] = $row['cert_price'];
                     $message['total_amount'] = $row['total_amount'];
                     $message['sst'] = $row['sst'];
+                    $message['subtotal_sst_amt'] = $row['subtotal_sst_amt'];
+                    $message['rebate'] = $row['rebate'];
+                    $message['rebate_amount'] = $row['rebate_amount'];
                     $message['subtotal_amount'] = $row['subtotal_amount'];
                     $message['labour_charge'] = $row['labour_charge'];
                     $message['stampfee_labourcharge'] = $row['stampfee_labourcharge'];
