@@ -334,6 +334,14 @@ $(function () {
             $('#fromDatePicker').datetimepicker('date', adjustedFromDate);
         }
     });
+
+    // Export Summary Logic
+    $('#exportSummary').on('click', function() {
+        var fromDateValue = $('#fromDate').val();
+        var toDateValue = $('#toDate').val();
+
+        window.location.href = 'php/exportSummary.php?type=Stamping&fromDate=' + fromDateValue + '&toDate=' + toDateValue;
+    });
 });
 
 function dateDifferenceInMonths(fromDate, toDate) {
