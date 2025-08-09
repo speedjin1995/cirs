@@ -401,57 +401,100 @@ to get the desired effect
               <p>Dashboard</p>
             </a>
           </li>
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>Inquries<i class="fas fa-angle-left right"></i></p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#monitoring" data-file="monitoring.php" class="nav-link link">
-                  <i class="nav-icon fas fa-chart-pie"></i>
-                  <p>Monitoring</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#inquiry" data-file="inquiry.php" class="nav-link link">
-                  <i class="nav-icon fas fa-tachometer-alt"></i>
-                  <p>Inquries</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+          <?php 
+            if($role != "ACCOUNT"){
+              echo '
+                <li class="nav-item has-treeview">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>Inquries<i class="fas fa-angle-left right"></i></p>
+                  </a>
+                  <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="#monitoring" data-file="monitoring.php" class="nav-link link">
+                        <i class="nav-icon fas fa-chart-pie"></i>
+                        <p>Monitoring</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#inquiry" data-file="inquiry.php" class="nav-link link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Inquries</p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              ';
+            }
+          ?>
+          
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-certificate"></i>
               <p>Govt. Stamping<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview" style="display: block;">
-              <li class="nav-item">
-                <a href="#pending" data-file="pending.php" class="nav-link link">
-                  <i class="nav-icon far fa-circle"></i>
-                  <p>Pending Stamping</p>
-                </a>
-              </li>
-              <?php //if($role == "ADMIN"){
-                echo '<li class="nav-item">
-                <a href="#stamping" data-file="stamp.php" class="nav-link link">
-                  <i class="nav-icon far fa-circle"></i>
-                  <p>Complete Stamping</p>
-                </a></li>';
-              //}?>
-              <li class="nav-item">
-                <a href="#oldstamp" data-file="oldstamp.php" class="nav-link link">
-                  <i class="nav-icon far fa-circle"></i>
-                  <p>Cancelled Stamping</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#stampsummary" data-file="stampsummary.php" class="nav-link link">
-                  <i class="nav-icon far fa-circle"></i>
-                  <p>Stamping Summary</p>
-                </a>
-              </li>
+              <?php 
+                if($role == "SUPER_ADMIN"){
+                  echo '
+                    <li class="nav-item">
+                      <a href="#pending" data-file="pending.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Pending Stamping</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#stamping" data-file="stamp.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Complete Stamping</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#oldstamp" data-file="oldstamp.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Cancelled Stamping</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#stampsummary" data-file="stampsummary.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Stamping Summary</p>
+                      </a>
+                    </li>
+                  ';
+                  
+                } else if ($role == "ACCOUNT") {
+                  echo '
+                    <li class="nav-item">
+                      <a href="#stampsummary" data-file="stampsummary.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Stamping Summary</p>
+                      </a>
+                    </li>
+                  ';
+                } else{
+                  echo '
+                    <li class="nav-item">
+                      <a href="#pending" data-file="pending.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Pending Stamping</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#stamping" data-file="stamp.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Complete Stamping</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#oldstamp" data-file="oldstamp.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Cancelled Stamping</p>
+                      </a>
+                    </li>
+                  ';
+                }
+              ?>
             </ul>
           </li>
           <li class="nav-item has-treeview">
@@ -460,31 +503,67 @@ to get the desired effect
               <p>Other Validations<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#pendingvalidation" data-file="pendingvalidation.php" class="nav-link link">
-                  <i class="nav-icon far fa-circle"></i>
-                  <p>Pending Validation</p>
-                </a>
-              </li>
-              <?php //if($role == "ADMIN"){
-                echo '<li class="nav-item">
-                <a href="#validation" data-file="validation.php" class="nav-link link">
-                  <i class="nav-icon far fa-circle"></i>
-                  <p>Complete Validation</p>
-                </a></li>';
-              //}?>
-              <li class="nav-item">
-                <a href="#oldvalidation" data-file="oldvalidation.php" class="nav-link link">
-                  <i class="nav-icon far fa-circle"></i>
-                  <p>Cancelled Validation</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#othersummary" data-file="othersummary.php" class="nav-link link">
-                  <i class="nav-icon far fa-circle"></i>
-                  <p>Validation Summary</p>
-                </a>
-              </li>
+              <?php 
+                if($role == "SUPER_ADMIN"){
+                  echo '
+                    <li class="nav-item">
+                      <a href="#pendingvalidation" data-file="pendingvalidation.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Pending Validation</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#validation" data-file="validation.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Complete Validation</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#oldvalidation" data-file="oldvalidation.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Cancelled Validation</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#othersummary" data-file="othersummary.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Validation Summary</p>
+                      </a>
+                    </li>
+                  ';
+                  
+                } else if ($role == "ACCOUNT") {
+                  echo '
+                    <li class="nav-item">
+                      <a href="#othersummary" data-file="othersummary.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Validation Summary</p>
+                      </a>
+                    </li>
+                  ';
+                } else{
+                  echo '
+                    <li class="nav-item">
+                      <a href="#pendingvalidation" data-file="pendingvalidation.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Pending Validation</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#validation" data-file="validation.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Complete Validation</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#oldvalidation" data-file="oldvalidation.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Cancelled Validation</p>
+                      </a>
+                    </li>
+                  ';
+                }
+              ?>
             </ul>
           </li>
           <li class="nav-item has-treeview">
@@ -493,31 +572,67 @@ to get the desired effect
               <p>Inhouse Validations<i class="fas fa-angle-left right"></i></p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#pendinginhouse" data-file="pendinginhouse.php" class="nav-link link">
-                  <i class="nav-icon far fa-circle"></i>
-                  <p>Pending Validation</p>
-                </a>
-              </li>
-              <?php //if($role == "ADMIN"){
-                echo '<li class="nav-item">
-                <a href="#inhouse" data-file="inhouse.php" class="nav-link link">
-                  <i class="nav-icon far fa-circle"></i>
-                  <p>Complete Validation</p>
-                </a></li>';
-              //}?>
-              <li class="nav-item">
-                <a href="#oldinhouse" data-file="oldinhouse.php" class="nav-link link">
-                  <i class="nav-icon far fa-circle"></i>
-                  <p>Cancelled Validation</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#inhousesummary" data-file="inhousesummary.php" class="nav-link link">
-                  <i class="nav-icon far fa-circle"></i>
-                  <p>Validation Summary</p>
-                </a>
-              </li>
+              <?php 
+                if($role == "SUPER_ADMIN"){
+                  echo '
+                    <li class="nav-item">
+                      <a href="#pendinginhouse" data-file="pendinginhouse.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Pending Validation</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#inhouse" data-file="inhouse.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Complete Validation</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#oldinhouse" data-file="oldinhouse.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Cancelled Validation</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#inhousesummary" data-file="inhousesummary.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Validation Summary</p>
+                      </a>
+                    </li>
+                  ';
+                  
+                } else if ($role == "ACCOUNT") {
+                  echo '
+                    <li class="nav-item">
+                      <a href="#inhousesummary" data-file="inhousesummary.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Validation Summary</p>
+                      </a>
+                    </li>
+                  ';
+                } else{
+                  echo '
+                    <li class="nav-item">
+                      <a href="#pendinginhouse" data-file="pendinginhouse.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Pending Validation</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#inhouse" data-file="inhouse.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Complete Validation</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#oldinhouse" data-file="oldinhouse.php" class="nav-link link">
+                        <i class="nav-icon far fa-circle"></i>
+                        <p>Cancelled Validation</p>
+                      </a>
+                    </li>
+                  ';
+                }
+              ?>
             </ul>
           </li>
           <li class="nav-item has-treeview">
@@ -576,117 +691,118 @@ to get the desired effect
               //   </li>';
               // }
 
-              echo '<li class="nav-item has-treeview">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-database"></i>
-                  <p>Master Data<i class="fas fa-angle-left right"></i></p>
-                </a>
-                <ul class="nav nav-treeview" style="display: none;">
-                  <li class="nav-item">
-                    <a href="#dealer" data-file="dealer.php" class="nav-link link">
-                      <i class="nav-icon fas fa-user"></i>
-                      <p>Reseller</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#customers" data-file="customers.php" class="nav-link link">
-                      <i class="nav-icon fas fa-book"></i>
-                      <p>Customers</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#price" data-file="products.php" class="nav-link link">
-                      <i class="nav-icon fas fa-thermometer"></i>
-                      <p>Price</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#machine" data-file="machine.php" class="nav-link link">
-                      <i class="nav-icon fas fa-store"></i>
-                      <p>Machine/Scale Type</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#standards" data-file="standards.php" class="nav-link link">
-                      <i class="nav-icon fas fa-newspaper"></i>
-                      <p>Value of Standards</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#brand" data-file="brand.php" class="nav-link link">
-                      <i class="nav-icon fas fa-weight"></i>
-                      <p>Brand</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#model" data-file="model.php" class="nav-link link">
-                      <i class="nav-icon fas fa-tag"></i>
-                      <p>Model</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#loads" data-file="loads.php" class="nav-link link">
-                      <i class="nav-icon fas fa-weight-hanging"></i>
-                      <p>Load Cells</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#size" data-file="size.php" class="nav-link link">
-                      <i class="nav-icon fas fa-book"></i>
-                      <p>Size</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#capacity" data-file="capacity.php" class="nav-link link">
-                      <i class="nav-icon fas fa-industry"></i>
-                      <p>Capacity</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#alat" data-file="alat.php" class="nav-link link">
-                      <i class="nav-icon fas fa-tools"></i>
-                      <p>Jenis Alat</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#validators" data-file="validators.php" class="nav-link link">
-                      <i class="nav-icon fas fa-search"></i>
-                      <p>Validators</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#reasons" data-file="reasons.php" class="nav-link link">
-                      <i class="nav-icon fas fa-digital-tachograph"></i>
-                      <p>Reasons</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#units" data-file="units.php" class="nav-link link">
-                      <i class="nav-icon fas fa-balance-scale"></i>
-                      <p>Unit of Measurement</p>
-                    </a>
-                  </li>
-                  <!--li class="nav-item">
-                    <a href="#problem" data-file="problem.php" class="nav-link link">
-                      <i class="nav-icon fas fa-industry"></i>
-                      <p>Problems</p>
-                    </a>
-                  </li-->
-                  <li class="nav-item">
-                    <a href="#country" data-file="country.php" class="nav-link link">
-                      <i class="nav-icon fas fa-globe-asia"></i>
-                      <p>Country</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#state" data-file="state.php" class="nav-link link">
-                      <i class="nav-icon fas fa-map-marker-alt"></i>
-                      <p>State</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>';
-              //}
+              if($role != "ACCOUNT"){
+                echo '<li class="nav-item has-treeview">
+                  <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-database"></i>
+                    <p>Master Data<i class="fas fa-angle-left right"></i></p>
+                  </a>
+                  <ul class="nav nav-treeview" style="display: none;">
+                    <li class="nav-item">
+                      <a href="#dealer" data-file="dealer.php" class="nav-link link">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>Reseller</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#customers" data-file="customers.php" class="nav-link link">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>Customers</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#price" data-file="products.php" class="nav-link link">
+                        <i class="nav-icon fas fa-thermometer"></i>
+                        <p>Price</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#machine" data-file="machine.php" class="nav-link link">
+                        <i class="nav-icon fas fa-store"></i>
+                        <p>Machine/Scale Type</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#standards" data-file="standards.php" class="nav-link link">
+                        <i class="nav-icon fas fa-newspaper"></i>
+                        <p>Value of Standards</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#brand" data-file="brand.php" class="nav-link link">
+                        <i class="nav-icon fas fa-weight"></i>
+                        <p>Brand</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#model" data-file="model.php" class="nav-link link">
+                        <i class="nav-icon fas fa-tag"></i>
+                        <p>Model</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#loads" data-file="loads.php" class="nav-link link">
+                        <i class="nav-icon fas fa-weight-hanging"></i>
+                        <p>Load Cells</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#size" data-file="size.php" class="nav-link link">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>Size</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#capacity" data-file="capacity.php" class="nav-link link">
+                        <i class="nav-icon fas fa-industry"></i>
+                        <p>Capacity</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#alat" data-file="alat.php" class="nav-link link">
+                        <i class="nav-icon fas fa-tools"></i>
+                        <p>Jenis Alat</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#validators" data-file="validators.php" class="nav-link link">
+                        <i class="nav-icon fas fa-search"></i>
+                        <p>Validators</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#reasons" data-file="reasons.php" class="nav-link link">
+                        <i class="nav-icon fas fa-digital-tachograph"></i>
+                        <p>Reasons</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#units" data-file="units.php" class="nav-link link">
+                        <i class="nav-icon fas fa-balance-scale"></i>
+                        <p>Unit of Measurement</p>
+                      </a>
+                    </li>
+                    <!--li class="nav-item">
+                      <a href="#problem" data-file="problem.php" class="nav-link link">
+                        <i class="nav-icon fas fa-industry"></i>
+                        <p>Problems</p>
+                      </a>
+                    </li-->
+                    <li class="nav-item">
+                      <a href="#country" data-file="country.php" class="nav-link link">
+                        <i class="nav-icon fas fa-globe-asia"></i>
+                        <p>Country</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#state" data-file="state.php" class="nav-link link">
+                        <i class="nav-icon fas fa-map-marker-alt"></i>
+                        <p>State</p>
+                      </a>
+                    </li>
+                  </ul>
+                </li>';
+              }
           ?>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
