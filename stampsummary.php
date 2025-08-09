@@ -60,9 +60,15 @@ else{
                     </div>
                   </div>
                 </div>
-                <div class="col-9"></div>
+                <div class="col-6"></div>
                 <div class="col-3">
-                  <button type="button" class="btn btn-block bg-gradient-warning btn-sm"  id="filterSearch">
+                  <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="exportSummary">
+                    <i class="fa-regular fa-file-excel"></i>
+                    Export Summary
+                  </button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-block bg-gradient-warning btn-sm" id="filterSearch">
                     <i class="fas fa-search"></i>
                     Search
                   </button>
@@ -192,7 +198,7 @@ $(function () {
                     });
 
                     //Styling for Metrology & DE Metrology Row
-                    if (dataIndex === 0 || dataIndex === 4) { 
+                    if (dataIndex === 0 || dataIndex === 5) { 
                         $(row).css({
                             'font-weight': 'bold',
                             'color': 'white',
@@ -283,7 +289,7 @@ $(function () {
                         });
 
                         //Styling for Metrology & DE Metrology Row
-                        if (dataIndex === 0 || dataIndex === 3) { 
+                        if (dataIndex === 0 || dataIndex === 5) { 
                             $(row).css({
                                 'font-weight': 'bold',
                                 'color': 'white',
