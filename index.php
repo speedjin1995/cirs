@@ -402,7 +402,7 @@ to get the desired effect
             </a>
           </li>
           <?php 
-            if($role != "ACCOUNT"){
+            /*if($role != "ACCOUNT"){
               echo '
                 <li class="nav-item has-treeview">
                   <a href="#" class="nav-link">
@@ -425,7 +425,7 @@ to get the desired effect
                   </ul>
                 </li>
               ';
-            }
+            }*/
           ?>
           
           <li class="nav-item has-treeview menu-open">
