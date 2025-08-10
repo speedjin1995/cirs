@@ -4387,7 +4387,7 @@ function edit(id) {
         $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#makeIn').val(obj.message.make_in).trigger('change');
-        $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
+        $('#extendModal').find('#validator').val(obj.message.validate_by).select2('destroy').select2();
         $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
         $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
         $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
@@ -4395,13 +4395,15 @@ function edit(id) {
         $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
         $('#extendModal').find('#companyText').val('');
         $('#extendModal').find('#product').val(obj.message.products);
-        $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
+        $('#extendModal').find('#machineType').val(obj.message.machine_type).select2('destroy').select2();
+        $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).select2('destroy').select2();
+
         customer = obj.message.customers;
         branch = obj.message.branch;
-        $('#extendModal').on('jaIsLoaded', function() {
-          $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
-        });
-        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
+        // $('#extendModal').on('jaIsLoaded', function() {
+        //   $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).select2('destroy').select2();
+        // });
+        // $('#extendModal').find('#capacity').val(obj.message.capacity).select2('destroy').select2();
         if(obj.message.capacity_range == 'MULTI'){
           $('#extendModal').find('#toggleMultiRange').prop('checked', true).trigger('change');
           $('#extendModal').find('#capacity_multi').val(obj.message.capacity).trigger('change');
@@ -4447,12 +4449,13 @@ function edit(id) {
         }
         
         $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
-        $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
+        $('#extendModal').find('#includeCert').val(obj.message.include_cert);
         $('#extendModal').find('#poNo').val(obj.message.purchase_no);
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
         $('#extendModal').find('#validatorInvoice').val(obj.message.validator_invoice);
+        $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
@@ -4725,8 +4728,15 @@ function edit(id) {
           }
         });
 
-        $('#extendModal').on('priceLoaded', function() {
-          $('#extendModal').find('#unitPrice').val(obj.message.unit_price).trigger('change');
+        // $('#extendModal').on('priceLoaded', function() {
+        //   $('#extendModal').find('#unitPrice').val(obj.message.unit_price).trigger('change');
+        // });
+
+        // Initialize all Select2 elements in the modal
+        $('#extendModal .select2').select2({
+          allowClear: true,
+          placeholder: "Please Select",
+          dropdownParent: $('#extendModal') // Ensures dropdown is not cut off
         });
         
         $('#extendModal').modal('show');
@@ -4756,7 +4766,7 @@ function edit(id) {
         $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#makeIn').val(obj.message.make_in).trigger('change');
-        $('#extendModal').find('#validator').val(obj.message.validate_by).trigger('change');
+        $('#extendModal').find('#validator').val(obj.message.validate_by).select2('destroy').select2();
         $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
         $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
         $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
@@ -4774,12 +4784,12 @@ function edit(id) {
 
         $('#extendModal').find('#companyText').val('');
         $('#extendModal').find('#product').val(obj.message.products);
-        $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
-        $('#extendModal').on('jaIsLoaded', function() {
-          $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
-        });
-        
-        $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
+        $('#extendModal').find('#machineType').val(obj.message.machine_type).select2('destroy').select2();
+        $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).select2('destroy').select2();
+        // $('#extendModal').on('jaIsLoaded', function() {
+        //   $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).select2('destroy').select2();
+        // });
+        // $('#extendModal').find('#capacity').val(obj.message.capacity).trigger('change');
         if(obj.message.capacity_range == 'MULTI'){
           $('#extendModal').find('#toggleMultiRange').prop('checked', true).trigger('change');
           $('#extendModal').find('#capacity_multi').val(obj.message.capacity).trigger('change');
@@ -4820,12 +4830,13 @@ function edit(id) {
         }
 
         $('#extendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
-        $('#extendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
+        $('#extendModal').find('#includeCert').val(obj.message.include_cert);
         $('#extendModal').find('#poNo').val(obj.message.purchase_no);
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
         $('#extendModal').find('#validatorInvoice').val(obj.message.validator_invoice);
+        $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
@@ -5060,9 +5071,9 @@ function edit(id) {
           }
         });
 
-        $('#extendModal').on('priceLoaded', function() {
-          $('#extendModal').find('#unitPrice').val(obj.message.unit_price).trigger('change');
-        });
+        // $('#extendModal').on('priceLoaded', function() {
+        //   $('#extendModal').find('#unitPrice').val(obj.message.unit_price).trigger('change');
+        // });
 
         $('#extendModal').modal('show');
 
