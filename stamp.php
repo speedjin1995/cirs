@@ -768,6 +768,12 @@ else{
               <div class="row">
                 <div class="col-4">
                   <div class="form-group">
+                    <label>Validator Invoice </label>
+                    <input type="text" class="form-control" id="validatorInvoice" name="validatorInvoice">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
                     <label>Unit Price *</label>
                     <input type="number" class="form-control" id="unitPrice" name="unitPrice" required>
                   </div>
@@ -788,6 +794,24 @@ else{
                   <div class="form-group">
                     <label>SST 8%</label>
                     <input type="text" class="form-control" id="sst" name="sst" readonly>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Sub Total Amount With SST</label>
+                    <input type="text" class="form-control" id="subAmountSst" name="subAmountSst" readonly>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Rebate By %</label>
+                    <input type="text" class="form-control" id="rebate" name="rebate" value="0">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Rebate Amount</label>
+                    <input type="text" class="form-control" id="rebateAmount" name="rebateAmount" readonly>
                   </div>
                 </div>
                 <div class="col-4">
@@ -2828,7 +2852,15 @@ $(function () {
 
     $('#totalAmount').val(totalAmt);
     $('#sst').val((totalAmt * 0.08).toFixed(2));
-    $('#subAmount').val((totalAmt + (totalAmt * 0.08)).toFixed(2));
+    $('#subAmountSst').val((totalAmt + (totalAmt * 0.08)).toFixed(2));
+
+    // Rebate calculation (enhancement)
+    var rebate = parseFloat($('#rebate').val())/100 || 0;
+    var subAmountSst = parseFloat($('#subAmountSst').val()) || 0;
+    var rebateAmount = subAmountSst * rebate;
+    $('#rebateAmount').val(rebateAmount.toFixed(2));
+    var subTotalAmount = subAmountSst - rebateAmount;
+    $('#subAmount').val(subTotalAmount.toFixed(2));
   });
 
   $('#extendModal').find('#includeCert').on('change', function(){
@@ -2883,6 +2915,15 @@ $(function () {
     // $('#subAmount').val((totalAmt + (totalAmt * 0.08)).toFixed(2));
   });
 
+  $('#extendModal').find('#rebate').on('change', function(){
+    var rebate = parseFloat($(this).val())/100 || 0;
+    var subAmountSst = parseFloat($('#subAmountSst').val()) || 0;
+    var rebateAmount = subAmountSst * rebate;
+    $('#rebateAmount').val(rebateAmount.toFixed(2));
+    var subTotalAmount = subAmountSst - rebateAmount;
+    $('#subAmount').val(subTotalAmount.toFixed(2));
+  });
+  
   $('#extendModal').find('#labourCharge').on('change', function(){
     var labourCharge = parseFloat($(this).val());
     var subTotalAmt = parseFloat($('#subAmount').val());
@@ -3572,7 +3613,9 @@ function format (row) {
       returnString += `</p></div>`;
   }
 
-  returnString += `</div><hr>
+  returnString += `</div>
+  <h6 style="margin:0"><b>Information Details: 1</b></h6>
+  <hr style="margin-top:0">
   <div class="row">
     <!-- Machine Section -->
     <div class="col-6">
@@ -3601,7 +3644,9 @@ function format (row) {
           <p><strong>Create By:</strong> ${row.create_by}</p>
           <p><strong>Last Update By:</strong> ${row.modified_by}</p>
         </div>
-      </div><hr>
+      </div>
+      <h6 style="margin:0"><b>Information Details: 2</b></h6>
+      <hr style="margin-top:0">
     `;
   }else{
     returnString += `
@@ -3615,7 +3660,9 @@ function format (row) {
           <p><strong>Create By:</strong> ${row.create_by}</p>
           <p><strong>Last Update By:</strong> ${row.modified_by}</p>
         </div>
-      </div><hr>
+      </div>
+      <h6 style="margin:0"><b>Information Details: 2</b></h6>
+      <hr style="margin-top:0">
     `;
   }
     
@@ -3623,6 +3670,7 @@ function format (row) {
   <div class="row">
     <!-- Billing Section -->
     <div class="col-6">
+      <p><strong>Validator Invoice:</strong> ${row.validator_invoice}</p>
       <p><strong>Quotation No:</strong> ${row.quotation_no} `;
       
       if(row.quotation_attachment){
@@ -3650,6 +3698,9 @@ function format (row) {
       <p><strong>Cert Price:</strong> ${row.cert_price}</p>
       <p><strong>Total Amount:</strong> ${row.total_amount}</p>
       <p><strong>SST Price:</strong> ${row.sst}</p>
+      <p><strong>Sub Total Price With SST:</strong> ${row.subtotal_sst_amt}</p>
+      <p><strong>Rebate (%):</strong> ${row.rebate}</p>
+      <p><strong>Rebate Amount:</strong> ${row.rebate_amount}</p>
       <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>
     </div>
   </div><hr>`;
@@ -4255,6 +4306,9 @@ function newEntry(){
   $('#extendModal').find('#certPrice').val('');
   $('#extendModal').find('#totalAmount').val("");
   $('#extendModal').find('#sst').val('');
+  $('#extendModal').find('#subAmountSst').val('');
+  $('#extendModal').find('#rebate').val(0);
+  $('#extendModal').find('#rebateAmount').val('');
   $('#extendModal').find('#subAmount').val('');
   $('#extendModal').find('#labourCharge').val('0.00');
   $('#extendModal').find('#stampLabourCharge').val('');
@@ -4398,9 +4452,13 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
+        $('#extendModal').find('#validatorInvoice').val(obj.message.validator_invoice);
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
+        $('#extendModal').find('#subAmountSst').val(obj.message.subtotal_sst_amt);
+        $('#extendModal').find('#rebate').val(obj.message.rebate);
+        $('#extendModal').find('#rebateAmount').val(obj.message.rebate_amount);
         $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
         $('#extendModal').find('#labourCharge').val(obj.message.labour_charge);
         $('#extendModal').find('#stampLabourCharge').val(obj.message.stampfee_labourcharge);
@@ -4767,9 +4825,13 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
+        $('#extendModal').find('#validatorInvoice').val(obj.message.validator_invoice);
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
         $('#extendModal').find('#totalAmount').val(obj.message.total_amount);
         $('#extendModal').find('#sst').val(obj.message.sst);
+        $('#extendModal').find('#subAmountSst').val(obj.message.subtotal_sst_amt);
+        $('#extendModal').find('#rebate').val(obj.message.rebate);
+        $('#extendModal').find('#rebateAmount').val(obj.message.rebate_amount);
         $('#extendModal').find('#subAmount').val(obj.message.subtotal_amount);
         $('#extendModal').find('#labourCharge').val(obj.message.labour_charge);
         $('#extendModal').find('#stampLabourCharge').val(obj.message.stampfee_labourcharge);

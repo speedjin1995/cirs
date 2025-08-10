@@ -93,3 +93,10 @@ SET btu_info = JSON_ARRAY(
   )
 )
 WHERE batu_ujian IS NOT NULL;
+
+-- 09/08/2025 --
+ALTER TABLE `stamping` ADD `subtotal_sst_amt` VARCHAR(10) NULL AFTER `sst`, ADD `rebate` VARCHAR(10) NULL AFTER `subtotal_sst_amt`, ADD `rebate_amount` VARCHAR(10) NULL AFTER `rebate`;
+
+ALTER TABLE `stamping` ADD `validator_invoice` VARCHAR(50) NULL AFTER `log`;
+
+INSERT INTO `roles` (`id`, `role_code`, `role_name`, `module`, `deleted`) VALUES (NULL, 'ACCOUNT', 'ACCOUNT', NULL, '0');

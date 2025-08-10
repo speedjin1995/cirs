@@ -29,9 +29,9 @@ try {
         machines, unit_serial_no, manufacturing, brand, model, capacity, size, calibrations, 
         last_calibration_date, expired_calibration_date, cert_file_path1, cert_file_path2, cert_file_path3, 
         cert_file_path4, cert_file_path5, validation_date, status, created_datetime, update_datetime, 
-        reason_id, other_reason, existing_id, deleted, renewed
+        reason_id, other_reason, existing_id, deleted, renewed, jenis_alat
     ) VALUES (
-        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
     )";
     $insertStmt = $pdo->prepare($insertQuery);
 
@@ -55,7 +55,8 @@ try {
                 date('Y-m-d H:i:s'), // New update_datetime
                 $record['reason_id'], $record['other_reason'], $record['id'], // Link to existing record
                 '0', // Set deleted to 0
-                'N' // Set renewed to 1
+                'N', // Set renewed to 1
+                $record['jenis_alat']
             ]);
 
             // Add to processed IDs
