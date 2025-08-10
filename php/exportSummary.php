@@ -26,7 +26,11 @@ if(isset($_GET['type'])){
         $toDateTime = $dateTime->format('Y-m-d 23:59:59');
         $searchQuery .= " and stamping_date <= '".$toDateTime."'";
     }
-    
+
+    if($_GET['validator'] != null && $_GET['validator'] != ''){
+        $searchQuery .= " and validate_by = '".$_GET['validator']."'";
+    }
+
     $type = $_GET['type'];
     if($type == 'Stamping'){
         $fileName = "Stamping_" . $_GET['fromDate'] . "-" . $_GET['toDate'] . ".xls";
@@ -64,13 +68,14 @@ if(isset($_GET['type'])){
             $excelData .= "<table border='1'>";
             $excelData .= "
                         <tr>
-                            <td colspan='25' style='font-size:16px;font-weight:bold;'>Overall Search Filters</td>
+                            <td colspan='26' style='font-size:16px;font-weight:bold;'>Overall Search Filters</td>
                         </tr>
                         <tr>
                             <th class='header'>No</th>
                             <th class='header'>Date</th>
                             <th class='header'>Expire Date</th>
                             <th class='header'>Direct Customer / Reseller</th>
+                            <th class='header'>Reseller</th>
                             <th class='header'>Customer</th>
                             <th class='header'>Stamping Type</th>
                             <th class='header'>Validator</th>
@@ -93,7 +98,7 @@ if(isset($_GET['type'])){
                             <th class='header'>Total Nett Amount</th>
                         </tr>
                         <tr>
-                            <td colspan='10'></td>
+                            <td colspan='11'></td>
                             <td class='header'>SINGLE</td>
                             <td class='header'>MULTI</td>
                             <td colspan='13'></td>
@@ -137,6 +142,7 @@ if(isset($_GET['type'])){
                                 <td class="body">'.$formattedStampingDate.'</td>
                                 <td class="body">'.$formattedDueDate.'</td>
                                 <td class="body">'.$row['type'].'</td>
+                                <td class="body">'.searchResellerNameById($row['dealer'], $db).'</td>
                                 <td class="body">'.searchCustNameById($row['customers'], $db).'</td>
                                 <td class="body">'.$row['stamping_type'].'</td>
                                 <td class="body">'.searchValidatorNameById($row['validate_by'], $db).'</td>
@@ -182,7 +188,7 @@ if(isset($_GET['type'])){
             // Sub Total Row
             $excelData .= '
                         <tr>
-                            <td colspan="16" class="body"></td>
+                            <td colspan="17" class="body"></td>
                             <td class="body" style="font-weight: bold;">Total</td>
                             <td class="body" style="font-weight: bold;">'.'RM '.number_format($totalUnitPrice, 2).'</td>
                             <td class="body" style="font-weight: bold;">'.'RM '.number_format($totalCertPrice, 2).'</td>
@@ -200,11 +206,11 @@ if(isset($_GET['type'])){
             $excelData .= '
             <table>
                 <tr>
-                    <td style="border:none;" colspan="20"></td>
+                    <td style="border:none;" colspan="21"></td>
                     <td class="header" colspan="5" style="border: 1px solid black;">SUMMARY VALIDATOR REBATE</td>
                 </tr>
                 <tr>
-                    <td style="border:none;" colspan="20"></td>
+                    <td style="border:none;" colspan="21"></td>
                     <td class="header" style="border:1px solid black;">VALIDATOR</td>
                     <td class="header" style="border:1px solid black;">TOTAL JOB</td>
                     <td class="header" style="border:1px solid black;">TOTAL ACCOUNT</td>
@@ -212,7 +218,7 @@ if(isset($_GET['type'])){
                     <td class="header" style="border:1px solid black;">TOTAL REBATE AMOUNT</td>
                 </tr>
                 <tr>
-                    <td style="border:none;" colspan="20"></td>
+                    <td style="border:none;" colspan="21"></td>
                     <td class="body" style="border:1px solid black;">METROLOGY</td>
                     <td class="body" style="border:1px solid black;">'.$totalMetroJob.'</td>
                     <td class="body" style="border:1px solid black;">'.number_format($totalMetroAccount, 2).'</td>
@@ -220,7 +226,7 @@ if(isset($_GET['type'])){
                     <td class="body" style="border:1px solid black;">RM '.number_format($totalMetroRebateAmt, 2).'</td>
                 </tr>
                 <tr>
-                    <td style="border:none;" colspan="20"></td>
+                    <td style="border:none;" colspan="21"></td>
                     <td class="body" style="border:1px solid black;">DE METROLOGY</td>
                     <td class="body" style="border:1px solid black;">'.$totalDeMetroJob.'</td>
                     <td class="body" style="border:1px solid black;">RM '.number_format($totalDeMetroAccount, 2).'</td>

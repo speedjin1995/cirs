@@ -20,6 +20,10 @@ if($_POST['toDate'] != null && $_POST['toDate'] != ''){
   $toDate = $dateTime;
 }
 
+if($_POST['validator'] != null && $_POST['validator'] != ''){
+  $searchQuery .= " and validate_by = '".$_POST['validator']."'";
+}
+
 $months = calcDateDifference($fromDate, $toDate);
 
 if(empty($months)){
