@@ -9,6 +9,8 @@ if(!isset($_SESSION['userID'])){
 }
 else{
     $_SESSION['page']='stampsummary';
+
+    $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
 }
 ?>
 
@@ -60,6 +62,17 @@ else{
                     </div>
                   </div>
                 </div>
+
+                <div class="form-group col-4">
+                    <label>Select Validators:</label>
+                    <select class="form-control select2" id="validatorFilter" name="validatorFilter">
+                        <option value="" selected disabled hidden>Please Select</option>
+                        <?php while ($validator = mysqli_fetch_assoc($validators)) { ?>
+                        <option value="<?= $validator['id'] ?>"><?= $validator['validator'] ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+
                 <div class="col-6"></div>
                 <div class="col-3">
                   <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="exportSummary">
@@ -134,7 +147,8 @@ $(function () {
 
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
-
+    var validator = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
+    
     var table = $("#dashboardTable").DataTable({
         "responsive": true,
         "autoWidth": false,
@@ -149,7 +163,8 @@ $(function () {
             'url':'php/filterSumCountStamping.php',
             'data': {
                 fromDate: fromDateValue,
-                toDate: toDateValue
+                toDate: toDateValue,
+                validator: validator
             } 
         },
         'columns': [
@@ -167,7 +182,8 @@ $(function () {
         type: 'POST',
         data: {
             fromDate: fromDateValue,
-            toDate: toDateValue
+            toDate: toDateValue,
+            validator: validator
         },
         dataType: 'json',
         success: function(response) {
@@ -220,6 +236,7 @@ $(function () {
     $('#filterSearch').on('click', function(){
         var fromDateValue = $('#fromDate').val();
         var toDateValue = $('#toDate').val();
+        var validator = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
 
         //Destroy the old Datatable
         $("#dashboardTable").DataTable().clear().destroy();
@@ -240,7 +257,8 @@ $(function () {
                 'url':'php/filterSumCountStamping.php',
                 'data': {
                     fromDate: fromDateValue,
-                    toDate: toDateValue
+                    toDate: toDateValue,
+                    validator: validator
                 } 
             },
             'columns': [
@@ -258,7 +276,8 @@ $(function () {
             type: 'POST',
             data: {
                 fromDate: fromDateValue,
-                toDate: toDateValue
+                toDate: toDateValue,
+                validator: validator
             },
             dataType: 'json',
             success: function(response) {
@@ -339,8 +358,9 @@ $(function () {
     $('#exportSummary').on('click', function() {
         var fromDateValue = $('#fromDate').val();
         var toDateValue = $('#toDate').val();
+        var validator = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
 
-        window.location.href = 'php/exportSummary.php?type=Stamping&fromDate=' + fromDateValue + '&toDate=' + toDateValue;
+        window.location.href = 'php/exportSummary.php?type=Stamping&fromDate=' + fromDateValue + '&toDate=' + toDateValue + '&validator=' + validator;
     });
 });
 

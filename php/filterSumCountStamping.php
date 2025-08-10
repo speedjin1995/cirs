@@ -27,6 +27,10 @@ if($_POST['toDate'] != null && $_POST['toDate'] != ''){
 	$searchQuery .= " and stamping_date <= '".$toDateTime."'";
 }
 
+if($_POST['validator'] != null && $_POST['validator'] != ''){
+  $searchQuery .= " and validate_by = '".$_POST['validator']."'";
+}
+
 ## Fetch records
 $empQuery = "SELECT validate_by, status, COUNT(*) AS count FROM stamping WHERE deleted = 0 AND validate_by IN (9,10)".$searchQuery." GROUP BY status, validate_by order by validate_by";
 $empRecords = mysqli_query($db, $empQuery);

@@ -100,3 +100,8 @@ ALTER TABLE `stamping` ADD `subtotal_sst_amt` VARCHAR(10) NULL AFTER `sst`, ADD 
 ALTER TABLE `stamping` ADD `validator_invoice` VARCHAR(50) NULL AFTER `log`;
 
 INSERT INTO `roles` (`id`, `role_code`, `role_name`, `module`, `deleted`) VALUES (NULL, 'ACCOUNT', 'ACCOUNT', NULL, '0');
+
+-- 10/08/2025 --
+UPDATE stamping SET total_amount = CAST(COALESCE(NULLIF(total_amount, 'NaN'), '0') AS DECIMAL(15,2)), sst = CAST(COALESCE(NULLIF(sst, 'NaN'), '0') AS DECIMAL(15,2));
+
+UPDATE stamping SET subtotal_sst_amt = CAST(total_amount + sst AS DECIMAL(15,2));
