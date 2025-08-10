@@ -68,40 +68,40 @@ if(isset($_GET['type'])){
             $excelData .= "<table border='1'>";
             $excelData .= "
                         <tr>
-                            <td colspan='26' style='font-size:16px;font-weight:bold;'>Overall Search Filters</td>
+                            <td colspan='28' style='font-size:16px;font-weight:bold;'>Overall Search Filters</td>
                         </tr>
                         <tr>
-                            <th class='header'>No</th>
-                            <th class='header'>Date</th>
-                            <th class='header'>Expire Date</th>
-                            <th class='header'>Direct Customer / Reseller</th>
-                            <th class='header'>Reseller</th>
-                            <th class='header'>Customer</th>
-                            <th class='header'>Stamping Type</th>
-                            <th class='header'>Validator</th>
-                            <th class='header'>Cawangan</th>
-                            <th class='header'>Machine Type</th>
-                            <th class='header'>Jenis Alat</th>
+                            <th class='header' rowspan='2'>No</th>
+                            <th class='header' rowspan='2'>Date</th>
+                            <th class='header' rowspan='2'>Expire Date</th>
+                            <th class='header' rowspan='2'>Direct Customer / Reseller</th>
+                            <th class='header' rowspan='2'>Reseller</th>
+                            <th class='header' rowspan='2'>Customer</th>
+                            <th class='header' rowspan='2'>Stamping Type</th>
+                            <th class='header' rowspan='2'>Validator</th>
+                            <th class='header' rowspan='2'>Cawangan</th>
+                            <th class='header' rowspan='2'>Machine Type</th>
+                            <th class='header' rowspan='2'>Jenis Alat</th>
                             <th class='header' colspan='2' style='border-bottom: 1px solid black;'>Capacity</th>
-                            <th class='header'>No Daftar (Lama)</th>
-                            <th class='header'>No Daftar (Baru)</th>
-                            <th class='header'>Borang (E)</th>
-                            <th class='header'>Borang (D)</th>
-                            <th class='header'>Validator Invoice</th>
-                            <th class='header'>Unit Price</th>
-                            <th class='header'>Certificate Price</th>
-                            <th class='header'>Total Amount Without SST</th>
-                            <th class='header'>SST 8%</th>
-                            <th class='header'>Sub Total With SST</th>
-                            <th class='header'>Rebate %</th>
-                            <th class='header'>Total Rebate Amount</th>
-                            <th class='header'>Total Nett Amount</th>
+                            <th class='header' rowspan='2'>Machine Serial No</th>
+                            <th class='header' rowspan='2'>No Daftar (Lama)</th>
+                            <th class='header' rowspan='2'>No Daftar (Baru)</th>
+                            <th class='header' rowspan='2'>Borang (E)</th>
+                            <th class='header' rowspan='2'>Borang (D)</th>
+                            <th class='header' rowspan='2'>Assigned To</th>
+                            <th class='header' rowspan='2'>Validator Invoice</th>
+                            <th class='header' rowspan='2'>Unit Price</th>
+                            <th class='header' rowspan='2'>Certificate Price</th>
+                            <th class='header' rowspan='2'>Total Amount Without SST</th>
+                            <th class='header' rowspan='2'>SST 8%</th>
+                            <th class='header' rowspan='2'>Sub Total With SST</th>
+                            <th class='header' rowspan='2'>Rebate %</th>
+                            <th class='header' rowspan='2'>Total Rebate Amount</th>
+                            <th class='header' rowspan='2'>Total Nett Amount</th>
                         </tr>
                         <tr>
-                            <td colspan='11'></td>
                             <td class='header'>SINGLE</td>
                             <td class='header'>MULTI</td>
-                            <td colspan='13'></td>
                         </tr>
                         ";
 
@@ -146,15 +146,17 @@ if(isset($_GET['type'])){
                                 <td class="body">'.searchCustNameById($row['customers'], $db).'</td>
                                 <td class="body">'.$row['stamping_type'].'</td>
                                 <td class="body">'.searchValidatorNameById($row['validate_by'], $db).'</td>
-                                <td class="body">'.searchCountryById($row['make_in'], $db).'</td>
+                                <td class="body">'.searchStateNameById($row['cawangan'], $db).'</td>
                                 <td class="body">'.searchMachineNameById($row['machine_type'], $db).'</td>
                                 <td class="body">'.searchAlatNameById($row['jenis_alat'], $db).'</td>
                                 <td class="body">'.searchCapacityNameById($row['capacity'], $db).'</td>
                                 <td class="body">'.searchCapacityNameById($row['capacity_high'], $db).'</td>
+                                <td class="body">'.$row['serial_no'].'</td>
                                 <td class="body">'.$row['no_daftar_lama'].'</td>
                                 <td class="body">'.$row['no_daftar_baru'].'</td>
                                 <td class="body">'.$row['borang_e'].'</td>
                                 <td class="body">'.$row['borang_d'].'</td>
+                                <td class="body">'.searchStaffNameById($row['assignTo'], $db).'</td>
                                 <td class="body">'.$row['validator_invoice'].'</td>
                                 <td class="body">'.'RM '.number_format(($row['unit_price'] ?? 0), 2).'</td>
                                 <td class="body">'.'RM '.number_format(($row['cert_price'] ?? 0), 2).'</td>
@@ -188,7 +190,7 @@ if(isset($_GET['type'])){
             // Sub Total Row
             $excelData .= '
                         <tr>
-                            <td colspan="17" class="body"></td>
+                            <td colspan="19" class="body"></td>
                             <td class="body" style="font-weight: bold;">Total</td>
                             <td class="body" style="font-weight: bold;">'.'RM '.number_format($totalUnitPrice, 2).'</td>
                             <td class="body" style="font-weight: bold;">'.'RM '.number_format($totalCertPrice, 2).'</td>
