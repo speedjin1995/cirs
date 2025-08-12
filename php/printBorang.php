@@ -1,5 +1,6 @@
 <?php
 // Set proper error reporting for character encoding issues
+error_reporting(E_ALL);
 ini_set('default_charset', 'UTF-8');
 mb_internal_encoding('UTF-8');
 mb_http_output('UTF-8');
@@ -854,7 +855,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -1026,7 +1026,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -1196,7 +1195,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -1363,7 +1361,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -1537,7 +1534,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -1708,7 +1704,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -2044,7 +2039,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -2206,7 +2200,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -2374,7 +2367,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -2552,7 +2544,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -2724,7 +2715,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -2893,7 +2883,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -3089,7 +3078,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -3275,7 +3263,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -3442,7 +3429,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -3614,7 +3600,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
 
             if ($res = $result->fetch_assoc()) {
                 $nilais = json_decode($res['nilais'], true);
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -3797,7 +3782,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
 
             if ($res = $result->fetch_assoc()) {
                 $nilais = json_decode($res['nilais'], true);
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -3980,7 +3964,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
 
             if ($res = $result->fetch_assoc()) {
                 $nilais = json_decode($res['nilais'], true);
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -4142,7 +4125,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
 
             if ($res = $result->fetch_assoc()) {
                 $nilais = json_decode($res['nilais'], true);
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -5068,7 +5050,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                                     $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
         
                                     $pdf->SetXY(118.188, 236.567-2); // Adjust for {no_penentusahan}
-                                    $pdf->Write(0, $res['no_daftar_lama']);
+                                    $pdf->Write(0, $btuBox['batuDaftarLama']);
                                 }
                             }
                         }
@@ -5267,7 +5249,7 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                                     $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
         
                                     $pdf->SetXY(168.805, 203.567-2); // Adjust for {no_penentusahan}
-                                    $pdf->Write(0, $res['no_daftar_lama']);
+                                    $pdf->Write(0, $btuBox['batuDaftarLama']);
                                 }
                             }
                         }
@@ -5331,7 +5313,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -5459,7 +5440,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;

@@ -105,3 +105,6 @@ INSERT INTO `roles` (`id`, `role_code`, `role_name`, `module`, `deleted`) VALUES
 UPDATE stamping SET total_amount = CAST(COALESCE(NULLIF(total_amount, 'NaN'), '0') AS DECIMAL(15,2)), sst = CAST(COALESCE(NULLIF(sst, 'NaN'), '0') AS DECIMAL(15,2));
 
 UPDATE stamping SET subtotal_sst_amt = CAST(total_amount + sst AS DECIMAL(15,2));
+
+-- 12/08/2025 --
+ALTER TABLE `stamping` ADD `copy` VARCHAR(3) NOT NULL DEFAULT 'N' AFTER `duplicate`;

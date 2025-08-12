@@ -219,6 +219,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "borang_d"=>$row['borang_d'] ?? '',
     "renewed"=>$row['renewed'] ?? 'N',
     "duplicate"=>$row['duplicate'] ?? 'N',
+    "copy"=>$row['copy'] ?? 'N',
     "created_datetime"=>$row['created_datetime'] != null ? convertDatetimeToDate($row['created_datetime']) : '',
     "updated_datetime"=>$row['updated_datetime'] != null ? convertDatetimeToDate($row['updated_datetime']) : ''
   );

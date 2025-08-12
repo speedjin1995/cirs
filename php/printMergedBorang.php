@@ -4054,7 +4054,7 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                                     $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
         
                                     $pdf->SetXY(118.188, 236.567-2); // Adjust for {no_penentusahan}
-                                    $pdf->Write(0, $res['no_daftar_lama']);
+                                    $pdf->Write(0, $btuBox['batuDaftarLama']);
                                 }
                             }
                         }
@@ -4190,7 +4190,7 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                                     $pdf->Write(0, searchStateNameById($res['cawangan'], $db));
         
                                     $pdf->SetXY(168.805, 203.567-2); // Adjust for {no_penentusahan}
-                                    $pdf->Write(0, $res['no_daftar_lama']);
+                                    $pdf->Write(0, $btuBox['batuDaftarLama']);
                                 }
                             }
                         }

@@ -14,6 +14,10 @@ if(!isset($_SESSION['userID'])){
 if(isset($_POST['duplicateNo'], $_POST['id'])){
     $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING);
     $duplicateNo = filter_input(INPUT_POST, 'duplicateNo', FILTER_SANITIZE_STRING);
+    $type = '';
+    if(isset($_POST['type']) && !empty($_POST['type']) && $_POST['type'] != '' && $_POST['type'] != null){
+        $type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
+    }
     $allSuccess = false;
 
     if ($select_stmt = $db->prepare("SELECT * FROM stamping WHERE id = ?")) {
@@ -43,8 +47,8 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
                     pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, cawangan, invoice_no, cash_bill, stamping_type, last_year_stamping_date, stamping_date, 
                     due_date, pic, customer_pic, quotation_no, quotation_date, purchase_no, purchase_date, remarks, log, 
                     unit_price, cert_price, total_amount, sst, subtotal_amount, reason_id, other_reason, existing_id, status, 
-                    renewed, duplicate
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    renewed, duplicate, copy
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                 $insertStmt = $db->prepare($insertQuery);
 
@@ -53,8 +57,10 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
                     stamp_id, penentusan_baru, penentusan_semula, kelulusan_mspk, no_kelulusan, indicator_serial, 
                     platform_country, platform_type, size, jenis_pelantar, jenis_penunjuk, alat_type, questions, 
                     steelyard, bilangan_kaunterpois, nilais, bentuk_dulang, class, batu_ujian, batu_ujian_lain, other_info, 
-                    load_cell_country, load_cell_no, load_cells_info
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    load_cell_country, load_cell_no, load_cells_info, penandaan_batu_ujian, btu_info, btu_box_info, nilai_jangka,
+                    nilai_jangka_other, diperbuat_daripada, diperbuat_daripada_other, pam_no, kelulusan_bentuk, kadar_pengaliran,
+                    bentuk_penunjuk, jenama, jenama_other, nilai_jangkaan_maksimum, bahan_pembuat, bahan_pembuat_other
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                 $insertExtStmt = $db->prepare($insertExtQuery);
 
@@ -66,6 +72,14 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
                 $insertLogStmt = $db->prepare($insertLogQuery);
 
                 for($i=0; $i<(int)$duplicateNo; $i++){
+                    if ($type === 'copy') {
+                        $copy = 'Y';
+                        $duplicate = 'N';
+                    } else {
+                        $copy = 'N';
+                        $duplicate = 'Y';
+                    }
+
                     $insertStmt->execute([
                         $record['type'], $record['dealer'], $record['dealer_branch'], $record['customer_type'], $record['customers'],
                         $record['branch'], $record['products'], $record['brand'], $record['machine_type'], $record['model'],
@@ -74,7 +88,7 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
                         $record['include_cert'], null, null, $record['cawangan'], null, null, 'RENEWAL', null, 
                         null, null, $record['pic'], $record['customer_pic'], null, null, null, null, $record['remarks'], 
                         $record['log'], $record['unit_price'], $record['cert_price'], $record['total_amount'], $record['sst'], $record['subtotal_amount'], 
-                        $record['reason_id'], $record['other_reason'], $record['id'], 'Pending', 'N', 'Y'
+                        $record['reason_id'], $record['other_reason'], $record['id'], 'Pending', 'N', $duplicate, $copy
                     ]);
     
                     // Get the last inserted ID
@@ -95,7 +109,12 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
                             $extRecord['size'], $extRecord['jenis_pelantar'], $extRecord['jenis_penunjuk'], $extRecord['alat_type'],
                             $extRecord['questions'], $extRecord['steelyard'], $extRecord['bilangan_kaunterpois'], $extRecord['nilais'], $extRecord['bentuk_dulang'], 
                             $extRecord['class'], $extRecord['batu_ujian'], $extRecord['batu_ujian_lain'], $extRecord['other_info'], $extRecord['load_cell_country'],
-                            $extRecord['load_cell_no'], $extRecord['load_cells_info']
+                            $extRecord['load_cell_no'], $extRecord['load_cells_info'],
+                            $extRecord['penandaan_batu_ujian'], $extRecord['btu_info'],
+                            $extRecord['btu_box_info'], $extRecord['nilai_jangka'], $extRecord['nilai_jangka_other'], $extRecord['diperbuat_daripada'],
+                            $extRecord['diperbuat_daripada_other'], $extRecord['pam_no'], $extRecord['kelulusan_bentuk'], $extRecord['kadar_pengaliran'],
+                            $extRecord['bentuk_penunjuk'], $extRecord['jenama'], $extRecord['jenama_other'], $extRecord['nilai_jangkaan_maksimum'],
+                            $extRecord['bahan_pembuat'], $extRecord['bahan_pembuat_other']
                         ]);
                     }
 

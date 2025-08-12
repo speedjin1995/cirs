@@ -1022,7 +1022,7 @@ else{
 
       <form role="form" id="duplicateForm">
         <div class="modal-header bg-gray-dark color-palette">
-          <h4 class="modal-title">Duplicate Stamping</h4>
+          <h4 class="modal-title">Copy Stamping</h4>
           <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -1030,10 +1030,11 @@ else{
 
         <div class="modal-body">
           <input type="hidden" class="form-control" id="id" name="id">
+          <input type="hidden" class="form-control" id="type" name="type">
           <div class="row">
             <div class="col-6">
               <div class="form-group">
-                <label>No of records to duplicate *</label>
+                <label>No of records to copy *</label>
                 <input type="number" class="form-control" id="duplicateNo" name="duplicateNo" required>
               </div>
             </div>
@@ -2099,7 +2100,8 @@ $(function () {
             }else{
               dropdownMenu += '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>';
             }
-            dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>'+
+            dropdownMenu += '<a class="dropdown-item" id="copy'+ data + '" onclick="copy(' + data + ')"><i class="fa-solid fa-clone"></i> Copy</a>' + 
+            '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>'+
             '<a class="dropdown-item" id="deactivate' + data + '" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>';
           
           dropdownMenu += '</div></div>';
@@ -2246,6 +2248,24 @@ $(function () {
           }
         });
       }
+      else if($('#duplicateModal').hasClass('show')){
+        $.post('php/duplicateStamp.php', $('#duplicateForm').serialize(), function(data){
+          var obj = JSON.parse(data); 
+          if(obj.status === 'success'){
+            $('#duplicateModal').modal('hide');
+            toastr["success"](obj.message, "Success:");
+            $('#weightTable').DataTable().ajax.reload(null, false);
+          }
+          else if(obj.status === 'failed'){
+            toastr["error"](obj.message, "Failed:");
+          }
+          else{
+            toastr["error"]("Something wrong when edit", "Failed:");
+          }
+
+          $('#spinnerLoading').hide();
+        });
+      }
       else if($('#cancelModal').hasClass('show')){
         $.post('php/deleteStamp.php', $('#cancelForm').serialize(), function(data){
           var obj = JSON.parse(data); 
@@ -2358,7 +2378,8 @@ $(function () {
               }else{
                 dropdownMenu += '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>';
               }
-              dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>'+
+              dropdownMenu += '<a class="dropdown-item" id="copy'+ data + '" onclick="copy(' + data + ')"><i class="fa-solid fa-clone"></i> Copy</a>' + 
+              '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>'+
               '<a class="dropdown-item" id="deactivate' + data + '" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>';
             
             dropdownMenu += '</div></div>';
@@ -3719,6 +3740,7 @@ function format (row) {
         <div class="row">
           <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
           <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+          <div class="col-1"><button title="Log" type="button" id="copy${row.id}" onclick="copy(${row.id})" class="btn btn-success btn-sm"><i class="fa-solid fa-clone"></i></button></div>
           <div class="col-1"><button title="Cancel" type="button" id="deactivate${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
         </div>
       </div>
@@ -5299,6 +5321,26 @@ function log(id) {
       toastr["error"]("Something wrong when pull data", "Failed:");
     }
     $('#spinnerLoading').hide();
+  });
+}
+
+function copy(id) {
+  $('#duplicateModal').find('#id').val(id);
+  $('#duplicateModal').find('#type').val('copy');
+  $('#duplicateModal').modal('show');
+
+  $('#duplicateForm').validate({
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+      error.addClass('invalid-feedback');
+      element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass('is-invalid');
+    }
   });
 }
 </script>

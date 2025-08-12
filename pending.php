@@ -2189,9 +2189,11 @@ $(function () {
       { 
         data: 'status',
         render: function (data, type, row) {
-          if (row.duplicate == 'N'){
+          if (row.duplicate == 'N' && row.copy == 'N'){
             return data;
-          }else{
+          } else if (row.copy == 'Y'){
+            return data + '<br>(Copied)';
+          } else{
             return data + '<br>(Duplicated)';
           }
         }
@@ -2242,11 +2244,13 @@ $(function () {
     'createdRow': function (row, data, dataIndex) {
       var dueDate = new Date(data.dueDate); // Parse into a Date object
       if (data.duplicate === 'Y') {
-          $(row).css('color', '#800080');
+        $(row).css('color', '#800080');
+      } else if (data.copy === 'Y') {
+        $(row).css('color', '#00509e ');
       } else if (data.renewed === 'Y') {
-          $(row).css('color', 'blue');
+        $(row).css('color', 'blue');
       } else if (dueDate < today){
-          $(row).css('color', 'red');
+        $(row).css('color', 'red');
       }
     },
     "lengthMenu": [ [10, 25, 50, 100, 300, 600, 1000], [10, 25, 50, 100, 300, 600, 1000] ], // More show options
@@ -2523,7 +2527,18 @@ $(function () {
         { data: 'no_daftar_baru' },
         { data: 'stamping_date' },
         { data: 'due_date' },
-        { data: 'status' },
+        { 
+          data: 'status',
+          render: function (data, type, row) {
+            if (row.duplicate == 'N' && row.copy == 'N'){
+              return data;
+            } else if (row.copy == 'Y'){
+              return data + '<br>(Copied)';
+            } else{
+              return data + '<br>(Duplicated)';
+            }
+          }
+        },
         {
           data: 'id',
           className: 'action-button',
@@ -2570,11 +2585,13 @@ $(function () {
       'createdRow': function (row, data, dataIndex) {
         var dueDate = new Date(data.dueDate);
         if (data.duplicate === 'Y') {
-            $(row).css('color', '#800080');
+          $(row).css('color', '#800080');
+        } else if (data.copy === 'Y') {
+          $(row).css('color', '#00509e');
         } else if (data.renewed === 'Y') {
-            $(row).css('color', 'blue');
+          $(row).css('color', 'blue');
         } else if (dueDate < today){
-            $(row).css('color', 'red');
+          $(row).css('color', 'red');
         }
       },
       "lengthMenu": [ [10, 25, 50, 100, 300, 600, 1000], [10, 25, 50, 100, 300, 600, 1000] ], // More show options
