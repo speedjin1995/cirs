@@ -2955,10 +2955,10 @@ $(function () {
           $('#unitPrice').trigger('change');
 
           // 🔥 Ensure `priceLoaded` is triggered only ONCE per edit session
-          if (!priceLoadedTriggered) {
-            $('#extendModal').trigger('priceLoaded');
-            priceLoadedTriggered = true; // ✅ Prevents re-triggering
-          }
+          // if (!priceLoadedTriggered) {
+          //   $('#extendModal').trigger('priceLoaded');
+          //   priceLoadedTriggered = true; // ✅ Prevents re-triggering
+          // }
         }
         else if(obj.status === 'failed'){
           toastr["error"](obj.message, "Failed:");
@@ -4395,7 +4395,7 @@ function edit(id) {
         $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
         $('#extendModal').find('#companyText').val('');
         $('#extendModal').find('#product').val(obj.message.products);
-        $('#extendModal').find('#machineType').val(obj.message.machine_type).select2('destroy').select2();
+        $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
         $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
 
         customer = obj.message.customers;
@@ -4784,7 +4784,7 @@ function edit(id) {
 
         $('#extendModal').find('#companyText').val('');
         $('#extendModal').find('#product').val(obj.message.products);
-        $('#extendModal').find('#machineType').val(obj.message.machine_type).select2('destroy').select2();
+        $('#extendModal').find('#machineType').val(obj.message.machine_type).trigger('change');
         $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
         // $('#extendModal').on('jaIsLoaded', function() {
         //   $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).select2('destroy').select2();
