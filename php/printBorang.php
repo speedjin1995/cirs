@@ -855,7 +855,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -1197,7 +1196,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -1364,7 +1362,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -1538,7 +1535,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -1709,7 +1705,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -2045,7 +2040,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -2207,7 +2201,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -2375,7 +2368,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -2553,7 +2545,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -2725,7 +2716,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -2894,7 +2884,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -3090,7 +3079,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -3276,7 +3264,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -3443,7 +3430,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -3615,7 +3601,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
 
             if ($res = $result->fetch_assoc()) {
                 $nilais = json_decode($res['nilais'], true);
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -3798,7 +3783,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
 
             if ($res = $result->fetch_assoc()) {
                 $nilais = json_decode($res['nilais'], true);
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -3981,7 +3965,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
 
             if ($res = $result->fetch_assoc()) {
                 $nilais = json_decode($res['nilais'], true);
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -4143,7 +4126,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
 
             if ($res = $result->fetch_assoc()) {
                 $nilais = json_decode($res['nilais'], true);
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -5332,7 +5314,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
@@ -5460,7 +5441,6 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
             $message = '';
 
             if ($res = $result->fetch_assoc()) {
-                $loadcells = json_decode($res['load_cells_info'], true);
                 $branch = null;
                 $address1 = null;
                 $address2 = null;
