@@ -5269,7 +5269,7 @@ function edit(id) {
 
         jalat = obj.message.jenis_alat;
 
-        $('#extendModal').on('atkLoaded', function() {
+        // $('#extendModal').on('atkLoaded', function() {
           if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '1'){
             $('#addtionalSection').html($('#atkDetails').html());
             $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
