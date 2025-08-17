@@ -109,6 +109,10 @@ else{
     					<input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="Enter H/P">
     				</div>
                     <div class="form-group">
+    					<label for="emailAddress">Staff Email Address *</label>
+    					<input type="email" class="form-control" name="emailAddress" id="emailAddress" placeholder="Enter Email Address">
+    				</div>
+                    <div class="form-group">
 						<label>System Role *</label>
 						<select class="form-control" id="userRole" name="userRole" required>
 						    <option select="selected" value="">Please Select</option>
@@ -230,6 +234,7 @@ $(function () {
         $('#addModal').find('#position').val("");
         $('#addModal').find('#phoneNumber').val("");
         $('#addModal').find('#userRole').val("");
+        $('#addModal').find('#emailAddress').val("");
         $('#addModal').modal('show');
         
         $('#memberForm').validate({
@@ -260,6 +265,7 @@ function edit(id){
             $('#addModal').find('#icNo').val(obj.message.ic_number);
             $('#addModal').find('#position').val(obj.message.designation);
             $('#addModal').find('#phoneNumber').val(obj.message.contact_number);
+            $('#addModal').find('#emailAddress').val(obj.message.email);
             $('#addModal').find('#userRole').val(obj.message.role_code);
             $('#addModal').modal('show');
             

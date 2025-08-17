@@ -108,3 +108,9 @@ UPDATE stamping SET subtotal_sst_amt = CAST(total_amount + sst AS DECIMAL(15,2))
 
 -- 12/08/2025 --
 ALTER TABLE `stamping` ADD `copy` VARCHAR(3) NOT NULL DEFAULT 'N' AFTER `duplicate`;
+
+-- 17/08/2025 --
+ALTER TABLE users 
+ADD COLUMN email VARCHAR(100) NULL,
+ADD COLUMN reset_token VARCHAR(255) NULL,
+ADD COLUMN reset_expires DATETIME NULL;

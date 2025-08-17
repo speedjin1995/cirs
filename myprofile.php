@@ -16,10 +16,12 @@ else{
 	$result = $stmt->get_result();
     $fullName = '';
     $userName = '';
+    $emailAddr = '';
 	
 	if(($row = $result->fetch_assoc()) !== null){
         $fullName = $row['name'];
         $userName = $row['username'];
+        $emailAddr = $row['email'];
     }
     $stmt->close(); // Close the prepared statement
     $db->close(); // Close the database connection
@@ -48,6 +50,11 @@ else{
 				<div class="form-group">
 					<label for="name">Username *</label>
 					<input type="text" class="form-control" id="userEmail" name="userEmail" value="<?=$userName ?>" placeholder="Enter Username" readonly="">
+				</div>
+
+                <div class="form-group">
+					<label for="email">Email Address *</label>
+					<input type="email" class="form-control" id="emailAddr" name="emailAddr" value="<?=$emailAddr ?>" placeholder="Enter Email Address" required="">
 				</div>
 			</div>
 			

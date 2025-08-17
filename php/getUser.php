@@ -30,6 +30,7 @@ if(isset($_POST['userID'])){
                 $message['designation'] = $row['designation'];
                 $message['contact_number'] = $row['contact_number'];
                 $message['role_code'] = $row['role_code'];
+                $message['email'] = $row['email'];
             }
             
             $update_stmt->close();
