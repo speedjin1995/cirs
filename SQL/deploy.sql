@@ -136,3 +136,4 @@ ALTER TABLE `company_branches` ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `company_branches` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `users` ADD `branch` INT(11) NULL AFTER `role_code`;

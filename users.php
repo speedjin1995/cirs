@@ -21,6 +21,7 @@ else{
 
     $superAdminRoles = $db->query("SELECT * FROM roles WHERE role_code != 'SUPER_ADMIN' AND deleted = '0'");
     $adminRoles = $db->query("SELECT * FROM roles WHERE role_code NOT IN ('SUPER_ADMIN', 'ADMIN') AND deleted = '0'");
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
 
     $db->close(); // Close the database connection
 }
@@ -61,6 +62,7 @@ else{
                                     <th>Job Position</th>
                                     <th>Contact No(H/P)</th>
 									<th>System Role</th>
+									<th>Branch</th>
 									<th>Status</th>
 									<th>Actions</th>
 								</tr>
@@ -127,6 +129,15 @@ else{
                             <?php } ?>
 						</select>
 					</div>
+                    <div class="form-group">
+						<label>Branch *</label>
+						<select class="form-control" id="branch" name="branch" required>
+						    <option select="selected" value="">Please Select</option>
+						    <?php while ($row = mysqli_fetch_assoc($companyBranches)) { ?>
+                                <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
+                            <?php } ?>
+						</select>
+					</div>
     			</div>
             </div>
             <div class="modal-footer justify-content-between">
@@ -158,6 +169,7 @@ $(function () {
             { data: 'designation' },
             { data: 'contact_number' },
             { data: 'role_name' },
+            { data: 'branch_name' },
             { data: 'status' },
             {
                 data: 'deleted',
@@ -211,7 +223,7 @@ $(function () {
                 if(obj.status === 'success'){
                     $('#addModal').modal('hide');
                     toastr["success"](obj.message, "Success:");
-                    $('#memberTable').DataTable().ajax.reload();
+                    $('#memberTable').DataTable().ajax.reload(null, false);
                     $('#spinnerLoading').hide();
                 }
                 else if(obj.status === 'failed'){
@@ -235,6 +247,7 @@ $(function () {
         $('#addModal').find('#phoneNumber').val("");
         $('#addModal').find('#userRole').val("");
         $('#addModal').find('#emailAddress').val("");
+        $('#addModal').find('#branch').val("");
         $('#addModal').modal('show');
         
         $('#memberForm').validate({
@@ -267,6 +280,7 @@ function edit(id){
             $('#addModal').find('#phoneNumber').val(obj.message.contact_number);
             $('#addModal').find('#emailAddress').val(obj.message.email);
             $('#addModal').find('#userRole').val(obj.message.role_code);
+            $('#addModal').find('#branch').val(obj.message.branch);
             $('#addModal').modal('show');
             
             $('#memberForm').validate({

@@ -20,6 +20,7 @@ if(isset($_POST['username'], $_POST['name'], $_POST['userRole'], $_POST['emailAd
     $icNo = null;
     $position = null;
     $phoneNumber = null;
+    $branch = null;
     
     if(isset($_POST['icNo']) && $_POST['icNo'] != null && $_POST['icNo'] != ''){
         $icNo = filter_input(INPUT_POST, 'icNo', FILTER_SANITIZE_STRING);
@@ -33,9 +34,13 @@ if(isset($_POST['username'], $_POST['name'], $_POST['userRole'], $_POST['emailAd
         $phoneNumber = filter_input(INPUT_POST, 'phoneNumber', FILTER_SANITIZE_STRING);
     }
 
+    if(isset($_POST['branch']) && $_POST['branch'] != null && $_POST['branch'] != ''){
+        $branch = filter_input(INPUT_POST, 'branch', FILTER_SANITIZE_STRING);
+    }
+
     if($_POST['id'] != null && $_POST['id'] != ''){
-        if ($update_stmt = $db->prepare("UPDATE users SET username=?, name=?, ic_number=?, designation=?, contact_number=?, role_code=?, email=? WHERE id=?")) {
-            $update_stmt->bind_param('ssssssss', $username, $name, $icNo, $position, $phoneNumber, $roleCode, $emailAddress, $_POST['id']);
+        if ($update_stmt = $db->prepare("UPDATE users SET username=?, name=?, ic_number=?, designation=?, contact_number=?, role_code=?, email=?, branch=? WHERE id=?")) {
+            $update_stmt->bind_param('sssssssss', $username, $name, $icNo, $position, $phoneNumber, $roleCode, $emailAddress, $branch, $_POST['id']);
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
@@ -63,8 +68,8 @@ if(isset($_POST['username'], $_POST['name'], $_POST['userRole'], $_POST['emailAd
         $password = '123456';
         $password = hash('sha512', $password . $random_salt);
 
-        if ($insert_stmt = $db->prepare("INSERT INTO users (username, name, ic_number, designation, contact_number, password, salt, created_by, role_code, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-            $insert_stmt->bind_param('ssssssssss', $username, $name, $icNo, $position, $phoneNumber, $password, $random_salt, $userId, $roleCode, $emailAddress);
+        if ($insert_stmt = $db->prepare("INSERT INTO users (username, name, ic_number, designation, contact_number, password, salt, created_by, role_code, email, branch) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+            $insert_stmt->bind_param('sssssssssss', $username, $name, $icNo, $position, $phoneNumber, $password, $random_salt, $userId, $roleCode, $emailAddress, $branch);
             
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {
