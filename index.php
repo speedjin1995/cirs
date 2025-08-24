@@ -824,6 +824,12 @@ to get the desired effect
                             <i class="nav-icon fas fa-user"></i>
                             <p>Staffs</p>
                           </a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="#branch" data-file="branch.php" class="nav-link link">
+                            <i class="nav-icon fa-solid fa-location-dot"></i>
+                            <p>Branches</p>
+                          </a>
                         </li>';
                 }
               ?>

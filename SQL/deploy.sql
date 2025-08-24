@@ -114,3 +114,25 @@ ALTER TABLE users
 ADD COLUMN email VARCHAR(100) NULL,
 ADD COLUMN reset_token VARCHAR(255) NULL,
 ADD COLUMN reset_expires DATETIME NULL;
+
+-- 24/08/2025 --
+CREATE TABLE `company_branches` (
+  `id` int(11) NOT NULL,
+  `branch_code` varchar(50) DEFAULT NULL,
+  `branch_name` varchar(100) NOT NULL,
+  `map_url` text DEFAULT NULL,
+  `address_line_1` text NOT NULL,
+  `address_line_2` text DEFAULT NULL,
+  `address_line_3` text DEFAULT NULL,
+  `address_line_4` text DEFAULT NULL,
+  `pic` varchar(50) DEFAULT NULL,
+  `pic_contact` varchar(30) DEFAULT NULL,
+  `office_no` varchar(30) DEFAULT NULL,
+  `email` varchar(30) DEFAULT NULL,
+  `deleted` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `company_branches` ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `company_branches` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
