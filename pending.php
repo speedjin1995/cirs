@@ -14,10 +14,12 @@ else{
 	$stmt->execute();
 	$result = $stmt->get_result();
   $role = 'NORMAL';
+  $branch = '';
   $_SESSION['page']='pending';
 	
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
+    $branch = $row['branch'];
   }
   $stmt->close();
 
@@ -69,6 +71,21 @@ else{
   $countryAtsH = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countrySia = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $country2 = $db->query("SELECT * FROM country WHERE deleted = '0'");
+
+  if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
+  }
+  else{
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
+  }
+
+  if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
+    $companyBranches2 = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
+  }
+  else{
+    $companyBranches2 = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
+  }
+
   $loadCells = $db->query("SELECT load_cells.*, brand.brand AS brand_name, model.model AS model_name FROM load_cells join brand on load_cells.brand = brand.id join model on load_cells.model = model.id where load_cells.deleted = 0 and brand.deleted = 0 and model.deleted = 0");
 //   $loadCells = $db->query("SELECT load_cells.*, machines.machine_type AS machinetype, brand.brand AS brand_name, model.model AS model_name, alat.alat, country.nicename 
 // FROM load_cells, machines, brand, model, alat, country WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
@@ -232,6 +249,18 @@ else{
                     <input type="text" class="form-control" id="quoteNoFilter" name="quoteNoFilter">
                   </div>
                 </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Branch:</label>
+                    <select class="form-control select2" id="branchFilter" name="branchFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($row = mysqli_fetch_assoc($companyBranches)) { ?>
+                          <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
               </div>
 
               <div class="row">
@@ -326,6 +355,16 @@ else{
                 <select class="form-control" style="width: 100%;" id="type" name="type" required>
                   <option value="DIRECT">DIRECT CUSTOMER</option>
                   <option value="RESELLER">RESELLER</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="form-group">
+                <label>Company Branch * </label>
+                <select class="form-control select2" id="companyBranch" name="companyBranch" required>
+                  <?php while ($row = mysqli_fetch_assoc($companyBranches2)) { ?>
+                      <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
+                  <?php } ?>
                 </select>
               </div>
             </div>
@@ -2121,6 +2160,7 @@ $(function () {
   var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
   var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
   var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
+  var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
 
   const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
 
@@ -2149,6 +2189,7 @@ $(function () {
         borang: borangNoFilter,
         serial: serialNoFilter,
         quotation: quoteNoFilter,
+        branch: branchFilter,
         status: 'Pending'
       } 
     },
@@ -2460,6 +2501,7 @@ $(function () {
     var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
     var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
     var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
+    var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
 
     //Destroy the old Datatable
     $("#weightTable").DataTable().clear().destroy();
@@ -2490,6 +2532,7 @@ $(function () {
           borang: borangNoFilter,
           serial: serialNoFilter,
           quotation: quoteNoFilter,
+          branch: branchFilter,
           status: 'Pending'
         } 
       },
@@ -4602,6 +4645,7 @@ function newEntry(){
 
   $('#extendModal').find('#id').val("");
   $('#extendModal').find('#type').val("DIRECT");
+  $('#extendModal').find('#companyBranch').val("<?=$branch ?>").trigger('change');
   $('#isResseller').hide();
   $('#isResseller2').hide();
   $('#isResseller3').hide();
@@ -4796,6 +4840,7 @@ function edit(id) {
         priceLoadedTriggered = false; 
 
         $('#extendModal').find('#id').val(obj.message.id);
+        $('#extendModal').find('#companyBranch').val(obj.message.company_branch).trigger('change');
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#dealer').val('');
         $('#extendModal').find('#reseller_branch').val('');

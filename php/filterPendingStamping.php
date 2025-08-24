@@ -63,6 +63,10 @@ if($_POST['quotation'] != null && $_POST['quotation'] != '' && $_POST['quotation
   $searchQuery .= " and s.quotation_no like '%".$_POST['quotation']."%'";
 }
 
+if($_POST['branch'] != null && $_POST['branch'] != '' && $_POST['branch'] != '-'){
+	$searchQuery .= " and s.company_branch = '".$_POST['branch']."'";
+}
+
 if($searchValue != ''){
   $searchQuery .= " and 
   (c.customer_name like '%".$searchValue."%' OR 
