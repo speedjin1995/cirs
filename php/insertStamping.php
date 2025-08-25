@@ -530,7 +530,9 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 
 				// For ATK Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '1'){
-					$penentusan_baru = null;
+					$weighbridge_location = null;
+					$weighbridge_name = null;
+					$weighbridge_serial_no = null;
 					$penentusan_semula = null;
 					$kelulusan_mspk = null;
 					$no_kelulusan = null;
@@ -562,6 +564,22 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 								"loadCellSerial" => $loadCellSerial[$i]
 							);
 						}
+					}
+
+					if(isset($_POST['wbLocation']) && $_POST['wbLocation']!=null && $_POST['wbLocation']!=""){
+						$weighbridge_location = $_POST['wbLocation'];
+					}
+
+					if(isset($_POST['wbName']) && $_POST['wbName']!=null && $_POST['wbName']!=""){
+						$weighbridge_name = $_POST['wbName'];
+					}
+
+					if(isset($_POST['wbSerialNo']) && $_POST['wbSerialNo']!=null && $_POST['wbSerialNo']!=""){
+						$weighbridge_serial_no = $_POST['wbSerialNo'];
+					}
+
+					if(isset($_POST['penentusanBaru']) && $_POST['penentusanBaru']!=null && $_POST['penentusanBaru']!=""){
+						$penentusan_baru = $_POST['penentusanBaru'];
 					}
 
 					if(isset($_POST['penentusanBaru']) && $_POST['penentusanBaru']!=null && $_POST['penentusanBaru']!=""){
@@ -612,10 +630,10 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						$load_cell_no = $_POST['noOfLoadCell'];
 					}
 
-					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET penentusan_baru = ?, penentusan_semula = ?, kelulusan_mspk = ?, no_kelulusan = ?, indicator_serial = ?, platform_country = ?, platform_type = ?, 
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET weighbridge_location = ?, weighbridge_name = ?, weighbridge_serial_no = ?, penentusan_baru = ?, penentusan_semula = ?, kelulusan_mspk = ?, no_kelulusan = ?, indicator_serial = ?, platform_country = ?, platform_type = ?, 
 					size = ?, jenis_pelantar = ?, other_info = ?, load_cell_country = ?, load_cell_no = ?, load_cells_info = ? WHERE stamp_id = ?")){
 						$data = json_encode($load_cells_info);
-						$insert_stmt2->bind_param('ssssssssssssss', $penentusan_baru, $penentusan_semula, $kelulusan_mspk, $no_kelulusan, $indicator_serial, $platform_country, $platform_type, 
+						$insert_stmt2->bind_param('sssssssssssssssss', $weighbridge_location, $weighbridge_name, $weighbridge_serial_no, $penentusan_baru, $penentusan_semula, $kelulusan_mspk, $no_kelulusan, $indicator_serial, $platform_country, $platform_type, 
 						$size, $jenis_pelantar, $others, $load_cell_country, $load_cell_no, $data, $_POST['id']);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
@@ -1116,7 +1134,9 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 
 				// For ATK Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '1'){
-					$penentusan_baru = null;
+										$weighbridge_location = null;
+					$weighbridge_name = null;
+					$weighbridge_serial_no = null;
 					$penentusan_semula = null;
 					$kelulusan_mspk = null;
 					$no_kelulusan = null;
@@ -1148,6 +1168,18 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 								"loadCellSerial" => $loadCellSerial[$i]
 							);
 						}
+					}
+
+					if(isset($_POST['wbLocation']) && $_POST['wbLocation']!=null && $_POST['wbLocation']!=""){
+						$weighbridge_location = $_POST['wbLocation'];
+					}
+
+					if(isset($_POST['wbName']) && $_POST['wbName']!=null && $_POST['wbName']!=""){
+						$weighbridge_name = $_POST['wbName'];
+					}
+
+					if(isset($_POST['wbSerialNo']) && $_POST['wbSerialNo']!=null && $_POST['wbSerialNo']!=""){
+						$weighbridge_serial_no = $_POST['wbSerialNo'];
 					}
 
 					if(isset($_POST['penentusanBaru']) && $_POST['penentusanBaru']!=null && $_POST['penentusanBaru']!=""){
@@ -1198,10 +1230,10 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						$load_cell_no = $_POST['noOfLoadCell'];
 					}
 
-					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, penentusan_baru, penentusan_semula, kelulusan_mspk, no_kelulusan, indicator_serial, platform_country, 
-						platform_type, size, jenis_pelantar, other_info, load_cell_country, load_cell_no, load_cells_info) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, weighbridge_location, weighbridge_name, weighbridge_serial_no, penentusan_baru, penentusan_semula, kelulusan_mspk, no_kelulusan, indicator_serial, platform_country, 
+						platform_type, size, jenis_pelantar, other_info, load_cell_country, load_cell_no, load_cells_info) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
 						$data = json_encode($load_cells_info);
-						$insert_stmt2->bind_param('ssssssssssssss', $stamp_id, $penentusan_baru, $penentusan_semula, $kelulusan_mspk, $no_kelulusan, $indicator_serial, $platform_country, $platform_type, 
+						$insert_stmt2->bind_param('sssssssssssssssss', $stamp_id, $weighbridge_location, $weighbridge_name, $weighbridge_serial_no, $penentusan_baru, $penentusan_semula, $kelulusan_mspk, $no_kelulusan, $indicator_serial, $platform_country, $platform_type, 
 						$size, $jenis_pelantar, $others, $load_cell_country, $load_cell_no, $data);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();

@@ -2048,7 +2048,8 @@ function format (row) {
                         <div class="row">
                           <!-- ATK Section -->
                           <div class="col-6">
-                            <p><strong>Penentusan Baru:</strong> ${row.penentusan_baru}</p>
+                            <p><strong>Weighbridge Location:</strong> ${row.weighbridge_location}</p>
+                            <p><strong>Weighbridge Serial No:</strong> ${row.weighbridge_serial_no}</p>
                             <p><strong>Kelulusan MSPK:</strong> ${row.kelulusan_mspk}</p>
                             <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
                             <p><strong>Structure Size:</strong> ${row.size}</p>
@@ -2056,6 +2057,7 @@ function format (row) {
                             <p><strong>No. of Load Cells:</strong> ${row.load_cell_no}</p>
                           </div>      
                           <div class="col-6">
+                            <p><strong>Weighbridge Name:</strong> ${row.weighbridge_name}</p>
                             <p><strong>Penetusan Semula:</strong> ${row.penentusan_semula}</p>
                             <p><strong>No. Kelulusan MSPK:</strong> ${row.no_kelulusan}</p>
                             <p><strong>Platform Type:</strong> ${row.platform_type}</p>

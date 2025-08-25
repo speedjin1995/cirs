@@ -197,6 +197,9 @@ if(isset($_POST['userID'])){
                                 $result2 = $update_stmt2->get_result();
                         
                                 if($row2 = $result2->fetch_assoc()) {
+                                    $message['weighbridge_location'] = $row2['weighbridge_location'] ?? '';
+                                    $message['weighbridge_name'] = $row2['weighbridge_name'] ?? '';
+                                    $message['weighbridge_serial_no'] = $row2['weighbridge_serial_no'] ?? '';
                                     $message['penentusan_baru'] = $row2['penentusan_baru'] ?? '';
                                     $message['penentusan_semula'] = $row2['penentusan_semula'] ?? '';
                                     $message['kelulusan_mspk'] = $row2['kelulusan_mspk'] ?? '';
@@ -351,6 +354,9 @@ if(isset($_POST['userID'])){
                                 $result2 = $update_stmt2->get_result();
                         
                                 if($row2 = $result2->fetch_assoc()) {
+                                    $message['weighbridge_location'] = $row2['weighbridge_location'] ?? '';
+                                    $message['weighbridge_name'] = $row2['weighbridge_name'] ?? '';
+                                    $message['weighbridge_serial_no'] = $row2['weighbridge_serial_no'] ?? '';
                                     $message['penentusan_baru'] = $row2['penentusan_baru'] ?? '';
                                     $message['penentusan_semula'] = $row2['penentusan_semula'] ?? '';
                                     $message['kelulusan_mspk'] = $row2['kelulusan_mspk'] ?? '';

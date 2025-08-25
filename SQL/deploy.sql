@@ -149,3 +149,5 @@ ALTER TABLE `stamping` ADD `borang_e_date` DATETIME NULL AFTER `borang_e`;
 ALTER TABLE `inhouse_validations` ADD `calibrator2` INT(5) NULL AFTER `calibrator`, ADD `calibrator3` INT(5) NULL AFTER `calibrator2`;
 
 ALTER TABLE `stamping` ADD `notification_period` VARCHAR(10) NULL AFTER `invoice_attachment`;
+
+ALTER TABLE `stamping_ext` ADD `weighbridge_location` VARCHAR(100) NULL AFTER `stamp_id`, ADD `weighbridge_name` VARCHAR(100) NULL AFTER `weighbridge_location`, ADD `weighbridge_serial_no` VARCHAR(100) NULL AFTER `weighbridge_name`;

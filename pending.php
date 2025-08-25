@@ -1273,6 +1273,24 @@ else{
       <div class="row">
         <div class="col-4">
           <div class="form-group">
+            <label>Weighbridge Location</label>
+            <input type="text" class="form-control" id="wbLocation" name="wbLocation">
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+            <label>Weighbridge Name</label>
+            <input type="text" class="form-control" id="wbName" name="wbName">
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+            <label>Weighbridge Serial No.</label>
+            <input type="text" class="form-control" id="wbSerialNo" name="wbSerialNo">
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
             <label>Penentusan Baru</label>
             <input type="text" class="form-control" id="penentusanBaru" name="penentusanBaru">
           </div>
@@ -4574,7 +4592,8 @@ function format (row) {
                         <div class="row">
                           <!-- ATK Section -->
                           <div class="col-6">
-                            <p><strong>Penentusan Baru:</strong> ${row.penentusan_baru}</p>
+                            <p><strong>Weighbridge Location:</strong> ${row.weighbridge_location}</p>
+                            <p><strong>Weighbridge Serial No:</strong> ${row.weighbridge_serial_no}</p>
                             <p><strong>Kelulusan MSPK:</strong> ${row.kelulusan_mspk}</p>
                             <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
                             <p><strong>Structure Size:</strong> ${row.size}</p>
@@ -4582,6 +4601,7 @@ function format (row) {
                             <p><strong>No. of Load Cells:</strong> ${row.load_cell_no}</p>
                           </div>      
                           <div class="col-6">
+                            <p><strong>Weighbridge Name:</strong> ${row.weighbridge_name}</p>
                             <p><strong>Penetusan Semula:</strong> ${row.penentusan_semula}</p>
                             <p><strong>No. Kelulusan MSPK:</strong> ${row.no_kelulusan}</p>
                             <p><strong>Platform Type:</strong> ${row.platform_type}</p>
@@ -4999,6 +5019,9 @@ function edit(id) {
         // $('#extendModal').on('atkLoaded', function() {
           if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '1'){
             $('#addtionalSection').html($('#atkDetails').html());
+            $('#extendModal').find('#wbLocation').val(obj.message.weighbridge_location);
+            $('#extendModal').find('#wbName').val(obj.message.weighbridge_name);
+            $('#extendModal').find('#wbSerialNo').val(obj.message.weighbridge_serial_no);
             $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
             $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
             $('#extendModal').find('#kelulusanMSPK').val(obj.message.kelulusan_mspk);
@@ -5346,6 +5369,9 @@ function edit(id) {
         // $('#extendModal').on('atkLoaded', function() {
           if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '1'){
             $('#addtionalSection').html($('#atkDetails').html());
+            $('#extendModal').find('#wbLocation').val(obj.message.weighbridge_location);
+            $('#extendModal').find('#wbName').val(obj.message.weighbridge_name);
+            $('#extendModal').find('#wbSerialNo').val(obj.message.weighbridge_serial_no);
             $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
             $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
             $('#extendModal').find('#kelulusanMSPK').val(obj.message.kelulusan_mspk);
