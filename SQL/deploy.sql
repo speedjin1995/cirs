@@ -143,3 +143,5 @@ ALTER TABLE `stamping` ADD `company_branch` INT(11) NULL AFTER `type`;
 ALTER TABLE `other_validations` ADD `company_branch` INT(11) NULL AFTER `type`;
 
 ALTER TABLE `inhouse_validations` ADD `company_branch` INT(11) NULL AFTER `type`;
+
+ALTER TABLE `stamping` ADD `borang_e_date` DATETIME NULL AFTER `borang_e`;

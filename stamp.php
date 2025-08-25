@@ -662,6 +662,17 @@ else{
                     <input class="form-control" type="text" placeholder="No. Borang E" id="borangE" name="borangE">
                   </div>
                 </div>
+                <div class="col-4" id="borangEDateView" style="display:none;">
+                  <div class="form-group">
+                    <label>Borang E Date</label>
+                    <div class='input-group date' id="borangEDatePicker" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#borangEDatePicker" id="borangEDate" name="borangEDate"/>
+                      <div class="input-group-append" data-target="#borangEDatePicker" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div class="col-4">
                   <div class="form-group">
                     <label>No Siri Pelekat Keselamatan </label>
@@ -2025,6 +2036,12 @@ $(function () {
     defaultDate: ''
   });
 
+  $('#borangEDatePicker').datetimepicker({
+    icons: { time: 'far fa-calendar' },
+    format: 'DD/MM/YYYY',
+    defaultDate: ''
+  });
+
   $('#datePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
@@ -2549,11 +2566,13 @@ $(function () {
     if($(this).val() == "NEW"){
       $('#daftarLamaView').hide();
       $('#borangEView').hide();
+      $('#borangEDateView').hide();
       $('#lastYearStampDateView').hide();
     }
     else{
       $('#daftarLamaView').show();
       $('#borangEView').show();
+      $('#borangEDateView').show();
       $('#lastYearStampDateView').show();
     }
   });
@@ -4502,6 +4521,7 @@ function edit(id) {
         $('#extendModal').find('#pic').val(obj.message.pic);
         $('#extendModal').find('#borangD').val(obj.message.borang_d);
         $('#extendModal').find('#borangE').val(obj.message.borang_e);
+        $('#extendModal').find('#borangEDate').val(formatDate3(obj.message.borang_e_date));
         $('#extendModal').find('#remark').val(obj.message.remarks);
         $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
         $('#extendModal').find('#quotation').val(obj.message.quotation_no);
