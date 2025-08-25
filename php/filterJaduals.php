@@ -39,6 +39,10 @@ if($_POST['cawangan'] != null && $_POST['cawangan'] != '' && $_POST['cawangan'] 
 	$searchQuery .= " and s.cawangan = '".$_POST['cawangan']."'";
 }
 
+if($_POST['branch'] != null && $_POST['branch'] != '' && $_POST['branch'] != '-'){
+	$searchQuery .= " and s.company_branch = '".$_POST['branch']."'";
+}
+
 if($_POST['status'] != null && $_POST['status'] != '' && $_POST['status'] != '-'){
   if($_POST['status'] == '6'){
     $searchQuery .= " and s.stamping_type = 'NEW'";

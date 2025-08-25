@@ -14,14 +14,23 @@ else{
 	$stmt->execute();
 	$result = $stmt->get_result();
   $role = 'NORMAL';
+  $branch = '';
   $_SESSION['page']='jadual7';
 	
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
+    $branch = $row['branch'];
   }
 
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE type = 'STAMPING' AND deleted = '0'");
+
+  if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
+  }
+  else{
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
+  }
 
   $stmt->close();
   $db->close();
@@ -101,6 +110,18 @@ else{
                       <option value="" selected disabled hidden>Please Select</option>
                       <?php while($rowValidators=mysqli_fetch_assoc($validators)){ ?>
                         <option value="<?=$rowValidators['id'] ?>"><?=$rowValidators['validator'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Branch:</label>
+                    <select class="form-control select2" id="branchFilter" name="branchFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($row = mysqli_fetch_assoc($companyBranches)) { ?>
+                          <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
                       <?php } ?>
                     </select>
                   </div>
@@ -301,6 +322,7 @@ $(function () {
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
   var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
   var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';    
+  var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
   var statusFilter = '7';
 
   var table = $("#weightTable").DataTable({
@@ -321,7 +343,8 @@ $(function () {
         customer: customerNoFilter,
         validator: validatorFilter,
         cawangan: cawanganFilter,
-        status: statusFilter
+        status: statusFilter,
+        branch: branchFilter
       } 
     },
     'columns': [
@@ -561,6 +584,7 @@ $(function () {
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
     var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
     var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
+    var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
     var statusFilter = '7';
 
     //Destroy the old Datatable
@@ -585,7 +609,8 @@ $(function () {
           customer: customerNoFilter,
           validator: validatorFilter,
           cawangan: cawanganFilter,
-          status: statusFilter
+          status: statusFilter,
+          branch: branchFilter
         } 
       },
       'columns': [

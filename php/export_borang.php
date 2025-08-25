@@ -470,6 +470,25 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
             }else{
                 $validatorFilter = searchValidatorNameById($_POST['validator'], $db);
                 $cawanganFilter = searchStateNameById($_POST['cawangan'], $db);
+
+                $branchId = '';
+                if(isset($_POST['branchId']) && $_POST['branchId']!=null && $_POST['branchId']!=""){
+                    $branchId = $_POST['branchId'];
+                }
+
+                $branchAddress = '';
+                $branchTel = '';
+                $branchFax = '';
+
+                $branchQuery = "SELECT * FROM company_branches WHERE id = '$branchId'";
+                $branchDetail = mysqli_query($db, $branchQuery);
+                $branchRow = mysqli_fetch_assoc($branchDetail);
+
+                if(!empty($branchRow)){
+                    $branchAddress = $branchRow['address_line_1'].' '.$branchRow['address_line_2'].' '.$branchRow['address_line_3'].' '.$branchRow['address_line_4'];
+                    $branchTel = $branchRow['pic_contact'];
+                    $branchFax = $branchRow['office_no'];
+                }
             
                 $rows = array();
                 $totalAmt = 0;
@@ -687,8 +706,8 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                 <tr>
                                     <td style="vertical-align: left;" width="50%">
                                         <p>NAMA SYARIKAT PEMILIK / PEMBAIK : <br><br><b>'.$companyName.' ('.$companyOldRoc.')</b><br>
-                                        ALAMAT : '.$companyAddress.'<br>
-                                        Tel. : '.$companyTel.'     Fax. : '.$companyFax.'</p><br>';
+                                        ALAMAT : '.$branchAddress.'<br>
+                                        Tel. : '.$branchTel.'     Fax. : '.$branchFax.'</p><br>';
     
                                     $message .= '<p><b>Pengurus Cawangan : <span style="font-size: 14px">' . $validatorFilter . ' ' . $cawanganFilter . '</span></b><br>';
                                         

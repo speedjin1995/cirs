@@ -3,12 +3,27 @@
 require_once 'db_connect.php';
 require_once 'requires/lookup.php';
  
-if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actualPrintDate'])){
+if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actualPrintDate'], $_POST['branchId'])){
     $selectedIds = $_POST['id'];
     $arrayOfId = explode(",", $selectedIds);
     $driver = filter_input(INPUT_POST, 'driver', FILTER_SANITIZE_STRING);
     $cawangan = searchStateNameById(filter_input(INPUT_POST, 'cawanganBorang', FILTER_SANITIZE_STRING), $db);
     $validator2 = filter_input(INPUT_POST, 'validatorBorang', FILTER_SANITIZE_STRING);
+    $branchId = filter_input(INPUT_POST, 'branchId', FILTER_SANITIZE_STRING);
+
+    $branchAddress = '';
+    $branchTel = '';
+    $branchFax = '';
+
+    $branchQuery = "SELECT * FROM company_branches WHERE id = '$branchId'";
+    $branchDetail = mysqli_query($db, $branchQuery);
+    $branchRow = mysqli_fetch_assoc($branchDetail);
+
+    if(!empty($branchRow)){
+        $branchAddress = $branchRow['address_line_1'].' '.$branchRow['address_line_2'].' '.$branchRow['address_line_3'].' '.$branchRow['address_line_4'];
+        $branchTel = $branchRow['pic_contact'];
+        $branchFax = $branchRow['office_no'];
+    }
 
     if(isset($_POST['validatorBorang']) && $_POST['validatorBorang']!=null && $_POST['validatorBorang']!=""){
         $validatorFilter = searchValidatorNameById($validator2, $db);
@@ -633,8 +648,8 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                                 <tr>
                                     <td style="vertical-align: left;" width="50%">
                                         <p>NAMA SYARIKAT PEMILIK / PEMBAIK : <br><br><b>'.$companyName.' ('.$companyOldRoc.')</b><br>
-                                        ALAMAT : '.$companyAddress.'<br>
-                                        Tel. : '.$companyTel.'     Fax. : '.$companyFax.'</p><br>';
+                                        ALAMAT : '.$branchAddress.'<br>
+                                        Tel. : '.$branchTel.'     Fax. : '.$branchFax.'</p><br>';
     
                                     $message .= '<p><b>Pengurus Cawangan : <span style="font-size: 14px">' . $validatorFilter . ' ' . $cawangan . '</span></b><br>';
                                         

@@ -993,6 +993,7 @@ else{
 
         <div class="modal-body">
           <input type="hidden" class="form-control" id="id" name="id">
+          <input type="hidden" class="form-control" id="branchId" name="branchId">
           <div class="row">
             <div class="col-6">
               <div class="form-group">
@@ -2684,100 +2685,106 @@ $(function () {
   });
 
   $('#exportBorangs').on('click', function () {
-    var selectedIds = []; // An array to store the selected 'id' values
+    var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : null;
 
-    $("#weightTable tbody input[type='checkbox']").each(function () {
-      if (this.checked) {
-        selectedIds.push($(this).val());
-      }
-    });
+    if (!branchFilter) {
+      alert("Please select a branch before exporting.");
+      return;
+    }else{
+      var selectedIds = []; // An array to store the selected 'id' values
 
-    if (selectedIds.length <= 0) {
-      // Optionally, you can display a message or take another action if no IDs are selected
-      alert("Please select at least one DO to Deliver.");
-    } 
-    else {
-      var validator = $('#validatorFilter').val();
-      $("#printDOModal").find('#id').val(selectedIds);
-      $("#printDOModal").find('#driver').val('P');
-      $("#printDOModal").find('#validatorBorang').val(validator);
-      $("#printDOModal").find('#userId').val(userId);
-
-      // Destroy existing DataTable instance safely
-      if ($.fn.DataTable.isDataTable("#printDOModal #orderPanjangTable")) {
-        orderPanjangTable.destroy();
-      }
-
-      orderPanjangTable = $("#printDOModal").find("#orderPanjangTable").DataTable({
-        "responsive": true,
-        "autoWidth": false,
-        "processing": true,
-        "serverSide": true,
-        "serverMethod": "post",
-        "paging": false,        // Disable pagination
-        "searching": false,     // Disable search box
-        "ordering": false,      // Disable sorting
-        "info": false,          // Disable "Showing X of Y entries"
-        "rowReorder": {
-          selector: 'tr', // Makes the entire row draggable
-          dataSrc: 'id',   // Track row position using 'id'
-          update: false // Prevent automatic update after reordering
-        },
-        "columnDefs": [ { orderable: false, targets: "_all" }], // Disable sorting
-        "ajax": {
-          "type": "POST",
-          "url": "php/getMultiStamping.php",
-          "data": function (d) {
-            d.selectedIds = selectedIds; // Pass the selected IDs
-            d.status = "Pending";
-          }
-        },
-        "columns": [
-          { data: "customers" },
-          { data: "brand" },
-          { data: "machine_type" },
-          { data: "serial_no" },
-          { data: "validate_by" },
-          { data: "capacity" },
-          { data: "no_daftar_lama" },
-          { data: "no_daftar_baru" },
-          { data: "stamping_date" },
-          { data: "due_date" },
-          { data: "id", visible: false }, // Hide 'id' but keep it in DataTable
-        ]
-      });
-
-      $("#printDOModal").find('#orderPanjangTable').show();
-      $("#printDOModal").modal("show");
-
-      orderPanjangTable.off("row-reorder").on("row-reorder", function (e, diff, edit) {
-        var newOrderedIds = [];
-
-        $('#orderPanjangTable tbody tr').each(function () {
-            let rowData = orderPanjangTable.row(this).data(); // Fetch row data
-            if (rowData) {
-              newOrderedIds.push(rowData.id); // Assuming ID is in column index 0
-            }
-        });
-
-        $("#printDOModal").find('#id').val(newOrderedIds.join(','));
-      });
-
-      $('#printDOForm').validate({
-        errorElement: 'span',
-        errorPlacement: function (error, element) {
-          error.addClass('invalid-feedback');
-          element.closest('.form-group').append(error);
-        },
-        highlight: function (element, errorClass, validClass) {
-          $(element).addClass('is-invalid');
-        },
-        unhighlight: function (element, errorClass, validClass) {
-          $(element).removeClass('is-invalid');
+      $("#weightTable tbody input[type='checkbox']").each(function () {
+        if (this.checked) {
+          selectedIds.push($(this).val());
         }
       });
 
-      //$('#printDOForm').submit();
+      if (selectedIds.length <= 0) {
+        // Optionally, you can display a message or take another action if no IDs are selected
+        alert("Please select at least one DO to Deliver.");
+      } 
+      else {
+        var validator = $('#validatorFilter').val();
+        $("#printDOModal").find('#id').val(selectedIds);
+        $("#printDOModal").find('#branchId').val(branchFilter);
+        $("#printDOModal").find('#driver').val('P');
+        $("#printDOModal").find('#validatorBorang').val(validator);
+        $("#printDOModal").find('#userId').val(userId);
+
+        // Destroy existing DataTable instance safely
+        if ($.fn.DataTable.isDataTable("#printDOModal #orderPanjangTable")) {
+          orderPanjangTable.destroy();
+        }
+
+        orderPanjangTable = $("#printDOModal").find("#orderPanjangTable").DataTable({
+          "responsive": true,
+          "autoWidth": false,
+          "processing": true,
+          "serverSide": true,
+          "serverMethod": "post",
+          "paging": false,        // Disable pagination
+          "searching": false,     // Disable search box
+          "ordering": false,      // Disable sorting
+          "info": false,          // Disable "Showing X of Y entries"
+          "rowReorder": {
+            selector: 'tr', // Makes the entire row draggable
+            dataSrc: 'id',   // Track row position using 'id'
+            update: false // Prevent automatic update after reordering
+          },
+          "columnDefs": [ { orderable: false, targets: "_all" }], // Disable sorting
+          "ajax": {
+            "type": "POST",
+            "url": "php/getMultiStamping.php",
+            "data": function (d) {
+              d.selectedIds = selectedIds; // Pass the selected IDs
+              d.status = "Pending";
+            }
+          },
+          "columns": [
+            { data: "customers" },
+            { data: "brand" },
+            { data: "machine_type" },
+            { data: "serial_no" },
+            { data: "validate_by" },
+            { data: "capacity" },
+            { data: "no_daftar_lama" },
+            { data: "no_daftar_baru" },
+            { data: "stamping_date" },
+            { data: "due_date" },
+            { data: "id", visible: false }, // Hide 'id' but keep it in DataTable
+          ]
+        });
+
+        $("#printDOModal").find('#orderPanjangTable').show();
+        $("#printDOModal").modal("show");
+
+        orderPanjangTable.off("row-reorder").on("row-reorder", function (e, diff, edit) {
+          var newOrderedIds = [];
+
+          $('#orderPanjangTable tbody tr').each(function () {
+              let rowData = orderPanjangTable.row(this).data(); // Fetch row data
+              if (rowData) {
+                newOrderedIds.push(rowData.id); // Assuming ID is in column index 0
+              }
+          });
+
+          $("#printDOModal").find('#id').val(newOrderedIds.join(','));
+        });
+
+        $('#printDOForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
+      }
     }
   });
 
