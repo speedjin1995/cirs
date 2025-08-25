@@ -807,6 +807,12 @@ else{
                     <input type="text" id="InvoiceFilePath" name="InvoiceFilePath" style="display:none">           
                   </div>
                 </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Notification Period (Months)</label>
+                    <input class="form-control" type="number" placeholder="Notification Period" id="notificationPeriod" name="notificationPeriod">
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -4332,6 +4338,7 @@ function newEntry(){
   $('#extendModal').find('#quotationFilePath').val('');
   $('#extendModal').find('#newInvoice').show();
   $('#extendModal').find('#uploadInvoiceAttachment').val('');
+  $('#extendModal').find('#notificationPeriod').val('');
   $('#extendModal').find('#viewInvoice').hide();
   $('#extendModal').find('#InvoiceFilePath').val('');
   //Additonal field reset
@@ -4525,6 +4532,7 @@ function edit(id) {
         $('#extendModal').find('#remark').val(obj.message.remarks);
         $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
         $('#extendModal').find('#quotation').val(obj.message.quotation_no);
+        $('#extendModal').find('#notificationPeriod').val(obj.message.notification_period);
 
         if(obj.message.quotation_attachment){
           $('#extendModal').find('#viewQuotation').attr('href', "view_file.php?file="+obj.message.quotation_attachment).show();
