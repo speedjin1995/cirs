@@ -154,7 +154,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
             <table class="table-bordered">
                 <tbody>
                     <tr>
-                        <th colspan="10" style="vertical-align: middle;">
+                        <th colspan="11" style="vertical-align: middle;">
                             JADUAL 6<br>AKTA TIMBANG DAN SUKAT 1972<br>PERATURAN-PERATURAN TIMBANG DAN SUKAT 1981<br>(PERATURAN 35)<br>DAFTAR TIMBANG , SUKAT DAN ALAT TIMBANG SUKAT YANG DIJUAL/DIBUAT
                         </th>
                     </tr>
@@ -169,6 +169,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                         <th style="font-size:12px;">CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
                         <th style="font-size:12px;" width="10%">BRG D BIL NO.</th>
                         <th style="font-size:12px;" width="10%">BRG E BIL NO.</th>
+                        <th style="font-size:12px;" width="10%">COMPANY BRANCH</th>
                     </tr>';
 
             while ($row = $result->fetch_assoc()) {
@@ -247,6 +248,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                 <td style="font-size:12px;">'.$siriKeselamatan.'</td>
                                 <td style="font-size:12px;">'.$borangD.'</td>
                                 <td style="font-size:12px;">'.$borangE.'</td>
+                                <td style="font-size:12px;">'.searchCompanyBranchById($row['company_branch'], $db).'</td>
                             </tr>';
             }
 
@@ -320,7 +322,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
             <table class="table-bordered">
                 <tbody>
                     <tr>
-                        <th colspan="12" style="vertical-align: middle;">
+                        <th colspan="13" style="vertical-align: middle;">
                             JADUAL 7<br>AKTA TIMBANG DAN SUKAT 1972<br>PERATURAN-PERATURAN TIMBANG DAN SUKAT 1981<br>(PERATURAN 35)<br>DAFTAR TIMBANG , SUKAT DAN ALAT TIMBANG SUKAT YANG DIJUAL/DIBUAT
                         </th>
                     </tr>
@@ -334,6 +336,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                         <th style="font-size:12px;">LIST NO. (STMP. NO.)</th>
                         <th style="font-size:12px;" width="10%">NO. DAFTAR LAMA</th>
                         <th style="font-size:12px;" width="10%">NO. DAFTAR BARU</th>
+                        <th style="font-size:12px;" width="8%">COMPANY BRANCH</th>
                         <th style="font-size:12px;">DETAILS OF REPAIR</th>
                         <th style="font-size:12px;">CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
                         <th style="font-size:12px;">FEE</th>
@@ -414,6 +417,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                         <td style="font-size:12px;">'.$row['pin_keselamatan'].'</td>
                         <td style="font-size:12px;">'.$noDaftarLama.'</td>
                         <td style="font-size:12px;">'.$noDaftarBaru.'</td>
+                        <td style="font-size:12px;">'.searchCompanyBranchById($row['company_branch'], $db).'</td>
                         <td style="font-size:12px;">SERVICE / STMP</td>
                         <td style="font-size:12px;">'.$siriKeselamatan.'</td>';
 
@@ -556,8 +560,9 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                 <td style="font-size:12px; padding-left:0.5%;">'.$noDaftarBaru.'</td>
                                 <td style="font-size:12px;">'.$siriKeselamatan.'</td>
                                 <td style="font-size:12px;">'.$borangD.'</td>
-                                <td style="font-size:12px;">'.$borangE.'</td>';
-                                
+                                <td style="font-size:12px;">'.$borangE.'</td>
+                                <td style="font-size:12px;">'.searchCompanyBranchById($row['company_branch'], $db).'</td>';
+
                                 if ($row['cert_price'] != 0) {
                                     $rows[$rowCount] .= '<td style="padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').' (Laporan)</td>';
                                 } else {
@@ -735,6 +740,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                                     <th style="font-size:12px;">No. Siri Pelekat Keselamatan</th>
                                     <th style="font-size:12px;" width="7%">Borang D</th>
                                     <th style="font-size:12px;" width="7%">Borang E</th>
+                                    <th style="font-size:12px;" width="7%">Company Branch</th>
                                     <th style="font-size:12px;" width="8%">Fi / Bayaran</th>
                                 </tr>';
                             
@@ -744,17 +750,17 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                             
                             if ($startIndex + $recordsPerPage >= $num_records) {
                                 $message .= '<tr>
-                                                <td colspan="10" style="border-left: none; border: none;"></td>
+                                                <td colspan="11" style="border-left: none; border: none;"></td>
                                                 <td colspan="2">Total Amount</td>
                                                 <td>RM ' . number_format(floatval($totalAmt), 2, '.', '') . '</td>
                                             </tr>';
                                 $message .= '<tr>
-                                                <td colspan="10" style="border-left: none; border: none;"></td>
+                                                <td colspan="11" style="border-left: none; border: none;"></td>
                                                 <td colspan="2">SST8%</td>
                                                 <td> RM ' . number_format(floatval($sst), 2, '.', '') . '</td>
                                             </tr>';
                                 $message .= '<tr>
-                                                <td colspan="10" style="border-left: none; border: none;"></td>
+                                                <td colspan="11" style="border-left: none; border: none;"></td>
                                                 <td colspan="2">Sub Total Amount</td>
                                                 <td>RM ' . number_format(floatval($subTotalAmt), 2, '.', '') . '</td>
                                             </tr>';
