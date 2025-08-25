@@ -141,3 +141,5 @@ ALTER TABLE `users` ADD `branch` INT(11) NULL AFTER `role_code`;
 ALTER TABLE `stamping` ADD `company_branch` INT(11) NULL AFTER `type`;
 
 ALTER TABLE `other_validations` ADD `company_branch` INT(11) NULL AFTER `type`;
+
+ALTER TABLE `inhouse_validations` ADD `company_branch` INT(11) NULL AFTER `type`;

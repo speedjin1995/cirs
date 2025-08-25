@@ -14,10 +14,12 @@ else{
 	$stmt->execute();
 	$result = $stmt->get_result();
   $role = 'NORMAL';
+  $branch = '';
   $_SESSION['page']='pendinginhouse';
 	
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
+    $branch = $row['branch'];
   }
 
   $autoFormNos = $db->query("SELECT DISTINCT auto_form_no FROM inhouse_validations WHERE deleted = '0'");
@@ -40,6 +42,21 @@ else{
   $cancelledReasons = $db->query("SELECT * FROM reasons WHERE deleted = '0'");
   $country = $db->query("SELECT * FROM country");
   $country2 = $db->query("SELECT * FROM country");
+
+  if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
+  }
+  else{
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
+  }
+
+  if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
+    $companyBranches2 = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
+  }
+  else{
+    $companyBranches2 = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
+  }
+
   $loadCells = $db->query("SELECT load_cells.*, machines.machine_type AS machinetype, brand.brand AS brand_name, model.model AS model_name, alat.alat, country.nicename 
 FROM load_cells, machines, brand, model, alat, country WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
 AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load_cells.deleted = '0'");
@@ -128,9 +145,17 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     <input class="form-control" type="text" placeholder="Certificate No." id="autoFormNoFilter" name="autoFormNoFilter">
                   </div>
                 </div>
-              </div>
-
-              <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Branch:</label>
+                    <select class="form-control select2" id="branchFilter" name="branchFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($row = mysqli_fetch_assoc($companyBranches)) { ?>
+                          <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
                 <div class="form-group col-4">
                   <label>From Inhouse Date:</label>
                   <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
@@ -150,6 +175,9 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </div>
                   </div>
                 </div>
+              </div>
+
+              <div class="row">
                 <div class="col-9"></div>
                 <div class="col-3">
                   <button type="button" class="btn btn-block bg-gradient-warning btn-sm"  id="filterSearch">
@@ -237,6 +265,16 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <select class="form-control" style="width: 100%;" id="type" name="type" required>
                   <option value="DIRECT">DIRECT CUSTOMER</option>
                   <option value="RESELLER">RESELLER</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="form-group">
+                <label>Company Branch * </label>
+                <select class="form-control select2" id="companyBranch" name="companyBranch" required>
+                  <?php while ($row = mysqli_fetch_assoc($companyBranches2)) { ?>
+                      <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
+                  <?php } ?>
                 </select>
               </div>
             </div>
@@ -929,6 +967,7 @@ $(function () {
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
   var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
   var autoFormNoFilter = $('#autoFormNoFilter').val() ? $('#autoFormNoFilter').val() : '';
+  var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
   //var statusFilter = $('#statusFilter').val() ? $('#statusFilter').val() : '';
 
   var table = $("#weightTable").DataTable({
@@ -950,6 +989,7 @@ $(function () {
         customer: customerNoFilter,
         validator: validatorFilter,
         autoFormNo: autoFormNoFilter,
+        branch: branchFilter,
         status: 'Pending'
       } 
     },
@@ -1251,6 +1291,7 @@ $(function () {
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
     var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
     var autoFormNoFilter = $('#autoFormNoFilter').val() ? $('#autoFormNoFilter').val() : '';
+    var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
     //var statusFilter = $('#statusFilter').val() ? $('#statusFilter').val() : '';
 
     //Destroy the old Datatable
@@ -1276,6 +1317,7 @@ $(function () {
           customer: customerNoFilter,
           validator: validatorFilter,
           autoFormNo: autoFormNoFilter,
+          branch: branchFilter,
           status: 'Pending'
         } 
       },
@@ -2110,6 +2152,7 @@ function newEntry(){
 
   $('#extendModal').find('#id').val("");
   $('#extendModal').find('#type').val("DIRECT").trigger('change');
+  $('#extendModal').find('#companyBranch').val("<?=$branch ?>").trigger('change');
   $('#extendModal').find('#dealer').val('').trigger('change');
   $('#extendModal').find('#reseller_branch').val('').trigger('change');
   // $('#isResseller').hide();
@@ -2324,6 +2367,7 @@ function edit(id) {
       if(obj.message.type == 'DIRECT'){
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
+        $('#extendModal').find('#companyBranch').val(obj.message.company_branch).trigger('change');
         $('#extendModal').find('#dealer').val('');
         $('#extendModal').find('#reseller_branch').val('');
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');

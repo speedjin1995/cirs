@@ -131,6 +131,7 @@ if(isset($_POST['validationId'])){
                 }else{
                     $message['id'] = $row['id'];
                     $message['type'] = $row['type'];
+                    $message['company_branch'] = $row['company_branch'];
                     $message['dealer'] = $row['dealer'];
                     $message['dealer_branch'] = $row['dealer_branch'];
                     $message['validate_by'] = $row['validate_by'];
