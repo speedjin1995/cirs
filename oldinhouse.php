@@ -1927,6 +1927,7 @@ function format (row) {
       <p><strong>Brand:</strong> ${row.brand}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
       <p><strong>Inhouse Calibrator:</strong> ${row.calibrator}</p>
+      <p><strong>Inhouse Calibrator 3:</strong> ${row.calibrator3}</p>
     </div>
     <div class="col-6">
       <p><strong>Unit Serial No:</strong> ${row.unit_serial_no}</p>
@@ -1935,13 +1936,21 @@ function format (row) {
       <p><strong>Model:</strong> ${row.model}</p>
       <p><strong>Structure Size:</strong> ${row.size}</p>
       <p><strong>Created Date:</strong> ${row.validation_date}</p>
-      <div class="row">
-        <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
-        <div class="col-1"><button title="Print" type="button" id="print${row.id}" onclick="print(${row.id})" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>
-        <div class="col-1"><button title="Complete" type="button" id="complete${row.id}" onclick="complete(${row.id})" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>
-        <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
-        <div class="col-1"><button title="Cancelled" type="button" id="deactivate${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
-      </div>
+      <p><strong>Inhouse Calibrator 2:</strong> ${row.calibrator2}</p> `;
+
+      if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
+        returnString += `<div class="row">
+          <div class="col-1"><button title="Revert" type="button" id="revertBtn${row.id}" onclick="revertToPending(${row.id})" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>
+          <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+          <div class="col-1"><button title="Delete" type="button" id="delete${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
+        </div>`;
+      }else{
+        returnString += `<div class="row">
+          <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+        </div>`;
+      }
+
+      returnString += `
     </div> 
   </div><hr>
   `;
@@ -2203,7 +2212,7 @@ function edit(id) {
             var tests = obj.message.tests[i];
 
             for(var j=0; j < tests.length; j++){
-              var item = tests[j]; console.log(item);
+              var item = tests[j];
               var $addContents = $("#loadTestingDetails").clone();
               $("#loadTestingTable").append($addContents.html());
 

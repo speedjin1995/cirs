@@ -35,6 +35,8 @@ else{
   $problems = $db->query("SELECT * FROM problem WHERE deleted = '0'");
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
+  $users3 = $db->query("SELECT * FROM users WHERE deleted = '0'");
+  $users4 = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'INHOUSE'");
   $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'INHOUSE'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
@@ -542,6 +544,28 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     <select class="form-control select2" style="width: 100%;" id="calibrator" name="calibrator" required>
                       <option selected="selected"></option>
                       <?php while($user=mysqli_fetch_assoc($users2)){ ?>
+                        <option value="<?=$user['id'] ?>"><?=$user['name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Inhouse Calibrator 2 * </label>
+                    <select class="form-control select2" style="width: 100%;" id="calibrator2" name="calibrator2" required>
+                      <option selected="selected"></option>
+                      <?php while($user=mysqli_fetch_assoc($users3)){ ?>
+                        <option value="<?=$user['id'] ?>"><?=$user['name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Inhouse Calibrator 3 * </label>
+                    <select class="form-control select2" style="width: 100%;" id="calibrator3" name="calibrator3" required>
+                      <option selected="selected"></option>
+                      <?php while($user=mysqli_fetch_assoc($users4)){ ?>
                         <option value="<?=$user['id'] ?>"><?=$user['name'] ?></option>
                       <?php } ?>
                     </select>
@@ -2052,6 +2076,7 @@ function format (row) {
       <p><strong>Brand:</strong> ${row.brand}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
       <p><strong>Inhouse Calibrator:</strong> ${row.calibrator}</p>
+      <p><strong>Inhouse Calibrator 3:</strong> ${row.calibrator3}</p>
     </div>
     <div class="col-6">
       <p><strong>Unit Serial No:</strong> ${row.unit_serial_no}</p>
@@ -2060,6 +2085,8 @@ function format (row) {
       <p><strong>Model:</strong> ${row.model}</p>
       <p><strong>Structure Size:</strong> ${row.size}</p>
       <p><strong>Created Date:</strong> ${row.validation_date}</p>
+      <p><strong>Inhouse Calibrator 2:</strong> ${row.calibrator2}</p>
+
       <div class="row">
         <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
         <div class="col-1"><button title="Print" type="button" id="print${row.id}" onclick="print(${row.id})" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>
@@ -2185,6 +2212,8 @@ function newEntry(){
   $('#extendModal').find('#capacity').val('').trigger('change');
   $('#extendModal').find('#size').val('').trigger('change');
   $('#extendModal').find('#calibrator').val('').trigger('change');
+  $('#extendModal').find('#calibrator2').val('').trigger('change');
+  $('#extendModal').find('#calibrator3').val('').trigger('change');
   $('#extendModal').find('#companyText').val('').trigger('change');
   $('#extendModal').find('#validationDate').val('');
   $('#extendModal').find('#expiredDate').val('');
@@ -2392,6 +2421,8 @@ function edit(id) {
         $('#extendModal').find('#auto_cert_no').val(obj.message.auto_cert_no);
         $('#extendModal').find('#validationDate').val(formatDate3(obj.message.validation_date));
         $('#extendModal').find('#calibrator').val(obj.message.calibrator).trigger('change');
+        $('#extendModal').find('#calibrator2').val(obj.message.calibrator2).trigger('change');
+        $('#extendModal').find('#calibrator3').val(obj.message.calibrator3).trigger('change');
 
         if(obj.message.tests != null && obj.message.tests.length > 0){
           // $("#loadTestingTable").html('');

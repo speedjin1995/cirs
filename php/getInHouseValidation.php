@@ -107,6 +107,8 @@ if(isset($_POST['validationId'])){
                     $message['capacity'] = $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '';
                     $message['size'] = $row['size'] != null ? searchSizeNameById($row['size'], $db) : '';
                     $message['calibrator'] = $row['calibrator'] != null ? searchStaffNameById($row['calibrator'], $db) : '';
+                    $message['calibrator2'] = $row['calibrator2'] != null ? searchStaffNameById($row['calibrator2'], $db) : '';
+                    $message['calibrator3'] = $row['calibrator3'] != null ? searchStaffNameById($row['calibrator3'], $db) : '';
                     $message['expired_date'] = $row['expired_date'] ?? '';
                     $message['auto_cert_no'] = $row['auto_cert_no'] ?? '';
                     $message['tests'] = ($row['tests'] != null) ? json_decode($row['tests'], true) : [];
@@ -147,6 +149,8 @@ if(isset($_POST['validationId'])){
                     $message['capacity'] = $row['capacity'];
                     $message['size'] = $row['size'];
                     $message['calibrator'] = $row['calibrator'];
+                    $message['calibrator2'] = $row['calibrator2'];
+                    $message['calibrator3'] = $row['calibrator3'];
                     $message['last_calibration_date'] = $row['last_calibration_date'];
                     $message['expired_date'] = $row['expired_date'];
                     $message['auto_cert_no'] = $row['auto_cert_no'];

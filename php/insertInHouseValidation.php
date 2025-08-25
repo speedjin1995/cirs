@@ -51,6 +51,8 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 	$email = null;
 	$pic = null;
 	$contact = null;
+	$calibrator2 = null;
+	$calibrator3 = null;
 	$logs = array();
 
 	if(isset($_POST['dealer']) && $_POST['dealer']!=null && $_POST['dealer']!=""){
@@ -99,6 +101,14 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 
 	if(isset($_POST['contact']) && $_POST['contact']!=null && $_POST['contact']!=""){
 		$contact = $_POST['contact'];
+	}
+
+	if(isset($_POST['calibrator2']) && $_POST['calibrator2']!=null && $_POST['calibrator2']!=""){
+		$calibrator2 = $_POST['calibrator2'];
+	}
+
+	if(isset($_POST['calibrator3']) && $_POST['calibrator3']!=null && $_POST['calibrator3']!=""){
+		$calibrator3 = $_POST['calibrator3'];
 	}
 
 	if($customerType == "NEW"){
@@ -183,9 +193,9 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 		//Updated datetime
 		$currentDateTime = date('Y-m-d H:i:s');
 		if ($update_stmt = $db->prepare("UPDATE inhouse_validations SET type=?, company_branch=?, dealer=?, dealer_branch=?, validate_by=?, customer_type=?, customer=?, branch=?, machines=?, jenis_alat=?, unit_serial_no=?, expired_date=?, manufacturing=?, auto_cert_no=?, brand=?
-		, model=?, capacity=?, size=?, calibrator=?, validation_date=?, update_datetime=? WHERE id=?")){
+		, model=?, capacity=?, size=?, calibrator=?, calibrator2=?, calibrator3=?, validation_date=?, update_datetime=? WHERE id=?")){
 			$data = json_encode($logs);
-			$update_stmt->bind_param('ssssssssssssssssssssss', $type, $companyBranch, $dealer, $reseller_branch, $validator, $customerType, $customer, $branch, $machineType, $alat, $serial, $expiredDate, $manufacturing, $autoCertNo, $brand, $model, $capacity, $size, $calibrator, $validationDate, $currentDateTime, $_POST['id']);
+			$update_stmt->bind_param('ssssssssssssssssssssssss', $type, $companyBranch, $dealer, $reseller_branch, $validator, $customerType, $customer, $branch, $machineType, $alat, $serial, $expiredDate, $manufacturing, $autoCertNo, $brand, $model, $capacity, $size, $calibrator, $calibrator2, $calibrator3, $validationDate, $currentDateTime, $_POST['id']);
 
 			// Execute the prepared query.
 			if (! $update_stmt->execute()){
@@ -260,12 +270,12 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 
                     $autoFormNo.=$misValue;
 
-					if ($insert_stmt = $db->prepare("INSERT INTO inhouse_validations (type, company_branch, dealer, dealer_branch, validate_by, customer_type, customer, branch, auto_form_no, machines, jenis_alat, unit_serial_no, expired_date, manufacturing, auto_cert_no, brand, model, capacity, size, calibrator, status, validation_date) 
-					VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+					if ($insert_stmt = $db->prepare("INSERT INTO inhouse_validations (type, company_branch, dealer, dealer_branch, validate_by, customer_type, customer, branch, auto_form_no, machines, jenis_alat, unit_serial_no, expired_date, manufacturing, auto_cert_no, brand, model, capacity, size, calibrator, calibrator2, calibrator3, status, validation_date) 
+					VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
 						$data = json_encode($logs);
 						$loadTestings = null;
 						$status = 'Pending';
-						$insert_stmt->bind_param('ssssssssssssssssssssss', $type, $companyBranch, $dealer, $reseller_branch, $validator, $customerType, $customer, $branch, $autoFormNo, $machineType, $alat, $serial, $expiredDate, $manufacturing, $autoCertNo, $brand, $model, $capacity, $size, $calibrator, $status, $validationDate);
+						$insert_stmt->bind_param('ssssssssssssssssssssssss', $type, $companyBranch, $dealer, $reseller_branch, $validator, $customerType, $customer, $branch, $autoFormNo, $machineType, $alat, $serial, $expiredDate, $manufacturing, $autoCertNo, $brand, $model, $capacity, $size, $calibrator, $calibrator2, $calibrator3, $status, $validationDate);
 						
 						// Execute the prepared query.
 						if (! $insert_stmt->execute()){
