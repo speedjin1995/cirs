@@ -322,13 +322,14 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
             <table class="table-bordered">
                 <tbody>
                     <tr>
-                        <th colspan="13" style="vertical-align: middle;">
+                        <th colspan="14" style="vertical-align: middle;">
                             JADUAL 7<br>AKTA TIMBANG DAN SUKAT 1972<br>PERATURAN-PERATURAN TIMBANG DAN SUKAT 1981<br>(PERATURAN 35)<br>DAFTAR TIMBANG , SUKAT DAN ALAT TIMBANG SUKAT YANG DIJUAL/DIBUAT
                         </th>
                     </tr>
                     <tr>
                         <th style="font-size:12px;" width="8%">BRG D BIL NO.</th>
                         <th style="font-size:12px;" width="8%">BRG E BIL NO.</th>
+                        <th style="font-size:12px;" width="15%">BRG E DATE</th>
                         <th style="font-size:12px;">STAMPING DATE</th>
                         <th style="font-size:12px;">NAME OF PURCHASE WITH ADDRESS</th>
                         <th style="font-size:12px;">ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
@@ -370,6 +371,13 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                 $stampingDate = new DateTime($row['stamping_date']);
                 $formattedStampingDate = $stampingDate->format('d-m-Y');
 
+                if ($row['borang_e_date'] == null || $row['borang_e_date'] == '0000-00-00 00:00:00'){
+                    $formattedBorangEDate = '';
+                } else {
+                    $borangEDate = new DateTime($row['borang_e_date']);
+                    $formattedBorangEDate = $borangEDate->format('d-m-Y');
+                }
+
                 // Logic for BTU - (BOX)
                 $capacity = '';
                 $borangD = '';
@@ -410,6 +418,7 @@ if(isset($_POST['driver']) && !empty($_POST['ids'])){
                 $message .= '<tr>
                         <td style="font-size:12px;">'.$borangD.'</td>
                         <td style="font-size:12px;">'.$borangE.'</td>
+                        <td style="font-size:12px;">'.$formattedBorangEDate.'</td>
                         <td style="font-size:12px;">'.$formattedStampingDate.'</td>
                         <td style="font-size:12px;"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
                         <td style="font-size:12px;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>

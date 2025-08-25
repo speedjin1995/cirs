@@ -158,6 +158,13 @@ while($row = mysqli_fetch_assoc($empRecords)) {
   $stampingDate = new DateTime($row['stamping_date']);
   $formattedStampingDate = $stampingDate->format('d-m-Y');
 
+  if ($row['borang_e_date'] == null || $row['borang_e_date'] == '0000-00-00 00:00:00'){
+    $formattedBorangEDate = '';
+  } else {
+    $borangEDate = new DateTime($row['borang_e_date']);
+    $formattedBorangEDate = $borangEDate->format('d-m-Y');
+  }
+
   // $capacity = '';
   // $count = 1;
   // if (searchAlatNameById($row['jenis_alat'], $db) == 'BTU - (BOX)'){
@@ -225,6 +232,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "siri_keselamatan"=>$row['siri_keselamatan'] ?? '',
     "borang_d"=>$row['borang_d'] ?? '',
     "borang_e"=>$row['borang_e'] ?? '',
+    "borang_e_date"=>$formattedBorangEDate,
     "assignTo"=>$row['assignTo'] != null ? searchStaffNameById($row['assignTo'], $db) : '',
     "quantity"=>'1',
     "batch_no"=>'',

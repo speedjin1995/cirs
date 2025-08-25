@@ -151,6 +151,7 @@ else{
                   <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
                   <th width="8%">BRG D BIL NO.</th>
                   <th width="8%">BRG E BIL NO.</th>
+                  <th width="8%">BRG E DATE</th>
                   <th>STAMPING DATE</th>
                   <th>NAME OF PURCHASE</th>
                   <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
@@ -232,6 +233,7 @@ else{
                     <tr>
                       <th width="8%">BRG D BIL NO.</th>
                       <th width="8%">BRG E BIL NO.</th>
+                      <th width="8%">BRG E DATE</th>
                       <th>STAMPING DATE</th>
                       <th>NAME OF PURCHASE</th>
                       <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
@@ -346,6 +348,10 @@ $(function () {
       { 
         data: 'borang_e', 
         name: 'borang_e'
+      },
+      { 
+        data: 'borang_e_date', 
+        name: 'borang_e_date'
       },
       { 
         data: 'stamping_date', 
@@ -608,6 +614,10 @@ $(function () {
           name: 'borang_e'
         },
         { 
+          data: 'borang_e_date', 
+          name: 'borang_e_date'
+        },
+        { 
           data: 'stamping_date', 
           name: 'stamping_date'
         },
@@ -722,6 +732,7 @@ $(function () {
         "columns": [
           { data: 'borang_d' },
           { data: 'borang_e' },
+          { data: 'borang_e_date' },
           { data: 'stamping_date' },
           { data: 'customers' },
 
