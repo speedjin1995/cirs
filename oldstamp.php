@@ -14,10 +14,12 @@ else{
 	$stmt->execute();
 	$result = $stmt->get_result();
   $role = 'NORMAL';
+  $branch = '';
   $_SESSION['page']='oldstamp';
 	
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
+    $branch = $row['branch'];
   }
   $stmt->close();
 
@@ -37,6 +39,21 @@ else{
   $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");  
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
+
+  if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
+  }
+  else{
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
+  }
+
+  if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
+    $companyBranches2 = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
+  }
+  else{
+    $companyBranches2 = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
+  }
+
 
   $db->close(); // Close the database connection
 }
@@ -193,6 +210,18 @@ else{
                   <div class="form-group">
                     <label>Quotation No:</label>
                     <input type="text" class="form-control" id="quoteNoFilter" name="quoteNoFilter">
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Branch:</label>
+                    <select class="form-control select2" id="branchFilter" name="branchFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($row = mysqli_fetch_assoc($companyBranches)) { ?>
+                          <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
+                      <?php } ?>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -808,6 +837,7 @@ $(function () {
   var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
   var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
   var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
+  var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
 
   var table = $("#weightTable").DataTable({
     "responsive": true,
@@ -834,6 +864,7 @@ $(function () {
         borang: borangNoFilter,
         serial: serialNoFilter,
         quotation: quoteNoFilter,
+        branch: branchFilter,
         status: 'Cancelled'
       } 
     },
@@ -1047,6 +1078,7 @@ $(function () {
     var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
     var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
     var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
+    var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
 
     //Destroy the old Datatable
     $("#weightTable").DataTable().clear().destroy();
@@ -1077,6 +1109,7 @@ $(function () {
           borang: borangNoFilter,
           serial: serialNoFilter,
           quotation: quoteNoFilter,
+          branch: branchFilter,
           status: 'Cancelled'
         } 
       },
