@@ -130,6 +130,9 @@ if(isset($_POST['userID'])){
                     $message['serial_no'] = $row['serial_no'];
                     $message['validate_by'] = searchValidatorNameById($row['validate_by'], $db) ?? '';
                     $message['jenis_alat'] = $row['jenis_alat'] != null ? searchJenisAlatNameByid($row['jenis_alat'], $db) : '';
+                    $message['machine_name'] = $row['machine_name'] ?? '';
+                    $message['machine_location'] = $row['machine_location'] ?? '';
+                    $message['machine_serial_no'] = $row['machine_serial_no'] ?? '';
                     $message['no_daftar_lama'] = $row['no_daftar_lama'] ?? '';
                     $message['no_daftar_baru'] = $row['no_daftar_baru'] ?? '';
                     $message['pin_keselamatan'] = $row['pin_keselamatan'];
@@ -197,9 +200,6 @@ if(isset($_POST['userID'])){
                                 $result2 = $update_stmt2->get_result();
                         
                                 if($row2 = $result2->fetch_assoc()) {
-                                    $message['weighbridge_location'] = $row2['weighbridge_location'] ?? '';
-                                    $message['weighbridge_name'] = $row2['weighbridge_name'] ?? '';
-                                    $message['weighbridge_serial_no'] = $row2['weighbridge_serial_no'] ?? '';
                                     $message['penentusan_baru'] = $row2['penentusan_baru'] ?? '';
                                     $message['penentusan_semula'] = $row2['penentusan_semula'] ?? '';
                                     $message['kelulusan_mspk'] = $row2['kelulusan_mspk'] ?? '';
@@ -303,6 +303,9 @@ if(isset($_POST['userID'])){
                     $message['validate_by'] = $row['validate_by'];
                     $message['cawangan'] = $row['cawangan'];
                     $message['jenis_alat'] = $row['jenis_alat'];
+                    $message['machine_name'] = $row['machine_name'];
+                    $message['machine_location'] = $row['machine_location'];
+                    $message['machine_serial_no'] = $row['machine_serial_no'];
                     $message['trade'] = $row['trade'];
                     $message['no_daftar_lama'] = $row['no_daftar_lama'] ?? '';
                     $message['no_daftar_baru'] = $row['no_daftar_baru'] ?? '';
@@ -354,9 +357,6 @@ if(isset($_POST['userID'])){
                                 $result2 = $update_stmt2->get_result();
                         
                                 if($row2 = $result2->fetch_assoc()) {
-                                    $message['weighbridge_location'] = $row2['weighbridge_location'] ?? '';
-                                    $message['weighbridge_name'] = $row2['weighbridge_name'] ?? '';
-                                    $message['weighbridge_serial_no'] = $row2['weighbridge_serial_no'] ?? '';
                                     $message['penentusan_baru'] = $row2['penentusan_baru'] ?? '';
                                     $message['penentusan_semula'] = $row2['penentusan_semula'] ?? '';
                                     $message['kelulusan_mspk'] = $row2['kelulusan_mspk'] ?? '';
