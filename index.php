@@ -360,7 +360,7 @@ to get the desired effect
         <h5 class="nav-link mb-0 pl-0" style="background-color: #074979;color: white;"><b>Licensed By : <?php echo $company_name ?></b></h5>
       </li>
       <li class="nav-item ml-auto">
-        <h6 class="nav-link mb-0 pl-0" style="background-color: #074979;color: white;"><b>Date : <?php echo $datetime ?></b></h6>
+        <h6 class="nav-link mb-0 pl-0" style="background-color: #074979;color: white;"><b>Date : <span id="datetime"></span></b></h6>
       </li>
     </ul>
   </nav>
@@ -1001,7 +1001,23 @@ $(function () {
     $(this).data('bs.modal')._config.backdrop = 'static';
     $(this).data('bs.modal')._config.keyboard = false;
   });
+
+  setInterval(updateDateTime, 1000);
+  updateDateTime();
 });
+
+function updateDateTime() {
+    const now = new Date();
+    // format as YYYY-MM-DD HH:MM:SS
+    const formatted = now.getFullYear() + "-" +
+        String(now.getMonth() + 1).padStart(2, '0') + "-" +
+        String(now.getDate()).padStart(2, '0') + " " +
+        String(now.getHours()).padStart(2, '0') + ":" +
+        String(now.getMinutes()).padStart(2, '0') + ":" +
+        String(now.getSeconds()).padStart(2, '0');
+    document.getElementById("datetime").textContent = formatted;
+}
+
 
 function isValidDate(d) {
   return !isNaN(Date.parse(d));
