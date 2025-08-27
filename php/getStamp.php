@@ -127,6 +127,8 @@ if(isset($_POST['userID'])){
                     $message['capacity'] = $row['capacity'] != null ? $capacityName : '';
                     $message['capacity_range'] = $capacityType;
                     $message['assignTo'] = $row['assignTo'] != null ? searchStaffNameById($row['assignTo'], $db) : '';
+                    $message['assignTo2'] = $row['assignTo2'] != null ? searchStaffNameById($row['assignTo2'], $db) : '';
+                    $message['assignTo3'] = $row['assignTo3'] != null ? searchStaffNameById($row['assignTo3'], $db) : '';
                     $message['serial_no'] = $row['serial_no'];
                     $message['validate_by'] = searchValidatorNameById($row['validate_by'], $db) ?? '';
                     $message['jenis_alat'] = $row['jenis_alat'] != null ? searchJenisAlatNameByid($row['jenis_alat'], $db) : '';
@@ -299,6 +301,8 @@ if(isset($_POST['userID'])){
                     $message['capacity'] = $row['capacity'];
                     $message['capacity_range'] = $capacityType;
                     $message['assignTo'] = $row['assignTo'];
+                    $message['assignTo2'] = $row['assignTo2'];
+                    $message['assignTo3'] = $row['assignTo3'];
                     $message['serial_no'] = $row['serial_no'];
                     $message['validate_by'] = $row['validate_by'];
                     $message['cawangan'] = $row['cawangan'];

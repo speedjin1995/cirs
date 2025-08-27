@@ -152,7 +152,8 @@ ALTER TABLE `stamping` ADD `notification_period` VARCHAR(10) NULL AFTER `invoice
 
 ALTER TABLE `stamping_ext` ADD `weighbridge_location` VARCHAR(100) NULL AFTER `stamp_id`, ADD `weighbridge_name` VARCHAR(100) NULL AFTER `weighbridge_location`, ADD `weighbridge_serial_no` VARCHAR(100) NULL AFTER `weighbridge_name`;
 
--- 26/08/2025 --
 ALTER TABLE `stamping` ADD `machine_name` VARCHAR(100) NULL AFTER `jenis_alat`, ADD `machine_location` VARCHAR(100) NULL AFTER `machine_name`, ADD `machine_serial_no` VARCHAR(100) NULL AFTER `machine_location`;
 
 ALTER TABLE `stamping_ext` DROP `weighbridge_location`, DROP `weighbridge_name`, DROP `weighbridge_serial_no`;
+
+ALTER TABLE `stamping` ADD `assignTo2` INT(5) NULL AFTER `assignTo`, ADD `assignTo3` INT(5) NULL AFTER `assignTo2`;

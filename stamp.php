@@ -39,6 +39,8 @@ else{
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $technicians = $db->query("SELECT * FROM users WHERE role_code != 'SUPER_ADMIN' AND deleted = '0'");
+  $technicians2 = $db->query("SELECT * FROM users WHERE role_code != 'SUPER_ADMIN' AND deleted = '0'");
+  $technicians3 = $db->query("SELECT * FROM users WHERE role_code != 'SUPER_ADMIN' AND deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
   $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");  
   $validatorsF = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
@@ -608,9 +610,29 @@ else{
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>Assigned To *</label>
+                    <label>Assigned To Technician 1*</label>
                     <select class="form-control select2" style="width: 100%;" id="assignTo" name="assignTo" required>
                       <?php while($technician=mysqli_fetch_assoc($technicians)){ ?>
+                        <option value="<?=$technician['id'] ?>"><?=$technician['name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Assigned To Technician 2*</label>
+                    <select class="form-control select2" style="width: 100%;" id="assignTo2" name="assignTo2" required>
+                      <?php while($technician=mysqli_fetch_assoc($technicians2)){ ?>
+                        <option value="<?=$technician['id'] ?>"><?=$technician['name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Assigned To Technician 3*</label>
+                    <select class="form-control select2" style="width: 100%;" id="assignTo3" name="assignTo3" required>
+                      <?php while($technician=mysqli_fetch_assoc($technicians3)){ ?>
                         <option value="<?=$technician['id'] ?>"><?=$technician['name'] ?></option>
                       <?php } ?>
                     </select>
@@ -3749,6 +3771,9 @@ function format (row) {
           <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
           <p><strong>Borang D:</strong> ${row.borang_d}</p>
           <p><strong>Borang E:</strong> ${row.borang_e}</p>
+          <p><strong>Assigned To Technician 1 :</strong> ${row.assignTo}</p>
+          <p><strong>Assigned To Technician 2:</strong> ${row.assignTo2}</p>
+          <p><strong>Assigned To Technician 3:</strong> ${row.assignTo3}</p>
           <p><strong>Last Year Stamping Date:</strong> ${row.last_year_stamping_date}</p>
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
           <p><strong>Next Due Date:</strong> ${row.due_date}</p>
@@ -3766,6 +3791,9 @@ function format (row) {
           <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
           <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
           <p><strong>Borang D:</strong> ${row.borang_d}</p>
+          <p><strong>Assigned To Technician :</strong> ${row.assignTo}</p>
+          <p><strong>Assigned To Technician 2:</strong> ${row.assignTo2}</p>
+          <p><strong>Assigned To Technician 3:</strong> ${row.assignTo3}</p>
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
           <p><strong>Next Due Date:</strong> ${row.due_date}</p>
           <p><strong>Create By:</strong> ${row.create_by}</p>
@@ -4504,6 +4532,8 @@ function edit(id) {
         $('#extendModal').find('#validator').val(obj.message.validate_by).select2('destroy').select2();
         $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
         $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
+        $('#extendModal').find('#assignTo2').val(obj.message.assignTo2).trigger('change');
+        $('#extendModal').find('#assignTo3').val(obj.message.assignTo3).trigger('change');
         $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
         $('#extendModal').find('#newRenew').val(obj.message.stampType).trigger('change');
         $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
@@ -4890,6 +4920,8 @@ function edit(id) {
         $('#extendModal').find('#validator').val(obj.message.validate_by).select2('destroy').select2();
         $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
         $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
+        $('#extendModal').find('#assignTo2').val(obj.message.assignTo2).trigger('change');
+        $('#extendModal').find('#assignTo3').val(obj.message.assignTo3).trigger('change');
         $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
         $('#extendModal').find('#newRenew').val(obj.message.stampType).trigger('change');
         customer = obj.message.customers;

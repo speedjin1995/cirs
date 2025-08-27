@@ -1594,9 +1594,14 @@ function format (row) {
           <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
           <p><strong>Borang D:</strong> ${row.borang_d}</p>
           <p><strong>Borang E:</strong> ${row.borang_e}</p>
+          <p><strong>Assigned To Technician 1 :</strong> ${row.assignTo}</p>
+          <p><strong>Assigned To Technician 2:</strong> ${row.assignTo2}</p>
+          <p><strong>Assigned To Technician 3:</strong> ${row.assignTo3}</p>
           <p><strong>Last Year Stamping Date:</strong> ${row.last_year_stamping_date}</p>
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
           <p><strong>Next Due Date:</strong> ${row.due_date}</p>
+          <p><strong>Create By:</strong> ${row.create_by}</p>
+          <p><strong>Last Update By:</strong> ${row.modified_by}</p>
         </div>
       </div>
       <h6 style="margin:0"><b>Information Details: 2</b></h6>
@@ -1609,8 +1614,13 @@ function format (row) {
           <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
           <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
           <p><strong>Borang D:</strong> ${row.borang_d}</p>
+          <p><strong>Assigned To Technician :</strong> ${row.assignTo}</p>
+          <p><strong>Assigned To Technician 2:</strong> ${row.assignTo2}</p>
+          <p><strong>Assigned To Technician 3:</strong> ${row.assignTo3}</p>
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
           <p><strong>Next Due Date:</strong> ${row.due_date}</p>
+          <p><strong>Create By:</strong> ${row.create_by}</p>
+          <p><strong>Last Update By:</strong> ${row.modified_by}</p>
         </div>
       </div>
       <h6 style="margin:0"><b>Information Details: 2</b></h6>
