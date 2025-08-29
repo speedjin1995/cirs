@@ -11,6 +11,8 @@ else{
     $_SESSION['page']='stampsummary';
 
     $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
+    $states = $db->query("SELECT * FROM state WHERE deleted = '0'");
+    $machineTypes = $db->query("SELECT * FROM machines WHERE deleted = '0'");
 }
 ?>
 
@@ -70,6 +72,31 @@ else{
                         <?php while ($validator = mysqli_fetch_assoc($validators)) { ?>
                         <option value="<?= $validator['id'] ?>"><?= $validator['validator'] ?></option>
                         <?php } ?>
+                    </select>
+                </div>
+                <div class="form-group col-4">
+                    <label>Validator (Cawangan):</label>
+                    <select class="form-control select2" style="width: 100%;" id="cawanganFilter" name="cawanganFilter" required>
+                        <option selected="selected"></option>
+                        <?php while($state=mysqli_fetch_assoc($states)){ ?>
+                        <option value="<?=$state['id'] ?>"><?=$state['state'] ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="form-group col-4">
+                    <label>Direct Customer / Reseller:</label>
+                    <select class="form-control" style="width: 100%;" id="typeFilter" name="typeFilter" required>
+                        <option value="DIRECT">DIRECT CUSTOMER</option>
+                        <option value="RESELLER">RESELLER</option>
+                    </select>
+                </div>
+                <div class="form-group col-4">
+                    <label>Machine Type:</label>
+                    <select class="form-control select2" id="machineTypeFilter" name="machineTypeFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($machineType = mysqli_fetch_assoc($machineTypes)) { ?>
+                        <option value="<?= $machineType['id'] ?>"><?= $machineType['machine_type'] ?></option>
+                      <?php } ?>
                     </select>
                 </div>
 
@@ -132,6 +159,15 @@ $(function () {
     const startOfYear = new Date(currentYear, 0, 1);
     const endOfYear = new Date(currentYear, 11, 31, 23, 59, 59, 999);
 
+    $('.select2').each(function() {
+        $(this).select2({
+            allowClear: true,
+            placeholder: "Please Select",
+            // Conditionally set dropdownParent based on the element’s location
+            dropdownParent: $(this).closest('.modal').length ? $(this).closest('.modal-body') : undefined
+        });
+    });
+
     //Date picker
     $('#fromDatePicker').datetimepicker({
         icons: { time: 'far fa-calendar' },
@@ -148,7 +184,10 @@ $(function () {
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var validator = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
-    
+    var cawangan = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';
+    var type = $('#typeFilter').val() ? $('#typeFilter').val() : '';
+    var machineType = $('#machineTypeFilter').val() ? $('#machineTypeFilter').val() : '';
+
     var table = $("#dashboardTable").DataTable({
         "responsive": true,
         "autoWidth": false,
@@ -164,7 +203,10 @@ $(function () {
             'data': {
                 fromDate: fromDateValue,
                 toDate: toDateValue,
-                validator: validator
+                validator: validator,
+                cawangan: cawangan,
+                type: type,
+                machineType: machineType
             } 
         },
         'columns': [
@@ -183,7 +225,10 @@ $(function () {
         data: {
             fromDate: fromDateValue,
             toDate: toDateValue,
-            validator: validator
+            validator: validator,
+            cawangan: cawangan,
+            type: type,
+            machineType: machineType
         },
         dataType: 'json',
         success: function(response) {
@@ -237,6 +282,9 @@ $(function () {
         var fromDateValue = $('#fromDate').val();
         var toDateValue = $('#toDate').val();
         var validator = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
+        var cawangan = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';
+        var type = $('#typeFilter').val() ? $('#typeFilter').val() : '';
+        var machineType = $('#machineTypeFilter').val() ? $('#machineTypeFilter').val() : '';
 
         //Destroy the old Datatable
         $("#dashboardTable").DataTable().clear().destroy();
@@ -258,7 +306,10 @@ $(function () {
                 'data': {
                     fromDate: fromDateValue,
                     toDate: toDateValue,
-                    validator: validator
+                    validator: validator,
+                    cawangan: cawangan,
+                    type: type,
+                    machineType: machineType
                 } 
             },
             'columns': [
@@ -277,7 +328,10 @@ $(function () {
             data: {
                 fromDate: fromDateValue,
                 toDate: toDateValue,
-                validator: validator
+                validator: validator,
+                cawangan: cawangan,
+                type: type,
+                machineType: machineType
             },
             dataType: 'json',
             success: function(response) {
