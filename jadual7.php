@@ -24,6 +24,7 @@ else{
 
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE type = 'STAMPING' AND deleted = '0'");
+  $machinetypes = $db->query("SELECT * FROM machines WHERE deleted = '0'");
 
   if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
     $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
@@ -122,6 +123,32 @@ else{
                       <option value="" selected disabled hidden>Please Select</option>
                       <?php while ($row = mysqli_fetch_assoc($companyBranches)) { ?>
                           <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Borang D No:</label>
+                    <input type="text" class="form-control" id="borangDFilter" name="borangDFilter">
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Borang E No:</label>
+                    <input type="text" class="form-control" id="borangEFilter" name="borangEFilter">
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Machine Type:</label>
+                    <select class="form-control select2" id="machineTypeFilter" name="machineTypeFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($row = mysqli_fetch_assoc($machinetypes)) { ?>
+                          <option value="<?= $row['id'] ?>"><?= $row['machine_type'] ?></option>
                       <?php } ?>
                     </select>
                   </div>
@@ -323,6 +350,9 @@ $(function () {
   var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
   var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';    
   var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
+  var borangDFilter = $('#borangDFilter').val() ? $('#borangDFilter').val() : '';
+  var borangEFilter = $('#borangEFilter').val() ? $('#borangEFilter').val() : '';
+  var machineTypeFilter = $('#machineTypeFilter').val() ? $('#machineTypeFilter').val() : '';
   var statusFilter = '7';
 
   var table = $("#weightTable").DataTable({
@@ -344,7 +374,10 @@ $(function () {
         validator: validatorFilter,
         cawangan: cawanganFilter,
         status: statusFilter,
-        branch: branchFilter
+        branch: branchFilter,
+        borangD: borangDFilter,
+        borangE: borangEFilter,
+        machineType: machineTypeFilter
       } 
     },
     'columns': [
@@ -585,6 +618,9 @@ $(function () {
     var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
     var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
     var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
+    var borangDFilter = $('#borangDFilter').val() ? $('#borangDFilter').val() : '';
+    var borangEFilter = $('#borangEFilter').val() ? $('#borangEFilter').val() : '';
+    var machineTypeFilter = $('#machineTypeFilter').val() ? $('#machineTypeFilter').val() : '';
     var statusFilter = '7';
 
     //Destroy the old Datatable
@@ -610,7 +646,10 @@ $(function () {
           validator: validatorFilter,
           cawangan: cawanganFilter,
           status: statusFilter,
-          branch: branchFilter
+          branch: branchFilter,
+          borangD: borangDFilter,
+          borangE: borangEFilter,
+          machineType: machineTypeFilter
         } 
       },
       'columns': [
