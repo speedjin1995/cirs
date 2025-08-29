@@ -157,3 +157,18 @@ ALTER TABLE `stamping` ADD `machine_name` VARCHAR(100) NULL AFTER `jenis_alat`, 
 ALTER TABLE `stamping_ext` DROP `weighbridge_location`, DROP `weighbridge_name`, DROP `weighbridge_serial_no`;
 
 ALTER TABLE `stamping` ADD `assignTo2` INT(5) NULL AFTER `assignTo`, ADD `assignTo3` INT(5) NULL AFTER `assignTo2`;
+
+ALTER TABLE `stamping` ADD `seal_no_lama` VARCHAR(100) NULL AFTER `no_daftar_baru`, ADD `seal_no_baru` VARCHAR(100) NULL AFTER `seal_no_lama`, ADD `pegawai_contact` VARCHAR(30) NULL AFTER `seal_no_baru`;
+
+ALTER TABLE `stamping` ADD `cert_no` VARCHAR(50) NULL AFTER `include_cert`;
+
+CREATE TABLE `machine_names` (
+  `id` int(11) NOT NULL,
+  `machine_no` varchar(50) NOT NULL,
+  `machine_name` varchar(100) NOT NULL,
+  `deleted` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `machine_names` ADD PRIMARY KEY (`id`);
+  
+ALTER TABLE `machine_names` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;

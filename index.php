@@ -723,6 +723,12 @@ to get the desired effect
                       </a>
                     </li>
                     <li class="nav-item">
+                      <a href="#machinename" data-file="machinename.php" class="nav-link link">
+                        <i class="nav-icon fas fa-store"></i>
+                        <p>Machine Name</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
                       <a href="#standards" data-file="standards.php" class="nav-link link">
                         <i class="nav-icon fas fa-newspaper"></i>
                         <p>Value of Standards</p>
