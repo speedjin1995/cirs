@@ -44,6 +44,7 @@ else{
   $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
   $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");  
   $validatorsF = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
+  $machineNames = $db->query("SELECT * FROM machine_names WHERE deleted = '0'");
   $states = $db->query("SELECT * FROM state WHERE deleted = '0'");
   $cawangans = $db->query("SELECT * FROM state WHERE deleted = '0'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
@@ -552,7 +553,12 @@ else{
                 <div class="col-4">
                   <div class="form-group">
                     <label>Machine Name</label>
-                    <input type="text" class="form-control" id="machineName" name="machineName">
+                    <select class="form-control select2" style="width: 100%;" id="machineName" name="machineName" required>
+                      <option selected="selected">-</option>
+                      <?php while($rowMN=mysqli_fetch_assoc($machineNames)){ ?>
+                        <option value="<?=$rowMN['id'] ?>"><?=$rowMN['machine_name'] ?></option>
+                      <?php } ?>
+                    </select>
                   </div>
                 </div>
                 <div class="col-4">
@@ -610,7 +616,7 @@ else{
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>Assigned To Technician 1*</label>
+                    <label>Assigned To Technician 1 *</label>
                     <select class="form-control select2" style="width: 100%;" id="assignTo" name="assignTo" required>
                       <?php while($technician=mysqli_fetch_assoc($technicians)){ ?>
                         <option value="<?=$technician['id'] ?>"><?=$technician['name'] ?></option>
@@ -620,8 +626,8 @@ else{
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>Assigned To Technician 2*</label>
-                    <select class="form-control select2" style="width: 100%;" id="assignTo2" name="assignTo2" required>
+                    <label>Assigned To Technician 2</label>
+                    <select class="form-control select2" style="width: 100%;" id="assignTo2" name="assignTo2">
                       <?php while($technician=mysqli_fetch_assoc($technicians2)){ ?>
                         <option value="<?=$technician['id'] ?>"><?=$technician['name'] ?></option>
                       <?php } ?>
@@ -630,8 +636,8 @@ else{
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>Assigned To Technician 3*</label>
-                    <select class="form-control select2" style="width: 100%;" id="assignTo3" name="assignTo3" required>
+                    <label>Assigned To Technician 3</label>
+                    <select class="form-control select2" style="width: 100%;" id="assignTo3" name="assignTo3">
                       <?php while($technician=mysqli_fetch_assoc($technicians3)){ ?>
                         <option value="<?=$technician['id'] ?>"><?=$technician['name'] ?></option>
                       <?php } ?>
@@ -684,10 +690,28 @@ else{
                     <input class="form-control" type="text" placeholder="No Daftar Lama" id="noDaftarLama" name="noDaftarLama">
                   </div>
                 </div>
+                <div class="col-4" id="sealLamaView" style="display:none;">
+                  <div class="form-group">
+                    <label>Seal No (Lama)</label>
+                    <input class="form-control" type="text" placeholder="Seal No (Lama)" id="sealNoLama" name="sealNoLama">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Pegawai/Contact No</label>
+                    <input class="form-control" type="text" placeholder="Pegawai/Contact No" id="pegawaiContact" name="pegawaiContact">
+                  </div>
+                </div>
                 <div class="col-4">
                   <div class="form-group">
                     <label>No Daftar (Baru)</label>
                     <input class="form-control" type="text" placeholder="No Daftar Baru" id="noDaftarBaru" name="noDaftarBaru">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Seal No (Baru)</label>
+                    <input class="form-control" type="text" placeholder="Seal No (Baru)" id="sealNoBaru" name="sealNoBaru">
                   </div>
                 </div>
                 <div class="col-4">
@@ -761,6 +785,13 @@ else{
                     </select>
                   </div>
                 </div>
+                <div class="col-4" id="certNoView" style="display:none">
+                  <div class="form-group">
+                    <label>Certificate No * </label>
+                    <input class="form-control" type="text" placeholder="Certificate No" id="certNo" name="certNo">
+                  </div>
+                </div>
+
                 <!-- <div class="col-4">
                   <div class="form-group">
                     <label>No PIN Pelekat Keselamatan </label>
@@ -2611,12 +2642,14 @@ $(function () {
   $('#extendModal').find('#newRenew').on('change', function(){
     if($(this).val() == "NEW"){
       $('#daftarLamaView').hide();
+      $('#sealLamaView').hide();
       $('#borangEView').hide();
       $('#borangEDateView').hide();
       $('#lastYearStampDateView').hide();
     }
     else{
       $('#daftarLamaView').show();
+      $('#sealLamaView').show();
       $('#borangEView').show();
       $('#borangEDateView').show();
       $('#lastYearStampDateView').show();
@@ -2994,6 +3027,14 @@ $(function () {
   });
 
   $('#extendModal').find('#includeCert').on('change', function(){
+    var includeCert = $(this).val();
+
+    if (includeCert == 'YES'){
+      $('#certNoView').show();
+    }else{
+      $('#certNoView').hide();
+    }
+
     // changed code to pull instead of taking from product field
     $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
       var obj = JSON.parse(data);
@@ -3858,7 +3899,8 @@ function format (row) {
         <div class="row">
           <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
           <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
-          <div class="col-1"><button title="Log" type="button" id="copy${row.id}" onclick="copy(${row.id})" class="btn btn-success btn-sm"><i class="fa-solid fa-clone"></i></button></div>
+          <div class="col-1"><button title="Copy" type="button" id="copy${row.id}" onclick="copy(${row.id})" class="btn btn-success btn-sm"><i class="fa-solid fa-clone"></i></button></div>
+          <div class="col-1"><button title="Restamping" type="button" id="restamping${row.id}" onclick="restamping(${row.id})" class="btn btn-info btn-sm"><i class="fas fa-stamp"></i></button></div>
           <div class="col-1"><button title="Cancel" type="button" id="deactivate${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
         </div>
       </div>
@@ -4541,7 +4583,7 @@ function edit(id) {
         $('#extendModal').find('#product').val(obj.message.products);
         $('#extendModal').find('#machineType').val(obj.message.machine_type).select2('destroy').select2();
         $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).select2('destroy').select2();
-        $('#extendModal').find('#machineName').val(obj.message.machine_name);
+        $('#extendModal').find('#machineName').val(obj.message.machine_name).trigger('change');
         $('#extendModal').find('#machineLocation').val(obj.message.machine_location);
         $('#extendModal').find('#machineSerialNo').val(obj.message.machine_serial_no);
 
@@ -4573,6 +4615,15 @@ function edit(id) {
         $('#extendModal').find('#address2').val(obj.message.address2);
         $('#extendModal').find('#noDaftarLama').val(obj.message.no_daftar_lama);
         $('#extendModal').find('#noDaftarBaru').val(obj.message.no_daftar_baru);
+        $('#extendModal').find('#sealNoLama').val(obj.message.seal_no_lama);
+        $('#extendModal').find('#sealNoBaru').val(obj.message.seal_no_baru);
+        $('#extendModal').find('#pegawaiContact').val(obj.message.pegawai_contact);
+        if (obj.message.include_cert == 'YES'){
+          $('#certNoView').show();
+        }else{
+          $('#certNoView').hide();
+        }
+        $('#extendModal').find('#certNo').val(obj.message.cert_no);
         $('#extendModal').find('#address3').val(obj.message.address3);
         $('#extendModal').find('#serial').val(obj.message.serial_no);
         $('#extendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);
@@ -4939,7 +4990,7 @@ function edit(id) {
         $('#extendModal').find('#product').val(obj.message.products);
         $('#extendModal').find('#machineType').val(obj.message.machine_type).select2('destroy').select2();
         $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).select2('destroy').select2();
-        $('#extendModal').find('#machineName').val(obj.message.machine_name);
+        $('#extendModal').find('#machineName').val(obj.message.machine_name).trigger('change');
         $('#extendModal').find('#machineLocation').val(obj.message.machine_location);
         $('#extendModal').find('#machineSerialNo').val(obj.message.machine_serial_no);
 
@@ -4964,6 +5015,15 @@ function edit(id) {
         $('#extendModal').find('#address2').val(obj.message.address2);
         $('#extendModal').find('#noDaftarLama').val(obj.message.no_daftar_lama);
         $('#extendModal').find('#noDaftarBaru').val(obj.message.no_daftar_baru);
+        $('#extendModal').find('#sealNoLama').val(obj.message.seal_no_lama);
+        $('#extendModal').find('#sealNoBaru').val(obj.message.seal_no_baru);
+        $('#extendModal').find('#pegawaiContact').val(obj.message.pegawai_contact);
+        if (obj.message.include_cert == 'YES'){
+          $('#certNoView').show();
+        }else{
+          $('#certNoView').hide();
+        }
+        $('#extendModal').find('#certNo').val(obj.message.cert_no);
         $('#extendModal').find('#address3').val(obj.message.address3);
         $('#extendModal').find('#serial').val(obj.message.serial_no);
         $('#extendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);

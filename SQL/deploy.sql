@@ -187,3 +187,5 @@ ALTER TABLE `validator_officers` ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `validator_officers` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `stamping` CHANGE `other_reason` `other_reason` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
+

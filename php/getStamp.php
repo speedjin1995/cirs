@@ -137,6 +137,10 @@ if(isset($_POST['userID'])){
                     $message['machine_serial_no'] = $row['machine_serial_no'] ?? '';
                     $message['no_daftar_lama'] = $row['no_daftar_lama'] ?? '';
                     $message['no_daftar_baru'] = $row['no_daftar_baru'] ?? '';
+                    $message['seal_no_lama'] = $row['seal_no_lama'] ?? '';
+                    $message['seal_no_baru'] = $row['seal_no_baru'] ?? '';
+                    $message['pegawai_contact'] = $row['pegawai_contact'] ?? '';
+                    $message['cert_no'] = $row['cert_no'] ?? '';
                     $message['pin_keselamatan'] = $row['pin_keselamatan'];
                     $message['siri_keselamatan'] = $row['siri_keselamatan'] ?? '';
                     $message['include_cert'] = $row['include_cert'];
@@ -313,6 +317,10 @@ if(isset($_POST['userID'])){
                     $message['trade'] = $row['trade'];
                     $message['no_daftar_lama'] = $row['no_daftar_lama'] ?? '';
                     $message['no_daftar_baru'] = $row['no_daftar_baru'] ?? '';
+                    $message['seal_no_lama'] = $row['seal_no_lama'] ?? '';
+                    $message['seal_no_baru'] = $row['seal_no_baru'] ?? '';
+                    $message['pegawai_contact'] = $row['pegawai_contact'] ?? '';
+                    $message['cert_no'] = $row['cert_no'] ?? '';
                     $message['pin_keselamatan'] = $row['pin_keselamatan'];
                     $message['siri_keselamatan'] = $row['siri_keselamatan'];
                     $message['include_cert'] = $row['include_cert'];
