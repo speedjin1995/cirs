@@ -788,6 +788,12 @@ to get the desired effect
                         <p>Unit of Measurement</p>
                       </a>
                     </li>
+                    <li class="nav-item">
+                      <a href="#validatorOfficer" data-file="validatorOfficer.php" class="nav-link link">
+                        <i class="nav-icon fas fa-person"></i>
+                        <p>Validator Officer</p>
+                      </a>
+                    </li>
                     <!--li class="nav-item">
                       <a href="#problem" data-file="problem.php" class="nav-link link">
                         <i class="nav-icon fas fa-industry"></i>

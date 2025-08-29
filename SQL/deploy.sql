@@ -172,3 +172,18 @@ CREATE TABLE `machine_names` (
 ALTER TABLE `machine_names` ADD PRIMARY KEY (`id`);
   
 ALTER TABLE `machine_names` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+CREATE TABLE `validator_officers` (
+  `id` int(11) NOT NULL,
+  `officer_name` varchar(100) NOT NULL,
+  `officer_contact` varchar(30) DEFAULT NULL,
+  `officer_position` varchar(30) DEFAULT NULL,
+  `officer_company` int(5) DEFAULT NULL,
+  `officer_cawangan` int(5) DEFAULT NULL,
+  `deleted` int(10) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `validator_officers` ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `validator_officers` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
