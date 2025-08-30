@@ -16,7 +16,8 @@ $searchQuery = " ";
 if($searchValue != ''){
    $searchQuery = " and (users.name like '%".$searchValue."%' or 
         users.username like '%".$searchValue."%' or
-        roles.role_name like'%".$searchValue."%' ) ";
+        roles.role_name like'%".$searchValue."%' or
+        company_branches.branch_name like'%".$searchValue."%' ) ";
 }
 
 $searchQuery .= " and users.role_code != 'SUPER_ADMIN'";
@@ -27,12 +28,12 @@ $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
 ## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount from users, roles WHERE users.role_code = roles.role_code".$searchQuery);
+$sel = mysqli_query($db,"SELECT COUNT(*) AS allcount FROM users INNER JOIN roles ON users.role_code = roles.role_code LEFT JOIN company_branches ON users.branch = company_branches.id".$searchQuery);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-$empQuery = "select users.*, roles.role_name from users, roles WHERE users.role_code = roles.role_code".$searchQuery." order by deleted, ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+$empQuery = "SELECT users.*, roles.role_name, company_branches.branch_name FROM users INNER JOIN roles ON users.role_code = roles.role_code LEFT JOIN company_branches ON users.branch = company_branches.id".$searchQuery." order by deleted, ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 
@@ -51,6 +52,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
       "designation"=>$row['designation'],
       "contact_number"=>$row['contact_number'],
       "role_name"=>$row['role_name'],
+      "branch_name"=>$row['branch_name'],
       "created_date"=>$created_date,
       "deleted"=>$row['deleted'],
       "status"=>($row['deleted'] == '0') ? 'Active' : 'Inactive'

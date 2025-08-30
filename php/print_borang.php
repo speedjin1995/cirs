@@ -3,12 +3,27 @@
 require_once 'db_connect.php';
 require_once 'requires/lookup.php';
  
-if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actualPrintDate'])){
+if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actualPrintDate'], $_POST['branchId'])){
     $selectedIds = $_POST['id'];
     $arrayOfId = explode(",", $selectedIds);
     $driver = filter_input(INPUT_POST, 'driver', FILTER_SANITIZE_STRING);
     $cawangan = searchStateNameById(filter_input(INPUT_POST, 'cawanganBorang', FILTER_SANITIZE_STRING), $db);
     $validator2 = filter_input(INPUT_POST, 'validatorBorang', FILTER_SANITIZE_STRING);
+    $branchId = filter_input(INPUT_POST, 'branchId', FILTER_SANITIZE_STRING);
+
+    $branchAddress = '';
+    $branchTel = '';
+    $branchFax = '';
+
+    $branchQuery = "SELECT * FROM company_branches WHERE id = '$branchId'";
+    $branchDetail = mysqli_query($db, $branchQuery);
+    $branchRow = mysqli_fetch_assoc($branchDetail);
+
+    if(!empty($branchRow)){
+        $branchAddress = $branchRow['address_line_1'].' '.$branchRow['address_line_2'].' '.$branchRow['address_line_3'].' '.$branchRow['address_line_4'];
+        $branchTel = $branchRow['pic_contact'];
+        $branchFax = $branchRow['office_no'];
+    }
 
     if(isset($_POST['validatorBorang']) && $_POST['validatorBorang']!=null && $_POST['validatorBorang']!=""){
         $validatorFilter = searchValidatorNameById($validator2, $db);
@@ -150,6 +165,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                         <th style="font-size:12px;">CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
                         <th style="font-size:12px;" width="10%">BRG D BIL NO.</th>
                         <th style="font-size:12px;" width="10%">BRG E BIL NO.</th>
+                        <th style="font-size:12px;" width="10%">COMPANY BRANCH</th>
                     </tr>';
 
             while ($row = $result->fetch_assoc()) {
@@ -228,6 +244,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                                 <td style="font-size:12px;">'.$siriKeselamatan.'</td>
                                 <td style="font-size:12px;">'.$borangD.'</td>
                                 <td style="font-size:12px;">'.$borangE.'</td>
+                                <td style="font-size:12px;">'.searchCompanyBranchById($row['company_branch'], $db).'</td>
                             </tr>';
             }
 
@@ -514,7 +531,9 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                             <td style="font-size:12px; padding-left:0.5%;">'.$noDaftarBaru.'</td>
                             <td style="font-size:12px;">'.$siriKeselamatan.'</td>
                             <td style="font-size:12px;">'.$borangD.'</td>
-                            <td style="font-size:12px;">'.$borangE.'</td>';
+                            <td style="font-size:12px;">'.$borangE.'</td>
+                            <td style="font-size:12px;">'.searchCompanyBranchById($row['company_branch'], $db).'</td>
+                            ';
                             
                             if ($row['cert_price'] != 0) {
                                 $rows[$rowCount] .= '<td style="padding-left: 0.5%">RM '.number_format(floatval($row['unit_price']), 2, '.', '').'<br>RM '.number_format(floatval($row['cert_price']), 2, '.', '').' (Laporan)</td>';
@@ -629,8 +648,8 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                                 <tr>
                                     <td style="vertical-align: left;" width="50%">
                                         <p>NAMA SYARIKAT PEMILIK / PEMBAIK : <br><br><b>'.$companyName.' ('.$companyOldRoc.')</b><br>
-                                        ALAMAT : '.$companyAddress.'<br>
-                                        Tel. : '.$companyTel.'     Fax. : '.$companyFax.'</p><br>';
+                                        ALAMAT : '.$branchAddress.'<br>
+                                        Tel. : '.$branchTel.'     Fax. : '.$branchFax.'</p><br>';
     
                                     $message .= '<p><b>Pengurus Cawangan : <span style="font-size: 14px">' . $validatorFilter . ' ' . $cawangan . '</span></b><br>';
                                         
@@ -691,6 +710,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                                     <th style="font-size:12px;">No. Siri Pelekat Keselamatan</th>
                                     <th style="font-size:12px;" width="7%">Borang D</th>
                                     <th style="font-size:12px;" width="7%">Borang E</th>
+                                    <th style="font-size:12px;" width="7%">Company Branch</th>
                                     <th style="font-size:12px;" width="8%">Fi / Bayaran</th>
                                 </tr>';
                             
@@ -700,17 +720,17 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                             
                             if ($startIndex + $recordsPerPage >= $num_records) {
                                 $message .= '<tr>
-                                                <td colspan="10" style="border-left: none; border: none;"></td>
+                                                <td colspan="11" style="border-left: none; border: none;"></td>
                                                 <td colspan="2">Total Amount</td>
                                                 <td>RM ' . number_format(floatval($totalAmt), 2, '.', '') . '</td>
                                             </tr>';
                                 $message .= '<tr>
-                                                <td colspan="10" style="border-left: none; border: none;"></td>
+                                                <td colspan="11" style="border-left: none; border: none;"></td>
                                                 <td colspan="2">SST8%</td>
                                                 <td> RM ' . number_format(floatval($sst), 2, '.', '') . '</td>
                                             </tr>';
                                 $message .= '<tr>
-                                                <td colspan="10" style="border-left: none; border: none;"></td>
+                                                <td colspan="11" style="border-left: none; border: none;"></td>
                                                 <td colspan="2">Sub Total Amount</td>
                                                 <td>RM ' . number_format(floatval($subTotalAmt), 2, '.', '') . '</td>
                                             </tr>';

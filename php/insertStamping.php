@@ -13,8 +13,9 @@ if(isset($_POST['customerType'])){
 }
 
 if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_POST['validator'], $_POST['machineType'], $_POST['jenisAlat']
-, $_POST['model'], $_POST['makeIn'], $_POST['capacity'], $_POST['serial'], $_POST['cawangan'], $_POST['trade'], $_POST['assignTo'])){
+, $_POST['model'], $_POST['makeIn'], $_POST['capacity'], $_POST['serial'], $_POST['cawangan'], $_POST['trade'], $_POST['assignTo'], $_POST['companyBranch'])){
 	$type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
+	$companyBranch = filter_input(INPUT_POST, 'companyBranch', FILTER_SANITIZE_STRING);
 	$customerType = filter_input(INPUT_POST, 'customerType', FILTER_SANITIZE_STRING);
 	$brand = filter_input(INPUT_POST, 'brand', FILTER_SANITIZE_STRING);
 	$makeIn = filter_input(INPUT_POST, 'makeIn', FILTER_SANITIZE_STRING);
@@ -29,6 +30,12 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 	$trade = filter_input(INPUT_POST, 'trade', FILTER_SANITIZE_STRING);
 	$assignTo = filter_input(INPUT_POST, 'assignTo', FILTER_SANITIZE_STRING);
 
+	$validatorlama = null;
+	$assignTo2 = null;
+	$assignTo3 = null;
+	$machineName = null;
+	$machineLocation = null;
+	$machineSerialNo = null;
 	$product = null;
 	$dealer = null;
 	$reseller_branch = null;
@@ -54,8 +61,10 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 	$siriKeselamatan = null;
 	$borangD = null;
 	$borangE = null;
+	$borangEDate = null;
 	$cashBill = null;
 	$invoice = null;
+	$notificationPeriod = null;
 	$pic = null;
 	$followUpDate = null;
 	$quotation = null;
@@ -74,6 +83,10 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 	$stampLabourCharge = '0.00';
 	$roundUp = '0.00';
 	$totalCharge = '0.00';
+	$sealNoLama = null;
+	$pegawaiContact = null;
+	$sealNoBaru = null;
+	$certNo = null;
 
 	$logs = array();
 
@@ -107,6 +120,30 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 
 			$select_stmtP->close();
 		}
+	}
+	
+	if(isset($_POST['validatorlama']) && $_POST['validatorlama']!=null && $_POST['validatorlama']!=""){
+		$validatorlama = $_POST['validatorlama'];
+	}
+	
+	if(isset($_POST['assignTo2']) && $_POST['assignTo2']!=null && $_POST['assignTo2']!=""){
+		$assignTo2 = $_POST['assignTo2'];
+	}
+
+	if(isset($_POST['assignTo3']) && $_POST['assignTo3']!=null && $_POST['assignTo3']!=""){
+		$assignTo3 = $_POST['assignTo3'];
+	}
+	
+	if(isset($_POST['machineName']) && $_POST['machineName']!=null && $_POST['machineName']!=""){
+		$machineName = $_POST['machineName'];
+	}
+
+	if(isset($_POST['machineLocation']) && $_POST['machineLocation']!=null && $_POST['machineLocation']!=""){
+		$machineLocation = $_POST['machineLocation'];
+	}
+
+	if(isset($_POST['machineSerialNo']) && $_POST['machineSerialNo']!=null && $_POST['machineSerialNo']!=""){
+		$machineSerialNo = $_POST['machineSerialNo'];
 	}
 
 	if(isset($_POST['dealer']) && $_POST['dealer']!=null && $_POST['dealer']!=""){
@@ -292,6 +329,11 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 		$borangE = $_POST['borangE'];
 	}
 
+	if(isset($_POST['borangEDate']) && $_POST['borangEDate']!=null && $_POST['borangEDate']!=""){
+		$borangEDate = $_POST['borangEDate'];
+		$borangEDate = DateTime::createFromFormat('d/m/Y', $borangEDate)->format('Y-m-d H:i:s');
+	}
+
 	if(isset($_POST['remark']) && $_POST['remark']!=null && $_POST['remark']!=""){
 		$remark = $_POST['remark'];
 	}
@@ -325,6 +367,10 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 
 	if(isset($_POST['cashBill']) && $_POST['cashBill']!=null && $_POST['cashBill']!=""){
 		$cashBill = $_POST['cashBill'];
+	}
+
+	if(isset($_POST['notificationPeriod']) && $_POST['notificationPeriod']!=null && $_POST['notificationPeriod']!=""){
+		$notificationPeriod = $_POST['notificationPeriod'];
 	}
 
 	if(isset($_POST['invoice']) && $_POST['invoice']!=null && $_POST['invoice']!=""){
@@ -383,17 +429,33 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 		$totalCharge = $_POST['totalCharge'];
 	}
 
+	if(isset($_POST['sealNoLama']) && $_POST['sealNoLama']!=null && $_POST['sealNoLama']!=""){
+		$sealNoLama = $_POST['sealNoLama'];
+	}
+
+	if(isset($_POST['pegawaiContact']) && $_POST['pegawaiContact']!=null && $_POST['pegawaiContact']!=""){
+		$pegawaiContact = $_POST['pegawaiContact'];
+	}
+
+	if(isset($_POST['sealNoBaru']) && $_POST['sealNoBaru']!=null && $_POST['sealNoBaru']!=""){
+		$sealNoBaru = $_POST['sealNoBaru'];
+	}
+
+	if(isset($_POST['certNo']) && $_POST['certNo']!=null && $_POST['certNo']!=""){
+		$certNo = $_POST['certNo'];
+	}
+
 	if(isset($_POST['id']) && $_POST['id'] != null && $_POST['id'] != ''){
 		//Updated datetime
 		$currentDateTime = date('Y-m-d H:i:s');
 
-		if ($update_stmt = $db->prepare("UPDATE stamping SET type=?, dealer=?, dealer_branch=?, customers=?, brand=?, machine_type=?, model=?, make_in=?, capacity=?, serial_no=?, assignTo=?, validate_by=?, cawangan=?, jenis_alat=?, trade=?, no_daftar_lama=?, no_daftar_baru=?, pin_keselamatan=?, siri_keselamatan=?, include_cert=?, borang_d=?
-		, borang_e=?, invoice_no=?, cash_bill=?, stamping_date=?, last_year_stamping_date=?, due_date=?, pic=?, customer_pic=?, quotation_no=?, quotation_date=?, purchase_no=?, purchase_date=?
-		, remarks=?, validator_invoice=?, unit_price=?, cert_price=?, total_amount=?, sst=?, subtotal_sst_amt=?, rebate=?, rebate_amount=?, subtotal_amount=?, log=?, products=?, stamping_type=?, updated_datetime=?, branch=?, labour_charge=?, stampfee_labourcharge=?, int_round_up=?, total_charges=? WHERE id=?")){
+		if ($update_stmt = $db->prepare("UPDATE stamping SET type=?, company_branch=?, dealer=?, dealer_branch=?, customers=?, brand=?, machine_type=?, model=?, make_in=?, capacity=?, serial_no=?, assignTo=?, assignTo2=?, assignTo3=?, validator_lama=?, validate_by=?, cawangan=?, jenis_alat=?, machine_name=?, machine_location=?, machine_serial_no=?, trade=?, no_daftar_lama=?, no_daftar_baru=?, pin_keselamatan=?, siri_keselamatan=?, include_cert=?, borang_d=?
+		, borang_e=?, borang_e_date=?, invoice_no=?, notification_period=?, cash_bill=?, stamping_date=?, last_year_stamping_date=?, due_date=?, pic=?, customer_pic=?, quotation_no=?, quotation_date=?, purchase_no=?, purchase_date=?
+		, remarks=?, validator_invoice=?, unit_price=?, cert_price=?, total_amount=?, sst=?, subtotal_sst_amt=?, rebate=?, rebate_amount=?, subtotal_amount=?, log=?, products=?, stamping_type=?, updated_datetime=?, branch=?, labour_charge=?, stampfee_labourcharge=?, int_round_up=?, total_charges=?, seal_no_lama=?, seal_no_baru=?, pegawai_contact=?, cert_no=? WHERE id=?")){
 			$data = json_encode($logs);
-			$update_stmt->bind_param('sssssssssssssssssssssssssssssssssssssssssssssssssssss', $type, $dealer, $reseller_branch, $customer, $brand, $machineType, $model, $makeIn, $capacity, $serial, $assignTo, 
-			$validator, $cawangan, $jenisAlat, $trade, $noDaftarLama,$noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $invoice, $cashBill, $stampDate, $lastYearStampDate, $dueDate, $uid, $pic, 
-			$quotation, $quotationDate, $poNo, $poDate, $remark, $validatorInvoice, $unitPrice, $certPrice, $totalPrice, $sst, $subAmountSst, $rebate, $rebateAmount, $subtotalPrice, $data, $product, $newRenew, $currentDateTime, $branch, $labourCharge, $stampLabourCharge, $roundUp, $totalCharge, $_POST['id']);
+			$update_stmt->bind_param('ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', $type, $companyBranch, $dealer, $reseller_branch, $customer, $brand, $machineType, $model, $makeIn, $capacity, $serial, $assignTo, $assignTo2, $assignTo3, $validatorlama,
+			$validator, $cawangan, $jenisAlat, $machineName, $machineLocation, $machineSerialNo, $trade, $noDaftarLama,$noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $borangEDate, $invoice, $notificationPeriod, $cashBill, $stampDate, $lastYearStampDate, $dueDate, $uid, $pic, 
+			$quotation, $quotationDate, $poNo, $poDate, $remark, $validatorInvoice, $unitPrice, $certPrice, $totalPrice, $sst, $subAmountSst, $rebate, $rebateAmount, $subtotalPrice, $data, $product, $newRenew, $currentDateTime, $branch, $labourCharge, $stampLabourCharge, $roundUp, $totalCharge, $sealNoLama, $sealNoBaru, $pegawaiContact, $certNo, $_POST['id']);
 		
 			// Execute the prepared query.
 			if (! $update_stmt->execute()){
@@ -518,7 +580,6 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 
 				// For ATK Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '1'){
-					$penentusan_baru = null;
 					$penentusan_semula = null;
 					$kelulusan_mspk = null;
 					$no_kelulusan = null;
@@ -550,6 +611,10 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 								"loadCellSerial" => $loadCellSerial[$i]
 							);
 						}
+					}
+
+					if(isset($_POST['penentusanBaru']) && $_POST['penentusanBaru']!=null && $_POST['penentusanBaru']!=""){
+						$penentusan_baru = $_POST['penentusanBaru'];
 					}
 
 					if(isset($_POST['penentusanBaru']) && $_POST['penentusanBaru']!=null && $_POST['penentusanBaru']!=""){
@@ -1081,14 +1146,14 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 
 	}
 	else{
-		if ($insert_stmt = $db->prepare("INSERT INTO stamping (type, dealer, dealer_branch, customer_type, customers, brand, machine_type, model, make_in, capacity, serial_no, assignTo,
-		validate_by, cawangan, jenis_alat, trade, no_daftar_lama, no_daftar_baru, pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, invoice_no, cash_bill, stamping_date, last_year_stamping_date, due_date, pic, customer_pic, 
-		quotation_no, quotation_date, purchase_no, purchase_date, remarks, validator_invoice, unit_price, cert_price, total_amount, sst, subtotal_sst_amt, rebate, rebate_amount, subtotal_amount, log, products, stamping_type, branch, labour_charge, stampfee_labourcharge, int_round_up, total_charges) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+		if ($insert_stmt = $db->prepare("INSERT INTO stamping (type, company_branch, dealer, dealer_branch, customer_type, customers, brand, machine_type, model, make_in, capacity, serial_no, assignTo, assignTo2, assignTo3, validator_lama,
+		validate_by, cawangan, jenis_alat, machine_name, machine_location, machine_serial_no, trade, no_daftar_lama, no_daftar_baru, pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, borang_e_date, invoice_no, notification_period, cash_bill, stamping_date, last_year_stamping_date, due_date, pic, customer_pic, 
+		quotation_no, quotation_date, purchase_no, purchase_date, remarks, validator_invoice, unit_price, cert_price, total_amount, sst, subtotal_sst_amt, rebate, rebate_amount, subtotal_amount, log, products, stamping_type, branch, labour_charge, stampfee_labourcharge, int_round_up, total_charges, seal_no_lama, seal_no_baru, pegawai_contact, cert_no) 
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
 			$data = json_encode($logs);
-			$insert_stmt->bind_param('ssssssssssssssssssssssssssssssssssssssssssssssssssss', $type, $dealer, $reseller_branch, $customerType, $customer, $brand, $machineType, $model, $makeIn, $capacity, $serial, $assignTo,
-			$validator, $cawangan, $jenisAlat, $trade, $noDaftarLama, $noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $invoice, $cashBill, $stampDate, $lastYearStampDate, $dueDate, $uid, $pic, 
-			$quotation, $quotationDate, $poNo, $poDate, $remark, $validatorInvoice, $unitPrice, $certPrice, $totalPrice, $sst, $subAmountSst, $rebate, $rebateAmount, $subtotalPrice, $data, $product, $newRenew, $branch, $labourCharge, $stampLabourCharge, $roundUp, $totalCharge);
+			$insert_stmt->bind_param('sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', $type, $companyBranch, $dealer, $reseller_branch, $customerType, $customer, $brand, $machineType, $model, $makeIn, $capacity, $serial, $assignTo, $assignTo2, $assignTo3, $validatorlama,
+			$validator, $cawangan, $jenisAlat, $machineName, $machineLocation, $machineSerialNo, $trade, $noDaftarLama, $noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $borangEDate, $invoice, $notificationPeriod, $cashBill, $stampDate, $lastYearStampDate, $dueDate, $uid, $pic, 
+			$quotation, $quotationDate, $poNo, $poDate, $remark, $validatorInvoice, $unitPrice, $certPrice, $totalPrice, $sst, $subAmountSst, $rebate, $rebateAmount, $subtotalPrice, $data, $product, $newRenew, $branch, $labourCharge, $stampLabourCharge, $roundUp, $totalCharge, $sealNoLama, $sealNoBaru, $pegawaiContact, $certNo);
 			
 			// Execute the prepared query.
 			if (! $insert_stmt->execute()){
@@ -1104,7 +1169,6 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 
 				// For ATK Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '1'){
-					$penentusan_baru = null;
 					$penentusan_semula = null;
 					$kelulusan_mspk = null;
 					$no_kelulusan = null;

@@ -14,10 +14,12 @@ else{
 	$stmt->execute();
 	$result = $stmt->get_result();
   $role = 'NORMAL';
+  $branch = '';
   $_SESSION['page']='pendinginhouse';
 	
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
+    $branch = $row['branch'];
   }
 
   $autoFormNos = $db->query("SELECT DISTINCT auto_form_no FROM inhouse_validations WHERE deleted = '0'");
@@ -33,6 +35,8 @@ else{
   $problems = $db->query("SELECT * FROM problem WHERE deleted = '0'");
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
+  $users3 = $db->query("SELECT * FROM users WHERE deleted = '0'");
+  $users4 = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'INHOUSE'");
   $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'INHOUSE'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
@@ -40,6 +44,21 @@ else{
   $cancelledReasons = $db->query("SELECT * FROM reasons WHERE deleted = '0'");
   $country = $db->query("SELECT * FROM country");
   $country2 = $db->query("SELECT * FROM country");
+
+  if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
+  }
+  else{
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
+  }
+
+  if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
+    $companyBranches2 = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
+  }
+  else{
+    $companyBranches2 = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
+  }
+
   $loadCells = $db->query("SELECT load_cells.*, machines.machine_type AS machinetype, brand.brand AS brand_name, model.model AS model_name, alat.alat, country.nicename 
 FROM load_cells, machines, brand, model, alat, country WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
 AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load_cells.deleted = '0'");
@@ -128,9 +147,17 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     <input class="form-control" type="text" placeholder="Certificate No." id="autoFormNoFilter" name="autoFormNoFilter">
                   </div>
                 </div>
-              </div>
-
-              <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Branch:</label>
+                    <select class="form-control select2" id="branchFilter" name="branchFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($row = mysqli_fetch_assoc($companyBranches)) { ?>
+                          <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
                 <div class="form-group col-4">
                   <label>From Inhouse Date:</label>
                   <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
@@ -150,6 +177,9 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </div>
                   </div>
                 </div>
+              </div>
+
+              <div class="row">
                 <div class="col-9"></div>
                 <div class="col-3">
                   <button type="button" class="btn btn-block bg-gradient-warning btn-sm"  id="filterSearch">
@@ -237,6 +267,16 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <select class="form-control" style="width: 100%;" id="type" name="type" required>
                   <option value="DIRECT">DIRECT CUSTOMER</option>
                   <option value="RESELLER">RESELLER</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="form-group">
+                <label>Company Branch * </label>
+                <select class="form-control select2" id="companyBranch" name="companyBranch" required>
+                  <?php while ($row = mysqli_fetch_assoc($companyBranches2)) { ?>
+                      <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
+                  <?php } ?>
                 </select>
               </div>
             </div>
@@ -504,6 +544,28 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     <select class="form-control select2" style="width: 100%;" id="calibrator" name="calibrator" required>
                       <option selected="selected"></option>
                       <?php while($user=mysqli_fetch_assoc($users2)){ ?>
+                        <option value="<?=$user['id'] ?>"><?=$user['name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Inhouse Calibrator 2 * </label>
+                    <select class="form-control select2" style="width: 100%;" id="calibrator2" name="calibrator2" required>
+                      <option selected="selected"></option>
+                      <?php while($user=mysqli_fetch_assoc($users3)){ ?>
+                        <option value="<?=$user['id'] ?>"><?=$user['name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Inhouse Calibrator 3 * </label>
+                    <select class="form-control select2" style="width: 100%;" id="calibrator3" name="calibrator3" required>
+                      <option selected="selected"></option>
+                      <?php while($user=mysqli_fetch_assoc($users4)){ ?>
                         <option value="<?=$user['id'] ?>"><?=$user['name'] ?></option>
                       <?php } ?>
                     </select>
@@ -929,6 +991,7 @@ $(function () {
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
   var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
   var autoFormNoFilter = $('#autoFormNoFilter').val() ? $('#autoFormNoFilter').val() : '';
+  var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
   //var statusFilter = $('#statusFilter').val() ? $('#statusFilter').val() : '';
 
   var table = $("#weightTable").DataTable({
@@ -950,6 +1013,7 @@ $(function () {
         customer: customerNoFilter,
         validator: validatorFilter,
         autoFormNo: autoFormNoFilter,
+        branch: branchFilter,
         status: 'Pending'
       } 
     },
@@ -1251,6 +1315,7 @@ $(function () {
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
     var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
     var autoFormNoFilter = $('#autoFormNoFilter').val() ? $('#autoFormNoFilter').val() : '';
+    var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
     //var statusFilter = $('#statusFilter').val() ? $('#statusFilter').val() : '';
 
     //Destroy the old Datatable
@@ -1276,6 +1341,7 @@ $(function () {
           customer: customerNoFilter,
           validator: validatorFilter,
           autoFormNo: autoFormNoFilter,
+          branch: branchFilter,
           status: 'Pending'
         } 
       },
@@ -2010,6 +2076,7 @@ function format (row) {
       <p><strong>Brand:</strong> ${row.brand}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
       <p><strong>Inhouse Calibrator:</strong> ${row.calibrator}</p>
+      <p><strong>Inhouse Calibrator 3:</strong> ${row.calibrator3}</p>
     </div>
     <div class="col-6">
       <p><strong>Unit Serial No:</strong> ${row.unit_serial_no}</p>
@@ -2018,6 +2085,8 @@ function format (row) {
       <p><strong>Model:</strong> ${row.model}</p>
       <p><strong>Structure Size:</strong> ${row.size}</p>
       <p><strong>Created Date:</strong> ${row.validation_date}</p>
+      <p><strong>Inhouse Calibrator 2:</strong> ${row.calibrator2}</p>
+
       <div class="row">
         <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
         <div class="col-1"><button title="Print" type="button" id="print${row.id}" onclick="print(${row.id})" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>
@@ -2110,6 +2179,7 @@ function newEntry(){
 
   $('#extendModal').find('#id').val("");
   $('#extendModal').find('#type').val("DIRECT").trigger('change');
+  $('#extendModal').find('#companyBranch').val("<?=$branch ?>").trigger('change');
   $('#extendModal').find('#dealer').val('').trigger('change');
   $('#extendModal').find('#reseller_branch').val('').trigger('change');
   // $('#isResseller').hide();
@@ -2142,6 +2212,8 @@ function newEntry(){
   $('#extendModal').find('#capacity').val('').trigger('change');
   $('#extendModal').find('#size').val('').trigger('change');
   $('#extendModal').find('#calibrator').val('').trigger('change');
+  $('#extendModal').find('#calibrator2').val('').trigger('change');
+  $('#extendModal').find('#calibrator3').val('').trigger('change');
   $('#extendModal').find('#companyText').val('').trigger('change');
   $('#extendModal').find('#validationDate').val('');
   $('#extendModal').find('#expiredDate').val('');
@@ -2324,6 +2396,7 @@ function edit(id) {
       if(obj.message.type == 'DIRECT'){
         $('#extendModal').find('#id').val(obj.message.id);
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
+        $('#extendModal').find('#companyBranch').val(obj.message.company_branch).trigger('change');
         $('#extendModal').find('#dealer').val('');
         $('#extendModal').find('#reseller_branch').val('');
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
@@ -2348,6 +2421,8 @@ function edit(id) {
         $('#extendModal').find('#auto_cert_no').val(obj.message.auto_cert_no);
         $('#extendModal').find('#validationDate').val(formatDate3(obj.message.validation_date));
         $('#extendModal').find('#calibrator').val(obj.message.calibrator).trigger('change');
+        $('#extendModal').find('#calibrator2').val(obj.message.calibrator2).trigger('change');
+        $('#extendModal').find('#calibrator3').val(obj.message.calibrator3).trigger('change');
 
         if(obj.message.tests != null && obj.message.tests.length > 0){
           // $("#loadTestingTable").html('');

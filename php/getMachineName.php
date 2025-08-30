@@ -6,7 +6,7 @@ session_start();
 if(isset($_POST['userID'])){
 	$id = filter_input(INPUT_POST, 'userID', FILTER_SANITIZE_STRING);
 
-    if ($update_stmt = $db->prepare("SELECT * FROM users WHERE id=?")) {
+    if ($update_stmt = $db->prepare("SELECT * FROM machine_names WHERE id=?")) {
         $update_stmt->bind_param('s', $id);
         
         // Execute the prepared query.
@@ -22,19 +22,14 @@ if(isset($_POST['userID'])){
             $result = $update_stmt->get_result();
             $message = array();
             
-            while ($row = $result->fetch_assoc()) {
+            if ($row = $result->fetch_assoc()) {
                 $message['id'] = $row['id'];
-                $message['username'] = $row['username'];
-                $message['name'] = $row['name'];
-                $message['ic_number'] = $row['ic_number'];
-                $message['designation'] = $row['designation'];
-                $message['contact_number'] = $row['contact_number'];
-                $message['role_code'] = $row['role_code'];
-                $message['email'] = $row['email'];
-                $message['branch'] = $row['branch'];
+                $message['machine_no'] = $row['machine_no'];
+                $message['machine_name'] = $row['machine_name'];
             }
             
             $update_stmt->close();
+
             echo json_encode(
                 array(
                     "status" => "success",
@@ -50,6 +45,7 @@ else{
         array(
             "status" => "failed",
             "message" => "Missing Attribute"
-            )); 
+        )
+    ); 
 }
 ?>

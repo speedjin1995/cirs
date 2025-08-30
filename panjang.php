@@ -14,10 +14,12 @@ else{
 	$stmt->execute();
 	$result = $stmt->get_result();
   $role = 'NORMAL';
+  $branch = '';
   $_SESSION['page']='panjang';
 	
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
+    $branch = $row['branch'];
   }
   $stmt->close();
 
@@ -34,6 +36,13 @@ else{
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE type = 'STAMPING' AND deleted = '0'");
   $cawangans = $db->query("SELECT * FROM state WHERE deleted = '0'");
+
+  if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
+  }
+  else{
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
+  }
 
   $db->close(); // Close the database connection
 }
@@ -126,6 +135,18 @@ else{
                       <option value="" selected disabled hidden>Please Select</option>
                       <?php while($rowCawangan=mysqli_fetch_assoc($cawangans)){ ?>
                         <option value="<?=$rowCawangan['id'] ?>"><?=$rowCawangan['state'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Branch:</label>
+                    <select class="form-control select2" id="branchFilter" name="branchFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($row = mysqli_fetch_assoc($companyBranches)) { ?>
+                          <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
                       <?php } ?>
                     </select>
                   </div>
@@ -247,6 +268,7 @@ else{
 
         <div class="modal-body">
           <input type="hidden" class="form-control" id="ids" name="ids">
+          <input type="hidden" class="form-control" id="branchId" name="branchId">
           <input type="hidden" class="form-control" id="validator" name="validator">
           <input type="hidden" class="form-control" id="cawangan" name="cawangan">
           <input type="hidden" class="form-control" id="driver" name="driver">
@@ -327,6 +349,10 @@ $(function () {
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
   var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
   var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
+  var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
+  var borangDFilter = '';
+  var borangEFilter = '';
+  var machineTypeFilter = '';
   var statusFilter = 'P';
 
   var table = $("#weightTable").DataTable({
@@ -347,7 +373,11 @@ $(function () {
         customer: customerNoFilter,
         validator: validatorFilter,
         cawangan: cawanganFilter,
-        status: statusFilter
+        status: statusFilter,
+        branch: branchFilter,
+        borangD: borangDFilter,
+        borangE: borangEFilter,
+        machineType: machineTypeFilter
       } 
     },
     'columns': [
@@ -588,7 +618,10 @@ $(function () {
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
     var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
     var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
-
+    var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
+    var borangDFilter = '';
+    var borangEFilter = '';
+    var machineTypeFilter = '';
     var statusFilter = 'P';
 
     //Destroy the old Datatable
@@ -613,7 +646,11 @@ $(function () {
           customer: customerNoFilter,
           validator: validatorFilter,
           cawangan: cawanganFilter,
-          status: statusFilter
+          status: statusFilter,
+          branch: branchFilter,
+          borangD: borangDFilter,
+          borangE: borangEFilter,
+          machineType: machineTypeFilter
         } 
       },
       'columns': [
@@ -714,126 +751,134 @@ $(function () {
   });
 
   $('#exportBorangs').on('click', function () {
-    var selectedIds = []; // An array to store the selected 'id' values
+    var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : null;
 
-    $("#weightTable tbody input[type='checkbox']").each(function () {
-      if (this.checked) {
-        selectedIds.push($(this).val());
-      }
-    });
+    if (!branchFilter) {
+      alert("Please select a branch before exporting.");
+      return;
+    }else{
+      var selectedIds = []; // An array to store the selected 'id' values
 
-    if(selectedIds.length > 0){
-      var fromDateValue = $('#fromDate').val();
-      var toDateValue = $('#toDate').val();
-      var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
-      var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
-      var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
-
-      $('#printPanjangModal').find('#ids').val(selectedIds);
-      $('#printPanjangModal').find('#validator').val(validatorFilter);
-      $('#printPanjangModal').find('#cawangan').val(cawanganFilter);
-      $('#printPanjangModal').find('#driver').val('P');
-      $('#printPanjangModal').find('#userId').val(userId);
-
-      // Destroy existing DataTable instance safely
-      if ($.fn.DataTable.isDataTable("#printPanjangModal #orderPanjangTable")) {
-        orderPanjangTable.destroy();
-      }
-
-      orderPanjangTable = $("#printPanjangModal").find("#orderPanjangTable").DataTable({
-        "responsive": true,
-        "autoWidth": false,
-        "processing": true,
-        "serverSide": true,
-        "serverMethod": "post",
-        "paging": false,        // Disable pagination
-        "searching": false,     // Disable search box
-        "ordering": false,      // Disable sorting
-        "info": false,          // Disable "Showing X of Y entries"
-        "rowReorder": {
-          selector: 'tr', // Makes the entire row draggable
-          dataSrc: 'id',   // Track row position using 'id'
-          update: false // Prevent automatic update after reordering
-        },
-        "columnDefs": [ { orderable: false, targets: "_all" }], // Disable sorting
-        "ajax": {
-          "type": "POST",
-          "url": "php/getMultiStamping.php",
-          "data": function (d) {
-            d.selectedIds = selectedIds; // Pass the selected IDs
-          }
-        },
-        "columns": [
-          { data: 'jenis_alat' },
-          { data: 'capacity' },
-          {
-            data: null, // We set data to null to allow custom rendering
-            name: 'brand_model',
-            render: function (data, type, row) {
-              return row.brand + '<br>' + row.model;
-            }
-          },
-          { data: 'serial_no' },
-          {
-            data: null, // We set data to null to allow custom rendering
-            name: 'customers',
-            render: function (data, type, row) {
-              return row.customers + '<br>' + row.full_address2;
-            }
-          },
-          { data: 'batch_no' },
-          { data: 'no_daftar_lama' },
-          { data: 'no_daftar_baru' },
-          { data: 'siri_keselamatan' },
-          { data: 'borang_d' },
-          { data: 'borang_e' },
-          {
-            orderable: false,
-            data: null, // Custom rendering for unit_price and cert_price
-            render: function (data, type, row) {
-              if (row.cert_price != 0){
-                return 'RM ' + parseFloat(row.unit_price).toFixed(2) + '<br>' + 'RM ' + parseFloat(row.cert_price).toFixed(2) + ' (Laporan)';
-              }else{
-                return 'RM ' + parseFloat(row.unit_price).toFixed(2);
-              } 
-            }
-          },
-          { data: "id", visible: false }, // Hide 'id' but keep it in DataTable
-        ]
-      });
-
-      $("#printPanjangModal").find('#orderPanjangTable').show();
-      $("#printPanjangModal").modal("show");
-
-      orderPanjangTable.off("row-reorder").on("row-reorder", function (e, diff, edit) {
-        var newOrderedIds = [];
-
-        $('#orderPanjangTable tbody tr').each(function () {
-          let rowData = orderPanjangTable.row(this).data(); // Fetch row data
-          if (rowData) {
-            newOrderedIds.push(rowData.id); // Assuming ID is in column index 0
-          }
-        });
-
-        $("#printPanjangModal").find('#ids').val(newOrderedIds.join(','));
-      });
-
-      $('#printPanjangForm').validate({
-        errorElement: 'span',
-        errorPlacement: function (error, element) {
-          error.addClass('invalid-feedback');
-          element.closest('.form-group').append(error);
-        },
-        highlight: function (element, errorClass, validClass) {
-          $(element).addClass('is-invalid');
-        },
-        unhighlight: function (element, errorClass, validClass) {
-          $(element).removeClass('is-invalid');
+      $("#weightTable tbody input[type='checkbox']").each(function () {
+        if (this.checked) {
+          selectedIds.push($(this).val());
         }
       });
-    }else{
-      // Optionally, you can display a message or take another action if no IDs are selected
-      alert("Please select at least one record.");
+
+      if(selectedIds.length > 0){
+        var fromDateValue = $('#fromDate').val();
+        var toDateValue = $('#toDate').val();
+        var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
+        var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
+        var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
+
+        $('#printPanjangModal').find('#ids').val(selectedIds);
+        $('#printPanjangModal').find('#branchId').val(branchFilter);
+        $('#printPanjangModal').find('#validator').val(validatorFilter);
+        $('#printPanjangModal').find('#cawangan').val(cawanganFilter);
+        $('#printPanjangModal').find('#driver').val('P');
+        $('#printPanjangModal').find('#userId').val(userId);
+
+        // Destroy existing DataTable instance safely
+        if ($.fn.DataTable.isDataTable("#printPanjangModal #orderPanjangTable")) {
+          orderPanjangTable.destroy();
+        }
+
+        orderPanjangTable = $("#printPanjangModal").find("#orderPanjangTable").DataTable({
+          "responsive": true,
+          "autoWidth": false,
+          "processing": true,
+          "serverSide": true,
+          "serverMethod": "post",
+          "paging": false,        // Disable pagination
+          "searching": false,     // Disable search box
+          "ordering": false,      // Disable sorting
+          "info": false,          // Disable "Showing X of Y entries"
+          "rowReorder": {
+            selector: 'tr', // Makes the entire row draggable
+            dataSrc: 'id',   // Track row position using 'id'
+            update: false // Prevent automatic update after reordering
+          },
+          "columnDefs": [ { orderable: false, targets: "_all" }], // Disable sorting
+          "ajax": {
+            "type": "POST",
+            "url": "php/getMultiStamping.php",
+            "data": function (d) {
+              d.selectedIds = selectedIds; // Pass the selected IDs
+            }
+          },
+          "columns": [
+            { data: 'jenis_alat' },
+            { data: 'capacity' },
+            {
+              data: null, // We set data to null to allow custom rendering
+              name: 'brand_model',
+              render: function (data, type, row) {
+                return row.brand + '<br>' + row.model;
+              }
+            },
+            { data: 'serial_no' },
+            {
+              data: null, // We set data to null to allow custom rendering
+              name: 'customers',
+              render: function (data, type, row) {
+                return row.customers + '<br>' + row.full_address2;
+              }
+            },
+            { data: 'batch_no' },
+            { data: 'no_daftar_lama' },
+            { data: 'no_daftar_baru' },
+            { data: 'siri_keselamatan' },
+            { data: 'borang_d' },
+            { data: 'borang_e' },
+            {
+              orderable: false,
+              data: null, // Custom rendering for unit_price and cert_price
+              render: function (data, type, row) {
+                if (row.cert_price != 0){
+                  return 'RM ' + parseFloat(row.unit_price).toFixed(2) + '<br>' + 'RM ' + parseFloat(row.cert_price).toFixed(2) + ' (Laporan)';
+                }else{
+                  return 'RM ' + parseFloat(row.unit_price).toFixed(2);
+                } 
+              }
+            },
+            { data: "id", visible: false }, // Hide 'id' but keep it in DataTable
+          ]
+        });
+
+        $("#printPanjangModal").find('#orderPanjangTable').show();
+        $("#printPanjangModal").modal("show");
+
+        orderPanjangTable.off("row-reorder").on("row-reorder", function (e, diff, edit) {
+          var newOrderedIds = [];
+
+          $('#orderPanjangTable tbody tr').each(function () {
+            let rowData = orderPanjangTable.row(this).data(); // Fetch row data
+            if (rowData) {
+              newOrderedIds.push(rowData.id); // Assuming ID is in column index 0
+            }
+          });
+
+          $("#printPanjangModal").find('#ids').val(newOrderedIds.join(','));
+        });
+
+        $('#printPanjangForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
+      }else{
+        // Optionally, you can display a message or take another action if no IDs are selected
+        alert("Please select at least one record.");
+      }
     }
   });
 

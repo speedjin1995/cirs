@@ -114,3 +114,79 @@ ALTER TABLE users
 ADD COLUMN email VARCHAR(100) NULL,
 ADD COLUMN reset_token VARCHAR(255) NULL,
 ADD COLUMN reset_expires DATETIME NULL;
+
+-- 24/08/2025 --
+CREATE TABLE `company_branches` (
+  `id` int(11) NOT NULL,
+  `branch_code` varchar(50) DEFAULT NULL,
+  `branch_name` varchar(100) NOT NULL,
+  `map_url` text DEFAULT NULL,
+  `address_line_1` text NOT NULL,
+  `address_line_2` text DEFAULT NULL,
+  `address_line_3` text DEFAULT NULL,
+  `address_line_4` text DEFAULT NULL,
+  `pic` varchar(50) DEFAULT NULL,
+  `pic_contact` varchar(30) DEFAULT NULL,
+  `office_no` varchar(30) DEFAULT NULL,
+  `email` varchar(30) DEFAULT NULL,
+  `deleted` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `company_branches` ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `company_branches` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `users` ADD `branch` INT(11) NULL AFTER `role_code`;
+
+ALTER TABLE `stamping` ADD `company_branch` INT(11) NULL AFTER `type`;
+
+ALTER TABLE `other_validations` ADD `company_branch` INT(11) NULL AFTER `type`;
+
+ALTER TABLE `inhouse_validations` ADD `company_branch` INT(11) NULL AFTER `type`;
+
+ALTER TABLE `stamping` ADD `borang_e_date` DATETIME NULL AFTER `borang_e`;
+
+ALTER TABLE `inhouse_validations` ADD `calibrator2` INT(5) NULL AFTER `calibrator`, ADD `calibrator3` INT(5) NULL AFTER `calibrator2`;
+
+ALTER TABLE `stamping` ADD `notification_period` VARCHAR(10) NULL AFTER `invoice_attachment`;
+
+ALTER TABLE `stamping_ext` ADD `weighbridge_location` VARCHAR(100) NULL AFTER `stamp_id`, ADD `weighbridge_name` VARCHAR(100) NULL AFTER `weighbridge_location`, ADD `weighbridge_serial_no` VARCHAR(100) NULL AFTER `weighbridge_name`;
+
+ALTER TABLE `stamping` ADD `machine_name` VARCHAR(100) NULL AFTER `jenis_alat`, ADD `machine_location` VARCHAR(100) NULL AFTER `machine_name`, ADD `machine_serial_no` VARCHAR(100) NULL AFTER `machine_location`;
+
+ALTER TABLE `stamping_ext` DROP `weighbridge_location`, DROP `weighbridge_name`, DROP `weighbridge_serial_no`;
+
+ALTER TABLE `stamping` ADD `assignTo2` INT(5) NULL AFTER `assignTo`, ADD `assignTo3` INT(5) NULL AFTER `assignTo2`;
+
+ALTER TABLE `stamping` ADD `seal_no_lama` VARCHAR(100) NULL AFTER `no_daftar_baru`, ADD `seal_no_baru` VARCHAR(100) NULL AFTER `seal_no_lama`, ADD `pegawai_contact` VARCHAR(30) NULL AFTER `seal_no_baru`;
+
+ALTER TABLE `stamping` ADD `cert_no` VARCHAR(50) NULL AFTER `include_cert`;
+
+CREATE TABLE `machine_names` (
+  `id` int(11) NOT NULL,
+  `machine_no` varchar(50) NOT NULL,
+  `machine_name` varchar(100) NOT NULL,
+  `deleted` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `machine_names` ADD PRIMARY KEY (`id`);
+  
+ALTER TABLE `machine_names` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+CREATE TABLE `validator_officers` (
+  `id` int(11) NOT NULL,
+  `officer_name` varchar(100) NOT NULL,
+  `officer_contact` varchar(30) DEFAULT NULL,
+  `officer_position` varchar(30) DEFAULT NULL,
+  `officer_company` int(5) DEFAULT NULL,
+  `officer_cawangan` int(5) DEFAULT NULL,
+  `deleted` int(10) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `validator_officers` ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `validator_officers` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `stamping` CHANGE `other_reason` `other_reason` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
+
+ALTER TABLE `stamping` ADD `validator_lama` INT(5) NULL AFTER `serial_no`;

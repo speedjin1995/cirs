@@ -39,6 +39,22 @@ if($_POST['cawangan'] != null && $_POST['cawangan'] != '' && $_POST['cawangan'] 
 	$searchQuery .= " and s.cawangan = '".$_POST['cawangan']."'";
 }
 
+if($_POST['branch'] != null && $_POST['branch'] != '' && $_POST['branch'] != '-'){
+	$searchQuery .= " and s.company_branch = '".$_POST['branch']."'";
+}
+
+if($_POST['borangD'] != null && $_POST['borangD'] != '' && $_POST['borangD'] != '-'){
+	$searchQuery .= " and s.borang_d = '".$_POST['borangD']."'";
+}
+
+if($_POST['borangE'] != null && $_POST['borangE'] != '' && $_POST['borangE'] != '-'){
+	$searchQuery .= " and s.borang_e = '".$_POST['borangE']."'";
+}
+
+if($_POST['machineType'] != null && $_POST['machineType'] != '' && $_POST['machineType'] != '-'){
+	$searchQuery .= " and s.machine_type = '".$_POST['machineType']."'";
+}
+
 if($_POST['status'] != null && $_POST['status'] != '' && $_POST['status'] != '-'){
   if($_POST['status'] == '6'){
     $searchQuery .= " and s.stamping_type = 'NEW'";
@@ -158,6 +174,13 @@ while($row = mysqli_fetch_assoc($empRecords)) {
   $stampingDate = new DateTime($row['stamping_date']);
   $formattedStampingDate = $stampingDate->format('d-m-Y');
 
+  if ($row['borang_e_date'] == null || $row['borang_e_date'] == '0000-00-00 00:00:00'){
+    $formattedBorangEDate = '';
+  } else {
+    $borangEDate = new DateTime($row['borang_e_date']);
+    $formattedBorangEDate = $borangEDate->format('d-m-Y');
+  }
+
   // $capacity = '';
   // $count = 1;
   // if (searchAlatNameById($row['jenis_alat'], $db) == 'BTU - (BOX)'){
@@ -225,6 +248,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "siri_keselamatan"=>$row['siri_keselamatan'] ?? '',
     "borang_d"=>$row['borang_d'] ?? '',
     "borang_e"=>$row['borang_e'] ?? '',
+    "borang_e_date"=>$formattedBorangEDate,
     "assignTo"=>$row['assignTo'] != null ? searchStaffNameById($row['assignTo'], $db) : '',
     "quantity"=>'1',
     "batch_no"=>'',

@@ -14,10 +14,12 @@ else{
 	$stmt->execute();
 	$result = $stmt->get_result();
   $role = 'NORMAL';
+  $branch = '';
   $_SESSION['page']='oldstamp';
 	
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
+    $branch = $row['branch'];
   }
   $stmt->close();
 
@@ -37,6 +39,21 @@ else{
   $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");  
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
+
+  if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
+  }
+  else{
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
+  }
+
+  if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
+    $companyBranches2 = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
+  }
+  else{
+    $companyBranches2 = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
+  }
+
 
   $db->close(); // Close the database connection
 }
@@ -193,6 +210,18 @@ else{
                   <div class="form-group">
                     <label>Quotation No:</label>
                     <input type="text" class="form-control" id="quoteNoFilter" name="quoteNoFilter">
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Branch:</label>
+                    <select class="form-control select2" id="branchFilter" name="branchFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($row = mysqli_fetch_assoc($companyBranches)) { ?>
+                          <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
+                      <?php } ?>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -808,6 +837,7 @@ $(function () {
   var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
   var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
   var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
+  var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
 
   var table = $("#weightTable").DataTable({
     "responsive": true,
@@ -834,6 +864,7 @@ $(function () {
         borang: borangNoFilter,
         serial: serialNoFilter,
         quotation: quoteNoFilter,
+        branch: branchFilter,
         status: 'Cancelled'
       } 
     },
@@ -1047,6 +1078,7 @@ $(function () {
     var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
     var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
     var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
+    var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
 
     //Destroy the old Datatable
     $("#weightTable").DataTable().clear().destroy();
@@ -1077,6 +1109,7 @@ $(function () {
           borang: borangNoFilter,
           serial: serialNoFilter,
           quotation: quoteNoFilter,
+          branch: branchFilter,
           status: 'Cancelled'
         } 
       },
@@ -1537,55 +1570,76 @@ function format (row) {
   <h6 style="margin:0"><b>Information Details: 1</b></h6>
   <hr style="margin-top:0">
   <div class="row">
-    <!-- Machine Section -->
-    <div class="col-6">
+    <div class="col-4">
       <p><strong>Brand:</strong> ${row.brand}</p>
       <p><strong>Model:</strong> ${row.model}</p>
       <p><strong>Machine Type:</strong> ${row.machine_type}</p>
-      <p><strong>Capacity:</strong> ${row.capacity}</p>
-      <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
-      <p><strong>Serial No:</strong> ${row.serial_no}</p>
-      <p><strong>Assigned To:</strong> ${row.assignTo}</p>
       <p><strong>Make In:</strong> ${row.make_in}</p>
+      <p><strong>Capacity:</strong> ${row.capacity}</p>
+      <p><strong>Serial No:</strong> ${row.serial_no}</p>
+      <p><strong>Machine Name:</strong> ${row.machine_name}</p>
+      <p><strong>Machine Location Area:</strong> ${row.machine_location}</p>
+      <p><strong>Machine Serial No:</strong> ${row.machine_serial_no}</p>
     </div>`;
 
   if(row.stampType == 'RENEWAL'){
     returnString += `
-      <!-- Stamping Section -->
-        <div class="col-6">
-          <p><strong>Lama No. Daftar:</strong> ${row.no_daftar_lama}</p>
-          <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
-          <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
+        <div class="col-4">
+          <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
+          <p><strong>No. Daftar (Lama):</strong> ${row.no_daftar_lama}</p>
+          <p><strong>Seal No (Lama):</strong> ${row.seal_no_lama}</p>
+          <p><strong>No. Daftar (Baru):</strong> ${row.no_daftar_baru}</p>
+          <p><strong>Seal No (Baru):</strong> ${row.seal_no_baru}</p>
           <p><strong>Borang D:</strong> ${row.borang_d}</p>
           <p><strong>Borang E:</strong> ${row.borang_e}</p>
+          <p><strong>Borang E Date:</strong> ${row.borang_e_date}</p>
+          <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
+        </div>
+        <div class="col-4">
           <p><strong>Last Year Stamping Date:</strong> ${row.last_year_stamping_date}</p>
+          <p><strong>Nama Pegawai / Contact:</strong> ${row.pegawai_contact}</p>
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
           <p><strong>Next Due Date:</strong> ${row.due_date}</p>
+          <p><strong>Certificate No:</strong> ${row.cert_no}</p>
+          <p><strong>Create By:</strong> ${row.create_by}</p>
+          <p><strong>Last Update By:</strong> ${row.modified_by}</p>
+          <p><strong>Assigned To Technician 1:</strong> ${row.assignTo}</p>
+          <p><strong>Assigned To Technician 2:</strong> ${row.assignTo2}</p>
+          <p><strong>Assigned To Technician 3:</strong> ${row.assignTo3}</p>
         </div>
-      </div>
-      <h6 style="margin:0"><b>Information Details: 2</b></h6>
-      <hr style="margin-top:0">
     `;
   }else{
     returnString += `
-      <!-- Stamping Section -->
-        <div class="col-6">
-          <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
-          <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
-          <p><strong>Borang D:</strong> ${row.borang_d}</p>
-          <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
-          <p><strong>Next Due Date:</strong> ${row.due_date}</p>
-        </div>
+      <div class="col-4">
+        <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
+        <p><strong>No. Daftar (Baru):</strong> ${row.no_daftar_baru}</p>
+        <p><strong>Seal No (Baru):</strong> ${row.seal_no_baru}</p>
+        <p><strong>Borang D:</strong> ${row.borang_d}</p>
+        <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
       </div>
-      <h6 style="margin:0"><b>Information Details: 2</b></h6>
-      <hr style="margin-top:0">
+      <div class="col-4">
+        <p><strong>Nama Pegawai / Contact:</strong> ${row.pegawai_contact}</p>
+        <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
+        <p><strong>Next Due Date:</strong> ${row.due_date}</p>
+        <p><strong>Certificate No:</strong> ${row.cert_no}</p>
+        <p><strong>Create By:</strong> ${row.create_by}</p>
+        <p><strong>Last Update By:</strong> ${row.modified_by}</p>
+        <p><strong>Assigned To Technician 1:</strong> ${row.assignTo}</p>
+        <p><strong>Assigned To Technician 2:</strong> ${row.assignTo2}</p>
+        <p><strong>Assigned To Technician 3:</strong> ${row.assignTo3}</p>
+      </div>
     `;
   }
+
+  returnString += `
+    </div><br>
+    <h6 style="margin:0"><b>Information Details: 2</b></h6>
+    <hr style="margin-top:0">
+  `;
     
   returnString += `
   <div class="row">
-    <!-- Billing Section -->
-    <div class="col-6">
+    <div class="col-4">
       <p><strong>Validator Invoice:</strong> ${row.validator_invoice}</p>
       <p><strong>Quotation No:</strong> ${row.quotation_no} `;
       
@@ -1608,41 +1662,52 @@ function format (row) {
       }
     returnString += `</div>
 
-    <!-- Price Section -->
-     <div class="col-6">
+    <div class="col-4">
       <p><strong>Unit Price:</strong> ${row.unit_price}</p>
       <p><strong>Cert Price:</strong> ${row.cert_price}</p>
       <p><strong>Total Amount:</strong> ${row.total_amount}</p>
       <p><strong>SST Price:</strong> ${row.sst}</p>
       <p><strong>Sub Total Price With SST:</strong> ${row.subtotal_sst_amt}</p>
+    </div>
+
+    <div class="col-4">
       <p><strong>Rebate (%):</strong> ${row.rebate}</p>
       <p><strong>Rebate Amount:</strong> ${row.rebate_amount}</p>
       <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>
-     </div>
-    </div><hr>`;
+    </div>
+  </div><hr>`;
 
     returnString += `
     <div class="row">
-      <div class="col-6">
+      <div class="col-4">
         <p><strong>Labour Charge:</strong> ${row.labour_charge}</p>
         <p><strong>Total Stamping Fee + Labour Charge:</strong> ${row.stampfee_labourcharge}</p>
         <p><strong>Remark:</strong> ${row.remarks}</p>
       </div>
       
-      <div class="col-6">
+      <div class="col-4">
         <p><strong>Internal Round Up:</strong> ${row.int_round_up}</p>
-        <p><strong>Total Billing Price:</strong> ${row.total_charges}</p>`;
+        <p><strong>Total Billing Price:</strong> ${row.total_charges}</p>
+      </div>`;
 
       if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
-        returnString += `<div class="row">
-          <div class="col-1"><button title="Revert" type="button" id="revertBtn${row.id}" onclick="revert(${row.id})" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>
-          <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
-          <div class="col-1"><button title="Cancel" type="button" id="delete${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
-        </div>`;
+        returnString += `
+          <div class="col-4">
+            <div class="row">
+              <div class="col-1"><button title="Revert" type="button" id="revertBtn${row.id}" onclick="revert(${row.id})" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>
+              <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+              <div class="col-1"><button title="Cancel" type="button" id="delete${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
+            </div>
+          </div>
+        `;
       }else{
-        returnString += `<div class="row">
-          <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
-        </div>`;
+        returnString += `
+          <div class="col-4">
+            <div class="row">
+              <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+            </div>
+          </div>
+        `;
       }
 
      returnString += `</div>
@@ -2015,7 +2080,6 @@ function format (row) {
                         <div class="row">
                           <!-- ATK Section -->
                           <div class="col-6">
-                            <p><strong>Penentusan Baru:</strong> ${row.penentusan_baru}</p>
                             <p><strong>Kelulusan MSPK:</strong> ${row.kelulusan_mspk}</p>
                             <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
                             <p><strong>Structure Size:</strong> ${row.size}</p>

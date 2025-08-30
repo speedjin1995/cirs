@@ -360,7 +360,7 @@ to get the desired effect
         <h5 class="nav-link mb-0 pl-0" style="background-color: #074979;color: white;"><b>Licensed By : <?php echo $company_name ?></b></h5>
       </li>
       <li class="nav-item ml-auto">
-        <h6 class="nav-link mb-0 pl-0" style="background-color: #074979;color: white;"><b>Date : <?php echo $datetime ?></b></h6>
+        <h6 class="nav-link mb-0 pl-0" style="background-color: #074979;color: white;"><b>Date : <span id="datetime"></span></b></h6>
       </li>
     </ul>
   </nav>
@@ -723,6 +723,12 @@ to get the desired effect
                       </a>
                     </li>
                     <li class="nav-item">
+                      <a href="#machinename" data-file="machinename.php" class="nav-link link">
+                        <i class="nav-icon fas fa-store"></i>
+                        <p>Machine Name</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
                       <a href="#standards" data-file="standards.php" class="nav-link link">
                         <i class="nav-icon fas fa-newspaper"></i>
                         <p>Value of Standards</p>
@@ -782,6 +788,12 @@ to get the desired effect
                         <p>Unit of Measurement</p>
                       </a>
                     </li>
+                    <li class="nav-item">
+                      <a href="#validatorOfficer" data-file="validatorOfficer.php" class="nav-link link">
+                        <i class="nav-icon fas fa-person"></i>
+                        <p>Validator Officer</p>
+                      </a>
+                    </li>
                     <!--li class="nav-item">
                       <a href="#problem" data-file="problem.php" class="nav-link link">
                         <i class="nav-icon fas fa-industry"></i>
@@ -823,6 +835,12 @@ to get the desired effect
                           <a href="#users" data-file="users.php" class="nav-link link">
                             <i class="nav-icon fas fa-user"></i>
                             <p>Staffs</p>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="#branch" data-file="branch.php" class="nav-link link">
+                            <i class="nav-icon fa-solid fa-location-dot"></i>
+                            <p>Branches</p>
                           </a>
                         </li>';
                 }
@@ -995,7 +1013,23 @@ $(function () {
     $(this).data('bs.modal')._config.backdrop = 'static';
     $(this).data('bs.modal')._config.keyboard = false;
   });
+
+  setInterval(updateDateTime, 1000);
+  updateDateTime();
 });
+
+function updateDateTime() {
+    const now = new Date();
+    // format as YYYY-MM-DD HH:MM:SS
+    const formatted = now.getFullYear() + "-" +
+        String(now.getMonth() + 1).padStart(2, '0') + "-" +
+        String(now.getDate()).padStart(2, '0') + " " +
+        String(now.getHours()).padStart(2, '0') + ":" +
+        String(now.getMinutes()).padStart(2, '0') + ":" +
+        String(now.getSeconds()).padStart(2, '0');
+    document.getElementById("datetime").textContent = formatted;
+}
+
 
 function isValidDate(d) {
   return !isNaN(Date.parse(d));

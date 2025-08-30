@@ -14,10 +14,12 @@ else{
 	$stmt->execute();
 	$result = $stmt->get_result();
   $role = 'NORMAL';
+  $branch = '';
   $_SESSION['page']='oldinhouse';
 	
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
+    $branch = $row['branch'];
   }
   $stmt->close();
 
@@ -41,6 +43,21 @@ else{
   $cancelledReasons = $db->query("SELECT * FROM reasons WHERE deleted = '0'");
   $country = $db->query("SELECT * FROM country");
   $country2 = $db->query("SELECT * FROM country");
+
+  if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
+  }
+  else{
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
+  }
+
+  if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
+    $companyBranches2 = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
+  }
+  else{
+    $companyBranches2 = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
+  }
+
   $loadCells = $db->query("SELECT load_cells.*, machines.machine_type AS machinetype, brand.brand AS brand_name, model.model AS model_name, alat.alat, country.nicename 
 FROM load_cells, machines, brand, model, alat, country WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
 AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load_cells.deleted = '0'");
@@ -128,21 +145,18 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     <input class="form-control" type="text" placeholder="Certificate No." id="autoFormNoFilter" name="autoFormNoFilter">
                   </div>
                 </div>
-
-                <!--div class="col-3">
+                <div class="col-4">
                   <div class="form-group">
-                    <label>Status</label>
-                    <select class="form-control" id="statusFilter" name="statusFilter">
+                    <label>Branch:</label>
+                    <select class="form-control select2" id="branchFilter" name="branchFilter">
                       <option value="" selected disabled hidden>Please Select</option>
-                      <option value="Active">Active</option>
-                      <option value="Complete">Complete</option>
+                      <?php while ($row = mysqli_fetch_assoc($companyBranches)) { ?>
+                          <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
+                      <?php } ?>
                     </select>
                   </div>
-                </div-->
-              </div>
-
-              <div class="row">
-              <div class="form-group col-4">
+                </div>
+                <div class="form-group col-4">
                   <label>From Inhouse Date:</label>
                   <div class="input-group date" id="fromDatePicker" data-target-input="nearest">
                     <input type="text" class="form-control datetimepicker-input" data-target="#fromDatePicker" id="fromDate"/>
@@ -161,6 +175,20 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                     </div>
                   </div>
                 </div>
+
+                <!--div class="col-3">
+                  <div class="form-group">
+                    <label>Status</label>
+                    <select class="form-control" id="statusFilter" name="statusFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <option value="Active">Active</option>
+                      <option value="Complete">Complete</option>
+                    </select>
+                  </div>
+                </div-->
+              </div>
+
+              <div class="row">
                 <div class="col-9"></div>
                 <div class="col-3">
                   <button type="button" class="btn btn-block bg-gradient-warning btn-sm"  id="filterSearch">
@@ -246,6 +274,16 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                 <select class="form-control" style="width: 100%;" id="type" name="type" required>
                   <option value="DIRECT">DIRECT CUSTOMER</option>
                   <option value="RESELLER">RESELLER</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="form-group">
+                <label>Company Branch * </label>
+                <select class="form-control select2" id="companyBranch" name="companyBranch" required>
+                  <?php while ($row = mysqli_fetch_assoc($companyBranches2)) { ?>
+                      <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
+                  <?php } ?>
                 </select>
               </div>
             </div>
@@ -907,6 +945,7 @@ $(function () {
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
   var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
   var autoFormNoFilter = $('#autoFormNoFilter').val() ? $('#autoFormNoFilter').val() : '';
+  var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
   //var statusFilter = $('#statusFilter').val() ? $('#statusFilter').val() : '';
 
   var table = $("#weightTable").DataTable({
@@ -928,6 +967,7 @@ $(function () {
         customer: customerNoFilter,
         validator: validatorFilter,
         autoFormNo: autoFormNoFilter,
+        branch: branchFilter,
         status: 'Pending'
       } 
     },
@@ -1181,6 +1221,7 @@ $(function () {
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
     var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
     var autoFormNoFilter = $('#autoFormNoFilter').val() ? $('#autoFormNoFilter').val() : '';
+    var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
     //var statusFilter = $('#statusFilter').val() ? $('#statusFilter').val() : '';
 
     //Destroy the old Datatable
@@ -1206,6 +1247,7 @@ $(function () {
           customer: customerNoFilter,
           validator: validatorFilter,
           autoFormNo: autoFormNoFilter,
+          branch: branchFilter,
           status: 'Pending'
         } 
       },
@@ -1885,6 +1927,7 @@ function format (row) {
       <p><strong>Brand:</strong> ${row.brand}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
       <p><strong>Inhouse Calibrator:</strong> ${row.calibrator}</p>
+      <p><strong>Inhouse Calibrator 3:</strong> ${row.calibrator3}</p>
     </div>
     <div class="col-6">
       <p><strong>Unit Serial No:</strong> ${row.unit_serial_no}</p>
@@ -1893,13 +1936,21 @@ function format (row) {
       <p><strong>Model:</strong> ${row.model}</p>
       <p><strong>Structure Size:</strong> ${row.size}</p>
       <p><strong>Created Date:</strong> ${row.validation_date}</p>
-      <div class="row">
-        <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
-        <div class="col-1"><button title="Print" type="button" id="print${row.id}" onclick="print(${row.id})" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>
-        <div class="col-1"><button title="Complete" type="button" id="complete${row.id}" onclick="complete(${row.id})" class="btn btn-success btn-sm"><i class="fas fa-check"></i></button></div>
-        <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
-        <div class="col-1"><button title="Cancelled" type="button" id="deactivate${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
-      </div>
+      <p><strong>Inhouse Calibrator 2:</strong> ${row.calibrator2}</p> `;
+
+      if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
+        returnString += `<div class="row">
+          <div class="col-1"><button title="Revert" type="button" id="revertBtn${row.id}" onclick="revertToPending(${row.id})" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>
+          <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+          <div class="col-1"><button title="Delete" type="button" id="delete${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
+        </div>`;
+      }else{
+        returnString += `<div class="row">
+          <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+        </div>`;
+      }
+
+      returnString += `
     </div> 
   </div><hr>
   `;
@@ -2161,7 +2212,7 @@ function edit(id) {
             var tests = obj.message.tests[i];
 
             for(var j=0; j < tests.length; j++){
-              var item = tests[j]; console.log(item);
+              var item = tests[j];
               var $addContents = $("#loadTestingDetails").clone();
               $("#loadTestingTable").append($addContents.html());
 

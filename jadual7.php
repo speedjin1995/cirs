@@ -14,14 +14,24 @@ else{
 	$stmt->execute();
 	$result = $stmt->get_result();
   $role = 'NORMAL';
+  $branch = '';
   $_SESSION['page']='jadual7';
 	
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
+    $branch = $row['branch'];
   }
 
   $customers2 = $db->query("SELECT * FROM customers WHERE customer_status = 'CUSTOMERS' AND deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE type = 'STAMPING' AND deleted = '0'");
+  $machinetypes = $db->query("SELECT * FROM machines WHERE deleted = '0'");
+
+  if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
+  }
+  else{
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
+  }
 
   $stmt->close();
   $db->close();
@@ -105,6 +115,44 @@ else{
                     </select>
                   </div>
                 </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Branch:</label>
+                    <select class="form-control select2" id="branchFilter" name="branchFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($row = mysqli_fetch_assoc($companyBranches)) { ?>
+                          <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Borang D No:</label>
+                    <input type="text" class="form-control" id="borangDFilter" name="borangDFilter">
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Borang E No:</label>
+                    <input type="text" class="form-control" id="borangEFilter" name="borangEFilter">
+                  </div>
+                </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Machine Type:</label>
+                    <select class="form-control select2" id="machineTypeFilter" name="machineTypeFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($row = mysqli_fetch_assoc($machinetypes)) { ?>
+                          <option value="<?= $row['id'] ?>"><?= $row['machine_type'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
               </div>
 
               <div class="row">
@@ -151,6 +199,7 @@ else{
                   <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
                   <th width="8%">BRG D BIL NO.</th>
                   <th width="8%">BRG E BIL NO.</th>
+                  <th width="8%">BRG E DATE</th>
                   <th>STAMPING DATE</th>
                   <th>NAME OF PURCHASE</th>
                   <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
@@ -232,6 +281,7 @@ else{
                     <tr>
                       <th width="8%">BRG D BIL NO.</th>
                       <th width="8%">BRG E BIL NO.</th>
+                      <th width="8%">BRG E DATE</th>
                       <th>STAMPING DATE</th>
                       <th>NAME OF PURCHASE</th>
                       <th>ABOUT WEIGHING, MEASURING AND WEIGHING INSTRUMENTS</th>
@@ -299,6 +349,10 @@ $(function () {
   var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
   var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
   var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';    
+  var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
+  var borangDFilter = $('#borangDFilter').val() ? $('#borangDFilter').val() : '';
+  var borangEFilter = $('#borangEFilter').val() ? $('#borangEFilter').val() : '';
+  var machineTypeFilter = $('#machineTypeFilter').val() ? $('#machineTypeFilter').val() : '';
   var statusFilter = '7';
 
   var table = $("#weightTable").DataTable({
@@ -319,7 +373,11 @@ $(function () {
         customer: customerNoFilter,
         validator: validatorFilter,
         cawangan: cawanganFilter,
-        status: statusFilter
+        status: statusFilter,
+        branch: branchFilter,
+        borangD: borangDFilter,
+        borangE: borangEFilter,
+        machineType: machineTypeFilter
       } 
     },
     'columns': [
@@ -346,6 +404,10 @@ $(function () {
       { 
         data: 'borang_e', 
         name: 'borang_e'
+      },
+      { 
+        data: 'borang_e_date', 
+        name: 'borang_e_date'
       },
       { 
         data: 'stamping_date', 
@@ -555,6 +617,10 @@ $(function () {
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
     var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
     var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
+    var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
+    var borangDFilter = $('#borangDFilter').val() ? $('#borangDFilter').val() : '';
+    var borangEFilter = $('#borangEFilter').val() ? $('#borangEFilter').val() : '';
+    var machineTypeFilter = $('#machineTypeFilter').val() ? $('#machineTypeFilter').val() : '';
     var statusFilter = '7';
 
     //Destroy the old Datatable
@@ -579,7 +645,11 @@ $(function () {
           customer: customerNoFilter,
           validator: validatorFilter,
           cawangan: cawanganFilter,
-          status: statusFilter
+          status: statusFilter,
+          branch: branchFilter,
+          borangD: borangDFilter,
+          borangE: borangEFilter,
+          machineType: machineTypeFilter
         } 
       },
       'columns': [
@@ -606,6 +676,10 @@ $(function () {
         { 
           data: 'borang_e', 
           name: 'borang_e'
+        },
+        { 
+          data: 'borang_e_date', 
+          name: 'borang_e_date'
         },
         { 
           data: 'stamping_date', 
@@ -722,6 +796,7 @@ $(function () {
         "columns": [
           { data: 'borang_d' },
           { data: 'borang_e' },
+          { data: 'borang_e_date' },
           { data: 'stamping_date' },
           { data: 'customers' },
 

@@ -6,7 +6,7 @@ session_start();
 if(isset($_POST['userID'])){
 	$id = filter_input(INPUT_POST, 'userID', FILTER_SANITIZE_STRING);
 
-    if ($update_stmt = $db->prepare("SELECT * FROM users WHERE id=?")) {
+    if ($update_stmt = $db->prepare("SELECT * FROM company_branches WHERE id=?")) {
         $update_stmt->bind_param('s', $id);
         
         // Execute the prepared query.
@@ -22,19 +22,23 @@ if(isset($_POST['userID'])){
             $result = $update_stmt->get_result();
             $message = array();
             
-            while ($row = $result->fetch_assoc()) {
+            if ($row = $result->fetch_assoc()) {
                 $message['id'] = $row['id'];
-                $message['username'] = $row['username'];
-                $message['name'] = $row['name'];
-                $message['ic_number'] = $row['ic_number'];
-                $message['designation'] = $row['designation'];
-                $message['contact_number'] = $row['contact_number'];
-                $message['role_code'] = $row['role_code'];
+                $message['branch_code'] = $row['branch_code'];
+                $message['branch_name'] = $row['branch_name'];
+                $message['address_line_1'] = $row['address_line_1'];
+                $message['address_line_2'] = $row['address_line_2'];
+                $message['address_line_3'] = $row['address_line_3'];
+                $message['address_line_4'] = $row['address_line_4'];
+                $message['map_url'] = $row['map_url'];
+                $message['pic'] = $row['pic'];
+                $message['pic_contact'] = $row['pic_contact'];
+                $message['office_no'] = $row['office_no'];
                 $message['email'] = $row['email'];
-                $message['branch'] = $row['branch'];
             }
             
             $update_stmt->close();
+
             echo json_encode(
                 array(
                     "status" => "success",
@@ -50,6 +54,7 @@ else{
         array(
             "status" => "failed",
             "message" => "Missing Attribute"
-            )); 
+        )
+    ); 
 }
 ?>

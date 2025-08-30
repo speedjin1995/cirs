@@ -24,6 +24,18 @@ if($_POST['validator'] != null && $_POST['validator'] != ''){
   $searchQuery .= " and validate_by = '".$_POST['validator']."'";
 }
 
+if($_POST['cawangan'] != null && $_POST['cawangan'] != ''){
+  $searchQuery .= " and cawangan = '".$_POST['cawangan']."'";
+}
+
+if($_POST['type'] != null && $_POST['type'] != ''){
+  $searchQuery .= " and type = '".$_POST['type']."'";
+}
+
+if($_POST['machineType'] != null && $_POST['machineType'] != ''){
+  $searchQuery .= " and machine_type = '".$_POST['machineType']."'";
+}
+
 $months = calcDateDifference($fromDate, $toDate);
 
 if(empty($months)){

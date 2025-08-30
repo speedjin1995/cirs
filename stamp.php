@@ -14,10 +14,12 @@ else{
 	$stmt->execute();
 	$result = $stmt->get_result();
   $role = 'NORMAL';
+  $branch = '';
   $_SESSION['page']='stamping';
 	
 	if(($row = $result->fetch_assoc()) !== null){
     $role = $row['role_code'];
+    $branch = $row['branch'];
   }
   $stmt->close();
 
@@ -37,9 +39,13 @@ else{
   $users = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $users2 = $db->query("SELECT * FROM users WHERE deleted = '0'");
   $technicians = $db->query("SELECT * FROM users WHERE role_code != 'SUPER_ADMIN' AND deleted = '0'");
+  $technicians2 = $db->query("SELECT * FROM users WHERE role_code != 'SUPER_ADMIN' AND deleted = '0'");
+  $technicians3 = $db->query("SELECT * FROM users WHERE role_code != 'SUPER_ADMIN' AND deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
   $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");  
+  $validators3 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
   $validatorsF = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
+  $machineNames = $db->query("SELECT * FROM machine_names WHERE deleted = '0'");
   $states = $db->query("SELECT * FROM state WHERE deleted = '0'");
   $cawangans = $db->query("SELECT * FROM state WHERE deleted = '0'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
@@ -59,6 +65,22 @@ else{
   $countryAtsH = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $countrySia = $db->query("SELECT * FROM country WHERE deleted = '0'");
   $country2 = $db->query("SELECT * FROM country WHERE deleted = '0'");
+
+  if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
+  }
+  else{
+    $companyBranches = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
+  }
+
+  if($role != 'ADMIN' && $role != 'SUPER_ADMIN'){
+    $companyBranches2 = $db->query("SELECT * FROM company_branches WHERE deleted = '0' AND id = '$branch' ORDER BY branch_name ASC");
+  }
+  else{
+    $companyBranches2 = $db->query("SELECT * FROM company_branches WHERE deleted = '0' ORDER BY branch_name ASC");
+  }
+
+
   $loadCells = $db->query("SELECT load_cells.*, brand.brand AS brand_name, model.model AS model_name FROM load_cells join brand on load_cells.brand = brand.id join model on load_cells.model = model.id where load_cells.deleted = 0 and brand.deleted = 0 and model.deleted = 0");
 //   $loadCells = $db->query("SELECT load_cells.*, machines.machine_type AS machinetype, brand.brand AS brand_name, model.model AS model_name, alat.alat, country.nicename 
 // FROM load_cells, machines, brand, model, alat, country WHERE load_cells.machine_type = machines.id AND load_cells.brand = brand.id AND load_cells.model = model.id 
@@ -221,6 +243,18 @@ else{
                     <input type="text" class="form-control" id="quoteNoFilter" name="quoteNoFilter">
                   </div>
                 </div>
+
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Branch:</label>
+                    <select class="form-control select2" id="branchFilter" name="branchFilter">
+                      <option value="" selected disabled hidden>Please Select</option>
+                      <?php while ($row = mysqli_fetch_assoc($companyBranches)) { ?>
+                          <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
               </div>
 
               <div class="row">
@@ -299,6 +333,16 @@ else{
                 <select class="form-control" style="width: 100%;" id="type" name="type" required>
                   <option value="DIRECT">DIRECT CUSTOMER</option>
                   <option value="RESELLER">RESELLER</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="form-group">
+                <label>Company Branch * </label>
+                <select class="form-control select2" id="companyBranch" name="companyBranch" required>
+                  <?php while ($row = mysqli_fetch_assoc($companyBranches2)) { ?>
+                      <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
+                  <?php } ?>
                 </select>
               </div>
             </div>
@@ -509,6 +553,29 @@ else{
                 </div>
                 <div class="col-4">
                   <div class="form-group">
+                    <label>Machine Name</label>
+                    <select class="form-control select2" style="width: 100%;" id="machineName" name="machineName" required>
+                      <option selected="selected">-</option>
+                      <?php while($rowMN=mysqli_fetch_assoc($machineNames)){ ?>
+                        <option value="<?=$rowMN['id'] ?>"><?=$rowMN['machine_name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Machine Location Area</label>
+                    <input type="text" class="form-control" id="machineLocation" name="machineLocation">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Machine Serial No.</label>
+                    <input type="text" class="form-control" id="machineSerialNo" name="machineSerialNo">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
                     <label>Trade / Non-Trade *</label>
                     <select class="form-control select2" style="width: 100%;" id="trade" name="trade" required>
                       <option selected="selected"></option>
@@ -550,9 +617,29 @@ else{
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>Assigned To *</label>
+                    <label>Assigned To Technician 1 *</label>
                     <select class="form-control select2" style="width: 100%;" id="assignTo" name="assignTo" required>
                       <?php while($technician=mysqli_fetch_assoc($technicians)){ ?>
+                        <option value="<?=$technician['id'] ?>"><?=$technician['name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Assigned To Technician 2</label>
+                    <select class="form-control select2" style="width: 100%;" id="assignTo2" name="assignTo2">
+                      <?php while($technician=mysqli_fetch_assoc($technicians2)){ ?>
+                        <option value="<?=$technician['id'] ?>"><?=$technician['name'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Assigned To Technician 3</label>
+                    <select class="form-control select2" style="width: 100%;" id="assignTo3" name="assignTo3">
+                      <?php while($technician=mysqli_fetch_assoc($technicians3)){ ?>
                         <option value="<?=$technician['id'] ?>"><?=$technician['name'] ?></option>
                       <?php } ?>
                     </select>
@@ -577,9 +664,19 @@ else{
                     </select>
                   </div>
                 </div>
+                <div class="col-4" id="validatorLamaView" style="display:none;">
+                  <div class="form-group">
+                    <label>Validator (Lama)</label>
+                    <select class="form-control select2" style="width: 100%;" id="validatorlama" name="validatorlama">
+                      <?php while($rowVA=mysqli_fetch_assoc($validators3)){ ?>
+                        <option value="<?=$rowVA['id'] ?>"><?=$rowVA['validator'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>Validator * </label>
+                    <label>Validator (Baru) * </label>
                     <select class="form-control select2" style="width: 100%;" id="validator" name="validator" required>
                       <?php while($rowVA=mysqli_fetch_assoc($validators)){ ?>
                         <option value="<?=$rowVA['id'] ?>"><?=$rowVA['validator'] ?></option>
@@ -604,10 +701,28 @@ else{
                     <input class="form-control" type="text" placeholder="No Daftar Lama" id="noDaftarLama" name="noDaftarLama">
                   </div>
                 </div>
+                <div class="col-4" id="sealLamaView" style="display:none;">
+                  <div class="form-group">
+                    <label>Seal No (Lama)</label>
+                    <input class="form-control" type="text" placeholder="Seal No (Lama)" id="sealNoLama" name="sealNoLama">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Pegawai/Contact No</label>
+                    <input class="form-control" type="text" placeholder="Pegawai/Contact No" id="pegawaiContact" name="pegawaiContact">
+                  </div>
+                </div>
                 <div class="col-4">
                   <div class="form-group">
                     <label>No Daftar (Baru)</label>
                     <input class="form-control" type="text" placeholder="No Daftar Baru" id="noDaftarBaru" name="noDaftarBaru">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Seal No (Baru)</label>
+                    <input class="form-control" type="text" placeholder="Seal No (Baru)" id="sealNoBaru" name="sealNoBaru">
                   </div>
                 </div>
                 <div class="col-4">
@@ -620,6 +735,17 @@ else{
                   <div class="form-group">
                     <label>No. Borang E</label>
                     <input class="form-control" type="text" placeholder="No. Borang E" id="borangE" name="borangE">
+                  </div>
+                </div>
+                <div class="col-4" id="borangEDateView" style="display:none;">
+                  <div class="form-group">
+                    <label>Borang E Date</label>
+                    <div class='input-group date' id="borangEDatePicker" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#borangEDatePicker" id="borangEDate" name="borangEDate"/>
+                      <div class="input-group-append" data-target="#borangEDatePicker" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-4">
@@ -670,6 +796,13 @@ else{
                     </select>
                   </div>
                 </div>
+                <div class="col-4" id="certNoView" style="display:none">
+                  <div class="form-group">
+                    <label>Certificate No * </label>
+                    <input class="form-control" type="text" placeholder="Certificate No" id="certNo" name="certNo">
+                  </div>
+                </div>
+
                 <!-- <div class="col-4">
                   <div class="form-group">
                     <label>No PIN Pelekat Keselamatan </label>
@@ -754,6 +887,12 @@ else{
                       </div>
                     </div>
                     <input type="text" id="InvoiceFilePath" name="InvoiceFilePath" style="display:none">           
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Notification Period (Months)</label>
+                    <input class="form-control" type="number" placeholder="Notification Period" id="notificationPeriod" name="notificationPeriod">
                   </div>
                 </div>
               </div>
@@ -1985,6 +2124,12 @@ $(function () {
     defaultDate: ''
   });
 
+  $('#borangEDatePicker').datetimepicker({
+    icons: { time: 'far fa-calendar' },
+    format: 'DD/MM/YYYY',
+    defaultDate: ''
+  });
+
   $('#datePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
@@ -2025,6 +2170,7 @@ $(function () {
   var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
   var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
   var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
+  var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
 
   const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
 
@@ -2053,6 +2199,7 @@ $(function () {
         borang: borangNoFilter,
         serial: serialNoFilter,
         quotation: quoteNoFilter,
+        branch: branchFilter,
         status: 'Complete'
       } 
     },
@@ -2301,6 +2448,7 @@ $(function () {
     var borangNoFilter = $('#borangNoFilter').val() ? $('#borangNoFilter').val() : '';
     var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
     var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
+    var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
 
     //Destroy the old Datatable
     $("#weightTable").DataTable().clear().destroy();
@@ -2331,6 +2479,7 @@ $(function () {
           borang: borangNoFilter,
           serial: serialNoFilter,
           quotation: quoteNoFilter,
+          branch: branchFilter,
           status: 'Complete'
         } 
       },
@@ -2503,13 +2652,19 @@ $(function () {
 
   $('#extendModal').find('#newRenew').on('change', function(){
     if($(this).val() == "NEW"){
+      $('#validatorLamaView').hide();
       $('#daftarLamaView').hide();
+      $('#sealLamaView').hide();
       $('#borangEView').hide();
+      $('#borangEDateView').hide();
       $('#lastYearStampDateView').hide();
     }
     else{
+      $('#validatorLamaView').show();
       $('#daftarLamaView').show();
+      $('#sealLamaView').show();
       $('#borangEView').show();
+      $('#borangEDateView').show();
       $('#lastYearStampDateView').show();
     }
   });
@@ -2885,6 +3040,14 @@ $(function () {
   });
 
   $('#extendModal').find('#includeCert').on('change', function(){
+    var includeCert = $(this).val();
+
+    if (includeCert == 'YES'){
+      $('#certNoView').show();
+    }else{
+      $('#certNoView').hide();
+    }
+
     // changed code to pull instead of taking from product field
     $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
       var obj = JSON.parse(data);
@@ -3638,59 +3801,76 @@ function format (row) {
   <h6 style="margin:0"><b>Information Details: 1</b></h6>
   <hr style="margin-top:0">
   <div class="row">
-    <!-- Machine Section -->
-    <div class="col-6">
+    <div class="col-4">
       <p><strong>Brand:</strong> ${row.brand}</p>
       <p><strong>Model:</strong> ${row.model}</p>
       <p><strong>Machine Type:</strong> ${row.machine_type}</p>
-      <p><strong>Capacity:</strong> ${row.capacity}</p>
-      <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
-      <p><strong>Serial No:</strong> ${row.serial_no}</p>
-      <p><strong>Assigned To:</strong> ${row.assignTo}</p>
       <p><strong>Make In:</strong> ${row.make_in}</p>
+      <p><strong>Capacity:</strong> ${row.capacity}</p>
+      <p><strong>Serial No:</strong> ${row.serial_no}</p>
+      <p><strong>Machine Name:</strong> ${row.machine_name}</p>
+      <p><strong>Machine Location Area:</strong> ${row.machine_location}</p>
+      <p><strong>Machine Serial No:</strong> ${row.machine_serial_no}</p>
     </div>`;
 
   if(row.stampType == 'RENEWAL'){
     returnString += `
-      <!-- Stamping Section -->
-        <div class="col-6">
-          <p><strong>Lama No. Daftar:</strong> ${row.no_daftar_lama}</p>
-          <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
-          <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
+        <div class="col-4">
+          <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
+          <p><strong>No. Daftar (Lama):</strong> ${row.no_daftar_lama}</p>
+          <p><strong>Seal No (Lama):</strong> ${row.seal_no_lama}</p>
+          <p><strong>No. Daftar (Baru):</strong> ${row.no_daftar_baru}</p>
+          <p><strong>Seal No (Baru):</strong> ${row.seal_no_baru}</p>
           <p><strong>Borang D:</strong> ${row.borang_d}</p>
           <p><strong>Borang E:</strong> ${row.borang_e}</p>
+          <p><strong>Borang E Date:</strong> ${row.borang_e_date}</p>
+          <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
+        </div>
+        <div class="col-4">
           <p><strong>Last Year Stamping Date:</strong> ${row.last_year_stamping_date}</p>
+          <p><strong>Nama Pegawai / Contact:</strong> ${row.pegawai_contact}</p>
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
           <p><strong>Next Due Date:</strong> ${row.due_date}</p>
+          <p><strong>Certificate No:</strong> ${row.cert_no}</p>
           <p><strong>Create By:</strong> ${row.create_by}</p>
           <p><strong>Last Update By:</strong> ${row.modified_by}</p>
+          <p><strong>Assigned To Technician 1:</strong> ${row.assignTo}</p>
+          <p><strong>Assigned To Technician 2:</strong> ${row.assignTo2}</p>
+          <p><strong>Assigned To Technician 3:</strong> ${row.assignTo3}</p>
         </div>
-      </div>
-      <h6 style="margin:0"><b>Information Details: 2</b></h6>
-      <hr style="margin-top:0">
     `;
   }else{
     returnString += `
-      <!-- Stamping Section -->
-        <div class="col-6">
-          <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
-          <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
-          <p><strong>Borang D:</strong> ${row.borang_d}</p>
-          <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
-          <p><strong>Next Due Date:</strong> ${row.due_date}</p>
-          <p><strong>Create By:</strong> ${row.create_by}</p>
-          <p><strong>Last Update By:</strong> ${row.modified_by}</p>
-        </div>
+      <div class="col-4">
+        <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
+        <p><strong>No. Daftar (Baru):</strong> ${row.no_daftar_baru}</p>
+        <p><strong>Seal No (Baru):</strong> ${row.seal_no_baru}</p>
+        <p><strong>Borang D:</strong> ${row.borang_d}</p>
+        <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
       </div>
-      <h6 style="margin:0"><b>Information Details: 2</b></h6>
-      <hr style="margin-top:0">
+      <div class="col-4">
+        <p><strong>Nama Pegawai / Contact:</strong> ${row.pegawai_contact}</p>
+        <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
+        <p><strong>Next Due Date:</strong> ${row.due_date}</p>
+        <p><strong>Certificate No:</strong> ${row.cert_no}</p>
+        <p><strong>Create By:</strong> ${row.create_by}</p>
+        <p><strong>Last Update By:</strong> ${row.modified_by}</p>
+        <p><strong>Assigned To Technician 1:</strong> ${row.assignTo}</p>
+        <p><strong>Assigned To Technician 2:</strong> ${row.assignTo2}</p>
+        <p><strong>Assigned To Technician 3:</strong> ${row.assignTo3}</p>
+      </div>
     `;
   }
+
+  returnString += `
+    </div><br>
+    <h6 style="margin:0"><b>Information Details: 2</b></h6>
+    <hr style="margin-top:0">
+  `;
     
   returnString += `
   <div class="row">
-    <!-- Billing Section -->
-    <div class="col-6">
+    <div class="col-4">
       <p><strong>Validator Invoice:</strong> ${row.validator_invoice}</p>
       <p><strong>Quotation No:</strong> ${row.quotation_no} `;
       
@@ -3713,34 +3893,40 @@ function format (row) {
       }
     returnString += `</div>
 
-    <!-- Price Section -->
-    <div class="col-6">
+    <div class="col-4">
       <p><strong>Unit Price:</strong> ${row.unit_price}</p>
       <p><strong>Cert Price:</strong> ${row.cert_price}</p>
       <p><strong>Total Amount:</strong> ${row.total_amount}</p>
       <p><strong>SST Price:</strong> ${row.sst}</p>
       <p><strong>Sub Total Price With SST:</strong> ${row.subtotal_sst_amt}</p>
+    </div>
+
+    <div class="col-4">
       <p><strong>Rebate (%):</strong> ${row.rebate}</p>
       <p><strong>Rebate Amount:</strong> ${row.rebate_amount}</p>
       <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>
     </div>
   </div><hr>`;
 
-    returnString += `
+  returnString += `
     <div class="row">
-      <div class="col-6">
+      <div class="col-4">
         <p><strong>Labour Charge:</strong> ${row.labour_charge}</p>
         <p><strong>Total Stamping Fee + Labour Charge:</strong> ${row.stampfee_labourcharge}</p>
         <p><strong>Remark:</strong> ${row.remarks}</p>
       </div>
 
-      <div class="col-6">
+      <div class="col-4">
         <p><strong>Internal Round Up:</strong> ${row.int_round_up}</p>
         <p><strong>Total Billing Price:</strong> ${row.total_charges}</p>
+      </div>
+
+      <div class="col-4">
         <div class="row">
           <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
           <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
-          <div class="col-1"><button title="Log" type="button" id="copy${row.id}" onclick="copy(${row.id})" class="btn btn-success btn-sm"><i class="fa-solid fa-clone"></i></button></div>
+          <div class="col-1"><button title="Copy" type="button" id="copy${row.id}" onclick="copy(${row.id})" class="btn btn-success btn-sm"><i class="fa-solid fa-clone"></i></button></div>
+          <div class="col-1"><button title="Restamping" type="button" id="restamping${row.id}" onclick="restamping(${row.id})" class="btn btn-info btn-sm"><i class="fas fa-stamp"></i></button></div>
           <div class="col-1"><button title="Cancel" type="button" id="deactivate${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
         </div>
       </div>
@@ -4114,7 +4300,6 @@ function format (row) {
                         <div class="row">
                           <!-- ATK Section -->
                           <div class="col-6">
-                            <p><strong>Penentusan Baru:</strong> ${row.penentusan_baru}</p>
                             <p><strong>Kelulusan MSPK:</strong> ${row.kelulusan_mspk}</p>
                             <p><strong>Platform Made In:</strong> ${row.platform_country}</p>
                             <p><strong>Structure Size:</strong> ${row.size}</p>
@@ -4210,6 +4395,7 @@ function newEntry(){
 
   $('#extendModal').find('#id').val("");
   $('#extendModal').find('#type').val("DIRECT");
+  $('#extendModal').find('#companyBranch').val("<?=$branch ?>").trigger('change');
   $('#isResseller').hide();
   $('#isResseller2').hide();
   $('#isResseller3').hide();
@@ -4268,6 +4454,7 @@ function newEntry(){
   $('#extendModal').find('#quotationFilePath').val('');
   $('#extendModal').find('#newInvoice').show();
   $('#extendModal').find('#uploadInvoiceAttachment').val('');
+  $('#extendModal').find('#notificationPeriod').val('');
   $('#extendModal').find('#viewInvoice').hide();
   $('#extendModal').find('#InvoiceFilePath').val('');
   //Additonal field reset
@@ -4402,6 +4589,7 @@ function edit(id) {
         priceLoadedTriggered = false; 
 
         $('#extendModal').find('#id').val(obj.message.id);
+        $('#extendModal').find('#companyBranch').val(obj.message.company_branch).trigger('change');
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#dealer').val('');
         $('#extendModal').find('#reseller_branch').val('');
@@ -4409,9 +4597,12 @@ function edit(id) {
         $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#makeIn').val(obj.message.make_in).trigger('change');
+        $('#extendModal').find('#validatorlama').val(obj.message.validator_lama).select2('destroy').select2();
         $('#extendModal').find('#validator').val(obj.message.validate_by).select2('destroy').select2();
         $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
         $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
+        $('#extendModal').find('#assignTo2').val(obj.message.assignTo2).trigger('change');
+        $('#extendModal').find('#assignTo3').val(obj.message.assignTo3).trigger('change');
         $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
         $('#extendModal').find('#newRenew').val(obj.message.stampType).trigger('change');
         $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
@@ -4419,6 +4610,9 @@ function edit(id) {
         $('#extendModal').find('#product').val(obj.message.products);
         $('#extendModal').find('#machineType').val(obj.message.machine_type).select2('destroy').select2();
         $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).select2('destroy').select2();
+        $('#extendModal').find('#machineName').val(obj.message.machine_name).trigger('change');
+        $('#extendModal').find('#machineLocation').val(obj.message.machine_location);
+        $('#extendModal').find('#machineSerialNo').val(obj.message.machine_serial_no);
 
         customer = obj.message.customers;
         branch = obj.message.branch;
@@ -4448,6 +4642,15 @@ function edit(id) {
         $('#extendModal').find('#address2').val(obj.message.address2);
         $('#extendModal').find('#noDaftarLama').val(obj.message.no_daftar_lama);
         $('#extendModal').find('#noDaftarBaru').val(obj.message.no_daftar_baru);
+        $('#extendModal').find('#sealNoLama').val(obj.message.seal_no_lama);
+        $('#extendModal').find('#sealNoBaru').val(obj.message.seal_no_baru);
+        $('#extendModal').find('#pegawaiContact').val(obj.message.pegawai_contact);
+        if (obj.message.include_cert == 'YES'){
+          $('#certNoView').show();
+        }else{
+          $('#certNoView').hide();
+        }
+        $('#extendModal').find('#certNo').val(obj.message.cert_no);
         $('#extendModal').find('#address3').val(obj.message.address3);
         $('#extendModal').find('#serial').val(obj.message.serial_no);
         $('#extendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);
@@ -4456,9 +4659,11 @@ function edit(id) {
         $('#extendModal').find('#pic').val(obj.message.pic);
         $('#extendModal').find('#borangD').val(obj.message.borang_d);
         $('#extendModal').find('#borangE').val(obj.message.borang_e);
+        $('#extendModal').find('#borangEDate').val(formatDate3(obj.message.borang_e_date));
         $('#extendModal').find('#remark').val(obj.message.remarks);
         $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
         $('#extendModal').find('#quotation').val(obj.message.quotation_no);
+        $('#extendModal').find('#notificationPeriod').val(obj.message.notification_period);
 
         if(obj.message.quotation_attachment){
           $('#extendModal').find('#viewQuotation').attr('href', "view_file.php?file="+obj.message.quotation_attachment).show();
@@ -4790,9 +4995,12 @@ function edit(id) {
         $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#makeIn').val(obj.message.make_in).trigger('change');
+        $('#extendModal').find('#validatorlama').val(obj.message.validator_lama).select2('destroy').select2();
         $('#extendModal').find('#validator').val(obj.message.validate_by).select2('destroy').select2();
         $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
         $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
+        $('#extendModal').find('#assignTo2').val(obj.message.assignTo2).trigger('change');
+        $('#extendModal').find('#assignTo3').val(obj.message.assignTo3).trigger('change');
         $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
         $('#extendModal').find('#newRenew').val(obj.message.stampType).trigger('change');
         customer = obj.message.customers;
@@ -4810,6 +5018,10 @@ function edit(id) {
         $('#extendModal').find('#product').val(obj.message.products);
         $('#extendModal').find('#machineType').val(obj.message.machine_type).select2('destroy').select2();
         $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).select2('destroy').select2();
+        $('#extendModal').find('#machineName').val(obj.message.machine_name).trigger('change');
+        $('#extendModal').find('#machineLocation').val(obj.message.machine_location);
+        $('#extendModal').find('#machineSerialNo').val(obj.message.machine_serial_no);
+
         // $('#extendModal').on('jaIsLoaded', function() {
         //   $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).select2('destroy').select2();
         // });
@@ -4831,6 +5043,15 @@ function edit(id) {
         $('#extendModal').find('#address2').val(obj.message.address2);
         $('#extendModal').find('#noDaftarLama').val(obj.message.no_daftar_lama);
         $('#extendModal').find('#noDaftarBaru').val(obj.message.no_daftar_baru);
+        $('#extendModal').find('#sealNoLama').val(obj.message.seal_no_lama);
+        $('#extendModal').find('#sealNoBaru').val(obj.message.seal_no_baru);
+        $('#extendModal').find('#pegawaiContact').val(obj.message.pegawai_contact);
+        if (obj.message.include_cert == 'YES'){
+          $('#certNoView').show();
+        }else{
+          $('#certNoView').hide();
+        }
+        $('#extendModal').find('#certNo').val(obj.message.cert_no);
         $('#extendModal').find('#address3').val(obj.message.address3);
         $('#extendModal').find('#serial').val(obj.message.serial_no);
         $('#extendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);

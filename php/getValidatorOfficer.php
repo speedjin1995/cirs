@@ -6,7 +6,7 @@ session_start();
 if(isset($_POST['userID'])){
 	$id = filter_input(INPUT_POST, 'userID', FILTER_SANITIZE_STRING);
 
-    if ($update_stmt = $db->prepare("SELECT * FROM users WHERE id=?")) {
+    if ($update_stmt = $db->prepare("SELECT * FROM validator_officers WHERE id=?")) {
         $update_stmt->bind_param('s', $id);
         
         // Execute the prepared query.
@@ -24,14 +24,13 @@ if(isset($_POST['userID'])){
             
             while ($row = $result->fetch_assoc()) {
                 $message['id'] = $row['id'];
-                $message['username'] = $row['username'];
-                $message['name'] = $row['name'];
-                $message['ic_number'] = $row['ic_number'];
-                $message['designation'] = $row['designation'];
-                $message['contact_number'] = $row['contact_number'];
-                $message['role_code'] = $row['role_code'];
-                $message['email'] = $row['email'];
-                $message['branch'] = $row['branch'];
+                $message['officer_name'] = $row['officer_name'];
+                $message['officer_contact'] = $row['officer_contact'];
+                $message['officer_contact'] = $row['officer_contact'];
+                $message['officer_contact'] = $row['officer_contact'];
+                $message['officer_position'] = $row['officer_position'];
+                $message['officer_company'] = $row['officer_company'];
+                $message['officer_cawangan'] = $row['officer_cawangan'];
             }
             
             $update_stmt->close();
@@ -50,6 +49,7 @@ else{
         array(
             "status" => "failed",
             "message" => "Missing Attribute"
-            )); 
+        )
+    ); 
 }
 ?>

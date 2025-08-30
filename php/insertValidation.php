@@ -12,8 +12,9 @@ if(isset($_POST['customerType'])){
 	$customerType = $_POST['customerTypeEdit'];
 }
 
-if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'], $_POST['machineType'], $_POST['serial'], $_POST['manufacturing'], $_POST['alatHidden'], $_POST['brand'], $_POST['model'], $_POST['capacity'], $_POST['size'])){
+if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'], $_POST['machineType'], $_POST['serial'], $_POST['manufacturing'], $_POST['alatHidden'], $_POST['brand'], $_POST['model'], $_POST['capacity'], $_POST['size'], $_POST['companyBranch'])){
 	$type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
+	$companyBranch = filter_input(INPUT_POST, 'companyBranch', FILTER_SANITIZE_STRING);
 	// $customerType = filter_input(INPUT_POST, 'customerType', FILTER_SANITIZE_STRING);
 	$validator = filter_input(INPUT_POST, 'validator', FILTER_SANITIZE_STRING);
 	$address1 = filter_input(INPUT_POST, 'address1', FILTER_SANITIZE_STRING);
@@ -195,10 +196,10 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 	if(isset($_POST['id']) && $_POST['id'] != null && $_POST['id'] != ''){
 		//Updated datetime
 		$currentDateTime = date('Y-m-d H:i:s');
-		if ($update_stmt = $db->prepare("UPDATE other_validations SET type=?, dealer=?, dealer_branch=?, validate_by=?, customer_type=?, customer=?, branch=?, auto_form_no=?, machines=?, unit_serial_no=?, manufacturing=?, jenis_alat=?, brand=?
+		if ($update_stmt = $db->prepare("UPDATE other_validations SET type=?, company_branch=?, dealer=?, dealer_branch=?, validate_by=?, customer_type=?, customer=?, branch=?, auto_form_no=?, machines=?, unit_serial_no=?, manufacturing=?, jenis_alat=?, brand=?
 		, model=?, capacity=?, size=?, last_calibration_date=?, expired_calibration_date=?, validation_date=?, update_datetime=? WHERE id=?")){
 			$data = json_encode($logs);
-			$update_stmt->bind_param('sssssssssssssssssssss', $type, $dealer, $reseller_branch, $validator, $customerType, $customer, $branch, $certNo, $machineType, $serial, $manufacturing, $alat, $brand, $model, $capacity, $size, $lastCalibrationDate, $expiredCalibrationDate, $validationDate, $currentDateTime, $_POST['id']);
+			$update_stmt->bind_param('ssssssssssssssssssssss', $type, $companyBranch, $dealer, $reseller_branch, $validator, $customerType, $customer, $branch, $certNo, $machineType, $serial, $manufacturing, $alat, $brand, $model, $capacity, $size, $lastCalibrationDate, $expiredCalibrationDate, $validationDate, $currentDateTime, $_POST['id']);
 			
 			// Execute the prepared query.
 			if (! $update_stmt->execute()){
@@ -336,12 +337,12 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 		$db->close();
 	}
 	else{
-		if ($insert_stmt = $db->prepare("INSERT INTO other_validations (type, dealer, dealer_branch, validate_by, customer_type, customer, branch, machines, unit_serial_no, manufacturing, jenis_alat, brand, model, capacity, size, last_calibration_date, expired_calibration_date, auto_form_no, status, validation_date) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+		if ($insert_stmt = $db->prepare("INSERT INTO other_validations (type, company_branch, dealer, dealer_branch, validate_by, customer_type, customer, branch, machines, unit_serial_no, manufacturing, jenis_alat, brand, model, capacity, size, last_calibration_date, expired_calibration_date, auto_form_no, status, validation_date) 
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
 			$data = json_encode($logs);
 			$calibrations = null;
 			$status = 'Pending';
-			$insert_stmt->bind_param('ssssssssssssssssssss', $type, $dealer, $reseller_branch, $validator, $customerType, $customer, $branch,$machineType, $serial, $manufacturing, $alat, $brand, $model,$capacity, $size, $lastCalibrationDate, $expiredCalibrationDate, $certNo, $status, $validationDate);
+			$insert_stmt->bind_param('sssssssssssssssssssss', $type, $companyBranch, $dealer, $reseller_branch, $validator, $customerType, $customer, $branch,$machineType, $serial, $manufacturing, $alat, $brand, $model,$capacity, $size, $lastCalibrationDate, $expiredCalibrationDate, $certNo, $status, $validationDate);
 			
 			// Execute the prepared query.
 			if (! $insert_stmt->execute()){

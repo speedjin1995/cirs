@@ -38,6 +38,10 @@ if($_POST['autoFormNo'] != null && $_POST['autoFormNo'] != '' && $_POST['autoFor
 	$searchQuery .= " and auto_form_no LIKE '%".$_POST['autoFormNo']."%'";
 }
 
+if($_POST['branch'] != null && $_POST['branch'] != '' && $_POST['branch'] != '-'){
+	$searchQuery .= " and company_branch = '".$_POST['branch']."'";
+}
+
 if($searchValue != ''){
   $searchQuery .= " and 
   (c.customer_name like '%".$searchValue."%' OR 
