@@ -320,6 +320,9 @@ $(function () {
   var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
   var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
   var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
+  var borangDFilter = '';
+  var borangEFilter = '';
+  var machineTypeFilter = '';
   var statusFilter = '6';
 
   var table = $("#weightTable").DataTable({
@@ -341,7 +344,10 @@ $(function () {
         validator: validatorFilter,
         cawangan: cawanganFilter,
         status: statusFilter,
-        branch: branchFilter
+        branch: branchFilter,
+        borangD: borangDFilter,
+        borangE: borangEFilter,
+        machineType: machineTypeFilter
       } 
     },
     'columns': [
@@ -569,6 +575,9 @@ $(function () {
     var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';  
     var cawanganFilter = $('#cawanganFilter').val() ? $('#cawanganFilter').val() : '';  
     var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
+    var borangDFilter = '';
+    var borangEFilter = '';
+    var machineTypeFilter = '';
     var statusFilter = '6';
 
     //Destroy the old Datatable
@@ -594,7 +603,10 @@ $(function () {
           validator: validatorFilter,
           cawangan: cawanganFilter,
           status: statusFilter,
-          branch: branchFilter
+          branch: branchFilter,
+          borangD: borangDFilter,
+          borangE: borangEFilter,
+          machineType: machineTypeFilter
         } 
       },
       'columns': [

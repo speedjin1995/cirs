@@ -97,19 +97,19 @@ if(isset($_GET['type'])){
             $excelData .= "<table border='1'>";
             $excelData .= "
                         <tr>
-                            <td colspan='11' class='header'>JADUAL 6</td>
+                            <td colspan='16' class='header'>JADUAL 6</td>
                         </tr>
                         <tr>
-                            <td colspan='11' class='header'>AKTA TIMBANG DAN SUKAT 1972</td>
+                            <td colspan='16' class='header'>AKTA TIMBANG DAN SUKAT 1972</td>
                         </tr>
                         <tr>
-                            <td colspan='11' class='header'>PERATURAN-PERATURAN TIMBANG DAN SUKAT 1981</td>
+                            <td colspan='16' class='header'>PERATURAN-PERATURAN TIMBANG DAN SUKAT 1981</td>
                         </tr>
                         <tr>
-                            <td colspan='11' class='header'>(PERATURAN 35)</td>
+                            <td colspan='16' class='header'>(PERATURAN 35)</td>
                         </tr>
                         <tr>
-                            <td colspan='11' class='header'>DAFTAR TIMBANG, SUKAT DAN ALAT TIMBANG SUKAT YANG DIJUAL/DIBUAT</td>
+                            <td colspan='16' class='header'>DAFTAR TIMBANG, SUKAT DAN ALAT TIMBANG SUKAT YANG DIJUAL/DIBUAT</td>
                         </tr>
                         <tr>
                             <th>DATE</th>
@@ -118,9 +118,14 @@ if(isset($_GET['type'])){
                             <th>JENIS ALAT</th>
                             <th>CAPACITY</th>
                             <th>QUANTITY</th>
+                            <th>VALIDATOR BY (LAMA)</th>
                             <th>NO. DAFTAR (LAMA)</th>
+                            <th>SEAL NO. (LAMA)</th>
+                            <th>VALIDATOR BY (BARU)</th>
                             <th>NO. DAFTAR (BARU)</th>
+                            <th>SEAL NO. (BARU)</th>
                             <th>CERTIFICATE NO./ NO. SIRI PELEKAT KESELAMATAN</th>
+                            <th>COMPANY BRANCH</th>
                             <th>NAME OF PURCHASE</th>
                             <th>ADDRESS</th>
                         </tr>
@@ -151,20 +156,62 @@ if(isset($_GET['type'])){
                     }
                 }
 
-                $stampingDate = new DateTime($row['stamping_date']);
-                $formattedStampingDate = $stampingDate->format('d-m-Y');
                 $custAddress = $address1 . ' ' . $address2 . ' ' . $address3 . ' ' . $address4;
+                $stampingDate = new DateTime($row['stamping_date']);
+                $formattedStampingDate = $stampingDate->format('d/m/Y');
+
+                // Logic for BTU - (BOX)
+                $capacity = '';
+                $borangD = '';
+                $borangE = '';
+                $siriKeselamatan = '';
+                $noDaftarLama = '';
+                $noDaftarBaru = '';
+                $count = 1;
+                if (searchAlatNameById($row['jenis_alat'], $db) == 'BTU - (BOX)'){
+                    $id = $row['id']; 
+                    $stampExtQuery = "SELECT * FROM stamping_ext WHERE stamp_id = $id";
+                    $stampDetail = mysqli_query($db, $stampExtQuery);
+                    $stampRow = mysqli_fetch_assoc($stampDetail);
+                    
+                    if(!empty($stampRow)){
+                      if (!empty($stampRow['btu_box_info'])){
+                        $btuBox = json_decode($stampRow['btu_box_info'], true);
+                        foreach ($btuBox as $btu) {
+                            $capacity .= $count.'.'.searchCapacityUnitById($btu['penandaanBatuUjian'], $db). '<br>';
+                            $borangD .= $count.'.'.$btu['batuBorangD'].'<br>';
+                            $borangE .= $count.'.'.$btu['batuBorangE'].'<br>';
+                            $siriKeselamatan .= $count.'.'.$btu['batuNoSiriPelekatKeselamatan'].'<br>';
+                            $noDaftarLama .= $count.'.'.$btu['batuDaftarLama'].'<br>';
+                            $noDaftarBaru .= $count.'.'.$btu['batuDaftarBaru'].'<br>';
+                            $count++;
+                        }
+                      }
+                    }
+                }else{
+                    $capacity = $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '';
+                    $siriKeselamatan = $row['siri_keselamatan'];
+                    $noDaftarLama = $row['no_daftar_lama'];
+                    $noDaftarBaru = $row['no_daftar_baru'];
+                    $borangD = $row['borang_d'];
+                    $borangE = $row['borang_e'];
+                }
 
                 $excelData .= '<tr>
                                 <td class="body">'.$formattedStampingDate.'</td>
                                 <td class="body">'.searchBrandNameById($row['brand'], $db).'</td>
                                 <td class="body">'.searchModelNameById($row['model'], $db).'</td>
                                 <td class="body">'.searchAlatNameById($row['jenis_alat'], $db).'</td>
-                                <td class="body">'.searchCapacityNameById($row['capacity'], $db).'</td>
+                                <td class="body">'.$capacity.'</td>
                                 <td class="body">1</td>
-                                <td class="body">'.$row['no_daftar_lama'].'</td>
-                                <td class="body">'.$row['no_daftar_baru'].'</td>
-                                <td class="body">'.$row['siri_keselamatan'].'</td>
+                                <td class="body">'.searchValidatorNameById($row['validator_lama'], $db).'</td>
+                                <td class="body">'.$noDaftarLama.'</td>
+                                <td class="body">'.$row['seal_no_lama'].'</td>
+                                <td class="body">'.searchValidatorNameById($row['validate_by'], $db).'</td>
+                                <td class="body">'.$noDaftarBaru.'</td>
+                                <td class="body">'.$row['seal_no_baru'].'</td>
+                                <td class="body">'.$siriKeselamatan.'</td>
+                                <td class="body">'.searchCompanyBranchById($row['company_branch'], $db).'</td>
                                 <td class="body">'.searchCustNameById($row['customers'], $db).'</td>
                                 <td class="body">'.$custAddress.'</td>
                             </tr>';
