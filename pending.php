@@ -53,6 +53,7 @@ else{
   $technicians3 = $db->query("SELECT * FROM users WHERE role_code != 'SUPER_ADMIN' AND deleted = '0'");
   $validators = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
   $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");  
+  $validators3 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");  
   $validatorsF = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
   $machineNames = $db->query("SELECT * FROM machine_names WHERE deleted = '0'");
   $states = $db->query("SELECT * FROM state WHERE deleted = '0'");
@@ -689,9 +690,19 @@ else{
                     </select>
                   </div>
                 </div>
+                <div class="col-4" id="validatorLamaView" style="display:none;">
+                  <div class="form-group">
+                    <label>Validator (Lama)</label>
+                    <select class="form-control select2" style="width: 100%;" id="validatorlama" name="validatorlama">
+                      <?php while($rowVA=mysqli_fetch_assoc($validators3)){ ?>
+                        <option value="<?=$rowVA['id'] ?>"><?=$rowVA['validator'] ?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>Validator * </label>
+                    <label>Validator (Baru) *</label>
                     <select class="form-control select2" style="width: 100%;" id="validator" name="validator" required>
                       <?php while($rowVA=mysqli_fetch_assoc($validators)){ ?>
                         <option value="<?=$rowVA['id'] ?>"><?=$rowVA['validator'] ?></option>
@@ -3015,6 +3026,7 @@ $(function () {
 
   $('#extendModal').find('#newRenew').on('change', function(){
     if($(this).val() == "NEW"){
+      $('#validatorLamaView').hide();
       $('#daftarLamaView').hide();
       $('#sealLamaView').hide();
       $('#borangEView').hide();
@@ -3022,6 +3034,7 @@ $(function () {
       $('#lastYearStampDateView').hide();
     }
     else{
+      $('#validatorLamaView').show();
       $('#daftarLamaView').show();
       $('#sealLamaView').show();
       $('#borangEView').show();
@@ -4771,6 +4784,7 @@ function newEntry(){
   $('#isResseller5').hide();
   $('#extendModal').find('#customerType').val("EXISTING").attr('disabled', false).trigger('change');
   $('#extendModal').find('#brand').val('').trigger('change');
+  $('#extendModal').find('#validatorlama').val('').trigger('change');
   $('#extendModal').find('#validator').val('').trigger('change');
   $('#extendModal').find('#product').val('');
   $('#extendModal').find('#company').val('');
@@ -4801,6 +4815,7 @@ function newEntry(){
   $('#extendModal').find('#sealNoLama').val('');
   $('#extendModal').find('#sealNoBaru').val('');
   $('#extendModal').find('#pegawaiContact').val('');
+  $('#extendModal').find('#newRenew').val('NEW').trigger('change');
   $('#extendModal').find('#certNo').val('');
   $('#extendModal').find('#address3').val('');
   $('#extendModal').find('#serial').val('');
@@ -4979,6 +4994,7 @@ function edit(id) {
         $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#makeIn').val(obj.message.make_in).trigger('change');
+        $('#extendModal').find('#validatorlama').val(obj.message.validator_lama).select2('destroy').select2();
         $('#extendModal').find('#validator').val(obj.message.validate_by).select2('destroy').select2();
         $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
         $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
@@ -5375,6 +5391,7 @@ function edit(id) {
         $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
         $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
         $('#extendModal').find('#makeIn').val(obj.message.make_in).trigger('change');
+        $('#extendModal').find('#validatorlama').val(obj.message.validator_lama).select2('destroy').select2();
         $('#extendModal').find('#validator').val(obj.message.validate_by).select2('destroy').select2();
         $('#extendModal').find('#cawangan').val(obj.message.cawangan).trigger('change');
         $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');

@@ -130,6 +130,7 @@ if(isset($_POST['userID'])){
                     $message['assignTo2'] = $row['assignTo2'] != null ? searchStaffNameById($row['assignTo2'], $db) : '';
                     $message['assignTo3'] = $row['assignTo3'] != null ? searchStaffNameById($row['assignTo3'], $db) : '';
                     $message['serial_no'] = $row['serial_no'];
+                    $message['validator_lama'] = searchValidatorNameById($row['validator_lama'], $db) ?? '';
                     $message['validate_by'] = searchValidatorNameById($row['validate_by'], $db) ?? '';
                     $message['jenis_alat'] = $row['jenis_alat'] != null ? searchJenisAlatNameByid($row['jenis_alat'], $db) : '';
                     $message['machine_name'] = $row['machine_name'] ?? '';
@@ -309,6 +310,7 @@ if(isset($_POST['userID'])){
                     $message['assignTo3'] = $row['assignTo3'];
                     $message['serial_no'] = $row['serial_no'];
                     $message['validate_by'] = $row['validate_by'];
+                    $message['validator_lama'] = $row['validator_lama'];
                     $message['cawangan'] = $row['cawangan'];
                     $message['jenis_alat'] = $row['jenis_alat'];
                     $message['machine_name'] = $row['machine_name'];
