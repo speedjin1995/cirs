@@ -146,7 +146,8 @@ if(isset($_POST['userID'])){
                     $message['siri_keselamatan'] = $row['siri_keselamatan'] ?? '';
                     $message['include_cert'] = $row['include_cert'];
                     $message['borang_d'] = $row['borang_d'] ?? '';
-                    $message['borang_e'] = $row['borang_e'] ?? '' . ($row['borang_e_date'] != null ? ' (' . convertDatetimeToDate($row['borang_e_date']) . ')' : '');
+                    $message['borang_e'] = $row['borang_e'] ?? '';
+                    $message['borang_e_date'] = ($row['borang_e_date'] != null ? ' (' . convertDatetimeToDate($row['borang_e_date']) . ')' : '');
                     $message['invoice_no'] = $row['invoice_no'] ?? '';
                     $message['invoice_attachment'] = $row['invoice_attachment'] ?? '';
                     $message['invoice_filepath'] = searchFilePathById($row['invoice_attachment'], $db) ?? '';

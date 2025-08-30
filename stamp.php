@@ -3801,68 +3801,76 @@ function format (row) {
   <h6 style="margin:0"><b>Information Details: 1</b></h6>
   <hr style="margin-top:0">
   <div class="row">
-    <!-- Machine Section -->
-    <div class="col-6">
+    <div class="col-4">
       <p><strong>Brand:</strong> ${row.brand}</p>
       <p><strong>Model:</strong> ${row.model}</p>
       <p><strong>Machine Type:</strong> ${row.machine_type}</p>
+      <p><strong>Make In:</strong> ${row.make_in}</p>
       <p><strong>Capacity:</strong> ${row.capacity}</p>
-      <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
+      <p><strong>Serial No:</strong> ${row.serial_no}</p>
       <p><strong>Machine Name:</strong> ${row.machine_name}</p>
       <p><strong>Machine Location Area:</strong> ${row.machine_location}</p>
       <p><strong>Machine Serial No:</strong> ${row.machine_serial_no}</p>
-      <p><strong>Serial No:</strong> ${row.serial_no}</p>
-      <p><strong>Assigned To:</strong> ${row.assignTo}</p>
-      <p><strong>Make In:</strong> ${row.make_in}</p>
     </div>`;
 
   if(row.stampType == 'RENEWAL'){
     returnString += `
-      <!-- Stamping Section -->
-        <div class="col-6">
-          <p><strong>Lama No. Daftar:</strong> ${row.no_daftar_lama}</p>
-          <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
-          <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
+        <div class="col-4">
+          <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
+          <p><strong>No. Daftar (Lama):</strong> ${row.no_daftar_lama}</p>
+          <p><strong>Seal No (Lama):</strong> ${row.seal_no_lama}</p>
+          <p><strong>No. Daftar (Baru):</strong> ${row.no_daftar_baru}</p>
+          <p><strong>Seal No (Baru):</strong> ${row.seal_no_baru}</p>
           <p><strong>Borang D:</strong> ${row.borang_d}</p>
           <p><strong>Borang E:</strong> ${row.borang_e}</p>
-          <p><strong>Assigned To Technician 1 :</strong> ${row.assignTo}</p>
-          <p><strong>Assigned To Technician 2:</strong> ${row.assignTo2}</p>
-          <p><strong>Assigned To Technician 3:</strong> ${row.assignTo3}</p>
+          <p><strong>Borang E Date:</strong> ${row.borang_e_date}</p>
+          <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
+        </div>
+        <div class="col-4">
           <p><strong>Last Year Stamping Date:</strong> ${row.last_year_stamping_date}</p>
+          <p><strong>Nama Pegawai / Contact:</strong> ${row.pegawai_contact}</p>
           <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
           <p><strong>Next Due Date:</strong> ${row.due_date}</p>
+          <p><strong>Certificate No:</strong> ${row.cert_no}</p>
           <p><strong>Create By:</strong> ${row.create_by}</p>
           <p><strong>Last Update By:</strong> ${row.modified_by}</p>
+          <p><strong>Assigned To Technician 1:</strong> ${row.assignTo}</p>
+          <p><strong>Assigned To Technician 2:</strong> ${row.assignTo2}</p>
+          <p><strong>Assigned To Technician 3:</strong> ${row.assignTo3}</p>
         </div>
-      </div>
-      <h6 style="margin:0"><b>Information Details: 2</b></h6>
-      <hr style="margin-top:0">
     `;
   }else{
     returnString += `
-      <!-- Stamping Section -->
-        <div class="col-6">
-          <p><strong>Baru No. Daftar:</strong> ${row.no_daftar_baru}</p>
-          <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
-          <p><strong>Borang D:</strong> ${row.borang_d}</p>
-          <p><strong>Assigned To Technician :</strong> ${row.assignTo}</p>
-          <p><strong>Assigned To Technician 2:</strong> ${row.assignTo2}</p>
-          <p><strong>Assigned To Technician 3:</strong> ${row.assignTo3}</p>
-          <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
-          <p><strong>Next Due Date:</strong> ${row.due_date}</p>
-          <p><strong>Create By:</strong> ${row.create_by}</p>
-          <p><strong>Last Update By:</strong> ${row.modified_by}</p>
-        </div>
+      <div class="col-4">
+        <p><strong>Jenis Alat:</strong> ${row.jenis_alat}</p>
+        <p><strong>No. Daftar (Baru):</strong> ${row.no_daftar_baru}</p>
+        <p><strong>Seal No (Baru):</strong> ${row.seal_no_baru}</p>
+        <p><strong>Borang D:</strong> ${row.borang_d}</p>
+        <p><strong>Siri Keselamatan:</strong> ${row.siri_keselamatan}</p>
       </div>
-      <h6 style="margin:0"><b>Information Details: 2</b></h6>
-      <hr style="margin-top:0">
+      <div class="col-4">
+        <p><strong>Nama Pegawai / Contact:</strong> ${row.pegawai_contact}</p>
+        <p><strong>Stamping Date:</strong> ${row.stamping_date}</p>
+        <p><strong>Next Due Date:</strong> ${row.due_date}</p>
+        <p><strong>Certificate No:</strong> ${row.cert_no}</p>
+        <p><strong>Create By:</strong> ${row.create_by}</p>
+        <p><strong>Last Update By:</strong> ${row.modified_by}</p>
+        <p><strong>Assigned To Technician 1:</strong> ${row.assignTo}</p>
+        <p><strong>Assigned To Technician 2:</strong> ${row.assignTo2}</p>
+        <p><strong>Assigned To Technician 3:</strong> ${row.assignTo3}</p>
+      </div>
     `;
   }
+
+  returnString += `
+    </div><br>
+    <h6 style="margin:0"><b>Information Details: 2</b></h6>
+    <hr style="margin-top:0">
+  `;
     
   returnString += `
   <div class="row">
-    <!-- Billing Section -->
-    <div class="col-6">
+    <div class="col-4">
       <p><strong>Validator Invoice:</strong> ${row.validator_invoice}</p>
       <p><strong>Quotation No:</strong> ${row.quotation_no} `;
       
@@ -3885,30 +3893,35 @@ function format (row) {
       }
     returnString += `</div>
 
-    <!-- Price Section -->
-    <div class="col-6">
+    <div class="col-4">
       <p><strong>Unit Price:</strong> ${row.unit_price}</p>
       <p><strong>Cert Price:</strong> ${row.cert_price}</p>
       <p><strong>Total Amount:</strong> ${row.total_amount}</p>
       <p><strong>SST Price:</strong> ${row.sst}</p>
       <p><strong>Sub Total Price With SST:</strong> ${row.subtotal_sst_amt}</p>
+    </div>
+
+    <div class="col-4">
       <p><strong>Rebate (%):</strong> ${row.rebate}</p>
       <p><strong>Rebate Amount:</strong> ${row.rebate_amount}</p>
       <p><strong>Sub Total Price:</strong> ${row.subtotal_amount}</p>
     </div>
   </div><hr>`;
 
-    returnString += `
+  returnString += `
     <div class="row">
-      <div class="col-6">
+      <div class="col-4">
         <p><strong>Labour Charge:</strong> ${row.labour_charge}</p>
         <p><strong>Total Stamping Fee + Labour Charge:</strong> ${row.stampfee_labourcharge}</p>
         <p><strong>Remark:</strong> ${row.remarks}</p>
       </div>
 
-      <div class="col-6">
+      <div class="col-4">
         <p><strong>Internal Round Up:</strong> ${row.int_round_up}</p>
         <p><strong>Total Billing Price:</strong> ${row.total_charges}</p>
+      </div>
+
+      <div class="col-4">
         <div class="row">
           <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
           <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
