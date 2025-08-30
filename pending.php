@@ -1078,9 +1078,9 @@ else{
           <div class="row">
             <div class="col-6">
               <div class="form-group">
-                <label>Borang 6/7/Panjang *</label>
+                <label>Borang 6/7/Panjang (8) *</label>
                 <select class="form-control" id="driver" name="driver" required>
-                  <option value="P">Borang Panjang</option>
+                  <option value="P">Borang Panjang (Jadual 8)</option>
                 </select>
               </div>
             </div>

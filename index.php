@@ -656,7 +656,7 @@ to get the desired effect
               <li class="nav-item">
                 <a href="#panjang" data-file="panjang.php" class="nav-link link">
                   <i class="nav-icon fas fa-list"></i>
-                  <p>Borang Panjang</p>
+                  <p>Borang Panjang (Jadual 8)</p>
                 </a>
               </li>
             </ul>
