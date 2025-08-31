@@ -590,8 +590,14 @@ else{
                 </div>
                 <div class="col-4">
                   <div class="form-group">
-                    <label>Machine Location Area</label>
+                    <label>Machine Location</label>
                     <input type="text" class="form-control" id="machineLocation" name="machineLocation">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Machine Area</label>
+                    <input type="text" class="form-control" id="machineArea" name="machineArea">
                   </div>
                 </div>
                 <div class="col-4">
@@ -828,6 +834,12 @@ else{
                     <input class="form-control" type="text" placeholder="Certificate No" id="certNo" name="certNo">
                   </div>
                 </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Notification Period (Months)</label>
+                    <input class="form-control" type="number" placeholder="Notification Period" id="notificationPeriod" name="notificationPeriod">
+                  </div>
+                </div>
                 <!-- <div class="col-4">
                   <div class="form-group">
                     <label>No PIN Pelekat Keselamatan </label>
@@ -912,12 +924,6 @@ else{
                       </div>
                     </div>
                     <input type="text" id="InvoiceFilePath" name="InvoiceFilePath" style="display:none">           
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Notification Period (Months)</label>
-                    <input class="form-control" type="number" placeholder="Notification Period" id="notificationPeriod" name="notificationPeriod">
                   </div>
                 </div>
               </div>
@@ -4193,7 +4199,8 @@ function format (row) {
       <p><strong>Capacity:</strong> ${row.capacity}</p>
       <p><strong>Serial No:</strong> ${row.serial_no}</p>
       <p><strong>Machine Name:</strong> ${row.machine_name}</p>
-      <p><strong>Machine Location Area:</strong> ${row.machine_location}</p>
+      <p><strong>Machine Location:</strong> ${row.machine_location}</p>
+      <p><strong>Machine Area:</strong> ${row.machine_area}</p>
       <p><strong>Machine Serial No:</strong> ${row.machine_serial_no}</p>
     </div>`;
 
@@ -4807,6 +4814,7 @@ function newEntry(){
   $('#extendModal').find('#jenisAlat').val('').trigger('change');
   $('#extendModal').find('#machineName').val('').trigger('change');
   $('#extendModal').find('#machineLocation').val('');
+  $('#extendModal').find('#machineArea').val('');
   $('#extendModal').find('#machineSerialNo').val('');
   $('#extendModal').find('#address1').val('');
   $('#extendModal').find('#address1').val('');
@@ -5023,6 +5031,7 @@ function edit(id) {
         $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).select2('destroy').select2();
         $('#extendModal').find('#machineName').val(obj.message.machine_name).trigger('change');
         $('#extendModal').find('#machineLocation').val(obj.message.machine_location);
+        $('#extendModal').find('#machineArea').val(obj.message.machine_area);
         $('#extendModal').find('#machineSerialNo').val(obj.message.machine_serial_no);
         customer = obj.message.customers;
         branch = obj.message.branch;
@@ -5430,6 +5439,7 @@ function edit(id) {
         $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).select2('destroy').select2();
         $('#extendModal').find('#machineName').val(obj.message.machine_name).trigger('change');
         $('#extendModal').find('#machineLocation').val(obj.message.machine_location);
+        $('#extendModal').find('#machineArea').val(obj.message.machine_area);
         $('#extendModal').find('#machineSerialNo').val(obj.message.machine_serial_no);
 
         // $('#extendModal').on('jaIsLoaded', function() {

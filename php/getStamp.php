@@ -135,6 +135,7 @@ if(isset($_POST['userID'])){
                     $message['jenis_alat'] = $row['jenis_alat'] != null ? searchJenisAlatNameByid($row['jenis_alat'], $db) : '';
                     $message['machine_name'] = $row['machine_name'] ?? '';
                     $message['machine_location'] = $row['machine_location'] ?? '';
+                    $message['machine_area'] = $row['machine_area'] ?? '';
                     $message['machine_serial_no'] = $row['machine_serial_no'] ?? '';
                     $message['no_daftar_lama'] = $row['no_daftar_lama'] ?? '';
                     $message['no_daftar_baru'] = $row['no_daftar_baru'] ?? '';
@@ -316,6 +317,7 @@ if(isset($_POST['userID'])){
                     $message['jenis_alat'] = $row['jenis_alat'];
                     $message['machine_name'] = $row['machine_name'];
                     $message['machine_location'] = $row['machine_location'];
+                    $message['machine_area'] = $row['machine_area'];
                     $message['machine_serial_no'] = $row['machine_serial_no'];
                     $message['trade'] = $row['trade'];
                     $message['no_daftar_lama'] = $row['no_daftar_lama'] ?? '';

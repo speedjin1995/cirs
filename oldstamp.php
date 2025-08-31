@@ -1578,7 +1578,8 @@ function format (row) {
       <p><strong>Capacity:</strong> ${row.capacity}</p>
       <p><strong>Serial No:</strong> ${row.serial_no}</p>
       <p><strong>Machine Name:</strong> ${row.machine_name}</p>
-      <p><strong>Machine Location Area:</strong> ${row.machine_location}</p>
+      <p><strong>Machine Location:</strong> ${row.machine_location}</p>
+      <p><strong>Machine Area:</strong> ${row.machine_area}</p>
       <p><strong>Machine Serial No:</strong> ${row.machine_serial_no}</p>
     </div>`;
 
