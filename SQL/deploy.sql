@@ -193,3 +193,18 @@ ALTER TABLE `stamping` ADD `validator_lama` INT(5) NULL AFTER `serial_no`;
 
 -- 31/08/2025 --
 ALTER TABLE `stamping` ADD `machine_area` VARCHAR(100) NULL AFTER `machine_location`;
+
+INSERT INTO company_branches (branch_name, address_line_1, pic, pic_contact, email)
+SELECT 
+    c.name, 
+    c.address, 
+    c.person_incharge, 
+    c.contact_no, 
+    c.email
+FROM companies c
+WHERE NOT EXISTS (
+    SELECT 1 
+    FROM company_branches cb 
+    WHERE UPPER(cb.branch_name COLLATE utf8mb4_unicode_ci) = UPPER(c.name COLLATE utf8mb4_unicode_ci) 
+      AND cb.deleted = 0
+);
