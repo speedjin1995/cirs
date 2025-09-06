@@ -164,6 +164,7 @@ if(isset($_POST['userID'])){
                     $message['purchase_no'] = $row['purchase_no'] ?? '';
                     $message['purchase_date'] = $row['purchase_date'] != null ? convertDatetimeToDate($row['purchase_date']) : '';
                     $message['remarks'] = $row['remarks'] ?? '';
+                    $message['internal_remark'] = $row['internal_remark'] ?? '';
                     $message['log'] = json_decode($row['log'], true);
                     $message['validator_invoice'] = $row['validator_invoice'] ?? '';
                     $message['unit_price'] = 'RM ' . $row['unit_price'];
@@ -349,6 +350,7 @@ if(isset($_POST['userID'])){
                     $message['purchase_no'] = $row['purchase_no'];
                     $message['purchase_date'] = $row['purchase_date'];
                     $message['remarks'] = $row['remarks'] ?? '';
+                    $message['internal_remark'] = $row['internal_remark'] ?? '';
                     $message['log'] = json_decode($row['log'], true);
                     $message['validator_invoice'] = $row['validator_invoice'] ?? '';
                     $message['unit_price'] = $row['unit_price'];
