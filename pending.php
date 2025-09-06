@@ -286,30 +286,48 @@ else{
       <div class="col-lg-12">
         <div class="card card-primary">
           <div class="card-header">
-            <div class="row">
-              <div class="col-4"><p class="mb-0" style="font-size: 110%">Company Weight And Measure Details</p></div>
-              <div class="col-2">
-                <button type="button" class="btn btn-block btn-sm bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Cancel Stampings"><i class="fa-solid fa-ban"></i> Cancel Stamping</button>
+            <div class="row align-items-center">
+              <div class="col-md-4">
+                <p class="mb-0" style="font-size: 110%">Company Weight And Measure Details</p>
               </div>
-              <div class="col-2">
-                <button type="button" class="btn btn-block btn-sm bg-gradient-info" id="exportBorangs" data-bs-toggle="tooltip" title="Export Borangs"><i class="fa-solid fa-file-export"></i> Export Borang</button>
-              </div>
-              <div class="col-2">
-                <button type="button" class="btn btn-block btn-sm bg-gradient-success" id="mergeBorang" data-bs-toggle="tooltip" title="Merge Borangs"><i class="fa-brands fa-stack-exchange"></i> Merge Borangs</button>
-              </div>
-              <div class="col-2">
-                <button type="button" class="btn btn-block btn-sm bg-gradient-warning" onclick="newEntry()" data-bs-toggle="tooltip" title="Add New Stamping"><i class="fa-solid fa-circle-plus"></i> Add New Stamping</button>
+              <div class="col-md-8">
+                <div class="row">
+                  <div class="col-auto">
+                    <button type="button" class="btn btn-sm bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Cancel Stampings">
+                      <i class="fa-solid fa-ban"></i> Cancel Stamping
+                    </button>
+                  </div>
+                  <div class="col-auto">
+                    <button type="button" class="btn btn-sm bg-gradient-info" id="exportBorangs" data-bs-toggle="tooltip" title="Export Borangs">
+                      <i class="fa-solid fa-file-export"></i> Export Borang
+                    </button>
+                  </div>
+                  <div class="col-auto">
+                    <button type="button" class="btn btn-sm bg-gradient-success" id="mergeBorang" data-bs-toggle="tooltip" title="Merge Borangs">
+                      <i class="fa-brands fa-stack-exchange"></i> Merge Borangs
+                    </button>
+                  </div>
+                  <div class="col-auto">
+                    <button type="button" class="btn btn-sm bg-gradient-info" id="printSurats" data-bs-toggle="tooltip" title="Print Surat">
+                      <i class="fa-brands fa-stack-exchange"></i> Print Surats
+                    </button>
+                  </div>
+                  <div class="col-auto">
+                    <button type="button" class="btn btn-sm bg-gradient-warning" onclick="newEntry()" data-bs-toggle="tooltip" title="Add New Stamping">
+                      <i class="fa-solid fa-circle-plus"></i> Add New Stamping
+                    </button>
+                  </div>
+                  <!--div class="col-2">
+                    <a href="/template/Stamping Record Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
+                  </div-->
+                  <!--div class="col-2">
+                    <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">Upload Excel</button>
+                  </div-->
+                </div>
               </div>
             </div>
-              
-              <!--div class="col-2">
-                <a href="/template/Stamping Record Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
-              </div-->
-              <!--div class="col-2">
-                <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">Upload Excel</button>
-              </div-->
           </div>
-
+          
           <div class="card-body">
             <table id="weightTable" class="table table-bordered table-striped display">
               <thead>
@@ -1352,6 +1370,46 @@ else{
   </div>
 </div>
 
+<div class="modal fade" id="printSuratModal"> 
+  <div class="modal-dialog modal-xl" style="max-width: 90%;">
+    <div class="modal-content">
+
+      <form role="form" id="printSuratForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Print Surat</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" class="form-control" id="id" name="id">
+          <input type="hidden" class="form-control" id="printType" name="printType">
+          <input type="hidden" class="form-control" id="companyBranch" name="companyBranch">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>Actual Print Date *</label>
+                <div class='input-group date' id="printSuratDatePicker" data-target-input="nearest">
+                  <input type='text' class="form-control datetimepicker-input" data-target="#printSuratDatePicker" id="printSuratDate" name="printSuratDate" required/>
+                  <div class="input-group-append" data-target="#printSuratDatePicker" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <script type="text/html" id="atkDetails">
   <div class="card card-primary">
     <div class="card-body">
@@ -2231,6 +2289,12 @@ $(function () {
     defaultDate: ''
   });
   
+  $('#printSuratDatePicker').datetimepicker({
+    icons: { time: 'far fa-calendar' },
+    format: 'DD/MM/YYYY',
+    defaultDate: ''
+  });
+  
   $('#datePicker').datetimepicker({
     icons: { time: 'far fa-calendar' },
     format: 'DD/MM/YYYY',
@@ -2379,6 +2443,7 @@ $(function () {
           }
 
           dropdownMenu += '<a class="dropdown-item" id="deactivate' + data + '" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>';
+          dropdownMenu += '<a class="dropdown-item" id="printSurat' + data + '" onclick="printSurat(' + data + ')"><i class="fa fa-envelope" aria-hidden="true"></i> Print Surat</a>';
           dropdownMenu += '</div></div>';
 
           return dropdownMenu;
@@ -2595,6 +2660,29 @@ $(function () {
 
         $('#printBorangModal').modal('hide');
       }
+      else if($('#printSuratModal').hasClass('show')){
+        $.post('php/printSurat.php', $('#printSuratForm').serialize(), function(data){
+          var obj = JSON.parse(data);
+      
+          if(obj.status === 'success'){
+            $('#printSuratModal').modal('hide');
+            $('#weightTable').DataTable().ajax.reload();
+            var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
+            printWindow.document.write(obj.message);
+            printWindow.document.close();
+            setTimeout(function(){
+              printWindow.print();
+              printWindow.close();
+            }, 1000);
+          }
+          else if(obj.status === 'failed'){
+            toastr["error"](obj.message, "Failed:");
+          }
+          else{
+            toastr["error"]("Something wrong when pull data", "Failed:");
+          }
+        });
+      }
     }
   });
 
@@ -2722,6 +2810,7 @@ $(function () {
             }
 
             dropdownMenu += '<a class="dropdown-item" id="deactivate' + data + '" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>';
+            dropdownMenu += '<a class="dropdown-item" id="printSurat' + data + '" onclick="printSurat(' + data + ')"><i class="fa fa-envelope" aria-hidden="true"></i> Print Surat</a>';
             dropdownMenu += '</div></div>';
 
             return dropdownMenu;
@@ -2996,6 +3085,49 @@ $(function () {
         // Optionally, you can display a message or take another action if no IDs are selected
         alert("Please select at least one borang to merge.");
       }
+  });
+
+  $('#printSurats').on('click', function () {
+    // Checking to see if company branch is selected
+    var companyBranch = $('#branchFilter').val();
+
+    if (companyBranch && companyBranch !== "") {
+      var selectedIds = []; // An array to store the selected 'id' values
+
+      $("#weightTable tbody input[type='checkbox']").each(function () {
+        if (this.checked) {
+          selectedIds.push($(this).val());
+        }
+      });
+
+      if (selectedIds.length > 0) {
+        $("#printSuratModal").find('#id').val(selectedIds);
+        $("#printSuratModal").find('#printSuratDate').val('');
+        $("#printSuratModal").find('#printType').val('MULTI');
+        $("#printSuratModal").find('#companyBranch').val(companyBranch);
+        $("#printSuratModal").modal("show");
+
+        $('#printSuratForm').validate({
+          errorElement: 'span',
+          errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+          },
+          highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+          },
+          unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+          }
+        });
+      } 
+      else {
+        // Optionally, you can display a message or take another action if no IDs are selected
+        alert("Please select at least one record to print.");
+      }
+    }else{
+      alert("Please select a company branch.");
+    }
   });
 
   $('#uploadExccl').on('click', function(){
@@ -4330,6 +4462,7 @@ function format (row) {
 
         // Cancelled button
         returnString += '<div class="col-1"><button title="Cancelled" type="button" id="delete'+row.id+'" onclick="deactivate('+row.id+')" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>';
+        returnString += '<div class="col-1"><button title="Print Surat" type="button" id="printSurat'+row.id+'" onclick="printSurat('+row.id+')" class="btn btn-info btn-sm"><i class="fa fa-envelope" aria-hidden="true"></i></button></div>';
 
     returnString += `
       </div>
@@ -5898,6 +6031,27 @@ function print(id, type, validate) {
       toastr["error"]("Something wrong when activate", "Failed:");
     }
   });*/
+}
+
+function printSurat(id) {
+  $("#printSuratModal").find('#id').val(id);
+  $("#printSuratModal").find('#printSuratDate').val('');
+  $("#printSuratModal").find('#printType').val('SINGLE');
+  $("#printSuratModal").modal("show");
+
+  $('#printSuratForm').validate({
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+      error.addClass('invalid-feedback');
+      element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass('is-invalid');
+    }
+  });
 }
 
 function portrait(id) {
