@@ -1005,6 +1005,14 @@ else{
               </div>
             </div>
           </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <label>Internal Remark</label>
+                <textarea class="form-control" type="text" placeholder="Internal Remark" id="internalRemark" name="internalRemark"></textarea>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="modal-footer justify-content-between bg-gray-dark color-palette">
@@ -3920,6 +3928,7 @@ function format (row) {
         <p><strong>Labour Charge:</strong> ${row.labour_charge}</p>
         <p><strong>Total Stamping Fee + Labour Charge:</strong> ${row.stampfee_labourcharge}</p>
         <p><strong>Remark:</strong> ${row.remarks}</p>
+        <p><strong>Internal Remark:</strong> ${row.internal_remark}</p>
       </div>
 
       <div class="col-4">
@@ -4668,6 +4677,7 @@ function edit(id) {
         $('#extendModal').find('#borangE').val(obj.message.borang_e);
         $('#extendModal').find('#borangEDate').val(formatDate3(obj.message.borang_e_date));
         $('#extendModal').find('#remark').val(obj.message.remarks);
+        $('#extendModal').find('#internalRemark').val(obj.message.internal_remark);
         $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
         $('#extendModal').find('#quotation').val(obj.message.quotation_no);
         $('#extendModal').find('#notificationPeriod').val(obj.message.notification_period);
@@ -5069,6 +5079,7 @@ function edit(id) {
         $('#extendModal').find('#borangD').val(obj.message.borang_d);
         $('#extendModal').find('#borangE').val(obj.message.borang_e);
         $('#extendModal').find('#remark').val(obj.message.remarks);
+        $('#extendModal').find('#internalRemark').val(obj.message.internal_remark);
         $('#extendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
         $('#extendModal').find('#quotation').val(obj.message.quotation_no);
 

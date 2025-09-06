@@ -208,3 +208,5 @@ WHERE NOT EXISTS (
     WHERE UPPER(cb.branch_name COLLATE utf8mb4_unicode_ci) = UPPER(c.name COLLATE utf8mb4_unicode_ci) 
       AND cb.deleted = 0
 );
+
+ALTER TABLE `stamping` ADD `internal_remark` TEXT NULL AFTER `remarks`;

@@ -1684,6 +1684,7 @@ function format (row) {
         <p><strong>Labour Charge:</strong> ${row.labour_charge}</p>
         <p><strong>Total Stamping Fee + Labour Charge:</strong> ${row.stampfee_labourcharge}</p>
         <p><strong>Remark:</strong> ${row.remarks}</p>
+        <p><strong>Internal Remark:</strong> ${row.internal_remark}</p>
       </div>
       
       <div class="col-4">

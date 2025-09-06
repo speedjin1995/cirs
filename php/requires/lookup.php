@@ -1,4 +1,20 @@
 <?php
+function searchCustomerBranchAddressById($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM branches WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['address'].' '.$row['address2'].' '.$row['address3'].' '.$row['address4'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
 function searchCompanyBranchById($value, $db) {
     $id = null;
 
