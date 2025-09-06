@@ -210,3 +210,5 @@ WHERE NOT EXISTS (
 );
 
 ALTER TABLE `stamping` ADD `internal_remark` TEXT NULL AFTER `remarks`;
+
+UPDATE `stamping` SET company_branch = 1 WHERE company_branch IS NULL AND deleted = 0;
