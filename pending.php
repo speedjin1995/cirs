@@ -291,7 +291,7 @@ else{
                 <p class="mb-0" style="font-size: 110%">Company Weight And Measure Details</p>
               </div>
               <div class="col-md-8">
-                <div class="row">
+                <div class="d-flex justify-content-end gap-2">
                   <div class="col-auto">
                     <button type="button" class="btn btn-sm bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Cancel Stampings">
                       <i class="fa-solid fa-ban"></i> Cancel Stamping
