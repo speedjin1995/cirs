@@ -31,13 +31,13 @@ try {
 
     // Prepare insert statement for stamping
     $insertQuery = "INSERT INTO stamping (
-        type, dealer, dealer_branch, customer_type, customers, branch, products, brand, machine_type, model, 
-        capacity, capacity_high, assignTo, serial_no, validate_by, jenis_alat, trade, no_daftar, no_daftar_lama, no_daftar_baru, 
-        pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, cawangan, invoice_no, cash_bill, stamping_type, last_year_stamping_date, stamping_date, 
-        due_date, pic, customer_pic, quotation_no, quotation_date, purchase_no, purchase_date, remarks, log, 
-        unit_price, cert_price, total_amount, sst, subtotal_amount, reason_id, other_reason, existing_id, status, 
-        renewed, make_in, labour_charge, stampfee_labourcharge, int_round_up, total_charges
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        type, company_branch, dealer, dealer_branch, customer_type, customers, branch, products, brand, machine_type, model, 
+        capacity, capacity_high, assignTo, assignTo2, assignTo3, serial_no, validate_by, validator_lama, jenis_alat, trade, no_daftar, no_daftar_lama, no_daftar_baru, 
+        pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, borang_e_date,cawangan, invoice_no, machine_name, machine_location, machine_area, machine_serial_no, notification_period, cash_bill, stamping_type, last_year_stamping_date, stamping_date, 
+        due_date, pic, customer_pic, quotation_no, quotation_date, purchase_no, purchase_date, remarks, internal_remark, log, validator_invoice,
+        unit_price, cert_price, total_amount, sst, subtotal_sst_amt, rebate, rebate_amount, subtotal_amount, reason_id, other_reason, existing_id, status, 
+        renewed, make_in, labour_charge, stampfee_labourcharge, int_round_up, total_charges, seal_no_lama, seal_no_baru, pegawai_contact, cert_no
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $insertStmt = $pdo->prepare($insertQuery);
 
@@ -61,15 +61,15 @@ try {
         foreach ($records as $record) {
             // Insert into stamping
             $insertStmt->execute([
-                $record['type'], $record['dealer'], $record['dealer_branch'], $record['customer_type'], $record['customers'],
+                $record['type'], $record['company_branch'], $record['dealer'], $record['dealer_branch'], $record['customer_type'], $record['customers'],
                 $record['branch'], $record['products'], $record['brand'], $record['machine_type'], $record['model'],
-                $record['capacity'], $record['capacity_high'], $record['assignTo'], $record['serial_no'], $record['validate_by'],
+                $record['capacity'], $record['capacity_high'], $record['assignTo'], $record['assignTo2'], $record['assignTo3'], $record['serial_no'], $record['validate_by'], $record['validator_lama'],
                 $record['jenis_alat'], $record['trade'], $record['no_daftar_baru'], $record['no_daftar_baru'], null, null, null, 
-                $record['include_cert'], null, null, $record['cawangan'], null, null, 'RENEWAL', $record['stamping_date'], 
-                $record['due_date'], null, $record['pic'], $record['customer_pic'], null, null, null, null, $record['remarks'], 
-                $record['log'], $record['unit_price'], $record['cert_price'], $record['total_amount'], $record['sst'], $record['subtotal_amount'], 
+                $record['include_cert'], null, null, null, $record['cawangan'], null, $record['machine_name'], $record['machine_location'], $record['machine_area'], $record['machine_serial_no'], null, null, 'RENEWAL', $record['stamping_date'], 
+                $record['due_date'], null, $record['pic'], $record['customer_pic'], null, null, null, null, $record['remarks'], $record['internal_remark'], 
+                $record['log'], $record['validator_invoice'], $record['unit_price'], $record['cert_price'], $record['total_amount'], $record['sst'], $record['subtotal_sst_amt'], $record['rebate'], $record['rebate_amount'], $record['subtotal_amount'], 
                 $record['reason_id'], $record['other_reason'], $record['id'], 'Pending', 'N', $record['make_in'], $record['labour_charge'],
-                $record['stampfee_labourcharge'], $record['int_round_up'], $record['total_charges']
+                $record['stampfee_labourcharge'], $record['int_round_up'], $record['total_charges'], $record['seal_no_lama'], $record['seal_no_baru'], $record['pegawai_contact'], $record['cert_no']
             ]);
 
             // Get the last inserted ID
