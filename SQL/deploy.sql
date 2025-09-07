@@ -208,3 +208,11 @@ WHERE NOT EXISTS (
     WHERE UPPER(cb.branch_name COLLATE utf8mb4_unicode_ci) = UPPER(c.name COLLATE utf8mb4_unicode_ci) 
       AND cb.deleted = 0
 );
+
+ALTER TABLE `stamping` ADD `internal_remark` TEXT NULL AFTER `remarks`;
+
+UPDATE `stamping` SET company_branch = 1 WHERE company_branch IS NULL AND deleted = 0;
+
+UPDATE `other_validations` SET company_branch = 1 WHERE company_branch IS NULL AND deleted = 0;
+
+UPDATE `inhouse_validations` SET company_branch = 1 WHERE company_branch IS NULL AND deleted = 0;

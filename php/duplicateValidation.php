@@ -32,8 +32,8 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
     
             if ($record = $result->fetch_assoc()) {
                 // Prepare insert statement for other_validations
-                $insertQuery = "INSERT INTO other_validations (type, dealer, dealer_branch, validate_by, customer_type, customer, branch, machines, unit_serial_no, manufacturing, brand, model, capacity, size, last_calibration_date, expired_calibration_date, auto_form_no, status, validation_date, renewed, duplicate) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $insertQuery = "INSERT INTO other_validations (type, company_branch, dealer, dealer_branch, validate_by, customer_type, customer, branch, machines, unit_serial_no, manufacturing, jenis_alat, brand, model, capacity, size, last_calibration_date, expired_calibration_date, auto_form_no, status, validation_date, renewed, duplicate) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                 $insertStmt = $db->prepare($insertQuery);
 
@@ -46,7 +46,7 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
 
                 for($i=0; $i<(int)$duplicateNo; $i++){
                     $insertStmt->execute([
-                        $record['type'], $record['dealer'], $record['dealer_branch'], $record['validate_by'], $record['customer_type'], $record['customer'], $record['branch'], $record['machines'], $record['unit_serial_no'], $record['manufacturing'], $record['brand'], $record['model'], $record['capacity'], $record['size'], null, null, $record['auto_form_no'], 'Pending', null, 'N', 'Y'
+                        $record['type'], $record['company_branch'], $record['dealer'], $record['dealer_branch'], $record['validate_by'], $record['customer_type'], $record['customer'], $record['branch'], $record['machines'], $record['unit_serial_no'], $record['manufacturing'], $record['jenis_alat'], $record['brand'], $record['model'], $record['capacity'], $record['size'], null, null, $record['auto_form_no'], 'Pending', null, 'N', 'Y'
                     ]);
 
                     // Get the last inserted ID
