@@ -902,11 +902,11 @@ $(function () {
         data: 'id',
         className: 'action-button',
         render: function (data, type, row) {
-          let dropdownMenu = '<div class="dropdown" style="width=20%">' +
+          let dropdownMenu = '<div class="dropdown" style="width: 20%; position: relative;">' +
             '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #074979;">' +
             '<i class="fa-solid fa-ellipsis"></i>' +
             '</button>' +
-            '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">';
+            '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton' + data + '">';
 
             if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
               dropdownMenu += 
@@ -1147,11 +1147,11 @@ $(function () {
           data: 'id',
           className: 'action-button',
           render: function (data, type, row) {
-            let dropdownMenu = '<div class="dropdown" style="width=20%">' +
-              '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #074979;">' +
-              '<i class="fa-solid fa-ellipsis"></i>' +
-              '</button>' +
-              '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">';
+          let dropdownMenu = '<div class="dropdown" style="width: 20%; position: relative;">' +
+            '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #074979;">' +
+            '<i class="fa-solid fa-ellipsis"></i>' +
+            '</button>' +
+            '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton' + data + '">';
 
               if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
                 dropdownMenu += 

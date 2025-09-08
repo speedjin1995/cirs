@@ -970,11 +970,11 @@ $(function () {
         data: 'id',
         className: 'action-button',
         render: function (data, type, row) {
-          let dropdownMenu = '<div class="dropdown" style="width=20%">' +
+          let dropdownMenu = '<div class="dropdown" style="position: relative;">' +
             '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
             '<i class="fa-solid fa-ellipsis"></i>' +
             '</button>' +
-            '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">' +
+            '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton' + data + '">' +
             '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>' +
             '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>' +
             '<a class="dropdown-item" id="deactivate' + data + '" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>';
@@ -1286,11 +1286,11 @@ $(function () {
           data: 'id',
           className: 'action-button',
           render: function (data, type, row) {
-            let dropdownMenu = '<div class="dropdown" style="width=20%">' +
+            let dropdownMenu = '<div class="dropdown" style="position: relative;">' +
               '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
               '<i class="fa-solid fa-ellipsis"></i>' +
               '</button>' +
-              '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">' +
+              '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton' + data + '">' +
               '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>' +
               '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>' +
               '<a class="dropdown-item" id="deactivate' + data + '" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>';
