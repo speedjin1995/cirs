@@ -644,19 +644,19 @@ to get the desired effect
               <li class="nav-item">
                 <a href="#jadual6" data-file="jadual6.php" class="nav-link link">
                   <i class="nav-icon fas fa-table"></i>
-                  <p>Jadual 6</p>
+                  <p>Borang Jadual 6</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="#jadual7" data-file="jadual7.php" class="nav-link link">
                   <i class="nav-icon fas fa-receipt"></i>
-                  <p>Jadual 7</p>
+                  <p>Borang Jadual 7</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="#panjang" data-file="panjang.php" class="nav-link link">
                   <i class="nav-icon fas fa-list"></i>
-                  <p>Borang Panjang (Jadual 8)</p>
+                  <p>Borang Jadual 8</p>
                 </a>
               </li>
             </ul>
