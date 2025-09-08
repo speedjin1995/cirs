@@ -47,6 +47,7 @@ if(isset($_POST['id'], $_POST['printType'], $_POST['printSuratDate'])){
 
                     if(!empty($branchRow)){
                         $branchAddress = $branchRow['address_line_1'].' '.$branchRow['address_line_2'].' '.$branchRow['address_line_3'].' '.$branchRow['address_line_4'];
+                        $branchPic = $branchRow['pic'];
                         $branchTel = $branchRow['pic_contact'];
                         $branchFax = $branchRow['office_no'];
                         $branchEmail = $branchRow['email'];
@@ -75,6 +76,12 @@ if(isset($_POST['id'], $_POST['printType'], $_POST['printSuratDate'])){
                     <!-- Bootstrap 4 CDN -->
                     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
                     <style>
+                        @media print {
+                            body, html {
+                                margin: 0 !important;
+                                padding: 0 !important;
+                            }
+                        }
                         body {
                             background: #f0f0f0;
                             font-size: 16pt; /* Increase base font size */
@@ -101,9 +108,9 @@ if(isset($_POST['id'], $_POST['printType'], $_POST['printSuratDate'])){
                     </style>
                     </head>
                     <body style="background:#f0f0f0;">
-                        <div class="container-fluid py-5" style="padding-left: 100px; padding-right: 50px;">
+                        <div class="container-fluid py-5" style="padding-left: 100px; padding-right: 100px;">
                             <div class="text-center mb-4">
-                                <h2 class="font-weight-bold mb-1">'.$companyName.'<small style="font-size: 12pt">(Co. No. '.$companyOldRoc.')</small></h2>
+                                <h2 class="font-weight-bold mb-1">'.$companyName.'<small style="font-size: 12pt"> (Co. No. '.$companyOldRoc.')</small></h2>
                                 <p style="margin:0;">'.$branchAddress.'<br>
                                 Tel : '.$branchTel.' Fax : '.$branchFax.'<br>
                                 Email : '.$companyEmail.' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Website : www.spwt.my
@@ -175,12 +182,12 @@ if(isset($_POST['id'], $_POST['printType'], $_POST['printSuratDate'])){
                             <p>Kami dengan sukacitanya berharap pihak tuan dapat mengesahkan jadual penetusan semula kepada kami.</p>
                             <p>Sekian Terima Kasih.</p>
                             <p>Yang Benar,</p>
-                            <p class="font-weight-bold mb-4">SP WEIGHING SYSTEMS SDN. BHD.</p>
+                            <p class="font-weight-bold mb-4">'.$companyName.'</p>
 
                             <br>
                             <p class="mt-2">..............................................................<br>
-                                Syaswani<br>
-                                012-5201218
+                                '.$branchPic.'<br>
+                                '.$branchTel.'
                             </p>
 
                         </div>
@@ -219,6 +226,7 @@ if(isset($_POST['id'], $_POST['printType'], $_POST['printSuratDate'])){
 
         if(!empty($branchRow)){
             $branchAddress = $branchRow['address_line_1'].' '.$branchRow['address_line_2'].' '.$branchRow['address_line_3'].' '.$branchRow['address_line_4'];
+            $branchPic = $branchRow['pic'];
             $branchTel = $branchRow['pic_contact'];
             $branchFax = $branchRow['office_no'];
         }
@@ -285,9 +293,15 @@ if(isset($_POST['id'], $_POST['printType'], $_POST['printSuratDate'])){
                 <!-- Bootstrap 4 CDN -->
                 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
                 <style>
+                    @media print {
+                        body, html {
+                            margin: 0 !important;
+                            padding: 0 !important;
+                        }
+                    }
                     body {
-                    background: #f0f0f0;
-                        font-size: 16pt; /* Increase base font size */
+                        background: #f0f0f0;
+                        font-size: 16pt;
                         line-height: 1.6;
                     }
                     .table-dark-border th,
@@ -308,7 +322,7 @@ if(isset($_POST['id'], $_POST['printType'], $_POST['printSuratDate'])){
                 </style>
                 </head>
                 <body style="background:#f0f0f0;">
-                    <div class="container-fluid py-5" style="padding-left: 100px; padding-right: 50px;">
+                    <div class="container-fluid py-5" style="padding-left: 100px; padding-right: 100px;">
                         <div class="text-center mb-4">
                             <h2 class="font-weight-bold mb-1">'.$companyName.'<small style="font-size: 12pt">(Co. No. '.$companyOldRoc.')</small></h2>
                             <p style="margin:0;">'.$companyAddress.'<br>
@@ -392,12 +406,12 @@ if(isset($_POST['id'], $_POST['printType'], $_POST['printSuratDate'])){
                         <p>Kami dengan sukacitanya berharap pihab tuan dapat mengesahkan jadual penetusan semula kepada kami.</p>
                         <p>Sekian Terima Kasih.</p>
                         <p>Yang Benar,</p>
-                        <p class="font-weight-bold mb-4">SP WEIGHING SYSTEMS SDN. BHD.</p>
+                        <p class="font-weight-bold mb-4">'.$companyName.'</p>
 
                         <br>
                         <p class="mt-2">..............................................................<br>
-                            Syaswani<br>
-                            012-5201218
+                            '.$branchPic.'<br>
+                            '.$branchTel.'
                         </p>
 
                     </div>

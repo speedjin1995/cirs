@@ -5014,7 +5014,7 @@ function newEntry(){
   $('#extendModal').find('#quotationFilePath').val('');
   $('#extendModal').find('#newInvoice').show();
   $('#extendModal').find('#uploadInvoiceAttachment').val('');
-  $('#extendModal').find('#notificationPeriod').val('');
+  $('#extendModal').find('#notificationPeriod').val(1);
   $('#extendModal').find('#viewInvoice').hide();
   $('#extendModal').find('#InvoiceFilePath').val('');
   //Additonal field reset
