@@ -729,6 +729,30 @@ else{
   </div>
 </div>
 
+<div class="modal fade" id="timelineModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title">Status Timeline</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="timeline" id="timeline">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <script type="text/html" id="pricingDetails">
   <tr class="details">
     <td>
@@ -772,6 +796,7 @@ var pricingCount = $("#pricingTable").find(".details").length;
 $(function () {
   $('#customerNoHidden').hide();
 
+  const userRole = '<?= $role; ?>';
   const today = new Date();
   const tomorrow = new Date(today);
   const yesterday = new Date(today);
@@ -908,15 +933,19 @@ $(function () {
             '</button>' +
             '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton' + data + '">';
 
-            if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
-              dropdownMenu += 
-                '<a class="dropdown-item" id="revertBtn' + data + '" onclick="revert(' + data + ')"><i class="fa fa-arrow-circle-left"></i> Revert</a>'+
-                '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>'+
+            if (userRole == 'ADMIN' || userRole == 'SUPER_ADMIN') {
+              dropdownMenu +=
+                '<a class="dropdown-item" id="revertBtn' + data + '" onclick="revert(' + data + ')"><i class="fa fa-arrow-circle-left"></i> Revert</a>';
+
+                if (userRole === 'SUPER_ADMIN'){
+                  dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
+                }
+
+                dropdownMenu += '<a class="dropdown-item" id="statusTimeline' + data + '" onclick="statusTimeline(' + data + ')"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Status Timeline</a>'+
                 '<a class="dropdown-item" id="delete'+data+'" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Delete</a>';
             }else{
-              dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
+              dropdownMenu += '<a class="dropdown-item" id="statusTimeline' + data + '" onclick="statusTimeline(' + data + ')"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Status Timeline</a>';
             }
-            
           
           dropdownMenu += '</div></div>';
 
@@ -1153,15 +1182,19 @@ $(function () {
             '</button>' +
             '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton' + data + '">';
 
-              if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
-                dropdownMenu += 
-                  '<a class="dropdown-item" id="revertBtn' + data + '" onclick="revert(' + data + ')"><i class="fa fa-arrow-circle-left"></i> Revert</a>'+
-                  '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>'+
-                  '<a class="dropdown-item" id="delete'+data+'" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Delete</a>';
-              }else{
-                dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
-              }
-              
+            if (userRole == 'ADMIN' || userRole == 'SUPER_ADMIN') {
+              dropdownMenu +=
+                '<a class="dropdown-item" id="revertBtn' + data + '" onclick="revert(' + data + ')"><i class="fa fa-arrow-circle-left"></i> Revert</a>';
+
+                if (userRole === 'SUPER_ADMIN'){
+                  dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
+                }
+
+                dropdownMenu += '<a class="dropdown-item" id="statusTimeline' + data + '" onclick="statusTimeline(' + data + ')"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Status Timeline</a>'+
+                '<a class="dropdown-item" id="delete'+data+'" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Delete</a>';
+            }else{
+              dropdownMenu += '<a class="dropdown-item" id="statusTimeline' + data + '" onclick="statusTimeline(' + data + ')"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Status Timeline</a>';
+            }
             
             dropdownMenu += '</div></div>';
 
@@ -1535,6 +1568,7 @@ $(function () {
 });
 
 function format (row) {
+  const userRole = '<?=$role ?>';
   const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
 
   var returnString = `
@@ -1692,12 +1726,16 @@ function format (row) {
         <p><strong>Total Billing Price:</strong> ${row.total_charges}</p>
       </div>`;
 
-      if ('<?=$role ?>' == 'ADMIN' || '<?=$role ?>' == 'SUPER_ADMIN') {
+      if (userRole === 'ADMIN' || userRole === 'SUPER_ADMIN') {
         returnString += `
           <div class="col-4">
             <div class="row">
-              <div class="col-1"><button title="Revert" type="button" id="revertBtn${row.id}" onclick="revert(${row.id})" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>
-              <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+              <div class="col-1"><button title="Revert" type="button" id="revertBtn${row.id}" onclick="revert(${row.id})" class="btn btn-success btn-sm"><i class="fa fa-arrow-circle-left"></i></button></div>`;
+              if (userRole === 'SUPER_ADMIN'){
+                returnString += '<div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+              }
+
+              returnString += `<div class="col-1"><button title="Status Timeline" type="button" id="statusTimeline${row.id}" onclick="statusTimeline(${row.id})" class="btn btn-warning btn-sm"><i class="fa fa-map-marker-alt" aria-hidden="true"></i></button></div>
               <div class="col-1"><button title="Cancel" type="button" id="delete${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
             </div>
           </div>
@@ -1705,8 +1743,7 @@ function format (row) {
       }else{
         returnString += `
           <div class="col-4">
-            <div class="row">
-              <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+            <div class="row"><div class="col-1"><button title="Status Timeline" type="button" id="statusTimeline${row.id}" onclick="statusTimeline(${row.id})" class="btn btn-warning btn-sm"><i class="fa fa-map-marker-alt" aria-hidden="true"></i></button></div>
             </div>
           </div>
         `;
@@ -2548,4 +2585,68 @@ function log(id) {
     $('#spinnerLoading').hide();
   });
 }
+
+function statusTimeline(id) {
+  $('#spinnerLoading').show();
+  $.post('php/getTimeline.php', {id: id, type: 'Stamping'}, function(data){
+    var obj = JSON.parse(data);
+
+    if (obj.status === 'success') { 
+      $('#timeline').empty();
+
+      if (obj.message.length > 0) {
+        obj.message.forEach(row => {
+          // Pick icon and color based on status
+          let icon = 'fas fa-info bg-blue';
+          if (row.status.toLowerCase().includes('create')) icon = 'fas fa-plus bg-green';
+          else if (row.status.toLowerCase().includes('approve')) icon = 'fas fa-check bg-success';
+          else if (row.status.toLowerCase().includes('reject')) icon = 'fas fa-times bg-danger';
+          else if (row.status.toLowerCase().includes('update')) icon = 'fas fa-edit bg-warning';
+
+          let newItem = `
+            <div>
+              <i class="${icon}"></i>
+              <div class="timeline-item">
+                <span class="time"><i class="fas fa-clock"></i> ${row.occurred_at}</span>
+                <h3 class="timeline-header"><a href="#">${row.created_by}</a> ${row.status}</h3>
+                <div class="timeline-body">
+                  ${row.status_remark ? row.status_remark : ''}
+                </div>
+              </div>
+            </div>
+          `;
+          $('#timeline').append(newItem);
+        });
+
+        // End marker
+        $('#timeline').append(`
+          <div>
+            <i class="fas fa-clock bg-gray"></i>
+          </div>
+        `);
+
+      } else {
+        $('#timeline').append(`
+          <div>
+            <i class="fas fa-info-circle bg-secondary"></i>
+            <div class="timeline-item">
+              <h3 class="timeline-header text-center">No data available</h3>
+            </div>
+          </div>
+        `);
+      }
+
+      $('#timelineModal').modal('show');
+    }
+    else if (obj.status === 'failed') {
+      toastr["error"](obj.message, "Failed:");
+    }
+    else {
+      toastr["error"]("Something wrong when pulling data", "Failed:");
+    }
+
+    $('#spinnerLoading').hide();
+  });
+}
+
 </script>

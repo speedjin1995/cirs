@@ -1276,6 +1276,30 @@ else{
   </div>
 </div>
 
+<div class="modal fade" id="timelineModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title">Status Timeline</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="timeline" id="timeline">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="printBorangModal"> 
   <div class="modal-dialog modal-xl" style="max-width: 50%;">
     <div class="modal-content">
@@ -2137,7 +2161,7 @@ var branch = 0;
 
 $(function () {
   $('#customerNoHidden').hide();
-
+  const userRole = <?php echo json_encode($role); ?>;
   const today = new Date();
   const tomorrow = new Date(today);
   const yesterday = new Date(today);
@@ -2300,9 +2324,14 @@ $(function () {
             }else{
               dropdownMenu += '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>';
             }
-            dropdownMenu += '<a class="dropdown-item" id="copy'+ data + '" onclick="copy(' + data + ')"><i class="fa-solid fa-clone"></i> Copy</a>' + 
-            '<a class="dropdown-item" id="restamping' + data + '" onclick="restamping(' + data + ')"><i class="fas fa-stamp" aria-hidden="true"></i> Restamping</a>'+
-            '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>'+
+            dropdownMenu += '<a class="dropdown-item" id="copy'+ data + '" onclick="copy(' + data + ')"><i class="fa-solid fa-clone"></i> Copy</a>';
+            //'<a class="dropdown-item" id="restamping' + data + '" onclick="restamping(' + data + ')"><i class="fas fa-stamp" aria-hidden="true"></i> Restamping</a>'+
+
+            if (userRole === 'SUPER_ADMIN'){
+              dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
+            }
+
+            dropdownMenu += '<a class="dropdown-item" id="statusTimeline' + data + '" onclick="statusTimeline(' + data + ')"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Status Timeline</a>'+
             '<a class="dropdown-item" id="deactivate' + data + '" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>';
           
           dropdownMenu += '</div></div>';
@@ -2582,8 +2611,14 @@ $(function () {
               }else{
                 dropdownMenu += '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>';
               }
-              dropdownMenu += '<a class="dropdown-item" id="copy'+ data + '" onclick="copy(' + data + ')"><i class="fa-solid fa-clone"></i> Copy</a>' + 
-              '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>'+
+              dropdownMenu += '<a class="dropdown-item" id="copy'+ data + '" onclick="copy(' + data + ')"><i class="fa-solid fa-clone"></i> Copy</a>';
+              //'<a class="dropdown-item" id="restamping' + data + '" onclick="restamping(' + data + ')"><i class="fas fa-stamp" aria-hidden="true"></i> Restamping</a>'+
+
+              if (userRole === 'SUPER_ADMIN'){
+                dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
+              }
+
+              dropdownMenu += '<a class="dropdown-item" id="statusTimeline' + data + '" onclick="statusTimeline(' + data + ')"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Status Timeline</a>'+
               '<a class="dropdown-item" id="deactivate' + data + '" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>';
             
             dropdownMenu += '</div></div>';
@@ -3831,6 +3866,7 @@ $(function () {
 });
 
 function format (row) {
+  const userRole = '<?=$role ?>';
   const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
 
   var returnString = `
@@ -3990,8 +4026,13 @@ function format (row) {
 
       <div class="col-4">
         <div class="row">
-          <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
-          <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+          <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>`;
+
+          if (userRole === 'SUPER_ADMIN'){
+            returnString += '<div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+          }
+
+          returnString += `<div class="col-1"><button title="Status Timeline" type="button" id="statusTimeline${row.id}" onclick="statusTimeline(${row.id})" class="btn btn-warning btn-sm"><i class="fa fa-map-marker-alt" aria-hidden="true"></i></button></div>
           <div class="col-1"><button title="Copy" type="button" id="copy${row.id}" onclick="copy(${row.id})" class="btn btn-success btn-sm"><i class="fa-solid fa-clone"></i></button></div>
           <div class="col-1"><button title="Restamping" type="button" id="restamping${row.id}" onclick="restamping(${row.id})" class="btn btn-info btn-sm"><i class="fas fa-stamp"></i></button></div>
           <div class="col-1"><button title="Cancel" type="button" id="deactivate${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
@@ -5639,6 +5680,91 @@ function log(id) {
     else{
       toastr["error"]("Something wrong when pull data", "Failed:");
     }
+    $('#spinnerLoading').hide();
+  });
+}
+
+function statusTimeline(id) {
+  $('#spinnerLoading').show();
+  $.post('php/getTimeline.php', {id: id, type: 'Stamping'}, function(data){
+    var obj = JSON.parse(data);
+
+    if (obj.status === 'success') { 
+      $('#timeline').empty();
+
+      if (obj.message.length > 0) {
+        obj.message.forEach(row => {
+          let statusLower = row.status.toLowerCase();
+          
+          // Map status to appropriate icons and colors
+          if (statusLower.includes('quotation issued') || statusLower.includes('follow-up')) {
+            icon = 'fas fa-file-invoice bg-info';
+          } else if (statusLower.includes('quotation chop') || statusLower.includes('sign back')) {
+            icon = 'fas fa-signature bg-primary';
+          } else if (statusLower.includes('purchase order') || statusLower.includes('po received')) {
+            icon = 'fas fa-shopping-cart bg-success';
+          } else if (statusLower.includes('pre-stamping completed')) {
+            icon = 'fas fa-clipboard-check bg-warning';
+          } else if (statusLower.includes('stamping date confirmed') || statusLower.includes('customer notified')) {
+            icon = 'fas fa-calendar-check bg-orange';
+          } else if (statusLower.includes('stamping completed')) {
+            icon = 'fas fa-stamp bg-success';
+          } else if (statusLower.includes('spmt payment completed')) {
+            icon = 'fas fa-credit-card bg-green';
+          } else if (statusLower.includes('metrology department payment completed')) {
+            icon = 'fas fa-money-check bg-dark';
+          } else if (statusLower.includes('create')) {
+            icon = 'fas fa-plus bg-green';
+          } else if (statusLower.includes('approve')) {
+            icon = 'fas fa-check bg-success';
+          } else if (statusLower.includes('reject') || statusLower.includes('cancel')) {
+            icon = 'fas fa-times bg-danger';
+          } else if (statusLower.includes('update') || statusLower.includes('edit')) {
+            icon = 'fas fa-edit bg-warning';
+          }
+
+          let newItem = `
+            <div>
+              <i class="${icon}"></i>
+              <div class="timeline-item">
+                <span class="time"><i class="fas fa-clock"></i> ${row.occurred_at}</span>
+                <h3 class="timeline-header"><a href="#">${row.created_by}</a> <b>${row.status}</b></h3>
+                <div class="timeline-body">
+                  ${row.status_remark ? row.status_remark : ''}
+                </div>
+              </div>
+            </div>
+          `;
+          $('#timeline').append(newItem);
+        });
+
+        // End marker
+        $('#timeline').append(`
+          <div>
+            <i class="fas fa-clock bg-gray"></i>
+          </div>
+        `);
+
+      } else {
+        $('#timeline').append(`
+          <div>
+            <i class="fas fa-info-circle bg-secondary"></i>
+            <div class="timeline-item">
+              <h3 class="timeline-header text-center">No data available</h3>
+            </div>
+          </div>
+        `);
+      }
+
+      $('#timelineModal').modal('show');
+    }
+    else if (obj.status === 'failed') {
+      toastr["error"](obj.message, "Failed:");
+    }
+    else {
+      toastr["error"]("Something wrong when pulling data", "Failed:");
+    }
+
     $('#spinnerLoading').hide();
   });
 }

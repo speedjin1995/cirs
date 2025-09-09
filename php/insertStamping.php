@@ -1197,6 +1197,57 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					$insert_stmt3->close();
 				}
 
+				// Logic to save stamping status timeline
+				$stmt = $db->prepare("SELECT quotation_no, quotation_attachment, purchase_no, serial_no, stamping_date, invoice_no, invoice_payment_type, invoice_payment_ref, validator_invoice FROM stamping WHERE id=?");
+				$stmt->bind_param('i', $stampingId);
+				$stmt->execute();
+				$stmt->bind_result($quotation_no, $quotation_attachment, $purchase_no, $serial_no, $stamping_date, $invoice_no, $invoice_payment_type, $invoice_payment_ref, $validator_invoice);
+				$stmt->fetch();
+				$stmt->close();
+
+				// Statuses and their conditions
+				$statuses = [
+					1 => !empty($quotation_no),
+					2 => !empty($quotation_attachment),
+					3 => !empty($purchase_no),
+					4 => !empty($serial_no),
+					5 => !empty($stamping_date),
+					6 => !empty($invoice_no),
+					7 => (!empty($invoice_payment_type) && !empty($invoice_payment_ref)),
+					8 => !empty($validator_invoice),
+				];
+
+				// Status descriptions (should match your miscellaneous table)
+				$status_desc = [];
+				if ($status_stmt = $db->prepare("SELECT * FROM miscellaneous WHERE code='stamping_status' AND deleted = 0")) {
+					$status_stmt->execute();
+					$result = $status_stmt->get_result();
+					while ($row = $result->fetch_assoc()) {
+						$status_desc[$row['value']] = $row['description'];
+					}
+					$status_stmt->close();
+				}
+
+				// Insert log for each status reached, in order
+				$created_by = $_SESSION['userID'];
+				$now = date('Y-m-d H:i:s');
+				foreach ($statuses as $val => $reached) {
+					if ($reached) {
+						// Check if already logged
+						$check = $db->prepare("SELECT id FROM stamping_status_log WHERE stamp_id=? AND status=?");
+						$check->bind_param('is', $stampingId, $status_desc[$val]);
+						$check->execute();
+						$check->store_result();
+						if ($check->num_rows == 0) {
+							$insert = $db->prepare("INSERT INTO stamping_status_log (stamp_id, status, created_by, occurred_at) VALUES (?, ?, ?, ?)");
+							$insert->bind_param('isss', $stampingId, $status_desc[$val], $created_by, $now);
+							$insert->execute();
+							$insert->close();
+						}
+						$check->close();
+					}
+				}
+
 				echo json_encode(
 					array(
 						"status"=> "success", 
@@ -1938,7 +1989,6 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// Logic to save stamping status timeline
-				// Fetch latest data for this stamping
 				$stmt = $db->prepare("SELECT quotation_no, quotation_attachment, purchase_no, serial_no, stamping_date, invoice_no, invoice_payment_type, invoice_payment_ref, validator_invoice FROM stamping WHERE id=?");
 				$stmt->bind_param('i', $stamp_id);
 				$stmt->execute();

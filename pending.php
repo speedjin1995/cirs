@@ -1344,6 +1344,30 @@ else{
   </div>
 </div>
 
+<div class="modal fade" id="timelineModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title">Status Timeline</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="timeline" id="timeline">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="printBorangModal"> 
   <div class="modal-dialog modal-xl" style="max-width: 90%;">
     <div class="modal-content">
@@ -2280,6 +2304,7 @@ $(function () {
   $('#customerNoHidden').hide();
   
   const userId = <?php echo json_encode($user); ?>;
+  const userRole = <?php echo json_encode($role); ?>;
   const today = new Date();
   const tomorrow = new Date(today);
   const yesterday = new Date(today);
@@ -2483,7 +2508,11 @@ $(function () {
             dropdownMenu += '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ', \'' + row.jenis_alat + '\', \'' + row.validate_by + '\')"><i class="fas fa-print"></i> Print</a>';
           }
 
-          dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
+          if (userRole === 'SUPER_ADMIN'){
+            dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
+          }
+
+          dropdownMenu += '<a class="dropdown-item" id="statusTimeline' + data + '" onclick="statusTimeline(' + data + ')"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Status Timeline</a>';
 
           if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '' && row.borang_e != '') {
             dropdownMenu += '<a class="dropdown-item" id="complete' + data + '" onclick="complete(' + data + ')"><i class="fas fa-check"></i> Complete</a>';
@@ -2850,7 +2879,11 @@ $(function () {
               dropdownMenu += '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ', \'' + row.jenis_alat + '\', \'' + row.validate_by + '\')"><i class="fas fa-print"></i> Print</a>';
             }
 
-            dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
+            if (userRole === 'SUPER_ADMIN'){
+              dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
+            }
+
+            dropdownMenu += '<a class="dropdown-item" id="statusTimeline' + data + '" onclick="statusTimeline(' + data + ')"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Status Timeline</a>';
 
             if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '' && row.borang_e != '') {
               dropdownMenu += '<a class="dropdown-item" id="complete' + data + '" onclick="complete(' + data + ')"><i class="fas fa-check"></i> Complete</a>';
@@ -4345,6 +4378,7 @@ $(function () {
 });
 
 function format (row) {
+  const userRole = '<?=$role ?>';
   const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
 
   var returnString = `
@@ -4511,7 +4545,11 @@ function format (row) {
           returnString += '<div class="col-1"><button title="Print" type="button" id="print'+row.id+'" onclick="print('+row.id+', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
         }
 
-        returnString += '<div class="col-1"><button title="Log" type="button" id="log'+row.id+'" onclick="log('+row.id+')" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+        if (userRole === 'SUPER_ADMIN'){
+          returnString += '<div class="col-1"><button title="Log" type="button" id="log'+row.id+'" onclick="log('+row.id+')" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+        }
+
+        returnString += '<div class="col-1"><button title="Status Timeline" type="button" id="statusTimeline'+row.id+'" onclick="statusTimeline('+row.id+')" class="btn btn-warning btn-sm"><i class="fa fa-map-marker-alt" aria-hidden="true"></i></button></div>';
 
         // Complete button if conditions are met
         if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '' && row.borang_e != '') {
@@ -6248,6 +6286,93 @@ function log(id) {
     else{
       toastr["error"]("Something wrong when pull data", "Failed:");
     }
+    $('#spinnerLoading').hide();
+  });
+}
+
+function statusTimeline(id) {
+  $('#spinnerLoading').show();
+  $.post('php/getTimeline.php', {id: id, type: 'Stamping'}, function(data){
+    var obj = JSON.parse(data);
+
+    if (obj.status === 'success') { 
+      $('#timeline').empty();
+
+      if (obj.message.length > 0) {
+        obj.message.forEach(row => {
+          // Pick icon and color based on status
+          let icon = 'fas fa-info bg-blue';
+          let statusLower = row.status.toLowerCase();
+          
+          // Map status to appropriate icons and colors
+          if (statusLower.includes('quotation issued') || statusLower.includes('follow-up')) {
+            icon = 'fas fa-file-invoice bg-info';
+          } else if (statusLower.includes('quotation chop') || statusLower.includes('sign back')) {
+            icon = 'fas fa-signature bg-primary';
+          } else if (statusLower.includes('purchase order') || statusLower.includes('po received')) {
+            icon = 'fas fa-shopping-cart bg-success';
+          } else if (statusLower.includes('pre-stamping completed')) {
+            icon = 'fas fa-clipboard-check bg-warning';
+          } else if (statusLower.includes('stamping date confirmed') || statusLower.includes('customer notified')) {
+            icon = 'fas fa-calendar-check bg-orange';
+          } else if (statusLower.includes('stamping completed')) {
+            icon = 'fas fa-stamp bg-success';
+          } else if (statusLower.includes('spmt payment completed')) {
+            icon = 'fas fa-credit-card bg-green';
+          } else if (statusLower.includes('metrology department payment completed')) {
+            icon = 'fas fa-money-check bg-dark';
+          } else if (statusLower.includes('create')) {
+            icon = 'fas fa-plus bg-green';
+          } else if (statusLower.includes('approve')) {
+            icon = 'fas fa-check bg-success';
+          } else if (statusLower.includes('reject') || statusLower.includes('cancel')) {
+            icon = 'fas fa-times bg-danger';
+          } else if (statusLower.includes('update') || statusLower.includes('edit')) {
+            icon = 'fas fa-edit bg-warning';
+          }
+
+          let newItem = `
+            <div>
+              <i class="${icon}"></i>
+              <div class="timeline-item">
+                <span class="time"><i class="fas fa-clock"></i> ${row.occurred_at}</span>
+                <h3 class="timeline-header"><a href="#">${row.created_by}</a> ${row.status}</h3>
+                <div class="timeline-body">
+                  ${row.status_remark ? row.status_remark : ''}
+                </div>
+              </div>
+            </div>
+          `;
+          $('#timeline').append(newItem);
+        });
+
+        // End marker
+        $('#timeline').append(`
+          <div>
+            <i class="fas fa-clock bg-gray"></i>
+          </div>
+        `);
+
+      } else {
+        $('#timeline').append(`
+          <div>
+            <i class="fas fa-info-circle bg-secondary"></i>
+            <div class="timeline-item">
+              <h3 class="timeline-header text-center">No data available</h3>
+            </div>
+          </div>
+        `);
+      }
+
+      $('#timelineModal').modal('show');
+    }
+    else if (obj.status === 'failed') {
+      toastr["error"](obj.message, "Failed:");
+    }
+    else {
+      toastr["error"]("Something wrong when pulling data", "Failed:");
+    }
+
     $('#spinnerLoading').hide();
   });
 }
