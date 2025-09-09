@@ -338,6 +338,8 @@ if(isset($_POST['userID'])){
                     $message['borang_e_date'] = $row['borang_e_date'];
                     $message['notification_period'] = $row['notification_period'];
                     $message['invoice_no'] = $row['invoice_no'];
+                    $message['invoice_payment_type'] = $row['invoice_payment_type'];
+                    $message['invoice_payment_ref'] = $row['invoice_payment_ref'];
                     $message['invoice_attachment'] = $row['invoice_attachment'] ?? '';
                     $message['invoice_filepath'] = searchFilePathById($row['invoice_attachment'], $db) ?? '';
                     $message['cash_bill'] = $row['cash_bill'];

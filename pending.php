@@ -967,6 +967,22 @@ else{
                     <input type="text" id="InvoiceFilePath" name="InvoiceFilePath" style="display:none">           
                   </div>
                 </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Invoice Payment Type</label>
+                    <select class="form-control select2" id="invoicePaymentType" name="invoicePaymentType">
+                      <option value="Cash">Cash</option>
+                      <option value="Check">Check</option>
+                      <option value="Online">Online Transfer</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Invoice Payment Reference</label>
+                    <input class="form-control" type="text" placeholder="Invoice Payment Reference" id="invoicePayRef" name="invoicePayRef">
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -5052,6 +5068,8 @@ function newEntry(){
   $('#extendModal').find('#notificationPeriod').val(1);
   $('#extendModal').find('#viewInvoice').hide();
   $('#extendModal').find('#InvoiceFilePath').val('');
+  $('#extendModal').find('#invoicePaymentType').val('').trigger('change');
+  $('#extendModal').find('#invoicePayRef').val('');
   //Additonal field reset
   // var value = $('#extendModal').find('#additionalSection').find('#batuUjian').val();
   // $('#extendModal').find('#additionalSection').find('#jenis_penunjuk').val('').trigger('change');
@@ -5285,6 +5303,8 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
+        $('#extendModal').find('#invoicePaymentType').val(obj.message.invoice_payment_type).trigger('change');
+        $('#extendModal').find('#invoicePayRef').val(obj.message.invoice_payment_ref);
         $('#extendModal').find('#validatorInvoice').val(obj.message.validator_invoice);
         $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
@@ -5693,6 +5713,8 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
+        $('#extendModal').find('#invoicePaymentType').val(obj.message.invoice_payment_type).trigger('change');
+        $('#extendModal').find('#invoicePayRef').val(obj.message.invoice_payment_ref);
         $('#extendModal').find('#validatorInvoice').val(obj.message.validator_invoice);
         $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
