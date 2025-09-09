@@ -1230,6 +1230,148 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 			else{
 				$stamp_id = $insert_stmt->insert_id;
 
+				$uploadQuotationAttachment = null;
+				$uploadInvoiceAttachment = null;
+				$uploadRentalAttachment = null;
+				if(isset($_FILES['uploadQuotationAttachment']) && $_FILES['uploadQuotationAttachment']!=null && $_FILES['uploadQuotationAttachment']!=""){
+					$uploadQuotationAttachment = $_FILES['uploadQuotationAttachment'];
+
+					$ds = DIRECTORY_SEPARATOR;
+					$storeFolder = '../uploads/stamping';
+					if($uploadQuotationAttachment['error'] === 0){
+						# Delete Existing File 
+						// if(isset($_POST['quotationFilePath']) && $_POST['quotationFilePath']!=null && $_POST['quotationFilePath']!=""){
+						// 	$quotationFilePath = $_POST['quotationFilePath'];
+						// 	if (file_exists($quotationFilePath)) {
+						// 		unlink($quotationFilePath);
+						// 	}
+						// }
+
+						$timestamp = time();
+						$uploadDir = $storeFolder . $ds; // Directory to store uploaded files
+						$folderDir = dirname(__DIR__, 2) . '/' . $uploadDir;
+						// Check if folder exists, if not, create it with correct permissions
+						if (!is_dir($folderDir)) {
+							mkdir($folderDir, 0777, true); // true allows recursive directory creation
+						}
+
+						$filename = $timestamp . '_' . basename($_FILES['uploadQuotationAttachment']['name']);
+						$uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
+						$tempFile = $_FILES['uploadQuotationAttachment']['tmp_name'];
+
+						// Move the uploaded file to the target directory
+						if (move_uploaded_file($tempFile, $uploadFile)) {
+							$dbDir = "../uploads/stamping/";
+							$quotationFilePath = $dbDir . $filename;
+							// Update certificate data in the database
+							if ($stmt3 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+								$stmt3->bind_param('ss', $filename, $quotationFilePath);
+								$stmt3->execute();
+								$fid = $stmt3->insert_id;
+								$stmt3->close();
+								
+								if ($stmtf = $db->prepare("UPDATE stamping SET quotation_attachment=? WHERE id=?")) {
+									$stmtf->bind_param('ss', $fid, $stamp_id);
+									$stmtf->execute();
+									$stmtf->close();
+								}
+							} 
+						} 
+					}
+				}
+
+				if(isset($_FILES['uploadInvoiceAttachment']) && $_FILES['uploadInvoiceAttachment']!=null && $_FILES['uploadInvoiceAttachment']!=""){
+					$uploadInvoiceAttachment = $_FILES['uploadInvoiceAttachment'];
+
+					$ds = DIRECTORY_SEPARATOR;
+					$storeFolder = '../uploads/stamping';
+					if($uploadInvoiceAttachment['error'] === 0){
+						# Delete Existing File 
+						// if(isset($_POST['InvoiceFilePath']) && $_POST['InvoiceFilePath']!=null && $_POST['InvoiceFilePath']!=""){
+						// 	$InvoiceFilePath = $_POST['InvoiceFilePath'];
+						// 	if (file_exists($InvoiceFilePath)) {
+						// 		unlink($InvoiceFilePath);
+						// 	}
+						// }
+
+						$timestamp = time();
+						$uploadDir = $storeFolder . $ds; // Directory to store uploaded files
+						$folderDir = dirname(__DIR__, 2) . '/' . $uploadDir;
+						// Check if folder exists, if not, create it with correct permissions
+						if (!is_dir($folderDir)) {
+							mkdir($folderDir, 0777, true); // true allows recursive directory creation
+						}
+
+						$filename = $timestamp . '_' . basename($_FILES['uploadInvoiceAttachment']['name']);
+						$uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
+						$tempFile = $_FILES['uploadInvoiceAttachment']['tmp_name'];
+
+						// Move the uploaded file to the target directory
+						if (move_uploaded_file($tempFile, $uploadFile)) {
+							$invoiceFilePath = $uploadDir . $filename;
+							// Update certificate data in the database
+							if ($stmt3 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+								$stmt3->bind_param('ss', $filename, $invoiceFilePath);
+								$stmt3->execute();
+								$fid = $stmt3->insert_id;
+								$stmt3->close();
+								
+								if ($stmtf = $db->prepare("UPDATE stamping SET invoice_attachment=? WHERE id=?")) {
+									$stmtf->bind_param('ss', $fid, $stamp_id);
+									$stmtf->execute();
+									$stmtf->close();
+								}
+							} 
+						} 
+					}
+				}
+
+				if(isset($_FILES['uploadRentalAttachment']) && $_FILES['uploadRentalAttachment']!=null && $_FILES['uploadRentalAttachment']!=""){
+					$uploadRentalAttachment = $_FILES['uploadRentalAttachment'];
+
+					$ds = DIRECTORY_SEPARATOR;
+					$storeFolder = '../uploads/stamping';
+					if($uploadRentalAttachment['error'] === 0){
+						# Delete Existing File 
+						// if(isset($_POST['InvoiceFilePath']) && $_POST['InvoiceFilePath']!=null && $_POST['InvoiceFilePath']!=""){
+						// 	$InvoiceFilePath = $_POST['InvoiceFilePath'];
+						// 	if (file_exists($InvoiceFilePath)) {
+						// 		unlink($InvoiceFilePath);
+						// 	}
+						// }
+
+						$timestamp = time();
+						$uploadDir = $storeFolder . $ds; // Directory to store uploaded files
+						$folderDir = dirname(__DIR__, 2) . '/' . $uploadDir;
+						// Check if folder exists, if not, create it with correct permissions
+						if (!is_dir($folderDir)) {
+							mkdir($folderDir, 0777, true); // true allows recursive directory creation
+						}
+
+						$filename = $timestamp . '_' . basename($_FILES['uploadRentalAttachment']['name']);
+						$uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
+						$tempFile = $_FILES['uploadRentalAttachment']['tmp_name'];
+
+						// Move the uploaded file to the target directory
+						if (move_uploaded_file($tempFile, $uploadFile)) {
+							$rentalFilePath = $uploadDir . $filename;
+							// Update certificate data in the database
+							if ($stmt3 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+								$stmt3->bind_param('ss', $filename, $rentalFilePath);
+								$stmt3->execute();
+								$fid = $stmt3->insert_id;
+								$stmt3->close();
+
+								if ($stmtf = $db->prepare("UPDATE stamping SET rental_attachment=? WHERE id=?")) {
+									$stmtf->bind_param('ss', $fid, $stamp_id);
+									$stmtf->execute();
+									$stmtf->close();
+								}
+							} 
+						} 
+					}
+				}
+
 				// For ATK Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '1'){
 					$penentusan_semula = null;
