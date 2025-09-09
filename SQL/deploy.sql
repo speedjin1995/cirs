@@ -220,3 +220,4 @@ UPDATE `inhouse_validations` SET company_branch = 1 WHERE company_branch IS NULL
 -- 09/09/2025 --
 ALTER TABLE `stamping` ADD `ownership_status` VARCHAR(10) NULL AFTER `assignTo3`, ADD `rental_attachment` INT(5) NULL AFTER `ownership_status`;
 
+ALTER TABLE `stamping` ADD `invoice_payment_type` VARCHAR(10) NULL AFTER `invoice_attachment`, ADD `invoice_payment_ref` TEXT NULL AFTER `invoice_payment_type`;
