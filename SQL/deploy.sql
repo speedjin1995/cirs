@@ -221,3 +221,27 @@ UPDATE `inhouse_validations` SET company_branch = 1 WHERE company_branch IS NULL
 ALTER TABLE `stamping` ADD `ownership_status` VARCHAR(10) NULL AFTER `assignTo3`, ADD `rental_attachment` INT(5) NULL AFTER `ownership_status`;
 
 ALTER TABLE `stamping` ADD `invoice_payment_type` VARCHAR(10) NULL AFTER `invoice_attachment`, ADD `invoice_payment_ref` TEXT NULL AFTER `invoice_payment_type`;
+
+CREATE TABLE `stamping_status_log` (
+  `id` int(11) NOT NULL,
+  `stamp_id` int(11) NOT NULL,
+  `status` varchar(50) DEFAULT NULL,
+  `status_remark` text DEFAULT NULL,
+  `created_by` varchar(100) DEFAULT NULL,
+  `occurred_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `stamping_status_log` ADD PRIMARY KEY (`id`);
+  
+ALTER TABLE `stamping_status_log` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+INSERT INTO `miscellaneous` (code, description, value)
+VALUES
+('stamping_status', 'Quotation Issued / Follow-Up', 1),
+('stamping_status', 'Quotation Chop Sign Back By Customer', 2),
+('stamping_status', 'Purchase Order (PO) Received', 3),
+('stamping_status', 'Pre-Stamping Completed', 4),
+('stamping_status', 'Stamping Date Confirmed / Customer Notified', 5),
+('stamping_status', 'Stamping Completed', 6),
+('stamping_status', 'SPMT Payment Completed', 7),
+('stamping_status', 'Metrology Department Payment Completed', 8);
