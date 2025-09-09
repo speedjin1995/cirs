@@ -34,6 +34,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 	$validatorlama = null;
 	$assignTo2 = null;
 	$assignTo3 = null;
+	$ownershipStatus = null;
 	$machineName = null;
 	$machineLocation = null;
 	$machineArea = null;
@@ -135,6 +136,10 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 
 	if(isset($_POST['assignTo3']) && $_POST['assignTo3']!=null && $_POST['assignTo3']!=""){
 		$assignTo3 = $_POST['assignTo3'];
+	}
+
+	if(isset($_POST['ownershipStatus']) && $_POST['ownershipStatus']!=null && $_POST['ownershipStatus']!=""){
+		$ownershipStatus = $_POST['ownershipStatus'];
 	}
 	
 	if(isset($_POST['machineName']) && $_POST['machineName']!=null && $_POST['machineName']!=""){
@@ -460,11 +465,11 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 		//Updated datetime
 		$currentDateTime = date('Y-m-d H:i:s');
 
-		if ($update_stmt = $db->prepare("UPDATE stamping SET type=?, company_branch=?, dealer=?, dealer_branch=?, customers=?, brand=?, machine_type=?, model=?, make_in=?, capacity=?, serial_no=?, assignTo=?, assignTo2=?, assignTo3=?, validator_lama=?, validate_by=?, cawangan=?, jenis_alat=?, machine_name=?, machine_location=?, machine_area=?, machine_serial_no=?, trade=?, no_daftar_lama=?, no_daftar_baru=?, pin_keselamatan=?, siri_keselamatan=?, include_cert=?, borang_d=?
+		if ($update_stmt = $db->prepare("UPDATE stamping SET type=?, company_branch=?, dealer=?, dealer_branch=?, customers=?, brand=?, machine_type=?, model=?, make_in=?, capacity=?, serial_no=?, assignTo=?, assignTo2=?, assignTo3=?, ownership_status=?, validator_lama=?, validate_by=?, cawangan=?, jenis_alat=?, machine_name=?, machine_location=?, machine_area=?, machine_serial_no=?, trade=?, no_daftar_lama=?, no_daftar_baru=?, pin_keselamatan=?, siri_keselamatan=?, include_cert=?, borang_d=?
 		, borang_e=?, borang_e_date=?, invoice_no=?, notification_period=?, cash_bill=?, stamping_date=?, last_year_stamping_date=?, due_date=?, pic=?, customer_pic=?, quotation_no=?, quotation_date=?, purchase_no=?, purchase_date=?
 		, remarks=?, internal_remark=?, validator_invoice=?, unit_price=?, cert_price=?, total_amount=?, sst=?, subtotal_sst_amt=?, rebate=?, rebate_amount=?, subtotal_amount=?, log=?, products=?, stamping_type=?, updated_datetime=?, branch=?, labour_charge=?, stampfee_labourcharge=?, int_round_up=?, total_charges=?, seal_no_lama=?, seal_no_baru=?, pegawai_contact=?, cert_no=? WHERE id=?")){
 			$data = json_encode($logs);
-			$update_stmt->bind_param('ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', $type, $companyBranch, $dealer, $reseller_branch, $customer, $brand, $machineType, $model, $makeIn, $capacity, $serial, $assignTo, $assignTo2, $assignTo3, $validatorlama,
+			$update_stmt->bind_param('sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', $type, $companyBranch, $dealer, $reseller_branch, $customer, $brand, $machineType, $model, $makeIn, $capacity, $serial, $assignTo, $assignTo2, $assignTo3, $ownershipStatus, $validatorlama,
 			$validator, $cawangan, $jenisAlat, $machineName, $machineLocation, $machineArea, $machineSerialNo, $trade, $noDaftarLama,$noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $borangEDate, $invoice, $notificationPeriod, $cashBill, $stampDate, $lastYearStampDate, $dueDate, $uid, $pic, 
 			$quotation, $quotationDate, $poNo, $poDate, $remark, $internalRemark, $validatorInvoice, $unitPrice, $certPrice, $totalPrice, $sst, $subAmountSst, $rebate, $rebateAmount, $subtotalPrice, $data, $product, $newRenew, $currentDateTime, $branch, $labourCharge, $stampLabourCharge, $roundUp, $totalCharge, $sealNoLama, $sealNoBaru, $pegawaiContact, $certNo, $_POST['id']);
 		
@@ -482,6 +487,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 
 				$uploadQuotationAttachment = null;
 				$uploadInvoiceAttachment = null;
+				$uploadRentalAttachment = null;
 				if(isset($_FILES['uploadQuotationAttachment']) && $_FILES['uploadQuotationAttachment']!=null && $_FILES['uploadQuotationAttachment']!=""){
 					$uploadQuotationAttachment = $_FILES['uploadQuotationAttachment'];
 
@@ -566,6 +572,52 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 								$stmt3->close();
 								
 								if ($stmtf = $db->prepare("UPDATE stamping SET invoice_attachment=? WHERE id=?")) {
+									$stmtf->bind_param('ss', $fid, $stampingId);
+									$stmtf->execute();
+									$stmtf->close();
+								}
+							} 
+						} 
+					}
+				}
+
+				if(isset($_FILES['uploadRentalAttachment']) && $_FILES['uploadRentalAttachment']!=null && $_FILES['uploadRentalAttachment']!=""){
+					$uploadRentalAttachment = $_FILES['uploadRentalAttachment'];
+
+					$ds = DIRECTORY_SEPARATOR;
+					$storeFolder = '../uploads/stamping';
+					if($uploadRentalAttachment['error'] === 0){
+						# Delete Existing File 
+						// if(isset($_POST['InvoiceFilePath']) && $_POST['InvoiceFilePath']!=null && $_POST['InvoiceFilePath']!=""){
+						// 	$InvoiceFilePath = $_POST['InvoiceFilePath'];
+						// 	if (file_exists($InvoiceFilePath)) {
+						// 		unlink($InvoiceFilePath);
+						// 	}
+						// }
+
+						$timestamp = time();
+						$uploadDir = $storeFolder . $ds; // Directory to store uploaded files
+						$folderDir = dirname(__DIR__, 2) . '/' . $uploadDir;
+						// Check if folder exists, if not, create it with correct permissions
+						if (!is_dir($folderDir)) {
+							mkdir($folderDir, 0777, true); // true allows recursive directory creation
+						}
+
+						$filename = $timestamp . '_' . basename($_FILES['uploadRentalAttachment']['name']);
+						$uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
+						$tempFile = $_FILES['uploadRentalAttachment']['tmp_name'];
+
+						// Move the uploaded file to the target directory
+						if (move_uploaded_file($tempFile, $uploadFile)) {
+							$rentalFilePath = $uploadDir . $filename;
+							// Update certificate data in the database
+							if ($stmt3 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+								$stmt3->bind_param('ss', $filename, $rentalFilePath);
+								$stmt3->execute();
+								$fid = $stmt3->insert_id;
+								$stmt3->close();
+
+								if ($stmtf = $db->prepare("UPDATE stamping SET rental_attachment=? WHERE id=?")) {
 									$stmtf->bind_param('ss', $fid, $stampingId);
 									$stmtf->execute();
 									$stmtf->close();
@@ -1157,12 +1209,12 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 
 	}
 	else{
-		if ($insert_stmt = $db->prepare("INSERT INTO stamping (type, company_branch, dealer, dealer_branch, customer_type, customers, brand, machine_type, model, make_in, capacity, serial_no, assignTo, assignTo2, assignTo3, validator_lama,
+		if ($insert_stmt = $db->prepare("INSERT INTO stamping (type, company_branch, dealer, dealer_branch, customer_type, customers, brand, machine_type, model, make_in, capacity, serial_no, assignTo, assignTo2, assignTo3, ownership_status, validator_lama,
 		validate_by, cawangan, jenis_alat, machine_name, machine_location, machine_area, machine_serial_no, trade, no_daftar_lama, no_daftar_baru, pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, borang_e_date, invoice_no, notification_period, cash_bill, stamping_date, last_year_stamping_date, due_date, pic, customer_pic, 
 		quotation_no, quotation_date, purchase_no, purchase_date, remarks, internal_remark, validator_invoice, unit_price, cert_price, total_amount, sst, subtotal_sst_amt, rebate, rebate_amount, subtotal_amount, log, products, stamping_type, branch, labour_charge, stampfee_labourcharge, int_round_up, total_charges, seal_no_lama, seal_no_baru, pegawai_contact, cert_no) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
 			$data = json_encode($logs);
-			$insert_stmt->bind_param('sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', $type, $companyBranch, $dealer, $reseller_branch, $customerType, $customer, $brand, $machineType, $model, $makeIn, $capacity, $serial, $assignTo, $assignTo2, $assignTo3, $validatorlama,
+			$insert_stmt->bind_param('ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', $type, $companyBranch, $dealer, $reseller_branch, $customerType, $customer, $brand, $machineType, $model, $makeIn, $capacity, $serial, $assignTo, $assignTo2, $assignTo3, $ownershipStatus, $validatorlama,
 			$validator, $cawangan, $jenisAlat, $machineName, $machineLocation, $machineArea, $machineSerialNo, $trade, $noDaftarLama, $noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $borangEDate, $invoice, $notificationPeriod, $cashBill, $stampDate, $lastYearStampDate, $dueDate, $uid, $pic, 
 			$quotation, $quotationDate, $poNo, $poDate, $remark, $internalRemark, $validatorInvoice, $unitPrice, $certPrice, $totalPrice, $sst, $subAmountSst, $rebate, $rebateAmount, $subtotalPrice, $data, $product, $newRenew, $branch, $labourCharge, $stampLabourCharge, $roundUp, $totalCharge, $sealNoLama, $sealNoBaru, $pegawaiContact, $certNo);
 			

@@ -311,6 +311,9 @@ if(isset($_POST['userID'])){
                     $message['assignTo'] = $row['assignTo'];
                     $message['assignTo2'] = $row['assignTo2'];
                     $message['assignTo3'] = $row['assignTo3'];
+                    $message['ownership_status'] = $row['ownership_status'];
+                    $message['rental_attachment'] = $row['rental_attachment'] ?? '';
+                    $message['rental_filepath'] = searchFilePathById($row['rental_attachment'], $db) ?? '';
                     $message['serial_no'] = $row['serial_no'];
                     $message['validate_by'] = $row['validate_by'];
                     $message['validator_lama'] = $row['validator_lama'];

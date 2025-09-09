@@ -651,6 +651,29 @@ else{
                     </select>
                   </div>
                 </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Ownership Status</label>
+                    <select class="form-control select2" style="width: 100%;" id="ownershipStatus" name="ownershipStatus">
+                      <option value="RENT">Rent</option>
+                      <option value="OWN">Own</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4" id="rentalAttachment" style="display:none">
+                  <div class="form-group">
+                    <label>Rental Attachment</label>
+                    <div class="d-flex">
+                      <div class="col-10">
+                        <input type="file" class="form-control" id="uploadRentalAttachment" name="uploadRentalAttachment">
+                      </div>
+                      <div class="col-2 mt-1">
+                        <a href="" id="viewRental" name="viewRental" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
+                      </div>
+                    </div>
+                    <input type="text" id="rentalFilePath" name="rentalFilePath" style="display:none">           
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -3617,6 +3640,16 @@ $(function () {
     }
   });
 
+  $('#extendModal').find('#ownershipStatus').on('change', function(){
+    var ownershipStatus = $(this).val();
+
+    if (ownershipStatus == 'RENT'){
+      $('#extendModal').find('#rentalAttachment').show();
+    }else{
+      $('#extendModal').find('#rentalAttachment').hide();
+    }
+  });
+
   $('#cancelModal').find('#cancellationReason').on('change', function(){
     if($(this).val() == '0'){
       $('#otherReason').attr("required", true);
@@ -4621,6 +4654,12 @@ function edit(id) {
         $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
         $('#extendModal').find('#assignTo2').val(obj.message.assignTo2).trigger('change');
         $('#extendModal').find('#assignTo3').val(obj.message.assignTo3).trigger('change');
+        $('#extendModal').find('#ownershipStatus').val(obj.message.ownership_status).trigger('change');
+        if(obj.message.rental_attachment){
+          $('#extendModal').find('#rentalFilePath').val(obj.message.rental_filepath);
+          $('#extendModal').find('#viewRental').attr('href', "view_file.php?file="+obj.message.rental_attachment).show();
+        }
+
         $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
         $('#extendModal').find('#newRenew').val(obj.message.stampType).trigger('change');
         $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
@@ -5021,6 +5060,12 @@ function edit(id) {
         $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
         $('#extendModal').find('#assignTo2').val(obj.message.assignTo2).trigger('change');
         $('#extendModal').find('#assignTo3').val(obj.message.assignTo3).trigger('change');
+        $('#extendModal').find('#ownershipStatus').val(obj.message.ownership_status).trigger('change');
+        if(obj.message.rental_attachment){
+          $('#extendModal').find('#rentalFilePath').val(obj.message.rental_filepath);
+          $('#extendModal').find('#viewRental').attr('href', "view_file.php?file="+obj.message.rental_attachment).show();
+        }
+
         $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
         $('#extendModal').find('#newRenew').val(obj.message.stampType).trigger('change');
         customer = obj.message.customers;

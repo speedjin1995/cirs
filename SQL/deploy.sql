@@ -216,3 +216,7 @@ UPDATE `stamping` SET company_branch = 1 WHERE company_branch IS NULL AND delete
 UPDATE `other_validations` SET company_branch = 1 WHERE company_branch IS NULL AND deleted = 0;
 
 UPDATE `inhouse_validations` SET company_branch = 1 WHERE company_branch IS NULL AND deleted = 0;
+
+-- 09/09/2025 --
+ALTER TABLE `stamping` ADD `ownership_status` VARCHAR(10) NULL AFTER `assignTo3`, ADD `rental_attachment` INT(5) NULL AFTER `ownership_status`;
+
