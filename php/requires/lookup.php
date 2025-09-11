@@ -393,7 +393,7 @@ function searchStaffICById($value, $db) {
 }
 
 function searchCountryById($value, $db) {
-    $id = 'MALAYSIA';
+    $id = '';
 
     if ($select_stmt = $db->prepare("SELECT * FROM country WHERE id=?")) {
         $select_stmt->bind_param('s', $value);
