@@ -293,8 +293,13 @@ else{
               <div class="col-md-8">
                 <div class="d-flex justify-content-end gap-2">
                   <div class="col-auto">
+                    <button type="button" class="btn btn-sm bg-gradient-success" id="multiComplete" data-bs-toggle="tooltip" title="Complete Stampings">
+                      <i class="fa-solid fa-check"></i> Complete
+                    </button>
+                  </div>
+                  <div class="col-auto">
                     <button type="button" class="btn btn-sm bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Cancel Stampings">
-                      <i class="fa-solid fa-ban"></i> Cancel Stamping
+                      <i class="fa-solid fa-ban"></i> Cancel
                     </button>
                   </div>
                   <div class="col-auto">
@@ -314,7 +319,7 @@ else{
                   </div>
                   <div class="col-auto">
                     <button type="button" class="btn btn-sm bg-gradient-warning" onclick="newEntry()" data-bs-toggle="tooltip" title="Add New Stamping">
-                      <i class="fa-solid fa-circle-plus"></i> Add New Stamping
+                      <i class="fa-solid fa-circle-plus"></i> Add New
                     </button>
                   </div>
                   <!--div class="col-2">
@@ -1477,6 +1482,34 @@ else{
           <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="errorLogModal"> 
+  <div class="modal-dialog modal-xl" style="max-width: 90%;">
+    <div class="modal-content">
+
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Error Completing Stamping</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <ol id="errorList" class="text-danger mt-2" style="padding-left: 20px;"></ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
     </div>
   </div>
 </div>
@@ -3069,6 +3102,53 @@ $(function () {
     
   });
 
+  $('#multiComplete').on('click', function () {
+      $('#spinnerLoading').show();
+      var selectedIds = []; // An array to store the selected 'id' values
+
+      $("#weightTable tbody input[type='checkbox']").each(function () {
+        if (this.checked) {
+          selectedIds.push($(this).val());
+        }
+      });
+
+      if (selectedIds.length > 0) {
+        if (confirm('Are you sure you want to complete this items?')) {
+          $('#spinnerLoading').show();
+          $.post('php/completeStamp.php', {userID: selectedIds, isMulti: 'Y'}, function(data){
+            var obj = JSON.parse(data);
+
+            if(obj.status === 'success'){
+              toastr["success"](obj.message, "Success:");
+              $('#weightTable').DataTable().ajax.reload(null, false);
+            }
+            else if(obj.status === 'error'){
+              $('#errorLogModal').find('#errorList').empty();
+              var errorMessage = obj.errors;
+              for (var i = 0; i < errorMessage.length; i++) {
+                  $('#errorLogModal').find('#errorList').append(`<li>${errorMessage[i]}</li>`);                            
+              }
+              $('#errorLogModal').modal('show');
+            }
+            else if(obj.status === 'failed'){
+              toastr["error"](obj.message, "Failed:");
+            }
+            else{
+              toastr["error"]("Something wrong when activate", "Failed:");
+            }
+            $('#spinnerLoading').hide();
+          });
+        }
+
+        $('#spinnerLoading').hide();
+      } 
+      else {
+        // Optionally, you can display a message or take another action if no IDs are selected
+        alert("Please select at least one stamping to complete.");
+        $('#spinnerLoading').hide();
+      }
+  });
+
   $('#mergeBorang').on('click', function () {
       var selectedIds = []; // An array to store the selected 'id' values
 
@@ -3241,6 +3321,18 @@ $(function () {
 
     reader.readAsBinaryString(file);
   });
+
+  $('#errorLogModal').on('shown.bs.modal', function () {
+    wasErrorLogModalShown = true;
+  });
+
+  $('#errorLogModal').on('hidden.bs.modal', function () {
+    if (wasErrorLogModalShown) {
+      wasErrorLogModalShown = false; // Reset flag
+      window.location.reload();
+    }
+  });
+
 
   $('#extendModal').find('#newRenew').on('change', function(){
     if($(this).val() == "NEW"){
@@ -6034,7 +6126,7 @@ function edit(id) {
 function complete(id) {
   if (confirm('Are you sure you want to complete this items?')) {
     $('#spinnerLoading').show();
-    $.post('php/completeStamp.php', {userID: id}, function(data){
+    $.post('php/completeStamp.php', {userID: id, isMulti: 'N'}, function(data){
       var obj = JSON.parse(data);
 
       if(obj.status === 'success'){
