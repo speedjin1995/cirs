@@ -363,6 +363,10 @@ function searchValidatorNameById($value, $db) {
 function searchStaffNameById($value, $db) {
     $id = null;
 
+    if ($value == 0){
+        return '*SYSTEM';
+    }
+
     if ($select_stmt = $db->prepare("SELECT * FROM users WHERE id=?")) {
         $select_stmt->bind_param('s', $value);
         $select_stmt->execute();

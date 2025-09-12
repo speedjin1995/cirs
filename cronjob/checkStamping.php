@@ -100,6 +100,14 @@ try {
                 }
             }
 
+            // Insert Stamping System Log
+            if ($insert_stmt3 = $pdo->prepare("INSERT INTO stamping_log (action, user_id, item_id) 
+            VALUES (?, ?, ?)")){
+                $action = "INSERT";
+                $user = 0;
+                $insert_stmt3->execute([$action, $user, $newStampId]);
+            }
+
             // Add to processed IDs
             $processedIds[] = $record['id'];
         }
