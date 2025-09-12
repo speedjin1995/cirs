@@ -2331,6 +2331,10 @@ $(function () {
               dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
             }
 
+            if (userRole === 'SUPER_ADMIN' || userRole === 'ADMIN'){
+              dropdownMenu += '<a class="dropdown-item" id="revertStamp' + data + '" onclick="revertStamp(' + data + ')"><i class="fa fa-undo" aria-hidden="true"></i> Revert Stamping</a>';
+            }
+
             dropdownMenu += '<a class="dropdown-item" id="statusTimeline' + data + '" onclick="statusTimeline(' + data + ')"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Status Timeline</a>'+
             '<a class="dropdown-item" id="deactivate' + data + '" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>';
           
@@ -2616,6 +2620,10 @@ $(function () {
 
               if (userRole === 'SUPER_ADMIN'){
                 dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
+              }
+
+              if (userRole === 'SUPER_ADMIN' || userRole === 'ADMIN'){
+                dropdownMenu += '<a class="dropdown-item" id="revertStamp' + data + '" onclick="revertStamp(' + data + ')"><i class="fa fa-undo" aria-hidden="true"></i> Revert Stamping</a>';
               }
 
               dropdownMenu += '<a class="dropdown-item" id="statusTimeline' + data + '" onclick="statusTimeline(' + data + ')"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Status Timeline</a>'+
@@ -4031,6 +4039,11 @@ function format (row) {
           if (userRole === 'SUPER_ADMIN'){
             returnString += '<div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
           }
+
+          if (userRole === 'SUPER_ADMIN' || userRole === 'ADMIN'){
+            returnString += '<div class="col-1"><button title="Revert Stamping" type="button" id="revertStamp${row.id}" onclick="revertStamp(${row.id})" class="btn btn-info btn-sm"><i class="fa fa-undo" aria-hidden="true"></i></button></div>';
+          }
+
 
           returnString += `<div class="col-1"><button title="Status Timeline" type="button" id="statusTimeline${row.id}" onclick="statusTimeline(${row.id})" class="btn btn-warning btn-sm"><i class="fa fa-map-marker-alt" aria-hidden="true"></i></button></div>
           <div class="col-1"><button title="Copy" type="button" id="copy${row.id}" onclick="copy(${row.id})" class="btn btn-success btn-sm"><i class="fa-solid fa-clone"></i></button></div>
@@ -5788,4 +5801,26 @@ function copy(id) {
     }
   });
 }
+
+function revertStamp(id) {
+  if (confirm('Are you sure you want to revert this item?')) {
+    $('#spinnerLoading').show();
+    $.post('php/revertStamp.php', {id: id, status: 'Complete'}, function(data){
+      var obj = JSON.parse(data);
+
+      if(obj.status === 'success'){
+        toastr["success"](obj.message, "Success:");
+        $('#weightTable').DataTable().ajax.reload(null, false);
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when activate", "Failed:");
+      }
+      $('#spinnerLoading').hide();
+    });
+  }
+}
+
 </script>
