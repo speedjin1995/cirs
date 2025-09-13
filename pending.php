@@ -1314,6 +1314,39 @@ else{
   </div>
 </div>
 
+<div class="modal fade" id="generateDupModal"> 
+  <div class="modal-dialog modal-xl" style="max-width: 50%;">
+    <div class="modal-content">
+
+      <form role="form" id="genDupForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Generate Stamping Template</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" class="form-control" id="id" name="id">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>No of records to generate *</label>
+                <input type="number" class="form-control" id="duplicateNo" name="duplicateNo" required>
+              </div>
+            </div>
+          </div>    
+        </div>
+
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="logModal"> 
   <div class="modal-dialog modal-xl" style="max-width: 80%;">
     <div class="modal-content">
@@ -2443,6 +2476,7 @@ $(function () {
   var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
 
   const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
+  const allowedGenDuplicateAlats = ['ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC'];
 
   var table = $("#weightTable").DataTable({
     "responsive": true,
@@ -2539,6 +2573,10 @@ $(function () {
 
           if (allowedAlats.includes(row.jenis_alat)) {
             dropdownMenu += '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ', \'' + row.jenis_alat + '\', \'' + row.validate_by + '\')"><i class="fas fa-print"></i> Print</a>';
+          }
+
+          if (allowedGenDuplicateAlats.includes(row.jenis_alat)) {
+            dropdownMenu += '<a class="dropdown-item" id="genDuplicateTemplate' + data + '" onclick="genDuplicateTemplate(' + data + ')"><i class="fas fa-copy"></i> Generate Template</a>';
           }
 
           if (userRole === 'SUPER_ADMIN'){
@@ -2747,11 +2785,40 @@ $(function () {
             toastr["error"](obj.message, "Failed:");
           }
           else{
-            toastr["error"]("Something wrong when edit", "Failed:");
+            toastr["error"]("Something wrong when duplicating", "Failed:");
           }
 
           $('#spinnerLoading').hide();
         });
+      }
+      else if($('#generateDupModal').hasClass('show')){
+        // Create a form for file download
+        var form = $('<form>', {
+          'method': 'POST',
+          'action': 'php/genStampTemplate.php',
+          'target': '_blank'
+        });
+        
+        // Add form data
+        var formData = $('#genDupForm').serializeArray();
+        $.each(formData, function(i, field) {
+          form.append($('<input>', {
+            'type': 'hidden',
+            'name': field.name,
+            'value': field.value
+          }));
+        });
+        
+        // Append to body and submit
+        $('body').append(form);
+        form.submit();
+        form.remove();
+        
+        $('#generateDupModal').modal('hide');
+        toastr["success"]("Template download started", "Success:");
+        $('#weightTable').DataTable().ajax.reload(null, false);
+        
+        $('#spinnerLoading').hide();
       }
       else if($('#printBorangModal').hasClass('show')){
         var id = $('#printBorangForm').find('#id').val();
@@ -2910,6 +2977,10 @@ $(function () {
 
             if (allowedAlats.includes(row.jenis_alat)) {
               dropdownMenu += '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ', \'' + row.jenis_alat + '\', \'' + row.validate_by + '\')"><i class="fas fa-print"></i> Print</a>';
+            }
+
+            if (allowedGenDuplicateAlats.includes(row.jenis_alat)) {
+              dropdownMenu += '<a class="dropdown-item" id="genDuplicateTemplate' + data + '" onclick="genDuplicateTemplate(' + data + ')"><i class="fas fa-copy"></i> Generate Template</a>';
             }
 
             if (userRole === 'SUPER_ADMIN'){
@@ -6474,6 +6545,25 @@ function duplicate(id) {
   $('#duplicateModal').modal('show');
 
   $('#duplicateForm').validate({
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+      error.addClass('invalid-feedback');
+      element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass('is-invalid');
+    }
+  });
+}
+
+function genDuplicateTemplate(id) {
+  $('#generateDupModal').find('#id').val(id);
+  $('#generateDupModal').modal('show');
+
+  $('#genDupForm').validate({
     errorElement: 'span',
     errorPlacement: function (error, element) {
       error.addClass('invalid-feedback');
