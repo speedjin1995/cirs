@@ -275,6 +275,22 @@ function searchMachineNameById($value, $db) {
     return $id;
 }
 
+function searchMachinenameNameById($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM machine_names WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['machine_name'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
 function searchCapacityNameById($value, $db) {
     $id = '';
 
