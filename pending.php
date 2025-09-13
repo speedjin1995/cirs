@@ -4543,6 +4543,7 @@ $(function () {
 function format (row) {
   const userRole = '<?=$role ?>';
   const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
+  const allowedGenDuplicateAlats = ['ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC'];
 
   var returnString = `
   <div class="row">
@@ -4707,6 +4708,11 @@ function format (row) {
         if (allowedAlats.includes(row.jenis_alat)) {
           returnString += '<div class="col-1"><button title="Print" type="button" id="print'+row.id+'" onclick="print('+row.id+', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
         }
+
+        if (allowedGenDuplicateAlats.includes(row.jenis_alat)) {
+          returnString += '<div class="col-1"><button title="Generate Template" type="button" id="genDuplicateTemplate'+row.id+'" onclick="genDuplicateTemplate('+row.id+')" class="btn btn-danger btn-sm"><i class="fas fa-copy"></i></button></div>';
+        }
+
 
         if (userRole === 'SUPER_ADMIN'){
           returnString += '<div class="col-1"><button title="Log" type="button" id="log'+row.id+'" onclick="log('+row.id+')" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
