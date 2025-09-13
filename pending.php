@@ -2575,7 +2575,7 @@ $(function () {
             dropdownMenu += '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ', \'' + row.jenis_alat + '\', \'' + row.validate_by + '\')"><i class="fas fa-print"></i> Print</a>';
           }
 
-          if (allowedGenDuplicateAlats.includes(row.jenis_alat)) {
+          if (allowedGenDuplicateAlats.includes(row.jenis_alat) && row.stamping_type == 'NEW') {
             dropdownMenu += '<a class="dropdown-item" id="genDuplicateTemplate' + data + '" onclick="genDuplicateTemplate(' + data + ')"><i class="fas fa-copy"></i> Generate Template</a>';
           }
 
@@ -2979,7 +2979,7 @@ $(function () {
               dropdownMenu += '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ', \'' + row.jenis_alat + '\', \'' + row.validate_by + '\')"><i class="fas fa-print"></i> Print</a>';
             }
 
-            if (allowedGenDuplicateAlats.includes(row.jenis_alat)) {
+            if (allowedGenDuplicateAlats.includes(row.jenis_alat) && row.stamping_type == 'NEW') {
               dropdownMenu += '<a class="dropdown-item" id="genDuplicateTemplate' + data + '" onclick="genDuplicateTemplate(' + data + ')"><i class="fas fa-copy"></i> Generate Template</a>';
             }
 
@@ -4709,7 +4709,7 @@ function format (row) {
           returnString += '<div class="col-1"><button title="Print" type="button" id="print'+row.id+'" onclick="print('+row.id+', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
         }
 
-        if (allowedGenDuplicateAlats.includes(row.jenis_alat)) {
+        if (allowedGenDuplicateAlats.includes(row.jenis_alat) && row.stamping_type == 'NEW') {
           returnString += '<div class="col-1"><button title="Generate Template" type="button" id="genDuplicateTemplate'+row.id+'" onclick="genDuplicateTemplate('+row.id+')" class="btn btn-danger btn-sm"><i class="fas fa-copy"></i></button></div>';
         }
 

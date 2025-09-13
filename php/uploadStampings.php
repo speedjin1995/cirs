@@ -11,7 +11,7 @@ $uid = $_SESSION['userID'];
 $data = json_decode(file_get_contents('php://input'), true);
 
 if (!empty($data)) {
-    foreach ($data as $row) {
+    foreach ($data as $row) { var_dump($row);die;
         $customers = !empty($row['Customer']) ? searchCust($row['Customer'], $db) : null;
         $brands = !empty($row['Brand']) ? searchBrand($row['Brand'], $db) : null;
         $models = !empty($row['Model']) ? searchModel($row['Model'], $db) : null;
