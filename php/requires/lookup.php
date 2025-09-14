@@ -1,20 +1,4 @@
 <?php
-function searchCustomerBranchAddressById($value, $db) {
-    $id = null;
-
-    if ($select_stmt = $db->prepare("SELECT * FROM branches WHERE id=?")) {
-        $select_stmt->bind_param('s', $value);
-        $select_stmt->execute();
-        $result = $select_stmt->get_result();
-        if ($row = $result->fetch_assoc()) {
-            $id = $row['address'].' '.$row['address2'].' '.$row['address3'].' '.$row['address4'];
-        }
-        $select_stmt->close();
-    }
-
-    return $id;
-}
-
 function searchCompanyBranchById($value, $db) {
     $id = null;
 
@@ -31,6 +15,21 @@ function searchCompanyBranchById($value, $db) {
     return $id;
 }
 
+function searchCompanyBranchAddressById($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM company_branches WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = '<b>'.$row['branch_name'].'</b><br>'.$row['address_line_1'].'<br>'.$row['address_line_2'].'<br>'.$row['address_line_3'].'<br>'.$row['address_line_4'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
 
 // Name by Id
 function searchCustNameById($value, $db) {
@@ -42,6 +41,38 @@ function searchCustNameById($value, $db) {
         $result = $select_stmt->get_result();
         if ($row = $result->fetch_assoc()) {
             $id = $row['customer_name'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+function searchCustomerBranchAddressById($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM branches WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['address'].' '.$row['address2'].' '.$row['address3'].' '.$row['address4'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+function searchCustomerBranchAddressById2($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM branches WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['address'].'<br>'.$row['address2'].'<br>'.$row['address3'].'<br>'.$row['address4'];
         }
         $select_stmt->close();
     }
@@ -76,6 +107,22 @@ function searchResellerNameById($value, $db) {
         $result = $select_stmt->get_result();
         if ($row = $result->fetch_assoc()) {
             $id = $row['customer_name'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+function searchResellerAddressById($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM dealer WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = '<b>'.$row['customer_name'].'</b><br>'.$row['customer_address'].'<br>'.$row['address2'].'<br>'.$row['address3'].'<br>'.$row['address4'];
         }
         $select_stmt->close();
     }
@@ -235,7 +282,7 @@ function searchValidatorNameById($value, $db) {
 function searchStaffNameById($value, $db) {
     $id = null;
 
-    if ($value == 0){
+    if ($value === 0){
         return '*SYSTEM';
     }
 

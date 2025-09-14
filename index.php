@@ -659,6 +659,12 @@ to get the desired effect
                   <p>Borang Jadual 8</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="#consolidated" data-file="consolidated.php" class="nav-link link">
+                  <i class="nav-icon fas fa-file"></i>
+                  <p>Consolidated Report</p>
+                </a>
+              </li>
             </ul>
           </li>
           <?php 
