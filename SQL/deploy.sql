@@ -247,3 +247,6 @@ VALUES
 ('stamping_status', 'Metrology Department Payment Completed', 8);
 
 ALTER TABLE `stamping` ADD `restamping` VARCHAR(3) NULL DEFAULT 'N' AFTER `copy`;
+
+-- 14/09/2025 --
+INSERT INTO `roles` (`role_code`, `role_name`, `module`, `deleted`) VALUES ('ADMIN/ACCOUNT', 'ADMIN/ACCOUNT', NULL, '0');

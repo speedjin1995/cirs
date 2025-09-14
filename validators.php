@@ -264,7 +264,7 @@ $(function () {
 
 function edit(id){
     $('#spinnerLoading').show();
-    $.post('php/getValidator.php', {userID: id}, function(data){
+    $.post('php/getValidator.php', {userID: id, action: 'Edit'}, function(data){
         var obj = JSON.parse(data);
         
         if(obj.status === 'success'){
