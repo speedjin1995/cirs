@@ -2627,6 +2627,7 @@ $(function () {
               }
 
               dropdownMenu += '<a class="dropdown-item" id="statusTimeline' + data + '" onclick="statusTimeline(' + data + ')"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Status Timeline</a>'+
+              // '<a class="dropdown-item" id="restamping' + data + '" onclick="restamping(' + data + ')"><i class="fas fa-stamp" aria-hidden="true"></i> Restamping</a>'+
               '<a class="dropdown-item" id="deactivate' + data + '" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>';
             
             dropdownMenu += '</div></div>';
@@ -5808,7 +5809,27 @@ function revertStamp(id) {
     $.post('php/revertStamp.php', {id: id, status: 'Complete'}, function(data){
       var obj = JSON.parse(data);
 
-      if(obj.status === 'success'){
+      if(obj.status === 'success'){ 
+        toastr["success"](obj.message, "Success:");
+        $('#weightTable').DataTable().ajax.reload(null, false);
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when activate", "Failed:");
+      }
+      $('#spinnerLoading').hide();
+    });
+  }
+}
+
+function restamping(id) {
+  if(confirm("Are you sure you want to restamp this item?")) {
+    $.post('php/duplicateStamp.php', {id: id}, function(data){
+      var obj = JSON.parse(data);
+    
+      if(obj.status === 'success'){ 
         toastr["success"](obj.message, "Success:");
         $('#weightTable').DataTable().ajax.reload(null, false);
       }

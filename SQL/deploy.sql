@@ -245,3 +245,6 @@ VALUES
 ('stamping_status', 'Stamping Completed', 6),
 ('stamping_status', 'SPMT Payment Completed', 7),
 ('stamping_status', 'Metrology Department Payment Completed', 8);
+
+-- Restamping --
+ALTER TABLE `stamping` ADD `restamping` VARCHAR(3) NULL DEFAULT 'N' AFTER `copy`;
