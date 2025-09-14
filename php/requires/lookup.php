@@ -31,150 +31,6 @@ function searchCompanyBranchById($value, $db) {
     return $id;
 }
 
-// Id by Name
-function searchCustIdByName($value, $db) {
-    $id = null;
-
-    if ($select_stmt = $db->prepare("SELECT * FROM customers WHERE customer_name=?")) {
-        $select_stmt->bind_param('s', $value);
-        $select_stmt->execute();
-        $result = $select_stmt->get_result();
-        if ($row = $result->fetch_assoc()) {
-            $id = $row['id'];
-        }
-        $select_stmt->close();
-    }
-
-    return $id;
-}
-
-function searchDealerIdByName($value, $db) {
-    $id = null;
-
-    if ($select_stmt = $db->prepare("SELECT * FROM dealer WHERE customer_name=?")) {
-        $select_stmt->bind_param('s', $value);
-        $select_stmt->execute();
-        $result = $select_stmt->get_result();
-        if ($row = $result->fetch_assoc()) {
-            $id = $row['id'];
-        }
-        $select_stmt->close();
-    }
-
-    return $id;
-}
-
-function searchBrandIdByName($value, $db) {
-    $id = null;
-
-    if ($select_stmt = $db->prepare("SELECT * FROM brand WHERE brand=?")) {
-        $select_stmt->bind_param('s', $value);
-        $select_stmt->execute();
-        $result = $select_stmt->get_result();
-        if ($row = $result->fetch_assoc()) {
-            $id = $row['id'];
-        }
-        $select_stmt->close();
-    }
-
-    return $id;
-}
-
-function searchModelIdByName($value, $db) {
-    $id = null;
-
-    if ($select_stmt = $db->prepare("SELECT * FROM model WHERE model=?")) {
-        $select_stmt->bind_param('s', $value);
-        $select_stmt->execute();
-        $result = $select_stmt->get_result();
-        if ($row = $result->fetch_assoc()) {
-            $id = $row['id'];
-        }
-        $select_stmt->close();
-    }
-
-    return $id;
-}
-
-function searchMachineIdByName($value, $db) {
-    $id = null;
-
-    if ($select_stmt = $db->prepare("SELECT * FROM machines WHERE machine_type=?")) {
-        $select_stmt->bind_param('s', $value);
-        $select_stmt->execute();
-        $result = $select_stmt->get_result();
-        if ($row = $result->fetch_assoc()) {
-            $id = $row['id'];
-        }
-        $select_stmt->close();
-    }
-
-    return $id;
-}
-
-function searchCapacityIdByName($value, $db) {
-    $id = null;
-
-    if ($select_stmt = $db->prepare("SELECT * FROM capacity WHERE capacity=?")) {
-        $select_stmt->bind_param('s', $value);
-        $select_stmt->execute();
-        $result = $select_stmt->get_result();
-        if ($row = $result->fetch_assoc()) {
-            $id = $row['id'];
-        }
-        $select_stmt->close();
-    }
-
-    return $id;
-}
-
-function searchJenisAlatNameByid($value, $db) {
-    $id = null;
-
-    if ($select_stmt = $db->prepare("SELECT * FROM alat WHERE id=?")) {
-        $select_stmt->bind_param('s', $value);
-        $select_stmt->execute();
-        $result = $select_stmt->get_result();
-        if ($row = $result->fetch_assoc()) {
-            $id = $row['alat'];
-        }
-        $select_stmt->close();
-    }
-
-    return $id;
-}
-
-function searchJenisAlatIdByName($value, $db) {
-    $id = null;
-
-    if ($select_stmt = $db->prepare("SELECT * FROM alat WHERE alat=?")) {
-        $select_stmt->bind_param('s', $value);
-        $select_stmt->execute();
-        $result = $select_stmt->get_result();
-        if ($row = $result->fetch_assoc()) {
-            $id = $row['id'];
-        }
-        $select_stmt->close();
-    }
-
-    return $id;
-}
-
-function searchValidatorIdByName($value, $db) {
-    $id = null;
-
-    if ($select_stmt = $db->prepare("SELECT * FROM validators WHERE validator=?")) {
-        $select_stmt->bind_param('s', $value);
-        $select_stmt->execute();
-        $result = $select_stmt->get_result();
-        if ($row = $result->fetch_assoc()) {
-            $id = $row['id'];
-        }
-        $select_stmt->close();
-    }
-
-    return $id;
-}
 
 // Name by Id
 function searchCustNameById($value, $db) {
@@ -412,6 +268,22 @@ function searchStaffICById($value, $db) {
     return $id;
 }
 
+function searchJenisAlatNameByid($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM alat WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['alat'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
 function searchCountryById($value, $db) {
     $id = '';
 
@@ -539,6 +411,250 @@ function searchLoadCellById($value, $db) {
         $result = $select_stmt->get_result();
         if ($row = $result->fetch_assoc()) {
             $id = $row['load_cell'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+function searchCustomerBranchById($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM branches WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['branch_name'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+################### Upload Stamping Lookup ###################
+// Id by Name
+function searchCompanyBranchIdByName($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM company_branches WHERE branch_name=? AND deleted='0'")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['id'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+function searchCustomerBranchIdByName($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM branches WHERE branch_name=? AND deleted='0'")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['id'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+
+function searchCustIdByName($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM customers WHERE customer_name=? AND deleted='0'")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['id'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+function searchDealerIdByName($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM dealer WHERE customer_name=? AND deleted='0'")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['id'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+function searchCountryIdByName($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM country WHERE name=? AND deleted='0'")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['id'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+
+function searchBrandIdByName($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM brand WHERE brand=? AND deleted='0'")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['id'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+function searchModelIdByName($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM model WHERE model=? AND deleted='0'")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['id'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+function searchMachineIdByName($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM machines WHERE machine_type=? AND deleted='0'")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['id'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+function searchCapacityIdByName($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM capacity WHERE name=? AND deleted='0'")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['id'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+function searchJenisAlatIdByName($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM alat WHERE alat=? AND deleted='0'")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['id'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+function searchValidatorIdByName($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM validators WHERE validator=? AND deleted='0'")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['id'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+function searchStaffIdByName($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM users WHERE name=? AND deleted='0'")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['id'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+function searchStateIdByName($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM state WHERE state=? AND deleted='0'")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['id'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+function searchMachinenameIdByName($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM machine_names WHERE machine_name=? AND deleted='0'")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['id'];
         }
         $select_stmt->close();
     }

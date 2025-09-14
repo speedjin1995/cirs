@@ -293,7 +293,12 @@ else{
               <div class="col-md-8">
                 <div class="d-flex justify-content-end gap-2">
                   <div class="col-auto">
-                    <button type="button" class="btn btn-sm bg-gradient-success" id="multiComplete" data-bs-toggle="tooltip" title="Complete Stampings">
+                    <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">
+                      <i class="fa-solid fa-upload"></i> Upload Excel
+                    </button>
+                  </div>
+                  <div class="col-auto">
+                    <button type="button" class="btn btn-sm bg-gradient-warning" id="multiComplete" data-bs-toggle="tooltip" title="Complete Stampings">
                       <i class="fa-solid fa-check"></i> Complete
                     </button>
                   </div>
@@ -1225,6 +1230,30 @@ else{
 
         </div>
 
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="uploadModal">
+  <div class="modal-dialog modal-xl" style="max-width: 90%;">
+    <div class="modal-content">
+      <form role="form" id="uploadForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Upload Excel File</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="file" id="fileInput">
+          <button type="button" id="previewButton">Preview Data</button>
+          <div id="previewTable" style="overflow: auto;"></div>
+        </div>
         <div class="modal-footer justify-content-between bg-gray-dark color-palette">
           <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
@@ -2696,16 +2725,20 @@ $(function () {
         var data = [];
         var rowIndex = -1;
         formData.forEach(function(field) {
-            var match = field.name.match(/([a-zA-Z]+)\[(\d+)\]/);
-            if (match) {
-              var fieldName = match[1];
-              var index = parseInt(match[2], 10);
-              if (index !== rowIndex) {
-                rowIndex = index;
-                data.push({});
-              }
-              data[index][fieldName] = field.value;
+          var match = field.name.match(/^(.*?)\[(\d+)\]$/);
+          if (match) {
+            var fieldName = match[1];
+            // Convert field name to remove spaces and capitalize words
+            fieldName = fieldName.replace(/\s+(.)/g, function(match, char) {
+              return char.toUpperCase();
+            });
+            var index = parseInt(match[2], 10);
+            if (index !== rowIndex) {
+              rowIndex = index;
+              data.push({});
             }
+            data[index][fieldName] = field.value;
+          }
         });
 
         // Send the JSON array to the server
@@ -3362,6 +3395,7 @@ $(function () {
   });
 
   $('#uploadExccl').on('click', function(){
+    $('#uploadModal').find('#previewTable').empty();
     $('#uploadModal').modal('show');
 
     $('#uploadForm').validate({
@@ -6386,30 +6420,34 @@ function displayPreview(data) {
   // Create HTML table headers
   var htmlTable = '<table style="width:100%;"><thead><tr>';
   headers.forEach(function(header) {
-      htmlTable += '<th>' + header + '</th>';
+    htmlTable += '<th>' + header + '</th>';
   });
   htmlTable += '</tr></thead><tbody>';
 
+  var dateColumns = ['Due Date', 'Borang E Date', 'Quotation Date', 'Purchase Date', 'Stamping Date', 'Last Year Stamping Date'];
   // Iterate over the data and create table rows
   for (var i = 1; i < jsonData.length; i++) {
       htmlTable += '<tr>';
       var rowData = jsonData[i];
 
       // Ensure we handle cases where there may be less than 15 cells in a row
-      while (rowData.length < 15) {
+      while (rowData.length < headers.length) {
         rowData.push(''); // Adding empty cells to reach 15 columns
       }
 
-      for (var j = 0; j < 15; j++) {
+      for (var j = 0; j < headers.length; j++) {
         var cellData = rowData[j];
         var formattedData = cellData;
 
         // Check if cellData is a valid Excel date serial number and format it to DD/MM/YYYY
-        if (typeof cellData === 'number' && cellData > 0) {
-            var excelDate = XLSX.SSF.parse_date_code(cellData);
-            if (excelDate) {
-                formattedData = formatDate2(new Date(excelDate.y, excelDate.m - 1, excelDate.d));
-            }
+        if (dateColumns.includes(headers[j]) && typeof cellData === 'number' && cellData > 0) {
+          var dateObj = XLSX.SSF.parse_date_code(cellData);
+          if (dateObj) {
+              var day = String(dateObj.d).padStart(2, '0');
+              var month = String(dateObj.m).padStart(2, '0');
+              var year = dateObj.y;
+              formattedData = `${day}/${month}/${year}`; // Always UK dd/mm/yyyy
+          }
         }
 
         htmlTable += '<td><input type="text" id="'+headers[j]+(i-1)+'" name="'+headers[j]+'['+(i-1)+']" value="' + (formattedData == null ? '' : formattedData) + '" /></td>';
