@@ -519,6 +519,10 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                     $borangE = $row['borang_e'];
                 }
 
+                if(isset($row['due_date']) && $row['due_date']!=null && $row['due_date']!=""){
+                    $expiredDate = date("d/m/Y", strtotime($row['due_date']));
+                }
+
                 $rows[] = '<tr style="height: 30px;">
                             <td style="font-size:12px;">'.$indexCount.'</td>
                             <td style="font-size:12px;">'.$jenisAlat.'</td>
@@ -526,12 +530,12 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                             <td style="font-size:12px; padding-left:0.5%;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
                             <td style="font-size:12px; padding-left:0.5%;">'.$row['serial_no'].'</td>
                             <td style="font-size:12px;"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
-                            <td style="font-size:12px;"></td>
                             <td style="font-size:12px; padding-left:0.5%;">'.$noDaftarLama.'</td>
                             <td style="font-size:12px; padding-left:0.5%;">'.$noDaftarBaru.'</td>
                             <td style="font-size:12px;">'.$siriKeselamatan.'</td>
                             <td style="font-size:12px;">'.$borangD.'</td>
                             <td style="font-size:12px;">'.$borangE.'</td>
+                            <td style="font-size:12px;">'.$expiredDate.'</td>
                             <td style="font-size:12px;">'.searchCompanyBranchById($row['company_branch'], $db).'</td>
                             ';
                             
@@ -704,12 +708,12 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                                     <th style="font-size:12px;">Jenama</th>
                                     <th style="font-size:12px;" width="10%">No. Siri Alat</th>
                                     <th style="font-size:12px;">Nama Dan Alamat Pemilik</th>
-                                    <th style="font-size:12px;" width="5%">Kod</th>
                                     <th style="font-size:12px;" width="10%">No. Daftar Lama</th>
                                     <th style="font-size:12px;" width="10%">No. Daftar Baru</th>
                                     <th style="font-size:12px;">No. Siri Pelekat Keselamatan</th>
                                     <th style="font-size:12px;" width="7%">Borang D</th>
                                     <th style="font-size:12px;" width="7%">Borang E</th>
+                                    <th style="font-size:12px;" width="7%">Expired Date</th>
                                     <th style="font-size:12px;" width="7%">Company Branch</th>
                                     <th style="font-size:12px;" width="8%">Fi / Bayaran</th>
                                 </tr>';

@@ -1,5 +1,5 @@
 <?php
-$config = include(dirname(__DIR__, 3) . '/db_config.php');
+$config = include(dirname(__DIR__) . '/db_config.php');
 
 // Database connection
 $host = $config['host'];
@@ -13,7 +13,7 @@ try {
 
     // Get the first and last day of the next month
     $firstDayNextMonth = date('Y-m-01 00:00:00', strtotime('first day of next month'));
-    $lastDayNextMonth = date('Y-m-t 23:59:59', strtotime('last day of next month'));
+    $lastDayNextMonth = date('Y-m-t 23:59:59', strtotime('last day of next month')); 
 
     // Query to select records where due_date is in the next month
     $query = "SELECT * FROM stamping WHERE status = 'Complete' AND due_date BETWEEN :firstDay AND :lastDay AND renewed='N' AND deleted='0'";
@@ -33,11 +33,11 @@ try {
     $insertQuery = "INSERT INTO stamping (
         type, company_branch, dealer, dealer_branch, customer_type, customers, branch, products, brand, machine_type, model, 
         capacity, capacity_high, assignTo, assignTo2, assignTo3, serial_no, validate_by, validator_lama, jenis_alat, trade, no_daftar, no_daftar_lama, no_daftar_baru, 
-        pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, borang_e_date,cawangan, invoice_no, machine_name, machine_location, machine_area, machine_serial_no, notification_period, cash_bill, stamping_type, last_year_stamping_date, stamping_date, 
+        pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, borang_e_date, cawangan, invoice_no, machine_name, machine_location, machine_area, machine_serial_no, notification_period, cash_bill, stamping_type, last_year_stamping_date, stamping_date, 
         due_date, pic, customer_pic, quotation_no, quotation_date, purchase_no, purchase_date, remarks, internal_remark, log, validator_invoice,
         unit_price, cert_price, total_amount, sst, subtotal_sst_amt, rebate, rebate_amount, subtotal_amount, reason_id, other_reason, existing_id, status, 
-        renewed, make_in, labour_charge, stampfee_labourcharge, int_round_up, total_charges, seal_no_lama, seal_no_baru, pegawai_contact, cert_no
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        renewed, make_in, labour_charge, stampfee_labourcharge, int_round_up, total_charges, seal_no_lama, seal_no_baru, pegawai_contact, cert_no, ownership_status, invoice_payment_type, invoice_payment_ref
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $insertStmt = $pdo->prepare($insertQuery);
 
@@ -69,7 +69,7 @@ try {
                 $record['due_date'], null, $record['pic'], $record['customer_pic'], null, null, null, null, $record['remarks'], $record['internal_remark'], 
                 $record['log'], $record['validator_invoice'], $record['unit_price'], $record['cert_price'], $record['total_amount'], $record['sst'], $record['subtotal_sst_amt'], $record['rebate'], $record['rebate_amount'], $record['subtotal_amount'], 
                 $record['reason_id'], $record['other_reason'], $record['id'], 'Pending', 'N', $record['make_in'], $record['labour_charge'],
-                $record['stampfee_labourcharge'], $record['int_round_up'], $record['total_charges'], $record['seal_no_lama'], $record['seal_no_baru'], $record['pegawai_contact'], $record['cert_no']
+                $record['stampfee_labourcharge'], $record['int_round_up'], $record['total_charges'], $record['seal_no_lama'], $record['seal_no_baru'], $record['pegawai_contact'], $record['cert_no'], 'OWN', null, null
             ]);
 
             // Get the last inserted ID
@@ -98,6 +98,14 @@ try {
                         $extRecord['bahan_pembuat'], $extRecord['bahan_pembuat_other']
                     ]);
                 }
+            }
+
+            // Insert Stamping System Log
+            if ($insert_stmt3 = $pdo->prepare("INSERT INTO stamping_log (action, user_id, item_id) 
+            VALUES (?, ?, ?)")){
+                $action = "INSERT";
+                $user = 0;
+                $insert_stmt3->execute([$action, $user, $newStampId]);
             }
 
             // Add to processed IDs

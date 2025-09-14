@@ -651,6 +651,29 @@ else{
                     </select>
                   </div>
                 </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Ownership Status</label>
+                    <select class="form-control select2" style="width: 100%;" id="ownershipStatus" name="ownershipStatus">
+                      <option value="RENT">Rent</option>
+                      <option value="OWN">Own</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4" id="rentalAttachment" style="display:none">
+                  <div class="form-group">
+                    <label>Rental Attachment</label>
+                    <div class="d-flex">
+                      <div class="col-10">
+                        <input type="file" class="form-control" id="uploadRentalAttachment" name="uploadRentalAttachment">
+                      </div>
+                      <div class="col-2 mt-1">
+                        <a href="" id="viewRental" name="viewRental" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
+                      </div>
+                    </div>
+                    <input type="text" id="rentalFilePath" name="rentalFilePath" style="display:none">           
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -898,6 +921,22 @@ else{
                       </div>
                     </div>
                     <input type="text" id="InvoiceFilePath" name="InvoiceFilePath" style="display:none">           
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Invoice Payment Type</label>
+                    <select class="form-control select2" id="invoicePaymentType" name="invoicePaymentType">
+                      <option value="Cash">Cash</option>
+                      <option value="Check">Check</option>
+                      <option value="Online">Online Transfer</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Invoice Payment Reference</label>
+                    <input class="form-control" type="text" placeholder="Invoice Payment Reference" id="invoicePayRef" name="invoicePayRef">
                   </div>
                 </div>
               </div>
@@ -1233,6 +1272,30 @@ else{
       <div class="modal-footer justify-content-between bg-gray-dark color-palette">
         <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="timelineModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title">Status Timeline</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="timeline" id="timeline">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+
     </div>
   </div>
 </div>
@@ -2098,7 +2161,7 @@ var branch = 0;
 
 $(function () {
   $('#customerNoHidden').hide();
-
+  const userRole = <?php echo json_encode($role); ?>;
   const today = new Date();
   const tomorrow = new Date(today);
   const yesterday = new Date(today);
@@ -2250,18 +2313,29 @@ $(function () {
         data: 'id',
         className: 'action-button',
         render: function (data, type, row) {
-          let dropdownMenu = '<div class="dropdown" style="width=20%">' +
+          let dropdownMenu = '<div class="dropdown" style="width: 20%; position: relative;">' +
             '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #074979;">' +
             '<i class="fa-solid fa-ellipsis"></i>' +
             '</button>' +
-            '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">';
+            '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton' + data + '">';
+
             if(row.stamping_type == 'NEW'){
               dropdownMenu += '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>';
             }else{
               dropdownMenu += '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>';
             }
-            dropdownMenu += '<a class="dropdown-item" id="copy'+ data + '" onclick="copy(' + data + ')"><i class="fa-solid fa-clone"></i> Copy</a>' + 
-            '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>'+
+            dropdownMenu += '<a class="dropdown-item" id="copy'+ data + '" onclick="copy(' + data + ')"><i class="fa-solid fa-clone"></i> Copy</a>';
+
+            if (userRole === 'SUPER_ADMIN'){
+              dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
+            }
+
+            if (userRole === 'SUPER_ADMIN' || userRole === 'ADMIN'){
+              dropdownMenu += '<a class="dropdown-item" id="revertStamp' + data + '" onclick="revertStamp(' + data + ')"><i class="fa fa-undo" aria-hidden="true"></i> Revert Stamping</a>';
+            }
+
+            dropdownMenu += '<a class="dropdown-item" id="statusTimeline' + data + '" onclick="statusTimeline(' + data + ')"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Status Timeline</a>'+
+            '<a class="dropdown-item" id="restamping' + data + '" onclick="restamping(' + data + ')"><i class="fas fa-stamp" aria-hidden="true"></i> Restamping</a>'+
             '<a class="dropdown-item" id="deactivate' + data + '" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>';
           
           dropdownMenu += '</div></div>';
@@ -2530,18 +2604,29 @@ $(function () {
           data: 'id',
           className: 'action-button',
           render: function (data, type, row) {
-            let dropdownMenu = '<div class="dropdown" style="width=20%">' +
+              let dropdownMenu = '<div class="dropdown" style="width: 20%; position: relative;">' +
               '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #074979;">' +
               '<i class="fa-solid fa-ellipsis"></i>' +
               '</button>' +
-              '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">';
+              '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton' + data + '">';
+              
               if(row.stamping_type == 'NEW'){
                 dropdownMenu += '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>';
               }else{
                 dropdownMenu += '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>';
               }
-              dropdownMenu += '<a class="dropdown-item" id="copy'+ data + '" onclick="copy(' + data + ')"><i class="fa-solid fa-clone"></i> Copy</a>' + 
-              '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>'+
+              dropdownMenu += '<a class="dropdown-item" id="copy'+ data + '" onclick="copy(' + data + ')"><i class="fa-solid fa-clone"></i> Copy</a>';
+
+              if (userRole === 'SUPER_ADMIN'){
+                dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
+              }
+
+              if (userRole === 'SUPER_ADMIN' || userRole === 'ADMIN'){
+                dropdownMenu += '<a class="dropdown-item" id="revertStamp' + data + '" onclick="revertStamp(' + data + ')"><i class="fa fa-undo" aria-hidden="true"></i> Revert Stamping</a>';
+              }
+
+              dropdownMenu += '<a class="dropdown-item" id="statusTimeline' + data + '" onclick="statusTimeline(' + data + ')"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Status Timeline</a>'+
+              '<a class="dropdown-item" id="restamping' + data + '" onclick="restamping(' + data + ')"><i class="fas fa-stamp" aria-hidden="true"></i> Restamping</a>'+
               '<a class="dropdown-item" id="deactivate' + data + '" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>';
             
             dropdownMenu += '</div></div>';
@@ -3614,6 +3699,16 @@ $(function () {
     }
   });
 
+  $('#extendModal').find('#ownershipStatus').on('change', function(){
+    var ownershipStatus = $(this).val();
+
+    if (ownershipStatus == 'RENT'){
+      $('#extendModal').find('#rentalAttachment').show();
+    }else{
+      $('#extendModal').find('#rentalAttachment').hide();
+    }
+  });
+
   $('#cancelModal').find('#cancellationReason').on('change', function(){
     if($(this).val() == '0'){
       $('#otherReason').attr("required", true);
@@ -3779,6 +3874,7 @@ $(function () {
 });
 
 function format (row) {
+  const userRole = '<?=$role ?>';
   const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
 
   var returnString = `
@@ -3938,8 +4034,17 @@ function format (row) {
 
       <div class="col-4">
         <div class="row">
-          <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>
-          <div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>
+          <div class="col-1"><button title="Edit" type="button" id="edit${row.id}" onclick="edit(${row.id})" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></button></div>`;
+
+          if (userRole === 'SUPER_ADMIN'){
+            returnString += '<div class="col-1"><button title="Log" type="button" id="log${row.id}" onclick="log(${row.id})" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+          }
+
+          if (userRole === 'SUPER_ADMIN' || userRole === 'ADMIN'){
+            returnString += '<div class="col-1"><button title="Revert Stamping" type="button" id="revertStamp${row.id}" onclick="revertStamp(${row.id})" class="btn btn-info btn-sm"><i class="fa fa-undo" aria-hidden="true"></i></button></div>';
+          }
+
+          returnString += `<div class="col-1"><button title="Status Timeline" type="button" id="statusTimeline${row.id}" onclick="statusTimeline(${row.id})" class="btn btn-warning btn-sm"><i class="fa fa-map-marker-alt" aria-hidden="true"></i></button></div>
           <div class="col-1"><button title="Copy" type="button" id="copy${row.id}" onclick="copy(${row.id})" class="btn btn-success btn-sm"><i class="fa-solid fa-clone"></i></button></div>
           <div class="col-1"><button title="Restamping" type="button" id="restamping${row.id}" onclick="restamping(${row.id})" class="btn btn-info btn-sm"><i class="fas fa-stamp"></i></button></div>
           <div class="col-1"><button title="Cancel" type="button" id="deactivate${row.id}" onclick="deactivate(${row.id})" class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i></button></div>
@@ -4618,6 +4723,12 @@ function edit(id) {
         $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
         $('#extendModal').find('#assignTo2').val(obj.message.assignTo2).trigger('change');
         $('#extendModal').find('#assignTo3').val(obj.message.assignTo3).trigger('change');
+        $('#extendModal').find('#ownershipStatus').val(obj.message.ownership_status).trigger('change');
+        if(obj.message.rental_attachment){
+          $('#extendModal').find('#rentalFilePath').val(obj.message.rental_filepath);
+          $('#extendModal').find('#viewRental').attr('href', "view_file.php?file="+obj.message.rental_attachment).show();
+        }
+
         $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
         $('#extendModal').find('#newRenew').val(obj.message.stampType).trigger('change');
         $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
@@ -4698,6 +4809,8 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
+        $('#extendModal').find('#invoicePaymentType').val(obj.message.invoice_payment_type).trigger('change');
+        $('#extendModal').find('#invoicePayRef').val(obj.message.invoice_payment_ref);
         $('#extendModal').find('#validatorInvoice').val(obj.message.validator_invoice);
         $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
@@ -5018,6 +5131,12 @@ function edit(id) {
         $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
         $('#extendModal').find('#assignTo2').val(obj.message.assignTo2).trigger('change');
         $('#extendModal').find('#assignTo3').val(obj.message.assignTo3).trigger('change');
+        $('#extendModal').find('#ownershipStatus').val(obj.message.ownership_status).trigger('change');
+        if(obj.message.rental_attachment){
+          $('#extendModal').find('#rentalFilePath').val(obj.message.rental_filepath);
+          $('#extendModal').find('#viewRental').attr('href', "view_file.php?file="+obj.message.rental_attachment).show();
+        }
+
         $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
         $('#extendModal').find('#newRenew').val(obj.message.stampType).trigger('change');
         customer = obj.message.customers;
@@ -5099,6 +5218,8 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
+        $('#extendModal').find('#invoicePaymentType').val(obj.message.invoice_payment_type).trigger('change');
+        $('#extendModal').find('#invoicePayRef').val(obj.message.invoice_payment_ref);
         $('#extendModal').find('#validatorInvoice').val(obj.message.validator_invoice);
         $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
@@ -5575,6 +5696,91 @@ function log(id) {
   });
 }
 
+function statusTimeline(id) {
+  $('#spinnerLoading').show();
+  $.post('php/getTimeline.php', {id: id, type: 'Stamping'}, function(data){
+    var obj = JSON.parse(data);
+
+    if (obj.status === 'success') { 
+      $('#timeline').empty();
+
+      if (obj.message.length > 0) {
+        obj.message.forEach(row => {
+          let statusLower = row.status.toLowerCase();
+          
+          // Map status to appropriate icons and colors
+          if (statusLower.includes('quotation issued') || statusLower.includes('follow-up')) {
+            icon = 'fas fa-file-invoice bg-info';
+          } else if (statusLower.includes('quotation chop') || statusLower.includes('sign back')) {
+            icon = 'fas fa-signature bg-primary';
+          } else if (statusLower.includes('purchase order') || statusLower.includes('po received')) {
+            icon = 'fas fa-shopping-cart bg-success';
+          } else if (statusLower.includes('pre-stamping completed')) {
+            icon = 'fas fa-clipboard-check bg-warning';
+          } else if (statusLower.includes('stamping date confirmed') || statusLower.includes('customer notified')) {
+            icon = 'fas fa-calendar-check bg-orange';
+          } else if (statusLower.includes('stamping completed')) {
+            icon = 'fas fa-stamp bg-success';
+          } else if (statusLower.includes('spmt payment completed')) {
+            icon = 'fas fa-credit-card bg-green';
+          } else if (statusLower.includes('metrology department payment completed')) {
+            icon = 'fas fa-money-check bg-dark';
+          } else if (statusLower.includes('create')) {
+            icon = 'fas fa-plus bg-green';
+          } else if (statusLower.includes('approve')) {
+            icon = 'fas fa-check bg-success';
+          } else if (statusLower.includes('reject') || statusLower.includes('cancel')) {
+            icon = 'fas fa-times bg-danger';
+          } else if (statusLower.includes('update') || statusLower.includes('edit')) {
+            icon = 'fas fa-edit bg-warning';
+          }
+
+          let newItem = `
+            <div>
+              <i class="${icon}"></i>
+              <div class="timeline-item">
+                <span class="time"><i class="fas fa-clock"></i> ${row.occurred_at}</span>
+                <h3 class="timeline-header"><a href="#">${row.created_by}</a> <b>${row.status}</b></h3>
+                <div class="timeline-body">
+                  ${row.status_remark ? row.status_remark : ''}
+                </div>
+              </div>
+            </div>
+          `;
+          $('#timeline').append(newItem);
+        });
+
+        // End marker
+        $('#timeline').append(`
+          <div>
+            <i class="fas fa-clock bg-gray"></i>
+          </div>
+        `);
+
+      } else {
+        $('#timeline').append(`
+          <div>
+            <i class="fas fa-info-circle bg-secondary"></i>
+            <div class="timeline-item">
+              <h3 class="timeline-header text-center">No data available</h3>
+            </div>
+          </div>
+        `);
+      }
+
+      $('#timelineModal').modal('show');
+    }
+    else if (obj.status === 'failed') {
+      toastr["error"](obj.message, "Failed:");
+    }
+    else {
+      toastr["error"]("Something wrong when pulling data", "Failed:");
+    }
+
+    $('#spinnerLoading').hide();
+  });
+}
+
 function copy(id) {
   $('#duplicateModal').find('#id').val(id);
   $('#duplicateModal').find('#type').val('copy');
@@ -5594,4 +5800,46 @@ function copy(id) {
     }
   });
 }
+
+function revertStamp(id) {
+  if (confirm('Are you sure you want to revert this item?')) {
+    $('#spinnerLoading').show();
+    $.post('php/revertStamp.php', {id: id, status: 'Complete'}, function(data){
+      var obj = JSON.parse(data);
+
+      if(obj.status === 'success'){ 
+        toastr["success"](obj.message, "Success:");
+        $('#weightTable').DataTable().ajax.reload(null, false);
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when activate", "Failed:");
+      }
+      $('#spinnerLoading').hide();
+    });
+  }
+}
+
+function restamping(id) {
+  if(confirm("Are you sure you want to restamp this item?")) {
+    $.post('php/restamping.php', {id: id}, function(data){
+      var obj = JSON.parse(data);
+    
+      if(obj.status === 'success'){ 
+        toastr["success"](obj.message, "Success:");
+        $('#weightTable').DataTable().ajax.reload(null, false);
+      }
+      else if(obj.status === 'failed'){
+        toastr["error"](obj.message, "Failed:");
+      }
+      else{
+        toastr["error"]("Something wrong when activate", "Failed:");
+      }
+      $('#spinnerLoading').hide();
+    });
+  }
+}
+
 </script>

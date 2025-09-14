@@ -293,8 +293,18 @@ else{
               <div class="col-md-8">
                 <div class="d-flex justify-content-end gap-2">
                   <div class="col-auto">
+                    <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">
+                      <i class="fa-solid fa-upload"></i> Upload Excel
+                    </button>
+                  </div>
+                  <div class="col-auto">
+                    <button type="button" class="btn btn-sm bg-gradient-warning" id="multiComplete" data-bs-toggle="tooltip" title="Complete Stampings">
+                      <i class="fa-solid fa-check"></i> Complete
+                    </button>
+                  </div>
+                  <div class="col-auto">
                     <button type="button" class="btn btn-sm bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Cancel Stampings">
-                      <i class="fa-solid fa-ban"></i> Cancel Stamping
+                      <i class="fa-solid fa-ban"></i> Cancel
                     </button>
                   </div>
                   <div class="col-auto">
@@ -314,7 +324,7 @@ else{
                   </div>
                   <div class="col-auto">
                     <button type="button" class="btn btn-sm bg-gradient-warning" onclick="newEntry()" data-bs-toggle="tooltip" title="Add New Stamping">
-                      <i class="fa-solid fa-circle-plus"></i> Add New Stamping
+                      <i class="fa-solid fa-circle-plus"></i> Add New
                     </button>
                   </div>
                   <!--div class="col-2">
@@ -695,6 +705,29 @@ else{
                     </select>
                   </div>
                 </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Ownership Status</label>
+                    <select class="form-control select2" style="width: 100%;" id="ownershipStatus" name="ownershipStatus">
+                      <option value="RENT">Rent</option>
+                      <option value="OWN">Own</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4" id="rentalAttachment" style="display:none">
+                  <div class="form-group">
+                    <label>Rental Attachment</label>
+                    <div class="d-flex">
+                      <div class="col-10">
+                        <input type="file" class="form-control" id="uploadRentalAttachment" name="uploadRentalAttachment">
+                      </div>
+                      <div class="col-2 mt-1">
+                        <a href="" id="viewRental" name="viewRental" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
+                      </div>
+                    </div>
+                    <input type="text" id="rentalFilePath" name="rentalFilePath" style="display:none">           
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -944,6 +977,22 @@ else{
                     <input type="text" id="InvoiceFilePath" name="InvoiceFilePath" style="display:none">           
                   </div>
                 </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Invoice Payment Type</label>
+                    <select class="form-control select2" id="invoicePaymentType" name="invoicePaymentType">
+                      <option value="Cash">Cash</option>
+                      <option value="Check">Check</option>
+                      <option value="Online">Online Transfer</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Invoice Payment Reference</label>
+                    <input class="form-control" type="text" placeholder="Invoice Payment Reference" id="invoicePayRef" name="invoicePayRef">
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1190,6 +1239,30 @@ else{
   </div>
 </div>
 
+<div class="modal fade" id="uploadModal">
+  <div class="modal-dialog modal-xl" style="max-width: 90%;">
+    <div class="modal-content">
+      <form role="form" id="uploadForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Upload Excel File</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="file" id="fileInput">
+          <button type="button" id="previewButton">Preview Data</button>
+          <div id="previewTable" style="overflow: auto;"></div>
+        </div>
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="cancelModal"> 
   <div class="modal-dialog modal-xl" style="max-width: 50%;">
     <div class="modal-content">
@@ -1270,6 +1343,39 @@ else{
   </div>
 </div>
 
+<div class="modal fade" id="generateDupModal"> 
+  <div class="modal-dialog modal-xl" style="max-width: 50%;">
+    <div class="modal-content">
+
+      <form role="form" id="genDupForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Generate Stamping Template</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" class="form-control" id="id" name="id">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>No of records to generate *</label>
+                <input type="number" class="form-control" id="duplicateNo" name="duplicateNo" required>
+              </div>
+            </div>
+          </div>    
+        </div>
+
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="logModal"> 
   <div class="modal-dialog modal-xl" style="max-width: 80%;">
     <div class="modal-content">
@@ -1301,6 +1407,30 @@ else{
       <div class="modal-footer justify-content-between bg-gray-dark color-palette">
         <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="timelineModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title">Status Timeline</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="timeline" id="timeline">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1414,6 +1544,34 @@ else{
           <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="errorLogModal"> 
+  <div class="modal-dialog modal-xl" style="max-width: 90%;">
+    <div class="modal-content">
+
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Error Completing Stamping</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <ol id="errorList" class="text-danger mt-2" style="padding-left: 20px;"></ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
     </div>
   </div>
 </div>
@@ -2241,6 +2399,7 @@ $(function () {
   $('#customerNoHidden').hide();
   
   const userId = <?php echo json_encode($user); ?>;
+  const userRole = <?php echo json_encode($role); ?>;
   const today = new Date();
   const tomorrow = new Date(today);
   const yesterday = new Date(today);
@@ -2346,6 +2505,7 @@ $(function () {
   var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
 
   const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
+  const allowedGenDuplicateAlats = ['ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC'];
 
   var table = $("#weightTable").DataTable({
     "responsive": true,
@@ -2426,11 +2586,11 @@ $(function () {
         data: 'id',
         className: 'action-button',
         render: function (data, type, row) {
-          let dropdownMenu = '<div class="dropdown" style="width=20%">' +
+          let dropdownMenu = '<div class="dropdown" style="width: 20%; position: relative;">' +
             '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #074979;">' +
             '<i class="fa-solid fa-ellipsis"></i>' +
             '</button>' +
-            '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">';
+            '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton' + data + '">';
 
           if(row.stamping_type == 'NEW'){
             dropdownMenu += '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>';
@@ -2444,7 +2604,15 @@ $(function () {
             dropdownMenu += '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ', \'' + row.jenis_alat + '\', \'' + row.validate_by + '\')"><i class="fas fa-print"></i> Print</a>';
           }
 
-          dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
+          if (allowedGenDuplicateAlats.includes(row.jenis_alat) && row.stamping_type == 'NEW') {
+            dropdownMenu += '<a class="dropdown-item" id="genDuplicateTemplate' + data + '" onclick="genDuplicateTemplate(' + data + ')"><i class="fas fa-copy"></i> Generate Template</a>';
+          }
+
+          if (userRole === 'SUPER_ADMIN'){
+            dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
+          }
+
+          dropdownMenu += '<a class="dropdown-item" id="statusTimeline' + data + '" onclick="statusTimeline(' + data + ')"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Status Timeline</a>';
 
           if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '' && row.borang_e != '') {
             dropdownMenu += '<a class="dropdown-item" id="complete' + data + '" onclick="complete(' + data + ')"><i class="fas fa-check"></i> Complete</a>';
@@ -2557,16 +2725,20 @@ $(function () {
         var data = [];
         var rowIndex = -1;
         formData.forEach(function(field) {
-            var match = field.name.match(/([a-zA-Z]+)\[(\d+)\]/);
-            if (match) {
-              var fieldName = match[1];
-              var index = parseInt(match[2], 10);
-              if (index !== rowIndex) {
-                rowIndex = index;
-                data.push({});
-              }
-              data[index][fieldName] = field.value;
+          var match = field.name.match(/^(.*?)\[(\d+)\]$/);
+          if (match) {
+            var fieldName = match[1];
+            // Convert field name to remove spaces and capitalize words
+            fieldName = fieldName.replace(/\s+(.)/g, function(match, char) {
+              return char.toUpperCase();
+            });
+            var index = parseInt(match[2], 10);
+            if (index !== rowIndex) {
+              rowIndex = index;
+              data.push({});
             }
+            data[index][fieldName] = field.value;
+          }
         });
 
         // Send the JSON array to the server
@@ -2646,11 +2818,40 @@ $(function () {
             toastr["error"](obj.message, "Failed:");
           }
           else{
-            toastr["error"]("Something wrong when edit", "Failed:");
+            toastr["error"]("Something wrong when duplicating", "Failed:");
           }
 
           $('#spinnerLoading').hide();
         });
+      }
+      else if($('#generateDupModal').hasClass('show')){
+        // Create a form for file download
+        var form = $('<form>', {
+          'method': 'POST',
+          'action': 'php/genStampTemplate.php',
+          'target': '_blank'
+        });
+        
+        // Add form data
+        var formData = $('#genDupForm').serializeArray();
+        $.each(formData, function(i, field) {
+          form.append($('<input>', {
+            'type': 'hidden',
+            'name': field.name,
+            'value': field.value
+          }));
+        });
+        
+        // Append to body and submit
+        $('body').append(form);
+        form.submit();
+        form.remove();
+        
+        $('#generateDupModal').modal('hide');
+        toastr["success"]("Template download started", "Success:");
+        $('#weightTable').DataTable().ajax.reload(null, false);
+        
+        $('#spinnerLoading').hide();
       }
       else if($('#printBorangModal').hasClass('show')){
         var id = $('#printBorangForm').find('#id').val();
@@ -2793,11 +2994,11 @@ $(function () {
           data: 'id',
           className: 'action-button',
           render: function (data, type, row) {
-            let dropdownMenu = '<div class="dropdown" style="width=20%">' +
-              '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #074979;">' +
-              '<i class="fa-solid fa-ellipsis"></i>' +
-              '</button>' +
-              '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">';
+          let dropdownMenu = '<div class="dropdown" style="width: 20%; position: relative;">' +
+            '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color: #074979;">' +
+            '<i class="fa-solid fa-ellipsis"></i>' +
+            '</button>' +
+            '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton' + data + '">';
 
             if(row.stamping_type == 'NEW'){
               dropdownMenu += '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>';
@@ -2811,7 +3012,15 @@ $(function () {
               dropdownMenu += '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ', \'' + row.jenis_alat + '\', \'' + row.validate_by + '\')"><i class="fas fa-print"></i> Print</a>';
             }
 
-            dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
+            if (allowedGenDuplicateAlats.includes(row.jenis_alat) && row.stamping_type == 'NEW') {
+              dropdownMenu += '<a class="dropdown-item" id="genDuplicateTemplate' + data + '" onclick="genDuplicateTemplate(' + data + ')"><i class="fas fa-copy"></i> Generate Template</a>';
+            }
+
+            if (userRole === 'SUPER_ADMIN'){
+              dropdownMenu += '<a class="dropdown-item" id="log' + data + '" onclick="log(' + data + ')"><i class="fa fa-list" aria-hidden="true"></i> Log</a>';
+            }
+
+            dropdownMenu += '<a class="dropdown-item" id="statusTimeline' + data + '" onclick="statusTimeline(' + data + ')"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Status Timeline</a>';
 
             if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '' && row.borang_e != '') {
               dropdownMenu += '<a class="dropdown-item" id="complete' + data + '" onclick="complete(' + data + ')"><i class="fas fa-check"></i> Complete</a>';
@@ -2997,6 +3206,53 @@ $(function () {
     
   });
 
+  $('#multiComplete').on('click', function () {
+      $('#spinnerLoading').show();
+      var selectedIds = []; // An array to store the selected 'id' values
+
+      $("#weightTable tbody input[type='checkbox']").each(function () {
+        if (this.checked) {
+          selectedIds.push($(this).val());
+        }
+      });
+
+      if (selectedIds.length > 0) {
+        if (confirm('Are you sure you want to complete this items?')) {
+          $('#spinnerLoading').show();
+          $.post('php/completeStamp.php', {userID: selectedIds, isMulti: 'Y'}, function(data){
+            var obj = JSON.parse(data);
+
+            if(obj.status === 'success'){
+              toastr["success"](obj.message, "Success:");
+              $('#weightTable').DataTable().ajax.reload(null, false);
+            }
+            else if(obj.status === 'error'){
+              $('#errorLogModal').find('#errorList').empty();
+              var errorMessage = obj.errors;
+              for (var i = 0; i < errorMessage.length; i++) {
+                  $('#errorLogModal').find('#errorList').append(`<li>${errorMessage[i]}</li>`);                            
+              }
+              $('#errorLogModal').modal('show');
+            }
+            else if(obj.status === 'failed'){
+              toastr["error"](obj.message, "Failed:");
+            }
+            else{
+              toastr["error"]("Something wrong when activate", "Failed:");
+            }
+            $('#spinnerLoading').hide();
+          });
+        }
+
+        $('#spinnerLoading').hide();
+      } 
+      else {
+        // Optionally, you can display a message or take another action if no IDs are selected
+        alert("Please select at least one stamping to complete.");
+        $('#spinnerLoading').hide();
+      }
+  });
+
   $('#mergeBorang').on('click', function () {
       var selectedIds = []; // An array to store the selected 'id' values
 
@@ -3139,6 +3395,7 @@ $(function () {
   });
 
   $('#uploadExccl').on('click', function(){
+    $('#uploadModal').find('#previewTable').empty();
     $('#uploadModal').modal('show');
 
     $('#uploadForm').validate({
@@ -3169,6 +3426,18 @@ $(function () {
 
     reader.readAsBinaryString(file);
   });
+
+  $('#errorLogModal').on('shown.bs.modal', function () {
+    wasErrorLogModalShown = true;
+  });
+
+  $('#errorLogModal').on('hidden.bs.modal', function () {
+    if (wasErrorLogModalShown) {
+      wasErrorLogModalShown = false; // Reset flag
+      window.location.reload();
+    }
+  });
+
 
   $('#extendModal').find('#newRenew').on('change', function(){
     if($(this).val() == "NEW"){
@@ -4131,6 +4400,16 @@ $(function () {
     }
   });
 
+  $('#extendModal').find('#ownershipStatus').on('change', function(){
+    var ownershipStatus = $(this).val();
+
+    if (ownershipStatus == 'RENT'){
+      $('#extendModal').find('#rentalAttachment').show();
+    }else{
+      $('#extendModal').find('#rentalAttachment').hide();
+    }
+  });
+
   $('#cancelModal').find('#cancellationReason').on('change', function(){
     if($(this).val() == '0'){
       $('#otherReason').attr("required", true);
@@ -4296,7 +4575,9 @@ $(function () {
 });
 
 function format (row) {
+  const userRole = '<?=$role ?>';
   const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
+  const allowedGenDuplicateAlats = ['ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC'];
 
   var returnString = `
   <div class="row">
@@ -4462,7 +4743,16 @@ function format (row) {
           returnString += '<div class="col-1"><button title="Print" type="button" id="print'+row.id+'" onclick="print('+row.id+', \''+row.jenis_alat+'\', \''+row.validate_by+'\')" class="btn btn-info btn-sm"><i class="fas fa-print"></i></button></div>';
         }
 
-        returnString += '<div class="col-1"><button title="Log" type="button" id="log'+row.id+'" onclick="log('+row.id+')" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+        if (allowedGenDuplicateAlats.includes(row.jenis_alat) && row.stamping_type == 'NEW') {
+          returnString += '<div class="col-1"><button title="Generate Template" type="button" id="genDuplicateTemplate'+row.id+'" onclick="genDuplicateTemplate('+row.id+')" class="btn btn-danger btn-sm"><i class="fas fa-copy"></i></button></div>';
+        }
+
+
+        if (userRole === 'SUPER_ADMIN'){
+          returnString += '<div class="col-1"><button title="Log" type="button" id="log'+row.id+'" onclick="log('+row.id+')" class="btn btn-secondary btn-sm"><i class="fa fa-list" aria-hidden="true"></i></button></div>';
+        }
+
+        returnString += '<div class="col-1"><button title="Status Timeline" type="button" id="statusTimeline'+row.id+'" onclick="statusTimeline('+row.id+')" class="btn btn-warning btn-sm"><i class="fa fa-map-marker-alt" aria-hidden="true"></i></button></div>';
 
         // Complete button if conditions are met
         if (row.stamping_date != '' && row.due_date != '' && row.siri_keselamatan != '' && row.borang_d != '' && row.borang_e != '') {
@@ -4972,6 +5262,8 @@ function newEntry(){
   $('#extendModal').find('#assignTo').val('').trigger('change');
   $('#extendModal').find('#assignTo2').val('').trigger('change');
   $('#extendModal').find('#assignTo3').val('').trigger('change');
+  $('#extendModal').find('#ownershipStatus').val('OWN').trigger('change');
+  $('#extendModal').find('#uploadRentalAttachment').val('');
   $('#extendModal').find('#trade').val('').trigger('change');
   $('#extendModal').find('#branch').val('').trigger('change');
   $('#extendModal').find('#noDaftarLama').val('');
@@ -5014,9 +5306,11 @@ function newEntry(){
   $('#extendModal').find('#quotationFilePath').val('');
   $('#extendModal').find('#newInvoice').show();
   $('#extendModal').find('#uploadInvoiceAttachment').val('');
-  $('#extendModal').find('#notificationPeriod').val('');
+  $('#extendModal').find('#notificationPeriod').val(1);
   $('#extendModal').find('#viewInvoice').hide();
   $('#extendModal').find('#InvoiceFilePath').val('');
+  $('#extendModal').find('#invoicePaymentType').val('').trigger('change');
+  $('#extendModal').find('#invoicePayRef').val('');
   //Additonal field reset
   // var value = $('#extendModal').find('#additionalSection').find('#batuUjian').val();
   // $('#extendModal').find('#additionalSection').find('#jenis_penunjuk').val('').trigger('change');
@@ -5165,6 +5459,12 @@ function edit(id) {
         $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
         $('#extendModal').find('#assignTo2').val(obj.message.assignTo2).trigger('change');
         $('#extendModal').find('#assignTo3').val(obj.message.assignTo3).trigger('change');
+        $('#extendModal').find('#ownershipStatus').val(obj.message.ownership_status).trigger('change');
+        if(obj.message.rental_attachment){
+          $('#extendModal').find('#rentalFilePath').val(obj.message.rental_filepath);
+          $('#extendModal').find('#viewRental').attr('href', "view_file.php?file="+obj.message.rental_attachment).show();
+        }
+
         $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
         $('#extendModal').find('#newRenew').val(obj.message.stampType).trigger('change');
         $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
@@ -5244,6 +5544,8 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
+        $('#extendModal').find('#invoicePaymentType').val(obj.message.invoice_payment_type).trigger('change');
+        $('#extendModal').find('#invoicePayRef').val(obj.message.invoice_payment_ref);
         $('#extendModal').find('#validatorInvoice').val(obj.message.validator_invoice);
         $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
@@ -5564,6 +5866,12 @@ function edit(id) {
         $('#extendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
         $('#extendModal').find('#assignTo2').val(obj.message.assignTo2).trigger('change');
         $('#extendModal').find('#assignTo3').val(obj.message.assignTo3).trigger('change');
+        $('#extendModal').find('#ownershipStatus').val(obj.message.ownership_status).trigger('change');
+        if(obj.message.rental_attachment){
+          $('#extendModal').find('#rentalFilePath').val(obj.message.rental_filepath);
+          $('#extendModal').find('#viewRental').attr('href', "view_file.php?file="+obj.message.rental_attachment).show();
+        }
+
         $('#extendModal').find('#trade').val(obj.message.trade).trigger('change');
         $('#extendModal').find('#newRenew').val(obj.message.stampType).trigger('change');
         customer = obj.message.customers;
@@ -5646,6 +5954,8 @@ function edit(id) {
         $('#extendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
         $('#extendModal').find('#cashBill').val(obj.message.cash_bill);
         $('#extendModal').find('#invoice').val(obj.message.invoice_no);
+        $('#extendModal').find('#invoicePaymentType').val(obj.message.invoice_payment_type).trigger('change');
+        $('#extendModal').find('#invoicePayRef').val(obj.message.invoice_payment_ref);
         $('#extendModal').find('#validatorInvoice').val(obj.message.validator_invoice);
         $('#extendModal').find('#unitPrice').val(obj.message.unit_price);
         $('#extendModal').find('#certPrice').val(obj.message.cert_price);
@@ -5927,7 +6237,7 @@ function edit(id) {
 function complete(id) {
   if (confirm('Are you sure you want to complete this items?')) {
     $('#spinnerLoading').show();
-    $.post('php/completeStamp.php', {userID: id}, function(data){
+    $.post('php/completeStamp.php', {userID: id, isMulti: 'N'}, function(data){
       var obj = JSON.parse(data);
 
       if(obj.status === 'success'){
@@ -6110,30 +6420,34 @@ function displayPreview(data) {
   // Create HTML table headers
   var htmlTable = '<table style="width:100%;"><thead><tr>';
   headers.forEach(function(header) {
-      htmlTable += '<th>' + header + '</th>';
+    htmlTable += '<th>' + header + '</th>';
   });
   htmlTable += '</tr></thead><tbody>';
 
+  var dateColumns = ['Due Date', 'Borang E Date', 'Quotation Date', 'Purchase Date', 'Stamping Date', 'Last Year Stamping Date'];
   // Iterate over the data and create table rows
   for (var i = 1; i < jsonData.length; i++) {
       htmlTable += '<tr>';
       var rowData = jsonData[i];
 
       // Ensure we handle cases where there may be less than 15 cells in a row
-      while (rowData.length < 15) {
+      while (rowData.length < headers.length) {
         rowData.push(''); // Adding empty cells to reach 15 columns
       }
 
-      for (var j = 0; j < 15; j++) {
+      for (var j = 0; j < headers.length; j++) {
         var cellData = rowData[j];
         var formattedData = cellData;
 
         // Check if cellData is a valid Excel date serial number and format it to DD/MM/YYYY
-        if (typeof cellData === 'number' && cellData > 0) {
-            var excelDate = XLSX.SSF.parse_date_code(cellData);
-            if (excelDate) {
-                formattedData = formatDate2(new Date(excelDate.y, excelDate.m - 1, excelDate.d));
-            }
+        if (dateColumns.includes(headers[j]) && typeof cellData === 'number' && cellData > 0) {
+          var dateObj = XLSX.SSF.parse_date_code(cellData);
+          if (dateObj) {
+              var day = String(dateObj.d).padStart(2, '0');
+              var month = String(dateObj.m).padStart(2, '0');
+              var year = dateObj.y;
+              formattedData = `${day}/${month}/${year}`; // Always UK dd/mm/yyyy
+          }
         }
 
         htmlTable += '<td><input type="text" id="'+headers[j]+(i-1)+'" name="'+headers[j]+'['+(i-1)+']" value="' + (formattedData == null ? '' : formattedData) + '" /></td>';
@@ -6183,11 +6497,117 @@ function log(id) {
   });
 }
 
+function statusTimeline(id) {
+  $('#spinnerLoading').show();
+  $.post('php/getTimeline.php', {id: id, type: 'Stamping'}, function(data){
+    var obj = JSON.parse(data);
+
+    if (obj.status === 'success') { 
+      $('#timeline').empty();
+
+      if (obj.message.length > 0) {
+        obj.message.forEach(row => {
+          // Pick icon and color based on status
+          let icon = 'fas fa-info bg-blue';
+          let statusLower = row.status.toLowerCase();
+          
+          // Map status to appropriate icons and colors
+          if (statusLower.includes('quotation issued') || statusLower.includes('follow-up')) {
+            icon = 'fas fa-file-invoice bg-info';
+          } else if (statusLower.includes('quotation chop') || statusLower.includes('sign back')) {
+            icon = 'fas fa-signature bg-primary';
+          } else if (statusLower.includes('purchase order') || statusLower.includes('po received')) {
+            icon = 'fas fa-shopping-cart bg-success';
+          } else if (statusLower.includes('pre-stamping completed')) {
+            icon = 'fas fa-clipboard-check bg-warning';
+          } else if (statusLower.includes('stamping date confirmed') || statusLower.includes('customer notified')) {
+            icon = 'fas fa-calendar-check bg-orange';
+          } else if (statusLower.includes('stamping completed')) {
+            icon = 'fas fa-stamp bg-success';
+          } else if (statusLower.includes('spmt payment completed')) {
+            icon = 'fas fa-credit-card bg-green';
+          } else if (statusLower.includes('metrology department payment completed')) {
+            icon = 'fas fa-money-check bg-dark';
+          } else if (statusLower.includes('create')) {
+            icon = 'fas fa-plus bg-green';
+          } else if (statusLower.includes('approve')) {
+            icon = 'fas fa-check bg-success';
+          } else if (statusLower.includes('reject') || statusLower.includes('cancel')) {
+            icon = 'fas fa-times bg-danger';
+          } else if (statusLower.includes('update') || statusLower.includes('edit')) {
+            icon = 'fas fa-edit bg-warning';
+          }
+
+          let newItem = `
+            <div>
+              <i class="${icon}"></i>
+              <div class="timeline-item">
+                <span class="time"><i class="fas fa-clock"></i> ${row.occurred_at}</span>
+                <h3 class="timeline-header"><a href="#">${row.created_by}</a> ${row.status}</h3>
+                <div class="timeline-body">
+                  ${row.status_remark ? row.status_remark : ''}
+                </div>
+              </div>
+            </div>
+          `;
+          $('#timeline').append(newItem);
+        });
+
+        // End marker
+        $('#timeline').append(`
+          <div>
+            <i class="fas fa-clock bg-gray"></i>
+          </div>
+        `);
+
+      } else {
+        $('#timeline').append(`
+          <div>
+            <i class="fas fa-info-circle bg-secondary"></i>
+            <div class="timeline-item">
+              <h3 class="timeline-header text-center">No data available</h3>
+            </div>
+          </div>
+        `);
+      }
+
+      $('#timelineModal').modal('show');
+    }
+    else if (obj.status === 'failed') {
+      toastr["error"](obj.message, "Failed:");
+    }
+    else {
+      toastr["error"]("Something wrong when pulling data", "Failed:");
+    }
+
+    $('#spinnerLoading').hide();
+  });
+}
+
 function duplicate(id) {
   $('#duplicateModal').find('#id').val(id);
   $('#duplicateModal').modal('show');
 
   $('#duplicateForm').validate({
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+      error.addClass('invalid-feedback');
+      element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass('is-invalid');
+    }
+  });
+}
+
+function genDuplicateTemplate(id) {
+  $('#generateDupModal').find('#id').val(id);
+  $('#generateDupModal').modal('show');
+
+  $('#genDupForm').validate({
     errorElement: 'span',
     errorPlacement: function (error, element) {
       error.addClass('invalid-feedback');

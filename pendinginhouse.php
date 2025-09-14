@@ -1058,11 +1058,11 @@ $(function () {
         data: 'id',
         className: 'action-button',
         render: function (data, type, row) {
-          let dropdownMenu = '<div class="dropdown">' +
+          let dropdownMenu = '<div class="dropdown" style="position: relative;">' +
             '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
             '<i class="fa-solid fa-ellipsis"></i>' +
             '</button>' +
-            '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">' +
+            '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton' + data + '">' +
             '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>' +
             '<a class="dropdown-item" id="duplicate'+ data + '" onclick="duplicate(' + data + ')"><i class="fa-solid fa-clone"></i> Duplicate</a>'+
             '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ')"><i class="fas fa-print"></i> Print</a>'+
@@ -1386,11 +1386,11 @@ $(function () {
           data: 'id',
           className: 'action-button',
           render: function (data, type, row) {
-            let dropdownMenu = '<div class="dropdown">' +
+            let dropdownMenu = '<div class="dropdown" style="position: relative;">' +
               '<button class="btn btn-secondary btn-sm" type="button" id="dropdownMenuButton' + data + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
               '<i class="fa-solid fa-ellipsis"></i>' +
               '</button>' +
-              '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton' + data + '">' +
+              '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton' + data + '">' +
               '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>' +
               '<a class="dropdown-item" id="duplicate'+ data + '" onclick="duplicate(' + data + ')"><i class="fa-solid fa-clone"></i> Duplicate</a>'+
               '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ')"><i class="fas fa-print"></i> Print</a>'+

@@ -123,7 +123,7 @@ function sanitizeForPDF($str) {
     
     // Ensure UTF-8 encoding
     if (!mb_check_encoding($str, 'UTF-8')) {
-        $str = mb_convert_encoding($str, 'UTF-8', 'auto');
+        $str = mb_convert_encoding($str, 'UTF-8', 'UTF-8');
     }
     
     // Convert HTML entities to their character equivalents

@@ -34,6 +34,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 	$validatorlama = null;
 	$assignTo2 = null;
 	$assignTo3 = null;
+	$ownershipStatus = null;
 	$machineName = null;
 	$machineLocation = null;
 	$machineArea = null;
@@ -66,6 +67,8 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 	$borangEDate = null;
 	$cashBill = null;
 	$invoice = null;
+	$invoicePaymentType = null;
+	$invoicePayRef = null;
 	$notificationPeriod = null;
 	$pic = null;
 	$followUpDate = null;
@@ -135,6 +138,10 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 
 	if(isset($_POST['assignTo3']) && $_POST['assignTo3']!=null && $_POST['assignTo3']!=""){
 		$assignTo3 = $_POST['assignTo3'];
+	}
+
+	if(isset($_POST['ownershipStatus']) && $_POST['ownershipStatus']!=null && $_POST['ownershipStatus']!=""){
+		$ownershipStatus = $_POST['ownershipStatus'];
 	}
 	
 	if(isset($_POST['machineName']) && $_POST['machineName']!=null && $_POST['machineName']!=""){
@@ -388,6 +395,14 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 		$invoice = $_POST['invoice'];
 	}
 
+	if(isset($_POST['invoicePaymentType']) && $_POST['invoicePaymentType']!=null && $_POST['invoicePaymentType']!=""){
+		$invoicePaymentType = $_POST['invoicePaymentType'];
+	}
+
+	if(isset($_POST['invoicePayRef']) && $_POST['invoicePayRef']!=null && $_POST['invoicePayRef']!=""){
+		$invoicePayRef = $_POST['invoicePayRef'];
+	}
+
 	if(isset($_POST['validatorInvoice']) && $_POST['validatorInvoice']!=null && $_POST['validatorInvoice']!=""){
 		$validatorInvoice = $_POST['validatorInvoice'];
 	}
@@ -460,12 +475,12 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 		//Updated datetime
 		$currentDateTime = date('Y-m-d H:i:s');
 
-		if ($update_stmt = $db->prepare("UPDATE stamping SET type=?, company_branch=?, dealer=?, dealer_branch=?, customers=?, brand=?, machine_type=?, model=?, make_in=?, capacity=?, serial_no=?, assignTo=?, assignTo2=?, assignTo3=?, validator_lama=?, validate_by=?, cawangan=?, jenis_alat=?, machine_name=?, machine_location=?, machine_area=?, machine_serial_no=?, trade=?, no_daftar_lama=?, no_daftar_baru=?, pin_keselamatan=?, siri_keselamatan=?, include_cert=?, borang_d=?
-		, borang_e=?, borang_e_date=?, invoice_no=?, notification_period=?, cash_bill=?, stamping_date=?, last_year_stamping_date=?, due_date=?, pic=?, customer_pic=?, quotation_no=?, quotation_date=?, purchase_no=?, purchase_date=?
+		if ($update_stmt = $db->prepare("UPDATE stamping SET type=?, company_branch=?, dealer=?, dealer_branch=?, customers=?, brand=?, machine_type=?, model=?, make_in=?, capacity=?, serial_no=?, assignTo=?, assignTo2=?, assignTo3=?, ownership_status=?, validator_lama=?, validate_by=?, cawangan=?, jenis_alat=?, machine_name=?, machine_location=?, machine_area=?, machine_serial_no=?, trade=?, no_daftar_lama=?, no_daftar_baru=?, pin_keselamatan=?, siri_keselamatan=?, include_cert=?, borang_d=?
+		, borang_e=?, borang_e_date=?, invoice_no=?, invoice_payment_type=?, invoice_payment_ref=?, notification_period=?, cash_bill=?, stamping_date=?, last_year_stamping_date=?, due_date=?, pic=?, customer_pic=?, quotation_no=?, quotation_date=?, purchase_no=?, purchase_date=?
 		, remarks=?, internal_remark=?, validator_invoice=?, unit_price=?, cert_price=?, total_amount=?, sst=?, subtotal_sst_amt=?, rebate=?, rebate_amount=?, subtotal_amount=?, log=?, products=?, stamping_type=?, updated_datetime=?, branch=?, labour_charge=?, stampfee_labourcharge=?, int_round_up=?, total_charges=?, seal_no_lama=?, seal_no_baru=?, pegawai_contact=?, cert_no=? WHERE id=?")){
 			$data = json_encode($logs);
-			$update_stmt->bind_param('ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', $type, $companyBranch, $dealer, $reseller_branch, $customer, $brand, $machineType, $model, $makeIn, $capacity, $serial, $assignTo, $assignTo2, $assignTo3, $validatorlama,
-			$validator, $cawangan, $jenisAlat, $machineName, $machineLocation, $machineArea, $machineSerialNo, $trade, $noDaftarLama,$noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $borangEDate, $invoice, $notificationPeriod, $cashBill, $stampDate, $lastYearStampDate, $dueDate, $uid, $pic, 
+			$update_stmt->bind_param('sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', $type, $companyBranch, $dealer, $reseller_branch, $customer, $brand, $machineType, $model, $makeIn, $capacity, $serial, $assignTo, $assignTo2, $assignTo3, $ownershipStatus, $validatorlama,
+			$validator, $cawangan, $jenisAlat, $machineName, $machineLocation, $machineArea, $machineSerialNo, $trade, $noDaftarLama,$noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $borangEDate, $invoice, $invoicePaymentType, $invoicePayRef, $notificationPeriod, $cashBill, $stampDate, $lastYearStampDate, $dueDate, $uid, $pic, 
 			$quotation, $quotationDate, $poNo, $poDate, $remark, $internalRemark, $validatorInvoice, $unitPrice, $certPrice, $totalPrice, $sst, $subAmountSst, $rebate, $rebateAmount, $subtotalPrice, $data, $product, $newRenew, $currentDateTime, $branch, $labourCharge, $stampLabourCharge, $roundUp, $totalCharge, $sealNoLama, $sealNoBaru, $pegawaiContact, $certNo, $_POST['id']);
 		
 			// Execute the prepared query.
@@ -482,6 +497,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 
 				$uploadQuotationAttachment = null;
 				$uploadInvoiceAttachment = null;
+				$uploadRentalAttachment = null;
 				if(isset($_FILES['uploadQuotationAttachment']) && $_FILES['uploadQuotationAttachment']!=null && $_FILES['uploadQuotationAttachment']!=""){
 					$uploadQuotationAttachment = $_FILES['uploadQuotationAttachment'];
 
@@ -566,6 +582,52 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 								$stmt3->close();
 								
 								if ($stmtf = $db->prepare("UPDATE stamping SET invoice_attachment=? WHERE id=?")) {
+									$stmtf->bind_param('ss', $fid, $stampingId);
+									$stmtf->execute();
+									$stmtf->close();
+								}
+							} 
+						} 
+					}
+				}
+
+				if(isset($_FILES['uploadRentalAttachment']) && $_FILES['uploadRentalAttachment']!=null && $_FILES['uploadRentalAttachment']!=""){
+					$uploadRentalAttachment = $_FILES['uploadRentalAttachment'];
+
+					$ds = DIRECTORY_SEPARATOR;
+					$storeFolder = '../uploads/stamping';
+					if($uploadRentalAttachment['error'] === 0){
+						# Delete Existing File 
+						// if(isset($_POST['InvoiceFilePath']) && $_POST['InvoiceFilePath']!=null && $_POST['InvoiceFilePath']!=""){
+						// 	$InvoiceFilePath = $_POST['InvoiceFilePath'];
+						// 	if (file_exists($InvoiceFilePath)) {
+						// 		unlink($InvoiceFilePath);
+						// 	}
+						// }
+
+						$timestamp = time();
+						$uploadDir = $storeFolder . $ds; // Directory to store uploaded files
+						$folderDir = dirname(__DIR__, 2) . '/' . $uploadDir;
+						// Check if folder exists, if not, create it with correct permissions
+						if (!is_dir($folderDir)) {
+							mkdir($folderDir, 0777, true); // true allows recursive directory creation
+						}
+
+						$filename = $timestamp . '_' . basename($_FILES['uploadRentalAttachment']['name']);
+						$uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
+						$tempFile = $_FILES['uploadRentalAttachment']['tmp_name'];
+
+						// Move the uploaded file to the target directory
+						if (move_uploaded_file($tempFile, $uploadFile)) {
+							$rentalFilePath = $uploadDir . $filename;
+							// Update certificate data in the database
+							if ($stmt3 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+								$stmt3->bind_param('ss', $filename, $rentalFilePath);
+								$stmt3->execute();
+								$fid = $stmt3->insert_id;
+								$stmt3->close();
+
+								if ($stmtf = $db->prepare("UPDATE stamping SET rental_attachment=? WHERE id=?")) {
 									$stmtf->bind_param('ss', $fid, $stampingId);
 									$stmtf->execute();
 									$stmtf->close();
@@ -1135,6 +1197,57 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					$insert_stmt3->close();
 				}
 
+				// Logic to save stamping status timeline
+				$stmt = $db->prepare("SELECT quotation_no, quotation_attachment, purchase_no, serial_no, stamping_date, invoice_no, invoice_payment_type, invoice_payment_ref, validator_invoice FROM stamping WHERE id=?");
+				$stmt->bind_param('i', $stampingId);
+				$stmt->execute();
+				$stmt->bind_result($quotation_no, $quotation_attachment, $purchase_no, $serial_no, $stamping_date, $invoice_no, $invoice_payment_type, $invoice_payment_ref, $validator_invoice);
+				$stmt->fetch();
+				$stmt->close();
+
+				// Statuses and their conditions
+				$statuses = [
+					1 => !empty($quotation_no),
+					2 => !empty($quotation_attachment),
+					3 => !empty($purchase_no),
+					4 => !empty($serial_no),
+					5 => !empty($stamping_date),
+					6 => !empty($invoice_no),
+					7 => (!empty($invoice_payment_type) && !empty($invoice_payment_ref)),
+					8 => !empty($validator_invoice),
+				];
+
+				// Status descriptions (should match your miscellaneous table)
+				$status_desc = [];
+				if ($status_stmt = $db->prepare("SELECT * FROM miscellaneous WHERE code='stamping_status' AND deleted = 0")) {
+					$status_stmt->execute();
+					$result = $status_stmt->get_result();
+					while ($row = $result->fetch_assoc()) {
+						$status_desc[$row['value']] = $row['description'];
+					}
+					$status_stmt->close();
+				}
+
+				// Insert log for each status reached, in order
+				$created_by = $_SESSION['userID'];
+				$now = date('Y-m-d H:i:s');
+				foreach ($statuses as $val => $reached) {
+					if ($reached) {
+						// Check if already logged
+						$check = $db->prepare("SELECT id FROM stamping_status_log WHERE stamp_id=? AND status=?");
+						$check->bind_param('is', $stampingId, $status_desc[$val]);
+						$check->execute();
+						$check->store_result();
+						if ($check->num_rows == 0) {
+							$insert = $db->prepare("INSERT INTO stamping_status_log (stamp_id, status, created_by, occurred_at) VALUES (?, ?, ?, ?)");
+							$insert->bind_param('isss', $stampingId, $status_desc[$val], $created_by, $now);
+							$insert->execute();
+							$insert->close();
+						}
+						$check->close();
+					}
+				}
+
 				echo json_encode(
 					array(
 						"status"=> "success", 
@@ -1157,13 +1270,13 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 
 	}
 	else{
-		if ($insert_stmt = $db->prepare("INSERT INTO stamping (type, company_branch, dealer, dealer_branch, customer_type, customers, brand, machine_type, model, make_in, capacity, serial_no, assignTo, assignTo2, assignTo3, validator_lama,
-		validate_by, cawangan, jenis_alat, machine_name, machine_location, machine_area, machine_serial_no, trade, no_daftar_lama, no_daftar_baru, pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, borang_e_date, invoice_no, notification_period, cash_bill, stamping_date, last_year_stamping_date, due_date, pic, customer_pic, 
+		if ($insert_stmt = $db->prepare("INSERT INTO stamping (type, company_branch, dealer, dealer_branch, customer_type, customers, brand, machine_type, model, make_in, capacity, serial_no, assignTo, assignTo2, assignTo3, ownership_status, validator_lama,
+		validate_by, cawangan, jenis_alat, machine_name, machine_location, machine_area, machine_serial_no, trade, no_daftar_lama, no_daftar_baru, pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, borang_e_date, invoice_no, invoice_payment_type, invoice_payment_ref, notification_period, cash_bill, stamping_date, last_year_stamping_date, due_date, pic, customer_pic, 
 		quotation_no, quotation_date, purchase_no, purchase_date, remarks, internal_remark, validator_invoice, unit_price, cert_price, total_amount, sst, subtotal_sst_amt, rebate, rebate_amount, subtotal_amount, log, products, stamping_type, branch, labour_charge, stampfee_labourcharge, int_round_up, total_charges, seal_no_lama, seal_no_baru, pegawai_contact, cert_no) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")){
 			$data = json_encode($logs);
-			$insert_stmt->bind_param('sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', $type, $companyBranch, $dealer, $reseller_branch, $customerType, $customer, $brand, $machineType, $model, $makeIn, $capacity, $serial, $assignTo, $assignTo2, $assignTo3, $validatorlama,
-			$validator, $cawangan, $jenisAlat, $machineName, $machineLocation, $machineArea, $machineSerialNo, $trade, $noDaftarLama, $noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $borangEDate, $invoice, $notificationPeriod, $cashBill, $stampDate, $lastYearStampDate, $dueDate, $uid, $pic, 
+			$insert_stmt->bind_param('ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', $type, $companyBranch, $dealer, $reseller_branch, $customerType, $customer, $brand, $machineType, $model, $makeIn, $capacity, $serial, $assignTo, $assignTo2, $assignTo3, $ownershipStatus, $validatorlama,
+			$validator, $cawangan, $jenisAlat, $machineName, $machineLocation, $machineArea, $machineSerialNo, $trade, $noDaftarLama, $noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD, $borangE, $borangEDate, $invoice, $invoicePaymentType, $invoicePayRef, $notificationPeriod, $cashBill, $stampDate, $lastYearStampDate, $dueDate, $uid, $pic, 
 			$quotation, $quotationDate, $poNo, $poDate, $remark, $internalRemark, $validatorInvoice, $unitPrice, $certPrice, $totalPrice, $sst, $subAmountSst, $rebate, $rebateAmount, $subtotalPrice, $data, $product, $newRenew, $branch, $labourCharge, $stampLabourCharge, $roundUp, $totalCharge, $sealNoLama, $sealNoBaru, $pegawaiContact, $certNo);
 			
 			// Execute the prepared query.
@@ -1177,6 +1290,148 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 			} 
 			else{
 				$stamp_id = $insert_stmt->insert_id;
+
+				$uploadQuotationAttachment = null;
+				$uploadInvoiceAttachment = null;
+				$uploadRentalAttachment = null;
+				if(isset($_FILES['uploadQuotationAttachment']) && $_FILES['uploadQuotationAttachment']!=null && $_FILES['uploadQuotationAttachment']!=""){
+					$uploadQuotationAttachment = $_FILES['uploadQuotationAttachment'];
+
+					$ds = DIRECTORY_SEPARATOR;
+					$storeFolder = '../uploads/stamping';
+					if($uploadQuotationAttachment['error'] === 0){
+						# Delete Existing File 
+						// if(isset($_POST['quotationFilePath']) && $_POST['quotationFilePath']!=null && $_POST['quotationFilePath']!=""){
+						// 	$quotationFilePath = $_POST['quotationFilePath'];
+						// 	if (file_exists($quotationFilePath)) {
+						// 		unlink($quotationFilePath);
+						// 	}
+						// }
+
+						$timestamp = time();
+						$uploadDir = $storeFolder . $ds; // Directory to store uploaded files
+						$folderDir = dirname(__DIR__, 2) . '/' . $uploadDir;
+						// Check if folder exists, if not, create it with correct permissions
+						if (!is_dir($folderDir)) {
+							mkdir($folderDir, 0777, true); // true allows recursive directory creation
+						}
+
+						$filename = $timestamp . '_' . basename($_FILES['uploadQuotationAttachment']['name']);
+						$uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
+						$tempFile = $_FILES['uploadQuotationAttachment']['tmp_name'];
+
+						// Move the uploaded file to the target directory
+						if (move_uploaded_file($tempFile, $uploadFile)) {
+							$dbDir = "../uploads/stamping/";
+							$quotationFilePath = $dbDir . $filename;
+							// Update certificate data in the database
+							if ($stmt3 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+								$stmt3->bind_param('ss', $filename, $quotationFilePath);
+								$stmt3->execute();
+								$fid = $stmt3->insert_id;
+								$stmt3->close();
+								
+								if ($stmtf = $db->prepare("UPDATE stamping SET quotation_attachment=? WHERE id=?")) {
+									$stmtf->bind_param('ss', $fid, $stamp_id);
+									$stmtf->execute();
+									$stmtf->close();
+								}
+							} 
+						} 
+					}
+				}
+
+				if(isset($_FILES['uploadInvoiceAttachment']) && $_FILES['uploadInvoiceAttachment']!=null && $_FILES['uploadInvoiceAttachment']!=""){
+					$uploadInvoiceAttachment = $_FILES['uploadInvoiceAttachment'];
+
+					$ds = DIRECTORY_SEPARATOR;
+					$storeFolder = '../uploads/stamping';
+					if($uploadInvoiceAttachment['error'] === 0){
+						# Delete Existing File 
+						// if(isset($_POST['InvoiceFilePath']) && $_POST['InvoiceFilePath']!=null && $_POST['InvoiceFilePath']!=""){
+						// 	$InvoiceFilePath = $_POST['InvoiceFilePath'];
+						// 	if (file_exists($InvoiceFilePath)) {
+						// 		unlink($InvoiceFilePath);
+						// 	}
+						// }
+
+						$timestamp = time();
+						$uploadDir = $storeFolder . $ds; // Directory to store uploaded files
+						$folderDir = dirname(__DIR__, 2) . '/' . $uploadDir;
+						// Check if folder exists, if not, create it with correct permissions
+						if (!is_dir($folderDir)) {
+							mkdir($folderDir, 0777, true); // true allows recursive directory creation
+						}
+
+						$filename = $timestamp . '_' . basename($_FILES['uploadInvoiceAttachment']['name']);
+						$uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
+						$tempFile = $_FILES['uploadInvoiceAttachment']['tmp_name'];
+
+						// Move the uploaded file to the target directory
+						if (move_uploaded_file($tempFile, $uploadFile)) {
+							$invoiceFilePath = $uploadDir . $filename;
+							// Update certificate data in the database
+							if ($stmt3 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+								$stmt3->bind_param('ss', $filename, $invoiceFilePath);
+								$stmt3->execute();
+								$fid = $stmt3->insert_id;
+								$stmt3->close();
+								
+								if ($stmtf = $db->prepare("UPDATE stamping SET invoice_attachment=? WHERE id=?")) {
+									$stmtf->bind_param('ss', $fid, $stamp_id);
+									$stmtf->execute();
+									$stmtf->close();
+								}
+							} 
+						} 
+					}
+				}
+
+				if(isset($_FILES['uploadRentalAttachment']) && $_FILES['uploadRentalAttachment']!=null && $_FILES['uploadRentalAttachment']!=""){
+					$uploadRentalAttachment = $_FILES['uploadRentalAttachment'];
+
+					$ds = DIRECTORY_SEPARATOR;
+					$storeFolder = '../uploads/stamping';
+					if($uploadRentalAttachment['error'] === 0){
+						# Delete Existing File 
+						// if(isset($_POST['InvoiceFilePath']) && $_POST['InvoiceFilePath']!=null && $_POST['InvoiceFilePath']!=""){
+						// 	$InvoiceFilePath = $_POST['InvoiceFilePath'];
+						// 	if (file_exists($InvoiceFilePath)) {
+						// 		unlink($InvoiceFilePath);
+						// 	}
+						// }
+
+						$timestamp = time();
+						$uploadDir = $storeFolder . $ds; // Directory to store uploaded files
+						$folderDir = dirname(__DIR__, 2) . '/' . $uploadDir;
+						// Check if folder exists, if not, create it with correct permissions
+						if (!is_dir($folderDir)) {
+							mkdir($folderDir, 0777, true); // true allows recursive directory creation
+						}
+
+						$filename = $timestamp . '_' . basename($_FILES['uploadRentalAttachment']['name']);
+						$uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
+						$tempFile = $_FILES['uploadRentalAttachment']['tmp_name'];
+
+						// Move the uploaded file to the target directory
+						if (move_uploaded_file($tempFile, $uploadFile)) {
+							$rentalFilePath = $uploadDir . $filename;
+							// Update certificate data in the database
+							if ($stmt3 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+								$stmt3->bind_param('ss', $filename, $rentalFilePath);
+								$stmt3->execute();
+								$fid = $stmt3->insert_id;
+								$stmt3->close();
+
+								if ($stmtf = $db->prepare("UPDATE stamping SET rental_attachment=? WHERE id=?")) {
+									$stmtf->bind_param('ss', $fid, $stamp_id);
+									$stmtf->execute();
+									$stmtf->close();
+								}
+							} 
+						} 
+					}
+				}
 
 				// For ATK Additional fields
 				if(($validator == '10' || $validator == '9') && $jenisAlat == '1'){
@@ -1731,6 +1986,57 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					$insert_stmt3->bind_param('sss', $action, $uid, $stamp_id);
 					$insert_stmt3->execute();
 					$insert_stmt3->close();
+				}
+
+				// Logic to save stamping status timeline
+				$stmt = $db->prepare("SELECT quotation_no, quotation_attachment, purchase_no, serial_no, stamping_date, invoice_no, invoice_payment_type, invoice_payment_ref, validator_invoice FROM stamping WHERE id=?");
+				$stmt->bind_param('i', $stamp_id);
+				$stmt->execute();
+				$stmt->bind_result($quotation_no, $quotation_attachment, $purchase_no, $serial_no, $stamping_date, $invoice_no, $invoice_payment_type, $invoice_payment_ref, $validator_invoice);
+				$stmt->fetch();
+				$stmt->close();
+
+				// Statuses and their conditions
+				$statuses = [
+					1 => !empty($quotation_no),
+					2 => !empty($quotation_attachment),
+					3 => !empty($purchase_no),
+					4 => !empty($serial_no),
+					5 => !empty($stamping_date),
+					6 => !empty($invoice_no),
+					7 => (!empty($invoice_payment_type) && !empty($invoice_payment_ref)),
+					8 => !empty($validator_invoice),
+				];
+
+				// Status descriptions (should match your miscellaneous table)
+				$status_desc = [];
+				if ($status_stmt = $db->prepare("SELECT * FROM miscellaneous WHERE code='stamping_status' AND deleted = 0")) {
+					$status_stmt->execute();
+					$result = $status_stmt->get_result();
+					while ($row = $result->fetch_assoc()) {
+						$status_desc[$row['value']] = $row['description'];
+					}
+					$status_stmt->close();
+				}
+
+				// Insert log for each status reached, in order
+				$created_by = $_SESSION['userID'];
+				$now = date('Y-m-d H:i:s');
+				foreach ($statuses as $val => $reached) {
+					if ($reached) {
+						// Check if already logged
+						$check = $db->prepare("SELECT id FROM stamping_status_log WHERE stamp_id=? AND status=?");
+						$check->bind_param('is', $stamp_id, $status_desc[$val]);
+						$check->execute();
+						$check->store_result();
+						if ($check->num_rows == 0) {
+							$insert = $db->prepare("INSERT INTO stamping_status_log (stamp_id, status, created_by, occurred_at) VALUES (?, ?, ?, ?)");
+							$insert->bind_param('isss', $stamp_id, $status_desc[$val], $created_by, $now);
+							$insert->execute();
+							$insert->close();
+						}
+						$check->close();
+					}
 				}
 				
 				echo json_encode(

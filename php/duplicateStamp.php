@@ -46,9 +46,9 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
                     capacity, capacity_high, assignTo, assignTo2, assignTo3, serial_no, validator_lama, validate_by, jenis_alat, machine_name, machine_location, machine_area, machine_serial_no, trade, no_daftar, no_daftar_lama, no_daftar_baru, 
                     pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, borang_e_date, cawangan, invoice_no, notification_period, cash_bill, stamping_type, last_year_stamping_date, stamping_date, 
                     due_date, pic, customer_pic, quotation_no, quotation_date, purchase_no, purchase_date, remarks, internal_remark, validator_invoice, log, 
-                    unit_price, cert_price, total_amount, sst, subtotal_sst_amt, rebate, rebate_amount, subtotal_amount, labour_charge, stampfee_labourcharge, int_round_up, total_charges, seal_no_lama, seal_no_baru, pegawai_contact, cert_no, reason_id, other_reason, existing_id, status, 
+                    unit_price, cert_price, total_amount, sst, subtotal_sst_amt, rebate, rebate_amount, subtotal_amount, labour_charge, stampfee_labourcharge, int_round_up, total_charges, seal_no_lama, seal_no_baru, pegawai_contact, cert_no, ownership_status, invoice_payment_type, invoice_payment_ref, reason_id, other_reason, existing_id, status, 
                     renewed, duplicate, copy
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                 $insertStmt = $db->prepare($insertQuery);
 
@@ -87,7 +87,7 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
                         $record['jenis_alat'], $record['machine_name'], $record['machine_location'], $record['machine_area'], $record['machine_serial_no'], $record['trade'], null, null, null, null, null, 
                         $record['include_cert'], null, null, null, $record['cawangan'], null, $record['notification_period'], null, 'RENEWAL', null, 
                         null, null, $record['pic'], $record['customer_pic'], null, null, null, null, $record['remarks'], $record['internal_remark'], $record['validator_invoice'],
-                        $record['log'], $record['unit_price'], $record['cert_price'], $record['total_amount'], $record['sst'], $record['subtotal_sst_amt'], $record['rebate'], $record['rebate_amount'], $record['subtotal_amount'], $record['labour_charge'], $record['stampfee_labourcharge'], $record['int_round_up'], $record['total_charges'], $record['seal_no_lama'], $record['seal_no_baru'], $record['pegawai_contact'], $record['cert_no'],
+                        $record['log'], $record['unit_price'], $record['cert_price'], $record['total_amount'], $record['sst'], $record['subtotal_sst_amt'], $record['rebate'], $record['rebate_amount'], $record['subtotal_amount'], $record['labour_charge'], $record['stampfee_labourcharge'], $record['int_round_up'], $record['total_charges'], $record['seal_no_lama'], $record['seal_no_baru'], $record['pegawai_contact'], $record['cert_no'], 'OWN', null, null,
                         $record['reason_id'], $record['other_reason'], $record['id'], 'Pending', 'N', $duplicate, $copy
                     ]);
     
