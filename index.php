@@ -435,7 +435,7 @@ to get the desired effect
             </a>
             <ul class="nav nav-treeview" style="display: block;">
               <?php 
-                if($role == "SUPER_ADMIN"){
+                if($role == "SUPER_ADMIN" || $role == "ADMIN/ACCOUNT"){
                   echo '
                     <li class="nav-item">
                       <a href="#pending" data-file="pending.php" class="nav-link link">
@@ -462,7 +462,6 @@ to get the desired effect
                       </a>
                     </li>
                   ';
-                  
                 } else if ($role == "ACCOUNT") {
                   echo '
                     <li class="nav-item">
@@ -504,7 +503,7 @@ to get the desired effect
             </a>
             <ul class="nav nav-treeview">
               <?php 
-                if($role == "SUPER_ADMIN"){
+                if($role == "SUPER_ADMIN" || $role == "ADMIN/ACCOUNT"){
                   echo '
                     <li class="nav-item">
                       <a href="#pendingvalidation" data-file="pendingvalidation.php" class="nav-link link">
@@ -531,7 +530,6 @@ to get the desired effect
                       </a>
                     </li>
                   ';
-                  
                 } else if ($role == "ACCOUNT") {
                   echo '
                     <li class="nav-item">
@@ -573,7 +571,7 @@ to get the desired effect
             </a>
             <ul class="nav nav-treeview">
               <?php 
-                if($role == "SUPER_ADMIN"){
+                if($role == "SUPER_ADMIN" || $role == "ADMIN/ACCOUNT"){
                   echo '
                     <li class="nav-item">
                       <a href="#pendinginhouse" data-file="pendinginhouse.php" class="nav-link link">
@@ -600,7 +598,6 @@ to get the desired effect
                       </a>
                     </li>
                   ';
-                  
                 } else if ($role == "ACCOUNT") {
                   echo '
                     <li class="nav-item">
@@ -830,7 +827,7 @@ to get the desired effect
         
             <ul class="nav nav-treeview" style="display: none;">
               <?php 
-                if($role == "ADMIN" || $role == "SUPER_ADMIN"){
+                if($role == "ADMIN" || $role == "SUPER_ADMIN" || $role == "ADMIN/ACCOUNT"){
                   echo '<li class="nav-item">
                           <a href="#company" data-file="company.php" class="nav-link link">
                             <i class="nav-icon fas fa-building"></i>
@@ -868,7 +865,7 @@ to get the desired effect
             </ul>
           </li>
           <?php 
-            if($role == "ADMIN" || $role == "SUPER_ADMIN"){
+            if($role == "ADMIN" || $role == "SUPER_ADMIN" || $role == "ADMIN/ACCOUNT"){
               echo '
                 <li class="nav-item has-treeview">
                   <a href="#" class="nav-link">
