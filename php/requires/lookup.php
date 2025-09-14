@@ -283,7 +283,7 @@ function searchStaffNameById($value, $db) {
     $id = null;
 
     if ($value == null || $value == ''){
-        return '-';
+        return '';
     }else if ($value == 0){
         return '*SYSTEM';
     }
