@@ -282,7 +282,9 @@ function searchValidatorNameById($value, $db) {
 function searchStaffNameById($value, $db) {
     $id = null;
 
-    if ($value === 0){
+    if ($value == null || $value == ''){
+        return '-';
+    }else if ($value == 0){
         return '*SYSTEM';
     }
 
