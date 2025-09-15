@@ -130,6 +130,22 @@ function searchResellerAddressById($value, $db) {
     return $id;
 }
 
+function searchResellerBranchByResellerId($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM reseller_branches WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['id'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
 function searchBrandNameById($value, $db) {
     $id = null;
 
@@ -501,11 +517,11 @@ function searchCompanyBranchIdByName($value, $db) {
     return $id;
 }
 
-function searchCustomerBranchIdByName($value, $db) {
+function searchCustomerBranchIdByName($value, $customerId, $db) {
     $id = null;
 
-    if ($select_stmt = $db->prepare("SELECT * FROM branches WHERE branch_name=? AND deleted='0'")) {
-        $select_stmt->bind_param('s', $value);
+    if ($select_stmt = $db->prepare("SELECT * FROM branches WHERE branch_name=? AND customer_id=? AND deleted='0'")) {
+        $select_stmt->bind_param('ss', $value, $customerId);
         $select_stmt->execute();
         $result = $select_stmt->get_result();
         if ($row = $result->fetch_assoc()) {
