@@ -224,7 +224,7 @@ else{
           { data: 'brand' },
           { data: 'machine_type' },
           { data: 'serial_no' },
-          { data: 'validator' },
+          { data: 'validate_by' },
           { data: 'jenis_alat' },
           { data: 'capacity' },
           { data: 'no_daftar_lama' },
