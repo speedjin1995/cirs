@@ -127,6 +127,10 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 			$select_stmtP->close();
 		}
 	}
+
+	if(isset($_POST['jenisAlatName']) && $_POST['jenisAlatName']!=null && $_POST['jenisAlatName']!=""){
+		$jenisAlatName = $_POST['jenisAlatName'];
+	}
 	
 	if(isset($_POST['validatorlama']) && $_POST['validatorlama']!=null && $_POST['validatorlama']!=""){
 		$validatorlama = $_POST['validatorlama'];
@@ -652,7 +656,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// For ATK Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '1'){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATK')){
 					$penentusan_semula = null;
 					$kelulusan_mspk = null;
 					$no_kelulusan = null;
@@ -748,8 +752,8 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					}
 				}
 
-				// For ATS Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '4'){
+				// For ATS (H) Additional fields
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATS (H)')){
 					$platform_country = null;
 
 					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
@@ -763,28 +767,23 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					}
 				}
 
-				// For ATP Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '2'){
+				// For ATS Additional fields
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATS')){
 					$platform_country = null;
-					$jenis_penunjuk = null;
 
 					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
 						$platform_country = $_POST['platformCountry'];
 					}
 
-					if(isset($_POST['jenis_penunjuk']) && $_POST['jenis_penunjuk']!=null && $_POST['jenis_penunjuk']!=""){
-						$jenis_penunjuk = $_POST['jenis_penunjuk'];
-					}
-
-					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, jenis_penunjuk=? WHERE stamp_id = ?")){
-						$insert_stmt2->bind_param('sss', $platform_country, $jenis_penunjuk, $_POST['id']);
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('ss', $platform_country, $_POST['id']);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
 				}
 
 				// For ATP (MOTORCAR) Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '23'){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATP (MOTORCAR)')){
 					$platform_country = null;
 					$jenis_penunjuk = null;
 
@@ -835,142 +834,9 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						$insert_stmt2->close();
 					}
 				}
-				
-				// For ATN Additional fields
-				if(($validator == '10' || $validator == '9') && ($jenisAlat == '5' || $jenisAlat == '18')){
-					$platform_country = null;
-					$alat_type = null;
-					$bentuk_dulang = null;
 
-					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
-						$platform_country = $_POST['platformCountry'];
-					}
-
-					if(isset($_POST['alat_type']) && $_POST['alat_type']!=null && $_POST['alat_type']!=""){
-						$alat_type = $_POST['alat_type'];
-					}
-
-					if(isset($_POST['bentuk_dulang']) && $_POST['bentuk_dulang']!=null && $_POST['bentuk_dulang']!=""){
-						$bentuk_dulang = $_POST['bentuk_dulang'];
-					}
-
-					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, alat_type=?, bentuk_dulang=? WHERE stamp_id = ?")){
-						$insert_stmt2->bind_param('ssss', $platform_country, $alat_type, $bentuk_dulang, $_POST['id']);
-						$insert_stmt2->execute();
-						$insert_stmt2->close();
-					}
-				}
-				
-				// For ATE Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '6'){
-					$platform_country = null;
-					$class = null;
-					$bentuk_dulang = null;
-
-					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
-						$platform_country = $_POST['platformCountry'];
-					}
-
-					if(isset($_POST['class']) && $_POST['class']!=null && $_POST['class']!=""){
-						$class = $_POST['class'];
-					}
-
-					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, class=? WHERE stamp_id = ?")){
-						$insert_stmt2->bind_param('sss', $platform_country, $class, $_POST['id']);
-						$insert_stmt2->execute();
-						$insert_stmt2->close();
-					}
-				}
-				
-				// For SLL Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '14'){
-					$platform_country = null;
-					$alat_type = null;		
-					
-					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
-						$platform_country = $_POST['platformCountry'];
-					}
-
-					if(isset($_POST['alat_type']) && $_POST['alat_type']!=null && $_POST['alat_type']!=""){
-						$alat_type = $_POST['alat_type'];
-					}
-
-					$questions = [
-						[
-							"no" => 1,
-							"answer" => $_POST['question1'] ?? null,
-						],
-						[
-							"no" => 2,
-							"answer" => $_POST['question2'] ?? null,
-						],
-						[
-							"no" => 3,
-							"answer" => $_POST['question3'] ?? null,
-						],
-						[
-							"no" => 4,
-							"answer" => $_POST['question4'] ?? null,
-						],
-						[
-							"no" => 5.1,
-							"answer" => $_POST['question5_1'] ?? null,
-						],
-						[
-							"no" => 5.2,
-							"answer" => $_POST['question5_2'] ?? null,
-						],
-						[
-							"no" => 6,
-							"answer" => $_POST['question6'] ?? null,
-						],
-						[
-							"no" => 7,
-							"answer" => $_POST['question7'] ?? null,
-						],
-					];
-
-					$questionString = json_encode($questions, JSON_PRETTY_PRINT);
-
-					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country=?, alat_type=?, questions=? WHERE stamp_id = ?")){
-						$insert_stmt2->bind_param('ssss', $platform_country, $alat_type, $questionString, $_POST['id']);
-						$insert_stmt2->execute();
-						$insert_stmt2->close();
-					}
-				}
-
-				// For BTU Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '7'){
-					$platform_country = null;
-					$penandaanBatuUjian = null;
-					$batuUjian = null;
-					$batuUjianLain = null;
-
-					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
-						$platform_country = $_POST['platformCountry'];
-					}
-
-					if(isset($_POST['penandaanBatuUjian']) && $_POST['penandaanBatuUjian']!=null && $_POST['penandaanBatuUjian']!=""){
-						$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
-					}
-
-					if(isset($_POST['batuUjian']) && $_POST['batuUjian']!=null && $_POST['batuUjian']!=""){
-						$batuUjian = $_POST['batuUjian'];
-					}
-
-					if(isset($_POST['batuUjianLain']) && $_POST['batuUjianLain']!=null && $_POST['batuUjianLain']!=""){
-						$batuUjianLain = $_POST['batuUjianLain'];
-					}
-
-					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, penandaan_batu_ujian = ?, batu_ujian = ?, batu_ujian_lain=? WHERE stamp_id = ?")){
-						$insert_stmt2->bind_param('sssss', $platform_country, $penandaanBatuUjian, $batuUjian, $batuUjianLain, $_POST['id']);
-						$insert_stmt2->execute();
-						$insert_stmt2->close();
-					}
-				}
-				
 				// For AUTO_PACKER Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '10'){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATP-AUTO MACHINE')){
 					$platform_country = null;
 					$jenis_penunjuk = null;
 
@@ -1030,23 +896,199 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					// }
 				}
 
-				// For ATS (H)  Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '17'){
+				// For ATP Additional fields
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATP')){
 					$platform_country = null;
+					$jenis_penunjuk = null;
 
 					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
 						$platform_country = $_POST['platformCountry'];
 					}
 
-					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ? WHERE stamp_id = ?")){
-						$insert_stmt2->bind_param('ss', $platform_country, $_POST['id']);
+					if(isset($_POST['jenis_penunjuk']) && $_POST['jenis_penunjuk']!=null && $_POST['jenis_penunjuk']!=""){
+						$jenis_penunjuk = $_POST['jenis_penunjuk'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, jenis_penunjuk=? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('sss', $platform_country, $jenis_penunjuk, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For ATN Additional fields
+				if(($validator == '10' || $validator == '9') && (str_contains($jenisAlatName, 'ATN'))){
+					$platform_country = null;
+					$alat_type = null;
+					$bentuk_dulang = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['alat_type']) && $_POST['alat_type']!=null && $_POST['alat_type']!=""){
+						$alat_type = $_POST['alat_type'];
+					}
+
+					if(isset($_POST['bentuk_dulang']) && $_POST['bentuk_dulang']!=null && $_POST['bentuk_dulang']!=""){
+						$bentuk_dulang = $_POST['bentuk_dulang'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, alat_type=?, bentuk_dulang=? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('ssss', $platform_country, $alat_type, $bentuk_dulang, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+				
+				// For ATE Additional fields
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATE')){
+					$platform_country = null;
+					$class = null;
+					$bentuk_dulang = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['class']) && $_POST['class']!=null && $_POST['class']!=""){
+						$class = $_POST['class'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, class=? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('sss', $platform_country, $class, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+				
+				// For SLL Additional fields
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'SLL')){
+					$platform_country = null;
+					$alat_type = null;		
+					
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['alat_type']) && $_POST['alat_type']!=null && $_POST['alat_type']!=""){
+						$alat_type = $_POST['alat_type'];
+					}
+
+					$questions = [
+						[
+							"no" => 1,
+							"answer" => $_POST['question1'] ?? null,
+						],
+						[
+							"no" => 2,
+							"answer" => $_POST['question2'] ?? null,
+						],
+						[
+							"no" => 3,
+							"answer" => $_POST['question3'] ?? null,
+						],
+						[
+							"no" => 4,
+							"answer" => $_POST['question4'] ?? null,
+						],
+						[
+							"no" => 5.1,
+							"answer" => $_POST['question5_1'] ?? null,
+						],
+						[
+							"no" => 5.2,
+							"answer" => $_POST['question5_2'] ?? null,
+						],
+						[
+							"no" => 6,
+							"answer" => $_POST['question6'] ?? null,
+						],
+						[
+							"no" => 7,
+							"answer" => $_POST['question7'] ?? null,
+						],
+					];
+
+					$questionString = json_encode($questions, JSON_PRETTY_PRINT);
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country=?, alat_type=?, questions=? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('ssss', $platform_country, $alat_type, $questionString, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For BTU (BOX) Additional fields
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BTU - (BOX)')){
+					$btu_info = [];
+
+					$no = $_POST['no'];
+					$batuUjian = $_POST['batuUjian'];
+					$batuUjianLain = $_POST['batuUjianLain'];
+					$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
+					$batuDaftarLama = $_POST['batuDaftarLama'];
+					$batuDaftarBaru = $_POST['batuDaftarBaru'];
+					$batuNoSiriPelekatKeselamatan = $_POST['batuNoSiriPelekatKeselamatan'];
+					$batuBorangD = $_POST['batuBorangD'];
+					$batuBorangE = $_POST['batuBorangE'];
+
+					if(isset($no) && $no != null && count($no) > 0){
+						for($i=0; $i<count($no); $i++){
+							$btu_info[] = array(
+								"no" => $no[$i],
+								"batuUjian" => $batuUjian[$i],
+								"batuUjianLain" => $batuUjianLain[$i],
+								"penandaanBatuUjian" => $penandaanBatuUjian[$i],
+								"batuDaftarLama" => $batuDaftarLama[$i],
+								"batuDaftarBaru" => $batuDaftarBaru[$i],
+								"batuNoSiriPelekatKeselamatan" => $batuNoSiriPelekatKeselamatan[$i],
+								"batuBorangD" => $batuBorangD[$i],
+								"batuBorangE" => $batuBorangE[$i]
+							);
+						}
+					}
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET btu_box_info = ? WHERE stamp_id = ?")){
+						$btuInfo = json_encode($btu_info);
+						$insert_stmt2->bind_param('ss', $btuInfo, $_POST['id']);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For BTU Additional fields
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BTU')){
+					$platform_country = null;
+					$penandaanBatuUjian = null;
+					$batuUjian = null;
+					$batuUjianLain = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['penandaanBatuUjian']) && $_POST['penandaanBatuUjian']!=null && $_POST['penandaanBatuUjian']!=""){
+						$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
+					}
+
+					if(isset($_POST['batuUjian']) && $_POST['batuUjian']!=null && $_POST['batuUjian']!=""){
+						$batuUjian = $_POST['batuUjian'];
+					}
+
+					if(isset($_POST['batuUjianLain']) && $_POST['batuUjianLain']!=null && $_POST['batuUjianLain']!=""){
+						$batuUjianLain = $_POST['batuUjianLain'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET platform_country = ?, penandaan_batu_ujian = ?, batu_ujian = ?, batu_ujian_lain=? WHERE stamp_id = ?")){
+						$insert_stmt2->bind_param('sssss', $platform_country, $penandaanBatuUjian, $batuUjian, $batuUjianLain, $_POST['id']);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
 				}
 
 				// For SIA Additional fields	
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '12'){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'SIA')){
 					$platform_country = null;
 					$nilaiJangka = null;
 					$nilaiJangkaOther = null;
@@ -1081,7 +1123,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// For BAP Additional fields	
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '11'){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BAP')){
 					$pamNo = null;
 					$kelulusanBentuk = null;
 					$alatType = null;
@@ -1126,7 +1168,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// For SIC Additional fields	
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '13'){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'SIC')){
 					$nilaiMaksimum = null;
 					$bahanPembuat = null;
 					$bahanPembuatOther = null;
@@ -1145,44 +1187,6 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 
 					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET nilai_jangkaan_maksimum = ?, bahan_pembuat = ?, bahan_pembuat_other = ? WHERE stamp_id = ?")){
 						$insert_stmt2->bind_param('ssss', $nilaiMaksimum, $bahanPembuat, $bahanPembuatOther, $_POST['id']);
-						$insert_stmt2->execute();
-						$insert_stmt2->close();
-					}
-				}
-
-				// For BTU (BOX) Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '26'){
-					$btu_info = [];
-
-					$no = $_POST['no'];
-					$batuUjian = $_POST['batuUjian'];
-					$batuUjianLain = $_POST['batuUjianLain'];
-					$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
-					$batuDaftarLama = $_POST['batuDaftarLama'];
-					$batuDaftarBaru = $_POST['batuDaftarBaru'];
-					$batuNoSiriPelekatKeselamatan = $_POST['batuNoSiriPelekatKeselamatan'];
-					$batuBorangD = $_POST['batuBorangD'];
-					$batuBorangE = $_POST['batuBorangE'];
-
-					if(isset($no) && $no != null && count($no) > 0){
-						for($i=0; $i<count($no); $i++){
-							$btu_info[] = array(
-								"no" => $no[$i],
-								"batuUjian" => $batuUjian[$i],
-								"batuUjianLain" => $batuUjianLain[$i],
-								"penandaanBatuUjian" => $penandaanBatuUjian[$i],
-								"batuDaftarLama" => $batuDaftarLama[$i],
-								"batuDaftarBaru" => $batuDaftarBaru[$i],
-								"batuNoSiriPelekatKeselamatan" => $batuNoSiriPelekatKeselamatan[$i],
-								"batuBorangD" => $batuBorangD[$i],
-								"batuBorangE" => $batuBorangE[$i]
-							);
-						}
-					}
-
-					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET btu_box_info = ? WHERE stamp_id = ?")){
-						$btuInfo = json_encode($btu_info);
-						$insert_stmt2->bind_param('ss', $btuInfo, $_POST['id']);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
@@ -1434,7 +1438,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// For ATK Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '1'){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATK')){
 					$penentusan_semula = null;
 					$kelulusan_mspk = null;
 					$no_kelulusan = null;
@@ -1526,8 +1530,8 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					}
 				}
 
-				// For ATS Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '4'){
+				// For ATS - H Additional fields
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATS (H)')){
 					$platform_country = null;
 
 					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
@@ -1542,29 +1546,24 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					}
 				}
 
-				// For ATP Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '2'){
+				// For ATS Additional fields
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATS')){
 					$platform_country = null;
-					$jenis_penunjuk = null;
 
 					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
 						$platform_country = $_POST['platformCountry'];
 					}
 
-					if(isset($_POST['jenis_penunjuk']) && $_POST['jenis_penunjuk']!=null && $_POST['jenis_penunjuk']!=""){
-						$jenis_penunjuk = $_POST['jenis_penunjuk'];
-					}
-
-					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, jenis_penunjuk) 
-					VALUES (?, ?, ?)")){
-						$insert_stmt2->bind_param('sss', $stamp_id, $platform_country, $jenis_penunjuk);
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country) 
+					VALUES (?, ?)")){
+						$insert_stmt2->bind_param('ss', $stamp_id, $platform_country);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
 				}
 
 				// For ATP (MOTORCAR) Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '23'){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATP (MOTORCAR)')){
 					$platform_country = null;
 					$jenis_penunjuk = null;
 
@@ -1617,144 +1616,8 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					}
 				}
 
-				// For ATN Additional fields
-				if(($validator == '10' || $validator == '9') && ($jenisAlat == '5' || $jenisAlat == '18')){
-					$platform_country = null;
-					$alat_type = null;
-					$bentuk_dulang = null;
-
-					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
-						$platform_country = $_POST['platformCountry'];
-					}
-
-					if(isset($_POST['alat_type']) && $_POST['alat_type']!=null && $_POST['alat_type']!=""){
-						$alat_type = $_POST['alat_type'];
-					}
-
-					if(isset($_POST['bentuk_dulang']) && $_POST['bentuk_dulang']!=null && $_POST['bentuk_dulang']!=""){
-						$bentuk_dulang = $_POST['bentuk_dulang'];
-					}
-
-					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, alat_type, bentuk_dulang) 
-					VALUES (?, ?, ?, ?)")){
-						$insert_stmt2->bind_param('ssss', $stamp_id, $platform_country, $alat_type, $bentuk_dulang);
-						$insert_stmt2->execute();
-						$insert_stmt2->close();
-					}
-				}
-
-				// For ATE Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '6'){
-					$platform_country = null;
-					$class = null;
-
-					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
-						$platform_country = $_POST['platformCountry'];
-					}
-
-					if(isset($_POST['class']) && $_POST['class']!=null && $_POST['class']!=""){
-						$class = $_POST['class'];
-					}
-
-					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, class) 
-					VALUES (?, ?, ?)")){
-						$insert_stmt2->bind_param('sss', $stamp_id, $platform_country, $class);
-						$insert_stmt2->execute();
-						$insert_stmt2->close();
-					}
-				}
-
-				// For SLL Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '14'){
-					$platform_country = null;
-					$alat_type = null;		
-					
-					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
-						$platform_country = $_POST['platformCountry'];
-					}
-
-					if(isset($_POST['alat_type']) && $_POST['alat_type']!=null && $_POST['alat_type']!=""){
-						$alat_type = $_POST['alat_type'];
-					}
-
-					$questions = [
-						[
-							"no" => 1,
-							"answer" => $_POST['question1'] ?? null,
-						],
-						[
-							"no" => 2,
-							"answer" => $_POST['question2'] ?? null,
-						],
-						[
-							"no" => 3,
-							"answer" => $_POST['question3'] ?? null,
-						],
-						[
-							"no" => 4,
-							"answer" => $_POST['question4'] ?? null,
-						],
-						[
-							"no" => 5.1,
-							"answer" => $_POST['question5_1'] ?? null,
-						],
-						[
-							"no" => 5.2,
-							"answer" => $_POST['question5_2'] ?? null,
-						],
-						[
-							"no" => 6,
-							"answer" => $_POST['question6'] ?? null,
-						],
-						[
-							"no" => 7,
-							"answer" => $_POST['question7'] ?? null,
-						],
-					];
-
-					$questionString = json_encode($questions, JSON_PRETTY_PRINT);
-
-					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, alat_type, questions) 
-					VALUES (?, ?, ?, ?)")){
-						$insert_stmt2->bind_param('ssss', $stamp_id, $platform_country, $alat_type, $questionString);
-						$insert_stmt2->execute();
-						$insert_stmt2->close();
-					}
-				}
-
-				// For BTU Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '7'){
-					$platform_country = null;
-					$batuUjian = null;
-					$batuUjianLain = null;
-					$penandaanBatuUjian = null;
-
-					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
-						$platform_country = $_POST['platformCountry'];
-					}
-
-					if(isset($_POST['penandaanBatuUjian']) && $_POST['penandaanBatuUjian']!=null && $_POST['penandaanBatuUjian']!=""){
-						$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
-					}
-
-					if(isset($_POST['batuUjian']) && $_POST['batuUjian']!=null && $_POST['batuUjian']!=""){
-						$batuUjian = $_POST['batuUjian'];
-					}
-
-					if(isset($_POST['batuUjianLain']) && $_POST['batuUjianLain']!=null && $_POST['batuUjianLain']!=""){
-						$batuUjianLain = $_POST['batuUjianLain'];
-					}
-
-					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, penandaan_batu_ujian, batu_ujian, batu_ujian_lain) 
-					VALUES (?, ?, ?, ?, ?)")){
-						$insert_stmt2->bind_param('sssss', $stamp_id, $platform_country, $penandaanBatuUjian, $batuUjian, $batuUjianLain);
-						$insert_stmt2->execute();
-						$insert_stmt2->close();
-					}
-				}
-
 				// For AUTO_PACKER Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '10'){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATP-AUTO MACHINE')){
 					$platform_country = null;
 					$jenis_penunjuk = null;
 
@@ -1815,24 +1678,204 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					// }
 				}
 
-				// For ATS - H Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '17'){
+				// For ATP Additional fields
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATP')){
 					$platform_country = null;
+					$jenis_penunjuk = null;
 
 					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
 						$platform_country = $_POST['platformCountry'];
 					}
 
-					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country) 
-					VALUES (?, ?)")){
-						$insert_stmt2->bind_param('ss', $stamp_id, $platform_country);
+					if(isset($_POST['jenis_penunjuk']) && $_POST['jenis_penunjuk']!=null && $_POST['jenis_penunjuk']!=""){
+						$jenis_penunjuk = $_POST['jenis_penunjuk'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, jenis_penunjuk) 
+					VALUES (?, ?, ?)")){
+						$insert_stmt2->bind_param('sss', $stamp_id, $platform_country, $jenis_penunjuk);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
 				}
 
+				// For ATN Additional fields
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATN')){
+					$platform_country = null;
+					$alat_type = null;
+					$bentuk_dulang = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['alat_type']) && $_POST['alat_type']!=null && $_POST['alat_type']!=""){
+						$alat_type = $_POST['alat_type'];
+					}
+
+					if(isset($_POST['bentuk_dulang']) && $_POST['bentuk_dulang']!=null && $_POST['bentuk_dulang']!=""){
+						$bentuk_dulang = $_POST['bentuk_dulang'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, alat_type, bentuk_dulang) 
+					VALUES (?, ?, ?, ?)")){
+						$insert_stmt2->bind_param('ssss', $stamp_id, $platform_country, $alat_type, $bentuk_dulang);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For ATE Additional fields
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATE')){
+					$platform_country = null;
+					$class = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['class']) && $_POST['class']!=null && $_POST['class']!=""){
+						$class = $_POST['class'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, class) 
+					VALUES (?, ?, ?)")){
+						$insert_stmt2->bind_param('sss', $stamp_id, $platform_country, $class);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For SLL Additional fields
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'SLL')){
+					$platform_country = null;
+					$alat_type = null;		
+					
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['alat_type']) && $_POST['alat_type']!=null && $_POST['alat_type']!=""){
+						$alat_type = $_POST['alat_type'];
+					}
+
+					$questions = [
+						[
+							"no" => 1,
+							"answer" => $_POST['question1'] ?? null,
+						],
+						[
+							"no" => 2,
+							"answer" => $_POST['question2'] ?? null,
+						],
+						[
+							"no" => 3,
+							"answer" => $_POST['question3'] ?? null,
+						],
+						[
+							"no" => 4,
+							"answer" => $_POST['question4'] ?? null,
+						],
+						[
+							"no" => 5.1,
+							"answer" => $_POST['question5_1'] ?? null,
+						],
+						[
+							"no" => 5.2,
+							"answer" => $_POST['question5_2'] ?? null,
+						],
+						[
+							"no" => 6,
+							"answer" => $_POST['question6'] ?? null,
+						],
+						[
+							"no" => 7,
+							"answer" => $_POST['question7'] ?? null,
+						],
+					];
+
+					$questionString = json_encode($questions, JSON_PRETTY_PRINT);
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, alat_type, questions) 
+					VALUES (?, ?, ?, ?)")){
+						$insert_stmt2->bind_param('ssss', $stamp_id, $platform_country, $alat_type, $questionString);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For BTU (BOX) Additional fields
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BTU - (BOX)')){
+					$btu_info = [];
+
+					$no = $_POST['no'];
+					$batuUjian = $_POST['batuUjian'];
+					$batuUjianLain = $_POST['batuUjianLain'];
+					$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
+					$batuDaftarLama = $_POST['batuDaftarLama'];
+					$batuDaftarBaru = $_POST['batuDaftarBaru'];
+					$batuNoSiriPelekatKeselamatan = $_POST['batuNoSiriPelekatKeselamatan'];
+					$batuBorangD = $_POST['batuBorangD'];
+					$batuBorangE = $_POST['batuBorangE'];
+
+					if(isset($no) && $no != null && count($no) > 0){
+						for($i=0; $i<count($no); $i++){
+							$btu_info[] = array(
+								"no" => $no[$i],
+								"batuUjian" => $batuUjian[$i],
+								"batuUjianLain" => $batuUjianLain[$i],
+								"penandaanBatuUjian" => $penandaanBatuUjian[$i],
+								"batuDaftarLama" => $batuDaftarLama[$i],
+								"batuDaftarBaru" => $batuDaftarBaru[$i],
+								"batuNoSiriPelekatKeselamatan" => $batuNoSiriPelekatKeselamatan[$i],
+								"batuBorangD" => $batuBorangD[$i],
+								"batuBorangE" => $batuBorangE[$i]
+							);
+						}
+					}
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, btu_box_info) 
+					VALUES (?, ?)")){
+						$btuInfo = json_encode($btu_info);
+						$insert_stmt2->bind_param('ss', $stamp_id, $btuInfo);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+
+				// For BTU Additional fields
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BTU')){
+					$platform_country = null;
+					$batuUjian = null;
+					$batuUjianLain = null;
+					$penandaanBatuUjian = null;
+
+					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
+						$platform_country = $_POST['platformCountry'];
+					}
+
+					if(isset($_POST['penandaanBatuUjian']) && $_POST['penandaanBatuUjian']!=null && $_POST['penandaanBatuUjian']!=""){
+						$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
+					}
+
+					if(isset($_POST['batuUjian']) && $_POST['batuUjian']!=null && $_POST['batuUjian']!=""){
+						$batuUjian = $_POST['batuUjian'];
+					}
+
+					if(isset($_POST['batuUjianLain']) && $_POST['batuUjianLain']!=null && $_POST['batuUjianLain']!=""){
+						$batuUjianLain = $_POST['batuUjianLain'];
+					}
+
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, platform_country, penandaan_batu_ujian, batu_ujian, batu_ujian_lain) 
+					VALUES (?, ?, ?, ?, ?)")){
+						$insert_stmt2->bind_param('sssss', $stamp_id, $platform_country, $penandaanBatuUjian, $batuUjian, $batuUjianLain);
+						$insert_stmt2->execute();
+						$insert_stmt2->close();
+					}
+				}
+				
 				// For SIA Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '12'){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'SIA')){
 					$platform_country = null;
 					$nilaiJangka = null;
 					$nilaiJangkaOther = null;
@@ -1869,7 +1912,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// For BAP Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '11'){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BAP')){
 					$pamNo = null;
 					$kelulusanBentuk = null;
 					$alatType = null;
@@ -1915,7 +1958,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// For SIC Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '13'){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'SIC')){
 					$nilaiMaksimum = null;
 					$bahanPembuat = null;
 					$bahanPembuatOther = null;
@@ -1935,45 +1978,6 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, nilai_jangkaan_maksimum, bahan_pembuat, bahan_pembuat_other) 
 					VALUES (?, ?, ?, ?)")){
 						$insert_stmt2->bind_param('ssss', $stamp_id, $nilaiMaksimum, $bahanPembuat, $bahanPembuatOther);
-						$insert_stmt2->execute();
-						$insert_stmt2->close();
-					}
-				}
-
-				// For BTU (BOX) Additional fields
-				if(($validator == '10' || $validator == '9') && $jenisAlat == '26'){
-					$btu_info = [];
-
-					$no = $_POST['no'];
-					$batuUjian = $_POST['batuUjian'];
-					$batuUjianLain = $_POST['batuUjianLain'];
-					$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
-					$batuDaftarLama = $_POST['batuDaftarLama'];
-					$batuDaftarBaru = $_POST['batuDaftarBaru'];
-					$batuNoSiriPelekatKeselamatan = $_POST['batuNoSiriPelekatKeselamatan'];
-					$batuBorangD = $_POST['batuBorangD'];
-					$batuBorangE = $_POST['batuBorangE'];
-
-					if(isset($no) && $no != null && count($no) > 0){
-						for($i=0; $i<count($no); $i++){
-							$btu_info[] = array(
-								"no" => $no[$i],
-								"batuUjian" => $batuUjian[$i],
-								"batuUjianLain" => $batuUjianLain[$i],
-								"penandaanBatuUjian" => $penandaanBatuUjian[$i],
-								"batuDaftarLama" => $batuDaftarLama[$i],
-								"batuDaftarBaru" => $batuDaftarBaru[$i],
-								"batuNoSiriPelekatKeselamatan" => $batuNoSiriPelekatKeselamatan[$i],
-								"batuBorangD" => $batuBorangD[$i],
-								"batuBorangE" => $batuBorangE[$i]
-							);
-						}
-					}
-
-					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, btu_box_info) 
-					VALUES (?, ?)")){
-						$btuInfo = json_encode($btu_info);
-						$insert_stmt2->bind_param('ss', $stamp_id, $btuInfo);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
