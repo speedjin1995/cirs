@@ -59,6 +59,7 @@ else{
   $states = $db->query("SELECT * FROM state WHERE deleted = '0'");
   $cawangans = $db->query("SELECT * FROM state WHERE deleted = '0'");
   $alats = $db->query("SELECT * FROM alat WHERE deleted = '0'");
+  $alats2 = $db->query("SELECT * FROM alat WHERE deleted = '0'");
   $products = $db->query("SELECT * FROM products WHERE deleted = '0'");
   $cancelledReasons = $db->query("SELECT * FROM reasons WHERE deleted = '0'");
   $sizes = $db->query("SELECT * FROM size WHERE deleted = '0'");
@@ -292,6 +293,11 @@ else{
               </div>
               <div class="col-md-8">
                 <div class="d-flex justify-content-end gap-2">
+                  <div class="col-auto">
+                    <button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadTemplate">
+                      <i class="fa-solid fa-download"></i> Download Template
+                    </button>
+                  </div>
                   <div class="col-auto">
                     <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">
                       <i class="fa-solid fa-upload"></i> Upload Excel
@@ -1231,6 +1237,41 @@ else{
 
         </div>
 
+        <div class="modal-footer justify-content-between bg-gray-dark color-palette">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="downloadModal">
+  <div class="modal-dialog modal-xl" style="max-width: 90%;">
+    <div class="modal-content">
+      <form role="form" id="downloadForm">
+        <div class="modal-header bg-gray-dark color-palette">
+          <h4 class="modal-title">Download Template</h4>
+          <button type="button" class="close bg-gray-dark color-palette" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>Jenis Alat *</label>
+                <select class="form-control select2" style="width: 100%;" id="jenisAlatDownload" name="jenisAlatDownload" required>
+                  <option selected="selected"></option>
+                  <?php while($valA=mysqli_fetch_assoc($alats2)){ ?>
+                    <option value="<?=$valA['id'] ?>" data-name="<?=$valA['alat'] ?>"><?=$valA['alat'] ?></option>
+                  <?php } ?>
+                </select>
+                <input type="hidden" class="form-control" id="jenisAlatName" name="jenisAlatName">
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="modal-footer justify-content-between bg-gray-dark color-palette">
           <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary" id="saveButton">Save changes</button>
@@ -2766,6 +2807,32 @@ $(function () {
             }
         });
       }
+      else if($('#downloadModal').hasClass('show')){
+        // Create a form for file download
+        var form = $('<form>', {
+          'method': 'POST',
+          'action': 'php/downloadStampingTemplate.php',
+          'target': '_blank'
+        });
+        
+        // Add form data
+        var formData = $('#downloadForm').serializeArray();
+        $.each(formData, function(i, field) {
+          form.append($('<input>', {
+            'type': 'hidden',
+            'name': field.name,
+            'value': field.value
+          }));
+        });
+        
+        // Append to body and submit
+        $('body').append(form);
+        form.submit();
+        form.remove();
+        
+        $('#downloadModal').modal('hide');
+        toastr["success"]("Template download started", "Success:");
+      }
       else if($('#printDOModal').hasClass('show')){
         $.post('php/print_borang.php', $('#printDOForm').serialize(), function(data){
           var obj = JSON.parse(data);
@@ -3414,6 +3481,26 @@ $(function () {
     });
   });
 
+  $('#downloadTemplate').on('click', function(){
+    $('#downloadModal').find('#jenisAlatDownload').val('');
+    $('#downloadModal').find('#jenisAlatName').val('');
+    $('#downloadModal').modal('show');
+
+    $('#downloadForm').validate({
+      errorElement: 'span',
+      errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+      },
+      highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+      },
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+      }
+    });
+  });
+
   $('#uploadModal').find('#previewButton').on('click', function(){
     var fileInput = document.getElementById('fileInput');
     var file = fileInput.files[0];
@@ -3426,6 +3513,11 @@ $(function () {
     };
 
     reader.readAsBinaryString(file);
+  });
+
+  $('#downloadModal').find('#jenisAlatDownload').on('change', function(){
+    var selectedText = $(this).find('option:selected').text();
+    $('#downloadModal').find('#jenisAlatName').val(selectedText);
   });
 
   $('#errorLogModal').on('shown.bs.modal', function () {

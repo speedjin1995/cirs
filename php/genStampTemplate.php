@@ -45,6 +45,9 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
                 }
             }
 
+            // Jenis Alat
+            $jenisAlat = searchJenisAlatNameByid($record['jenis_alat'], $db);
+
             // Base headers
             $headers = [
                 'Type','Company Branch','Dealer','Dealer Branch','Customer Type','Customers','Customer Branch',
@@ -79,7 +82,7 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
                 $record['ownership_status'], 
                 searchValidatorNameById($record['validate_by'], $db),
                 searchStateNameById($record['cawangan'], $db), 
-                searchJenisAlatNameByid($record['jenis_alat'], $db), 
+                $jenisAlat, 
                 searchMachinenameNameById($record['machine_name'], $db), 
                 $record['machine_location'], 
                 $record['machine_area'], 
@@ -134,10 +137,7 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
             $result2 = $extStmt->get_result();
 
             if ($extRecord = $result2->fetch_assoc()) {
-                if ($record['jenis_alat'] == '2') { // ATP
-                    $headers[] = 'Jenis Penunjuk';
-                    $values[] = $extRecord['jenis_penunjuk'];
-                } else if ($record['jenis_alat'] == '23') { // ATP (MOTORCAR)
+                if (str_contains($jenisAlat, 'ATP (MOTORCAR)')) { // ATP (MOTORCAR)
                     $headers = array_merge($headers, [
                         'Had Terima Steelyard (kg)', 'Bilangan Kaunterpois (biji)',
                         'Nilai Berat Kaunterpois 1 (kg)','Nilai Berat Kaunterpois 2 (kg)',
@@ -152,13 +152,16 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
                         $nilais[2]['nilai'] ?? '',$nilais[3]['nilai'] ?? '',
                         $nilais[4]['nilai'] ?? '',$nilais[5]['nilai'] ?? ''
                     ]);
-                } else if ($record['jenis_alat'] == '5' || $record['jenis_alat'] == '18') { // ATN
+                } else if (str_contains($jenisAlat, 'ATP')) { // ATP
+                    $headers[] = 'Jenis Penunjuk';
+                    $values[] = $extRecord['jenis_penunjuk'];
+                } else if (str_contains($jenisAlat, 'ATN')) { // ATN
                     $headers = array_merge($headers, ['Jenis Alat Type','Bentuk Dulang']);
                     $values = array_merge($values, [$extRecord['alat_type'],$extRecord['bentuk_dulang']]);
-                } else if ($record['jenis_alat'] == '6') { // ATE
+                } else if (str_contains($jenisAlat, 'ATE')) { // ATE
                     $headers[] = 'Class';
                     $values[] = $extRecord['class'];
-                } else if ($record['jenis_alat'] == '14') { // SLL
+                } else if (str_contains($jenisAlat, 'SLL')) { // SLL
                     $headers = array_merge($headers, ['Jenis Alat Type','Question 1','Question 2','Question 3','Question 4','Question 5.1','Question 5.2','Question 6','Question 7']);
                     $questions = json_decode($extRecord['questions'], true);
                     $values = array_merge($values, [
@@ -167,19 +170,16 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
                         $questions[3]['answer'] ?? '', $questions[4]['answer'] ?? '', $questions[5]['answer'] ?? '',
                         $questions[6]['answer'] ?? '', $questions[7]['answer'] ?? ''
                     ]);
-                } else if ($record['jenis_alat'] == '7') { // BTU
+                } else if (str_contains($jenisAlat, 'BTU')) { // BTU
                     $headers = array_merge($headers, ['Batu Ujian','Batu Ujian Lain','Penandaan Pada Batu Ujian']);
                     $values = array_merge($values, [$extRecord['batu_ujian'],$extRecord['batu_ujian_lain'],$extRecord['penandaan_batu_ujian']]);
-                } else if ($record['jenis_alat'] == '10') { // AUTO Packer
-                    $headers[] = 'Jenis Penunjuk';
-                    $values[] = $extRecord['jenis_penunjuk'];
-                } else if ($record['jenis_alat'] == '12') { // SIA
+                } else if (str_contains($jenisAlat, 'SIA')) { // SIA
                     $headers = array_merge($headers, ['Nilai Jangka Maksima','Nilai Jangka Maksima Other','Diperbuat Daripada','Diperbuat Daripada Other']);
                     $values = array_merge($values, [$extRecord['nilai_jangka'],$extRecord['nilai_jangka_other'],$extRecord['diperbuat_daripada'],$extRecord['diperbuat_daripada_other']]);
-                } else if ($record['jenis_alat'] == '11') { // BAP
+                } else if (str_contains($jenisAlat, 'BAP')) { // BAP
                     $headers = array_merge($headers, ['Pam No','No Kelulusan Bentuk','Jenama / Nama Pembuat','Jenama / Nama Pembuat Other','Alat Type','Kadar Pengaliran','Bentuk Penunjuk Harga/Kuantiti']);
                     $values = array_merge($values, [$extRecord['pam_no'],$extRecord['kelulusan_bentuk'],$extRecord['jenama'],$extRecord['jenama_other'],$extRecord['alat_type'],$extRecord['kadar_pengaliran'],$extRecord['bentuk_penunjuk']]);
-                } else if ($record['jenis_alat'] == '13') { // SIC
+                } else if (str_contains($jenisAlat, 'SIC')) { // SIC
                     $headers = array_merge($headers, ['Nilai Jangka Maksimum (Kapasiti)','Bahan Pembuat','Bahan Pembuat Other']);
                     $values = array_merge($values, [$extRecord['nilai_jangkaan_maksimum'],$extRecord['bahan_pembuat'],$extRecord['bahan_pembuat_other']]);
                 }
