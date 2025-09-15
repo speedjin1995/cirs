@@ -1574,7 +1574,7 @@ $(function () {
 
 function format (row) {
   const userRole = '<?=$role ?>';
-  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)', 'ATP (H)'];
 
   var returnString = `
   <div class="row">
@@ -1781,7 +1781,7 @@ function format (row) {
   //                       `;
   // }else 
   
-  if(row.jenis_alat == 'ATP'){
+  if(row.jenis_alat == 'ATP' || row.jenis_alat == 'ATP (H)'){
     returnString += `</div><hr>
                         <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATP)</strong></span>
                         <div class="row">

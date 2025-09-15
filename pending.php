@@ -600,9 +600,10 @@ else{
                     <select class="form-control select2" style="width: 100%;" id="jenisAlat" name="jenisAlat" required>
                       <option selected="selected">-</option>
                       <?php while($rowA=mysqli_fetch_assoc($alats)){ ?>
-                        <option value="<?=$rowA['id'] ?>"><?=$rowA['alat'] ?></option>
+                        <option value="<?=$rowA['id'] ?>" data-name="<?=$rowA['alat'] ?>"><?=$rowA['alat'] ?></option>
                       <?php } ?>
                     </select>
+                    <input type="hidden" id="jenisAlatName" name="jenisAlatName">
                   </div>
                 </div>
                 <div class="col-4">
@@ -2504,7 +2505,7 @@ $(function () {
   var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
   var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
 
-  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)', 'ATP (H)'];
   const allowedGenDuplicateAlats = ['ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC'];
 
   var table = $("#weightTable").DataTable({
@@ -3438,7 +3439,6 @@ $(function () {
     }
   });
 
-
   $('#extendModal').find('#newRenew').on('change', function(){
     if($(this).val() == "NEW"){
       $('#validatorLamaView').hide();
@@ -3746,10 +3746,13 @@ $(function () {
 
           for(var i=0; i<obj.message.length; i++){
             var modelInfo = obj.message[i];
-            $('#jenisAlat').append('<option value="'+modelInfo.id+'">'+modelInfo.jenis_alat+'</option>')
+            $('#jenisAlat').append('<option value="'+modelInfo.id+'" data-name="'+modelInfo.jenis_alat+'">'+modelInfo.jenis_alat+'</option>');
+            lastId = modelInfo.id;
           }
 
-          $('#extendModal').trigger('jaIsLoaded');
+          $('#jenisAlat').val(lastId).trigger('change');
+
+          // $('#extendModal').trigger('jaIsLoaded');
         }
         else if(obj.status === 'failed'){
           toastr["error"](obj.message, "Failed:");
@@ -3921,37 +3924,40 @@ $(function () {
     $('#totalCharge').val(totalCharges.toFixed(2));
   });
 
-  $('#extendModal').find('#machineType').on('change', function(){
-    if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
-      $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
-        var obj = JSON.parse(data);
+  // $('#extendModal').find('#machineType').on('change', function(){
+  //   if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
+  //     $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
+  //       var obj = JSON.parse(data);
         
-        if(obj.status === 'success'){
-          $('#product').val(obj.message.id);
-          $('#unitPrice').val(obj.message.price);
-          $('#unitPrice').trigger('change');
+  //       if(obj.status === 'success'){
+  //         $('#product').val(obj.message.id);
+  //         $('#unitPrice').val(obj.message.price);
+  //         $('#unitPrice').trigger('change');
 
-          // 🔥 Ensure `priceLoaded` is triggered only ONCE per edit session
-          // if (!priceLoadedTriggered) {
-          //   $('#extendModal').trigger('priceLoaded');
-          //   priceLoadedTriggered = true; // ✅ Prevents re-triggering
-          // }
-        }
-        else if(obj.status === 'failed'){
-          toastr["error"](obj.message, "Failed:");
-        }
-        else{
-          toastr["error"]("Something wrong when pull data", "Failed:");
-        }
-        //$('#spinnerLoading').hide();
-      });
-    }
-  });
+  //         // 🔥 Ensure `priceLoaded` is triggered only ONCE per edit session
+  //         // if (!priceLoadedTriggered) {
+  //         //   $('#extendModal').trigger('priceLoaded');
+  //         //   priceLoadedTriggered = true; // ✅ Prevents re-triggering
+  //         // }
+  //       }
+  //       else if(obj.status === 'failed'){
+  //         toastr["error"](obj.message, "Failed:");
+  //       }
+  //       else{
+  //         toastr["error"]("Something wrong when pull data", "Failed:");
+  //       }
+  //       //$('#spinnerLoading').hide();
+  //     });
+  //   }
+  // });
 
+  
   $('#extendModal').find('#jenisAlat').on('change', function(){
     alat = $(this).val();
     jalat = $(this).val();
     alatId = $(this).val();
+    $('#jenisAlatName').val($(this).find(':selected').data('name'));
+    jenisAlatName = $('#jenisAlatName').val();
     $('#addtionalSection').html('');
 
     if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
@@ -3979,7 +3985,7 @@ $(function () {
       });
     }
 
-    if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '1'){
+    if(($('#validator').val() == '10' || $('#validator').val() == '9') && jenisAlatName.includes("ATK")){
       $('#addtionalSection').html($('#atkDetails').html());
       loadCellCount = 0;
       $("#loadCellTable").html('');
@@ -4021,17 +4027,7 @@ $(function () {
     //   $('#addtionalSection').html($('#atsDetails').html());
     //   $('#extendModal').trigger('atkLoaded');
     // }
-    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '2'){
-      $('#addtionalSection').html($('#atpDetails').html());
-      $('#extendModal').trigger('atkLoaded');
-      $('#addtionalSection').find('.select2').select2({
-        allowClear: true,
-        placeholder: "Please Select",
-        dropdownParent: $('#addtionalSection'),
-        width: '100%'
-      });
-    }
-    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '23'){
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("ATP (MOTORCAR)")){
       $('#addtionalSection').html($('#atpMotorDetails').html());
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
@@ -4041,7 +4037,27 @@ $(function () {
         width: '100%'
       });
     }
-    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '5'){
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("ATP-AUTO MACHINE")){
+      $('#addtionalSection').html($('#autoPackDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
+    }
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("ATP")){
+      $('#addtionalSection').html($('#atpDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
+    }
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("ATN")){
       $('#addtionalSection').html($('#atnDetails').html());
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
@@ -4051,17 +4067,7 @@ $(function () {
         width: '100%'
       });
     }
-    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '18'){
-      $('#addtionalSection').html($('#atnDetails').html());
-      $('#extendModal').trigger('atkLoaded');
-      $('#addtionalSection').find('.select2').select2({
-        allowClear: true,
-        placeholder: "Please Select",
-        dropdownParent: $('#addtionalSection'),
-        width: '100%'
-      });
-    }
-    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '6'){
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("ATE")){
       $('#addtionalSection').html($('#ateDetails').html());
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
@@ -4071,7 +4077,7 @@ $(function () {
         width: '100%'
       });
     }
-    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '14'){
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("SLL")){
       $('#addtionalSection').html($('#sllDetails').html());
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
@@ -4081,8 +4087,10 @@ $(function () {
         width: '100%'
       });
     }
-    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '7'){
-      $('#addtionalSection').html($('#btuDetails').html());
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("BTU - (BOX)")){
+      $('#addtionalSection').html($('#btuBoxDetails').html());
+      btuCount = 0;
+      $("#btuTable").html('');
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
         allowClear: true,
@@ -4091,8 +4099,8 @@ $(function () {
         width: '100%'
       });
     }
-    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '10'){
-      $('#addtionalSection').html($('#autoPackDetails').html());
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("BTU")){
+      $('#addtionalSection').html($('#btuDetails').html());
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
         allowClear: true,
@@ -4105,7 +4113,7 @@ $(function () {
     //   $('#addtionalSection').html($('#atsHDetails').html());
     //   $('#extendModal').trigger('atkLoaded');
     // }
-    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '12'){
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("SIA")){
       $('#addtionalSection').html($('#siaDetails').html());
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
@@ -4115,7 +4123,7 @@ $(function () {
         width: '100%'
       });
     }
-    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '11'){
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("BAP")){
       $('#addtionalSection').html($('#bapDetails').html());
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
@@ -4125,20 +4133,8 @@ $(function () {
         width: '100%'
       });
     }
-    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '13'){
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("SIC")){
       $('#addtionalSection').html($('#sicDetails').html());
-      $('#extendModal').trigger('atkLoaded');
-      $('#addtionalSection').find('.select2').select2({
-        allowClear: true,
-        placeholder: "Please Select",
-        dropdownParent: $('#addtionalSection'),
-        width: '100%'
-      });
-    }
-    else if(($('#validator').val() == '10' || $('#validator').val() == '9') && alat == '26'){
-      $('#addtionalSection').html($('#btuBoxDetails').html());
-      btuCount = 0;
-      $("#btuTable").html('');
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
         allowClear: true,
@@ -4200,6 +4196,7 @@ $(function () {
   });
 
   $('#extendModal').find('#validator').on('change', function(){
+    var jenisAlatName = $('#jenisAlatName').val()
     if($('#machineType').val() && $('#jenisAlat').val() && $('#capacity').val() && $('#validator').val()){
       $.post('php/getProductsCriteria.php', {machineType: $('#machineType').val(), jenisAlat: $('#jenisAlat').val(), capacity: $('#capacity').val(), validator: $('#validator').val()}, function(data){
         var obj = JSON.parse(data);
@@ -4225,7 +4222,7 @@ $(function () {
       });
     }
 
-    if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '1'){
+    if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("ATK")){
       var alatId = $('#jenisAlat').val();
 
       $('#addtionalSection').html($('#atkDetails').html());
@@ -4269,17 +4266,7 @@ $(function () {
     //   $('#addtionalSection').html($('#atsDetails').html());
     //   $('#extendModal').trigger('atkLoaded');
     // }
-    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '2'){
-      $('#addtionalSection').html($('#atpDetails').html());
-      $('#extendModal').trigger('atkLoaded');
-      $('#addtionalSection').find('.select2').select2({
-        allowClear: true,
-        placeholder: "Please Select",
-        dropdownParent: $('#addtionalSection'),
-        width: '100%'
-      });
-    }
-    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '23'){
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("ATP (MOTORCAR)")){
       $('#addtionalSection').html($('#atpMotorDetails').html());
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
@@ -4289,7 +4276,27 @@ $(function () {
         width: '100%'
       });
     }
-    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '5'){
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("ATP-AUTO MACHINE")){
+      $('#addtionalSection').html($('#autoPackDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
+    }
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("ATP")){
+      $('#addtionalSection').html($('#atpDetails').html());
+      $('#extendModal').trigger('atkLoaded');
+      $('#addtionalSection').find('.select2').select2({
+        allowClear: true,
+        placeholder: "Please Select",
+        dropdownParent: $('#addtionalSection'),
+        width: '100%'
+      });
+    }
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("ATN")){
       $('#addtionalSection').html($('#atnDetails').html());
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
@@ -4299,17 +4306,7 @@ $(function () {
         width: '100%'
       });
     }
-    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '18'){
-      $('#addtionalSection').html($('#atnDetails').html());
-      $('#extendModal').trigger('atkLoaded');
-      $('#addtionalSection').find('.select2').select2({
-        allowClear: true,
-        placeholder: "Please Select",
-        dropdownParent: $('#addtionalSection'),
-        width: '100%'
-      });
-    }
-    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '6'){
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("ATE")){
       $('#addtionalSection').html($('#ateDetails').html());
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
@@ -4319,7 +4316,7 @@ $(function () {
         width: '100%'
       });
     }
-    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '14'){
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("SLL")){
       $('#addtionalSection').html($('#sllDetails').html());
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
@@ -4329,8 +4326,10 @@ $(function () {
         width: '100%'
       });
     }
-    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '7'){
-      $('#addtionalSection').html($('#btuDetails').html());
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("BTU - (BOX)")){
+      $('#addtionalSection').html($('#btuBoxDetails').html());
+      btuCount = 0;
+      $("#btuTable").html('');
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
         allowClear: true,
@@ -4339,8 +4338,8 @@ $(function () {
         width: '100%'
       });
     }
-    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '10'){
-      $('#addtionalSection').html($('#autoPackDetails').html());
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("BTU")){
+      $('#addtionalSection').html($('#btuDetails').html());
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
         allowClear: true,
@@ -4353,7 +4352,7 @@ $(function () {
     //   $('#addtionalSection').html($('#atsHDetails').html());
     //   $('#extendModal').trigger('atkLoaded');
     // }
-    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '12'){
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("SIA")){
       $('#addtionalSection').html($('#siaDetails').html());
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
@@ -4363,7 +4362,7 @@ $(function () {
         width: '100%'
       });
     }
-    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '11'){
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("BAP")){
       $('#addtionalSection').html($('#bapDetails').html());
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
@@ -4373,20 +4372,8 @@ $(function () {
         width: '100%'
       });
     }
-    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '13'){
+    else if(($(this).val() == '10' || $(this).val() == '9') && jenisAlatName.includes("SIC")){
       $('#addtionalSection').html($('#sicDetails').html());
-      $('#extendModal').trigger('atkLoaded');
-      $('#addtionalSection').find('.select2').select2({
-        allowClear: true,
-        placeholder: "Please Select",
-        dropdownParent: $('#addtionalSection'),
-        width: '100%'
-      });
-    }
-    else if(($(this).val() == '10' || $(this).val() == '9') && $('#jenisAlat').val() == '26'){
-      $('#addtionalSection').html($('#btuBoxDetails').html());
-      btuCount = 0;
-      $("#btuTable").html('');
       $('#extendModal').trigger('atkLoaded');
       $('#addtionalSection').find('.select2').select2({
         allowClear: true,
@@ -4576,7 +4563,7 @@ $(function () {
 
 function format (row) {
   const userRole = '<?=$role ?>';
-  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)'];
+  const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)', 'ATP (H)'];
   const allowedGenDuplicateAlats = ['ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC'];
 
   var returnString = `
@@ -4792,7 +4779,7 @@ function format (row) {
   //                       `;
   // }else 
   
-  if(row.jenis_alat == 'ATP'){
+  if(row.jenis_alat == 'ATP' || row.jenis_alat == 'ATP (H)'){
     returnString += `</div><hr>
                         <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATP)</strong></span>
                         <div class="row">
@@ -5472,6 +5459,7 @@ function edit(id) {
         $('#extendModal').find('#product').val(obj.message.products);
         $('#extendModal').find('#machineType').val(obj.message.machine_type).select2('destroy').select2();
         $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).select2('destroy').select2();
+        $('#extendModal').find('#jenisAlatName').val(obj.message.jenis_alat_name);
         $('#extendModal').find('#machineName').val(obj.message.machine_name).trigger('change');
         $('#extendModal').find('#machineLocation').val(obj.message.machine_location);
         $('#extendModal').find('#machineArea').val(obj.message.machine_area);
@@ -5599,8 +5587,9 @@ function edit(id) {
         }
 
         jalat = obj.message.jenis_alat;
+        jenisAlatName = obj.message.jenis_alat_name;
         // $('#extendModal').on('atkLoaded', function() {
-          if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '1'){
+          if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("ATK")){
             $('#addtionalSection').html($('#atkDetails').html());
             $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
             $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
@@ -5646,11 +5635,7 @@ function edit(id) {
           //   $('#addtionalSection').html($('#atsDetails').html());
           //   $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
           // }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '2'){
-            $('#addtionalSection').html($('#atpDetails').html());
-            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-            $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '23'){
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("ATP (MOTORCAR)")){
             $('#addtionalSection').html($('#atpMotorDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#steelyard').val(obj.message.steelyard).trigger('change');
@@ -5661,49 +5646,7 @@ function edit(id) {
             $('#extendModal').find('#nilai4').val(obj.message.nilais[3].nilai);
             $('#extendModal').find('#nilai5').val(obj.message.nilais[4].nilai);
             $('#extendModal').find('#nilai6').val(obj.message.nilais[5].nilai);
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '5'){
-            $('#addtionalSection').html($('#atnDetails').html());
-            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-            $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
-            $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '18'){
-            $('#addtionalSection').html($('#atnDetails').html());
-            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-            $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
-            $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '6'){
-            $('#addtionalSection').html($('#ateDetails').html());
-            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-            $('#extendModal').find('#class').val(obj.message.class).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '14'){
-            $('#addtionalSection').html($('#sllDetails').html());
-            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-            $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
-            $('#extendModal').find('#question1').val(obj.message.questions[0].answer).trigger('change');
-            $('#extendModal').find('#question2').val(obj.message.questions[1].answer).trigger('change');
-            $('#extendModal').find('#question3').val(obj.message.questions[2].answer).trigger('change');
-            $('#extendModal').find('#question4').val(obj.message.questions[3].answer).trigger('change');
-            $('#extendModal').find('#question5_1').val(obj.message.questions[4].answer).trigger('change');
-            $('#extendModal').find('#question5_2').val(obj.message.questions[5].answer).trigger('change');
-            $('#extendModal').find('#question6').val(obj.message.questions[6].answer).trigger('change');
-            $('#extendModal').find('#question7').val(obj.message.questions[7].answer).trigger('change');
-          } else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '7'){
-            $('#addtionalSection').html($('#btuDetails').html());
-            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-            $('#extendModal').find('#penandaanBatuUjian').val(obj.message.penandaan_batu_ujian).trigger('change');
-
-            $('#extendModal').find('#batuUjian').on('change', function(){
-              var batuUjian = $(this).val();
-              if (batuUjian == 'OTHER'){
-                $('#extendModal').find('#batuUjianLainDisplay').show();
-                $('#extendModal').find('#batuUjianLain').val(obj.message.batu_ujian_lain);
-              }else{
-                $('#extendModal').find('#batuUjianLainDisplay').hide();
-              }
-            });
-
-            $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
-          } else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '10'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("ATP-AUTO MACHINE")){
             // $('#addtionalSection').html($('#autoPackDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
             // $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
@@ -5715,75 +5658,33 @@ function edit(id) {
             $('#addtionalSection').html($('#autoPackDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
-          }
-          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '17'){
-          //   $('#addtionalSection').html($('#atsHDetails').html());
-          //   $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-          // }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '12'){
-            $('#addtionalSection').html($('#siaDetails').html());
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("ATP")){
+            $('#addtionalSection').html($('#atpDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-
-            $('#extendModal').find('#nilaiJangka').on('change', function(){
-              var nilaiJangka = $(this).val();
-              if (nilaiJangka == 'OTHER'){
-                $('#extendModal').find('#nilaiJangkaOtherDisplay').show();
-                $('#extendModal').find('#nilaiJangkaOther').val(obj.message.nilai_jangka_other);
-              }else{
-                $('#extendModal').find('#nilaiJangkaOtherDisplay').hide();
-              }
-            });
-
-            $('#extendModal').find('#diperbuatDaripada').on('change', function(){
-              var diperbuatDaripada = $(this).val();
-              if (diperbuatDaripada == 'OTHER'){
-                $('#extendModal').find('#diperbuatDaripadaOtherDisplay').show();
-                $('#extendModal').find('#diperbuatDaripadaOther').val(obj.message.diperbuat_daripada_other);
-              }else{
-                $('#extendModal').find('#diperbuatDaripadaOtherDisplay').hide();
-              }
-            });
-
-            $('#extendModal').find('#nilaiJangka').val(obj.message.nilai_jangka).trigger('change');
-            $('#extendModal').find('#diperbuatDaripada').val(obj.message.diperbuat_daripada).trigger('change');
-          }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '11'){ 
-            $('#addtionalSection').html($('#bapDetails').html());
-            $('#extendModal').find('#pamNo').val(obj.message.pam_no).trigger('change');            
-            $('#extendModal').find('#kelulusanBentuk').val(obj.message.kelulusan_bentuk).trigger('change');
-            $('#extendModal').find('#alatType').val(obj.message.alat_type).trigger('change');
-            $('#extendModal').find('#kadarPengaliran').val(obj.message.kadar_pengaliran).trigger('change');
-            $('#extendModal').find('#bentukPenunjuk').val(obj.message.bentuk_penunjuk).trigger('change');
-
-            $('#extendModal').find('#jenama').on('change', function(){
-              var jenama = $(this).val();
-              if (jenama == 'OTHER'){
-                $('#extendModal').find('#jenamaOtherDisplay').show();
-                $('#extendModal').find('#jenamaOther').val(obj.message.jenama_other);
-              }else{
-                $('#extendModal').find('#jenamaOtherDisplay').hide();
-              }
-            });
-
-            $('#extendModal').find('#jenama').val(obj.message.jenama).trigger('change');
-          }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '13'){ 
-            $('#addtionalSection').html($('#sicDetails').html());
-            $('#extendModal').find('#nilaiMaksimum').val(obj.message.nilai_jangkaan_maksimum).trigger('change');
-
-            $('#extendModal').find('#bahanPembuat').on('change', function(){
-              var bahanPembuat = $(this).val();
-              if (bahanPembuat == 'OTHER'){
-                $('#extendModal').find('#bahanPembuatOtherDisplay').show();
-                $('#extendModal').find('#bahanPembuatOther').val(obj.message.bahan_pembuat_other);
-              }else{
-                $('#extendModal').find('#bahanPembuatOtherDisplay').hide();
-              }
-            });
-
-            $('#extendModal').find('#bahanPembuat').val(obj.message.bahan_pembuat).trigger('change');
-          }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '26'){
+            console.log(obj.message.jenis_penunjuk);
+            $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("ATN")){
+            $('#addtionalSection').html($('#atnDetails').html());
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
+            $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("ATE")){
+            $('#addtionalSection').html($('#ateDetails').html());
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#class').val(obj.message.class).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("SLL")){
+            $('#addtionalSection').html($('#sllDetails').html());
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
+            $('#extendModal').find('#question1').val(obj.message.questions[0].answer).trigger('change');
+            $('#extendModal').find('#question2').val(obj.message.questions[1].answer).trigger('change');
+            $('#extendModal').find('#question3').val(obj.message.questions[2].answer).trigger('change');
+            $('#extendModal').find('#question4').val(obj.message.questions[3].answer).trigger('change');
+            $('#extendModal').find('#question5_1').val(obj.message.questions[4].answer).trigger('change');
+            $('#extendModal').find('#question5_2').val(obj.message.questions[5].answer).trigger('change');
+            $('#extendModal').find('#question6').val(obj.message.questions[6].answer).trigger('change');
+            $('#extendModal').find('#question7').val(obj.message.questions[7].answer).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("BTU - (BOX)")){
             $('#addtionalSection').html($('#btuBoxDetails').html());
 
             if(obj.message.btu_box_info.length > 0){
@@ -5817,6 +5718,89 @@ function edit(id) {
             }else{
               $('#extendModal').find('#noOfBtu').val(0);
             }
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("BTU")){
+            $('#addtionalSection').html($('#btuDetails').html());
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#penandaanBatuUjian').val(obj.message.penandaan_batu_ujian).trigger('change');
+
+            $('#extendModal').find('#batuUjian').on('change', function(){
+              var batuUjian = $(this).val();
+              if (batuUjian == 'OTHER'){
+                $('#extendModal').find('#batuUjianLainDisplay').show();
+                $('#extendModal').find('#batuUjianLain').val(obj.message.batu_ujian_lain);
+              }else{
+                $('#extendModal').find('#batuUjianLainDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
+          }
+          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '17'){
+          //   $('#addtionalSection').html($('#atsHDetails').html());
+          //   $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+          // }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("SIA")){
+            $('#addtionalSection').html($('#siaDetails').html());
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+
+            $('#extendModal').find('#nilaiJangka').on('change', function(){
+              var nilaiJangka = $(this).val();
+              if (nilaiJangka == 'OTHER'){
+                $('#extendModal').find('#nilaiJangkaOtherDisplay').show();
+                $('#extendModal').find('#nilaiJangkaOther').val(obj.message.nilai_jangka_other);
+              }else{
+                $('#extendModal').find('#nilaiJangkaOtherDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#diperbuatDaripada').on('change', function(){
+              var diperbuatDaripada = $(this).val();
+              if (diperbuatDaripada == 'OTHER'){
+                $('#extendModal').find('#diperbuatDaripadaOtherDisplay').show();
+                $('#extendModal').find('#diperbuatDaripadaOther').val(obj.message.diperbuat_daripada_other);
+              }else{
+                $('#extendModal').find('#diperbuatDaripadaOtherDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#nilaiJangka').val(obj.message.nilai_jangka).trigger('change');
+            $('#extendModal').find('#diperbuatDaripada').val(obj.message.diperbuat_daripada).trigger('change');
+          }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("BAP")){ 
+            $('#addtionalSection').html($('#bapDetails').html());
+            $('#extendModal').find('#pamNo').val(obj.message.pam_no).trigger('change');            
+            $('#extendModal').find('#kelulusanBentuk').val(obj.message.kelulusan_bentuk).trigger('change');
+            $('#extendModal').find('#alatType').val(obj.message.alat_type).trigger('change');
+            $('#extendModal').find('#kadarPengaliran').val(obj.message.kadar_pengaliran).trigger('change');
+            $('#extendModal').find('#bentukPenunjuk').val(obj.message.bentuk_penunjuk).trigger('change');
+
+            $('#extendModal').find('#jenama').on('change', function(){
+              var jenama = $(this).val();
+              if (jenama == 'OTHER'){
+                $('#extendModal').find('#jenamaOtherDisplay').show();
+                $('#extendModal').find('#jenamaOther').val(obj.message.jenama_other);
+              }else{
+                $('#extendModal').find('#jenamaOtherDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#jenama').val(obj.message.jenama).trigger('change');
+          }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("SIC")){ 
+            $('#addtionalSection').html($('#sicDetails').html());
+            $('#extendModal').find('#nilaiMaksimum').val(obj.message.nilai_jangkaan_maksimum).trigger('change');
+
+            $('#extendModal').find('#bahanPembuat').on('change', function(){
+              var bahanPembuat = $(this).val();
+              if (bahanPembuat == 'OTHER'){
+                $('#extendModal').find('#bahanPembuatOtherDisplay').show();
+                $('#extendModal').find('#bahanPembuatOther').val(obj.message.bahan_pembuat_other);
+              }else{
+                $('#extendModal').find('#bahanPembuatOtherDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#bahanPembuat').val(obj.message.bahan_pembuat).trigger('change');
           }
         // });
 
@@ -5889,6 +5873,7 @@ function edit(id) {
         $('#extendModal').find('#product').val(obj.message.products);
         $('#extendModal').find('#machineType').val(obj.message.machine_type).select2('destroy').select2();
         $('#extendModal').find('#jenisAlat').val(obj.message.jenis_alat).select2('destroy').select2();
+        $('#extendModal').find('#jenisAlatName').val(obj.message.jenis_alat_name);
         $('#extendModal').find('#machineName').val(obj.message.machine_name).trigger('change');
         $('#extendModal').find('#machineLocation').val(obj.message.machine_location);
         $('#extendModal').find('#machineArea').val(obj.message.machine_area);
@@ -5971,9 +5956,9 @@ function edit(id) {
         $('#extendModal').find('#totalCharge').val(obj.message.total_charges);
 
         jalat = obj.message.jenis_alat;
-
+        jenisAlatName = obj.message.jenis_alat_name;
         // $('#extendModal').on('atkLoaded', function() {
-          if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '1'){
+          if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("ATK")){
             $('#addtionalSection').html($('#atkDetails').html());
             $('#extendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
             $('#extendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
@@ -6018,11 +6003,7 @@ function edit(id) {
           //   $('#addtionalSection').html($('#atsDetails').html());
           //   $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
           // }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '2'){
-            $('#addtionalSection').html($('#atpDetails').html());
-            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-            $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '23'){
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("ATP (MOTORCAR)")){
             $('#addtionalSection').html($('#atpMotorDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#steelyard').val(obj.message.steelyard).trigger('change');
@@ -6033,49 +6014,7 @@ function edit(id) {
             $('#extendModal').find('#nilai4').val(obj.message.nilais[3].nilai);
             $('#extendModal').find('#nilai5').val(obj.message.nilais[4].nilai);
             $('#extendModal').find('#nilai6').val(obj.message.nilais[5].nilai);
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '5'){
-            $('#addtionalSection').html($('#atnDetails').html());
-            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-            $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
-            $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '18'){
-            $('#addtionalSection').html($('#atnDetails').html());
-            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-            $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
-            $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '6'){
-            $('#addtionalSection').html($('#ateDetails').html());
-            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-            $('#extendModal').find('#class').val(obj.message.class).trigger('change');
-          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '14'){
-            $('#addtionalSection').html($('#sllDetails').html());
-            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-            $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
-            $('#extendModal').find('#question1').val(obj.message.questions[0].answer).trigger('change');
-            $('#extendModal').find('#question2').val(obj.message.questions[1].answer).trigger('change');
-            $('#extendModal').find('#question3').val(obj.message.questions[2].answer).trigger('change');
-            $('#extendModal').find('#question4').val(obj.message.questions[3].answer).trigger('change');
-            $('#extendModal').find('#question5_1').val(obj.message.questions[4].answer).trigger('change');
-            $('#extendModal').find('#question5_2').val(obj.message.questions[5].answer).trigger('change');
-            $('#extendModal').find('#question6').val(obj.message.questions[6].answer).trigger('change');
-            $('#extendModal').find('#question7').val(obj.message.questions[7].answer).trigger('change');
-          } else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '7'){
-            $('#addtionalSection').html($('#btuDetails').html());
-            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-            $('#extendModal').find('#penandaanBatuUjian').val(obj.message.penandaan_batu_ujian).trigger('change');
-
-            $('#extendModal').find('#batuUjian').on('change', function(){
-              var batuUjian = $(this).val();
-              if (batuUjian == 'OTHER'){
-                $('#extendModal').find('#batuUjianLainDisplay').show(); 
-                $('#extendModal').find('#batuUjianLain').val(obj.message.batu_ujian_lain);
-              }else{
-                $('#extendModal').find('#batuUjianLainDisplay').hide();
-              }
-            });
-
-            $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
-          } else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '10'){
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("ATP-AUTO MACHINE")){
             // $('#addtionalSection').html($('#autoPackDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
             // $('#extendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
@@ -6087,75 +6026,32 @@ function edit(id) {
             $('#addtionalSection').html($('#autoPackDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
             $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
-          }
-          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '17'){
-          //   $('#addtionalSection').html($('#atsHDetails').html());
-          //   $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-          // }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '12'){
-            $('#addtionalSection').html($('#siaDetails').html());
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("ATP")){
+            $('#addtionalSection').html($('#atpDetails').html());
             // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
-
-            $('#extendModal').find('#nilaiJangka').on('change', function(){
-              var nilaiJangka = $(this).val();
-              if (nilaiJangka == 'OTHER'){
-                $('#extendModal').find('#nilaiJangkaOtherDisplay').show();
-                $('#extendModal').find('#nilaiJangkaOther').val(obj.message.nilai_jangka_other);
-              }else{
-                $('#extendModal').find('#nilaiJangkaOtherDisplay').hide();
-              }
-            });
-
-            $('#extendModal').find('#diperbuatDaripada').on('change', function(){
-              var diperbuatDaripada = $(this).val();
-              if (diperbuatDaripada == 'OTHER'){
-                $('#extendModal').find('#diperbuatDaripadaOtherDisplay').show();
-                $('#extendModal').find('#diperbuatDaripadaOther').val(obj.message.diperbuat_daripada_other);
-              }else{
-                $('#extendModal').find('#diperbuatDaripadaOtherDisplay').hide();
-              }
-            });
-
-            $('#extendModal').find('#nilaiJangka').val(obj.message.nilai_jangka).trigger('change');
-            $('#extendModal').find('#diperbuatDaripada').val(obj.message.diperbuat_daripada).trigger('change');
-          }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '11'){
-            $('#addtionalSection').html($('#bapDetails').html());
-            $('#extendModal').find('#pamNo').val(obj.message.pam_no).trigger('change');
-            $('#extendModal').find('#kelulusanBentuk').val(obj.message.kelulusan_bentuk).trigger('change');
-            $('#extendModal').find('#alatType').val(obj.message.alat_type).trigger('change');
-            $('#extendModal').find('#kadarPengaliran').val(obj.message.kadar_pengaliran).trigger('change');
-            $('#extendModal').find('#bentukPenunjuk').val(obj.message.bentuk_penunjuk).trigger('change');
-
-            $('#extendModal').find('#jenama').on('change', function(){
-              var jenama = $(this).val();
-              if (jenama == 'OTHER'){
-                $('#extendModal').find('#jenamaOtherDisplay').show();
-                $('#extendModal').find('#jenamaOther').val(obj.message.jenama_other);
-              }else{
-                $('#extendModal').find('#jenamaOtherDisplay').hide();
-              }
-            });
-
-            $('#extendModal').find('#jenama').val(obj.message.jenama).trigger('change');
-          }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '13'){ 
-            $('#addtionalSection').html($('#sicDetails').html());
-            $('#extendModal').find('#nilaiMaksimum').val(obj.message.nilai_jangkaan_maksimum).trigger('change');
-
-            $('#extendModal').find('#bahanPembuat').on('change', function(){
-              var bahanPembuat = $(this).val();
-              if (bahanPembuat == 'OTHER'){
-                $('#extendModal').find('#bahanPembuatOtherDisplay').show();
-                $('#extendModal').find('#bahanPembuatOther').val(obj.message.bahan_pembuat_other);
-              }else{
-                $('#extendModal').find('#bahanPembuatOtherDisplay').hide();
-              }
-            });
-
-            $('#extendModal').find('#bahanPembuat').val(obj.message.bahan_pembuat).trigger('change');
-          }
-          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '26'){
+            $('#extendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("ATN")){
+            $('#addtionalSection').html($('#atnDetails').html());
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
+            $('#extendModal').find('#bentuk_dulang').val(obj.message.bentuk_dulang).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("ATE")){
+            $('#addtionalSection').html($('#ateDetails').html());
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#class').val(obj.message.class).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("SLL")){
+            $('#addtionalSection').html($('#sllDetails').html());
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#alat_type').val(obj.message.alat_type).trigger('change');
+            $('#extendModal').find('#question1').val(obj.message.questions[0].answer).trigger('change');
+            $('#extendModal').find('#question2').val(obj.message.questions[1].answer).trigger('change');
+            $('#extendModal').find('#question3').val(obj.message.questions[2].answer).trigger('change');
+            $('#extendModal').find('#question4').val(obj.message.questions[3].answer).trigger('change');
+            $('#extendModal').find('#question5_1').val(obj.message.questions[4].answer).trigger('change');
+            $('#extendModal').find('#question5_2').val(obj.message.questions[5].answer).trigger('change');
+            $('#extendModal').find('#question6').val(obj.message.questions[6].answer).trigger('change');
+            $('#extendModal').find('#question7').val(obj.message.questions[7].answer).trigger('change');
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("BTU - (BOX)")){
             $('#addtionalSection').html($('#btuBoxDetails').html());
 
             if(obj.message.btu_box_info.length > 0){
@@ -6190,6 +6086,89 @@ function edit(id) {
             }else{
               $('#extendModal').find('#noOfBtu').val(0);
             }
+          }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("BTU")){
+            $('#addtionalSection').html($('#btuDetails').html());
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+            $('#extendModal').find('#penandaanBatuUjian').val(obj.message.penandaan_batu_ujian).trigger('change');
+
+            $('#extendModal').find('#batuUjian').on('change', function(){
+              var batuUjian = $(this).val();
+              if (batuUjian == 'OTHER'){
+                $('#extendModal').find('#batuUjianLainDisplay').show(); 
+                $('#extendModal').find('#batuUjianLain').val(obj.message.batu_ujian_lain);
+              }else{
+                $('#extendModal').find('#batuUjianLainDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#batuUjian').val(obj.message.batu_ujian).trigger('change');
+          } 
+          // else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jalat == '17'){
+          //   $('#addtionalSection').html($('#atsHDetails').html());
+          //   $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+          // }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("SIA")){
+            $('#addtionalSection').html($('#siaDetails').html());
+            // $('#extendModal').find('#platformCountry').val(obj.message.platform_country).trigger('change');
+
+            $('#extendModal').find('#nilaiJangka').on('change', function(){
+              var nilaiJangka = $(this).val();
+              if (nilaiJangka == 'OTHER'){
+                $('#extendModal').find('#nilaiJangkaOtherDisplay').show();
+                $('#extendModal').find('#nilaiJangkaOther').val(obj.message.nilai_jangka_other);
+              }else{
+                $('#extendModal').find('#nilaiJangkaOtherDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#diperbuatDaripada').on('change', function(){
+              var diperbuatDaripada = $(this).val();
+              if (diperbuatDaripada == 'OTHER'){
+                $('#extendModal').find('#diperbuatDaripadaOtherDisplay').show();
+                $('#extendModal').find('#diperbuatDaripadaOther').val(obj.message.diperbuat_daripada_other);
+              }else{
+                $('#extendModal').find('#diperbuatDaripadaOtherDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#nilaiJangka').val(obj.message.nilai_jangka).trigger('change');
+            $('#extendModal').find('#diperbuatDaripada').val(obj.message.diperbuat_daripada).trigger('change');
+          }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("BAP")){
+            $('#addtionalSection').html($('#bapDetails').html());
+            $('#extendModal').find('#pamNo').val(obj.message.pam_no).trigger('change');
+            $('#extendModal').find('#kelulusanBentuk').val(obj.message.kelulusan_bentuk).trigger('change');
+            $('#extendModal').find('#alatType').val(obj.message.alat_type).trigger('change');
+            $('#extendModal').find('#kadarPengaliran').val(obj.message.kadar_pengaliran).trigger('change');
+            $('#extendModal').find('#bentukPenunjuk').val(obj.message.bentuk_penunjuk).trigger('change');
+
+            $('#extendModal').find('#jenama').on('change', function(){
+              var jenama = $(this).val();
+              if (jenama == 'OTHER'){
+                $('#extendModal').find('#jenamaOtherDisplay').show();
+                $('#extendModal').find('#jenamaOther').val(obj.message.jenama_other);
+              }else{
+                $('#extendModal').find('#jenamaOtherDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#jenama').val(obj.message.jenama).trigger('change');
+          }
+          else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("SIC")){ 
+            $('#addtionalSection').html($('#sicDetails').html());
+            $('#extendModal').find('#nilaiMaksimum').val(obj.message.nilai_jangkaan_maksimum).trigger('change');
+
+            $('#extendModal').find('#bahanPembuat').on('change', function(){
+              var bahanPembuat = $(this).val();
+              if (bahanPembuat == 'OTHER'){
+                $('#extendModal').find('#bahanPembuatOtherDisplay').show();
+                $('#extendModal').find('#bahanPembuatOther').val(obj.message.bahan_pembuat_other);
+              }else{
+                $('#extendModal').find('#bahanPembuatOtherDisplay').hide();
+              }
+            });
+
+            $('#extendModal').find('#bahanPembuat').val(obj.message.bahan_pembuat).trigger('change');
           }
         // });
 

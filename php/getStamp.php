@@ -13,7 +13,7 @@ if(isset($_POST['userID'])){
     }
 
     $stampExtArray = [
-        1,4,2,5,6,14,7,10,17,23,12,18,11,13,26
+        'ATK', 'ATP (MOTORCAR)', 'ATP-AUTO MACHINE', 'ATP', 'ATN', 'ATN (G)', 'ATE', 'SLL', 'BTU - (BOX)', 'BTU', 'SIA', 'BAP', 'SIC', 'ATP (H)'
     ];
 
     if ($update_stmt = $db->prepare("SELECT * FROM stamping WHERE id=?")) {
@@ -202,7 +202,7 @@ if(isset($_POST['userID'])){
                     $message['create_by'] = $createBy;
                     $message['modified_by'] = $modifiedBy;
 
-                    if(($row['validate_by'] == '10' || $row['validate_by'] == '9') && in_array($row['jenis_alat'], $stampExtArray)){
+                    if(($row['validate_by'] == '10' || $row['validate_by'] == '9') && in_array(searchJenisAlatNameByid($row['jenis_alat'], $db), $stampExtArray)){
                         if ($update_stmt2 = $db->prepare("SELECT * FROM stamping_ext WHERE stamp_id=?")) {
                             $update_stmt2->bind_param('s', $row['id']);
                         
@@ -319,6 +319,7 @@ if(isset($_POST['userID'])){
                     $message['validator_lama'] = $row['validator_lama'];
                     $message['cawangan'] = $row['cawangan'];
                     $message['jenis_alat'] = $row['jenis_alat'];
+                    $message['jenis_alat_name'] = searchJenisAlatNameByid($row['jenis_alat'], $db) ?? '';
                     $message['machine_name'] = $row['machine_name'];
                     $message['machine_location'] = $row['machine_location'];
                     $message['machine_area'] = $row['machine_area'];
@@ -373,7 +374,7 @@ if(isset($_POST['userID'])){
                     $message['status'] = $row['status'];
                     $message['existing_id'] = $row['existing_id'];
 
-                    if(($row['validate_by'] == '10' || $row['validate_by'] == '9') && in_array($row['jenis_alat'], $stampExtArray)){
+                    if(($row['validate_by'] == '10' || $row['validate_by'] == '9') && in_array(searchJenisAlatNameByid($row['jenis_alat'], $db), $stampExtArray)){
                         if ($update_stmt2 = $db->prepare("SELECT * FROM stamping_ext WHERE stamp_id=?")) {
                             $update_stmt2->bind_param('s', $row['id']);
                         
