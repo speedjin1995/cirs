@@ -29,7 +29,7 @@ if (!empty($data)) {
         $assignTo = !empty($row['AssignTo']) ? searchStaffIdByName($row['AssignTo'], $db) : null;
         $assignTo2 = !empty($row['AssignTo2']) ? searchStaffIdByName($row['AssignTo2'], $db) : null;
         $assignTo3 = !empty($row['AssignTo3']) ? searchStaffIdByName($row['AssignTo3'], $db) : null;
-        $ownershipStatus = !empty($row['OwnershipStatus']) ? $row['OwnershipStatus'] : null;
+        $ownershipStatus = !empty($row['OwnershipStatus']) ? ($row['OwnershipStatus'] === 'Rental Unit' ? 'RENT' : ($row['OwnershipStatus'] === 'Customer Unit' ? 'OWN' : $row['OwnershipStatus'])) : null; var_dump($ownershipStatus);die;
         $validateBy = !empty($row['ValidateBy']) ? searchValidatorIdByName($row['ValidateBy'], $db) : null;
         $cawangan = !empty($row['Cawangan']) ? searchStateIdByName($row['Cawangan'], $db) : null;
         $jenisAlat = !empty($row['JenisAlat']) ? searchJenisAlatIdByName($row['JenisAlat'], $db) : null;

@@ -87,7 +87,7 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
                 searchStaffNameById($record['assignTo'], $db), 
                 searchStaffNameById($record['assignTo2'], $db), 
                 searchStaffNameById($record['assignTo3'], $db), 
-                $record['ownership_status'], 
+                $unitType = $record['ownership_status'] === 'RENT' ? 'Rental Unit' : ($record['ownership_status'] === 'OWN' ? 'Customer Unit' : ''),
                 $record['stamping_type'],
                 searchValidatorNameById($record['validate_by'], $db),
                 searchStateNameById($record['cawangan'], $db), 

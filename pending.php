@@ -716,8 +716,8 @@ else{
                   <div class="form-group">
                     <label>Ownership Status</label>
                     <select class="form-control select2" style="width: 100%;" id="ownershipStatus" name="ownershipStatus">
-                      <option value="RENT">Rent</option>
-                      <option value="OWN">Own</option>
+                      <option value="RENT">Rental Unit</option>
+                      <option value="OWN">Customer Unit</option>
                     </select>
                   </div>
                 </div>
