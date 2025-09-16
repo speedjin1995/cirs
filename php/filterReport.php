@@ -181,54 +181,46 @@ $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;
 while($row = mysqli_fetch_assoc($empRecords)) {
+  $rowData = array(
+    "no"=>$counter,
+    "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
+    "validate_by"=>$row['validate_by'] != null ? searchValidatorNameById($row['validate_by'], $db) : '',
+    "capacity"=> $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '',
+    "status"=>$row['status'],
+  );
+  
   if ($type == 'Stamping') {
     $stampingDate = new DateTime($row['stamping_date']);
     $formattedStampingDate = $stampingDate->format('d-m-Y');
-    $capacity = 
-    $data[] = array( 
-      "no"=>$counter,
-      "customers"=>$row['customers'] != null ? searchCustNameById($row['customers'], $db) : '',
-      "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
-      "machine_type"=>$row['machine_type'] != null ? searchMachineNameById($row['machine_type'], $db) : '',
-      "serial_no"=>$row['serial_no'] ?? '',
-      "validator"=>$row['validate_by'] != null ? searchValidatorNameById($row['validate_by'], $db) : '',
-      "capacity"=> $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '',
-      "jenis_alat"=>$row['jenis_alat'] != null ? searchAlatNameById($row['jenis_alat'], $db) : '', 
-      "stamping_date"=>$formattedStampingDate ?? '',
-      "due_date"=>$row['due_date'] ?? '',
-      "status"=>$row['status'],
-      "no_daftar_lama"=>$row['no_daftar_lama'] ?? '',
-      "no_daftar_baru"=>$row['no_daftar_baru'] ?? '',
-    );
+    $rowData = array_merge($rowData, array(
+      "customers" => $row['customers'] != null ? searchCustNameById($row['customers'], $db) : '',
+      "machine_type" => $row['machine_type'] != null ? searchMachineNameById($row['machine_type'], $db) : '',
+      "serial_no" => $row['serial_no'] ?? '',
+      "jenis_alat" => $row['jenis_alat'] != null ? searchAlatNameById($row['jenis_alat'], $db) : '',
+      "stamping_date" => $formattedStampingDate ?? '',
+      "due_date" => $row['due_date'] ?? '',
+      "no_daftar_lama" => $row['no_daftar_lama'] ?? '',
+      "no_daftar_baru" => $row['no_daftar_baru'] ?? '',
+    ));
   } else if ($type == 'Other') {
-    $data[] = array( 
-      "no"=>$counter,
-      "id"=>$row['id'],
+    $rowData = array_merge($rowData, array(
       "customer"=>$row['customer'] != null ? searchCustNameById($row['customer'], $db) : '',
-      "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
       "machines"=>$row['machines'] != null ? searchMachineNameById($row['machines'], $db) : '',
-      "validate_by"=>$row['validate_by'] != null ? searchValidatorNameById($row['validate_by'], $db) : '',
-      "capacity"=>$row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '',
       "auto_form_no"=>$row['auto_form_no'] ?? '',
       "last_calibration_date"=>$row['last_calibration_date'] != null ? convertDatetimeToDate($row['last_calibration_date']) : '',
       "expired_calibration_date"=>$row['expired_calibration_date'] != null ? convertDatetimeToDate($row['expired_calibration_date']) : '',
-      "status"=>$row['status'],
-    ); 
+    )); 
   } else if ($type == 'Inhouse') {
-    $data[] = array( 
-      "no"=>$counter,
-      "id"=>$row['id'],
+    $rowData = array_merge($rowData, array(
       "customer"=>$row['customer'] != null ? searchCustNameById($row['customer'], $db) : '',
-      "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
       "machines"=>$row['machines'] != null ? searchMachineNameById($row['machines'], $db) : '',
-      "capacity"=>$row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '',
       "auto_cert_no"=>$row['auto_cert_no'] ?? '',
       "validation_date"=>$row['validation_date'] != null ? convertDatetimeToDate($row['validation_date']) : '',
       "expired_date"=>$row['expired_date'] != null ? convertDatetimeToDate($row['expired_date']) : '',
       "calibrator"=>$row['size'] != null ? searchStaffNameById($row['calibrator'], $db) : '',
-      "status"=>$row['status'],
-    ); 
+    ));
   }
+  $data[] = $rowData;
   $counter++;
 }
 

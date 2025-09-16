@@ -11,14 +11,15 @@ $uid = $_SESSION['userID'];
 $data = json_decode(file_get_contents('php://input'), true);
 
 if (!empty($data)) {
+    $rowCount = 1;
+    $errorArray = [];
     foreach ($data as $row) {
         $type = !empty($row['Type']) ? $row['Type'] : null;
         $companyBranch = !empty($row['CompanyBranch']) ? searchCompanyBranchIdByName($row['CompanyBranch'], $db) : null;
         $dealer = !empty($row['Dealer']) ? searchDealerIdByName($row['Dealer'], $db) : null;
-        $dealerBranch = !empty($row['DealerBranch']) ? $row['DealerBranch'] : null;
         $customerType = !empty($row['CustomerType']) ? $row['CustomerType'] : null;
         $customers = !empty($row['Customers']) ? searchCustIdByName($row['Customers'], $db) : null;
-        $branch = !empty($row['CustomerBranch']) ? searchCustomerBranchIdByName($row['CustomerBranch'], $db) : null;
+        $otherCode = !empty($row['OtherCode']) ? $row['OtherCode'] : null;
         $brands = !empty($row['Brand']) ? searchBrandIdByName($row['Brand'], $db) : null;
         $machineType = !empty($row['MachineType']) ? searchMachineIdByName($row['MachineType'], $db) : null;
         $models = !empty($row['Model']) ? searchModelIdByName($row['Model'], $db) : null;
@@ -103,6 +104,182 @@ if (!empty($data)) {
         $bahan_pembuat = null;
         $bahan_pembuat_other = null;
 
+        if (isset($type) && !empty($type) && $type != ''){
+            if ($type == 'RESELLER') {
+                if ($dealer == null || $dealer == ''){
+                    $errorArray[] = "Row ".$rowCount.": Dealer is required or not found for RESELLER type.";
+                    continue; // Skip to the next row
+                }else{
+                    $dealerBranch = searchResellerBranchByResellerId($dealer, $db);
+                }
+            }
+        }else{
+            $errorArray[] = "Row ".$rowCount.": Type is required.";
+            continue; // Skip to the next row
+        } 
+
+        if ($companyBranch == null || $companyBranch == ''){
+            $errorArray[] = "Row ".$rowCount.": Company Branch is required or not found.";
+            continue; // Skip to the next row
+        }
+
+        if (isset($customerType) && !empty($customerType) && $customerType != ''){
+            if ($customerType == 'NEW') {
+                $branchName = !empty($row['CustomerBranch']) ? $row['CustomerBranch'] : null;
+                $branchAddressLine1 = !empty($row['AddressLine1']) ? $row['AddressLine1'] : null;
+                $branchAddressLine2 = !empty($row['AddressLine2']) ? $row['AddressLine2'] : null;
+                $branchAddressLine3 = !empty($row['AddressLine3']) ? $row['AddressLine3'] : null;
+                $branchAddressLine4 = !empty($row['AddressLine4']) ? $row['AddressLine4'] : null;
+                $branchTel = !empty($row['Tel']) ? $row['Tel'] : null;
+                $branchEmail = !empty($row['Email']) ? $row['Email'] : null;
+
+                if (isset($customers) && !empty($customers) && $customers != ''){
+                    $errorArray[] = "Row ".$rowCount.": Customer already exists, change Customer Type to EXISTING.";
+                    continue; // Skip to the next row
+                }
+
+                if ((!empty($record['Customers']) && $record['Customers'] != '') || (!empty($branchAddressLine1) && $branchAddressLine1 != '')){
+                    // Processing to insert new customer and branch
+                    $custNameFirstLetter = substr($row['Customers'], 0, 1);
+                    $firstChar = $custNameFirstLetter;
+                    $code = 'C-'.strtoupper($custNameFirstLetter);
+
+                    $customerQuery = "SELECT * FROM customers WHERE customer_code LIKE '%$code%' ORDER BY customer_code DESC";
+                    $customerDetail = mysqli_query($db, $customerQuery);
+                    $customerRow = mysqli_fetch_assoc($customerDetail);
+            
+                    $customerCode = null;
+                    $codeSeq = null;
+                    $count = '';
+            
+                    if(!empty($customerRow)){
+                        $customerCode = $customerRow['customer_code'];
+                        preg_match('/\d+/', $customerCode, $matches);
+                        $codeSeq = (int)$matches[0]; 
+                        $nextSeq = $codeSeq+1;
+                        $count = str_pad($nextSeq, 4, '0', STR_PAD_LEFT); 
+                        $code.=$count;
+                    }
+                    else{
+                        $nextSeq = 1;
+                        $count = str_pad($nextSeq, 4, '0', STR_PAD_LEFT); 
+                        $code.=$count;
+                    } 
+            
+                    // Customer does not exist, create a new customer
+                    if ($insert_stmt = $db->prepare("INSERT INTO customers (customer_name, customer_code, customer_address, address2, address3, address4, customer_phone, customer_email, customer_status, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                        $customer_status = 'CUSTOMERS';
+                        $insert_stmt->bind_param('ssssssssssss', $record['Customers'], $code, $branchAddressLine1, $branchAddressLine2, $branchAddressLine3, $branchAddressLine4, $branchTel, $branchEmail, $customer_status, $pic, $customerPic, $otherCode);
+                        
+                        if ($insert_stmt->execute()) {
+                            $customers = $insert_stmt->insert_id;
+                            $customerType = 'EXISTING';
+
+                            if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, branch_name, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
+                                $insert_stmt2->bind_param('ssssssss', $customers, $branchAddressLine1, $branchAddressLine2, $branchAddressLine3, $branchAddressLine4, $branchName, $pic, $customerPic);
+                                $insert_stmt2->execute();
+                                $branch = $insert_stmt2->insert_id;
+                                $insert_stmt2->close();
+                            } 
+                        } else {
+                            $errorArray[] = "Row ".$rowCount.": Failed to insert new customer.";
+                            continue; // Skip to the next row
+                        }
+
+                        $insert_stmt->close();
+                    }
+                }else{
+                    $errorArray[] = "Row ".$rowCount.": Customer Name && Address Line 1 is required for new customer branch.";
+                    continue; // Skip to the next row
+                }
+            }else{
+                $branch = !empty($row['CustomerBranch']) ? searchCustomerBranchIdByName($row['CustomerBranch'], $customers, $db) : null;
+            }
+        }else{
+            $errorArray[] = "Row ".$rowCount.": Customer Type is required.";
+            continue; // Skip to the next row
+        } 
+
+        if ($models == null || $models == ''){
+            $errorArray[] = "Row ".$rowCount.": Model is required or not found.";
+            continue; // Skip to the next row
+        }
+
+        if ($brands == null || $brands == ''){
+            $errorArray[] = "Row ".$rowCount.": Brand is required or not found.";
+            continue; // Skip to the next row
+        }
+
+        if ($serialNo == null || $serialNo == ''){
+            $errorArray[] = "Row ".$rowCount.": Serial No is required.";
+            continue; // Skip to the next row
+        }
+
+        if ($makeIn == null || $makeIn == ''){
+            $errorArray[] = "Row ".$rowCount.": Make In is required.";
+            continue; // Skip to the next row
+        }
+
+        if ($machineType == null || $machineType == ''){
+            $errorArray[] = "Row ".$rowCount.": Machine Type is required.";
+            continue; // Skip to the next row
+        }
+
+        if ($jenisAlat == null || $jenisAlat == ''){
+            $errorArray[] = "Row ".$rowCount.": Jenis Alat is required.";
+            continue; // Skip to the next row
+        }
+
+        if ($trade == null || $trade == ''){
+            $errorArray[] = "Row ".$rowCount.": Trade is required.";
+            continue; // Skip to the next row
+        }
+
+        if ($capacity == null || $capacity == ''){
+            $errorArray[] = "Row ".$rowCount.": Capacity is required.";
+            continue; // Skip to the next row
+        }
+
+        if ($assignTo == null || $assignTo == ''){
+            $errorArray[] = "Row ".$rowCount.": Assign To is required.";
+            continue; // Skip to the next row
+        }
+
+        if ($ownershipStatus == null || $ownershipStatus == ''){
+            $errorArray[] = "Row ".$rowCount.": Ownership Status is required.";
+            continue; // Skip to the next row
+        }
+
+        if ($stampingType == null || $stampingType == ''){
+            $errorArray[] = "Row ".$rowCount.": Stamping Type is required.";
+            continue; // Skip to the next row
+        }
+
+        if ($validateBy == null || $validateBy == ''){
+            $errorArray[] = "Row ".$rowCount.": Validate By is required.";
+            continue; // Skip to the next row
+        }
+
+        if ($cawangan == null || $cawangan == ''){
+            $errorArray[] = "Row ".$rowCount.": Cawangan is required.";
+            continue; // Skip to the next row
+        }
+
+        if ($includeCert == null || $includeCert == ''){
+            $errorArray[] = "Row ".$rowCount.": Include Cert is required.";
+            continue; // Skip to the next row
+        }
+
+        if ($notificationPeriod == null || $notificationPeriod == ''){
+            $errorArray[] = "Row ".$rowCount.": Notification Period is required.";
+            continue; // Skip to the next row
+        }
+
+        if ($unitPrice == null || $unitPrice == ''){
+            $errorArray[] = "Row ".$rowCount.": Unit Price is required.";
+            continue; // Skip to the next row
+        }
+
         if ($insert_stmt = $db->prepare("INSERT INTO stamping (type, company_branch, dealer, dealer_branch, customer_type, customers, branch, brand, machine_type, model, make_in, capacity, serial_no, assignTo, assignTo2, assignTo3, ownership_status, validate_by, cawangan, jenis_alat, machine_name, machine_location, machine_area, machine_serial_no, trade, no_daftar_baru, pin_keselamatan, siri_keselamatan, seal_no_baru, pegawai_contact, include_cert, cert_no, borang_d, invoice_no, invoice_payment_type, invoice_payment_ref, notification_period, cash_bill, stamping_date, due_date, pic, customer_pic, quotation_no, quotation_date, purchase_no, purchase_date, remarks, internal_remark, validator_invoice, unit_price, cert_price, total_amount, sst, subtotal_sst_amt, rebate, rebate_amount, subtotal_amount, log, products, stamping_type, labour_charge, stampfee_labourcharge, int_round_up, total_charges) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
             $insert_stmt->bind_param('ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss', 
                 $type, $companyBranch, $dealer, $dealerBranch, $customerType, $customers, $branch, $brands, $machineType, $models, $makeIn, $capacity, $serialNo, $assignTo, $assignTo2, $assignTo3, $ownershipStatus, $validateBy, $cawangan, $jenisAlat, $machineName, $machineLocation, $machineArea, $machineSerialNo, $trade, $noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $sealNoBaru, $pegawaiContact, $includeCert, $certNo, $borangD, $invoiceNo, $invoicePaymentType, $invoicePaymentRef, $notificationPeriod, $cashBill, $stampingDate, $dueDate, $pic, $customerPic, $quotationNo, $quotationDate, $purchaseNo, $purchaseDate, $remarks, $internalRemark, $validatorInvoice, $unitPrice, $certPrice, $totalAmount, $sst, $subtotalSstAmount, $rebate, $rebateAmount, $subtotalAmount, $log, $products, $stampingType, $labourCharge, $stampfeeLabelCharge, $intRoundUp, $totalCharges);
@@ -111,9 +288,7 @@ if (!empty($data)) {
             $insert_stmt->close();
 
             // Insert into stamping_ext table
-            if ($jenisAlat == '2') { // ATP
-                $jenis_penunjuk = !empty($row['JenisPenunjuk']) ? $row['JenisPenunjuk'] : null;
-            } elseif ($jenisAlat == '23') { // ATP (MOTORCAR)
+            if (str_contains($jenisAlat, 'ATP (MOTORCAR)')) { // ATP (MOTORCAR)
                 $steelyard = !empty($row['HadTerimaSteelyard(kg)']) ? $row['HadTerimaSteelyard(kg)'] : null;
                 $bilangan_kaunterpois = !empty($row['BilanganKaunterpois(biji)']) ? $row['BilanganKaunterpois(biji)'] : null;
 
@@ -145,12 +320,14 @@ if (!empty($data)) {
                 ];
 
                 $nilais = json_encode($nilais, JSON_PRETTY_PRINT);
-            } else if ($jenisAlat == '5' || $jenisAlat == '18') { // ATN
+            } else if (str_contains($jenisAlat, 'ATP')) { // ATP
+                $jenis_penunjuk = !empty($row['JenisPenunjuk']) ? $row['JenisPenunjuk'] : null;
+            } else if (str_contains($jenisAlat, 'ATN')) { // ATN
                 $alat_type = !empty($row['JenisAlatType']) ? $row['JenisAlatType'] : null;
                 $bentuk_dulang = !empty($row['BentukDulang']) ? $row['BentukDulang'] : null;
-            } else if ($jenisAlat == '6') { // ATE
+            } else if (str_contains($jenisAlat, 'ATE')) { // ATE
                 $class = !empty($row['Class']) ? $row['Class'] : null;
-            } else if ($jenisAlat == '14') { // SLL
+            } else if (str_contains($jenisAlat, 'SLL')) { // SLL
                 $alat_type = !empty($row['JenisAlatType']) ? $row['JenisAlatType'] : null;
                 $questions = [
                     [
@@ -188,18 +365,16 @@ if (!empty($data)) {
                 ];
 
                 $questions = json_encode($questions, JSON_PRETTY_PRINT);
-            } else if ($jenisAlat == '7') { // BTU
+            } else if (str_contains($jenisAlat, 'BTU')) { // BTU
                 $batu_ujian = !empty($row['BatuUjian']) ? $row['BatuUjian'] : null;
                 $batu_ujian_lain = !empty($row['BatuUjianLain']) ? $row['BatuUjianLain'] : null;
                 $penandaan_batu_ujian = !empty($row['PenandaanPadaBatuUjian']) ? $row['PenandaanPadaBatuUjian'] : null;
-            } else if ($jenisAlat == '10') { // AUTO Packer
-                $jenis_penunjuk = !empty($row['JenisPenunjuk']) ? $row['JenisPenunjuk'] : null;
-            } else if ($jenisAlat == '12') { // SIA
+            } else if (str_contains($jenisAlat, 'SIA')) { // SIA
                 $nilai_jangka = !empty($row['NilaiJangkaMaksima']) ? $row['NilaiJangkaMaksima'] : null;
                 $nilai_jangka_other = !empty($row['NilaiJangkaMaksimaOther']) ? $row['NilaiJangkaMaksimaOther'] : null;
                 $diperbuat_daripada = !empty($row['DiperbuatDaripada']) ? $row['DiperbuatDaripada'] : null;
                 $diperbuat_daripada_other = !empty($row['DiperbuatDaripadaOther']) ? $row['DiperbuatDaripadaOther'] : null;
-            } else if ($jenisAlat == '11') { // BAP
+            } else if (str_contains($jenisAlat, 'BAP')) { // BAP
                 $pam_no = null;
                 $kelulusan_bentuk = null;
                 $jenama = null;
@@ -215,7 +390,7 @@ if (!empty($data)) {
                 $alat_type = !empty($row['AlatType']) ? $row['AlatType'] : null;
                 $kadar_pengaliran = !empty($row['KadarPengaliran']) ? $row['KadarPengaliran'] : null;
                 $bentuk_penunjuk = !empty($row['BentukPenunjukHarga/Kuantiti']) ? $row['BentukPenunjukHarga/Kuantiti'] : null;
-            } else if ($jenisAlat == '13') { // SIC
+            } else if (str_contains($jenisAlat, 'SIC')) { // SIC
                 $nilai_jangkaan_maksimum = !empty($row['NilaiJangkaMaksimum(Kapasiti)']) ? $row['NilaiJangkaMaksimum(Kapasiti)'] : null;
                 $bahan_pembuat = !empty($row['BahanPembuat']) ? $row['BahanPembuat'] : null;
                 $bahan_pembuat_other = !empty($row['BahanPembuatOther']) ? $row['BahanPembuatOther'] : null;
@@ -255,6 +430,8 @@ if (!empty($data)) {
                 $insert_log_stmt->close();
             }
         }
+
+        $rowCount++;
     }
 
     $db->close();
