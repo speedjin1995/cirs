@@ -2335,6 +2335,10 @@ $(function () {
               dropdownMenu += '<a class="dropdown-item" id="revertStamp' + data + '" onclick="revertStamp(' + data + ')"><i class="fa fa-undo" aria-hidden="true"></i> Revert Stamping</a>';
             }
 
+            if (allowedAlats.includes(row.jenis_alat)) {
+              dropdownMenu += '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ', \'' + row.jenis_alat + '\', \'' + row.validate_by + '\')"><i class="fas fa-print"></i> Re-Print</a>';
+            }
+
             dropdownMenu += '<a class="dropdown-item" id="statusTimeline' + data + '" onclick="statusTimeline(' + data + ')"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Status Timeline</a>'+
             '<a class="dropdown-item" id="restamping' + data + '" onclick="restamping(' + data + ')"><i class="fas fa-stamp" aria-hidden="true"></i> Restamping</a>'+
             '<a class="dropdown-item" id="deactivate' + data + '" onclick="deactivate(' + data + ')"><i class="fa fa-times" aria-hidden="true"></i> Cancel</a>';
@@ -2624,6 +2628,10 @@ $(function () {
 
               if (userRole === 'SUPER_ADMIN' || userRole === 'ADMIN'){
                 dropdownMenu += '<a class="dropdown-item" id="revertStamp' + data + '" onclick="revertStamp(' + data + ')"><i class="fa fa-undo" aria-hidden="true"></i> Revert Stamping</a>';
+              }
+
+              if (allowedAlats.includes(row.jenis_alat)) {
+                dropdownMenu += '<a class="dropdown-item" id="print' + data + '" onclick="print(' + data + ', \'' + row.jenis_alat + '\', \'' + row.validate_by + '\')"><i class="fas fa-print"></i> Re-Print</a>';
               }
 
               dropdownMenu += '<a class="dropdown-item" id="statusTimeline' + data + '" onclick="statusTimeline(' + data + ')"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Status Timeline</a>'+
@@ -5534,27 +5542,9 @@ function deactivate(id) {
 }
 
 function print(id, type, validate) {
-  var optionText = $('#jenisAlat option[value="' + type + '"]').text();
-  window.open('php/printBorang.php?userID='+id+'&file='+optionText+'&validator='+validate, '_blank');
-  /*$.get('php/printBorang.php', {userID: id, file: 'ATK'}, function(data){
-    var obj = JSON.parse(data);
-
-    if(obj.status === 'success'){
-      var printWindow = window.open('', '', 'height=' + screen.height + ',width=' + screen.width);
-      printWindow.document.write(obj.message);
-      printWindow.document.close();
-      setTimeout(function(){
-        printWindow.print();
-        printWindow.close();
-      }, 500);
-    }
-    else if(obj.status === 'failed'){
-      toastr["error"](obj.message, "Failed:");
-    }
-    else{
-      toastr["error"]("Something wrong when activate", "Failed:");
-    }
-  });*/
+  var actualPrintDate = null;
+  var printType = 'SINGLE';
+  window.open('php/printBorang.php?userID='+id+'&file='+type+'&validator='+validate+'&printType='+printType+'&actualPrintDate='+actualPrintDate+'&doubleSided=N&status=Complete', '_blank');
 }
 
 function portrait(id) {

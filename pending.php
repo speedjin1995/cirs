@@ -2930,7 +2930,7 @@ $(function () {
         var doubleSided = $('#printBorangForm').find('#doubleSided').val();
 
         if(printType == 'SINGLE'){
-          window.open('php/printBorang.php?userID='+id+'&file='+type+'&validator='+validate+'&printType='+printType+'&actualPrintDate='+actualPrintDate+'&doubleSided=N', '_blank');
+          window.open('php/printBorang.php?userID='+id+'&file='+type+'&validator='+validate+'&printType='+printType+'&actualPrintDate='+actualPrintDate+'&doubleSided=N&status=Pending', '_blank');
         }else{
           window.open('php/printMergedBorang.php?userID='+id+'&actualPrintDate='+actualPrintDate+'&doubleSided='+doubleSided, '_blank');
         }

@@ -219,9 +219,10 @@ function safeFetchAssoc($result) {
     return $row;
 }
 
-if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintDate'])){
+if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintDate'], $_GET['status'])){
     $id = $_GET['userID'];
     $file = $_GET['file'];
+    $status = $_GET['status'];
     $validator = strtoupper($_GET['validator']);
     $actualPrintDate = $_GET['actualPrintDate'];
     $tickImage = '../assets/tick.png';
@@ -288,6 +289,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                         $pic = $branchRow['pic'];
                         $pic_phone = $branchRow['pic_contact'];
                     }
+                }
+
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
                 }
                 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -595,6 +600,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                         $pic_phone = $branchRow['pic_contact'];
                     }
                 }
+
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
+                }
                 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
@@ -893,6 +902,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
 
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
+                }
+
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
                     $size = $pdf->getTemplateSize($templateId);
@@ -1073,6 +1086,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 if(!empty($capacityRow)){
                     $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -1256,6 +1273,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
 
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
+                }
+
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
                     $size = $pdf->getTemplateSize($templateId);
@@ -1426,6 +1447,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
 
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
+                }
+
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
                     $size = $pdf->getTemplateSize($templateId);
@@ -1590,6 +1615,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 if(!empty($capacityRow)){
                     $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -1763,6 +1792,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
 
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
+                }
+
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
                     $size = $pdf->getTemplateSize($templateId);
@@ -1932,6 +1965,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
 
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
+                }
+
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
                     $size = $pdf->getTemplateSize($templateId);
@@ -2096,6 +2133,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 if(!empty($capacityRow)){
                     $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -2271,6 +2312,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
 
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
+                }
+
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
                     $size = $pdf->getTemplateSize($templateId);
@@ -2439,6 +2484,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 if(!empty($capacityRow)){
                     $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -2614,6 +2663,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
 
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
+                }
+
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
                     $size = $pdf->getTemplateSize($templateId);
@@ -2776,6 +2829,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
 
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
+                }
+
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
                     $size = $pdf->getTemplateSize($templateId);
@@ -2935,6 +2992,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 if(!empty($capacityRow)){
                     $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -3102,6 +3163,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 if(!empty($capacityRow)){
                     $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -3280,6 +3345,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 if(!empty($capacityRow)){
                     $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -3477,6 +3546,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
 
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
+                }
+
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
                     $size = $pdf->getTemplateSize($templateId);
@@ -3662,6 +3735,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
 
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
+                }
+
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
                     $size = $pdf->getTemplateSize($templateId);
@@ -3826,6 +3903,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 if(!empty($capacityRow)){
                     $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -3999,6 +4080,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
 
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
+                }
+
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
                     $size = $pdf->getTemplateSize($templateId);
@@ -4160,6 +4245,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
 
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
+                }
+
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
                     $size = $pdf->getTemplateSize($templateId);
@@ -4318,6 +4407,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 if(!empty($capacityRow)){
                     $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -4483,6 +4576,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
 
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
+                }
+
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
                     $size = $pdf->getTemplateSize($templateId);
@@ -4646,6 +4743,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
 
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
+                }
+
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
                     $size = $pdf->getTemplateSize($templateId);
@@ -4795,6 +4896,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 if(!empty($capacityRow)){
                     $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -4951,6 +5056,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 if(!empty($capacityRow)){
                     $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
                 }
 
                 if(count($btuBoxInfo) > 0){
@@ -5153,6 +5262,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
                 }
 
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
+                }
+
                 if(count($btuBoxInfo) > 0){
                     foreach ($btuBoxInfo as $btuBox){
                         $pdf = new PDFWithEllipse();
@@ -5350,6 +5463,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                     $capacityName = $capacityRow['name'];
                 }
 
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
+                }
+
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
                     $templateId = $pdf->importPage($pageNo);
                     $size = $pdf->getTemplateSize($templateId);
@@ -5473,6 +5590,10 @@ if(isset($_GET['userID'], $_GET["file"], $_GET["validator"], $_GET['actualPrintD
                 if(!empty($capacityRow)){
                     $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
                     $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                }
+
+                if ($status == 'Complete'){
+                    $actualPrintDate = date("d/m/Y", strtotime($res['stamping_date']));
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {

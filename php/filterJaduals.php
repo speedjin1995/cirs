@@ -174,6 +174,13 @@ while($row = mysqli_fetch_assoc($empRecords)) {
   $stampingDate = new DateTime($row['stamping_date']);
   $formattedStampingDate = $stampingDate->format('d-m-Y');
 
+  if ($row['due_date'] == null || $row['due_date'] == '0000-00-00 00:00:00'){
+    $formattedDueDate = '';
+  } else {
+    $dueDate = new DateTime($row['due_date']);
+    $formattedDueDate = $dueDate->format('d-m-Y');
+  }
+
   if ($row['borang_e_date'] == null || $row['borang_e_date'] == '0000-00-00 00:00:00'){
     $formattedBorangEDate = '';
   } else {
@@ -227,7 +234,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "cash_bill"=>$row['cash_bill'] ?? '',
     "invoice_no"=>$row['invoice_no'] ?? '',
     "stamping_date"=>$formattedStampingDate ?? '',
-    "due_date"=>$row['due_date'] ?? '',
+    "due_date"=>$formattedDueDate ?? '',
     "pic"=>$row['pic'] != null ? searchStaffNameById($row['pic'], $db) : '',
     "customer_pic"=>$row['customer_pic'] ?? '',
     "quotation_date"=>$row['quotation_date'] ?? '',
