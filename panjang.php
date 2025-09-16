@@ -201,12 +201,12 @@ else{
                   <th>Jenama</th>
                   <th>No. Siri Alat</th>
                   <th>Nama Dan Alamat Pemilik</th>
-                  <th>Kod</th>
                   <th>No. Daftar Lama</th>
                   <th>No. Daftar Baru</th>
                   <th>No. Siri Pelekat Keselamatan</th>
                   <th>No. Borang D</th>
                   <th>No. Borang E</th>
+                  <th>Expired Date</th>
                   <th>Fi / Bayaran</th>
                   <th></th>
                 </tr>
@@ -284,12 +284,12 @@ else{
                       <th>Jenama</th>
                       <th>No. Siri Alat</th>
                       <th>Nama Dan Alamat Pemilik</th>
-                      <th>Kod</th>
                       <th>No. Daftar Lama</th>
                       <th>No. Daftar Baru</th>
                       <th>No. Siri Pelekat Keselamatan</th>
                       <th>No. Borang D</th>
                       <th>No. Borang E</th>
+                      <th>Expired Date</th>
                       <th>Fi / Bayaran</th>
                     </tr>
                   </thead>
@@ -427,11 +427,11 @@ $(function () {
           return row.customers + '<br>' + row.full_address2;
         }
       },
-      { 
-        orderable: false,
-        data: 'batch_no',
-        name: 'batch_no' 
-      },
+      // { 
+      //   orderable: false,
+      //   data: 'batch_no',
+      //   name: 'batch_no' 
+      // },
       { 
         data: 'no_daftar_lama',
         name: 'no_daftar_lama' 
@@ -451,6 +451,10 @@ $(function () {
       { 
         data: 'borang_e',
         name: 'borang_e' 
+      },
+      { 
+        data: 'due_date',
+        name: 'due_date' 
       },
       {
         orderable: false,
@@ -700,11 +704,11 @@ $(function () {
             return row.customers + '<br>' + row.full_address2;
           }
         },
-        { 
-          orderable: false,
-          data: 'batch_no',
-          name: 'batch_no' 
-        },
+        // { 
+        //   orderable: false,
+        //   data: 'batch_no',
+        //   name: 'batch_no' 
+        // },
         { 
           data: 'no_daftar_lama',
           name: 'no_daftar_lama' 
@@ -724,6 +728,10 @@ $(function () {
         { 
           data: 'borang_e',
           name: 'borang_e' 
+        },
+        { 
+          data: 'due_date',
+          name: 'due_date' 
         },
         {
           orderable: false,
@@ -825,12 +833,13 @@ $(function () {
                 return row.customers + '<br>' + row.full_address2;
               }
             },
-            { data: 'batch_no' },
+            // { data: 'batch_no' },
             { data: 'no_daftar_lama' },
             { data: 'no_daftar_baru' },
             { data: 'siri_keselamatan' },
             { data: 'borang_d' },
             { data: 'borang_e' },
+            { data: 'due_date' },
             {
               orderable: false,
               data: null, // Custom rendering for unit_price and cert_price
