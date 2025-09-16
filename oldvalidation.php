@@ -149,9 +149,9 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                   <div class="form-group">
                     <label>Branch:</label>
                     <select class="form-control select2" id="branchFilter" name="branchFilter">
-                      <option value="" selected disabled hidden>Please Select</option>
+                      <option value="" disabled hidden>Please Select</option>
                       <?php while ($row = mysqli_fetch_assoc($companyBranches)) { ?>
-                          <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
+                        <option value="<?= $row['id'] ?>" <?= (strtoupper($row['branch_code']) == 'HQ') ? 'selected' : '' ?>><?= $row['branch_name'] ?></option>
                       <?php } ?>
                     </select>
                   </div>
