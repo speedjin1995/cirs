@@ -250,3 +250,6 @@ ALTER TABLE `stamping` ADD `restamping` VARCHAR(3) NULL DEFAULT 'N' AFTER `copy`
 
 -- 14/09/2025 --
 INSERT INTO `roles` (`role_code`, `role_name`, `module`, `deleted`) VALUES ('ADMIN/ACCOUNT', 'ADMIN/ACCOUNT', NULL, '0');
+
+-- 16/09/2025 --
+UPDATE `company_branches` SET branch_code = 'HQ' WHERE id = 1;

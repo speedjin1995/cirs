@@ -114,9 +114,9 @@ else{
                 <div class="form-group col-3">
                   <label>Branch:</label>
                   <select class="form-control select2" id="branchFilter" name="branchFilter">
-                    <option value="" selected disabled hidden>Please Select</option>
+                    <option value="" disabled hidden>Please Select</option>
                     <?php while ($row = mysqli_fetch_assoc($companyBranches)) { ?>
-                        <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
+                      <option value="<?= $row['id'] ?>" <?= (strtoupper($row['branch_code']) == 'HQ') ? 'selected' : '' ?>><?= $row['branch_name'] ?></option>
                     <?php } ?>
                   </select>
                 </div>
@@ -347,7 +347,7 @@ else{
             { data: 'brand' },
             { data: 'machine_type' },
             { data: 'serial_no' },
-            { data: 'validator' },
+            { data: 'validate_by' },
             { data: 'jenis_alat' },
             { data: 'capacity' },
             { data: 'no_daftar_lama' },
