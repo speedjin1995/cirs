@@ -406,6 +406,12 @@ else{
                 </select>
               </div>
             </div>
+            <div class="col-4">
+              <div class="form-group">
+                <label>Notification Period (Months)</label>
+                <input class="form-control" type="number" placeholder="Notification Period" id="notificationPeriod" name="notificationPeriod">
+              </div>
+            </div>
           </div>
           <div class="card card-primary" id="isResseller" style="display: none;">
             <div class="card-body">
@@ -531,6 +537,15 @@ else{
                 <h4>Machine / Indicator Information</h4>
               </div>
               <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Ownership Status</label>
+                    <select class="form-control select2" style="width: 100%;" id="ownershipStatus" name="ownershipStatus">
+                      <option value="RENT">Rental Unit</option>
+                      <option value="OWN">Customer Unit</option>
+                    </select>
+                  </div>
+                </div>
                 <div class="col-4">
                   <div class="form-group">
                     <label>Machine / Indicator Brand *</label>
@@ -712,15 +727,6 @@ else{
                     </select>
                   </div>
                 </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Ownership Status</label>
-                    <select class="form-control select2" style="width: 100%;" id="ownershipStatus" name="ownershipStatus">
-                      <option value="RENT">Rental Unit</option>
-                      <option value="OWN">Customer Unit</option>
-                    </select>
-                  </div>
-                </div>
                 <div class="col-4" id="rentalAttachment" style="display:none">
                   <div class="form-group">
                     <label>Rental Attachment</label>
@@ -890,12 +896,6 @@ else{
                   <div class="form-group">
                     <label>Certificate No * </label>
                     <input class="form-control" type="text" placeholder="Certificate No" id="certNo" name="certNo">
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="form-group">
-                    <label>Notification Period (Months)</label>
-                    <input class="form-control" type="number" placeholder="Notification Period" id="notificationPeriod" name="notificationPeriod">
                   </div>
                 </div>
                 <!-- <div class="col-4">
@@ -4486,6 +4486,14 @@ $(function () {
       $('#extendModal').find('#rentalAttachment').show();
     }else{
       $('#extendModal').find('#rentalAttachment').hide();
+    }
+  });
+
+  $('#extendModal').find('#notificationPeriod').on('change', function(){
+    var notificationPeriod = $(this).val();
+    if (notificationPeriod > 6){
+        alert("Maximum notification period is 6.");
+        $(this).val(6); // reset to 6
     }
   });
 
