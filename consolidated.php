@@ -188,11 +188,6 @@ else{
       defaultDate: endOfYear
     });
 
-    $('#selectAllCheckbox').on('change', function() {
-      var checkboxes = $('#reportTable tbody input[type="checkbox"]');
-      checkboxes.prop('checked', $(this).prop('checked')).trigger('change');
-    });
-
     // Use event delegation for dynamically created selectAllCheckbox
     $(document).on('change', '#selectAllCheckbox', function() {
       var checkboxes = $('#reportTable tbody input[type="checkbox"]');
