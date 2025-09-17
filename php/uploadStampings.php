@@ -29,7 +29,7 @@ if (!empty($data)) {
         $assignTo = !empty($row['AssignTo']) ? searchStaffIdByName($row['AssignTo'], $db) : null;
         $assignTo2 = !empty($row['AssignTo2']) ? searchStaffIdByName($row['AssignTo2'], $db) : null;
         $assignTo3 = !empty($row['AssignTo3']) ? searchStaffIdByName($row['AssignTo3'], $db) : null;
-        $ownershipStatus = !empty($row['OwnershipStatus']) ? ($row['OwnershipStatus'] === 'Rental Unit' ? 'RENT' : ($row['OwnershipStatus'] === 'Customer Unit' ? 'OWN' : $row['OwnershipStatus'])) : null; var_dump($ownershipStatus);die;
+        $ownershipStatus = !empty($row['OwnershipStatus']) ? ($row['OwnershipStatus'] === 'Rental Unit' ? 'RENT' : ($row['OwnershipStatus'] === 'Customer Unit' ? 'OWN' : $row['OwnershipStatus'])) : null;
         $validateBy = !empty($row['ValidateBy']) ? searchValidatorIdByName($row['ValidateBy'], $db) : null;
         $cawangan = !empty($row['Cawangan']) ? searchStateIdByName($row['Cawangan'], $db) : null;
         $jenisAlat = !empty($row['JenisAlat']) ? searchJenisAlatIdByName($row['JenisAlat'], $db) : null;
@@ -42,7 +42,7 @@ if (!empty($data)) {
         $pinKeselamatan = !empty($row['PinKeselamatan']) ? $row['PinKeselamatan'] : null;
         $siriKeselamatan = !empty($row['SiriKeselamatan']) ? $row['SiriKeselamatan'] : null;
         $sealNoBaru = !empty($row['SealNoBaru']) ? $row['SealNoBaru'] : null;
-        $pegawaiContact = !empty($row['PegawaiContact']) ? $row['PegawaiContact'] : null;
+        $pegawaiContact = !empty($row['PegawaiContact']) ? searchOfficeIdByName($row['PegawaiContact'], $db) : null;
         $includeCert = !empty($row['IncludeCert']) ? $row['IncludeCert'] : null;
         $certNo = !empty($row['CertNo']) ? $row['CertNo'] : null;
         $borangD = !empty($row['BorangD']) ? $row['BorangD'] : null;

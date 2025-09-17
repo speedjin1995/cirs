@@ -295,6 +295,39 @@ function searchValidatorNameById($value, $db) {
     return $id;
 }
 
+function searchOfficerNameById($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM validator_officers WHERE id=?")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['officer_name'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
+
+function searchOfficeIdByName($value, $db) {
+    $id = null;
+
+    if ($select_stmt = $db->prepare("SELECT * FROM validator_officers WHERE officer_name=? AND deleted='0'")) {
+        $select_stmt->bind_param('s', $value);
+        $select_stmt->execute();
+        $result = $select_stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $id = $row['id'];
+        }
+        $select_stmt->close();
+    }
+
+    return $id;
+}
+
 function searchStaffNameById($value, $db) {
     $id = null;
 

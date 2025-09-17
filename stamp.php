@@ -45,6 +45,7 @@ else{
   $validators2 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");  
   $validators3 = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
   $validatorsF = $db->query("SELECT * FROM validators WHERE deleted = '0' AND type = 'STAMPING'");
+  $validatorOfficers = $db->query("SELECT * FROM validator_officers WHERE deleted = '0'");
   $machineNames = $db->query("SELECT * FROM machine_names WHERE deleted = '0'");
   $states = $db->query("SELECT * FROM state WHERE deleted = '0'");
   $cawangans = $db->query("SELECT * FROM state WHERE deleted = '0'");
@@ -746,7 +747,12 @@ else{
                 <div class="col-4">
                   <div class="form-group">
                     <label>Pegawai/Contact No</label>
-                    <input class="form-control" type="text" placeholder="Pegawai/Contact No" id="pegawaiContact" name="pegawaiContact">
+                    <select class="form-control select2" style="width: 100%;" id="pegawaiContact" name="pegawaiContact">
+                      <option selected="selected"></option>
+                      <?php while($officer=mysqli_fetch_assoc($validatorOfficers)){ ?>
+                        <option value="<?=$officer['id'] ?>"><?=$officer['officer_name']?></option>
+                      <?php } ?>
+                    </select>
                   </div>
                 </div>
                 <div class="col-4">
