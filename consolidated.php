@@ -188,6 +188,17 @@ else{
       defaultDate: endOfYear
     });
 
+    $('#selectAllCheckbox').on('change', function() {
+      var checkboxes = $('#reportTable tbody input[type="checkbox"]');
+      checkboxes.prop('checked', $(this).prop('checked')).trigger('change');
+    });
+
+    // Use event delegation for dynamically created selectAllCheckbox
+    $(document).on('change', '#selectAllCheckbox', function() {
+      var checkboxes = $('#reportTable tbody input[type="checkbox"]');
+      checkboxes.prop('checked', $(this).prop('checked')).trigger('change');
+    });
+
     var fromDateValue = $('#fromDate').val();
     var toDateValue = $('#toDate').val();
     var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
@@ -206,7 +217,7 @@ else{
         'searching': false,
         'paging': true,
         'info': false,
-        'order': [[ 0, 'asc' ]],
+        'order': [[ 1, 'asc' ]],
         'ajax': {
           'type': 'POST',
           'url':'php/filterReport.php',
@@ -220,6 +231,15 @@ else{
           } 
         },
         'columns': [
+          {
+            // Add a checkbox with a unique ID for each row
+            data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+            className: 'select-checkbox',
+            orderable: false,
+            render: function (data, type, row) {
+              return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+            }
+          },
           { data: 'customers' },
           { data: 'brand' },
           { data: 'machine_type' },
@@ -244,7 +264,7 @@ else{
         'searching': false,
         'paging': true,
         'info': false,
-        'order': [[ 0, 'asc' ]],  
+        'order': [[ 1, 'asc' ]],  
         'ajax': {
           'type': 'POST',
           'url':'php/filterReport.php',
@@ -258,6 +278,15 @@ else{
           } 
         },
         'columns': [
+          {
+            // Add a checkbox with a unique ID for each row
+            data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+            className: 'select-checkbox',
+            orderable: false,
+            render: function (data, type, row) {
+              return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+            }
+          },
           { data: 'customer' },
           { data: 'brand' },
           { data: 'machines' },
@@ -279,7 +308,7 @@ else{
         'searching': false,
         'paging': true,
         'info': false,
-        'order': [[ 0, 'asc' ]],  
+        'order': [[ 1, 'asc' ]],  
         'ajax': {
           'type': 'POST',
           'url':'php/filterReport.php',
@@ -293,6 +322,15 @@ else{
           } 
         },
         'columns': [
+          {
+            // Add a checkbox with a unique ID for each row
+            data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+            className: 'select-checkbox',
+            orderable: false,
+            render: function (data, type, row) {
+              return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+            }
+          },
           { data: 'customer' },
           { data: 'brand' },
           { data: 'machines' },
@@ -329,7 +367,7 @@ else{
           'searching': false,
           'paging': true,
           'info': false,
-          'order': [[ 0, 'asc' ]],
+          'order': [[ 1, 'asc' ]],
           'ajax': {
             'type': 'POST',
             'url':'php/filterReport.php',
@@ -343,6 +381,15 @@ else{
             } 
           },
           'columns': [
+            {
+              // Add a checkbox with a unique ID for each row
+              data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+              className: 'select-checkbox',
+              orderable: false,
+              render: function (data, type, row) {
+                return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+              }
+            },
             { data: 'customers' },
             { data: 'brand' },
             { data: 'machine_type' },
@@ -367,7 +414,7 @@ else{
           'searching': false,
           'paging': true,
           'info': false,
-          'order': [[ 0, 'asc' ]],  
+          'order': [[ 1, 'asc' ]],  
           'ajax': {
             'type': 'POST',
             'url':'php/filterReport.php',
@@ -381,6 +428,15 @@ else{
             } 
           },
           'columns': [
+            {
+              // Add a checkbox with a unique ID for each row
+              data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+              className: 'select-checkbox',
+              orderable: false,
+              render: function (data, type, row) {
+                return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+              }
+            },
             { data: 'customer' },
             { data: 'brand' },
             { data: 'machines' },
@@ -402,7 +458,7 @@ else{
           'searching': false,
           'paging': true,
           'info': false,
-          'order': [[ 0, 'asc' ]],  
+          'order': [[ 1, 'asc' ]],  
           'ajax': {
             'type': 'POST',
             'url':'php/filterReport.php',
@@ -416,6 +472,15 @@ else{
             } 
           },
           'columns': [
+            {
+              // Add a checkbox with a unique ID for each row
+              data: 'id', // Assuming 'serialNo' is a unique identifier for each row
+              className: 'select-checkbox',
+              orderable: false,
+              render: function (data, type, row) {
+                return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
+              }
+            },
             { data: 'customer' },
             { data: 'brand' },
             { data: 'machines' },
@@ -431,15 +496,26 @@ else{
     });
 
     $('#exportExcel').on('click', function(){
+      var selectedIds = []; // An array to store the selected 'id' values
+
+      $("#reportTable tbody input[type='checkbox']").each(function () {
+        if (this.checked) {
+          selectedIds.push($(this).val());
+        }
+      });
+
       var fromDateValue = $('#fromDate').val();
       var toDateValue = $('#toDate').val();
       var customerNoFilter = $('#customerNoFilter').val() ? $('#customerNoFilter').val() : '';
       var typeFilter = $('#typeFilter').val() ? $('#typeFilter').val() : '';
       var validatorFilter = $('#validatorFilter').val() ? $('#validatorFilter').val() : '';
-      var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
-
-      window.open("php/exportReport.php?fromDate="+fromDateValue+"&toDate="+toDateValue+
-      "&customer="+customerNoFilter+"&type="+typeFilter+"&validator="+validatorFilter+"&branch="+branchFilter);
+      var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : ''; console.log(selectedIds);
+      
+      if(selectedIds.length > 0){
+        window.open("php/exportReport.php?reportType=multi&fromDate="+fromDateValue+"&toDate="+toDateValue+"&customer="+customerNoFilter+"&type="+typeFilter+"&validator="+validatorFilter+"&branch="+branchFilter+"&ids="+selectedIds);
+      }else{
+        window.open("php/exportReport.php?reportType=single&fromDate="+fromDateValue+"&toDate="+toDateValue+"&customer="+customerNoFilter+"&type="+typeFilter+"&validator="+validatorFilter+"&branch="+branchFilter+"&ids=");
+      }
     });
 
     // Event listener for changes in the #fromDatePicker
@@ -506,6 +582,7 @@ else{
     if (type == "Stamping") {
       html = `
         <tr>
+          <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
           <th>Company Name</th>
           <th>Brand</th>
           <th>Description Instruments</th>
@@ -524,6 +601,7 @@ else{
     else if (type == "Other") {
       html = `
         <tr>
+          <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
           <th>Company Name</th>
           <th>Brand</th>
           <th>Description Instruments</th>
@@ -539,6 +617,7 @@ else{
     else if (type == "Inhouse") {
       html = `
         <tr>
+          <th><input type="checkbox" id="selectAllCheckbox" class="selectAllCheckbox"></th>
           <th>Company Name</th>
           <th>Brand</th>
           <th>Description Instruments</th>

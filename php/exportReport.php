@@ -12,9 +12,10 @@ function filterData(&$str){
     if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"'; 
 } 
  
-if(isset($_GET['type'])){
+if(isset($_GET['type'], $_GET['reportType'])){
     $searchQuery = '';
     $type = $_GET['type'];
+    $reportType = $_GET['reportType'];
 
     if($_GET['fromDate'] != null && $_GET['fromDate'] != ''){
         $dateTime = DateTime::createFromFormat('d/m/Y', $_GET['fromDate']);
@@ -67,6 +68,12 @@ if(isset($_GET['type'])){
         } else if ($type == 'Inhouse'){
             $searchQuery .= " and a.company_branch = '".$_GET['branch']."'";
         }
+    }
+
+    if($_GET['ids'] != null && $_GET['ids'] != ''){
+        $ids = $_GET['ids'];
+        $searchQuery .= " and id IN (".$ids.")";
+        var_dump($ids);
     }
 
     if($type == 'Stamping'){
