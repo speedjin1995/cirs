@@ -101,7 +101,7 @@ if(isset($_POST['duplicateNo'], $_POST['id'])){
                 $record['pin_keselamatan'], 
                 $record['siri_keselamatan'], 
                 $record['seal_no_baru'], 
-                $record['pegawai_contact'], 
+                searchOfficerNameById($record['pegawai_contact'], $db), 
                 $record['include_cert'], 
                 $record['cert_no'], 
                 $record['borang_d'], 

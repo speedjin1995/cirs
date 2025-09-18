@@ -183,6 +183,7 @@ $counter = 1;
 while($row = mysqli_fetch_assoc($empRecords)) {
   $rowData = array(
     "no"=>$counter,
+    "id"=>$row['id'],
     "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
     "validate_by"=>$row['validate_by'] != null ? searchValidatorNameById($row['validate_by'], $db) : '',
     "capacity"=> $row['capacity'] != null ? searchCapacityNameById($row['capacity'], $db) : '',
