@@ -293,53 +293,54 @@ else{
                 <p class="mb-0" style="font-size: 110%">Company Weight And Measure Details</p>
               </div>
               <div class="col-md-8">
-                <div class="d-flex justify-content-end gap-2">
-                  <div class="col-auto">
-                    <button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadTemplate">
-                      <i class="fa-solid fa-download"></i> Download Template
+                <div class="d-flex justify-content-end">
+                  <div class="dropdown">
+                    <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="actionsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fa-solid fa-gear"></i> Actions
                     </button>
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="actionsMenu">
+                      <li>
+                        <a class="dropdown-item text-dark" href="#" id="downloadTemplate">
+                          <i class="fa-solid fa-download"></i> Download Template
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item text-dark" href="#" id="uploadExccl">
+                          <i class="fa-solid fa-upload"></i> Upload Excel
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item text-dark" href="#" id="multiComplete">
+                          <i class="fa-solid fa-check"></i> Complete
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item text-dark" href="#" id="multiDeactivate">
+                          <i class="fa-solid fa-ban"></i> Cancel
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item text-dark" href="#" id="exportBorangs">
+                          <i class="fa-solid fa-file-export"></i> Export Borang
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item text-dark" href="#" id="mergeBorang">
+                          <i class="fa-brands fa-stack-exchange"></i> Merge Borangs
+                        </a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item text-dark" href="#" id="printSurats">
+                          <i class="fa-brands fa-stack-exchange"></i> Print Surats
+                        </a>
+                      </li>
+                    </ul>
                   </div>
-                  <div class="col-auto">
-                    <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">
-                      <i class="fa-solid fa-upload"></i> Upload Excel
-                    </button>
-                  </div>
-                  <div class="col-auto">
-                    <button type="button" class="btn btn-sm bg-gradient-warning" id="multiComplete" data-bs-toggle="tooltip" title="Complete Stampings">
-                      <i class="fa-solid fa-check"></i> Complete
-                    </button>
-                  </div>
-                  <div class="col-auto">
-                    <button type="button" class="btn btn-sm bg-gradient-danger" id="multiDeactivate" data-bs-toggle="tooltip" title="Cancel Stampings">
-                      <i class="fa-solid fa-ban"></i> Cancel
-                    </button>
-                  </div>
-                  <div class="col-auto">
-                    <button type="button" class="btn btn-sm bg-gradient-info" id="exportBorangs" data-bs-toggle="tooltip" title="Export Borangs">
-                      <i class="fa-solid fa-file-export"></i> Export Borang
-                    </button>
-                  </div>
-                  <div class="col-auto">
-                    <button type="button" class="btn btn-sm bg-gradient-success" id="mergeBorang" data-bs-toggle="tooltip" title="Merge Borangs">
-                      <i class="fa-brands fa-stack-exchange"></i> Merge Borangs
-                    </button>
-                  </div>
-                  <div class="col-auto">
-                    <button type="button" class="btn btn-sm bg-gradient-info" id="printSurats" data-bs-toggle="tooltip" title="Print Surat">
-                      <i class="fa-brands fa-stack-exchange"></i> Print Surats
-                    </button>
-                  </div>
-                  <div class="col-auto">
-                    <button type="button" class="btn btn-sm bg-gradient-warning" onclick="newEntry()" data-bs-toggle="tooltip" title="Add New Stamping">
+                  <div class="ml-2">
+                    <button type="button" class="btn btn-warning btn-sm" onclick="newEntry()">
                       <i class="fa-solid fa-circle-plus"></i> Add New
                     </button>
                   </div>
-                  <!--div class="col-2">
-                    <a href="/template/Stamping Record Template.xlsx" download><button type="button" class="btn btn-block bg-gradient-danger btn-sm" id="downloadExccl">Download Template</button></a>
-                  </div-->
-                  <!--div class="col-2">
-                    <button type="button" class="btn btn-block bg-gradient-success btn-sm" id="uploadExccl">Upload Excel</button>
-                  </div-->
                 </div>
               </div>
             </div>
@@ -1220,7 +1221,7 @@ else{
                 <table id="orderPanjangTable" class="table table-bordered table-striped display">
                   <thead>
                     <tr>
-                      <th>No</th>
+                      <!-- <th>No</th> -->
                       <th>Company Name</th>
                       <th>Brands</th>
                       <th>Description<br> Instruments</th>
@@ -1528,7 +1529,7 @@ else{
                 <table id="orderTable" class="table table-bordered table-striped display">
                   <thead>
                     <tr>
-                      <th>No</th>
+                      <!-- <th>No</th> -->
                       <th>Company Name</th>
                       <th>Brands</th>
                       <th>Description<br> Instruments</th>
