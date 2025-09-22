@@ -519,6 +519,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                     $borangE = $row['borang_e'];
                 }
 
+                $expiredDate = '';
                 if(isset($row['due_date']) && $row['due_date']!=null && $row['due_date']!=""){
                     $expiredDate = date("d/m/Y", strtotime($row['due_date']));
                 }

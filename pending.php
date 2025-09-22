@@ -1221,7 +1221,7 @@ else{
                 <table id="orderPanjangTable" class="table table-bordered table-striped display">
                   <thead>
                     <tr>
-                      <th>No</th>
+                      <!-- <th>No</th> -->
                       <th>Company Name</th>
                       <th>Brands</th>
                       <th>Description<br> Instruments</th>
@@ -1529,7 +1529,7 @@ else{
                 <table id="orderTable" class="table table-bordered table-striped display">
                   <thead>
                     <tr>
-                      <th>No</th>
+                      <!-- <th>No</th> -->
                       <th>Company Name</th>
                       <th>Brands</th>
                       <th>Description<br> Instruments</th>
