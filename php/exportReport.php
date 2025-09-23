@@ -73,7 +73,6 @@ if(isset($_GET['type'], $_GET['reportType'])){
     if($_GET['ids'] != null && $_GET['ids'] != ''){
         $ids = $_GET['ids'];
         $searchQuery .= " and id IN (".$ids.")";
-        var_dump($ids);
     }
 
     if($type == 'Stamping'){

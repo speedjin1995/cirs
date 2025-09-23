@@ -190,7 +190,8 @@ if(isset($_POST['userID'])){
                     $logDetail = mysqli_query($db, $logQuery);
                     
                     while($logRow = mysqli_fetch_assoc($logDetail)) {
-                        $date = new DateTime($logRow['date']);
+                        $date = new DateTime($logRow['date'], new DateTimeZone('UTC'));
+                        $date->setTimezone(new DateTimeZone('Asia/Kuala_Lumpur'));
                         $formattedDate = $date->format("d/m/Y - h:i:sA");
                         if ($logRow['action'] == "INSERT"){
                             $createBy = searchStaffNameById($logRow['user_id'], $db). ' ' . $formattedDate;
