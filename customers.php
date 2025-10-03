@@ -131,6 +131,10 @@ else{
                     <input class="form-control" id="address4" name="address4" placeholder="Enter your address 4">
                   </div>
                   <div class="form-group col-3"> 
+                    <label for="address5">Address 5</label>
+                    <input class="form-control" id="address5" name="address5" placeholder="Enter your address 5">
+                  </div>
+                  <div class="form-group col-3"> 
                     <label for="customer_map_url">Map Url</label>
                     <input type="text" class="form-control" id="customer_map_url" name="customer_map_url" placeholder="Enter Customer Map Url">
                   </div>
@@ -220,6 +224,10 @@ else{
       <div class="form-group col-2"> 
         <label for="branch_address4">Address 4 </label>
         <input class="form-control" id="branch_address4" placeholder="Enter your address 4">
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branch_address5">Address 5 </label>
+        <input class="form-control" id="branch_address5" placeholder="Enter your address 5">
       </div>
       <div class="form-group col-2"> 
         <label for="map_url">Map URL</label>
@@ -417,6 +425,7 @@ $(function () {
     $('#addModal').find('#address2').val("");
     $('#addModal').find('#address3').val("");
     $('#addModal').find('#address4').val("");
+    $('#addModal').find('#address5').val("");
     $('#addModal').find('#customer_map_url').val("");
     $('#addModal').find('#phone').val("");
     $('#addModal').find('#pic').val("");
@@ -455,6 +464,7 @@ $(function () {
     $("#pricingTable").find('#branch_address2:last').attr('name', 'branch_address2['+pricingCount+']').attr("id", "branch_address2" + pricingCount);
     $("#pricingTable").find('#branch_address3:last').attr('name', 'branch_address3['+pricingCount+']').attr("id", "branch_address3" + pricingCount);
     $("#pricingTable").find('#branch_address4:last').attr('name', 'branch_address4['+pricingCount+']').attr("id", "branch_address4" + pricingCount);
+    $("#pricingTable").find('#branch_address5:last').attr('name', 'branch_address5['+pricingCount+']').attr("id", "branch_address5" + pricingCount);
     $("#pricingTable").find('#map_url:last').attr('name', 'map_url['+pricingCount+']').attr("id", "map_url" + pricingCount);
     $("#pricingTable").find('#branch_id:last').attr('name', 'branch_id['+pricingCount+']').attr("id", "branch_id" + pricingCount);
     $("#pricingTable").find('#branchPhone:last').attr('name', 'branchPhone['+pricingCount+']').attr("id", "branchPhone" + pricingCount);
@@ -584,6 +594,7 @@ function edit(id){
             $('#addModal').find('#address2').val(obj.message.address2);
             $('#addModal').find('#address3').val(obj.message.address3);
             $('#addModal').find('#address4').val(obj.message.address4);
+            $('#addModal').find('#address5').val(obj.message.address5);
             $('#addModal').find('#customer_map_url').val(obj.message.customerMapUrl);
             $('#addModal').find('#phone').val(obj.message.customer_phone);
             $('#addModal').find('#email').val(obj.message.customer_email);
@@ -610,6 +621,7 @@ function edit(id){
               $("#pricingTable").find('#branch_address2:last').attr('name', 'branch_address2['+pricingCount+']').attr("id", "branch_address2" + pricingCount).val(weightData[i].branch_address2);
               $("#pricingTable").find('#branch_address3:last').attr('name', 'branch_address3['+pricingCount+']').attr("id", "branch_address3" + pricingCount).val(weightData[i].branch_address3);
               $("#pricingTable").find('#branch_address4:last').attr('name', 'branch_address4['+pricingCount+']').attr("id", "branch_address4" + pricingCount).val(weightData[i].branch_address4);
+              $("#pricingTable").find('#branch_address5:last').attr('name', 'branch_address5['+pricingCount+']').attr("id", "branch_address5" + pricingCount).val(weightData[i].branch_address5);
               $("#pricingTable").find('#map_url:last').attr('name', 'map_url['+pricingCount+']').attr("id", "map_url" + pricingCount).val(weightData[i].map_url);
               $("#pricingTable").find('#branchPhone:last').attr('name', 'branchPhone['+pricingCount+']').attr("id", "branchPhone" + pricingCount).val(weightData[i].office_no);
               $("#pricingTable").find('#branchEmail:last').attr('name', 'branchEmail['+pricingCount+']').attr("id", "branchEmail" + pricingCount).val(weightData[i].email);

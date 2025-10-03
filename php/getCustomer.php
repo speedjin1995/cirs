@@ -39,6 +39,7 @@ if(isset($_POST['userID'])){
                                 "branch_address2" => $row2['address2'] ?? '',
                                 "branch_address3" => $row2['address3'] ?? '',
                                 "branch_address4" => $row2['address4'] ?? '',
+                                "branch_address5" => $row2['address5'] ?? '',
                                 "map_url" => $row2['map_url'] ?? '',
                                 "pic" => $row2['pic'] ?? '',
                                 "pic_contact" => $row2['pic_contact'] ?? '',
@@ -63,6 +64,7 @@ if(isset($_POST['userID'])){
                 $message['address2'] = $row['address2'];
                 $message['address3'] = $row['address3'];
                 $message['address4'] = $row['address4'];
+                $message['address5'] = $row['address5'];
                 $message['customerMapUrl'] = $row['map_url'];
                 $message['customer_phone'] = $row['customer_phone'];
                 $message['customer_email'] = $row['customer_email'];
