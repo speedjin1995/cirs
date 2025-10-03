@@ -560,8 +560,8 @@ function format(row){
   var returnString = "";
   console.log(row);
   if (row.log.length > 0) {
-    returnString += '<h4>Branches</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="10%">Branch Code</th><th width="10%">Branch Name</th><th width="20%">Address</th><th width="20%">Address 2</th><th width="20%">Address 3</th><th width="20%">Address 4</th></tr></thead><tbody>'
-    
+    returnString += '<h4>Branches</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="10%">Branch Code</th><th width="10%">Branch Name</th><th width="15%">Address</th><th width="15%">Address 2</th><th width="15%">Address 3</th><th width="15%">Address 4</th><th width="15%">Address 5</th></tr></thead><tbody>'
+
     for (var i = 0; i < row.log.length; i++) {
       var item = row.log[i];
 
@@ -570,7 +570,7 @@ function format(row){
         ? '<a href="' + item.mapurl + '" target="_blank">' + item.branchname + ' <i class="fa fa-map-marker"></i></a>' 
         : item.branchname;
 
-      returnString += '<tr><td>' + (i + 1) + '</td><td>' + item.branchcode + '</td><td>' + branchNameWithMapIcon + '</td><td>' + item.address1 + '</td><td>' + item.address2 + '</td><td>' + item.address3 + '</td><td>' + item.address4 + '</td></tr>';
+      returnString += '<tr><td>' + (i + 1) + '</td><td>' + item.branchcode + '</td><td>' + branchNameWithMapIcon + '</td><td>' + item.address1 + '</td><td>' + item.address2 + '</td><td>' + item.address3 + '</td><td>' + item.address4 + '</td><td>' + item.address5 + '</td></tr>';
     }
 
     returnString += '</tbody></table>';

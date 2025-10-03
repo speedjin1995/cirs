@@ -119,6 +119,10 @@ else{
                     <input class="form-control" id="address4" name="address4" placeholder="Enter your address 4">
                   </div>
                   <div class="form-group col-3"> 
+                    <label for="address5">Address 5</label>
+                    <input class="form-control" id="address5" name="address5" placeholder="Enter your address 5">
+                  </div>
+                  <div class="form-group col-3"> 
                     <label for="reseller_map_url">Map Url</label>
                     <input type="text" class="form-control" id="reseller_map_url" name="reseller_map_url" placeholder="Enter Reseller Map Url">
                   </div>
@@ -211,6 +215,10 @@ else{
       <div class="form-group col-2"> 
         <label for="branch_address4">Address 4 </label>
         <input class="form-control" id="branch_address4" placeholder="Enter your address 4">
+      </div>
+      <div class="form-group col-2"> 
+        <label for="branch_address5">Address 5 </label>
+        <input class="form-control" id="branch_address5" placeholder="Enter your address 5">
       </div>
       <div class="form-group col-2"> 
         <label for="map_url">Map URL</label>
@@ -406,6 +414,7 @@ $(function () {
       $('#addModal').find('#address2').val("");
       $('#addModal').find('#address3').val("");
       $('#addModal').find('#address4').val("");
+      $('#addModal').find('#address5').val("");
       $('#addModal').find('#reseller_map_url').val("");
       $('#addModal').find('#phone').val("");
       $('#addModal').find('#pic').val("");
@@ -444,6 +453,7 @@ $(function () {
       $("#branchTable").find('#branch_address2:last').attr('name', 'branch_address2['+branchCount+']').attr("id", "branch_address2" + branchCount);
       $("#branchTable").find('#branch_address3:last').attr('name', 'branch_address3['+branchCount+']').attr("id", "branch_address3" + branchCount);
       $("#branchTable").find('#branch_address4:last').attr('name', 'branch_address4['+branchCount+']').attr("id", "branch_address4" + branchCount);
+      $("#branchTable").find('#branch_address5:last').attr('name', 'branch_address5['+branchCount+']').attr("id", "branch_address5" + branchCount);
       $("#branchTable").find('#map_url:last').attr('name', 'map_url['+branchCount+']').attr("id", "map_url" + branchCount);
       $("#branchTable").find('#branch_id:last').attr('name', 'branch_id['+branchCount+']').attr("id", "branch_id" + branchCount);
       $("#branchTable").find('#branchPhone:last').attr('name', 'branchPhone['+branchCount+']').attr("id", "branchPhone" + branchCount);
