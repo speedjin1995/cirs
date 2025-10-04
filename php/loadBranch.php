@@ -41,7 +41,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "branch_name"=>$row['branch_name'],
     "map_url"=>$row['map_url'],
     "address" => '<a href="'.$row['map_url'].'" target="_blank">
-                    '.$row['address_line_1'].' '.$row['address_line_2'].' '.$row['address_line_3'].' '.$row['address_line_4'].'
+                    '.$row['address_line_1'].' '.$row['address_line_2'].' '.$row['address_line_3'].' '.$row['address_line_4'].' '.$row['address_line_5'].'
                     <br><i class="fa-solid fa-location-dot"></i>
                   </a>',
     "pic"=>$row['pic'].'<br>'. 'Tel: ' . $row['pic_contact'],
