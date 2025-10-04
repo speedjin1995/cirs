@@ -549,7 +549,7 @@ function format(row){
     var returnString = "";
 
     if (row.log.length > 0) {
-        returnString += '<h4>Branches</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="10%">Branch Code</th><th width="10%">Branch Name</th><th width="20%">Address</th><th width="20%">Address 2</th><th width="20%">Address 3</th><th width="20%">Address 4</th></tr></thead><tbody>'
+        returnString += '<h4>Branches</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="10%">Branch Code</th><th width="10%">Branch Name</th><th width="15%">Address</th><th width="15%">Address 2</th><th width="15%">Address 3</th><th width="15%">Address 4</th><th width="15%">Address 5</th></tr></thead><tbody>'
         
         for (var i = 0; i < row.log.length; i++) {
         var item = row.log[i];
@@ -559,7 +559,7 @@ function format(row){
             ? '<a href="' + item.mapurl + '" target="_blank">' + item.branchname + ' <i class="fa fa-map-marker"></i></a>' 
             : item.branchname;
 
-          returnString += '<tr><td>' + (i + 1) + '</td><td>' + item.branchcode + '</td><td>' + branchNameWithMapIcon + '</td><td>' + item.branch_address1 + '</td><td>' + item.branch_address2 + '</td><td>' + item.branch_address3 + '</td><td>' + item.branch_address4 + '</td></tr>';
+          returnString += '<tr><td>' + (i + 1) + '</td><td>' + item.branchcode + '</td><td>' + branchNameWithMapIcon + '</td><td>' + item.branch_address1 + '</td><td>' + item.branch_address2 + '</td><td>' + item.branch_address3 + '</td><td>' + item.branch_address4 + '</td><td>' + item.branch_address5 + '</td></tr>';
         }
 
         returnString += '</tbody></table>';
@@ -582,6 +582,7 @@ function edit(id){
             $('#addModal').find('#address2').val(obj.message.address2);
             $('#addModal').find('#address3').val(obj.message.address3);
             $('#addModal').find('#address4').val(obj.message.address4);
+            $('#addModal').find('#address5').val(obj.message.address5);
             $('#addModal').find('#reseller_map_url').val(obj.message.resellerMapUrl);
             $('#addModal').find('#phone').val(obj.message.customer_phone);
             $('#addModal').find('#email').val(obj.message.customer_email);
@@ -607,6 +608,7 @@ function edit(id){
               $("#branchTable").find('#branch_address2:last').attr('name', 'branch_address2['+branchCount+']').attr("id", "branch_address2" + branchCount).val(weightData[i].branch_address2);
               $("#branchTable").find('#branch_address3:last').attr('name', 'branch_address3['+branchCount+']').attr("id", "branch_address3" + branchCount).val(weightData[i].branch_address3);
               $("#branchTable").find('#branch_address4:last').attr('name', 'branch_address4['+branchCount+']').attr("id", "branch_address4" + branchCount).val(weightData[i].branch_address4);
+              $("#branchTable").find('#branch_address5:last').attr('name', 'branch_address5['+branchCount+']').attr("id", "branch_address5" + branchCount).val(weightData[i].branch_address5);
               $("#branchTable").find('#map_url:last').attr('name', 'map_url['+branchCount+']').attr("id", "map_url" + branchCount).val(weightData[i].map_url);
               $("#branchTable").find('#branchPhone:last').attr('name', 'branchPhone['+branchCount+']').attr("id", "branchPhone" + branchCount).val(weightData[i].office_no);
               $("#branchTable").find('#branchEmail:last').attr('name', 'branchEmail['+branchCount+']').attr("id", "branchEmail" + branchCount).val(weightData[i].email);
