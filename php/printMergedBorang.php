@@ -249,6 +249,7 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
             $address2 = null;
             $address3 = null;
             $address4 = null;
+            $address5 = null;
             $pic = null;
             $pic_phone = null;
 
@@ -263,6 +264,7 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                     $address2 = $branchRow['address2'];
                     $address3 = $branchRow['address3'];
                     $address4 = $branchRow['address4'];
+                    $address5 = $branchRow['address5'];
                     $pic = $branchRow['pic'];
                     $pic_phone = $branchRow['pic_contact'];
                 }
@@ -288,12 +290,14 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                 $hqAddress2 = null;
                 $hqAddress3 = null;
                 $hqAddress4 = null;
+                $hqAddress5 = null;
 
                 if(!empty($customerRow)){
                     $hqAddress1 = $customerRow['customer_address'];
                     $hqAddress2 = $customerRow['address2'];
                     $hqAddress3 = $customerRow['address3'];
                     $hqAddress4 = $customerRow['address4'];
+                    $hqAddress5 = $customerRow['address5'];
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -319,11 +323,17 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         $pdf->SetXY(24.599, 53.5); // Adjust these coordinates for each field
                         $pdf->Write(0, $hqAddress3.' '.$hqAddress4);
 
+                        $pdf->SetXY(24.599, 60); // Adjust these coordinates for each field
+                        $pdf->Write(0, $hqAddress5);
+
                         $pdf->SetXY(24.599, 72.5); // Adjust these coordinates for each field
                         $pdf->Write(0, $address1.' '.$address2);
 
                         $pdf->SetXY(24.599, 79); // Adjust these coordinates for each field
                         $pdf->Write(0, $address3.' '.$address4);
+
+                        $pdf->SetXY(24.599, 85); // Adjust these coordinates for each field
+                        $pdf->Write(0, $address5);
 
                         $pdf->SetXY(75, 104); // Adjust for {Company_Name}
                         $pdf->Write(0, $compname);
@@ -551,12 +561,14 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                 $hqAddress2 = null;
                 $hqAddress3 = null;
                 $hqAddress4 = null;
+                $hqAddress5 = null;
 
                 if(!empty($customerRow)){
                     $hqAddress1 = $customerRow['customer_address'];
                     $hqAddress2 = $customerRow['address2'];
                     $hqAddress3 = $customerRow['address3'];
                     $hqAddress4 = $customerRow['address4'];
+                    $hqAddress5 = $customerRow['address5'];
                 }
                 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -581,11 +593,17 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         $pdf->SetXY(20, 82); // Adjust for {Address2}
                         $pdf->Write(0, $hqAddress3.' '.$hqAddress4);
 
+                        $pdf->SetXY(20, 90); // Adjust for {Address2}
+                        $pdf->Write(0, $hqAddress5);
+
                         $pdf->SetXY(20, 105); // Adjust for {Stamping_Address1}
                         $pdf->Write(0, $address1.' '.$address2);
 
                         $pdf->SetXY(20, 112); // Adjust for {Stamping_Address2}
                         $pdf->Write(0, $address3.' '.$address4);
+
+                        $pdf->SetXY(20, 119); // Adjust for {Stamping_Address2}
+                        $pdf->Write(0, $address5);
 
                         $pdf->SetXY(65, 139); // Adjust for {Company_Name}
                         $pdf->Write(0, $compname);
@@ -799,17 +817,18 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                 $pageCount = $pdf->setSourceFile($fillFile);
                 $nilais = json_decode($res['nilais'], true);
 
-                $capacity = $res['capacity'];
-                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
-                $capacityDetail = mysqli_query($db, $capacityQuery);
-                $capacityRow = mysqli_fetch_assoc($capacityDetail);
-
                 $capacityValue = null;
                 $capacityDivision = null;
+                $capacity = $res['capacity'];
+                if($capacity != null && $capacity != ''){
+                    $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                    $capacityDetail = mysqli_query($db, $capacityQuery);
+                    $capacityRow = mysqli_fetch_assoc($capacityDetail);
 
-                if(!empty($capacityRow)){
-                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
-                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    if(!empty($capacityRow)){
+                        $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                        $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    }
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -888,8 +907,14 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         $pdf->SetXY(20.648, 114.188+1); // Adjust for {3. Alamat Pemilik Address 2}
                         $pdf->Write(0, $address2);
                         
-                        $pdf->SetXY(20.648, 124); // Adjust for {3. Alamat Pemilik Address 3 & 4}
-                        $pdf->Write(0, $address3 . ' ' . $address4);
+                        $pdf->SetXY(20.648, 124); // Adjust for {3. Alamat Pemilik Address 3}
+                        $pdf->Write(0, $address3);
+                        
+                        $pdf->SetXY(20.648, 130); // Adjust for {3. Alamat Pemilik Address 4}
+                        $pdf->Write(0, $address4);
+
+                        $pdf->SetXY(20.648, 135); // Adjust for {3. Alamat Pemilik Address 5}
+                        $pdf->Write(0, $address5);
                         
                         $pdf->SetXY(20.648, 146); // Adjust for {company name}
                         $pdf->Write(0, $compname);
@@ -936,17 +961,18 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                 $pageCount = $pdf->setSourceFile($fillFile);
                 $nilais = json_decode($res['nilais'], true);
         
-                $capacity = $res['capacity'];
-                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
-                $capacityDetail = mysqli_query($db, $capacityQuery);
-                $capacityRow = mysqli_fetch_assoc($capacityDetail);
-
                 $capacityValue = null;
                 $capacityDivision = null;
+                $capacity = $res['capacity'];
+                if($capacity != null && $capacity != ''){
+                    $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                    $capacityDetail = mysqli_query($db, $capacityQuery);
+                    $capacityRow = mysqli_fetch_assoc($capacityDetail);
 
-                if(!empty($capacityRow)){
-                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
-                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    if(!empty($capacityRow)){
+                        $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                        $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    }
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -1026,8 +1052,11 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         $pdf->Write(0, $address2);
                         
                         $pdf->SetXY(15.288, 105.305-2); // Adjust for {3. Alamat Pemilik Address 3 & 4}
-                        $pdf->Write(0, $address3 . ' ' . $address4);
-                        
+                        $pdf->Write(0, $address3);
+
+                        $pdf->SetXY(15.288, 110.305-2); // Adjust for {3. Alamat Pemilik Address 3 & 4}
+                        $pdf->Write(0, $address4 . ' ' . $address5);      
+
                         $pdf->SetXY(15.288, 122.926-2); // Adjust for {company name}
                         $pdf->Write(0, $compname);
 
@@ -1072,17 +1101,18 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                 $fillFile = 'forms/Metrology/ATP_FORM.pdf';
                 $pageCount = $pdf->setSourceFile($fillFile);
         
-                $capacity = $res['capacity'];
-                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
-                $capacityDetail = mysqli_query($db, $capacityQuery);
-                $capacityRow = mysqli_fetch_assoc($capacityDetail);
-
                 $capacityValue = null;
                 $capacityDivision = null;
+                $capacity = $res['capacity'];
+                if($capacity != null && $capacity != ''){
+                    $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                    $capacityDetail = mysqli_query($db, $capacityQuery);
+                    $capacityRow = mysqli_fetch_assoc($capacityDetail);
 
-                if(!empty($capacityRow)){
-                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
-                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    if(!empty($capacityRow)){
+                        $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                        $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    }
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -1108,23 +1138,25 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         $pdf->SetXY(127.704, 65); // Adjust for nama pembuat
                         $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(14.648, 85, 70, 20, 'F');
+
                         $pdf->SetFont('Arial', 'B', 8);
-                        $pdf->SetXY(14.648, 90.063); // Adjust for Customer Name
+                        $pdf->SetXY(14.648, 87.063); // Adjust for Customer Name
                         $pdf->Write(0, searchCustNameById($res['customers'], $db));
                         $pdf->SetFont('Arial', '', 8);
 
-                        $pdf->SetXY(14.648, 98.133); // Adjust for {3. Alamat Pemilik Address 1}
+                        $pdf->SetXY(14.648, 91.133); // Adjust for {3. Alamat Pemilik Address 1}
                         $pdf->Write(0, $address1);
 
-                        $pdf->SetXY(14.648, 102.188); // Adjust for {3. Alamat Pemilik Address 2}
+                        $pdf->SetXY(14.648, 96.188); // Adjust for {3. Alamat Pemilik Address 2}
                         $pdf->Write(0, $address2);
                         
-                        $pdf->SetXY(14.648, 105.258); // Adjust for {3. Alamat Pemilik Address 3 & 4}
+                        $pdf->SetXY(14.648, 101.258); // Adjust for {3. Alamat Pemilik Address 3 & 4}
                         $pdf->Write(0, $address3);
 
-                        $pdf->SetXY(14.648, 108.258); // Adjust for {3. Alamat Pemilik Address 3 & 4}
-                        $pdf->Write(0, $address4);
-
+                        $pdf->SetXY(14.648, 106.258); // Adjust for {3. Alamat Pemilik Address 3 & 4}
+                        $pdf->Write(0, $address4 . ' ' . $address5);
                         $pdf->SetFont('Arial', '', 10);
 
                         $pdf->SetXY(120.872, 89.258); // Adjust for {Model}
@@ -1247,6 +1279,9 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         
                         $pdf->SetXY(15.666, 107.855-2); // Adjust for {3. Alamat Pemilik Address 4}
                         $pdf->Write(0, $address3 . ' ' . $address4);
+                        
+                        $pdf->SetXY(15.666, 112.855-2); // Adjust for {3. Alamat Pemilik Address 4}
+                        $pdf->Write(0, $address5);
 
                         $pdf->SetXY(15.666, 126.474-2); // Adjust for {Company_Name}
                         $pdf->Write(0, $compname);
@@ -1320,17 +1355,18 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                 $fillFile = 'forms/Metrology/ATP_FORM.pdf';
                 $pageCount = $pdf->setSourceFile($fillFile);
         
-                $capacity = $res['capacity'];
-                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
-                $capacityDetail = mysqli_query($db, $capacityQuery);
-                $capacityRow = mysqli_fetch_assoc($capacityDetail);
-
                 $capacityValue = null;
                 $capacityDivision = null;
+                $capacity = $res['capacity'];
+                if($capacity != null && $capacity != ''){
+                    $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                    $capacityDetail = mysqli_query($db, $capacityQuery);
+                    $capacityRow = mysqli_fetch_assoc($capacityDetail);
 
-                if(!empty($capacityRow)){
-                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
-                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    if(!empty($capacityRow)){
+                        $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                        $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    }
                 }
         
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -1356,22 +1392,25 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         $pdf->SetXY(127.704, 65); // Adjust for nama pembuat
                         $pdf->Write(0, searchCountryNameById($res['make_in'], $db)); 
 
+                        $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
+                        $pdf->Rect(14.648, 85, 70, 20, 'F');
+
                         $pdf->SetFont('Arial', 'B', 8);
-                        $pdf->SetXY(14.648, 90.063); // Adjust for Customer Name
+                        $pdf->SetXY(14.648, 87.063); // Adjust for Customer Name
                         $pdf->Write(0, searchCustNameById($res['customers'], $db));
                         $pdf->SetFont('Arial', '', 8);
 
-                        $pdf->SetXY(14.648, 98.133); // Adjust for {3. Alamat Pemilik Address 1}
+                        $pdf->SetXY(14.648, 91.133); // Adjust for {3. Alamat Pemilik Address 1}
                         $pdf->Write(0, $address1);
 
-                        $pdf->SetXY(14.648, 102.188); // Adjust for {3. Alamat Pemilik Address 2}
+                        $pdf->SetXY(14.648, 96.188); // Adjust for {3. Alamat Pemilik Address 2}
                         $pdf->Write(0, $address2);
                         
-                        $pdf->SetXY(14.648, 105.258); // Adjust for {3. Alamat Pemilik Address 3 & 4}
+                        $pdf->SetXY(14.648, 101.258); // Adjust for {3. Alamat Pemilik Address 3 & 4}
                         $pdf->Write(0, $address3);
 
-                        $pdf->SetXY(14.648, 108.258); // Adjust for {3. Alamat Pemilik Address 3 & 4}
-                        $pdf->Write(0, $address4);
+                        $pdf->SetXY(14.648, 106.258); // Adjust for {3. Alamat Pemilik Address 3 & 4}
+                        $pdf->Write(0, $address4 . ' ' . $address5);
 
                         $pdf->SetFont('Arial', '', 10);
 
@@ -1446,17 +1485,18 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                 $fillFile = 'forms/DE_Metrology/DMSB_ATP.pdf';
                 $pageCount = $pdf->setSourceFile($fillFile);
         
-                $capacity = $res['capacity'];
-                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
-                $capacityDetail = mysqli_query($db, $capacityQuery);
-                $capacityRow = mysqli_fetch_assoc($capacityDetail);
-
                 $capacityValue = null;
                 $capacityDivision = null;
+                $capacity = $res['capacity'];
+                if($capacity != null && $capacity != ''){
+                    $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                    $capacityDetail = mysqli_query($db, $capacityQuery);
+                    $capacityRow = mysqli_fetch_assoc($capacityDetail);
 
-                if(!empty($capacityRow)){
-                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
-                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    if(!empty($capacityRow)){
+                        $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                        $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    }
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -1495,6 +1535,9 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         
                         $pdf->SetXY(15.666, 107.855-2); // Adjust for {3. Alamat Pemilik Address 4}
                         $pdf->Write(0, $address3 . ' ' . $address4);
+                        
+                        $pdf->SetXY(15.666, 112.855-2); // Adjust for {3. Alamat Pemilik Address 4}
+                        $pdf->Write(0, $address5);
 
                         $pdf->SetXY(15.666, 126.474-2); // Adjust for {Company_Name}
                         $pdf->Write(0, $compname);
@@ -1571,17 +1614,18 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                 $fillFile = 'forms/Metrology/ATS_FORM.pdf';
                 $pageCount = $pdf->setSourceFile($fillFile);
         
-                $capacity = $res['capacity'];
-                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
-                $capacityDetail = mysqli_query($db, $capacityQuery);
-                $capacityRow = mysqli_fetch_assoc($capacityDetail);
-
                 $capacityValue = null;
                 $capacityDivision = null;
+                $capacity = $res['capacity'];
+                if($capacity != null && $capacity != ''){
+                    $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                    $capacityDetail = mysqli_query($db, $capacityQuery);
+                    $capacityRow = mysqli_fetch_assoc($capacityDetail);
 
-                if(!empty($capacityRow)){
-                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
-                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    if(!empty($capacityRow)){
+                        $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                        $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    }
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -1618,8 +1662,14 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         $pdf->SetXY(18.648, 111.188+1); // Adjust for {3. Alamat Pemilik Address 2}
                         $pdf->Write(0, $address2);
                         
-                        $pdf->SetXY(18.648, 117.258); // Adjust for {3. Alamat Pemilik Address 3 & 4}
-                        $pdf->Write(0, $address3 . ' ' . $address4);
+                        $pdf->SetXY(18.648, 117.258); // Adjust for {3. Alamat Pemilik Address 3}
+                        $pdf->Write(0, $address3);
+
+                        $pdf->SetXY(18.648, 122.258); // Adjust for {3. Alamat Pemilik Address 4}
+                        $pdf->Write(0, $address4);
+
+                        $pdf->SetXY(18.648, 125.258); // Adjust for {3. Alamat Pemilik Address 5}
+                        $pdf->Write(0, $address5);
 
                         $pdf->SetFillColor(255, 255, 255);  // cover up unneccesary text
                         $pdf->Rect(140.942, 90.294, 20, 10, 'F'); 
@@ -1692,17 +1742,18 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                 $fillFile = 'forms/DE_Metrology/DMSB_ATS.pdf';
                 $pageCount = $pdf->setSourceFile($fillFile);
         
-                $capacity = $res['capacity'];
-                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
-                $capacityDetail = mysqli_query($db, $capacityQuery);
-                $capacityRow = mysqli_fetch_assoc($capacityDetail);
-
                 $capacityValue = null;
                 $capacityDivision = null;
+                $capacity = $res['capacity'];
+                if($capacity != null && $capacity != ''){
+                    $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                    $capacityDetail = mysqli_query($db, $capacityQuery);
+                    $capacityRow = mysqli_fetch_assoc($capacityDetail);
 
-                if(!empty($capacityRow)){
-                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
-                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    if(!empty($capacityRow)){
+                        $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                        $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    }
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -1739,14 +1790,20 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                         $pdf->Write(0, searchCustNameById($res['customers'], $db));
                         $pdf->SetFont('Arial', '', 10);
 
-                        $pdf->SetXY(22.648, 107.133-2); // Adjust for {3. Alamat Pemilik Address 1 & 2}
+                        $pdf->SetXY(22.648, 107.133-2); // Adjust for {3. Alamat Pemilik Address 1}
                         $pdf->Write(0, $address1);
 
-                        $pdf->SetXY(22.648, 111.188-2); // Adjust for {3. Alamat Pemilik Address 3}
+                        $pdf->SetXY(22.648, 111.188-2); // Adjust for {3. Alamat Pemilik Address 2}
                         $pdf->Write(0, $address2);
                         
-                        $pdf->SetXY(22.648, 115.258-2); // Adjust for {3. Alamat Pemilik Address 4}
-                        $pdf->Write(0, $address3 . ' ' . $address4);
+                        $pdf->SetXY(22.648, 115.258-2); // Adjust for {3. Alamat Pemilik Address 3}
+                        $pdf->Write(0, $address3);
+                        
+                        $pdf->SetXY(22.648, 119.258-2); // Adjust for {3. Alamat Pemilik Address 4}
+                        $pdf->Write(0, $address4);
+                        
+                        $pdf->SetXY(22.648, 122.258-2); // Adjust for {3. Alamat Pemilik Address 5}
+                        $pdf->Write(0, $address5);
 
                         $pdf->SetXY(21.648, 132.490-2); // Adjust for {Company_Name}
                         $pdf->Write(0, $compname);
@@ -1820,17 +1877,18 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                 $fillFile = 'forms/Metrology/ATE_FORM.pdf';
                 $pageCount = $pdf->setSourceFile($fillFile);
         
-                $capacity = $res['capacity'];
-                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
-                $capacityDetail = mysqli_query($db, $capacityQuery);
-                $capacityRow = mysqli_fetch_assoc($capacityDetail);
-
                 $capacityValue = null;
                 $capacityDivision = null;
+                $capacity = $res['capacity'];
+                if($capacity != null && $capacity != ''){
+                    $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                    $capacityDetail = mysqli_query($db, $capacityQuery);
+                    $capacityRow = mysqli_fetch_assoc($capacityDetail);
 
-                if(!empty($capacityRow)){
-                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
-                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    if(!empty($capacityRow)){
+                        $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                        $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    }
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
@@ -1945,17 +2003,18 @@ if(isset($_GET['userID'], $_GET['actualPrintDate'])){
                 $fillFile = 'forms/DE_Metrology/DMSB_ATE.pdf';
                 $pageCount = $pdf->setSourceFile($fillFile);
         
-                $capacity = $res['capacity'];
-                $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
-                $capacityDetail = mysqli_query($db, $capacityQuery);
-                $capacityRow = mysqli_fetch_assoc($capacityDetail);
-
                 $capacityValue = null;
                 $capacityDivision = null;
+                $capacity = $res['capacity'];
+                if($capacity != null && $capacity != ''){
+                    $capacityQuery = "SELECT * FROM capacity WHERE id = $capacity";
+                    $capacityDetail = mysqli_query($db, $capacityQuery);
+                    $capacityRow = mysqli_fetch_assoc($capacityDetail);
 
-                if(!empty($capacityRow)){
-                    $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
-                    $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    if(!empty($capacityRow)){
+                        $capacityValue = $capacityRow['capacity'] . searchUnitNameById($capacityRow['units'], $db);
+                        $capacityDivision = $capacityRow['division'] . searchUnitNameById($capacityRow['division_unit'], $db);
+                    }
                 }
 
                 for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
