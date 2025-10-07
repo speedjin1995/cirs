@@ -253,3 +253,20 @@ INSERT INTO `roles` (`role_code`, `role_name`, `module`, `deleted`) VALUES ('ADM
 
 -- 16/09/2025 --
 UPDATE `company_branches` SET branch_code = 'HQ' WHERE id = 1;
+
+-- 03/10/2025 --
+ALTER TABLE `customers` ADD `address5` TEXT NULL AFTER `address4`;
+
+ALTER TABLE `company_branches` ADD `address_line_5` TEXT NULL AFTER `address_line_4`;
+
+ALTER TABLE `branches` ADD `address5` TEXT NULL AFTER `address4`;
+
+ALTER TABLE `dealer` ADD `address5` TEXT NULL AFTER `address4`;
+
+ALTER TABLE `reseller_branches` ADD `address5` TEXT NULL AFTER `address4`;
+
+ALTER TABLE `inhouse_validations` CHANGE `last_calibration_date` `last_calibration_date` DATE NULL;
+
+ALTER TABLE `inhouse_validations` CHANGE `tests` `tests` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL;
+
+ALTER TABLE `other_validations` CHANGE `calibrations` `calibrations` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL;

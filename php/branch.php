@@ -16,6 +16,7 @@ if(isset($_POST['branchName'], $_POST['addressLine1'])){
     $addressLine2 = null;
     $addressLine3 = null;
     $addressLine4 = null;
+    $addressLine5 = null;
     $mapUrl = null;
     $pic = null;
     $picContact = null;
@@ -36,6 +37,10 @@ if(isset($_POST['branchName'], $_POST['addressLine1'])){
 
     if(isset($_POST['addressLine4']) && $_POST['addressLine4'] != null && $_POST['addressLine4'] != ''){
         $addressLine4 = filter_input(INPUT_POST, 'addressLine4', FILTER_SANITIZE_STRING);
+    }
+
+    if(isset($_POST['addressLine5']) && $_POST['addressLine5'] != null && $_POST['addressLine5'] != ''){
+        $addressLine5 = filter_input(INPUT_POST, 'addressLine5', FILTER_SANITIZE_STRING);
     }
 
     if(isset($_POST['mapUrl']) && $_POST['mapUrl'] != null && $_POST['mapUrl'] != ''){
@@ -59,8 +64,8 @@ if(isset($_POST['branchName'], $_POST['addressLine1'])){
     }
 
     if($_POST['id'] != null && $_POST['id'] != ''){
-        if ($update_stmt = $db->prepare("UPDATE `company_branches` SET `branch_code`=?, `branch_name`=?, `address_line_1`=?, `address_line_2`=?, `address_line_3`=?, `address_line_4`=?, `map_url`=?, `pic`=?, `pic_contact`=?, `office_no`=?, `email`=? WHERE id=?")) {
-            $update_stmt->bind_param('ssssssssssss', $branchCode, $branchName, $addressLine1, $addressLine2, $addressLine3, $addressLine4, $mapUrl, $pic, $picContact, $officeNo, $email, $_POST['id']);
+        if ($update_stmt = $db->prepare("UPDATE `company_branches` SET `branch_code`=?, `branch_name`=?, `address_line_1`=?, `address_line_2`=?, `address_line_3`=?, `address_line_4`=?, `address_line_5`=?, `map_url`=?, `pic`=?, `pic_contact`=?, `office_no`=?, `email`=? WHERE id=?")) {
+            $update_stmt->bind_param('sssssssssssss', $branchCode, $branchName, $addressLine1, $addressLine2, $addressLine3, $addressLine4, $addressLine5, $mapUrl, $pic, $picContact, $officeNo, $email, $_POST['id']);
             
             // Execute the prepared query.
             if (! $update_stmt->execute()) {
@@ -88,8 +93,8 @@ if(isset($_POST['branchName'], $_POST['addressLine1'])){
         }
     }
     else{
-        if ($insert_stmt = $db->prepare("INSERT INTO `company_branches` (`branch_code`, `branch_name`, `address_line_1`, `address_line_2`, `address_line_3`, `address_line_4`, `map_url`, `pic`, `pic_contact`, `office_no`, `email`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-            $insert_stmt->bind_param('sssssssssss', $branchCode, $branchName, $addressLine1, $addressLine2, $addressLine3, $addressLine4, $mapUrl, $pic, $picContact, $officeNo, $email);
+        if ($insert_stmt = $db->prepare("INSERT INTO `company_branches` (`branch_code`, `branch_name`, `address_line_1`, `address_line_2`, `address_line_3`, `address_line_4`, `address_line_5`, `map_url`, `pic`, `pic_contact`, `office_no`, `email`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+            $insert_stmt->bind_param('ssssssssssss', $branchCode, $branchName, $addressLine1, $addressLine2, $addressLine3, $addressLine4, $addressLine5, $mapUrl, $pic, $picContact, $officeNo, $email);
             
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {

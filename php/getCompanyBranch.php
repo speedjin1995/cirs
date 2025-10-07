@@ -30,6 +30,7 @@ if(isset($_POST['userID'])){
                 $message['address_line_2'] = $row['address_line_2'];
                 $message['address_line_3'] = $row['address_line_3'];
                 $message['address_line_4'] = $row['address_line_4'];
+                $message['address_line_5'] = $row['address_line_5'];
                 $message['map_url'] = $row['map_url'];
                 $message['pic'] = $row['pic'];
                 $message['pic_contact'] = $row['pic_contact'];

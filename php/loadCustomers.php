@@ -58,6 +58,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
           "address2" => $row2['address2'],
           "address3" => $row2['address3'],
           "address4" => $row2['address4'],
+          "address5" => $row2['address5'],
         );
       }
     }
@@ -66,9 +67,9 @@ while($row = mysqli_fetch_assoc($empRecords)) {
   }
   
   if(isset($row['map_url']) && !empty($row['map_url'])){
-    $customerAddress = '<a href="'.$row['map_url'].'" target="_blank">' .$row['customer_address']." ". $row['address2'] ." ". $row['address3']. ' <i class="fa fa-map-marker"></i></a>';
+    $customerAddress = '<a href="'.$row['map_url'].'" target="_blank">' .$row['customer_address']." ". $row['address2'] ." ". $row['address3'] . " " . $row['address4'] . " " . $row['address5'] . ' <i class="fa fa-map-marker"></i></a>';
   } else {
-    $customerAddress = $row['customer_address']." ". $row['address2'] ." ". $row['address3'];
+    $customerAddress = $row['customer_address']." ". $row['address2'] ." ". $row['address3'] . " " . $row['address4'] . " " . $row['address5'];
   }
 
   $data[] = array( 

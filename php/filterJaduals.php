@@ -152,6 +152,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
   $address2 = null;
   $address3 = null;
   $address4 = null;
+  $address5 = null;
   $pic = null;
   $pic_phone = null;
 
@@ -166,6 +167,7 @@ while($row = mysqli_fetch_assoc($empRecords)) {
       $address2 = $branchRow['address2'];
       $address3 = $branchRow['address3'];
       $address4 = $branchRow['address4'];
+      $address5 = $branchRow['address5'];
       $pic = $branchRow['pic'];
       $pic_phone = $branchRow['pic_contact'];
     }
@@ -220,10 +222,11 @@ while($row = mysqli_fetch_assoc($empRecords)) {
     "address2" => $address2 ?? '',
     "address3" => $address3 ?? '',
     "address4"=>$address4 ?? '',
+    "address5"=>$address5 ?? '',
     "picontact"=> $pic ?? '',
     "pic_phone"=> $pic_phone ?? '',
-    "full_address"=>$address1.' '.$address2.' '.$address3.' '.$address4,
-    "full_address2"=>$address1.'<br>'.$address2.'<br>'.$address3.'<br>'.$address4,
+    "full_address"=>$address1.' '.$address2.' '.$address3.' '.$address4.' '.$address5,
+    "full_address2"=>$address1.'<br>'.$address2.'<br>'.$address3.'<br>'.$address4.'<br>'.$address5,
     "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
     "machine_type"=>$row['machine_type'] != null ? searchMachineNameById($row['machine_type'], $db) : '',
     "model"=>$row['model'] != null  ? searchModelNameById($row['model'], $db) : '',

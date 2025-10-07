@@ -38,6 +38,7 @@ if(isset($_POST['userID'])){
                 $address2 = null;
                 $address3 = null;
                 $address4 = null;
+                $address5 = null;
                 $pic = null;
                 $pic_phone = null;
 
@@ -52,6 +53,7 @@ if(isset($_POST['userID'])){
                         $address2 = $branchRow['address2'];
                         $address3 = $branchRow['address3'];
                         $address4 = $branchRow['address4'];
+                        $address5 = $branchRow['address5'];
                         if(isset($branchRow['pic']) && $branchRow['pic'] != ''){
                             $pic = $branchRow['pic'];
                         }
@@ -66,6 +68,7 @@ if(isset($_POST['userID'])){
                 $reseller_address2 = null;
                 $reseller_address3 = null;
                 $reseller_address4 = null;
+                $reseller_address5 = null;
                 $reseller_pic = null;
                 $reseller_pic_phone = null;
 
@@ -80,6 +83,7 @@ if(isset($_POST['userID'])){
                         $reseller_address2 = $resellerRow['address2'];
                         $reseller_address3 = $resellerRow['address3'];
                         $reseller_address4 = $resellerRow['address4'];
+                        $reseller_address5 = $resellerRow['address5'];
                         $reseller_pic = $resellerRow['pic'];
                         $reseller_pic_phone = $resellerRow['pic_contact'];
                     }
@@ -106,6 +110,7 @@ if(isset($_POST['userID'])){
                     $message['reseller_address2'] = $reseller_address2;
                     $message['reseller_address3'] = $reseller_address3;
                     $message['reseller_address4'] = $reseller_address4;
+                    $message['reseller_address5'] = $reseller_address5;
                     $message['reseller_pic'] = $reseller_pic;
                     $message['reseller_pic_phone'] = $reseller_pic_phone;
                     $message['dealer_branch'] = $row['dealer_branch'];
@@ -115,6 +120,7 @@ if(isset($_POST['userID'])){
                     $message['address2'] = $address2;
                     $message['address3'] = $address3;
                     $message['address4'] = $address4;
+                    $message['address5'] = $address5;
                     $message['pic'] = $pic;
                     $message['pic_phone'] = $pic_phone;
                     $message['branch'] = $row['branch'];

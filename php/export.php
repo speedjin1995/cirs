@@ -137,6 +137,7 @@ if(isset($_GET['type'])){
                 $address2 = null;
                 $address3 = null;
                 $address4 = null;
+                $address5 = null;
                 $pic = null;
                 $pic_phone = null;
 
@@ -151,12 +152,13 @@ if(isset($_GET['type'])){
                     $address2 = $branchRow['address2'];
                     $address3 = $branchRow['address3'];
                     $address4 = $branchRow['address4'];
+                    $address5 = $branchRow['address5'];
                     $pic = $branchRow['pic'];
                     $pic_phone = $branchRow['pic_contact'];
                     }
                 }
 
-                $custAddress = $address1 . ' ' . $address2 . ' ' . $address3 . ' ' . $address4;
+                $custAddress = $address1 . ' ' . $address2 . ' ' . $address3 . ' ' . $address4 . ' ' . $address5;
                 $stampingDate = new DateTime($row['stamping_date']);
                 $formattedStampingDate = $stampingDate->format('d/m/Y');
 
@@ -276,6 +278,7 @@ if(isset($_GET['type'])){
                 $address2 = null;
                 $address3 = null;
                 $address4 = null;
+                $address5 = null;
                 $pic = null;
                 $pic_phone = null;
 
@@ -290,6 +293,7 @@ if(isset($_GET['type'])){
                     $address2 = $branchRow['address2'];
                     $address3 = $branchRow['address3'];
                     $address4 = $branchRow['address4'];
+                    $address5 = $branchRow['address5'];
                     $pic = $branchRow['pic'];
                     $pic_phone = $branchRow['pic_contact'];
                     }
@@ -346,7 +350,7 @@ if(isset($_GET['type'])){
                                 <td class="body">'.$borangE.'</td>
                                 <td class="body">'.$formattedBorangEDate.'</td>
                                 <td class="body">'.$formattedStampingDate.'</td>
-                                <td class="body"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
+                                <td class="body"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.' '.$address5.'</td>
                                 <td class="body">'.searchBrandNameById($row['brand'], $db).'</td>
                                 <td class="body">'.searchModelNameById($row['model'], $db).'</td>
                                 <td class="body">'.searchAlatNameById($row['jenis_alat'], $db).'</td>
@@ -444,6 +448,7 @@ if(isset($_GET['type'])){
                 $address2 = null;
                 $address3 = null;
                 $address4 = null;
+                $address5 = null;
                 $pic = null;
                 $pic_phone = null;
 
@@ -458,12 +463,13 @@ if(isset($_GET['type'])){
                     $address2 = $branchRow['address2'];
                     $address3 = $branchRow['address3'];
                     $address4 = $branchRow['address4'];
+                    $address5 = $branchRow['address5'];
                     $pic = $branchRow['pic'];
                     $pic_phone = $branchRow['pic_contact'];
                     }
                 }
 
-                $custAddress = $address1 . ' ' . $address2 . ' ' . $address3 . ' ' . $address4;
+                $custAddress = $address1 . ' ' . $address2 . ' ' . $address3 . ' ' . $address4 . ' ' . $address5;
                 $stampingDate = new DateTime($row['stamping_date']);
                 $formattedStampingDate = $stampingDate->format('d-m-Y');
                 $totalAmt += floatval($row['unit_price']) + floatval($row['cert_price']);

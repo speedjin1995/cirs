@@ -50,6 +50,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 	$address2 = null;
 	$address3 = null;
 	$address4 = null;
+	$address5 = null;
 	$phone = null;
 	$email = null;
 	$pic = null;
@@ -200,6 +201,10 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 		$address4 = $_POST['address4'];
 	}
 
+	if(isset($_POST['address5']) && $_POST['address5']!=null && $_POST['address5']!=""){
+		$address5 = $_POST['address5'];
+	}
+
 	if(isset($_POST['branch']) && $_POST['branch']!=null && $_POST['branch']!=""){
 		$branch = $_POST['branch'];
 	}
@@ -266,16 +271,16 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				} 
 		
 				// Customer does not exist, create a new customer
-				if ($insert_stmt = $db->prepare("INSERT INTO customers (customer_name, customer_code, customer_address, address2, address3, address4, customer_phone, customer_email, customer_status, pic, pic_contact, other_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+				if ($insert_stmt = $db->prepare("INSERT INTO customers (customer_name, customer_code, customer_address, address2, address3, address4, address5, customer_phone, customer_email, customer_status, pic, pic_contact, other_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 					$customer_status = 'CUSTOMERS';
-					$insert_stmt->bind_param('ssssssssssss', $_POST['companyText'], $code, $address1, $address2, $address3, $address4, $phone, $email, $customer_status, $pic, $contact, $otherCode);
+					$insert_stmt->bind_param('sssssssssssss', $_POST['companyText'], $code, $address1, $address2, $address3, $address4, $address5, $phone, $email, $customer_status, $pic, $contact, $otherCode);
 					
 					if ($insert_stmt->execute()) {
 						$customer = $insert_stmt->insert_id;
 						$customerType = 'EXISTING';
 
-						if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, branch_name, map_url, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-							$insert_stmt2->bind_param('sssssssss', $customer, $address1, $address2, $address3, $address4, $branchName, $mapUrl, $pic, $contact);
+						if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, address5, branch_name, map_url, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+							$insert_stmt2->bind_param('ssssssssss', $customer, $address1, $address2, $address3, $address4, $address5, $branchName, $mapUrl, $pic, $contact);
 							$insert_stmt2->execute();
 							$branch = $insert_stmt2->insert_id;
 							$insert_stmt2->close();
@@ -1058,7 +1063,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// For BTU Additional fields
-				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BTU')){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BTU') && !str_contains($jenisAlatName, 'BTU - (BOX)')){
 					$platform_country = null;
 					$penandaanBatuUjian = null;
 					$batuUjian = null;

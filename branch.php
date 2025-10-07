@@ -116,6 +116,10 @@ else{
     					<input type="text" class="form-control" name="addressLine4" id="addressLine4" placeholder="Enter Address Line 4">
     				</div>
     				<div class="form-group">
+    					<label for="addressLine5">Address Line 5</label>
+    					<input type="text" class="form-control" name="addressLine5" id="addressLine5" placeholder="Enter Address Line 5">
+    				</div>
+    				<div class="form-group">
     					<label for="mapUrl">Map Url</label>
     					<input type="text" class="form-control" name="mapUrl" id="mapUrl" placeholder="Enter Map Url">
     				</div>
@@ -346,6 +350,7 @@ $(function () {
         $('#branchModal').find('#addressLine2').val("");
         $('#branchModal').find('#addressLine3').val("");
         $('#branchModal').find('#addressLine4').val("");
+        $('#branchModal').find('#addressLine5').val("");
         $('#branchModal').find('#mapUrl').val("");
         $('#branchModal').find('#pic').val("");
         $('#branchModal').find('#picContact').val("");
@@ -466,6 +471,7 @@ function edit(id){
             $('#branchModal').find('#addressLine2').val(obj.message.address_line_2);
             $('#branchModal').find('#addressLine3').val(obj.message.address_line_3);
             $('#branchModal').find('#addressLine4').val(obj.message.address_line_4);
+            $('#branchModal').find('#addressLine5').val(obj.message.address_line_5);
             $('#branchModal').find('#mapUrl').val(obj.message.map_url);
             $('#branchModal').find('#pic').val(obj.message.pic);
             $('#branchModal').find('#picContact').val(obj.message.pic_contact);

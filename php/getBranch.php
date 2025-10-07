@@ -20,6 +20,7 @@ if(isset($_POST['userID'])){
                 $message["address2"] = $row2['address2'];
                 $message["address3"] = $row2['address3'];
                 $message["address4"] = $row2['address4'];
+                $message["address5"] = $row2['address5'];
             }
 
             echo json_encode(
