@@ -1,5 +1,5 @@
 <?php
-$config = include(dirname(__DIR__) . '/db_config.php');
+$config = include(dirname(__DIR__, 3) . '/db_config.php');
 
 // Database connection
 $host = $config['host'];
