@@ -920,7 +920,7 @@ function format (row) {
     <div class="col-md-6">
       <p><span><strong style="font-size:120%; text-decoration: underline;">Customer</strong></span><br>
       <strong>${row.customers}</strong><br>
-      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4} `;
+      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4}<br>${row.address5} `;
 
       if (row.pic) {
           returnString += `
@@ -934,7 +934,7 @@ function format (row) {
     <div class="col-md-6">
       <p><span><strong style="font-size:120%; text-decoration: underline;">Reseller</strong></span><br>
       <strong>${row.dealer}</strong><br>
-      ${row.reseller_address1}<br>${row.reseller_address2}<br>${row.reseller_address3}<br>${row.reseller_address4} `;
+      ${row.reseller_address1}<br>${row.reseller_address2}<br>${row.reseller_address3}<br>${row.reseller_address4}<br>${row.reseller_address5} `;
       
       if (row.reseller_pic) {
           returnString += `

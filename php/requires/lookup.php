@@ -56,7 +56,7 @@ function searchCustomerBranchAddressById($value, $db) {
         $select_stmt->execute();
         $result = $select_stmt->get_result();
         if ($row = $result->fetch_assoc()) {
-            $id = $row['address'].' '.$row['address2'].' '.$row['address3'].' '.$row['address4'];
+            $id = $row['address'].' '.$row['address2'].' '.$row['address3'].' '.$row['address4'].' '.$row['address5'];
         }
         $select_stmt->close();
     }
@@ -72,7 +72,7 @@ function searchCustomerBranchAddressById2($value, $db) {
         $select_stmt->execute();
         $result = $select_stmt->get_result();
         if ($row = $result->fetch_assoc()) {
-            $id = $row['address'].'<br>'.$row['address2'].'<br>'.$row['address3'].'<br>'.$row['address4'];
+            $id = $row['address'].'<br>'.$row['address2'].'<br>'.$row['address3'].'<br>'.$row['address4'].'<br>'.$row['address5'];
         }
         $select_stmt->close();
     }
@@ -122,7 +122,7 @@ function searchResellerAddressById($value, $db) {
         $select_stmt->execute();
         $result = $select_stmt->get_result();
         if ($row = $result->fetch_assoc()) {
-            $id = '<b>'.$row['customer_name'].'</b><br>'.$row['customer_address'].'<br>'.$row['address2'].'<br>'.$row['address3'].'<br>'.$row['address4'];
+            $id = '<b>'.$row['customer_name'].'</b><br>'.$row['customer_address'].'<br>'.$row['address2'].'<br>'.$row['address3'].'<br>'.$row['address4'].'<br>'.$row['address5'];
         }
         $select_stmt->close();
     }

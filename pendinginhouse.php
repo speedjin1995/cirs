@@ -386,6 +386,12 @@ AND load_cells.jenis_alat = alat.id AND load_cells.made_in = country.id AND load
                       <input class="form-control" type="text" placeholder="Address Line 4" id="address4" name="address4">
                     </div>
                   </div>
+                  <div class="col-3" id="addr5" style="display: none;">
+                    <div class="form-group">
+                      <label>Address Line 5 </label>
+                      <input class="form-control" type="text" placeholder="Address Line 5" id="address5" name="address5">
+                    </div>
+                  </div>
                 <!-- </div> -->
                 <!-- <div class="row col-12"> -->
                   <div class="col-3" id="phone" style="display: none;">
@@ -1580,7 +1586,7 @@ $(function () {
 
           for(var i=0; i<obj.message.branches.length; i++){
             var branchInfo = obj.message.branches[i];
-            $('#reseller_branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.branch_address1+' '+branchInfo.branch_address2+' '+branchInfo.branch_address3+' '+branchInfo.branch_address4+'</option>')
+            $('#reseller_branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.branch_address1+' '+branchInfo.branch_address2+' '+branchInfo.branch_address3+' '+branchInfo.branch_address4+' '+branchInfo.branch_address5+'</option>')
           }
           /*$('#extendModal').modal('show');
 
@@ -1660,6 +1666,7 @@ $(function () {
       $('#extendModal').find('#addr2').show();
       $('#extendModal').find('#addr3').show();
       $('#extendModal').find('#addr4').show();
+      $('#extendModal').find('#addr5').show();
       $('#extendModal').find('#contact').show();
       $('#extendModal').find('#email').show();
       $('#extendModal').find('#phone').show();
@@ -1669,6 +1676,7 @@ $(function () {
       $('#extendModal').find('#address2').val('');
       $('#extendModal').find('#address3').val('');
       $('#extendModal').find('#address4').val('');
+      $('#extendModal').find('#address5').val('');
       $('#extendModal').find('#contact').val('');
       $('#extendModal').find('#email').val('');
 
@@ -1686,6 +1694,7 @@ $(function () {
       $('#extendModal').find('#addr2').hide();
       $('#extendModal').find('#addr3').hide();
       $('#extendModal').find('#addr4').hide();
+      $('#extendModal').find('#addr5').hide();
       $('#extendModal').find('#contact').hide();
       $('#extendModal').find('#email').hide();
       $('#extendModal').find('#phone').hide();
@@ -1710,6 +1719,7 @@ $(function () {
           $('#extendModal').find('#address2').val(obj.message.address2);
           $('#extendModal').find('#address3').val(obj.message.address3);
           $('#extendModal').find('#address4').val(obj.message.address4);
+          $('#extendModal').find('#address5').val(obj.message.address5);
           
           /*$('#extendModal').modal('show');
 
@@ -1755,7 +1765,7 @@ $(function () {
 
         for(var i=0; i<obj.message.pricing.length; i++){
           var branchInfo = obj.message.pricing[i];
-          $('#branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.branch_address1+' '+branchInfo.branch_address2+' '+branchInfo.branch_address3+' '+branchInfo.branch_address4+'</option>')
+          $('#branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.branch_address1+' '+branchInfo.branch_address2+' '+branchInfo.branch_address3+' '+branchInfo.branch_address4+' '+branchInfo.branch_address5+'</option>')
         }
 
         /*$('#extendModal').modal('show');
@@ -2039,7 +2049,7 @@ function format (row) {
     <div class="col-md-6">
       <p><span><strong style="font-size:120%; text-decoration: underline;">Inhouse To : Customer</strong></span><br>
       <strong>${row.customer}</strong><br>
-      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4} `;
+      ${row.address1}<br>${row.address2}<br>${row.address3}<br>${row.address4}<br>${row.address5} `;
 
       if (row.pic) {
           returnString += `
@@ -2053,7 +2063,7 @@ function format (row) {
     <div class="col-md-6">
       <p><span><strong style="font-size:120%; text-decoration: underline;">Billing or Supply by Reseller</strong></span><br>
       <strong>${row.dealer}</strong><br>
-      ${row.reseller_address1}<br>${row.reseller_address2}<br>${row.reseller_address3}<br>${row.reseller_address4} `;
+      ${row.reseller_address1}<br>${row.reseller_address2}<br>${row.reseller_address3}<br>${row.reseller_address4}<br>${row.reseller_address5} `;
       
       if (row.reseller_pic) {
           returnString += `
@@ -2197,6 +2207,7 @@ function newEntry(){
   $('#extendModal').find('#address2').val('');
   $('#extendModal').find('#address3').val('');
   $('#extendModal').find('#address4').val('');
+  $('#extendModal').find('#address5').val('');
   $('#extendModal').find('#phone').val('');
   $('#extendModal').find('#email').val('');
   $('#extendModal').find('#pic').val('');

@@ -22,6 +22,7 @@ if(isset($_POST['selectedIds'])){
             $address2 = null;
             $address3 = null;
             $address4 = null;
+            $address5 = null;
             $pic = null;
             $pic_phone = null;
 
@@ -32,12 +33,13 @@ if(isset($_POST['selectedIds'])){
                 $branchRow = mysqli_fetch_assoc($branchDetail);
                 
                 if(!empty($branchRow)){
-                $address1 = $branchRow['address'];
-                $address2 = $branchRow['address2'];
-                $address3 = $branchRow['address3'];
-                $address4 = $branchRow['address4'];
-                $pic = $branchRow['pic'];
-                $pic_phone = $branchRow['pic_contact'];
+                    $address1 = $branchRow['address'];
+                    $address2 = $branchRow['address2'];
+                    $address3 = $branchRow['address3'];
+                    $address4 = $branchRow['address4'];
+                    $address5 = $branchRow['address5'];
+                    $pic = $branchRow['pic'];
+                    $pic_phone = $branchRow['pic_contact'];
                 }
             }
 
@@ -47,7 +49,7 @@ if(isset($_POST['selectedIds'])){
                 "no"=>$counter,
                 "id"=>$row['id'],
                 "customers"=>$row['customers'] != null ? searchCustNameById($row['customers'], $db) : '',
-                "full_address2"=>$address1.'<br>'.$address2.'<br>'.$address3.'<br>'.$address4,
+                "full_address2"=>$address1.'<br>'.$address2.'<br>'.$address3.'<br>'.$address4.'<br>'.$address5,
                 "brand"=>$row['brand'] != null ? searchBrandNameById($row['brand'], $db) : '',
                 "model"=>$row['model'] != null  ? searchModelNameById($row['model'], $db) : '',
                 "jenis_alat"=>$row['jenis_alat'] != null ? searchAlatNameById($row['jenis_alat'], $db) : '', 

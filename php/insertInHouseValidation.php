@@ -1,7 +1,7 @@
 <?php
 require_once 'db_connect.php';
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
+ini_set('display_errors', 1);
 session_start();
 
 $uid = $_SESSION['userID'];
@@ -47,6 +47,7 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 	$address2 = null;
 	$address3 = null;
 	$address4 = null;
+	$address5 = null;
 	$phone = null;
 	$email = null;
 	$pic = null;
@@ -81,6 +82,10 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 
 	if(isset($_POST['address4']) && $_POST['address4']!=null && $_POST['address4']!=""){
 		$address4 = $_POST['address4'];
+	}
+
+	if(isset($_POST['address5']) && $_POST['address5']!=null && $_POST['address5']!=""){
+		$address5 = $_POST['address5'];
 	}
 
 	if(isset($_POST['branch']) && $_POST['branch']!=null && $_POST['branch']!=""){
@@ -154,24 +159,22 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 				}
 
 				// Customer does not exist, create a new customer
-				if ($insert_stmt = $db->prepare("INSERT INTO customers (customer_name, customer_code, customer_address, address2, address3, address4, customer_phone, customer_email, customer_status, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+				if ($insert_stmt = $db->prepare("INSERT INTO customers (customer_name, customer_code, customer_address, address2, address3, address4, address5, customer_phone, customer_email, customer_status, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 					$customer_status = 'CUSTOMERS';
-					$insert_stmt->bind_param('sssssssssss', $_POST['companyText'], $code, $address1, $address2, $address3, $address4, $phone, $email, $customer_status, $pic, $contact);
+					$insert_stmt->bind_param('ssssssssssss', $_POST['companyText'], $code, $address1, $address2, $address3, $address4, $address5, $phone, $email, $customer_status, $pic, $contact);
 					
 					if ($insert_stmt->execute()) {
-						$insert_stmt->close();
 						$customer = $insert_stmt->insert_id;
 						$customerType = 'EXISTING';
 
-						if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, branch_name, map_url, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-							$insert_stmt2->bind_param('sssssssss', $customer, $address1, $address2, $address3, $address4, $branchName, $mapUrl, $pic, $contact);
+						if ($insert_stmt2 = $db->prepare("INSERT INTO branches (customer_id, address, address2, address3, address4, address5, branch_name, map_url, pic, pic_contact) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+							$insert_stmt2->bind_param('ssssssssss', $customer, $address1, $address2, $address3, $address4, $address5, $branchName, $mapUrl, $pic, $contact);
 							$insert_stmt2->execute();
 							$branch = $insert_stmt2->insert_id;
 							$insert_stmt2->close();
 						} 
 					} 
 				} else {
-					$insert_stmt->close();
 					echo json_encode(
 						array(
 							"status"=> "failed", 
@@ -179,9 +182,9 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 						)
 					);
 				}
-			}
 
-			$db->close();
+				$insert_stmt->close();
+			}
 		}
 	}
 	else{
@@ -201,7 +204,6 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 			if (! $update_stmt->execute()){
 				$response['status'] = "failed";
     			$response['message'] = $update_stmt->error;
-				$update_stmt->close();
 			} 
 			else{
 				for($i=1; $i<=10; $i++){
@@ -230,25 +232,21 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 					$insert_stmt3->execute();
 					$insert_stmt3->close();
 				}
-				
-				$update_stmt->close();
-				
+								
 				$response['status'] = "success";
 				$response['message'] = "Updated Successfully!!";
 			}
 		}
 		else{
-			$update_stmt->close();
 			$response['status'] = "failed";
 			$response['message'] = "Error when creating query";
 		}
 
-		$db->close();
+		$update_stmt->close();
 	}
 	else{
 		if($misc_stmt = $db->prepare("SELECT * FROM miscellaneous WHERE code='inhouse'")){
 			if(!$misc_stmt->execute()){
-				$misc_stmt->close();
                 echo json_encode(
                     array(
                         "status" => "failed",
@@ -256,7 +254,6 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
                     )); 
             }else{
                 $result = $misc_stmt->get_result();
-				$misc_stmt->close();
 				
                 while ($row = $result->fetch_assoc()){
 					$description = $row['description'];
@@ -281,7 +278,6 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 						if (! $insert_stmt->execute()){
 							$response['status'] = "failed";
 							$response['message'] = $insert_stmt->error;
-							$insert_stmt->close();
 						} 
 						else{
 							$validation_id = $insert_stmt->insert_id;
@@ -320,18 +316,19 @@ if(isset($_POST['type'], $customerType, $_POST['validator'], $_POST['address1'],
 								$insert_stmt3->execute();
 								$insert_stmt3->close();
 							}
-							$insert_stmt->close();
 							
 							$response['status'] = "success";
 							$response['message'] = "Added Successfully!!";
 						}
 					}
+					$insert_stmt->close();
 				}
 			}
-
-			$db->close();
 		}
+		$misc_stmt->close();
 	}
+
+	$db->close();
 } 
 else{
 	$response['status'] = "failed";

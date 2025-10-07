@@ -107,6 +107,7 @@ if(isset($_POST['id'])){
                             $address2 = $branchRow['address2'];
                             $address3 = $branchRow['address3'];
                             $address4 = $branchRow['address4'];
+                            $address5 = $branchRow['address5'];
                             $pic = $branchRow['pic'];
                             $officeNo = $branchRow['office_no'];
                         }
@@ -188,8 +189,8 @@ if(isset($_POST['id'])){
                                     <td class="align-top">
                                         <div class="row">
                                             <div class="col-12" id="address-line1">'. ($address1 ?? '').'</div>
-                                            <div class="col-12" id="address-line2">'. ($address2 ?? '').'</div>
-                                            <div class="col-12" id="address-line3">'. ($address3 ?? '')." ". ($address4 ?? '').'</div>
+                                            <div class="col-12" id="address-line2">'. ($address2 ?? '')." ". ($address3 ?? '').'</div>
+                                            <div class="col-12" id="address-line3">'. ($address4 ?? '')." ". ($address5 ?? '').'</div>
                                             <div class="col-12" id="contact">Tel: '. ($officeNo ?? '').'</div>
                                         </div>
                                     </td>

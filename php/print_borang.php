@@ -174,6 +174,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                 $address2 = null;
                 $address3 = null;
                 $address4 = null;
+                $address5 = null;
                 $pic = null;
                 $pic_phone = null;
 
@@ -184,12 +185,13 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                     $branchRow = mysqli_fetch_assoc($branchDetail);
                     
                     if(!empty($branchRow)){
-                    $address1 = $branchRow['address'];
-                    $address2 = $branchRow['address2'];
-                    $address3 = $branchRow['address3'];
-                    $address4 = $branchRow['address4'];
-                    $pic = $branchRow['pic'];
-                    $pic_phone = $branchRow['pic_contact'];
+                        $address1 = $branchRow['address'];
+                        $address2 = $branchRow['address2'];
+                        $address3 = $branchRow['address3'];
+                        $address4 = $branchRow['address4'];
+                        $address5 = $branchRow['address5'];
+                        $pic = $branchRow['pic'];
+                        $pic_phone = $branchRow['pic_contact'];
                     }
                 }
 
@@ -235,7 +237,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
               
                 $message .= '<tr>
                                 <td style="font-size:12px;">'.$formattedStampingDate.'</td>
-                                <td style="font-size:12px;"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
+                                <td style="font-size:12px;"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.' '.$address5.'</td>
                                 <td style="font-size:12px;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
                                 <td style="font-size:12px;">'.$capacity.'</td>
                                 <td style="font-size:12px;">1</td>
@@ -343,6 +345,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                 $address2 = null;
                 $address3 = null;
                 $address4 = null;
+                $address5 = null;
                 $pic = null;
                 $pic_phone = null;
 
@@ -357,6 +360,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                     $address2 = $branchRow['address2'];
                     $address3 = $branchRow['address3'];
                     $address4 = $branchRow['address4'];
+                    $address5 = $branchRow['address5'];
                     $pic = $branchRow['pic'];
                     $pic_phone = $branchRow['pic_contact'];
                     }
@@ -406,7 +410,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                         <td style="font-size:12px;">'.$borangD.'</td>
                         <td style="font-size:12px;">'.$borangE.'</td>
                         <td style="font-size:12px;">'.$formattedStampingDate.'</td>
-                        <td style="font-size:12px;"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
+                        <td style="font-size:12px;"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.' '.$address5.'</td>
                         <td style="font-size:12px;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'<br>'.searchAlatNameById($row['jenis_alat'], $db).'</td>
                         <td style="font-size:12px;">'.$capacity.'</td>
                         <td style="font-size:12px;">'.$row['pin_keselamatan'].'</td>
@@ -448,6 +452,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                 $address2 = null;
                 $address3 = null;
                 $address4 = null;
+                $address5 = null;
                 $pic = null;
                 $pic_phone = null;
 
@@ -462,6 +467,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                         $address2 = $branchRow['address2'];
                         $address3 = $branchRow['address3'];
                         $address4 = $branchRow['address4'];
+                        $address5 = $branchRow['address5'];
                         $pic = $branchRow['pic'];
                         $pic_phone = $branchRow['pic_contact'];
                     }
@@ -530,7 +536,7 @@ if(isset($_POST['id'], $_POST['driver'], $_POST['cawanganBorang'], $_POST['actua
                             <td style="font-size:12px;">'.$capacity.'</td>
                             <td style="font-size:12px; padding-left:0.5%;">'.searchBrandNameById($row['brand'], $db).'<br>'.searchModelNameById($row['model'], $db).'</td>
                             <td style="font-size:12px; padding-left:0.5%;">'.$row['serial_no'].'</td>
-                            <td style="font-size:12px;"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.'</td>
+                            <td style="font-size:12px;"><b>'.searchCustNameById($row['customers'], $db).'</b><br>'.$address1.' '.$address2.' '.$address3.' '.$address4.' '.$address5.'</td>
                             <td style="font-size:12px; padding-left:0.5%;">'.$noDaftarLama.'</td>
                             <td style="font-size:12px; padding-left:0.5%;">'.$noDaftarBaru.'</td>
                             <td style="font-size:12px;">'.$siriKeselamatan.'</td>
