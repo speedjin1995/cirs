@@ -270,3 +270,6 @@ ALTER TABLE `inhouse_validations` CHANGE `last_calibration_date` `last_calibrati
 ALTER TABLE `inhouse_validations` CHANGE `tests` `tests` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL;
 
 ALTER TABLE `other_validations` CHANGE `calibrations` `calibrations` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL;
+
+-- 14/10/2025 --
+DELETE FROM stamping_ext WHERE id NOT IN ( SELECT MIN(id) FROM stamping_ext GROUP BY stamp_id );

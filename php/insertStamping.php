@@ -773,7 +773,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// For ATS Additional fields
-				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATS')){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATS') && !str_contains($jenisAlatName, 'ATS (H)')){
 					$platform_country = null;
 
 					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
@@ -902,7 +902,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// For ATP Additional fields
-				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATP')){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATP') && !str_contains($jenisAlatName, 'ATP (MOTORCAR)') && !str_contains($jenisAlatName, 'ATP-AUTO MACHINE')){
 					$platform_country = null;
 					$jenis_penunjuk = null;
 
@@ -1552,7 +1552,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// For ATS Additional fields
-				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATS')){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATS') && !str_contains($jenisAlatName, 'ATS (H)')){
 					$platform_country = null;
 
 					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
@@ -1684,7 +1684,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// For ATP Additional fields
-				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATP')){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATP') && !str_contains($jenisAlatName, 'ATP (MOTORCAR)') && !str_contains($jenisAlatName, 'ATP-AUTO MACHINE')){
 					$platform_country = null;
 					$jenis_penunjuk = null;
 
