@@ -2449,6 +2449,7 @@ var btuCount = $("#btuTable").find(".details").length;
 var customer = 0;
 var branch = 0;
 var jalat = '';
+let alatOptions = $('#jenisAlat option').clone();
 
 $(function () {
   $('#customerNoHidden').hide();
@@ -5544,6 +5545,8 @@ function edit(id) {
     var obj = JSON.parse(data);
     
     if(obj.status === 'success'){
+      $('#extendModal').find('#jenisAlat').empty();
+      $('#extendModal').find('#jenisAlat').append(alatOptions);
       if(obj.message.type == 'DIRECT'){
         // Reset the flag when modal opens
         priceLoadedTriggered = false; 
