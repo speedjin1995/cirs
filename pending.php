@@ -1635,7 +1635,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (ATK)</h4>
+        <h4>Additional Information (ATK)</h4>
       </div>
       <div class="row">
         <div class="col-4">
@@ -1759,7 +1759,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (ATS)</h4>
+        <h4>Additional Information (ATS)</h4>
       </div>
       <div class="row">
         <div class="form-group col-4">
@@ -1780,7 +1780,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (ATP)</h4>
+        <h4>Additional Information (ATP)</h4>
       </div>
       <div class="row">
         <!-- <div class="form-group col-4">
@@ -1809,7 +1809,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (ATP - MOTORCAR)</h4>
+        <h4>Additional Information (ATP - MOTORCAR)</h4>
       </div>
       <div class="row">
         <!-- <div class="form-group col-4">
@@ -1867,7 +1867,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (ATN)</h4>
+        <h4>Additional Information (ATN)</h4>
       </div>
       <div class="row">
         <!-- <div class="form-group col-4">
@@ -1904,7 +1904,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (ATE)</h4>
+        <h4>Additional Information (ATE)</h4>
       </div>
       <div class="row">
         <!-- <div class="form-group col-4">
@@ -1933,7 +1933,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (SLL)</h4>
+        <h4>Additional Information (SLL)</h4>
       </div>
       <div class="row">
         <!-- <div class="form-group col-4">
@@ -2104,7 +2104,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (ATP-Auto Machine)</h4>
+        <h4>Additional Information (ATP-Auto Machine)</h4>
       </div>
       <div class="row">
         <!-- <div class="form-group col-4">
@@ -2133,7 +2133,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (ATS - H)</h4>
+        <h4>Additional Information (ATS - H)</h4>
       </div>
       <div class="row">
         <div class="form-group col-4">
@@ -2154,7 +2154,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (SIA)</h4>
+        <h4>Additional Information (SIA)</h4>
       </div>
       <div class="row">
         <!-- <div class="form-group col-4">
@@ -2199,7 +2199,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (BAP)</h4>
+        <h4>Additional Information (BAP)</h4>
       </div>
       <div class="row">
         <div class="form-group col-4">
@@ -2253,7 +2253,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (SIC)</h4>
+        <h4>Additional Information (SIC)</h4>
       </div>
       <div class="row">
         <div class="form-group col-4">
@@ -2286,7 +2286,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (BTU - BOX)</h4>
+        <h4>Additional Information (BTU - BOX)</h4>
       </div>
       <div class="row">
         <div class="col-4">
