@@ -657,7 +657,6 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						$insert_stmt->execute();
 						$insert_stmt->close();
 					}
-
 				}
 
 				// For ATK Additional fields
@@ -1849,7 +1848,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// For BTU Additional fields
-				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BTU')){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BTU') && !str_contains($jenisAlatName, 'BTU - (BOX)')){
 					$platform_country = null;
 					$batuUjian = null;
 					$batuUjianLain = null;
