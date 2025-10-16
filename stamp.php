@@ -2416,7 +2416,8 @@ $(function () {
                   if (obj.status === 'success') {
                       $('#extendModal').modal('hide');
                       toastr["success"](obj.message, "Success:");
-                      $('#weightTable').DataTable().ajax.reload(null, false);
+                      // $('#weightTable').DataTable().ajax.reload(null, false);
+                      location.reload();
                   } else {
                       toastr["error"](obj.message, "Failed:");
                   }
