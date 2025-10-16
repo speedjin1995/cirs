@@ -1230,8 +1230,8 @@ $(function () {
           if(obj.status === 'success'){
             $('#extendModal').modal('hide');
             toastr["success"](obj.message, "Success:");
-            // location.reload(); 
-            $('#weightTable').DataTable().ajax.reload(null, false);
+            location.reload(); 
+            // $('#weightTable').DataTable().ajax.reload(null, false);
           }
           else if(obj.status === 'failed'){
             toastr["error"](obj.message, "Failed:");

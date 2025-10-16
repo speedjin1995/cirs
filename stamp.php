@@ -2416,7 +2416,8 @@ $(function () {
                   if (obj.status === 'success') {
                       $('#extendModal').modal('hide');
                       toastr["success"](obj.message, "Success:");
-                      $('#weightTable').DataTable().ajax.reload(null, false);
+                      // $('#weightTable').DataTable().ajax.reload(null, false);
+                      location.reload();
                   } else {
                       toastr["error"](obj.message, "Failed:");
                   }
@@ -4737,7 +4738,7 @@ function edit(id) {
         $('#extendModal').find('#reseller_branch').val('');
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
         $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
-        $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
+        $('#extendModal').find('#brand').val(obj.message.brand).select2('destroy').select2();
         $('#extendModal').find('#makeIn').val(obj.message.make_in).trigger('change');
         $('#extendModal').find('#validatorlama').val(obj.message.validator_lama).select2('destroy').select2();
         $('#extendModal').find('#validator').val(obj.message.validate_by).select2('destroy').select2();
@@ -5139,8 +5140,33 @@ function edit(id) {
         $('#extendModal').find('#type').val(obj.message.type).trigger('change');
         $('#extendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', true).trigger('change');
         $('#extendModal').find('#customerTypeEdit').val(obj.message.customer_type);
-        $('#extendModal').find('#dealer').val(obj.message.dealer).trigger('change');
-        $('#extendModal').find('#brand').val(obj.message.brand).trigger('change');
+        $('#extendModal').find('#dealer').val(obj.message.dealer).select2('destroy').select2();
+
+        // Populate dealer 
+        $.post('php/getDealer.php', {userID: obj.message.dealer}, function(data){
+          var dealer = JSON.parse(data);
+          
+          if(dealer.status === 'success'){
+            $('#reseller_branch').html('');
+            $('#reseller_branch').append('<option selected="selected">-</option>');
+
+            for(var i=0; i<dealer.message.branches.length; i++){
+              var branchInfo = dealer.message.branches[i];
+              $('#reseller_branch').append('<option value="'+branchInfo.branchid+'">'+branchInfo.name+' - '+branchInfo.branch_address1+' '+branchInfo.branch_address2+' '+branchInfo.branch_address3+' '+branchInfo.branch_address4+' '+branchInfo.branch_address5+'</option>')
+            }
+
+            console.log(obj.message.dealer_branch);
+            $('#extendModal').find('#reseller_branch').val(obj.message.dealer_branch).trigger('change');
+          }
+          else if(dealer.status === 'failed'){
+            toastr["error"](dealer.message, "Failed:");
+          }
+          else{
+            toastr["error"]("Something wrong when pull data", "Failed:");
+          }
+        });
+
+        $('#extendModal').find('#brand').val(obj.message.brand).select2('destroy').select2();
         $('#extendModal').find('#makeIn').val(obj.message.make_in).trigger('change');
         $('#extendModal').find('#validatorlama').val(obj.message.validator_lama).select2('destroy').select2();
         $('#extendModal').find('#validator').val(obj.message.validate_by).select2('destroy').select2();
@@ -5158,8 +5184,7 @@ function edit(id) {
         $('#extendModal').find('#newRenew').val(obj.message.stampType).trigger('change');
         customer = obj.message.customers;
         branch = obj.message.branch;
-        setTimeout(function(){
-          $('#extendModal').find('#reseller_branch').val(obj.message.dealer_branch).trigger('change');
+        setTimeout(function(){          
           $('#extendModal').find('#company').val(obj.message.customers).trigger('change');
 
           setTimeout(function(){
