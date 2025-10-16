@@ -657,7 +657,6 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						$insert_stmt->execute();
 						$insert_stmt->close();
 					}
-
 				}
 
 				// For ATK Additional fields
@@ -675,12 +674,12 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					$load_cell_no = null;
 					$load_cells_info = [];
 
-					$no = $_POST['no'];
-					$loadCells = $_POST['loadCells'];
-					$loadCellBrand = $_POST['loadCellBrand'];
-					$loadCellModel = $_POST['loadCellModel'];
-					$loadCellCapacity = $_POST['loadCellCapacity'];
-					$loadCellSerial = $_POST['loadCellSerial'];
+					$no = $_POST['no'] ?? [];
+					$loadCells = $_POST['loadCells'] ?? [];
+					$loadCellBrand = $_POST['loadCellBrand'] ?? [];
+					$loadCellModel = $_POST['loadCellModel'] ?? [];
+					$loadCellCapacity = $_POST['loadCellCapacity'] ?? [];
+					$loadCellSerial = $_POST['loadCellSerial'] ?? [];
 
 					if(isset($no) && $no != null && count($no) > 0){
 						for($i=0; $i<count($no); $i++){
@@ -727,7 +726,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						$platform_type = $_POST['platformType'];
 					}
 				
-					if(isset($_POST['size']) && $_POST['size']!=null && $_POST['size']!=""){
+					if(isset($_POST['size']) && $_POST['size']!=null && $_POST['size']!="" && $_POST['size']!='-'){
 						$size = $_POST['size'];
 					}
 
@@ -773,7 +772,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// For ATS Additional fields
-				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATS')){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATS') && !str_contains($jenisAlatName, 'ATS (H)')){
 					$platform_country = null;
 
 					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
@@ -902,7 +901,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// For ATP Additional fields
-				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATP')){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATP') && !str_contains($jenisAlatName, 'ATP (MOTORCAR)') && !str_contains($jenisAlatName, 'ATP-AUTO MACHINE')){
 					$platform_country = null;
 					$jenis_penunjuk = null;
 
@@ -1028,15 +1027,16 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BTU - (BOX)')){
 					$btu_info = [];
 
-					$no = $_POST['no'];
-					$batuUjian = $_POST['batuUjian'];
-					$batuUjianLain = $_POST['batuUjianLain'];
-					$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
-					$batuDaftarLama = $_POST['batuDaftarLama'];
-					$batuDaftarBaru = $_POST['batuDaftarBaru'];
-					$batuNoSiriPelekatKeselamatan = $_POST['batuNoSiriPelekatKeselamatan'];
-					$batuBorangD = $_POST['batuBorangD'];
-					$batuBorangE = $_POST['batuBorangE'];
+					$noOfBtu = $_POST['noOfBtu'] ?? null;
+					$no = $_POST['no'] ?? [];
+					$batuUjian = $_POST['batuUjian'] ?? [];
+					$batuUjianLain = $_POST['batuUjianLain'] ?? [];
+					$penandaanBatuUjian = $_POST['penandaanBatuUjian'] ?? [];
+					$batuDaftarLama = $_POST['batuDaftarLama'] ?? [];
+					$batuDaftarBaru = $_POST['batuDaftarBaru'] ?? [];
+					$batuNoSiriPelekatKeselamatan = $_POST['batuNoSiriPelekatKeselamatan'] ?? [];
+					$batuBorangD = $_POST['batuBorangD'] ?? [];
+					$batuBorangE = $_POST['batuBorangE'] ?? [];
 
 					if(isset($no) && $no != null && count($no) > 0){
 						for($i=0; $i<count($no); $i++){
@@ -1054,9 +1054,9 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						}
 					}
 
-					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET btu_box_info = ? WHERE stamp_id = ?")){
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET btu_box_qty = ?, btu_box_info = ? WHERE stamp_id = ?")){
 						$btuInfo = json_encode($btu_info);
-						$insert_stmt2->bind_param('ss', $btuInfo, $_POST['id']);
+						$insert_stmt2->bind_param('ssi', $noOfBtu, $btuInfo, $_POST['id']);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
@@ -1457,12 +1457,12 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					$load_cell_no = null;
 					$load_cells_info = [];
 
-					$no = $_POST['no'];
-					$loadCells = $_POST['loadCells'];
-					$loadCellBrand = $_POST['loadCellBrand'];
-					$loadCellModel = $_POST['loadCellModel'];
-					$loadCellCapacity = $_POST['loadCellCapacity'];
-					$loadCellSerial = $_POST['loadCellSerial'];
+					$no = $_POST['no'] ?? [];
+					$loadCells = $_POST['loadCells'] ?? [];
+					$loadCellBrand = $_POST['loadCellBrand'] ?? [];
+					$loadCellModel = $_POST['loadCellModel'] ?? [];
+					$loadCellCapacity = $_POST['loadCellCapacity'] ?? [];
+					$loadCellSerial = $_POST['loadCellSerial'] ?? [];
 
 					if(isset($no) && $no != null && count($no) > 0){
 						for($i=0; $i<count($no); $i++){
@@ -1505,7 +1505,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						$platform_type = $_POST['platformType'];
 					}
 				
-					if(isset($_POST['size']) && $_POST['size']!=null && $_POST['size']!=""){
+					if(isset($_POST['size']) && $_POST['size']!=null && $_POST['size']!="" && $_POST['size']!='-'){
 						$size = $_POST['size'];
 					}
 
@@ -1552,7 +1552,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// For ATS Additional fields
-				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATS')){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATS') && !str_contains($jenisAlatName, 'ATS (H)')){
 					$platform_country = null;
 
 					if(isset($_POST['platformCountry']) && $_POST['platformCountry']!=null && $_POST['platformCountry']!=""){
@@ -1684,7 +1684,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				}
 
 				// For ATP Additional fields
-				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATP')){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'ATP') && !str_contains($jenisAlatName, 'ATP (MOTORCAR)') && !str_contains($jenisAlatName, 'ATP-AUTO MACHINE')){
 					$platform_country = null;
 					$jenis_penunjuk = null;
 
@@ -1813,15 +1813,16 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BTU - (BOX)')){
 					$btu_info = [];
 
-					$no = $_POST['no'];
-					$batuUjian = $_POST['batuUjian'];
-					$batuUjianLain = $_POST['batuUjianLain'];
-					$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
-					$batuDaftarLama = $_POST['batuDaftarLama'];
-					$batuDaftarBaru = $_POST['batuDaftarBaru'];
-					$batuNoSiriPelekatKeselamatan = $_POST['batuNoSiriPelekatKeselamatan'];
-					$batuBorangD = $_POST['batuBorangD'];
-					$batuBorangE = $_POST['batuBorangE'];
+					$noOfBtu = $_POST['noOfBtu'] ?? null;
+					$no = $_POST['no'] ?? [];
+					$batuUjian = $_POST['batuUjian'] ?? [];
+					$batuUjianLain = $_POST['batuUjianLain'] ?? [];
+					$penandaanBatuUjian = $_POST['penandaanBatuUjian'] ?? [];
+					$batuDaftarLama = $_POST['batuDaftarLama'] ?? [];
+					$batuDaftarBaru = $_POST['batuDaftarBaru'] ?? [];
+					$batuNoSiriPelekatKeselamatan = $_POST['batuNoSiriPelekatKeselamatan'] ?? [];
+					$batuBorangD = $_POST['batuBorangD'] ?? [];
+					$batuBorangE = $_POST['batuBorangE'] ?? [];
 
 					if(isset($no) && $no != null && count($no) > 0){
 						for($i=0; $i<count($no); $i++){
@@ -1839,17 +1840,17 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						}
 					}
 
-					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, btu_box_info) 
-					VALUES (?, ?)")){
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, btu_box_qty, btu_box_info) 
+					VALUES (?, ?, ?)")){
 						$btuInfo = json_encode($btu_info);
-						$insert_stmt2->bind_param('ss', $stamp_id, $btuInfo);
+						$insert_stmt2->bind_param('sss', $stamp_id, $noOfBtu, $btuInfo);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
 				}
 
 				// For BTU Additional fields
-				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BTU')){
+				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BTU') && !str_contains($jenisAlatName, 'BTU - (BOX)')){
 					$platform_country = null;
 					$batuUjian = null;
 					$batuUjianLain = null;

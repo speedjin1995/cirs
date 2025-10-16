@@ -426,6 +426,7 @@ if(isset($_POST['userID'])){
                                     $message['nilai_jangkaan_maksimum'] = $row2['nilai_jangkaan_maksimum'] ?? '';
                                     $message['bahan_pembuat'] = $row2['bahan_pembuat'] ?? '';
                                     $message['bahan_pembuat_other'] = $row2['bahan_pembuat_other'] ?? '';
+                                    $message['btu_box_qty'] = $row2['btu_box_qty'] ?? 0;
                                     $message['btu_box_info'] = json_decode($row2['btu_box_info'], true);
                                 }
                             }

@@ -1635,7 +1635,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (ATK)</h4>
+        <h4>Additional Information (ATK)</h4>
       </div>
       <div class="row">
         <div class="col-4">
@@ -1759,7 +1759,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (ATS)</h4>
+        <h4>Additional Information (ATS)</h4>
       </div>
       <div class="row">
         <div class="form-group col-4">
@@ -1780,7 +1780,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (ATP)</h4>
+        <h4>Additional Information (ATP)</h4>
       </div>
       <div class="row">
         <!-- <div class="form-group col-4">
@@ -1809,7 +1809,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (ATP - MOTORCAR)</h4>
+        <h4>Additional Information (ATP - MOTORCAR)</h4>
       </div>
       <div class="row">
         <!-- <div class="form-group col-4">
@@ -1867,7 +1867,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (ATN)</h4>
+        <h4>Additional Information (ATN)</h4>
       </div>
       <div class="row">
         <!-- <div class="form-group col-4">
@@ -1904,7 +1904,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (ATE)</h4>
+        <h4>Additional Information (ATE)</h4>
       </div>
       <div class="row">
         <!-- <div class="form-group col-4">
@@ -1933,7 +1933,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (SLL)</h4>
+        <h4>Additional Information (SLL)</h4>
       </div>
       <div class="row">
         <!-- <div class="form-group col-4">
@@ -2104,7 +2104,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (ATP-Auto Machine)</h4>
+        <h4>Additional Information (ATP-Auto Machine)</h4>
       </div>
       <div class="row">
         <!-- <div class="form-group col-4">
@@ -2133,7 +2133,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (ATS - H)</h4>
+        <h4>Additional Information (ATS - H)</h4>
       </div>
       <div class="row">
         <div class="form-group col-4">
@@ -2154,7 +2154,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (SIA)</h4>
+        <h4>Additional Information (SIA)</h4>
       </div>
       <div class="row">
         <!-- <div class="form-group col-4">
@@ -2199,7 +2199,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (BAP)</h4>
+        <h4>Additional Information (BAP)</h4>
       </div>
       <div class="row">
         <div class="form-group col-4">
@@ -2253,7 +2253,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (SIC)</h4>
+        <h4>Additional Information (SIC)</h4>
       </div>
       <div class="row">
         <div class="form-group col-4">
@@ -2286,7 +2286,7 @@ else{
   <div class="card card-primary">
     <div class="card-body">
       <div class="row">
-        <h4>Addtional Information (BTU - BOX)</h4>
+        <h4>Additional Information (BTU - BOX)</h4>
       </div>
       <div class="row">
         <div class="col-4">
@@ -2449,6 +2449,7 @@ var btuCount = $("#btuTable").find(".details").length;
 var customer = 0;
 var branch = 0;
 var jalat = '';
+let alatOptions = $('#jenisAlat option').clone();
 
 $(function () {
   $('#customerNoHidden').hide();
@@ -5544,6 +5545,8 @@ function edit(id) {
     var obj = JSON.parse(data);
     
     if(obj.status === 'success'){
+      $('#extendModal').find('#jenisAlat').empty();
+      $('#extendModal').find('#jenisAlat').append(alatOptions);
       if(obj.message.type == 'DIRECT'){
         // Reset the flag when modal opens
         priceLoadedTriggered = false; 
@@ -5715,10 +5718,10 @@ function edit(id) {
             $('#extendModal').find('#noSerialIndicator').val(obj.message.indicator_serial);
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
             $('#extendModal').find('#platformType').val(obj.message.platform_type);
-            $('#extendModal').on('sizeLoaded', function() {
-              $('#extendModal').find('#size').val(obj.message.size);
-            });
-            // $('#extendModal').find('#size').val(obj.message.size);
+            // $('#extendModal').on('sizeLoaded', function() {
+            //   $('#extendModal').find('#size').val(obj.message.size);
+            // });
+            $('#extendModal').find('#size').val(obj.message.size);
             $('#extendModal').find('#jenisPelantar').val(obj.message.jenis_pelantar);
             $('#extendModal').find('#others').val(obj.message.other_info);
             $('#extendModal').find('#loadCellCountry').val(obj.message.load_cell_country);
@@ -5804,8 +5807,8 @@ function edit(id) {
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("BTU - (BOX)")){
             $('#addtionalSection').html($('#btuBoxDetails').html());
 
+            $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_qty);
             if(obj.message.btu_box_info.length > 0){
-              $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_info.length);
               $("#btuTable").html('');
               btuCount = 0;
 
@@ -5832,8 +5835,6 @@ function edit(id) {
 
                 btuCount++;
               }
-            }else{
-              $('#extendModal').find('#noOfBtu').val(0);
             }
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("BTU")){
             $('#addtionalSection').html($('#btuDetails').html());
@@ -6084,9 +6085,10 @@ function edit(id) {
             $('#extendModal').find('#noSerialIndicator').val(obj.message.indicator_serial);
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
             $('#extendModal').find('#platformType').val(obj.message.platform_type);
-            $('#extendModal').on('sizeLoaded', function() {
-              $('#extendModal').find('#size').val(obj.message.size);
-            });
+            // $('#extendModal').on('sizeLoaded', function() {
+            //   $('#extendModal').find('#size').val(obj.message.size);
+            // });
+            $('#extendModal').find('#size').val(obj.message.size);
             $('#extendModal').find('#jenisPelantar').val(obj.message.jenis_pelantar);
             $('#extendModal').find('#others').val(obj.message.other_info);
             $('#extendModal').find('#loadCellCountry').val(obj.message.load_cell_country);
@@ -6171,8 +6173,8 @@ function edit(id) {
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("BTU - (BOX)")){
             $('#addtionalSection').html($('#btuBoxDetails').html());
 
+            $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_qty);
             if(obj.message.btu_box_info.length > 0){
-              $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_info.length);
               $("#btuTable").html('');
               btuCount = 0;
 
@@ -6200,8 +6202,6 @@ function edit(id) {
 
                 btuCount++;
               }
-            }else{
-              $('#extendModal').find('#noOfBtu').val(0);
             }
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("BTU")){
             $('#addtionalSection').html($('#btuDetails').html());
