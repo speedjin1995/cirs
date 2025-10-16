@@ -273,3 +273,6 @@ ALTER TABLE `other_validations` CHANGE `calibrations` `calibrations` LONGTEXT CH
 
 -- 14/10/2025 --
 DELETE FROM stamping_ext WHERE id NOT IN ( SELECT MIN(id) FROM stamping_ext GROUP BY stamp_id );
+
+-- 16/10/2025 --
+ALTER TABLE `stamping_ext` ADD `btu_box_qty` INT(10) NULL AFTER `btu_info`;

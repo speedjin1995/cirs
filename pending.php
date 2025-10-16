@@ -5807,8 +5807,8 @@ function edit(id) {
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("BTU - (BOX)")){
             $('#addtionalSection').html($('#btuBoxDetails').html());
 
+            $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_qty);
             if(obj.message.btu_box_info.length > 0){
-              $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_info.length);
               $("#btuTable").html('');
               btuCount = 0;
 
@@ -5835,8 +5835,6 @@ function edit(id) {
 
                 btuCount++;
               }
-            }else{
-              $('#extendModal').find('#noOfBtu').val(0);
             }
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("BTU")){
             $('#addtionalSection').html($('#btuDetails').html());
@@ -6175,8 +6173,8 @@ function edit(id) {
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("BTU - (BOX)")){
             $('#addtionalSection').html($('#btuBoxDetails').html());
 
+            $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_qty);
             if(obj.message.btu_box_info.length > 0){
-              $('#extendModal').find('#noOfBtu').val(obj.message.btu_box_info.length);
               $("#btuTable").html('');
               btuCount = 0;
 
@@ -6204,8 +6202,6 @@ function edit(id) {
 
                 btuCount++;
               }
-            }else{
-              $('#extendModal').find('#noOfBtu').val(0);
             }
           }else if((obj.message.validate_by == '10' || obj.message.validate_by == '9') && jenisAlatName.includes("BTU")){
             $('#addtionalSection').html($('#btuDetails').html());

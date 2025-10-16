@@ -1027,6 +1027,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BTU - (BOX)')){
 					$btu_info = [];
 
+					$noOfBtu = $_POST['noOfBtu'] ?? null;
 					$no = $_POST['no'] ?? [];
 					$batuUjian = $_POST['batuUjian'] ?? [];
 					$batuUjianLain = $_POST['batuUjianLain'] ?? [];
@@ -1053,9 +1054,9 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						}
 					}
 
-					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET btu_box_info = ? WHERE stamp_id = ?")){
+					if ($insert_stmt2 = $db->prepare("UPDATE stamping_ext SET btu_box_qty = ?, btu_box_info = ? WHERE stamp_id = ?")){
 						$btuInfo = json_encode($btu_info);
-						$insert_stmt2->bind_param('ss', $btuInfo, $_POST['id']);
+						$insert_stmt2->bind_param('ssi', $noOfBtu, $btuInfo, $_POST['id']);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
@@ -1812,6 +1813,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BTU - (BOX)')){
 					$btu_info = [];
 
+					$noOfBtu = $_POST['noOfBtu'] ?? null;
 					$no = $_POST['no'] ?? [];
 					$batuUjian = $_POST['batuUjian'] ?? [];
 					$batuUjianLain = $_POST['batuUjianLain'] ?? [];
@@ -1838,10 +1840,10 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						}
 					}
 
-					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, btu_box_info) 
-					VALUES (?, ?)")){
+					if ($insert_stmt2 = $db->prepare("INSERT INTO stamping_ext (stamp_id, btu_box_qty, btu_box_info) 
+					VALUES (?, ?, ?)")){
 						$btuInfo = json_encode($btu_info);
-						$insert_stmt2->bind_param('ss', $stamp_id, $btuInfo);
+						$insert_stmt2->bind_param('sss', $stamp_id, $noOfBtu, $btuInfo);
 						$insert_stmt2->execute();
 						$insert_stmt2->close();
 					}
