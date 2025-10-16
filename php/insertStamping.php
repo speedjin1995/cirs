@@ -674,12 +674,12 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					$load_cell_no = null;
 					$load_cells_info = [];
 
-					$no = $_POST['no'];
-					$loadCells = $_POST['loadCells'];
-					$loadCellBrand = $_POST['loadCellBrand'];
-					$loadCellModel = $_POST['loadCellModel'];
-					$loadCellCapacity = $_POST['loadCellCapacity'];
-					$loadCellSerial = $_POST['loadCellSerial'];
+					$no = $_POST['no'] ?? [];
+					$loadCells = $_POST['loadCells'] ?? [];
+					$loadCellBrand = $_POST['loadCellBrand'] ?? [];
+					$loadCellModel = $_POST['loadCellModel'] ?? [];
+					$loadCellCapacity = $_POST['loadCellCapacity'] ?? [];
+					$loadCellSerial = $_POST['loadCellSerial'] ?? [];
 
 					if(isset($no) && $no != null && count($no) > 0){
 						for($i=0; $i<count($no); $i++){
@@ -726,7 +726,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						$platform_type = $_POST['platformType'];
 					}
 				
-					if(isset($_POST['size']) && $_POST['size']!=null && $_POST['size']!=""){
+					if(isset($_POST['size']) && $_POST['size']!=null && $_POST['size']!="" && $_POST['size']!='-'){
 						$size = $_POST['size'];
 					}
 
@@ -1027,15 +1027,15 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BTU - (BOX)')){
 					$btu_info = [];
 
-					$no = $_POST['no'];
-					$batuUjian = $_POST['batuUjian'];
-					$batuUjianLain = $_POST['batuUjianLain'];
-					$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
-					$batuDaftarLama = $_POST['batuDaftarLama'];
-					$batuDaftarBaru = $_POST['batuDaftarBaru'];
-					$batuNoSiriPelekatKeselamatan = $_POST['batuNoSiriPelekatKeselamatan'];
-					$batuBorangD = $_POST['batuBorangD'];
-					$batuBorangE = $_POST['batuBorangE'];
+					$no = $_POST['no'] ?? [];
+					$batuUjian = $_POST['batuUjian'] ?? [];
+					$batuUjianLain = $_POST['batuUjianLain'] ?? [];
+					$penandaanBatuUjian = $_POST['penandaanBatuUjian'] ?? [];
+					$batuDaftarLama = $_POST['batuDaftarLama'] ?? [];
+					$batuDaftarBaru = $_POST['batuDaftarBaru'] ?? [];
+					$batuNoSiriPelekatKeselamatan = $_POST['batuNoSiriPelekatKeselamatan'] ?? [];
+					$batuBorangD = $_POST['batuBorangD'] ?? [];
+					$batuBorangE = $_POST['batuBorangE'] ?? [];
 
 					if(isset($no) && $no != null && count($no) > 0){
 						for($i=0; $i<count($no); $i++){
@@ -1456,12 +1456,12 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 					$load_cell_no = null;
 					$load_cells_info = [];
 
-					$no = $_POST['no'];
-					$loadCells = $_POST['loadCells'];
-					$loadCellBrand = $_POST['loadCellBrand'];
-					$loadCellModel = $_POST['loadCellModel'];
-					$loadCellCapacity = $_POST['loadCellCapacity'];
-					$loadCellSerial = $_POST['loadCellSerial'];
+					$no = $_POST['no'] ?? [];
+					$loadCells = $_POST['loadCells'] ?? [];
+					$loadCellBrand = $_POST['loadCellBrand'] ?? [];
+					$loadCellModel = $_POST['loadCellModel'] ?? [];
+					$loadCellCapacity = $_POST['loadCellCapacity'] ?? [];
+					$loadCellSerial = $_POST['loadCellSerial'] ?? [];
 
 					if(isset($no) && $no != null && count($no) > 0){
 						for($i=0; $i<count($no); $i++){
@@ -1504,7 +1504,7 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 						$platform_type = $_POST['platformType'];
 					}
 				
-					if(isset($_POST['size']) && $_POST['size']!=null && $_POST['size']!=""){
+					if(isset($_POST['size']) && $_POST['size']!=null && $_POST['size']!="" && $_POST['size']!='-'){
 						$size = $_POST['size'];
 					}
 
@@ -1812,15 +1812,15 @@ if(isset($_POST['type'], $customerType, $_POST['newRenew'], $_POST['brand'], $_P
 				if(($validator == '10' || $validator == '9') && str_contains($jenisAlatName, 'BTU - (BOX)')){
 					$btu_info = [];
 
-					$no = $_POST['no'];
-					$batuUjian = $_POST['batuUjian'];
-					$batuUjianLain = $_POST['batuUjianLain'];
-					$penandaanBatuUjian = $_POST['penandaanBatuUjian'];
-					$batuDaftarLama = $_POST['batuDaftarLama'];
-					$batuDaftarBaru = $_POST['batuDaftarBaru'];
-					$batuNoSiriPelekatKeselamatan = $_POST['batuNoSiriPelekatKeselamatan'];
-					$batuBorangD = $_POST['batuBorangD'];
-					$batuBorangE = $_POST['batuBorangE'];
+					$no = $_POST['no'] ?? [];
+					$batuUjian = $_POST['batuUjian'] ?? [];
+					$batuUjianLain = $_POST['batuUjianLain'] ?? [];
+					$penandaanBatuUjian = $_POST['penandaanBatuUjian'] ?? [];
+					$batuDaftarLama = $_POST['batuDaftarLama'] ?? [];
+					$batuDaftarBaru = $_POST['batuDaftarBaru'] ?? [];
+					$batuNoSiriPelekatKeselamatan = $_POST['batuNoSiriPelekatKeselamatan'] ?? [];
+					$batuBorangD = $_POST['batuBorangD'] ?? [];
+					$batuBorangE = $_POST['batuBorangE'] ?? [];
 
 					if(isset($no) && $no != null && count($no) > 0){
 						for($i=0; $i<count($no); $i++){
