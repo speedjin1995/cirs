@@ -5718,10 +5718,10 @@ function edit(id) {
             $('#extendModal').find('#noSerialIndicator').val(obj.message.indicator_serial);
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
             $('#extendModal').find('#platformType').val(obj.message.platform_type);
-            $('#extendModal').on('sizeLoaded', function() {
-              $('#extendModal').find('#size').val(obj.message.size);
-            });
-            // $('#extendModal').find('#size').val(obj.message.size);
+            // $('#extendModal').on('sizeLoaded', function() {
+            //   $('#extendModal').find('#size').val(obj.message.size);
+            // });
+            $('#extendModal').find('#size').val(obj.message.size);
             $('#extendModal').find('#jenisPelantar').val(obj.message.jenis_pelantar);
             $('#extendModal').find('#others').val(obj.message.other_info);
             $('#extendModal').find('#loadCellCountry').val(obj.message.load_cell_country);
@@ -6087,9 +6087,10 @@ function edit(id) {
             $('#extendModal').find('#noSerialIndicator').val(obj.message.indicator_serial);
             $('#extendModal').find('#platformCountry').val(obj.message.platform_country);
             $('#extendModal').find('#platformType').val(obj.message.platform_type);
-            $('#extendModal').on('sizeLoaded', function() {
-              $('#extendModal').find('#size').val(obj.message.size);
-            });
+            // $('#extendModal').on('sizeLoaded', function() {
+            //   $('#extendModal').find('#size').val(obj.message.size);
+            // });
+            $('#extendModal').find('#size').val(obj.message.size);
             $('#extendModal').find('#jenisPelantar').val(obj.message.jenis_pelantar);
             $('#extendModal').find('#others').val(obj.message.other_info);
             $('#extendModal').find('#loadCellCountry').val(obj.message.load_cell_country);
