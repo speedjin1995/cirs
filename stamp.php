@@ -2171,7 +2171,7 @@ var loadCellCount = $("#loadCellTable").find(".details").length;
 var btuCount = $("#btuTable").find(".details").length;
 var customer = 0;
 var branch = 0;
-let alatOptions = $('#jenisAlat option').clone();
+var alatOptions = $('#jenisAlat option').clone();
 
 $(function () {
   $('#customerNoHidden').hide();
