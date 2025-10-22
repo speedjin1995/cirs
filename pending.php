@@ -2449,7 +2449,7 @@ var btuCount = $("#btuTable").find(".details").length;
 var customer = 0;
 var branch = 0;
 var jalat = '';
-let alatOptions = $('#jenisAlat option').clone();
+var alatOptions = $('#jenisAlat option').clone();
 
 $(function () {
   $('#customerNoHidden').hide();
