@@ -5605,9 +5605,10 @@ function edit(id) {
           $('#extendModal').find('#branch').val(obj.message.branch).trigger('change');
         }, 500);
 
-        $('#extendModal').on('modelsLoaded', function() {
+        // $('#extendModal').on('modelsLoaded', function() {
           $('#extendModal').find('#model').val(obj.message.model).trigger('change');
-        });
+        // });
+        
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#lastYearStampDate').val(formatDate3(obj.message.last_year_stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
@@ -6035,9 +6036,9 @@ function edit(id) {
         }
         //$('#extendModal').find('#address1').val(obj.message.address1);
 
-        $('#extendModal').on('modelsLoaded', function() {
+        // $('#extendModal').on('modelsLoaded', function() {
           $('#extendModal').find('#model').val(obj.message.model).trigger('change');
-        });
+        // });
         $('#extendModal').find('#stampDate').val(formatDate3(obj.message.stamping_date));
         $('#extendModal').find('#lastYearStampDate').val(formatDate3(obj.message.last_year_stamping_date));
         $('#extendModal').find('#address2').val(obj.message.address2);
