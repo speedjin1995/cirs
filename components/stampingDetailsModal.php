@@ -179,6 +179,9 @@
                     <input class="form-control" type="text" placeholder="No PIN Pelekat Keselamatan" id="pinKeselamatan" name="pinKeselamatan">
                   </div>
                 </div> -->
+                <input type="hidden" id="machine_type" name="machine_type"/>
+                <input type="hidden" id="jenis_alat" name="jenis_alat"/>
+                <input type="hidden" id="capacity" name="capacity"/>
               </div>
             </div>
           </div>

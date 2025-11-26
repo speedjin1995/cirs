@@ -17,6 +17,7 @@ if (isset($_POST['type'], $customerType, $_POST['companyBranch'])) {
 	$type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
 	$companyBranch = filter_input(INPUT_POST, 'companyBranch', FILTER_SANITIZE_STRING);
 	$customerType = filter_input(INPUT_POST, 'customerType', FILTER_SANITIZE_STRING);
+	$status = "";
 
 	$company = null;
 	$customerText = null;

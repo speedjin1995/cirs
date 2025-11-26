@@ -102,6 +102,33 @@ if (isset($_POST['newRenew'], $_POST['validator'], $_POST['cawangan'])) {
 		$certNo = $_POST['certNo'];
 	}
 
+	if ($select_stmtP = $db->prepare("SELECT id FROM products WHERE machine_type=? AND jenis_alat=? AND capacity=? AND validator=?")) {
+		$select_stmtP->bind_param('ssss', $machineType, $jenisAlat, $capacity, $validator);
+		$select_stmtP->execute();
+		$resultP = $select_stmtP->get_result();
+
+		if ($rowP = $resultP->fetch_assoc()) {
+			$product = $rowP['id'];
+		} 
+		else {
+			if(isset($_POST['unitPrice']) && $_POST['unitPrice']!=null && $_POST['unitPrice']!="" && $_POST['unitPrice']!="0.00"){
+				// Customer does not exist, create a new customer
+				if ($insert_stmtP = $db->prepare("INSERT INTO products (name, machine_type, jenis_alat, capacity, validator, price) VALUES (?, ?, ?, ?, ?, ?)")) {
+					$pname = 'product'.$machineType.$jenisAlat.$capacity.$validator;
+					$insert_stmtP->bind_param('ssssss', $pname , $machineType, $jenisAlat, $capacity, $validator, $_POST['unitPrice']);
+
+					if ($insert_stmtP->execute()) {
+						$product = $insert_stmtP->insert_id;
+					} 
+
+					$insert_stmtP->close();
+				}
+			}
+		}
+
+		$select_stmtP->close();
+	}
+
 	if (isset($_POST['id']) && $_POST['id'] != null && $_POST['id'] != '') {
 		//Updated datetime
 		$currentDateTime = date('Y-m-d H:i:s');
