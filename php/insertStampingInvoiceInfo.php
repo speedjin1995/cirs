@@ -12,6 +12,7 @@ if($_POST['invoice'] != null || $_POST['invoicePaymentType'] != null || $_POST['
 	$invoice = null;
 	$invoicePaymentType = null;
 	$invoicePayRef = null;
+	$invoiceDate = null;
 	
 	$logs = array();
 
@@ -27,13 +28,18 @@ if($_POST['invoice'] != null || $_POST['invoicePaymentType'] != null || $_POST['
 		$invoicePayRef = $_POST['invoicePayRef'];
 	}
 
+	if (isset($_POST['invoiceDate']) && $_POST['invoiceDate'] != null && $_POST['invoiceDate'] != "") {
+		$invoiceDate = $_POST['invoiceDate'];
+		$invoiceDate = DateTime::createFromFormat('d/m/Y', $invoiceDate)->format('Y-m-d H:i:s');
+	}
+
 	if(isset($_POST['id']) && $_POST['id'] != null && $_POST['id'] != ''){
 		//Updated datetime
 		$currentDateTime = date('Y-m-d H:i:s');
 
-		if ($update_stmt = $db->prepare("UPDATE stamping SET invoice_no=?, invoice_payment_type=?, invoice_payment_ref=?, log=?, updated_datetime=? WHERE id=?")){
+		if ($update_stmt = $db->prepare("UPDATE stamping SET invoice_no=?, invoice_payment_type=?, invoice_payment_ref=?, log=?, invoice_date=?, updated_datetime=? WHERE id=?")){
 			$data = json_encode($logs);
-			$update_stmt->bind_param('sssssi', $invoice, $invoicePaymentType, $invoicePayRef, $data, $currentDateTime, $_POST['id']);
+			$update_stmt->bind_param('ssssssi', $invoice, $invoicePaymentType, $invoicePayRef, $data, $invoiceDate, $currentDateTime, $_POST['id']);
 		
 			// Execute the prepared query.
 			if (! $update_stmt->execute()){
@@ -86,6 +92,46 @@ if($_POST['invoice'] != null || $_POST['invoicePaymentType'] != null || $_POST['
 								$stmt3->close();
 								
 								if ($stmtf = $db->prepare("UPDATE stamping SET invoice_attachment=? WHERE id=?")) {
+									$stmtf->bind_param('ss', $fid, $stampingId);
+									$stmtf->execute();
+									$stmtf->close();
+								}
+							} 
+						} 
+					}
+				}
+
+				$uploadPOAttachment = null;
+
+				if(isset($_FILES['uploadPOAttachment']) && $_FILES['uploadPOAttachment']!=null && $_FILES['uploadPOAttachment']!=""){
+					$uploadPOAttachment = $_FILES['uploadPOAttachment'];
+
+					$ds = DIRECTORY_SEPARATOR;
+					$storeFolder = '../uploads/stamping';
+					if($uploadPOAttachment['error'] === 0){
+						$timestamp = time();
+						$uploadDir = $storeFolder . $ds; // Directory to store uploaded files
+						$folderDir = dirname(__DIR__, 2) . '/' . $uploadDir;
+						// Check if folder exists, if not, create it with correct permissions
+						if (!is_dir($folderDir)) {
+							mkdir($folderDir, 0777, true); // true allows recursive directory creation
+						}
+
+						$filename = $timestamp . '_' . basename($_FILES['uploadPOAttachment']['name']);
+						$uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
+						$tempFile = $_FILES['uploadPOAttachment']['tmp_name'];
+
+						// Move the uploaded file to the target directory
+						if (move_uploaded_file($tempFile, $uploadFile)) {
+							$pOFilePath = $uploadDir . $filename;
+							// Update certificate data in the database
+							if ($stmt3 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+								$stmt3->bind_param('ss', $filename, $pOFilePath);
+								$stmt3->execute();
+								$fid = $stmt3->insert_id;
+								$stmt3->close();
+								
+								if ($stmtf = $db->prepare("UPDATE stamping SET po_attachment=? WHERE id=?")) {
 									$stmtf->bind_param('ss', $fid, $stampingId);
 									$stmtf->execute();
 									$stmtf->close();

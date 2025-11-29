@@ -30,7 +30,6 @@ if (isset($_POST['type'], $customerType, $_POST['companyBranch'])) {
 	$phone = null;
 	$email = null;
 	$contact = null;
-	$notificationPeriod = null;
 
 	//MIGHT NEEDED Y EVERY FILES
 	$dealer = null;
@@ -66,7 +65,6 @@ if (isset($_POST['type'], $customerType, $_POST['companyBranch'])) {
 	$invoice = null;
 	$invoicePaymentType = null;
 	$invoicePayRef = null;
-	$notificationPeriod = null;
 	$cashBill = null;
 	$stampDate = null;
 	$lastYearStampDate = null;
@@ -241,20 +239,16 @@ if (isset($_POST['type'], $customerType, $_POST['companyBranch'])) {
 		$pic = $_POST['pic'];
 	}
 
-	if (isset($_POST['notificationPeriod']) && $_POST['notificationPeriod'] != null && $_POST['notificationPeriod'] != "") {
-		$notificationPeriod = $_POST['notificationPeriod'];
-	}
-
 	//TJW START INSERT THE DATA INTO STAMPING TABLE
 	if (
 		$insert_stmt = $db->prepare("INSERT INTO stamping (type, company_branch, dealer, dealer_branch, customer_type, customers, brand, machine_type, model, make_in, capacity, serial_no, assignTo, assignTo2, assignTo3, ownership_status, validator_lama,
-		validate_by, cawangan, jenis_alat, machine_name, machine_location, machine_area, machine_serial_no, trade, no_daftar_lama, no_daftar_baru, pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, borang_e_date, invoice_no, invoice_payment_type, invoice_payment_ref, notification_period, cash_bill, stamping_date, last_year_stamping_date, due_date, pic, customer_pic, 
+		validate_by, cawangan, jenis_alat, machine_name, machine_location, machine_area, machine_serial_no, trade, no_daftar_lama, no_daftar_baru, pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, borang_e_date, invoice_no, invoice_payment_type, invoice_payment_ref, cash_bill, stamping_date, last_year_stamping_date, due_date, pic, customer_pic, 
 		quotation_no, quotation_date, purchase_no, purchase_date, remarks, internal_remark, validator_invoice, unit_price, cert_price, total_amount, sst, subtotal_sst_amt, rebate, rebate_amount, subtotal_amount, log, products, stamping_type, branch, labour_charge, stampfee_labourcharge, int_round_up, total_charges, seal_no_lama, seal_no_baru, pegawai_contact, cert_no) 
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	) {
 		$data = json_encode($logs);
 		$insert_stmt->bind_param(
-			'ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss',
+			'sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss',
 			$type,
 			$companyBranch,
 			$dealer,
@@ -291,7 +285,6 @@ if (isset($_POST['type'], $customerType, $_POST['companyBranch'])) {
 			$invoice,
 			$invoicePaymentType,
 			$invoicePayRef,
-			$notificationPeriod,
 			$cashBill,
 			$stampDate,
 			$lastYearStampDate,

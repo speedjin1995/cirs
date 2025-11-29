@@ -12,9 +12,13 @@ if(isset($_POST['assignTo'])){
 
 	$assignTo2 = null;
 	$assignTo3 = null;
+	$serviceReportNo = null;
 	
 	$logs = array();
 
+	if(isset($_POST['serviceReportNo']) && $_POST['serviceReportNo']!=null && $_POST['serviceReportNo']!=""){
+		$serviceReportNo = $_POST['serviceReportNo'];
+	}
 	
 	if(isset($_POST['assignTo2']) && $_POST['assignTo2']!=null && $_POST['assignTo2']!=""){
 		$assignTo2 = $_POST['assignTo2'];
@@ -28,10 +32,11 @@ if(isset($_POST['assignTo'])){
 		//Updated datetime
 		$currentDateTime = date('Y-m-d H:i:s');
 
-		if ($update_stmt = $db->prepare("UPDATE stamping SET assignTo=?, assignTo2=?, assignTo3=?, log=?, updated_datetime=? WHERE id=?")){
+		if ($update_stmt = $db->prepare("UPDATE stamping SET service_report_no=?, assignTo=?, assignTo2=?, assignTo3=?, log=?, updated_datetime=? WHERE id=?")){
 			$data = json_encode($logs);
-			$update_stmt->bind_param('sssssi',$assignTo, $assignTo2, $assignTo3, $data, $currentDateTime, $_POST['id']);
-		
+			$update_stmt->bind_param('ssssssi',$serviceReportNo, $assignTo, $assignTo2, $assignTo3, $data, $currentDateTime, $_POST['id']);
+	
+			
 			// Execute the prepared query.
 			if (! $update_stmt->execute()){
 				echo json_encode(
@@ -44,6 +49,45 @@ if(isset($_POST['assignTo'])){
 			else{
 				$stampingId = $_POST['id'];
 
+				$uploadServiceReportAttachment = null;
+
+				if(isset($_FILES['uploadServiceReportAttachment']) && $_FILES['uploadServiceReportAttachment']!=null && $_FILES['uploadServiceReportAttachment']!=""){
+					$uploadServiceReportAttachment = $_FILES['uploadServiceReportAttachment'];
+
+					$ds = DIRECTORY_SEPARATOR;
+					$storeFolder = '../uploads/stamping';
+					if($uploadServiceReportAttachment['error'] === 0){
+						$timestamp = time();
+						$uploadDir = $storeFolder . $ds; // Directory to store uploaded files
+						$folderDir = dirname(__DIR__, 2) . '/' . $uploadDir;
+						// Check if folder exists, if not, create it with correct permissions
+						if (!is_dir($folderDir)) {
+							mkdir($folderDir, 0777, true); // true allows recursive directory creation
+						}
+
+						$filename = $timestamp . '_' . basename($_FILES['uploadServiceReportAttachment']['name']);
+						$uploadFile = dirname(__DIR__, 2) . '/' . $uploadDir . $filename;
+						$tempFile = $_FILES['uploadServiceReportAttachment']['tmp_name'];
+
+						// Move the uploaded file to the target directory
+						if (move_uploaded_file($tempFile, $uploadFile)) {
+							$serviceReportFilePath = $uploadDir . $filename;
+							// Update certificate data in the database
+							if ($stmt3 = $db->prepare("INSERT INTO files (filename, filepath) VALUES (?, ?)")) {
+								$stmt3->bind_param('ss', $filename, $serviceReportFilePath);
+								$stmt3->execute();
+								$fid = $stmt3->insert_id;
+								$stmt3->close();
+								
+								if ($stmtf = $db->prepare("UPDATE stamping SET service_report_attachment=? WHERE id=?")) {
+									$stmtf->bind_param('ss', $fid, $stampingId);
+									$stmtf->execute();
+									$stmtf->close();
+								}
+							} 
+						} 
+					}
+				}
 
 				$stampExtQuery = "SELECT * FROM stamping_ext WHERE stamp_id = $stampingId";
                 $stampExtDetail = mysqli_query($db, $stampExtQuery);

@@ -91,13 +91,31 @@ function newQuotationInfoEntry(id){
   $('#capacityHigh').hide();
   $('#quotationInfoExtendModal').find('#id').val(id);
 
-  $('#quotationInfoExtendModal').find('#quotation').val("");
-  $('#quotationInfoExtendModal').find('#quotationDate').val('');
-  $('#quotationInfoExtendModal').find('#poNo').val("");
-  $('#quotationInfoExtendModal').find('#poDate').val('');
-  $('#quotationInfoExtendModal').find('#viewQuotation').hide();
+  $.post('php/getStamp.php', {userID: id}, function(data){
+    var obj = JSON.parse(data);
+    
+    if(obj.status === 'success'){
+      $('#quotationInfoExtendModal').find('#quotation').val(obj.message.quotation_no);
+
+      if(obj.message.quotation_attachment){
+        $('#quotationInfoExtendModal').find('#viewQuotation').attr('href', "view_file.php?file="+obj.message.quotation_attachment).show();
+        $('#quotationInfoExtendModal').find('#quotationFilePath').val(obj.message.quotation_filepath);
+      }
+      $('#quotationInfoExtendModal').find('#quotationDate').val(formatDate3(obj.message.quotation_date));
+      $('#quotationInfoExtendModal').find('#poNo').val(obj.message.purchase_no);
+      $('#quotationInfoExtendModal').find('#poDate').val(formatDate3(obj.message.purchase_date));
+      
+    }
+    else if(obj.status === 'failed'){
+      toastr["error"](obj.message, "Failed:");
+    }
+    else{
+      toastr["error"]("Something wrong when pull data", "Failed:");
+    }
+    $('#spinnerLoading').hide();
+  });
+
   $('#quotationInfoExtendModal').find('#uploadQuotationAttachment').val('');
-  $('#quotationInfoExtendModal').find('#quotationFilePath').val('');
 
   $('#pricingTable').html('');
   pricingCount = 0;

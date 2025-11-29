@@ -16,6 +16,14 @@
           <input type="hidden" class="form-control" id="id" name="id">
           <!--Remark Details--->
           <div class="row">
+          <div class="col-4">
+              <div class="form-group">
+                <label>Notification Period (Months)</label>
+                <input class="form-control" type="number" placeholder="Notification Period" id="notificationPeriod" name="notificationPeriod">
+              </div>
+          </div>
+          </div>
+          <div class="row">
             <div class="col-12">
               <div class="form-group">
                 <label>Remark</label>
@@ -49,11 +57,22 @@ function newOtherInfoEntry(id){
   $('#capacityHigh').hide();
   $('#otherInfoExtendModal').find('#id').val(id);
 
-  $('#otherInfoExtendModal').find('#remark').val("");
-  $('#otherInfoExtendModal').find('#internalRemark').val("");
-  
-  $('#pricingTable').html('');
-  pricingCount = 0;
+  $.post('php/getStamp.php', {userID: id}, function(data){
+    var obj = JSON.parse(data);
+    
+    if(obj.status === 'success'){
+      $('#otherInfoExtendModal').find('#remark').val(obj.message.remarks);
+      $('#otherInfoExtendModal').find('#internalRemark').val(obj.message.internal_remark);
+      $('#otherInfoExtendModal').find('#notificationPeriod').val(obj.message.notification_period);
+    }
+    else if(obj.status === 'failed'){
+      toastr["error"](obj.message, "Failed:");
+    }
+    else{
+      toastr["error"]("Something wrong when pull data", "Failed:");
+    }
+    $('#spinnerLoading').hide();
+  });
 
   $('#cerId').hide();
 
@@ -70,6 +89,14 @@ function newOtherInfoEntry(id){
     },
     unhighlight: function (element, errorClass, validClass) {
       $(element).removeClass('is-invalid');
+    }
+  });
+
+  $('#otherInfoExtendForm').find('#notificationPeriod').on('change', function(){
+    var notificationPeriod = $(this).val();
+    if (notificationPeriod > 6){
+        alert("Maximum notification period is 6.");
+        $(this).val(6); // reset to 6
     }
   });
 }

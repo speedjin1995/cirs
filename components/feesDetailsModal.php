@@ -125,21 +125,71 @@ function newFeesInfoEntry(id){
   $('#capacityHigh').hide();
   $('#feesInfoExtendModal').find('#id').val(id);
 
+  $.post('php/getStamp.php', {userID: id}, function(data){
+    var obj = JSON.parse(data);
+    
+    if(obj.status === 'success'){
+      $('#feesInfoExtendModal').find('#validatorInvoice').val(obj.message.validator_invoice);
+      $('#feesInfoExtendModal').find('#unitPrice').val(obj.message.unit_price);
+      $('#feesInfoExtendModal').find('#certPrice').val(obj.message.cert_price);
+
+      $('#feesInfoExtendModal').find('#totalAmount').val(obj.message.total_amount);
+      $('#feesInfoExtendModal').find('#sst').val(obj.message.sst);
+      $('#feesInfoExtendModal').find('#subAmountSst').val(obj.message.subtotal_sst_amt);
+      $('#feesInfoExtendModal').find('#rebate').val(obj.message.rebate);
+      $('#feesInfoExtendModal').find('#rebateAmount').val(obj.message.rebate_amount);
+      $('#feesInfoExtendModal').find('#subAmount').val(obj.message.subtotal_amount);
+      $('#feesInfoExtendModal').find('#labourCharge').val(obj.message.labour_charge);
+      $('#feesInfoExtendModal').find('#stampLabourCharge').val(obj.message.stampfee_labourcharge);
+      $('#feesInfoExtendModal').find('#roundUp').val(obj.message.int_round_up);
+      $('#feesInfoExtendModal').find('#totalCharge').val(obj.message.total_charges);
+
+        if(obj.message.log.length > 0){
+          for(var i = 0; i < obj.message.log.length; i++){
+            var item = obj.message.log[i];
+            var $addContents = $("#pricingDetails").clone();
+            $("#pricingTable").append($addContents.html());
+
+            $("#pricingTable").find('.details:last').attr("id", "detail" + pricingCount);
+            $("#pricingTable").find('.details:last').attr("data-index", pricingCount);
+            //$("#pricingTable").find('#remove:last').attr("id", "remove" + pricingCount);
+
+            $("#pricingTable").find('#no:last').attr('name', 'no['+pricingCount+']').attr("id", "no" + pricingCount).val(item.no);
+            $("#pricingTable").find('#date:last').attr('name', 'date['+pricingCount+']').attr("id", "date" + pricingCount).val(item.date);
+            $("#pricingTable").find('#notes:last').attr('name', 'notes['+pricingCount+']').attr("id", "notes" + pricingCount).val(item.notes);
+            $("#pricingTable").find('#followUpDate:last').attr('name', 'followUpDate['+pricingCount+']').attr("id", "followUpDate" + pricingCount).val(item.followUpDate);
+            $("#pricingTable").find('#picAttend:last').attr('name', 'picAttend['+pricingCount+']').attr("id", "picAttend" + pricingCount).val(item.picAttend);
+            $("#pricingTable").find('#status').attr('name', 'status['+pricingCount+']').attr("id", "status" + pricingCount).val('Pending').val(item.status);
+
+            var newDatePickerId = "datePicker5" + pricingCount;
+
+            // Find the newly added date input and set the new ID
+            var $newDateInputGroup = $("#pricingTable").find('#datePicker5:last');
+            $newDateInputGroup.attr("id", newDatePickerId);
+            $newDateInputGroup.find('input').attr("data-target", "#" + newDatePickerId);
+            $newDateInputGroup.find('.input-group-append').attr("data-target", "#" + newDatePickerId);
+
+            // Initialize the date picker on the new element
+            $newDateInputGroup.datetimepicker({
+              icons: { time: 'far fa-calendar' },
+              format: 'DD/MM/YYYY'
+            });
+
+            pricingCount++;
+          }
+        }
+    }
+    else if(obj.status === 'failed'){
+      toastr["error"](obj.message, "Failed:");
+    }
+    else{
+      toastr["error"]("Something wrong when pull data", "Failed:");
+    }
+    $('#spinnerLoading').hide();
+  });
+
   $('#pricingTable').html('');
   pricingCount = 0;
-  $('#feesInfoExtendModal').find('#validatorInvoice').val('');
-  $('#feesInfoExtendModal').find('#unitPrice').val('0.00');
-  $('#feesInfoExtendModal').find('#certPrice').val('');
-  $('#feesInfoExtendModal').find('#totalAmount').val("");
-  $('#feesInfoExtendModal').find('#sst').val('');
-  $('#feesInfoExtendModal').find('#subAmountSst').val('');
-  $('#feesInfoExtendModal').find('#rebate').val(0);
-  $('#feesInfoExtendModal').find('#rebateAmount').val('');
-  $('#feesInfoExtendModal').find('#subAmount').val('');
-  $('#feesInfoExtendModal').find('#labourCharge').val('0.00');
-  $('#feesInfoExtendModal').find('#stampLabourCharge').val('');
-  $('#feesInfoExtendModal').find('#roundUp').val('');
-  $('#feesInfoExtendModal').find('#totalCharge').val('');
 
   $('#cerId').hide();
 

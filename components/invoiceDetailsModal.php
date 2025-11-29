@@ -57,6 +57,31 @@
                     <input class="form-control" type="text" placeholder="Invoice Payment Reference" id="invoicePayRef" name="invoicePayRef">
                   </div>
                 </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Invoice Date</label>
+                    <div class='input-group date' id="datePicker2" data-target-input="nearest">
+                      <input type='text' class="form-control datetimepicker-input" data-target="#datePicker2" id="invoiceDate" name="invoiceDate"/>
+                      <div class="input-group-append" data-target="#datePicker2" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Upload PO Attachment</label>
+                    <div class="d-flex">
+                      <div class="col-10">
+                        <input type="file" class="form-control" id="uploadPOAttachment" name="uploadPOAttachment">
+                      </div>
+                      <div class="col-2 mt-1">
+                        <a href="" id="viewPO" name="viewPO" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
+                      </div>
+                    </div>
+                    <input type="text" id="POFilePath" name="POFilePath" style="display:none">           
+                  </div>
+                </div>
                 <!--Invoice Details--->
               </div>
             </div>
@@ -78,12 +103,37 @@ function newInvoiceInfoEntry(id){
   $('#capacityHigh').hide();
   $('#invoiceInfoExtendModal').find('#id').val(id);
 
-  $('#invoiceInfoExtendModal').find('#invoice').val('');
+  $.post('php/getStamp.php', {userID: id}, function(data){
+    var obj = JSON.parse(data);
+    
+    if(obj.status === 'success'){
+      $('#invoiceInfoExtendModal').find('#invoice').val(obj.message.invoice_no);
+      $('#invoiceInfoExtendModal').find('#invoicePaymentType').val(obj.message.invoice_payment_type).trigger('change');
+      $('#invoiceInfoExtendModal').find('#invoicePayRef').val(obj.message.invoice_payment_ref);
+      $('#invoiceInfoExtendModal').find('#invoiceDate').val(formatDate3(obj.message.due_date));
+      
+      if(obj.message.invoice_attachment){
+          $('#invoiceInfoExtendModal').find('#InvoiceFilePath').val(obj.message.invoice_filepath);
+          $('#invoiceInfoExtendModal').find('#viewInvoice').attr('href', "view_file.php?file="+obj.message.invoice_attachment).show();
+      }
+
+      if(obj.message.po_attachment){
+          $('#invoiceInfoExtendModal').find('#POFilePath').val(obj.message.po_filepath);
+          $('#invoiceInfoExtendModal').find('#viewPO').attr('href', "view_file.php?file="+obj.message.po_attachment).show();
+      }
+      
+    }
+    else if(obj.status === 'failed'){
+      toastr["error"](obj.message, "Failed:");
+    }
+    else{
+      toastr["error"]("Something wrong when pull data", "Failed:");
+    }
+    $('#spinnerLoading').hide();
+  });
+
   $('#invoiceInfoExtendModal').find('#uploadInvoiceAttachment').val('');
-  $('#invoiceInfoExtendModal').find('#viewInvoice').hide();
-  $('#invoiceInfoExtendModal').find('#InvoiceFilePath').val('');
-  $('#invoiceInfoExtendModal').find('#invoicePaymentType').val('').trigger('change');
-  $('#invoiceInfoExtendModal').find('#invoicePayRef').val('');
+  $('#invoiceInfoExtendModal').find('#uploadPOAttachment').val('');
 
   $('#pricingTable').html('');
   pricingCount = 0;

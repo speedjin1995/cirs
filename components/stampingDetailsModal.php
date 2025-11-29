@@ -203,23 +203,40 @@ function newStampingInfoEntry(id){
   $('#capacityHigh').hide();
   $('#stampingInfoExtendModal').find('#id').val(id);
 
-  $('#stampingInfoExtendModal').find('#validatorlama').val('').trigger('change');
-  $('#stampingInfoExtendModal').find('#validator').val('');
-  $('#stampingInfoExtendModal').find('#noDaftarLama').val('');
-  $('#stampingInfoExtendModal').find('#noDaftarBaru').val('');
-  $('#stampingInfoExtendModal').find('#sealNoLama').val('');
-  $('#stampingInfoExtendModal').find('#sealNoBaru').val('');
-  $('#stampingInfoExtendModal').find('#pegawaiContact').val('');
-  $('#stampingInfoExtendModal').find('#newRenew').val('NEW').trigger('change');
-  $('#stampingInfoExtendModal').find('#certNo').val('');
-  $('#stampingInfoExtendModal').find('#pinKeselamatan').val('');
-  $('#stampingInfoExtendModal').find('#siriKeselamatan').val('');
+  $.post('php/getStamp.php', {userID: id}, function(data){
+    var obj = JSON.parse(data);
+    
+    if(obj.status === 'success'){
+        $('#stampingInfoExtendModal').find('#machine_type').val(obj.message.machine_type);
+        $('#stampingInfoExtendModal').find('#jenis_alat').val(obj.message.jenis_alat);
+        $('#stampingInfoExtendModal').find('#validator').val(obj.message.validate_by).select2('destroy').select2();
+        $('#stampingInfoExtendModal').find('#capacity').val(obj.message.capacity);
 
-  $('#stampingInfoExtendModal').find('#borangD').val("");
-  $('#stampingInfoExtendModal').find('#borangE').val("");
-  $('#stampingInfoExtendModal').find('#borangEDate').val("");
-  $('#stampingInfoExtendModal').find('#dueDate').val('');
-  $('#stampingInfoExtendModal').find('#includeCert').val("NO").trigger('change');
+        $('#stampingInfoExtendModal').find('#validatorlama').val(obj.message.validator_lama).select2('destroy').select2();
+        $('#stampingInfoExtendModal').find('#noDaftarLama').val(obj.message.no_daftar_lama);
+        $('#stampingInfoExtendModal').find('#noDaftarBaru').val(obj.message.no_daftar_baru);
+        $('#stampingInfoExtendModal').find('#sealNoLama').val(obj.message.seal_no_lama);
+        $('#stampingInfoExtendModal').find('#sealNoBaru').val(obj.message.seal_no_baru);
+        $('#stampingInfoExtendModal').find('#pegawaiContact').val(obj.message.pegawai_contact);
+        $('#stampingInfoExtendModal').find('#newRenew').val(obj.message.stampType).trigger('change');
+        $('#stampingInfoExtendModal').find('#certNo').val(obj.message.cert_no);
+        $('#stampingInfoExtendModal').find('#pinKeselamatan').val(obj.message.pin_keselamatan);
+        $('#stampingInfoExtendModal').find('#siriKeselamatan').val(obj.message.siri_keselamatan);
+        $('#stampingInfoExtendModal').find('#borangD').val(obj.message.borang_d);
+        $('#stampingInfoExtendModal').find('#borangE').val(obj.message.borang_e);
+        $('#stampingInfoExtendModal').find('#borangEDate').val(formatDate3(obj.message.borang_e_date));
+        $('#stampingInfoExtendModal').find('#dueDate').val(formatDate3(obj.message.due_date));
+        $('#stampingInfoExtendModal').find('#includeCert').val(obj.message.include_cert).trigger('change');
+
+    }
+    else if(obj.status === 'failed'){
+      toastr["error"](obj.message, "Failed:");
+    }
+    else{
+      toastr["error"]("Something wrong when pull data", "Failed:");
+    }
+    $('#spinnerLoading').hide();
+  });
  
   $('#pricingTable').html('');
   pricingCount = 0;

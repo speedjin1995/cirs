@@ -337,9 +337,9 @@ else{
                     </ul>
                   </div>
                   <div class="ml-2">
-                    <button type="button" class="btn btn-warning btn-sm" onclick="newEntry()">
+                    <!--<button type="button" class="btn btn-warning btn-sm" onclick="newEntry()">
                       <i class="fa-solid fa-circle-plus"></i> Add New
-                    </button>
+                    </button>-->
                     <button type="button" class="btn btn-warning btn-sm" onclick="newCustomerInfoEntry()">
                       <i class="fa-solid fa-circle-plus"></i> Add New
                     </button>
@@ -2371,8 +2371,15 @@ function format (row) {
         <p><strong>Assigned To Technician 1:</strong> ${row.assignTo}</p>
         <p><strong>Assigned To Technician 2:</strong> ${row.assignTo2}</p>
         <p><strong>Assigned To Technician 3:</strong> ${row.assignTo3}</p>
-      </div>
-    `;
+        <p><strong>Service Report No:</strong> ${row.service_report_no} `;
+      
+      if(row.service_report_attachment){
+        returnString += `<span class="ml-5"><a href="view_file.php?file=${row.service_report_attachment}" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></span></p>`;
+      }else{
+        returnString += `</p>`;
+      }
+
+      returnString += `</div>`;
   }
 
   returnString += `
@@ -2397,6 +2404,7 @@ function format (row) {
       <p><strong>Quotation Date:</strong> ${row.quotation_date}</p>
       <p><strong>Purchase No:</strong> ${row.purchase_no}</p>
       <p><strong>Purchase Date:</strong> ${row.purchase_date}</p>
+      <p><strong>Invoice Date:</strong> ${row.invoice_date}</p>
       <p><strong>Invoice/Cash Bill No:</strong> ${row.invoice_no}`;
 
       if(row.invoice_attachment){
@@ -2404,6 +2412,15 @@ function format (row) {
       }else{
         returnString += `</p>`;
       }
+
+      returnString += `<p><strong>PO:</strong> `;
+
+      if(row.po_attachment){
+        returnString += `<span class="ml-5"><a href="view_file.php?file=${row.po_attachment}" target="_blank" class="btn btn-success btn-sm" role="button"><i class="fa fa-file-pdf-o"></i></a></span></p>`;
+      }else{
+        returnString += `</p>`;
+      }
+
     returnString += `</div>
 
     <div class="col-4">

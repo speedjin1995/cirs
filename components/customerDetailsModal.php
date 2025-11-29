@@ -13,7 +13,7 @@
         </div>
 
         <div class="modal-body" >
-          <input type="hidden" class="form-control" id="customerInfoId" name="customerInfoId">
+          <input type="hidden" class="form-control" id="id" name="id">
           <!--Customer Details--->
           <div class="row">
             <div class="col-4">
@@ -33,12 +33,6 @@
                       <option value="<?= $row['id'] ?>"><?= $row['branch_name'] ?></option>
                   <?php } ?>
                 </select>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="form-group">
-                <label>Notification Period (Months)</label>
-                <input class="form-control" type="number" placeholder="Notification Period" id="notificationPeriod" name="notificationPeriod">
               </div>
             </div>
           </div>
@@ -181,28 +175,47 @@
 function newCustomerInfoEntry(){
   var date = new Date();
   $('#capacityHigh').hide();
-  $('#customerInfoExtendModal').find('#customerInfoId').val("");
-  $('#customerInfoExtendModal').find('#type').val("DIRECT");
-  $('#customerInfoExtendModal').find('#companyBranch').val("<?=$branch ?>").trigger('change');
+
+  $.post('php/getStamp.php', {userID: id}, function(data){
+    var obj = JSON.parse(data);
+    
+    if(obj.status === 'success'){
+        $('#customerInfoExtendModal').find('#id').val(obj.message.id);
+        $('#customerInfoExtendModal').find('#type').val(obj.message.type).trigger('change');
+        $('#customerInfoExtendModal').find('#customerType').val(obj.message.customer_type).attr('disabled', false).trigger('change');
+        $('#customerInfoExtendModal').find('#customerTypeEdit').val(obj.message.customer_type);
+        $('#customerInfoExtendModal').find('#companyBranch').val(obj.message.company_branch).trigger('change');
+        $('#customerInfoExtendModal').find('#company').val(obj.message.customers).trigger('change');
+        $('#customerInfoExtendModal').find('#companyText').val('');
+        $('#customerInfoExtendModal').find('#address1').val(obj.message.address1);
+        $('#customerInfoExtendModal').find('#address2').val(obj.message.address2);
+        $('#customerInfoExtendModal').find('#address3').val(obj.message.address3);
+        $('#customerInfoExtendModal').find('#address4').val(obj.message.address4);
+        $('#customerInfoExtendModal').find('#address5').val(obj.message.address5);
+        $('#customerInfoExtendModal').find('#address3').val(obj.message.address3);
+
+        setTimeout(function(){
+          $('#customerInfoExtendModal').find('#branch').val(obj.message.branch).trigger('change');
+        }, 500);
+
+        $('#customerInfoExtendModal').find('#pic').val(obj.message.pic);
+
+    }
+    else if(obj.status === 'failed'){
+      toastr["error"](obj.message, "Failed:");
+    }
+    else{
+      toastr["error"]("Something wrong when pull data", "Failed:");
+    }
+    $('#spinnerLoading').hide();
+  });
 
   $('#isResseller').hide();
   $('#isResseller2').hide();
   $('#isResseller3').hide();
   $('#isResseller4').hide();
   $('#isResseller5').hide();
-
-  $('#customerInfoExtendModal').find('#customerType').val("EXISTING").attr('disabled', false).trigger('change');
-  $('#customerInfoExtendModal').find('#company').val('');
-  $('#customerInfoExtendModal').find('#companyText').val('').trigger('change');
-  $('#customerInfoExtendModal').find('#address1').val('');
-  $('#customerInfoExtendModal').find('#address2').val('');
-  $('#customerInfoExtendModal').find('#address3').val('');
-  $('#customerInfoExtendModal').find('#address4').val('');
-  $('#customerInfoExtendModal').find('#address5').val('');
-  $('#customerInfoExtendModal').find('#notificationPeriod').val(1);
-  $('#customerInfoExtendModal').find('#branch').val('').trigger('change');
-  $('#customerInfoExtendModal').find('#pic').val("");
-
+  
   customer = 0;
   branch = 0;
   $('#pricingTable').html('');
@@ -451,14 +464,6 @@ function newCustomerInfoEntry(){
       }
       //$('#spinnerLoading').hide();
     });
-  });
-
-  $('#customerInfoExtendModal').find('#notificationPeriod').on('change', function(){
-    var notificationPeriod = $(this).val();
-    if (notificationPeriod > 6){
-        alert("Maximum notification period is 6.");
-        $(this).val(6); // reset to 6
-    }
   });
 
 </script>

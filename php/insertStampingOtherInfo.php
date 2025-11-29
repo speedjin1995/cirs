@@ -11,6 +11,7 @@ if(isset($_POST['id']) && $_POST['remark'] != null && $_POST['internalRemark'] !
 
 	$remark = null;
 	$internalRemark = null;
+	$notificationPeriod = null;
 
 	$logs = array();
 
@@ -22,13 +23,17 @@ if(isset($_POST['id']) && $_POST['remark'] != null && $_POST['internalRemark'] !
 		$internalRemark = $_POST['internalRemark'];
 	}
 
+	if (isset($_POST['notificationPeriod']) && $_POST['notificationPeriod'] != null && $_POST['notificationPeriod'] != "") {
+		$notificationPeriod = $_POST['notificationPeriod'];
+	}
+
 	if(isset($_POST['id']) && $_POST['id'] != null && $_POST['id'] != ''){
 		//Updated datetime
 		$currentDateTime = date('Y-m-d H:i:s');
 
-		if ($update_stmt = $db->prepare("UPDATE stamping SET remarks=?, internal_remark=?, log=?, updated_datetime=? WHERE id=?")){
+		if ($update_stmt = $db->prepare("UPDATE stamping SET notification_period=?, remarks=?, internal_remark=?, log=?, updated_datetime=? WHERE id=?")){
 			$data = json_encode($logs);
-			$update_stmt->bind_param('ssssi',$remark, $internalRemark, $data, $currentDateTime, $_POST['id']);
+			$update_stmt->bind_param('sssssi', $notificationPeriod, $remark, $internalRemark, $data, $currentDateTime, $_POST['id']);
 		
 			// Execute the prepared query.
 			if (! $update_stmt->execute()){

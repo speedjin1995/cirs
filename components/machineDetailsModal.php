@@ -218,32 +218,63 @@ function newMachineInfoEntry(id){
   var date = new Date();
   $('#capacityHigh').hide();
   $('#machineInfoExtendModal').find('#id').val(id);
-  
-  $('#machineInfoExtendModal').find('#brand').val('').trigger('change');
-  $('#machineInfoExtendModal').find('#product').val('');
-  $('#machineInfoExtendModal').find('#machineType').val('').trigger('change');
-  $('#machineInfoExtendModal').find('#jenisAlat').val('').trigger('change');
-  $('#machineInfoExtendModal').find('#machineName').val('').trigger('change');
-  $('#machineInfoExtendModal').find('#machineLocation').val('');
-  $('#machineInfoExtendModal').find('#machineArea').val('');
-  $('#machineInfoExtendModal').find('#machineSerialNo').val('');
-  $('#machineInfoExtendModal').find('#model').val("").trigger('change');
-  $('#machineInfoExtendModal').find('#makeIn').val("").trigger('change');
-  $('#machineInfoExtendModal').find('#capacity_single').val('').trigger('change');
-  $('#machineInfoExtendModal').find('#capacity_multi').val('').trigger('change');
-  $('#machineInfoExtendModal').find('#ownershipStatus').val('OWN').trigger('change');
+
+  $.post('php/getStamp.php', {userID: id}, function(data){
+    var obj = JSON.parse(data);
+    
+    if(obj.status === 'success'){
+      $('#machineInfoExtendModal').find('#brand').val(obj.message.brand).select2('destroy').select2();
+      $('#machineInfoExtendModal').find('#product').val(obj.message.products);
+      $('#machineInfoExtendModal').find('#machineType').val(obj.message.machine_type).select2('destroy').select2();
+      $('#machineInfoExtendModal').find('#jenisAlat').val(obj.message.jenis_alat).select2('destroy').select2();
+      $('#machineInfoExtendModal').find('#machineLocation').val(obj.message.machine_location);
+
+      $('#machineInfoExtendModal').find('#machineName').val(obj.message.machine_name).trigger('change');
+      $('#machineInfoExtendModal').find('#machineArea').val(obj.message.machine_area);
+      $('#machineInfoExtendModal').find('#machineSerialNo').val(obj.message.machine_serial_no);
+      $('#machineInfoExtendModal').find('#model').val(obj.message.model).trigger('change');
+      $('#machineInfoExtendModal').find('#makeIn').val(obj.message.make_in).trigger('change');
+
+      if(obj.message.capacity_range == 'MULTI'){
+          $('#machineInfoExtendModal').find('#toggleMultiRange').prop('checked', true).trigger('change');
+          $('#machineInfoExtendModal').find('#capacity_multi').val(obj.message.capacity).trigger('change');
+      }else{
+          $('#machineInfoExtendModal').find('#toggleMultiRange').prop('checked', false).trigger('change');
+          $('#machineInfoExtendModal').find('#capacity_single').val(obj.message.capacity).trigger('change');
+      }
+      $('#machineInfoExtendModal').find('#ownershipStatus').val(obj.message.ownership_status).trigger('change');
+      $('#machineInfoExtendModal').find('#trade').val(obj.message.trade).trigger('change');
+      $('#machineInfoExtendModal').find('#serial').val(obj.message.serial_no);
+
+      $('#machineInfoExtendModal').find('#penentusanBaru').val(obj.message.penentusan_baru);
+      $('#machineInfoExtendModal').find('#penentusanSemula').val(obj.message.penentusan_semula);
+
+      $('#machineInfoExtendModal').find('#kelulusanMSPK').val(obj.message.kelulusan_mspk);
+      $('#machineInfoExtendModal').find('#noMSPK').val(obj.message.no_kelulusan);
+      $('#machineInfoExtendModal').find('#platformCountry').val(obj.message.platform_country);
+      $('#machineInfoExtendModal').find('#platformType').val(obj.message.platform_type);
+      $('#machineInfoExtendModal').find('#size').val(obj.message.size);
+      $('#machineInfoExtendModal').find('#jenisPelantar').val(obj.message.jenis_pelantar);
+      $('#machineInfoExtendModal').find('#others').val(obj.message.other_info);
+      $('#machineInfoExtendModal').find('#platformCountry').val(obj.message.platform_country);
+      $('#machineInfoExtendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
+      $('#machineInfoExtendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
+      $('#machineInfoExtendModal').find('#nilai2').val(obj.message.nilais[1].nilai);
+      $('#machineInfoExtendModal').find('#nilai3').val(obj.message.nilais[2].nilai);
+      $('#machineInfoExtendModal').find('#nilai4').val(obj.message.nilais[3].nilai);
+      $('#machineInfoExtendModal').find('#nilai5').val(obj.message.nilais[4].nilai);
+      $('#machineInfoExtendModal').find('#nilai6').val(obj.message.nilais[5].nilai);
+    }
+    else if(obj.status === 'failed'){
+      toastr["error"](obj.message, "Failed:");
+    }
+    else{
+      toastr["error"]("Something wrong when pull data", "Failed:");
+    }
+    $('#spinnerLoading').hide();
+  });
+
   $('#machineInfoExtendModal').find('#uploadRentalAttachment').val('');
-  $('#machineInfoExtendModal').find('#trade').val('').trigger('change');
-  $('#machineInfoExtendModal').find('#serial').val('');
-  $('#machineInfoExtendModal').find('#penentusanBaru').val('');
-  $('#machineInfoExtendModal').find('#penentusanSemula').val('');
-  $('#machineInfoExtendModal').find('#kelulusanMSPK').val('').trigger('change');
-  $('#machineInfoExtendModal').find('#noMSPK').val('');
-  $('#machineInfoExtendModal').find('#platformCountry').val('').trigger('change');
-  $('#machineInfoExtendModal').find('#platformType').val('').trigger('change');
-  $('#machineInfoExtendModal').find('#size').val('').trigger('change');
-  $('#machineInfoExtendModal').find('#jenisPelantar').val('').trigger('change');
-  $('#machineInfoExtendModal').find('#others').val('');
  
   //Additonal field reset
   // var value = $('#machineInfoExtendModal').find('#additionalSection').find('#batuUjian').val();
@@ -299,15 +330,6 @@ function newMachineInfoEntry(id){
   branch = 0;
   $('#pricingTable').html('');
   pricingCount = 0;
-
-  $('#machineInfoExtendModal').find('#platformCountry').val('');
-  $('#machineInfoExtendModal').find('#jenis_penunjuk').val('');
-  $('#machineInfoExtendModal').find('#nilai1').val('');
-  $('#machineInfoExtendModal').find('#nilai2').val('');
-  $('#machineInfoExtendModal').find('#nilai3').val('');
-  $('#machineInfoExtendModal').find('#nilai4').val('');
-  $('#machineInfoExtendModal').find('#nilai5').val('');
-  $('#machineInfoExtendModal').find('#nilai6').val('');
 
   $('#cerId').hide();
 

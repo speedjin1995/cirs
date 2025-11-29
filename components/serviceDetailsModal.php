@@ -22,6 +22,28 @@
               <div class="row">
                 <div class="col-4">
                   <div class="form-group">
+                    <label>Service Report Number</label>
+                    <input type="text" class="form-control" id="serviceReportNo" name="serviceReportNo">
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group">
+                    <label>Upload Service Report</label>
+                    <div class="d-flex">
+                      <div class="col-10">
+                        <input type="file" class="form-control" id="uploadServiceReportAttachment" name="uploadServiceReportAttachment">
+                      </div>
+                      <div class="col-2 mt-1">
+                        <a href="" id="viewServiceReport" name="viewServiceReport" target="_blank" class="btn btn-success btn-sm" role="button" style="display: none;"><i class="fa fa-file-pdf-o"></i></a>
+                      </div>
+                    </div>
+                    <input type="text" id="serviceReportFilePath" name="serviceReportFilePath" style="display:none">           
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <div class="form-group">
                     <label>Assigned To Technician 1 *</label>
                     <select class="form-control select2" style="width: 100%;" id="assignTo" name="assignTo" required>
                       <?php while($technician=mysqli_fetch_assoc($technicians)){ ?>
@@ -70,9 +92,31 @@ function newServiceInfoEntry(id){
   $('#capacityHigh').hide();
   $('#serviceInfoExtendModal').find('#id').val(id);
 
-  $('#serviceInfoExtendModal').find('#assignTo').val('').trigger('change');
-  $('#serviceInfoExtendModal').find('#assignTo2').val('').trigger('change');
-  $('#serviceInfoExtendModal').find('#assignTo3').val('').trigger('change');
+  $.post('php/getStamp.php', {userID: id}, function(data){
+    var obj = JSON.parse(data);
+    
+    if(obj.status === 'success'){
+      $('#serviceInfoExtendModal').find('#serviceReportNo').val(obj.message.service_report_no);
+      
+      if(obj.message.service_report_attachment){
+        $('#serviceInfoExtendModal').find('#viewServiceReport').attr('href', "view_file.php?file="+obj.message.service_report_attachment).show();
+        $('#serviceInfoExtendModal').find('#serviceReportFilePath').val(obj.message.service_report_filepath);
+      }
+      
+      $('#serviceInfoExtendModal').find('#assignTo').val(obj.message.assignTo).trigger('change');
+      $('#serviceInfoExtendModal').find('#assignTo2').val(obj.message.assignTo2).trigger('change');
+      $('#serviceInfoExtendModal').find('#assignTo3').val(obj.message.assignTo3).trigger('change');
+    }
+    else if(obj.status === 'failed'){
+      toastr["error"](obj.message, "Failed:");
+    }
+    else{
+      toastr["error"]("Something wrong when pull data", "Failed:");
+    }
+    $('#spinnerLoading').hide();
+  });
+
+  $('#serviceInfoExtendModal').find('#uploadServiceReportAttachment').val('');
 
   $('#pricingTable').html('');
   pricingCount = 0;
