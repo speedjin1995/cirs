@@ -174,7 +174,7 @@
 <script>
 function newCustomerInfoEntry(id){
   var date = new Date();
-  
+
   // Ensure id is an integer; if it's not a valid number, default to 0.
   id = parseInt(id, 10);
   if (isNaN(id)) id = 0;
@@ -217,7 +217,6 @@ function newCustomerInfoEntry(id){
   });
   }
   else{
-    console.log("New Customer Info Entry Called2222", id);
   $('#customerInfoExtendModal').find('#customerInfoId').val("");
   $('#customerInfoExtendModal').find('#type').val("DIRECT");
   $('#customerInfoExtendModal').find('#companyBranch').val("<?=$branch ?>").trigger('change');
