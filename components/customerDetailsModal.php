@@ -172,11 +172,17 @@
 </div> <!-- /.modal -->
 
 <script>
-function newCustomerInfoEntry(){
+function newCustomerInfoEntry(id){
   var date = new Date();
+  
+  // Ensure id is an integer; if it's not a valid number, default to 0.
+  id = parseInt(id, 10);
+  if (isNaN(id)) id = 0;
   $('#capacityHigh').hide();
 
-  $.post('php/getStamp.php', {userID: id}, function(data){
+  if(id > 0){
+    console.log("New Customer Info Entry Called", id);
+    $.post('php/getStamp.php', {userID: id}, function(data){
     var obj = JSON.parse(data);
     
     if(obj.status === 'success'){
@@ -209,6 +215,24 @@ function newCustomerInfoEntry(){
     }
     $('#spinnerLoading').hide();
   });
+  }
+  else{
+    console.log("New Customer Info Entry Called2222", id);
+  $('#customerInfoExtendModal').find('#customerInfoId').val("");
+  $('#customerInfoExtendModal').find('#type').val("DIRECT");
+  $('#customerInfoExtendModal').find('#companyBranch').val("<?=$branch ?>").trigger('change');
+  $('#customerInfoExtendModal').find('#customerType').val("EXISTING").attr('disabled', false).trigger('change');
+  $('#customerInfoExtendModal').find('#company').val('');
+  $('#customerInfoExtendModal').find('#companyText').val('').trigger('change');
+  $('#customerInfoExtendModal').find('#address1').val('');
+  $('#customerInfoExtendModal').find('#address2').val('');
+  $('#customerInfoExtendModal').find('#address3').val('');
+  $('#customerInfoExtendModal').find('#address4').val('');
+  $('#customerInfoExtendModal').find('#address5').val('');
+  $('#customerInfoExtendModal').find('#notificationPeriod').val(1);
+  $('#customerInfoExtendModal').find('#branch').val('').trigger('change');
+  $('#customerInfoExtendModal').find('#pic').val("");  
+  }
 
   $('#isResseller').hide();
   $('#isResseller2').hide();
@@ -239,6 +263,14 @@ function newCustomerInfoEntry(){
     }
   });
 }
+
+  $('#customerInfoExtendModal').find('#notificationPeriod').on('change', function(){
+    var notificationPeriod = $(this).val();
+    if (notificationPeriod > 6){
+        alert("Maximum notification period is 6.");
+        $(this).val(6); // reset to 6
+    }
+  });
 
   $('#customerInfoExtendModal').find('#type').on('change', function(){
     if($(this).val() == "DIRECT"){

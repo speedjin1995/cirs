@@ -340,7 +340,7 @@ else{
                     <!--<button type="button" class="btn btn-warning btn-sm" onclick="newEntry()">
                       <i class="fa-solid fa-circle-plus"></i> Add New
                     </button>-->
-                    <button type="button" class="btn btn-warning btn-sm" onclick="newCustomerInfoEntry()">
+                    <button type="button" class="btn btn-warning btn-sm" onclick="newCustomerInfoEntry('id')">
                       <i class="fa-solid fa-circle-plus"></i> Add New
                     </button>
                   </div>
