@@ -25,6 +25,7 @@ if (isset($_POST['brand'], $_POST['machineType'], $_POST['jenisAlat'], $_POST['m
     $machineSerialNo = null;
     $product = null;
     $dealer = null;
+    $status = 'Pending Quotation';
 
     $logs = array();
 
@@ -90,11 +91,11 @@ if (isset($_POST['brand'], $_POST['machineType'], $_POST['jenisAlat'], $_POST['m
 
         if (
             $update_stmt = $db->prepare("UPDATE stamping SET brand=?, machine_type=?, model=?, make_in=?, capacity=?, serial_no=?, ownership_status=?, jenis_alat=?, machine_name=?, machine_location=?, machine_area=?, machine_serial_no=?, trade=?
-		, log=?, updated_datetime=? WHERE id=?")
+		, log=?, updated_datetime=?, status=? WHERE id=?")
         ) {
             $data = json_encode($logs);
             $update_stmt->bind_param(
-                'sssssssssssssssi',
+                'ssssssssssssssssi',
                 $brand,
                 $machineType,
                 $model,
@@ -110,6 +111,7 @@ if (isset($_POST['brand'], $_POST['machineType'], $_POST['jenisAlat'], $_POST['m
                 $trade,
                 $data,
                 $currentDateTime,
+                $status,
                 $_POST['id']
             );
 

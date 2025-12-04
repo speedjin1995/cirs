@@ -57,6 +57,20 @@ if(isset($_POST['assignTo'])){
 					$ds = DIRECTORY_SEPARATOR;
 					$storeFolder = '../uploads/stamping';
 					if($uploadServiceReportAttachment['error'] === 0){
+
+						$update_stmt = $db->prepare("UPDATE stamping SET status=?, updated_datetime=? WHERE id=?");
+					    $update_stmt->bind_param('Serviced', $currentDateTime, $_POST['id']);
+		
+						// Execute the prepared query.
+						if (! $update_stmt->execute()){
+							echo json_encode(
+								array(
+									"status"=> "failed", 
+									"message"=> $update_stmt->error
+								)
+							);
+						} 
+
 						$timestamp = time();
 						$uploadDir = $storeFolder . $ds; // Directory to store uploaded files
 						$folderDir = dirname(__DIR__, 2) . '/' . $uploadDir;
@@ -87,6 +101,20 @@ if(isset($_POST['assignTo'])){
 							} 
 						} 
 					}
+				}
+				else{
+					$update_stmt = $db->prepare("UPDATE stamping SET status=?, updated_datetime=? WHERE id=?");
+					$update_stmt->bind_param('Servicing', $currentDateTime, $_POST['id']);
+		
+						// Execute the prepared query.
+						if (! $update_stmt->execute()){
+							echo json_encode(
+								array(
+									"status"=> "failed", 
+									"message"=> $update_stmt->error
+								)
+							);
+						} 
 				}
 
 				$stampExtQuery = "SELECT * FROM stamping_ext WHERE stamp_id = $stampingId";

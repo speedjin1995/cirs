@@ -267,6 +267,25 @@ else{
                     </select>
                   </div>
                 </div>
+                
+                <!---FILTER FOR STATUS--->
+                <div class="col-3">
+                  <div class="form-group">
+                    <label>Status:</label>
+                    <select class="form-control select2" id="statusFilter" name="statusFilter">
+                      <option value="">Please Select</option>
+                      <option value="Created">Created</option>
+                      <option value="Pending Quotation">Pending Quotation</option>
+                      <option value="Quoted">Quoted</option>
+                      <option value="Servicing">Servicing</option>
+                      <option value="Serviced">Serviced</option>
+                      <option value="Appointed">Appointed</option>
+                      <option value="Stamped">Stamped</option>
+                      <option value="Invoiced">Invoiced</option>
+                      <option value="Paid">Paid</option>
+                    </select>
+                  </div>
+                </div>
               </div>
 
               <div class="row">
@@ -386,6 +405,7 @@ else{
 <?php include 'components/quotationDetailsModal.php'; ?>
 <?php include 'components/invoiceDetailsModal.php'; ?>
 <?php include 'components/otherDetailsModal.php'; ?>
+<?php include 'change_status.php'; ?>
 <?php //include 'components/extendModal.php'; ?>
 
 <div class="modal fade" id="printDOModal">
@@ -1095,6 +1115,7 @@ $(function () {
   var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
   var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
   var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
+  var statusFilter = $('#statusFilter').val() ? $('#statusFilter').val() : '';
 
   const allowedAlats = ['ATK','ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC', 'BTU - (BOX)', 'ATP (H)'];
   const allowedGenDuplicateAlats = ['ATP','ATS','ATE','BTU','ATN','ATL','ATP-AUTO MACHINE','SLL','ATS (H)','ATN (G)', 'ATP (MOTORCAR)', 'SIA', 'BAP', 'SIC'];
@@ -1125,7 +1146,7 @@ $(function () {
         serial: serialNoFilter,
         quotation: quoteNoFilter,
         branch: branchFilter,
-        status: 'Pending'
+        status: statusFilter
       } 
     },
     'columns': [
@@ -1135,12 +1156,12 @@ $(function () {
         className: 'select-checkbox',
         orderable: false,
         render: function (data, type, row) {
-          if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+          //if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
             return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-          } 
-          else {
-            return ''; // Return an empty string or any other placeholder if the item is invoiced
-          }
+          //} 
+          //else {
+          //  return ''; // Return an empty string or any other placeholder if the item is invoiced
+          //}
         }
       },
       {
@@ -1184,16 +1205,23 @@ $(function () {
             '</button>' +
             '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton' + data + '">';
 
+          //HIDE/SHOW THE BUTTON BASED ON STATUS
+          if(row.status == 'Created') dropdownMenu += '<a class="dropdown-item" onclick="newMachineInfoEntry(' + data + ')"><i class="fas fa-pen"></i> Machine Info</a>';
+          if(row.status == 'Pending Quotation')  dropdownMenu += '<a class="dropdown-item" onclick="newQuotationInfoEntry(' + data + ')"><i class="fas fa-pen"></i> Quotation Info</a>';
+          if(row.status == 'Quoted' || row.status == 'Servicing')  dropdownMenu += '<a class="dropdown-item" onclick="newServiceInfoEntry(' + data + ')"><i class="fas fa-pen"></i> Service Info</a>'; 
+          if(row.status == 'Serviced' || row.status == 'Appointed') dropdownMenu += '<a class="dropdown-item" onclick="newStampingInfoEntry(' + data + ')"><i class="fas fa-pen"></i> Stamping Info</a>';
+          if(row.status == 'Stamped') dropdownMenu += '<a class="dropdown-item" onclick="newInvoiceInfoEntry(' + data + ')"><i class="fas fa-pen"></i> Invoice Info</a>';
+          if(row.status == 'Invoiced') dropdownMenu += '<a class="dropdown-item" onclick="newFeesInfoEntry(' + data + ')"><i class="fas fa-pen"></i> Fees Info</a>';
+          if(row.status == 'Paid') dropdownMenu += '<a class="dropdown-item" onclick="newOtherInfoEntry(' + data + ')"><i class="fas fa-pen"></i> Other Info</a>';
+ 
+          if(row.status != 'Created'){
+            dropdownMenu += `
+              <a class="dropdown-item" id="changeStatus${data}"
+              onclick="changeStatusEntry(${data}, '${row.status}')">
+              <i class="fas fa-pen"></i> Change Status
+              </a>`;
+          }
 
-          //TJW TESTING FIRST
-          dropdownMenu += '<a class="dropdown-item" onclick="newMachineInfoEntry(' + data + ')"><i class="fas fa-pen"></i> Machine Info</a>';
-          dropdownMenu += '<a class="dropdown-item" onclick="newServiceInfoEntry(' + data + ')"><i class="fas fa-pen"></i> Service Info</a>';
-          dropdownMenu += '<a class="dropdown-item" onclick="newStampingInfoEntry(' + data + ')"><i class="fas fa-pen"></i> Stamping Info</a>';
-          dropdownMenu += '<a class="dropdown-item" onclick="newQuotationInfoEntry(' + data + ')"><i class="fas fa-pen"></i> Quotation Info</a>';
-          dropdownMenu += '<a class="dropdown-item" onclick="newInvoiceInfoEntry(' + data + ')"><i class="fas fa-pen"></i> Invoice Info</a>';
-          dropdownMenu += '<a class="dropdown-item" onclick="newFeesInfoEntry(' + data + ')"><i class="fas fa-pen"></i> Fees Info</a>';
-          dropdownMenu += '<a class="dropdown-item" onclick="newOtherInfoEntry(' + data + ')"><i class="fas fa-pen"></i> Other Info</a>';
-          //TJW TESTING FIRST  
           if(row.stamping_type == 'NEW'){
             dropdownMenu += '<a class="dropdown-item" id="edit' + data + '" onclick="edit(' + data + ')"><i class="fas fa-pen"></i> Edit</a>';
           }else{
@@ -1338,6 +1366,40 @@ $(function () {
                   isModalOpen = false; // Reset flag
               }
           });
+      }
+      else if($('#changeStatusModal').hasClass('show')){
+        console.log("Form submission triggered 2");
+        var formData = new FormData(form);
+
+        $('#spinnerLoading').show(); // Show loading indicator
+
+        $.ajax({
+              url: 'php/changeStampingStatus.php',
+              type: 'POST',
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function (data) {
+                  var obj = JSON.parse(data);
+                  if (obj.status === 'success') {
+                      $('#extendModal').modal('hide');
+                      toastr["success"](obj.message, "Success:");
+                      location.reload();
+                  } else {
+                      toastr["error"](obj.message, "Failed:");
+                  }
+              },
+              error: function (xhr, status, error) {
+                  console.error("AJAX request failed:", status, error);
+                  toastr["error"]("An error occurred while processing the request.", "Failed:");
+              },
+              complete: function () {
+                  // Re-enable file inputs and hide spinner
+                  $('#spinnerLoading').hide();
+                  isModalOpen = false; // Reset flag
+              }
+          });
+        
       }
       else if($('#uploadModal').hasClass('show')){
         $('#spinnerLoading').show();
@@ -1558,6 +1620,7 @@ $(function () {
     var serialNoFilter = $('#serialNoFilter').val() ? $('#serialNoFilter').val() : '';
     var quoteNoFilter = $('#quoteNoFilter').val() ? $('#quoteNoFilter').val() : '';
     var branchFilter = $('#branchFilter').val() ? $('#branchFilter').val() : '';
+    var statusFilter = $('#statusFilter').val() ? $('#statusFilter').val() : '';
 
     //Destroy the old Datatable
     $("#weightTable").DataTable().clear().destroy();
@@ -1589,7 +1652,7 @@ $(function () {
           serial: serialNoFilter,
           quotation: quoteNoFilter,
           branch: branchFilter,
-          status: 'Pending'
+          status: statusFilter
         } 
       },
       'columns': [
@@ -1599,12 +1662,12 @@ $(function () {
           className: 'select-checkbox',
           orderable: false,
           render: function (data, type, row) {
-            if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
+            //if (row.status == 'Pending') { // Assuming 'isInvoiced' is a boolean field in your row data
               return '<input type="checkbox" class="select-checkbox" id="checkbox_' + data + '" value="'+data+'"/>';
-            } 
-            else {
-              return ''; // Return an empty string or any other placeholder if the item is invoiced
-            }
+            //} 
+            //else {
+              //return ''; // Return an empty string or any other placeholder if the item is invoiced
+            //}
           }
         },
         {
@@ -2486,7 +2549,7 @@ function format (row) {
     </div>
   </div><br>
   `;
-  
+  if(row.log !=null){
   if (row.log.length > 0) {
     returnString += '<h4>Log</h4><table style="width: 100%;"><thead><tr><th width="5%">No.</th><th width="15%">Date Created</th><th>Notes</th><th width="17%">Next Follow Date</th><th width="15%">Follow Up By</th><th width="13%">Status</th></tr></thead><tbody>'
     
@@ -2496,6 +2559,7 @@ function format (row) {
     }
 
     returnString += '</tbody></table>';
+  }
   }
 
   // Additional section for ATS
@@ -2645,6 +2709,7 @@ function format (row) {
                         </div>
                         `;
 
+    if(row.questions !=null){
     if (row.questions.length > 0) {
       returnString +=`
       <div class="card card-primary">
@@ -2735,6 +2800,7 @@ function format (row) {
         </div>
       </div>`;
     }
+    }
   }else if(row.jenis_alat == 'BAP'){
     returnString += `</div><hr>
                         <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (BAP)</strong></span>
@@ -2794,7 +2860,7 @@ function format (row) {
                         <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (BTU - BOX)</strong></span>
                         <div class="row">  
                     `;
-
+    if(row.questibtu_box_infoons !=null){
     if (row.btu_box_info.length > 0){
       var batuUjianVal = '';
       returnString += `
@@ -2845,7 +2911,9 @@ function format (row) {
       returnString += `</tbody>
         </table>
       `;
-    }                
+    
+    }   
+    }             
   }else if(row.jenis_alat == 'ATK'){
     returnString += `</div><hr>
                         <p><span><strong style="font-size:120%; text-decoration: underline;">Additional Information (ATK)</strong></span>

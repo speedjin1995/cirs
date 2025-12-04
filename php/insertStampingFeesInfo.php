@@ -21,6 +21,7 @@ if (
 	$stampLabourCharge = '0.00';
 	$roundUp = '0.00';
 	$totalCharge = '0.00';
+	$status ="Paid";
 
 	$logs = array();
 
@@ -82,10 +83,10 @@ if (
 		//Updated datetime
 		$currentDateTime = date('Y-m-d H:i:s');
 
-		if ($update_stmt = $db->prepare("UPDATE stamping SET validator_invoice=?, unit_price=?, cert_price=?, total_amount=?, sst=?, subtotal_sst_amt=?, rebate=?, rebate_amount=?, subtotal_amount=?, log=?, updated_datetime=?, labour_charge=?, stampfee_labourcharge=?, int_round_up=?, total_charges=? WHERE id=?")) {
+		if ($update_stmt = $db->prepare("UPDATE stamping SET validator_invoice=?, unit_price=?, cert_price=?, total_amount=?, sst=?, subtotal_sst_amt=?, rebate=?, rebate_amount=?, subtotal_amount=?, log=?, updated_datetime=?, labour_charge=?, stampfee_labourcharge=?, int_round_up=?, total_charges=?, status=? WHERE id=?")) {
 			$data = json_encode($logs);
 			$update_stmt->bind_param(
-				'sssssssssssssssi',
+				'ssssssssssssssssi',
 				$validatorInvoice,
 				$unitPrice,
 				$certPrice,
@@ -101,6 +102,7 @@ if (
 				$stampLabourCharge,
 				$roundUp,
 				$totalCharge,
+				$status,
 				$_POST['id']
 			);
 

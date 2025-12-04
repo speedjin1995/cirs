@@ -67,6 +67,10 @@ if($_POST['branch'] != null && $_POST['branch'] != '' && $_POST['branch'] != '-'
 	$searchQuery .= " and s.company_branch = '".$_POST['branch']."'";
 }
 
+if($_POST['status'] != null && $_POST['status'] != '' && $_POST['status'] != '-'){
+	$searchQuery .= " and s.status = '".$_POST['status']."'";
+}
+
 if($searchValue != ''){
   $searchQuery .= " and 
   (c.customer_name like '%".$searchValue."%' OR 
@@ -79,6 +83,8 @@ if($searchValue != ''){
     s.no_daftar_lama like '%".$searchValue."%' OR
     s.no_daftar_baru like '%".$searchValue."%' OR
     s.borang_e like '%".$searchValue."%'
+    OR
+    s.status like '%".$searchValue."%'
   )";
 }
 
@@ -104,14 +110,21 @@ $sel = mysqli_query($db,"select count(*) as allcount FROM stamping");
 $records = mysqli_fetch_assoc($sel);
 $totalRecords = $records['allcount'];
 
-## Total number of record with filtering
-$sel = mysqli_query($db,"select count(*) as allcount FROM stamping s 
+$query = "select count(*) as allcount FROM stamping s 
                           LEFT JOIN customers c ON s.customers = c.id 
                           LEFT JOIN brand b ON s.brand = b.id 
                           LEFT JOIN machines m ON s.machine_type = m.id 
                           LEFT JOIN capacity cap ON s.capacity = cap.id 
-                          LEFT JOIN validators v ON s.validate_by = v.id
-                          WHERE s.status = 'Pending'".$searchQuery);
+                          LEFT JOIN validators v ON s.validate_by = v.id";   
+
+if($_POST['status']!= null && $_POST['status'] != '' && $_POST['status'] != '-'){
+  $query .= " WHERE s.status = '".$_POST['status']."'".$searchQuery;
+} else {
+  $query .= $searchQuery;
+}
+
+## Total number of record with filtering
+$sel = mysqli_query($db, $query);
 $records = mysqli_fetch_assoc($sel);
 $totalRecordwithFilter = $records['allcount'];
 
@@ -121,8 +134,14 @@ $empQuery = "SELECT s.* FROM stamping s
               LEFT JOIN brand b ON s.brand = b.id 
               LEFT JOIN machines m ON s.machine_type = m.id 
               LEFT JOIN capacity cap ON s.capacity = cap.id
-              LEFT JOIN validators v ON s.validate_by = v.id
-              WHERE s.status = 'Pending'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+              LEFT JOIN validators v ON s.validate_by = v.id";
+
+if($_POST['status']!= null && $_POST['status'] != '' && $_POST['status'] != '-'){
+  $empQuery .= " WHERE s.status = '".$_POST['status']."'".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+} else {
+  $empQuery .= " ".$searchQuery." order by ".$columnName." ".$columnSortOrder." limit ".$row.",".$rowperpage;
+}              
+
 $empRecords = mysqli_query($db, $empQuery);
 $data = array();
 $counter = 1;

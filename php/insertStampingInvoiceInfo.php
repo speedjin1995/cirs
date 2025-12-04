@@ -69,6 +69,20 @@ if($_POST['invoice'] != null || $_POST['invoicePaymentType'] != null || $_POST['
 						// 	}
 						// }
 
+						
+						$update_stmt = $db->prepare("UPDATE stamping SET status=?, updated_datetime=? WHERE id=?");
+					    $update_stmt->bind_param('Invoiced', $currentDateTime, $_POST['id']);
+		
+						// Execute the prepared query.
+						if (! $update_stmt->execute()){
+							echo json_encode(
+								array(
+									"status"=> "failed", 
+									"message"=> $update_stmt->error
+								)
+							);
+						} 
+
 						$timestamp = time();
 						$uploadDir = $storeFolder . $ds; // Directory to store uploaded files
 						$folderDir = dirname(__DIR__, 2) . '/' . $uploadDir;

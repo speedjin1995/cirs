@@ -17,7 +17,7 @@ if (isset($_POST['type'], $customerType, $_POST['companyBranch'])) {
 	$type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
 	$companyBranch = filter_input(INPUT_POST, 'companyBranch', FILTER_SANITIZE_STRING);
 	$customerType = filter_input(INPUT_POST, 'customerType', FILTER_SANITIZE_STRING);
-	$status = "";
+	$status = "Created";
 
 	$company = null;
 	$customerText = null;
@@ -240,85 +240,47 @@ if (isset($_POST['type'], $customerType, $_POST['companyBranch'])) {
 	}
 
 	//TJW START INSERT THE DATA INTO STAMPING TABLE
+    $columns = [
+        'type','company_branch','dealer','dealer_branch','customer_type','customers','brand','machine_type','model','make_in','capacity','serial_no',
+        'assignTo','assignTo2','assignTo3','ownership_status','validator_lama','validate_by','cawangan','jenis_alat','machine_name','machine_location',
+        'machine_area','machine_serial_no','trade','no_daftar_lama','no_daftar_baru','pin_keselamatan','siri_keselamatan','include_cert','borang_d',
+        'borang_e','borang_e_date','invoice_no','invoice_payment_type','invoice_payment_ref','cash_bill','stamping_date','last_year_stamping_date',
+        'due_date','pic','customer_pic','quotation_no','quotation_date','purchase_no','purchase_date','remarks','internal_remark','validator_invoice',
+        'unit_price','cert_price','total_amount','sst','subtotal_sst_amt','rebate','rebate_amount','subtotal_amount','log','products','stamping_type',
+        'branch','labour_charge','stampfee_labourcharge','int_round_up','total_charges','seal_no_lama','seal_no_baru','pegawai_contact','cert_no', 'status'
+    ];
+
+    $params = [
+        $type, $companyBranch, $dealer, $reseller_branch, $customerType, $customer, $brand, $machineType, $model, $makeIn, $capacity, $serial,
+        $assignTo, $assignTo2, $assignTo3, $ownershipStatus, $validatorlama, $validator, $cawangan, $jenisAlat, $machineName, $machineLocation,
+        $machineArea, $machineSerialNo, $trade, $noDaftarLama, $noDaftarBaru, $pinKeselamatan, $siriKeselamatan, $includeCert, $borangD,
+        $borangE, $borangEDate, $invoice, $invoicePaymentType, $invoicePayRef, $cashBill, $stampDate, $lastYearStampDate,
+        $dueDate, $uid, $pic, $quotation, $quotationDate, $poNo, $poDate, $remark, $internalRemark, $validatorInvoice,
+        $unitPrice, $certPrice, $totalPrice, $sst, $subAmountSst, $rebate, $rebateAmount, $subtotalPrice, $data, $product, $newRenew,
+        $branch, $labourCharge, $stampLabourCharge, $roundUp, $totalCharge, $sealNoLama, $sealNoBaru, $pegawaiContact, $certNo, $status
+    ];
+
+    if (count($columns) !== count($params)) {
+        echo json_encode(["status" => "failed", "message" => "Column count (".count($columns).") does not match param count (".count($params).")"]);
+        $db->close();
+        exit;
+    }
+
+	$placeholders = implode(',', array_fill(0, count($params), '?'));
+    $sql = "INSERT INTO stamping (" . implode(',', $columns) . ") VALUES ($placeholders)";
+
+
 	if (
-		$insert_stmt = $db->prepare("INSERT INTO stamping (type, company_branch, dealer, dealer_branch, customer_type, customers, brand, machine_type, model, make_in, capacity, serial_no, assignTo, assignTo2, assignTo3, ownership_status, validator_lama,
-		validate_by, cawangan, jenis_alat, machine_name, machine_location, machine_area, machine_serial_no, trade, no_daftar_lama, no_daftar_baru, pin_keselamatan, siri_keselamatan, include_cert, borang_d, borang_e, borang_e_date, invoice_no, invoice_payment_type, invoice_payment_ref, cash_bill, stamping_date, last_year_stamping_date, due_date, pic, customer_pic, 
-		quotation_no, quotation_date, purchase_no, purchase_date, remarks, internal_remark, validator_invoice, unit_price, cert_price, total_amount, sst, subtotal_sst_amt, rebate, rebate_amount, subtotal_amount, log, products, stamping_type, branch, labour_charge, stampfee_labourcharge, int_round_up, total_charges, seal_no_lama, seal_no_baru, pegawai_contact, cert_no) 
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+		$insert_stmt = $db->prepare($sql)
 	) {
-		$data = json_encode($logs);
-		$insert_stmt->bind_param(
-			'sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss',
-			$type,
-			$companyBranch,
-			$dealer,
-			$reseller_branch,
-			$customerType,
-			$customer,
-			$brand,
-			$machineType,
-			$model,
-			$makeIn,
-			$capacity,
-			$serial,
-			$assignTo,
-			$assignTo2,
-			$assignTo3,
-			$ownershipStatus,
-			$validatorlama,
-			$validator,
-			$cawangan,
-			$jenisAlat,
-			$machineName,
-			$machineLocation,
-			$machineArea,
-			$machineSerialNo,
-			$trade,
-			$noDaftarLama,
-			$noDaftarBaru,
-			$pinKeselamatan,
-			$siriKeselamatan,
-			$includeCert,
-			$borangD,
-			$borangE,
-			$borangEDate,
-			$invoice,
-			$invoicePaymentType,
-			$invoicePayRef,
-			$cashBill,
-			$stampDate,
-			$lastYearStampDate,
-			$dueDate,
-			$uid,
-			$pic,
-			$quotation,
-			$quotationDate,
-			$poNo,
-			$poDate,
-			$remark,
-			$internalRemark,
-			$validatorInvoice,
-			$unitPrice,
-			$certPrice,
-			$totalPrice,
-			$sst,
-			$subAmountSst,
-			$rebate,
-			$rebateAmount,
-			$subtotalPrice,
-			$data,
-			$product,
-			$newRenew,
-			$branch,
-			$labourCharge,
-			$stampLabourCharge,
-			$roundUp,
-			$totalCharge,
-			$sealNoLama,
-			$sealNoBaru,
-			$pegawaiContact,
-			$certNo
-		);
+		 $types = str_repeat('s', count($params)); // adjust types if needed
+            $bind_names = [];
+            $bind_names[] = & $types;
+            for ($i = 0; $i < count($params); $i++) {
+                $bind_names[] = & $params[$i];
+            }
+            call_user_func_array([$insert_stmt, 'bind_param'], $bind_names);
+
 
 		// Execute the prepared query.
 		if (!$insert_stmt->execute()) {

@@ -176,6 +176,45 @@ if (isset($_POST['newRenew'], $_POST['validator'], $_POST['cawangan'])) {
 					)
 				);
 			} else {
+
+				if((isset($_POST['validatorlama']) && $_POST['validatorlama'] != null && $_POST['validatorlama'] != "")
+				&& (isset($_POST['no_daftar_lama']) && $_POST['no_daftar_lama'] != null && $_POST['no_daftar_lama'] != "")
+				&& (isset($_POST['last_year_stamping_date']) && $_POST['last_year_stamping_date'] != null && $_POST['last_year_stamping_date'] != "")
+				&& (isset($_POST['seal_no_lama']) && $_POST['seal_no_lama'] != null && $_POST['seal_no_lama'] != "")
+				&& (isset($_POST['stamping_date']) && $_POST['stamping_date'] != null && $_POST['stamping_date'] != "")
+				){
+						$update_stmt = $db->prepare("UPDATE stamping SET status=?, updated_datetime=? WHERE id=?");
+					    $update_stmt->bind_param('Appointed', $currentDateTime, $_POST['id']);
+		
+						// Execute the prepared query.
+						if (! $update_stmt->execute()){
+							echo json_encode(
+								array(
+									"status"=> "failed", 
+									"message"=> $update_stmt->error
+								)
+							);
+						} 
+				}
+
+				if((isset($_POST['seal_no_baru']) && $_POST['seal_no_baru'] != null && $_POST['seal_no_baru'] != "")
+				&& (isset($_POST['no_daftar_baru']) && $_POST['no_daftar_baru'] != null && $_POST['no_daftar_baru'] != "")
+				){
+						$update_stmt = $db->prepare("UPDATE stamping SET status=?, updated_datetime=? WHERE id=?");
+					    $update_stmt->bind_param('Stamped', $currentDateTime, $_POST['id']);
+		
+						// Execute the prepared query.
+						if (! $update_stmt->execute()){
+							echo json_encode(
+								array(
+									"status"=> "failed", 
+									"message"=> $update_stmt->error
+								)
+							);
+						} 
+				}
+
+
 				$stampingId = $_POST['id'];
 
 				$stampExtQuery = "SELECT * FROM stamping_ext WHERE stamp_id = $stampingId";
