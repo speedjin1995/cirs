@@ -227,6 +227,7 @@ function newMachineInfoEntry(id){
       $('#machineInfoExtendModal').find('#product').val(obj.message.products);
       $('#machineInfoExtendModal').find('#machineType').val(obj.message.machine_type).select2('destroy').select2();
       $('#machineInfoExtendModal').find('#jenisAlat').val(obj.message.jenis_alat).select2('destroy').select2();
+      $('#machineInfoExtendModal').find('#jenisAlat').val(obj.message.jenis_alat).trigger('change');
       $('#machineInfoExtendModal').find('#machineLocation').val(obj.message.machine_location);
 
       $('#machineInfoExtendModal').find('#machineName').val(obj.message.machine_name).trigger('change');
@@ -258,12 +259,12 @@ function newMachineInfoEntry(id){
       $('#machineInfoExtendModal').find('#others').val(obj.message.other_info);
       $('#machineInfoExtendModal').find('#platformCountry').val(obj.message.platform_country);
       $('#machineInfoExtendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
-      $('#machineInfoExtendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
+      /*$('#machineInfoExtendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
       $('#machineInfoExtendModal').find('#nilai2').val(obj.message.nilais[1].nilai);
       $('#machineInfoExtendModal').find('#nilai3').val(obj.message.nilais[2].nilai);
       $('#machineInfoExtendModal').find('#nilai4').val(obj.message.nilais[3].nilai);
       $('#machineInfoExtendModal').find('#nilai5').val(obj.message.nilais[4].nilai);
-      $('#machineInfoExtendModal').find('#nilai6').val(obj.message.nilais[5].nilai);
+      $('#machineInfoExtendModal').find('#nilai6').val(obj.message.nilais[5].nilai);*/
     }
     else if(obj.status === 'failed'){
       toastr["error"](obj.message, "Failed:");
@@ -279,6 +280,13 @@ function newMachineInfoEntry(id){
   //Additonal field reset
   // var value = $('#machineInfoExtendModal').find('#additionalSection').find('#batuUjian').val();
   // $('#machineInfoExtendModal').find('#additionalSection').find('#jenis_penunjuk').val('').trigger('change');
+
+  $('#machineInfoExtendModal').find('#nilai1').val("");
+  $('#machineInfoExtendModal').find('#nilai2').val("");
+  $('#machineInfoExtendModal').find('#nilai3').val("");
+  $('#machineInfoExtendModal').find('#nilai4').val("");
+  $('#machineInfoExtendModal').find('#nilai5').val("");
+  $('#machineInfoExtendModal').find('#nilai6').val("");
 
   $('#machineInfoExtendModal').find('#jenisAlat').change(function() {
     if($(this).val() == 1) {
