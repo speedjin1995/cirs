@@ -259,12 +259,11 @@ function newMachineInfoEntry(id){
       $('#machineInfoExtendModal').find('#others').val(obj.message.other_info);
       $('#machineInfoExtendModal').find('#platformCountry').val(obj.message.platform_country);
       $('#machineInfoExtendModal').find('#jenis_penunjuk').val(obj.message.jenis_penunjuk).trigger('change');
-      /*$('#machineInfoExtendModal').find('#nilai1').val(obj.message.nilais[0].nilai);
-      $('#machineInfoExtendModal').find('#nilai2').val(obj.message.nilais[1].nilai);
-      $('#machineInfoExtendModal').find('#nilai3').val(obj.message.nilais[2].nilai);
-      $('#machineInfoExtendModal').find('#nilai4').val(obj.message.nilais[3].nilai);
-      $('#machineInfoExtendModal').find('#nilai5').val(obj.message.nilais[4].nilai);
-      $('#machineInfoExtendModal').find('#nilai6').val(obj.message.nilais[5].nilai);*/
+      if(obj.message.nilais){
+        for(var i=0; i<obj.message.nilais.length; i++){
+          $('#machineInfoExtendModal').find('#nilai'+(i+1)).val(obj.message.nilais[i].nilai);
+        } 
+      }
     }
     else if(obj.status === 'failed'){
       toastr["error"](obj.message, "Failed:");
