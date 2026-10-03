@@ -337,6 +337,11 @@ else{
                     </ul>
                   </div>
                   <div class="ml-2">
+                    <button type="button" class="btn btn-info btn-sm" id="runRenewalCron">
+                      <i class="fa-solid fa-rotate"></i> Refresh Renewals
+                    </button>
+                  </div>
+                  <div class="ml-2">
                     <button type="button" class="btn btn-warning btn-sm" onclick="newEntry()">
                       <i class="fa-solid fa-circle-plus"></i> Add New
                     </button>
@@ -2975,6 +2980,25 @@ $(function () {
           }
         });
       }
+    }
+  });
+
+  $('#runRenewalCron').on('click', function(){
+    if(confirm('Generate renewal records for stampings due next month?')){
+      $('#spinnerLoading').show();
+      $.post('cronjob/checkStamping.php', {}, function(data){
+        if(data.indexOf('Error') === 0){
+          toastr["error"](data, "Failed:");
+        }
+        else{
+          toastr["success"](data, "Success:");
+          $('#weightTable').DataTable().ajax.reload();
+        }
+        $('#spinnerLoading').hide();
+      }).fail(function(){
+        toastr["error"]("Failed to run renewal job", "Failed:");
+        $('#spinnerLoading').hide();
+      });
     }
   });
 
